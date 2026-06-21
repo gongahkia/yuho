@@ -283,85 +283,6 @@ After running `yuho transpile my_statute.yh -t mermaid`, you can view the output
 2. **GitHub** -- wrap the output in a ` ```mermaid ` code block in any `.md` file. GitHub renders it natively
 3. **Local notes or docs** -- paste the output into any Mermaid-capable editor, notes app, or documentation page
 
-## Using the wizard (no code required)
-
-`yuho wizard` walks you through creating a statute model interactively:
-
-```
-$ yuho wizard
-
-Welcome to the Yuho Statute Wizard!
-This will guide you through creating a .yh statute file.
-
-Section number: 378
-Statute title: Theft
-
-Add definitions (enter blank line when done):
-  Term: movableProperty
-  Definition: Any corporeal property except land and things attached to the earth
-  Term: dishonestly
-  Definition: With intention of causing wrongful gain or wrongful loss
-  Term:
-
-Add elements (enter blank line when done):
-  Type (actus_reus/mens_rea/circumstance): actus_reus
-  Name: taking
-  Description: Taking any moveable property out of the possession of any person
-  Type: mens_rea
-  Name: intent
-  Description: Intending to take dishonestly
-  Type: actus_reus
-  Name: moving
-  Description: Moving that property without that person's consent
-  Type:
-
-Add penalty:
-  Imprisonment range (e.g. 1 year .. 3 years): 1 year .. 7 years
-  Fine range (e.g. $0.00 .. $10,000.00): $0.00 .. $10,000.00
-
-Output file [s378_theft.yh]: s378_theft.yh
-Statute written to s378_theft.yh
-```
-
-The wizard generates valid `.yh` code you can then transpile, test, or edit further.
-
-## Using the REPL
-
-`yuho repl` provides an interactive environment for experimenting:
-
-```
-$ yuho repl
-Yuho REPL - Interactive statute experimentation
-Type help for commands, exit to quit
-
-yuho> struct Verdict { guilty, notGuilty, mistrial }
-Parsed: 1 struct(s)
-
-yuho> fn assess(bool evidence) : string {
-  ...     match {
-  ...         case TRUE if evidence := consequence "Guilty";
-  ...         case _ := consequence "Not guilty";
-  ...     }
-  ... }
-Parsed: 1 function(s)
-
-yuho> load library/penal_code/s415_cheating/statute.yh
-Loaded: 1 struct(s), 3 function(s), 1 statute(s)
-
-yuho> transpile english
-=== ENGLISH Output ===
-SECTION 415: Cheating
-...
-
-yuho> transpile mermaid
-=== MERMAID Output ===
-mindmap
-    Cheating
-    ...
-```
-
-Available REPL commands: `load <file>`, `transpile <target>`, `ast`, `history`, `reset`, `help`, `exit`.
-
 ## Testing fact patterns
 
 You can model a hypothetical and evaluate it against a statute definition:
@@ -431,22 +352,15 @@ Yuho does not replace IRAC. It sharpens the **R** by forcing you to explicitly i
 
 ## Cross-section graphs
 
-Two interactive graph surfaces in the static explorer site
-(`editors/explorer-site/build/`):
+The checked-in corpus can be queried as a section-level reference graph:
 
-- `/graph.html` — **reference graph** at section granularity: 260
-  referenced sections and 1,402 typed edges (`subsumes` / `amends` /
-  `implicit`) in the current corpus. The same data the CLI's
-  `yuho refs --scc` consumes.
-- `/semantic-graph.html` — **typed semantic graph** at definition / element
-  / exception granularity. Node kinds: section / definition / element /
-  exception. Edge kinds: `contains` (structural), `mentions` (an element
-  description text references a defined term), `defeats` (G13 priority
-  DAG between exceptions in the same section), `shares_term` (cross-
-  section: every section that defines the same term name).
+```bash
+yuho refs 415
+yuho refs --scc --json
+```
 
-Both pages are interactive (cytoscape.js): pan / zoom / click. Clicking
-a section node navigates to its `/s/<N>.html` page.
+Edges are typed as `subsumes`, `amends`, or `implicit`. The graph is also
+available programmatically through `yuho.library.reference_graph`.
 
 ## Formal verification (advanced)
 
@@ -465,8 +379,6 @@ This is entirely optional and targeted at advanced users interested in formal me
 
 * Learn Yuho's syntax at [`SYNTAX.md`](../researcher/syntax.md)
 * See statute examples in the [`library/`](../../library/) directory
-* Try the interactive wizard: `yuho wizard`
-* Experiment in the REPL: `yuho repl`
 * Install and try Yuho: clone the repo, `pip install -e '.[dev]'`, then run `yuho --help`
 * Explore the CLI commands: `yuho check`, `yuho transpile`, `yuho explain`, `yuho refs --scc`
 * Want to contribute? See [`CONTRIBUTING.md`](../../.github/CONTRIBUTING.md)

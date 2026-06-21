@@ -1,8 +1,7 @@
 """
 Python-side faithfulness — structural diff harness.
 
-Tightens `make verify-bulk-contrast` from a behavioural to a
-structural check on the smoke fixtures (s299/s300/s378/s415):
+Runs a structural check on the smoke fixtures (s299/s300/s378/s415):
 
   1. invokes `lake env lean --run scripts/ExportSpec.lean` from
      `mechanisation/`, captures the Lean spec's JSON biconditional
@@ -223,6 +222,13 @@ def run_lean_exporter(full: bool = False) -> dict[str, list[Any]]:
     524-section corpus from `scripts/Fixtures.lean`; otherwise the
     four hand-stitched smoke fixtures are emitted.
     """
+    subprocess.run(
+        ["lake", "build", "scripts"],
+        cwd=REPO / "mechanisation",
+        capture_output=True,
+        text=True,
+        check=True,
+    )
     cmd = ["lake", "env", "lean", "--run", "scripts/ExportSpec.lean"]
     if full:
         cmd += ["--", "--full"]

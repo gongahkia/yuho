@@ -743,35 +743,6 @@ def _run_semantic_checks(
             )
         )
 
-    try:
-        from yuho.chronology import build_world, validate_world
-
-        world = build_world(ast)
-        if world.has_content():
-            for item in validate_world(world):
-                if item.severity == "warning":
-                    warning_count += 1
-                else:
-                    error_count += 1
-                issues.append(
-                    SemanticIssue(
-                        severity=item.severity,
-                        message=f"Chronology: {item.message}",
-                        line=item.line,
-                        column=item.column,
-                    )
-                )
-    except (TypeError, ValueError, AttributeError, RuntimeError) as exc:
-        error_count += 1
-        issues.append(
-            SemanticIssue(
-                severity="error",
-                message=f"Chronology analysis failed: {exc}",
-                line=0,
-                column=0,
-            )
-        )
-
     return SemanticSummary(
         issues=tuple(issues),
         errors=error_count,

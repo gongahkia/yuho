@@ -173,8 +173,8 @@ and `amends <num>` clauses on `statute_block`. Agents used the existing
 grammar correctly.
 
 **Resolver side:** landed. `yuho refs` builds the cross-section
-reference graph, LSP/MCP surfaces can query it, and the evaluator/Z3
-layers understand `is_infringed` / `apply_scope` guards.
+reference graph, and the evaluator/Z3 layers understand `is_infringed`
+/ `apply_scope` guards.
 
 ### G12 — mixed cumulative + alternative penalty clauses ✅ FIXED
 

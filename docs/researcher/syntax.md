@@ -24,8 +24,7 @@
 11. [Legal Tests](#legal-tests)
 12. [Conflict Checks](#conflict-checks)
 13. [Imports](#imports)
-14. [Chronology / Provenance](#chronology--provenance)
-15. [Testing](#testing)
+14. [Testing](#testing)
 
 ## Introduction
 
@@ -162,14 +161,13 @@ struct Container<T> {
 }
 
 // --- STRUCT INHERITANCE ---
-// struct inheritance is available for chronology entity schemas
+// structs can extend another struct
 
 struct LegalFact {
     string citation,
 }
 
 struct ProvenFact : LegalFact {
-    source source_ref,
     string status,
 }
 
@@ -554,98 +552,6 @@ import * from "penal_code/s415_cheating"
 
 referencing penal_code/s415_cheating
 ```
-
-## Chronology / Provenance
-
-Chronology declarations are top-level Yuho declarations for source-backed
-facts, timelines, relationships, issues, deadlines, exhibits, and
-alternate scenarios.
-
-```yh
-source trial_transcript: transcript {
-    citation := "Tr. 42";
-}
-
-source_bundle trial_sources {
-    sources := [trial_transcript];
-}
-
-locator tr_42 {
-    source_ref := trial_transcript;
-    page := 42;
-}
-
-timeline main_case {
-    start := 2024-01-01;
-    end := 2024-12-31;
-}
-
-entity transcript_excerpt: evidence {
-    source_ref := trial_transcript;
-    locator_ref := tr_42;
-    citation := "Tr. 42:1";
-    appears_on := main_case @ 2024-01-01..2024-01-31;
-}
-
-entity admission_claim: claim {
-    source_ref := trial_transcript;
-    citation := "Tr. 42:1";
-    appears_on := main_case @ 2024-01-31..2024-01-31;
-}
-
-rel transcript_excerpt -["cites"]-> admission_claim;
-```
-
-Relationship types add validator semantics:
-
-```yh
-reltype cites {
-    source := evidence;
-    target := claim;
-    required := TRUE;
-    min_inbound := 1;
-}
-```
-
-Rulesets and deadline rules are declarative authority records; Yuho
-validates their provenance and consistency but does not calculate legal
-docketing deadlines.
-
-```yh
-ruleset federal_rules {
-    jurisdiction := federal;
-    procedure := civil;
-    source_ref := court_rules;
-}
-
-deadline_rule response_deadline {
-    ruleset := federal_rules;
-    rule := "response";
-    trigger := service;
-    offset := 21 days;
-    source_ref := court_rules;
-}
-```
-
-Scenarios store alternate chronology worlds, and constraints evaluate
-Yuho assertions or boolean expressions against the chronology world.
-
-```yh
-scenario "delayed remedy" from main_case {
-    entity local_delay: fact {
-        source_ref := trial_transcript;
-        citation := "local implementation record";
-        appears_on := main_case @ 2024-06-01..2024-06-30;
-    }
-}
-
-constraint "claims are cited" {
-    assert has_inbound(admission_claim, "cites"), "claim must cite evidence";
-}
-```
-
-See [../user/chronology.md](../user/chronology.md) for report commands,
-validation severity, recurrence, state changes, and import formats.
 
 ## Testing
 

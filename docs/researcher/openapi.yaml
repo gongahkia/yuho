@@ -1,5 +1,4 @@
 # Yuho does not currently ship a REST/OpenAPI server.
 #
-# Historical drafts of this file described a `yuho api --port 8080`
-# surface. That command is not part of the current CLI. Use the Python
-# package, `yuho` CLI, LSP (`yuho lsp`), or MCP server (`yuho serve`) instead.
+# The supported integration surface is the local Python package plus the
+# `yuho` CLI. This file intentionally contains no OpenAPI schema.

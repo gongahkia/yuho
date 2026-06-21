@@ -72,7 +72,6 @@ module.exports = grammar({
       $.enum_definition,
       $.type_alias,
       $.function_definition,
-      $._chronology_declaration,
       $.statute_block,
       $.legal_test_block,
       $.conflict_check_block,
@@ -81,23 +80,6 @@ module.exports = grammar({
       $.variable_declaration,
       $.assert_statement,
       $.expression_statement,
-    ),
-
-    _chronology_declaration: $ => choice(
-      $.source_declaration,
-      $.source_bundle_declaration,
-      $.locator_declaration,
-      $.ruleset_declaration,
-      $.deadline_rule_declaration,
-      $.issue_declaration,
-      $.issue_element_declaration,
-      $.timeline_declaration,
-      $.entity_declaration,
-      $.relationship_type_declaration,
-      $.relationship_declaration,
-      $.scenario_declaration,
-      $.view_declaration,
-      $.constraint_declaration,
     ),
 
     // =========================================================================
@@ -268,136 +250,6 @@ module.exports = grammar({
       ':=',
       field('value', $._expression),
       optional(','),
-    ),
-
-    // =========================================================================
-    // Chronology / provenance declarations
-    // =========================================================================
-
-    source_declaration: $ => seq(
-      'source',
-      field('name', $.identifier),
-      optional(seq(':', field('kind', $.identifier))),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    source_bundle_declaration: $ => seq(
-      'source_bundle',
-      field('name', $.identifier),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    locator_declaration: $ => seq(
-      'locator',
-      field('name', $.identifier),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    ruleset_declaration: $ => seq(
-      'ruleset',
-      field('name', $.identifier),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    deadline_rule_declaration: $ => seq(
-      'deadline_rule',
-      field('name', $.identifier),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    issue_declaration: $ => seq(
-      'issue',
-      field('name', $.identifier),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    issue_element_declaration: $ => seq(
-      'issue_element',
-      field('name', $.identifier),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    timeline_declaration: $ => seq(
-      'timeline',
-      field('name', $.identifier),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    entity_declaration: $ => seq(
-      'entity',
-      field('name', $.identifier),
-      optional(seq(':', field('type_name', $.identifier))),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    relationship_type_declaration: $ => seq(
-      'reltype',
-      field('name', $.identifier),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    relationship_declaration: $ => prec.right(seq(
-      'rel',
-      field('source', $.identifier),
-      choice(
-        seq('-[', field('label', $.string_literal), ']->'),
-        '-->',
-      ),
-      field('target', $.identifier),
-      optional(seq('@', field('temporal_scope', $.range_expression))),
-      optional(';'),
-    )),
-
-    scenario_declaration: $ => seq(
-      'scenario',
-      field('name', $.string_literal),
-      optional(seq('from', field('fork_from', $.identifier))),
-      '{',
-      repeat(choice($._chronology_declaration, $._statement)),
-      '}'
-    ),
-
-    view_declaration: $ => seq(
-      'view',
-      field('name', choice($.identifier, $.string_literal)),
-      '{',
-      repeat($.chronology_field),
-      '}'
-    ),
-
-    constraint_declaration: $ => seq(
-      'constraint',
-      field('name', choice($.identifier, $.string_literal)),
-      '{',
-      repeat(choice($._statement, $.relationship_declaration)),
-      '}'
-    ),
-
-    chronology_field: $ => seq(
-      field('name', $.identifier),
-      ':=',
-      field('value', $._expression),
-      optional(choice(',', ';')),
     ),
 
     // =========================================================================

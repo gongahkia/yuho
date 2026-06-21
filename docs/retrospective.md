@@ -79,9 +79,11 @@ trail that fed straight into the provenance ledger.
 
 Four lint passes that compare the encoded AST to `_raw/act.json` — illustration count, fabricated fine cap, fabricated caning range, disjunctive-connective mismatch — caught the most common encoding errors before they reached L3. They also clarified which gaps were diagnostic-layer issues rather than grammar issues.
 
-### 6. Single source of truth + radial UIs
+### 6. Single source of truth + derived artefacts
 
-The encoded `.yh` file is canonical. Everything else (English, LaTeX, Mermaid, Alloy, DOCX, JSON corpus, browser extension data, static site, ledger, benchmark) regenerates from it. This kept downstream surfaces in sync without manual labour: rebuild corpus, downstream artefacts cascade.
+The encoded `.yh` file is canonical. Everything else (English, LaTeX,
+Mermaid, Alloy, DOCX, JSON corpus, ledger, benchmark) regenerates from
+it. This kept downstream artefacts in sync without manual labour.
 
 ---
 
@@ -204,13 +206,12 @@ worked around this with timestamps in `metadata.toml` and a final
 sweep, but a versioned prompt with explicit "this stamp was issued
 under prompt vN" annotation would have been more rigorous.
 
-### 5. Earlier investment in the corpus + downstream UIs
+### 5. Earlier investment in the corpus
 
-We held off on building the JSON corpus / browser extension / static
-site until after L3 was largely done. With hindsight, the corpus
-would have been useful earlier as a debug surface (per-section
-side-by-side of canonical / `.yh` / English) that human reviewers
-could have used to triage flagged sections faster.
+We held off on building the JSON corpus until after L3 was largely done.
+With hindsight, the corpus would have been useful earlier as a debug
+surface (per-section side-by-side of canonical / `.yh` / English) that
+human reviewers could have used to triage flagged sections faster.
 
 ---
 

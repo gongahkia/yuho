@@ -27,8 +27,8 @@ Edges carry **kind**:
                     same term name. Catches "every section that defines
                     'dishonestly'".
 
-The graph is built once per library and dumped to JSON for client-side
-rendering on ``/semantic-graph.html``.
+The graph can be built once per library and dumped to JSON for offline
+inspection or downstream corpus checks.
 """
 
 from __future__ import annotations

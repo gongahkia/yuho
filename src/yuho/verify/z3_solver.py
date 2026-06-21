@@ -60,7 +60,7 @@ class Z3Diagnostic:
     source_location: Optional["SourceLocation"] = None
 
     def to_diagnostic(self) -> Dict[str, Any]:
-        """Convert to LSP-compatible diagnostic."""
+        """Convert to a structured diagnostic."""
         diag: Dict[str, Any] = {
             "message": f"Z3: {self.check_name} - {self.message}",
             "severity": "info" if self.passed else "warning",
@@ -1136,8 +1136,7 @@ class Z3Generator:
         # the section's predicate; the subsection split is structurally
         # irrelevant once elements are flattened. Without this hoist,
         # `<sX>_elements_satisfied` would not exist for any defence
-        # statute, breaking `yuho narrow-defence` and any cross-section
-        # query that names them.
+        # statute, breaking cross-section queries that name them.
         element_exprs = []
         for elem in statute.elements:
             expr = self._translate_element(statute_id, elem)

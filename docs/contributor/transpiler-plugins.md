@@ -86,7 +86,8 @@ In `src/yuho/transpile/__init__.py`, add the import and `__all__` entry.
 
 ### 5. Add to CLI choices
 
-In `src/yuho/cli/main.py`, add your target string to the transpile `--target` Choice list. Also update `src/yuho/cli/commands_registry.py` for the batch transpile command.
+In `src/yuho/cli/main.py`, add your target string to the transpile
+`--target` Choice list.
 
 ### 6. Test
 

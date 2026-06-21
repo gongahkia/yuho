@@ -6,9 +6,9 @@
 # Build:
 #     docker build -t yuho:latest .
 #
-# Run full verification (~5 minutes, no network during build except
+# Run core verification (~5 minutes, no network during build except
 # image install):
-#     docker run --rm yuho:latest make -C /workspace verify-all
+#     docker run --rm yuho:latest make -C /workspace verify-core
 #
 # The image installs:
 #   - Python 3.12 + Yuho's [dev] extras (Z3, hypothesis, etc.)
@@ -42,11 +42,7 @@ COPY src ./src
 COPY library ./library
 COPY scripts ./scripts
 COPY tests ./tests
-COPY evals ./evals
-COPY benchmarks ./benchmarks
-COPY simulator ./simulator
 COPY docs ./docs
-COPY editors ./editors
 COPY Makefile* ./
 
 # Install the tree-sitter Python bindings + Yuho with dev extras.
@@ -59,5 +55,5 @@ RUN python -m pip install --upgrade pip && \
 # Verify the toolchain at build time so a corrupt image fails fast.
 RUN yuho check library/penal_code/s415_cheating/statute.yh
 
-# Default entrypoint surfaces the full verification target.
-CMD ["make", "verify-all"]
+# Default entrypoint surfaces the core verification target.
+CMD ["make", "verify-core"]

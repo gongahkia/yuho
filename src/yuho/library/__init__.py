@@ -1,84 +1,35 @@
-"""
-Yuho library module - user-contributed statute repository.
+"""Checked-in corpus graph utilities."""
 
-Provides:
-- Package format definitions (.yhpkg)
-- Contribution validation
-- Library indexing and search
-- Package installation and management
-- Dependency resolution with version constraints
-"""
-
-from yuho.library.package import (
-    Package,
-    PackageMetadata,
-    PackageValidator,
-    DeprecationInfo,
+from yuho.library.graph_lint import (
+    GraphLintWarning,
+    check_apply_scope_arg_shape,
+    check_apply_scope_resolution,
+    check_is_infringed_resolution,
+    lint_reference_graph,
 )
-from yuho.library.index import (
-    LibraryIndex,
-    search_library,
+from yuho.library.reference_graph import (
+    ReferenceEdge,
+    ReferenceGraph,
+    build_reference_graph,
 )
-from yuho.library.install import (
-    install_package,
-    uninstall_package,
-    list_installed,
-    update_package,
-    check_updates,
-    download_package,
-    update_all_packages,
-    publish_package,
-)
-from yuho.library.resolver import (
-    DependencyResolver,
-    Resolution,
-    Dependency,
-    Version,
-    VersionConstraint,
-    resolve_dependencies,
-    validate_semver,
-    SemverValidation,
-    SemverValidationError,
-    CompatibilityChecker,
-    CompatibilityResult,
-)
-from yuho.library.lockfile import (
-    LockFile,
-    LockFileManager,
-    LockedPackage,
-    load_lock_file,
-    create_lock_file,
+from yuho.library.semantic_graph import (
+    SemanticEdge,
+    SemanticGraph,
+    SemanticNode,
+    build_semantic_graph,
 )
 
 __all__ = [
-    "Package",
-    "PackageMetadata",
-    "PackageValidator",
-    "DeprecationInfo",
-    "LibraryIndex",
-    "search_library",
-    "install_package",
-    "uninstall_package",
-    "list_installed",
-    "update_package",
-    "check_updates",
-    "download_package",
-    "update_all_packages",
-    "publish_package",
-    "DependencyResolver",
-    "Resolution",
-    "Dependency",
-    "Version",
-    "VersionConstraint",
-    "resolve_dependencies",
-    "validate_semver",
-    "SemverValidation",
-    "SemverValidationError",
-    "CompatibilityChecker",
-    "CompatibilityResult",
-    "LockFile",
-    "LockFileManager",
-    "LockedPackage",
-    "load_lock_file",
-    "create_lock_file",
+    "GraphLintWarning",
+    "ReferenceEdge",
+    "ReferenceGraph",
+    "SemanticEdge",
+    "SemanticGraph",
+    "SemanticNode",
+    "build_reference_graph",
+    "build_semantic_graph",
+    "check_apply_scope_arg_shape",
+    "check_apply_scope_resolution",
+    "check_is_infringed_resolution",
+    "lint_reference_graph",
 ]

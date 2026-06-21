@@ -1,62 +1,49 @@
 # FAQ
 
-## 1. What does Yuho mean?
+## What does Yuho mean?
 
-Yuho is derived from 夢法 (*yume ho*) which roughly translates to 'ideal law' in Japanese.
+Yuho is derived from 夢法 (*yume ho*), roughly "ideal law" in Japanese.
 
-## 2. What version of Python is required?
+## What Python version is required?
 
-Python 3.10 or later. See `pyproject.toml` for the full list of supported versions.
+Python 3.10 or later. See `pyproject.toml` for the supported versions.
 
-## 3. How do I install Yuho?
+## How do I install Yuho?
 
 ```bash
 pip install yuho
 ```
 
-Or clone the repo and run `./setup.sh` for a development install.
-
-## 4. What file extension does Yuho use?
-
-`.yh` files.
-
-## 5. Can Yuho model statutes from jurisdictions outside Singapore?
-
-Yes. The syntax is jurisdiction-agnostic. Current examples focus on Singapore Criminal Law but the language can represent any statute-based legal system.
-
-## 6. How do I start the LSP server?
+For repository work:
 
 ```bash
-yuho lsp
+uv venv --python 3.13 .venv
+source .venv/bin/activate
+uv pip install -e '.[dev]'
 ```
 
-See `editors/nvim-yuho/` for Neovim integration.
+## What file extension does Yuho use?
 
-## 7. What transpilation targets are supported?
+`.yh`.
+
+## Can Yuho model statutes outside Singapore?
+
+The syntax is jurisdiction-agnostic. The checked-in encoded corpus is
+Singapore Penal Code focused; other statute families need separate
+encoding work.
+
+## What transpilation targets are supported?
 
 JSON, controlled English, LaTeX, Mermaid flowchart, Mermaid mindmap,
-Alloy, DOCX, and Akoma Ntoso. The CLI can also derive PDF/SVG/PNG from
-LaTeX or Mermaid outputs when the external renderers are installed.
+Alloy, DOCX, and Akoma Ntoso. The CLI can derive PDF/SVG/PNG when the
+external renderers are installed.
 
-## 8. Do I need to know how to code?
+## What editor should I use?
 
-No for reading and reviewing generated outputs; yes for authoring `.yh`
-directly at the current stage. Yuho's syntax is designed to read like
-structured English. If you can read a statute and identify its elements
-(actus reus, mens rea, etc.), the language server, snippets, and
-diagnostics provide the main authoring support.
+Any text editor. Save files with a `.yh` extension and run `yuho check`
+or `yuho fmt` from the CLI.
 
-## 9. What editor should I use to write `.yh` files?
+## Does Yuho provide legal advice?
 
-Any text editor works (VS Code, Sublime Text, TextEdit, Notepad). Save files with a `.yh` extension. For syntax highlighting in Neovim, see `editors/nvim-yuho/`.
-
-## 10. How do I set up `yuho explain` without Ollama?
-
-The `explain` command works without any LLM configured -- it falls back to the built-in English transpiler. For enhanced AI-powered explanations, set an API key via environment variable:
-
-```bash
-export YUHO_LLM_PROVIDER=anthropic
-export YUHO_LLM_ANTHROPIC_API_KEY=sk-ant-...
-```
-
-Or use Ollama locally (see `CONFIG.md` for full setup).
+No. It encodes and checks statute structure. Legal application,
+interpretation, and advice remain outside the tool.

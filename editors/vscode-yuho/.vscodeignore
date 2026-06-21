@@ -1,9 +1,0 @@
-src/**
-tsconfig.json
-.vscode/**
-.vscode-test/**
-node_modules/**
-!node_modules/vscode-languageclient/**
-.gitignore
-.yarnrc
-*.ts.map

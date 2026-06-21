@@ -15,9 +15,8 @@ Each per-section record stitches together:
 * outgoing / incoming reference edges (via G10 reference graph)
 * provenance: Yuho version, scrape date, encoding commit, raw SSO hash
 
-This is the data layer for the browser extension (Task 2b) and the static
-explorer site (Task 2c). Both UIs read the same JSON; the corpus is the
-single source of truth.
+This is the offline corpus layer for audits, checks, and downstream
+analysis. The encoded `.yh` files remain the source of truth.
 
 Run:
     python3 scripts/build_corpus.py

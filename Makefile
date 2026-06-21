@@ -2,11 +2,11 @@
 #
 # Targets:
 #
-#   make verify-all
-#       Run the main project verification checks end-to-end:
+#   make verify-core
+#       Run the retained project checks end-to-end:
 #       parser smoke check, AKN OASIS-XSD round-trip, runtime tests,
-#       evals fake-run, case-law differential testing, and mechanisation.
-#       Writes a one-page summary at logs/verify-all-summary.txt.
+#       structural diff, and mechanisation.
+#       Writes a one-page summary at logs/verify-core-summary.txt.
 #
 #   make verify-coverage
 #       Re-run the per-section L1+L2 sanity check against the entire
@@ -15,19 +15,6 @@
 #   make verify-akn-xsd
 #       Re-run AKN round-trip against the vendored OASIS XSD.
 #       Requires xmllint (`apt-get install libxml2-utils` on Debian).
-#
-#   make verify-evals
-#       Run the LLM benchmark with the deterministic FakeClient
-#       (no API calls); confirms the runner + 205 fixtures work
-#       end-to-end.
-#
-#   make verify-case-law
-#       Re-run the case-law scorers (recommend / contrast / constrained).
-#       Updates the JSON results files.
-#
-#   make verify-bulk-contrast
-#       Re-run the Z3 bulk-contrast driver across every doctrinally-related
-#       section pair.
 #
 # Heavy targets (full corpus build, SVG rendering) live under scripts/.
 
@@ -41,40 +28,36 @@ PYTHON ?= python3
 YUHO ?= yuho
 LOGS = logs
 
-.PHONY: verify-all \
-        verify-coverage verify-akn-xsd verify-evals \
-        verify-case-law verify-bulk-contrast verify-mechanisation \
+.PHONY: verify-all verify-core \
+        verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
         verify-mermaid-verbose \
         clean-reproduce
 
-verify-all: $(LOGS)
+verify-all: verify-core
+
+verify-core: $(LOGS)
 	@echo "=== Yuho verification ==="
 	@echo ""
 	$(MAKE) verify-coverage
 	$(MAKE) verify-akn-xsd
 	$(MAKE) verify-runtime-tests
-	$(MAKE) verify-evals
-	$(MAKE) verify-case-law
+	$(MAKE) verify-structural-diff
 	$(MAKE) verify-mechanisation
 	@echo ""
 	@echo "=== summary ==="
 	@printf "Coverage         : %s\n" "$$(tail -n 1 $(LOGS)/coverage.log)" \
-		| tee $(LOGS)/verify-all-summary.txt
+		| tee $(LOGS)/verify-core-summary.txt
 	@printf "AKN XSD          : %s\n" "$$(grep -E 'AKN round-trip:' $(LOGS)/akn-xsd.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-all-summary.txt
+		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Runtime tests    : %s\n" "$$(grep -E 'runtime sweep:' $(LOGS)/runtime-tests.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-all-summary.txt
-	@printf "Evals (fake)     : %s\n" "$$(grep -E 'mean F1' $(LOGS)/evals.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-all-summary.txt
-	@printf "Case-law (recommend) : %s\n" "$$(grep -E 'Top-1 accuracy' $(LOGS)/case-law-recommend.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-all-summary.txt
-	@printf "Case-law (constrained): %s\n" "$$(grep -E 'consistency-rate' $(LOGS)/case-law-constrained.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-all-summary.txt
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "Structural diff  : %s\n" "$$(tail -n 1 $(LOGS)/structural-diff.log)" \
+		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Mechanisation    : %s\n" "$$(tail -n 1 $(LOGS)/mechanisation.log)" \
-		| tee -a $(LOGS)/verify-all-summary.txt
+		| tee -a $(LOGS)/verify-core-summary.txt
 	@echo ""
-	@echo "Wrote: $(LOGS)/verify-all-summary.txt"
+	@echo "Wrote: $(LOGS)/verify-core-summary.txt"
 
 verify-coverage: $(LOGS)
 	@echo ">>> verifying L1+L2 coverage on 524 SG PC statute.yh files…"
@@ -94,20 +77,6 @@ verify-coverage: $(LOGS)
 verify-akn-xsd: $(LOGS)
 	@echo ">>> verifying AKN OASIS-XSD round-trip (524/524)…"
 	$(PYTHON) scripts/akn_roundtrip.py --xsd 2>&1 | tee $(LOGS)/akn-xsd.log
-
-verify-evals: $(LOGS)
-	@echo ">>> verifying eval-runner end-to-end (FakeClient, no API)…"
-	$(PYTHON) evals/run.py --fake --no-per-fixture 2>&1 | tee $(LOGS)/evals.log
-
-verify-case-law: $(LOGS)
-	@echo ">>> verifying case-law differential testing…"
-	$(PYTHON) evals/case_law/score_recommend.py 2>&1 | tee $(LOGS)/case-law-recommend.log
-	$(PYTHON) evals/case_law/score_contrast.py 2>&1 | tee $(LOGS)/case-law-contrast.log
-	$(PYTHON) evals/case_law/score_contrast_constrained.py 2>&1 | tee $(LOGS)/case-law-constrained.log
-
-verify-bulk-contrast: $(LOGS)
-	@echo ">>> running Z3 bulk-contrast across SG PC pairs…"
-	$(PYTHON) scripts/bulk_contrast.py 2>&1 | tee $(LOGS)/bulk-contrast.log
 
 verify-structural-diff: $(LOGS)
 	@echo ">>> running Lean spec ↔ Python Z3Generator structural diff (smoke fixtures, --strict)…"

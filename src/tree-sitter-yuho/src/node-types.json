@@ -613,112 +613,6 @@
     }
   },
   {
-    "type": "chronology_field",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "value": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "boolean_literal",
-            "named": true
-          },
-          {
-            "type": "date_literal",
-            "named": true
-          },
-          {
-            "type": "duration_literal",
-            "named": true
-          },
-          {
-            "type": "field_access",
-            "named": true
-          },
-          {
-            "type": "float_literal",
-            "named": true
-          },
-          {
-            "type": "function_call",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "index_access",
-            "named": true
-          },
-          {
-            "type": "integer_literal",
-            "named": true
-          },
-          {
-            "type": "list_literal",
-            "named": true
-          },
-          {
-            "type": "match_expression",
-            "named": true
-          },
-          {
-            "type": "money_literal",
-            "named": true
-          },
-          {
-            "type": "parenthesized_expression",
-            "named": true
-          },
-          {
-            "type": "pass_expression",
-            "named": true
-          },
-          {
-            "type": "percent_literal",
-            "named": true
-          },
-          {
-            "type": "range_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
-            "named": true
-          },
-          {
-            "type": "struct_literal",
-            "named": true
-          },
-          {
-            "type": "timeline_appearance",
-            "named": true
-          },
-          {
-            "type": "unary_expression",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "conflict_check_block",
     "named": true,
     "fields": {
@@ -765,89 +659,9 @@
     }
   },
   {
-    "type": "constraint_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "string_literal",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "assert_statement",
-          "named": true
-        },
-        {
-          "type": "assignment_statement",
-          "named": true
-        },
-        {
-          "type": "expression_statement",
-          "named": true
-        },
-        {
-          "type": "pass_statement",
-          "named": true
-        },
-        {
-          "type": "relationship_declaration",
-          "named": true
-        },
-        {
-          "type": "return_statement",
-          "named": true
-        },
-        {
-          "type": "variable_declaration",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "currency_symbol",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "deadline_rule_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "death_penalty_clause",
@@ -1192,42 +1006,6 @@
         },
         {
           "type": "temporal_constraint",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "entity_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "type_name": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
           "named": true
         }
       ]
@@ -2272,58 +2050,6 @@
     }
   },
   {
-    "type": "issue_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "issue_element_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "legal_test_block",
     "named": true,
     "fields": {
@@ -2622,32 +2348,6 @@
         },
         {
           "type": "string_literal",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "locator_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
           "named": true
         }
       ]
@@ -3761,78 +3461,6 @@
     }
   },
   {
-    "type": "relationship_declaration",
-    "named": true,
-    "fields": {
-      "label": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "string_literal",
-            "named": true
-          }
-        ]
-      },
-      "source": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "target": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "temporal_scope": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "range_expression",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "relationship_type_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "return_statement",
     "named": true,
     "fields": {},
@@ -3928,206 +3556,6 @@
     }
   },
   {
-    "type": "ruleset_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "scenario_declaration",
-    "named": true,
-    "fields": {
-      "fork_from": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "string_literal",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "assert_statement",
-          "named": true
-        },
-        {
-          "type": "assignment_statement",
-          "named": true
-        },
-        {
-          "type": "constraint_declaration",
-          "named": true
-        },
-        {
-          "type": "deadline_rule_declaration",
-          "named": true
-        },
-        {
-          "type": "entity_declaration",
-          "named": true
-        },
-        {
-          "type": "expression_statement",
-          "named": true
-        },
-        {
-          "type": "issue_declaration",
-          "named": true
-        },
-        {
-          "type": "issue_element_declaration",
-          "named": true
-        },
-        {
-          "type": "locator_declaration",
-          "named": true
-        },
-        {
-          "type": "pass_statement",
-          "named": true
-        },
-        {
-          "type": "relationship_declaration",
-          "named": true
-        },
-        {
-          "type": "relationship_type_declaration",
-          "named": true
-        },
-        {
-          "type": "return_statement",
-          "named": true
-        },
-        {
-          "type": "ruleset_declaration",
-          "named": true
-        },
-        {
-          "type": "scenario_declaration",
-          "named": true
-        },
-        {
-          "type": "source_bundle_declaration",
-          "named": true
-        },
-        {
-          "type": "source_declaration",
-          "named": true
-        },
-        {
-          "type": "timeline_declaration",
-          "named": true
-        },
-        {
-          "type": "variable_declaration",
-          "named": true
-        },
-        {
-          "type": "view_declaration",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "source_bundle_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "source_declaration",
-    "named": true,
-    "fields": {
-      "kind": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -4142,18 +3570,6 @@
         },
         {
           "type": "conflict_check_block",
-          "named": true
-        },
-        {
-          "type": "constraint_declaration",
-          "named": true
-        },
-        {
-          "type": "deadline_rule_declaration",
-          "named": true
-        },
-        {
-          "type": "entity_declaration",
           "named": true
         },
         {
@@ -4173,47 +3589,11 @@
           "named": true
         },
         {
-          "type": "issue_declaration",
-          "named": true
-        },
-        {
-          "type": "issue_element_declaration",
-          "named": true
-        },
-        {
           "type": "legal_test_block",
           "named": true
         },
         {
-          "type": "locator_declaration",
-          "named": true
-        },
-        {
           "type": "referencing_statement",
-          "named": true
-        },
-        {
-          "type": "relationship_declaration",
-          "named": true
-        },
-        {
-          "type": "relationship_type_declaration",
-          "named": true
-        },
-        {
-          "type": "ruleset_declaration",
-          "named": true
-        },
-        {
-          "type": "scenario_declaration",
-          "named": true
-        },
-        {
-          "type": "source_bundle_declaration",
-          "named": true
-        },
-        {
-          "type": "source_declaration",
           "named": true
         },
         {
@@ -4225,19 +3605,11 @@
           "named": true
         },
         {
-          "type": "timeline_declaration",
-          "named": true
-        },
-        {
           "type": "type_alias",
           "named": true
         },
         {
           "type": "variable_declaration",
-          "named": true
-        },
-        {
-          "type": "view_declaration",
           "named": true
         }
       ]
@@ -4615,32 +3987,6 @@
           }
         ]
       }
-    }
-  },
-  {
-    "type": "timeline_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -5054,36 +4400,6 @@
     }
   },
   {
-    "type": "view_declaration",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "string_literal",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "chronology_field",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "!",
     "named": false
   },
@@ -5129,14 +4445,6 @@
   },
   {
     "type": "-",
-    "named": false
-  },
-  {
-    "type": "-->",
-    "named": false
-  },
-  {
-    "type": "-[",
     "named": false
   },
   {
@@ -5244,10 +4552,6 @@
     "named": false
   },
   {
-    "type": "]->",
-    "named": false
-  },
-  {
     "type": "actor",
     "named": false
   },
@@ -5345,10 +4649,6 @@
     "named": false
   },
   {
-    "type": "constraint",
-    "named": false
-  },
-  {
     "type": "cumulative",
     "named": false
   },
@@ -5366,10 +4666,6 @@
   },
   {
     "type": "days",
-    "named": false
-  },
-  {
-    "type": "deadline_rule",
     "named": false
   },
   {
@@ -5410,10 +4706,6 @@
   },
   {
     "type": "elements",
-    "named": false
-  },
-  {
-    "type": "entity",
     "named": false
   },
   {
@@ -5493,19 +4785,7 @@
     "named": true
   },
   {
-    "type": "issue",
-    "named": false
-  },
-  {
-    "type": "issue_element",
-    "named": false
-  },
-  {
     "type": "legal_test",
-    "named": false
-  },
-  {
-    "type": "locator",
     "named": false
   },
   {
@@ -5618,14 +4898,6 @@
     "named": false
   },
   {
-    "type": "rel",
-    "named": false
-  },
-  {
-    "type": "reltype",
-    "named": false
-  },
-  {
     "type": "repealed",
     "named": false
   },
@@ -5635,14 +4907,6 @@
   },
   {
     "type": "return",
-    "named": false
-  },
-  {
-    "type": "ruleset",
-    "named": false
-  },
-  {
-    "type": "scenario",
     "named": false
   },
   {
@@ -5659,10 +4923,6 @@
   },
   {
     "type": "source",
-    "named": false
-  },
-  {
-    "type": "source_bundle",
     "named": false
   },
   {
@@ -5706,10 +4966,6 @@
     "named": false
   },
   {
-    "type": "timeline",
-    "named": false
-  },
-  {
     "type": "type",
     "named": false
   },
@@ -5723,10 +4979,6 @@
   },
   {
     "type": "unspecified",
-    "named": false
-  },
-  {
-    "type": "view",
     "named": false
   },
   {

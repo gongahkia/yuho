@@ -1,70 +1,50 @@
 # Yuho documentation
 
-Docs are grouped by audience. Pick the section that matches what you want
-to do; cross-links between sections are explicit.
+Docs are grouped by audience.
 
----
+## Use Yuho
 
-## I want to *use* Yuho — `user/`
+Audience: people running the local `yuho` CLI, encoding statutes, or
+inspecting the checked-in corpus.
 
-Audience: people running the `yuho` CLI, the LSP, or the MCP server,
-encoding statutes or consuming the encoded library.
+- [Getting started](user/getting-started.md)
+- [5-minute tour](user/5-minutes.md)
+- [CLI reference](user/cli-reference.md)
+- [CLI exit codes](user/cli-exit-codes.md)
+- [Error codes](user/error-codes.md)
+- [FAQ](user/faq.md)
 
-- [Getting started](user/getting-started.md) — install + first encoding in 60 seconds.
-- [5-minute tour](user/5-minutes.md) — the core grammar by example.
-- [Chronology and provenance](user/chronology.md) — source-backed facts, timelines, issues, exhibits, scenarios, and reports.
-- [FAQ](user/faq.md) — common questions about scope, coverage, and how Yuho compares to Catala / Akoma Ntoso.
-- [Law student guide](user/law-student-guide.md) — Yuho through the lens of a Singapore criminal-law learner.
-- [CLI reference](user/cli-reference.md) — every `yuho` subcommand with examples.
-- [CLI exit codes](user/cli-exit-codes.md) — what each non-zero exit means.
-- [Error codes](user/error-codes.md) — diagnostic IDs and their meanings.
-- [MCP install](user/mcp-install.md) — wire Yuho's MCP server into Claude Desktop / Claude Code / Codex CLI / Cursor.
-- [Deployment](user/deployment.md) — running Yuho in CI or as a service.
+## Change Yuho
 
----
+Audience: people changing the parser, AST, transpilers, verifiers, or
+corpus tooling.
 
-## I want to *change* Yuho — `contributor/`
+- [Architecture](contributor/architecture.md)
+- [SDK](contributor/sdk.md)
+- [Transpiler plugins](contributor/transpiler-plugins.md)
+- [Porting guide](contributor/porting-guide.md)
+- [CI templates](contributor/ci-templates/)
 
-Audience: people changing the codebase, adding transpilers, or porting
-Yuho to a new statute family.
+## Understand Yuho
 
-- [Architecture](contributor/architecture.md) — module layout and data flow from grammar to AST to transpilers.
-- [Configuration](contributor/config.md) — config schema and defaults.
-- [SDK](contributor/sdk.md) — embedding Yuho in another Python program.
-- [SDK quickstart](contributor/sdk-quickstart.md) — minimal embed example.
-- [Transpiler plugins](contributor/transpiler-plugins.md) — author a new transpile target.
-- [Porting guide](contributor/porting-guide.md) — encode a different statute family.
-- [CI templates](contributor/ci-templates/) — drop-in CI configs.
+Audience: reviewers, researchers, and contributors tracing the design.
 
----
+- [Syntax reference](researcher/syntax.md)
+- [Formal semantics](researcher/formal-semantics.md)
+- [Phase C gaps](researcher/phase-c-gaps.md)
+- [Grammar quirks](grammar-quirks.md)
+- [OpenAPI note](researcher/openapi.yaml)
+- [Retrospective](retrospective.md)
 
-## I want to *understand* Yuho — `researcher/`
+## Corpus Work
 
-Audience: reviewers, contributors, and anyone tracing the design rationale.
+- [Encoded Penal Code library](../library/penal_code/)
+- [Legislative drafting cookbook](cookbook/legislative-drafting.md)
+- [Phase D L3 review prompt](researcher/phase-d-l3-review-prompt.md)
+- [Phase D re-encoding prompt](researcher/phase-d-reencoding-prompt.md)
+- [Phase D flag-fix prompt](researcher/phase-d-flag-fix-prompt.md)
 
-- [Formal semantics](researcher/formal-semantics.md) — the grammar's denotational semantics.
-- [Syntax reference](researcher/syntax.md) — every grammar production with examples.
-- [Phase C gaps](researcher/phase-c-gaps.md) — the fourteen grammar gaps surfaced during mass-encoding (G1–G14).
-- [Grammar quirks](grammar-quirks.md) — known parser limitations + authoring guidance to avoid them.
-- [OpenAPI note](researcher/openapi.yaml) — records that Yuho does not currently ship a REST/OpenAPI server.
+## See Also
 
----
-
-## Cross-cutting
-
-- [Cookbook](cookbook/) — recipe-style how-tos that don't fit one audience.
-- [Assets](assets/) — diagrams, screenshots, comic / meme variants.
-- [Architecture diagram (SVG)](architecture.svg) — rendered architecture overview.
-- [Retrospective](retrospective.md) — Phase A–D lessons learned + numbers.
-
-The Phase D agent prompts now live under `researcher/`:
-- [phase-d-l3-review-prompt.md](researcher/phase-d-l3-review-prompt.md)
-- [phase-d-reencoding-prompt.md](researcher/phase-d-reencoding-prompt.md)
-- [phase-d-flag-fix-prompt.md](researcher/phase-d-flag-fix-prompt.md)
-
----
-
-## See also
-
-- [Top-level README](../README.md) — project pitch + quickstart.
-- [Encoded library](../library/penal_code/) — the artefact itself.
+- [Top-level README](../README.md)
+- [Project license](../LICENSE)

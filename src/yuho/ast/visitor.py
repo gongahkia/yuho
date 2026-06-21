@@ -241,58 +241,6 @@ class Visitor:
         return self.generic_visit(node)
 
     # =========================================================================
-    # Chronology / provenance nodes
-    # =========================================================================
-
-    def visit_chronology_field(self, node: nodes.ChronologyField) -> Any:
-        return self.generic_visit(node)
-
-    def visit_chronology_decl(self, node: nodes.ChronologyDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_source_decl(self, node: nodes.SourceDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_source_bundle_decl(self, node: nodes.SourceBundleDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_locator_decl(self, node: nodes.LocatorDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_ruleset_decl(self, node: nodes.RulesetDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_deadline_rule_decl(self, node: nodes.DeadlineRuleDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_issue_decl(self, node: nodes.IssueDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_issue_element_decl(self, node: nodes.IssueElementDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_timeline_decl(self, node: nodes.TimelineDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_entity_decl(self, node: nodes.EntityDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_relationship_type_decl(self, node: nodes.RelationshipTypeDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_relationship_decl(self, node: nodes.RelationshipDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_scenario_decl(self, node: nodes.ScenarioDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_view_decl(self, node: nodes.ViewDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    def visit_constraint_decl(self, node: nodes.ConstraintDeclNode) -> Any:
-        return self.generic_visit(node)
-
-    # =========================================================================
     # Statute-specific nodes
     # =========================================================================
 

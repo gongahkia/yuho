@@ -17,7 +17,6 @@ keywords:
   - statute-encoding
   - singapore-penal-code
   - tree-sitter
-  - language-server
   - formal-verification
 preferred-citation:
   type: software

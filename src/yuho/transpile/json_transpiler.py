@@ -316,37 +316,6 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["target"] = node.target
             if node.annotations:
                 result["annotations"] = [self._to_dict(a) for a in node.annotations]
-        elif isinstance(node, nodes.ChronologyField):
-            result["name"] = node.name
-            result["value"] = self._to_dict(node.value)
-        elif isinstance(node, nodes.SourceDeclNode):
-            result["name"] = node.name
-            if node.kind:
-                result["kind"] = node.kind
-            result["fields"] = [self._to_dict(field) for field in node.fields]
-        elif isinstance(node, nodes.EntityDeclNode):
-            result["name"] = node.name
-            if node.type_name:
-                result["type_name"] = node.type_name
-            result["fields"] = [self._to_dict(field) for field in node.fields]
-        elif isinstance(node, nodes.ChronologyDeclNode):
-            result["name"] = node.name
-            result["fields"] = [self._to_dict(field) for field in node.fields]
-        elif isinstance(node, nodes.RelationshipDeclNode):
-            result["source"] = node.source
-            result["target"] = node.target
-            if node.label:
-                result["label"] = node.label
-            if node.temporal_scope:
-                result["temporal_scope"] = self._to_dict(node.temporal_scope)
-        elif isinstance(node, nodes.ScenarioDeclNode):
-            result["name"] = node.name
-            if node.fork_from:
-                result["fork_from"] = node.fork_from
-            result["body"] = [self._to_dict(item) for item in node.body]
-        elif isinstance(node, nodes.ConstraintDeclNode):
-            result["name"] = node.name
-            result["body"] = [self._to_dict(item) for item in node.body]
         elif isinstance(node, nodes.ModuleNode):
             from yuho.transpile.json_schema import AST_SCHEMA_VERSION
 
@@ -364,25 +333,5 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["legal_tests"] = [self._to_dict(lt) for lt in node.legal_tests]
             if node.conflict_checks:
                 result["conflict_checks"] = [self._to_dict(cc) for cc in node.conflict_checks]
-            chronology_fields = (
-                "sources",
-                "source_bundles",
-                "locators",
-                "rulesets",
-                "deadline_rules",
-                "issues",
-                "issue_elements",
-                "timelines",
-                "entities",
-                "relationship_types",
-                "relationships",
-                "scenarios",
-                "views",
-                "constraints",
-            )
-            for field_name in chronology_fields:
-                values = getattr(node, field_name, ())
-                if values:
-                    result[field_name] = [self._to_dict(value) for value in values]
 
         return result

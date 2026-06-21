@@ -1,17 +1,14 @@
-# Getting Started for Legal Tech Developers
+# Getting Started
 
-This guide covers the shipped local surfaces: CLI, transpilers, LSP, and
-MCP. Yuho does not currently ship a REST API, GraphQL target, Prolog
-target, or WASM package.
+Yuho ships as a local CLI and Python package for parsing, checking,
+transpiling, verifying, and inspecting statute encodings.
 
 ## 1. Install
-
-For repository work, use the supported Python range from the README:
 
 ```bash
 uv venv --python 3.13 .venv
 source .venv/bin/activate
-uv pip install -e '.[dev,lsp,mcp]'
+uv pip install -e '.[dev]'
 ```
 
 For package use:
@@ -52,58 +49,33 @@ yuho transpile -t akomantoso theft.yh
 ```
 
 `yuho transpile --all theft.yh --dir out/` writes the standard target
-set into a directory. The PDF/SVG/PNG paths are CLI conveniences built
-from LaTeX and Mermaid outputs; they are not separate AST targets.
+set into a directory. PDF/SVG/PNG outputs are derived from LaTeX or
+Mermaid when the external renderers are installed.
 
-## 4. Explore the shipped library
+## 4. Explore the checked-in corpus
 
 ```bash
-yuho ci-report
+yuho check library/penal_code/s415_cheating/statute.yh
+yuho refs 415
 yuho refs --scc --json
-yuho explain library/penal_code/s415_cheating/statute.yh
-yuho recommend simulator/fixtures/s415_classic.yaml
 ```
 
 The repository ships all 524 Singapore Penal Code sections as `.yh`,
-plus a raw Indian Penal Code snapshot and eight phase-1 encoded IPC
-sections for cross-jurisdiction checks.
+plus raw corpus material for the Indian Penal Code.
 
-## 5. Add chronology/provenance declarations
-
-Chronology declarations live in normal `.yh` files and are checked by
-`yuho check` when present:
+## 5. Verify retained gates
 
 ```bash
-yuho chronology check examples/chronology/brown_plaintiffs.yh
-yuho chronology export examples/chronology/brown_plaintiffs.yh -t mermaid
-yuho chronology sources examples/chronology/brown_plaintiffs.yh
+make verify-core
 ```
 
-Use them for source-backed facts, timelines, relationships, issues,
-deadlines, exhibits, and scenario diffs. See
-`docs/user/chronology.md` for syntax and report commands.
-
-## 6. Editor and AI integrations
-
-Start the language server over stdio:
-
-```bash
-yuho lsp
-```
-
-Start the MCP server for AI-client workflows:
-
-```bash
-yuho serve --stdio
-```
-
-See `editors/vscode-yuho/README.md` for VS Code setup and
-`docs/user/mcp-install.md` for MCP client wiring.
+That target runs the retained corpus and toolchain checks: parse/lint
+coverage, AKN XSD round-trip, runtime tests, Lean structural diff, and
+mechanisation where the Lean toolchain is installed.
 
 ## Next Steps
 
-- [CLI Reference](cli-reference.md)
-- [Feature Walkthrough](verify-features.md)
-- [Chronology and Provenance](chronology.md)
-- [5-Minute Tour](5-minutes.md)
-- [Contributor Architecture](../contributor/architecture.md)
+- [CLI reference](cli-reference.md)
+- [5-minute tour](5-minutes.md)
+- [Syntax reference](../researcher/syntax.md)
+- [Contributor architecture](../contributor/architecture.md)

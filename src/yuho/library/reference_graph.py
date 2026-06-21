@@ -6,8 +6,8 @@ references (mentions like ``s415`` or ``section 415`` inside element
 descriptions, doc comments, and case-law holdings).
 
 The resulting :class:`ReferenceGraph` answers reachability queries used by
-LSP goto-definition, the public explorer's cross-reference graph page,
-Tarjan-SCC analysis, and the lam4-style ``IS_INFRINGED`` predicate.
+``yuho refs``, corpus-wide graph lint, Tarjan-SCC analysis, and the
+lam4-style ``IS_INFRINGED`` predicate.
 
 Implementation note: we do not depend on networkx; the graph is small
 (524 nodes, low-thousand edges) and a hand-written adjacency-list

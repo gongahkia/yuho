@@ -32,17 +32,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-lsp = [
-    "pygls>=1.0,<2.0",
-]
-mcp = [
-    "fastmcp>=0.1,<1.0",
-    "httpx>=0.24,<1.0",
-]
-observability = [
-    "opentelemetry-sdk>=1.20,<2.0",
-    "opentelemetry-api>=1.20,<2.0",
-]
 dev = [
     "pytest>=7.0,<9.0",
     "hypothesis>=6.0,<7.0",
@@ -55,7 +44,7 @@ scrape = [
     "lxml>=5.0,<6.0",
 ]
 all = [
-    "yuho[lsp,mcp,observability,dev,scrape]",
+    "yuho[dev,scrape]",
 ]
 
 [project.scripts]
@@ -93,7 +82,6 @@ warn_unused_configs = true
 
 [[tool.mypy.overrides]]
 module = [
-    "yuho.mcp.server",
     "yuho.library.*",
 ]
 disallow_untyped_defs = true

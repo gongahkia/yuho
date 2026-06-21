@@ -275,16 +275,11 @@ install_yuho() {
     cd "$SRC_DIR"
 
     if [[ "$DEV_MODE" == true ]]; then
-        $PKG_CMD install -e ".[all]"
+        $PKG_CMD install -e ".[dev,scrape]"
     else
         $PKG_CMD install -e .
     fi
 
-    # install optional extras (lsp, mcp, dev)
-    log "Installing LSP dependencies..."
-    $PKG_CMD install -e ".[lsp]"
-    log "Installing MCP dependencies..."
-    $PKG_CMD install -e ".[mcp]"
     log "Installing dev dependencies (pytest, etc.)..."
     $PKG_CMD install -e ".[dev]"
 
@@ -346,7 +341,7 @@ main() {
 
     echo "To get started:"
     echo "  yuho --help"
-    echo "  yuho repl"
+    echo "  yuho check library/penal_code/s415_cheating/statute.yh"
     echo ""
 }
 

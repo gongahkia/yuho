@@ -29,7 +29,7 @@ class AlloyCounterexample:
     message: str = ""
 
     def to_diagnostic(self) -> Dict[str, Any]:
-        """Convert to LSP-compatible diagnostic."""
+        """Convert to a structured diagnostic."""
         return {
             "message": f"Alloy: {self.assertion_name} - {self.message}",
             "severity": "warning" if self.violated else "info",
