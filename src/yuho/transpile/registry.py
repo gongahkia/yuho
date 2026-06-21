@@ -74,6 +74,7 @@ class TranspilerRegistry:
         from yuho.transpile.alloy_transpiler import AlloyTranspiler
         from yuho.transpile.docx_transpiler import DOCXTranspiler
         from yuho.transpile.akomantoso_transpiler import AkomaNtosoTranspiler
+        from yuho.transpile.legalruleml_transpiler import LegalRuleMLTranspiler
 
         self._registry[TranspileTarget.JSON] = JSONTranspiler
         self._registry[TranspileTarget.ENGLISH] = EnglishTranspiler
@@ -83,6 +84,7 @@ class TranspilerRegistry:
         self._registry[TranspileTarget.ALLOY] = AlloyTranspiler
         self._registry[TranspileTarget.DOCX] = DOCXTranspiler
         self._registry[TranspileTarget.AKOMANTOSO] = AkomaNtosoTranspiler
+        self._registry[TranspileTarget.LEGALRULEML] = LegalRuleMLTranspiler
 
     @classmethod
     def instance(cls) -> "TranspilerRegistry":

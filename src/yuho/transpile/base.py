@@ -40,6 +40,8 @@ class TranspileTarget(Enum):
             "akomantoso": cls.AKOMANTOSO,
             "akn": cls.AKOMANTOSO,
             "legaldocml": cls.AKOMANTOSO,
+            "legalruleml": cls.LEGALRULEML,
+            "lrml": cls.LEGALRULEML,
         }
         target = mapping.get(name.lower())
         if not target:

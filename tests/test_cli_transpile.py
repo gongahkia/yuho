@@ -39,6 +39,7 @@ def test_transpile_all_generates_every_target_output(tmp_path: Path, monkeypatch
     class DummyDocx:
         def write_docx(self, _ast, path):
             Path(path).write_text("generated:docx", encoding="utf-8")
+
     monkeypatch.setattr("yuho.transpile.docx_transpiler.DOCXTranspiler", lambda: DummyDocx())
 
     source_path = tmp_path / "sample.yh"

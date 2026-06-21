@@ -186,6 +186,8 @@ def ast(
             "akomantoso",
             "akn",
             "legaldocml",
+            "legalruleml",
+            "lrml",
         ],
         case_sensitive=False,
     ),

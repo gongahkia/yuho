@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(A) 2026-06-21 Register LRML target in src/yuho/transpile/registry.py and CLI choices in src/yuho/cli/main.py +tooling @transpile effort:S
 (A) 2026-06-21 Vendor LegalRuleML v1.0 XSD under src/yuho/transpile/lrml_schema and add roundtrip script alongside scripts/akn_roundtrip.py +tooling @transpile effort:S
 (A) 2026-06-21 Bootstrap LSP server at src/yuho/lsp/ using pygls reading existing tree-sitter parser via parser/wrapper.py +tooling @lsp effort:M
 (A) 2026-06-21 LSP hover surfacing AST node kind + source-locations via parser/source_location.py +tooling @lsp effort:S

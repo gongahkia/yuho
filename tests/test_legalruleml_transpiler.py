@@ -12,7 +12,7 @@ except ImportError:
     _BACKEND = "stdlib"
 
 from yuho.ast import nodes
-from yuho.transpile.base import TranspileTarget
+from yuho.transpile import TranspileTarget, get_transpiler
 from yuho.transpile.legalruleml_transpiler import LegalRuleMLTranspiler
 
 
@@ -84,6 +84,9 @@ def test_target_and_extension():
     transpiler = LegalRuleMLTranspiler()
     assert transpiler.target is TranspileTarget.LEGALRULEML
     assert TranspileTarget.LEGALRULEML.file_extension == ".lrml"
+    assert TranspileTarget.from_string("lrml") is TranspileTarget.LEGALRULEML
+    assert TranspileTarget.from_string("legalruleml") is TranspileTarget.LEGALRULEML
+    assert isinstance(get_transpiler(TranspileTarget.LEGALRULEML), LegalRuleMLTranspiler)
 
 
 def test_emits_well_formed_legalruleml_root():

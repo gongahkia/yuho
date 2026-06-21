@@ -927,6 +927,7 @@ class TestTranspileTarget:
         assert TranspileTarget.from_string("en") == TranspileTarget.ENGLISH
         assert TranspileTarget.from_string("tex") == TranspileTarget.LATEX
         assert TranspileTarget.from_string("mmd") == TranspileTarget.MERMAID
+        assert TranspileTarget.from_string("lrml") == TranspileTarget.LEGALRULEML
 
     def test_from_string_case_insensitive(self):
         from yuho.transpile.base import TranspileTarget
@@ -947,6 +948,7 @@ class TestTranspileTarget:
         assert TranspileTarget.LATEX.file_extension == ".tex"
         assert TranspileTarget.MERMAID.file_extension == ".mmd"
         assert TranspileTarget.ALLOY.file_extension == ".als"
+        assert TranspileTarget.LEGALRULEML.file_extension == ".lrml"
 
 
 # =========================================================================

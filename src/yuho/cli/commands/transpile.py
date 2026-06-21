@@ -24,6 +24,7 @@ ALL_TARGETS = [
     "alloy",
     "docx",
     "akomantoso",
+    "legalruleml",
 ]
 
 
@@ -174,6 +175,7 @@ def run_transpile(
             # registry. The schema path is opt-in and rarely the right default.
             if transpile_target is TranspileTarget.MERMAID and shape in ("schema", "verbose"):
                 from yuho.transpile.mermaid_transpiler import MermaidTranspiler
+
                 transpiler = MermaidTranspiler(shape=shape)
             else:
                 transpiler = get_transpiler(transpile_target)
