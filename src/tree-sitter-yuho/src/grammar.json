@@ -4164,6 +4164,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "exists_at_most_expression"
+        },
+        {
+          "type": "SYMBOL",
           "name": "identifier"
         },
         {
@@ -4303,6 +4307,35 @@
           }
         ]
       }
+    },
+    "exists_at_most_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "exists_at_most"
+        },
+        {
+          "type": "FIELD",
+          "name": "limit",
+          "content": {
+            "type": "SYMBOL",
+            "name": "integer_literal"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "within"
+        },
+        {
+          "type": "FIELD",
+          "name": "window",
+          "content": {
+            "type": "SYMBOL",
+            "name": "duration_literal"
+          }
+        }
+      ]
     },
     "field_access": {
       "type": "PREC_LEFT",

@@ -159,6 +159,8 @@ def yuho_identifier(draw) -> str:
         "date",
         "duration",
         "void",
+        "exists_at_most",
+        "within",
     }
     if name.lower() in keywords or name in keywords:
         return "var_" + name

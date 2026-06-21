@@ -828,6 +828,7 @@ module.exports = grammar({
       $.list_literal,
       $.range_expression,
       $.timeline_appearance,
+      $.exists_at_most_expression,
       $.identifier,
       $.field_access,
       $.index_access,
@@ -859,6 +860,13 @@ module.exports = grammar({
       '@',
       field('range', $.range_expression),
     )),
+
+    exists_at_most_expression: $ => seq(
+      'exists_at_most',
+      field('limit', $.integer_literal),
+      'within',
+      field('window', $.duration_literal),
+    ),
 
     field_access: $ => prec.left(10, seq(
       field('base', $._expression),

@@ -315,6 +315,9 @@ class Interpreter(Visitor):
     def visit_duration(self, node: nodes.DurationNode) -> Value:
         return Value(node, "duration")
 
+    def visit_exists_at_most(self, node: nodes.ExistsAtMostNode) -> Value:
+        raise InterpreterError("exists_at_most evaluation requires event fact support")
+
     # ======================================================================
     # Expression visitors
     # ======================================================================

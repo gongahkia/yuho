@@ -386,6 +386,20 @@ class TimelineAppearanceNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class ExistsAtMostNode(ASTNode):
+    """Bounded count primitive: exists_at_most N within DURATION."""
+
+    limit: IntLit
+    window: DurationNode
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_exists_at_most(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.limit, self.window]
+
+
+@dataclass(frozen=True)
 class FunctionCallNode(ASTNode):
     """Function call expression: callee(args...)."""
 

@@ -66,6 +66,10 @@
           "named": true
         },
         {
+          "type": "exists_at_most_expression",
+          "named": true
+        },
+        {
           "type": "field_access",
           "named": true
         },
@@ -196,6 +200,10 @@
             "named": true
           },
           {
+            "type": "exists_at_most_expression",
+            "named": true
+          },
+          {
             "type": "field_access",
             "named": true
           },
@@ -320,6 +328,10 @@
             "named": true
           },
           {
+            "type": "exists_at_most_expression",
+            "named": true
+          },
+          {
             "type": "field_access",
             "named": true
           },
@@ -413,6 +425,10 @@
         },
         {
           "type": "duration_literal",
+          "named": true
+        },
+        {
+          "type": "exists_at_most_expression",
           "named": true
         },
         {
@@ -818,6 +834,10 @@
             "named": true
           },
           {
+            "type": "exists_at_most_expression",
+            "named": true
+          },
+          {
             "type": "field_access",
             "named": true
           },
@@ -1218,6 +1238,10 @@
             "named": true
           },
           {
+            "type": "exists_at_most_expression",
+            "named": true
+          },
+          {
             "type": "field_access",
             "named": true
           },
@@ -1310,6 +1334,32 @@
     }
   },
   {
+    "type": "exists_at_most_expression",
+    "named": true,
+    "fields": {
+      "limit": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "integer_literal",
+            "named": true
+          }
+        ]
+      },
+      "window": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "duration_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "expression_statement",
     "named": true,
     "fields": {},
@@ -1331,6 +1381,10 @@
         },
         {
           "type": "duration_literal",
+          "named": true
+        },
+        {
+          "type": "exists_at_most_expression",
           "named": true
         },
         {
@@ -1426,6 +1480,10 @@
           },
           {
             "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "exists_at_most_expression",
             "named": true
           },
           {
@@ -1542,6 +1600,10 @@
           },
           {
             "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "exists_at_most_expression",
             "named": true
           },
           {
@@ -1994,6 +2056,10 @@
             "named": true
           },
           {
+            "type": "exists_at_most_expression",
+            "named": true
+          },
+          {
             "type": "field_access",
             "named": true
           },
@@ -2081,6 +2147,10 @@
           },
           {
             "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "exists_at_most_expression",
             "named": true
           },
           {
@@ -2233,6 +2303,10 @@
           },
           {
             "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "exists_at_most_expression",
             "named": true
           },
           {
@@ -2402,6 +2476,10 @@
           "named": true
         },
         {
+          "type": "exists_at_most_expression",
+          "named": true
+        },
+        {
           "type": "field_access",
           "named": true
         },
@@ -2559,6 +2637,10 @@
             "named": true
           },
           {
+            "type": "exists_at_most_expression",
+            "named": true
+          },
+          {
             "type": "field_access",
             "named": true
           },
@@ -2646,6 +2728,10 @@
           },
           {
             "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "exists_at_most_expression",
             "named": true
           },
           {
@@ -2764,6 +2850,10 @@
           },
           {
             "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "exists_at_most_expression",
             "named": true
           },
           {
@@ -3000,6 +3090,10 @@
         },
         {
           "type": "duration_literal",
+          "named": true
+        },
+        {
+          "type": "exists_at_most_expression",
           "named": true
         },
         {
@@ -3326,6 +3420,10 @@
           "named": true
         },
         {
+          "type": "exists_at_most_expression",
+          "named": true
+        },
+        {
           "type": "field_access",
           "named": true
         },
@@ -3461,6 +3559,10 @@
             "named": true
           },
           {
+            "type": "exists_at_most_expression",
+            "named": true
+          },
+          {
             "type": "field_access",
             "named": true
           },
@@ -3548,6 +3650,10 @@
           },
           {
             "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "exists_at_most_expression",
             "named": true
           },
           {
@@ -3644,6 +3750,10 @@
         },
         {
           "type": "duration_literal",
+          "named": true
+        },
+        {
+          "type": "exists_at_most_expression",
           "named": true
         },
         {
@@ -4302,6 +4412,10 @@
           "named": true
         },
         {
+          "type": "exists_at_most_expression",
+          "named": true
+        },
+        {
           "type": "field_access",
           "named": true
         },
@@ -4425,6 +4539,10 @@
             "named": true
           },
           {
+            "type": "exists_at_most_expression",
+            "named": true
+          },
+          {
             "type": "field_access",
             "named": true
           },
@@ -4542,6 +4660,10 @@
           },
           {
             "type": "duration_literal",
+            "named": true
+          },
+          {
+            "type": "exists_at_most_expression",
             "named": true
           },
           {
@@ -4966,6 +5088,10 @@
     "named": false
   },
   {
+    "type": "exists_at_most",
+    "named": false
+  },
+  {
     "type": "fact",
     "named": false
   },
@@ -5277,6 +5403,10 @@
   {
     "type": "wildcard_pattern",
     "named": true
+  },
+  {
+    "type": "within",
+    "named": false
   },
   {
     "type": "year",

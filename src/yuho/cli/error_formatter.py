@@ -173,6 +173,7 @@ YUHO_KEYWORDS = [
     "burden", "prosecution", "defence",
     "beyond_reasonable_doubt", "balance_of_probabilities", "prima_facie",
     "causedBy", "agent", "actor", "patient", "precedes", "during", "after",
+    "exists_at_most", "within",
     # penalty primitives + combinators (G8, G9, G12, G14)
     "imprisonment", "fine", "caning", "death_penalty", "supplementary",
     "cumulative", "alternative", "or_both", "when",

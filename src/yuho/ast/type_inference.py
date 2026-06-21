@@ -268,6 +268,12 @@ class TypeInferenceVisitor(Visitor):
         self.result.set_type(node, inferred_type)
         return inferred_type
 
+    def visit_exists_at_most(self, node: nodes.ExistsAtMostNode) -> TypeAnnotation:
+        self.visit(node.limit)
+        self.visit(node.window)
+        self.result.set_type(node, BOOL_TYPE)
+        return BOOL_TYPE
+
     def visit_function_call(self, node: nodes.FunctionCallNode) -> TypeAnnotation:
         """Infer return type from function signature."""
         # Visit arguments

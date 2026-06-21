@@ -97,6 +97,9 @@ class Transformer(Visitor):
     def visit_function_call(self, node):
         return self.transform_function_call(node)
 
+    def visit_exists_at_most(self, node):
+        return self.transform_exists_at_most(node)
+
     def visit_binary_expr(self, node):
         return self.transform_binary_expr(node)
 
@@ -342,6 +345,17 @@ class Transformer(Visitor):
             return nodes.IndexAccessNode(
                 base=new_base,
                 index=new_index,
+                source_location=node.source_location,
+            )
+        return node
+
+    def transform_exists_at_most(self, node: nodes.ExistsAtMostNode) -> nodes.ASTNode:
+        new_limit = self._transform_typed(node.limit)
+        new_window = self._transform_typed(node.window)
+        if new_limit is not node.limit or new_window is not node.window:
+            return nodes.ExistsAtMostNode(
+                limit=new_limit,
+                window=new_window,
                 source_location=node.source_location,
             )
         return node

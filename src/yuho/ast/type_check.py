@@ -359,6 +359,23 @@ class TypeCheckVisitor(Visitor):
                 )
         return self.generic_visit(node)
 
+    def visit_exists_at_most(self, node: nodes.ExistsAtMostNode) -> None:
+        self.visit(node.limit)
+        self.visit(node.window)
+        limit_type = self._get_type(node.limit)
+        window_type = self._get_type(node.window)
+        if limit_type.type_name != "int":
+            self.result.add_error(
+                f"exists_at_most limit must be int, got {limit_type}",
+                node.limit,
+            )
+        if window_type.type_name != "duration":
+            self.result.add_error(
+                f"exists_at_most window must be duration, got {window_type}",
+                node.window,
+            )
+        return None
+
     # =========================================================================
     # Variable and assignment
     # =========================================================================

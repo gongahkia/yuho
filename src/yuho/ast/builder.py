@@ -552,6 +552,8 @@ class ASTBuilder:
             return self._build_range_expr(node)
         elif node_type == "timeline_appearance":
             return self._build_timeline_appearance(node)
+        elif node_type == "exists_at_most_expression":
+            return self._build_exists_at_most(node)
         elif node_type == "field_access":
             return self._build_field_access(node)
         elif node_type == "index_access":
@@ -621,6 +623,19 @@ class ASTBuilder:
         )
         return nodes.StringLit(
             value=text,
+            source_location=self._loc(node),
+        )
+
+    def _build_exists_at_most(self, node) -> nodes.ExistsAtMostNode:
+        limit_node = self._child_by_field(node, "limit")
+        window_node = self._child_by_field(node, "window")
+        return nodes.ExistsAtMostNode(
+            limit=self._build_int_lit(limit_node) if limit_node else nodes.IntLit(value=0),
+            window=(
+                self._build_duration(window_node)
+                if window_node
+                else nodes.DurationNode(days=0)
+            ),
             source_location=self._loc(node),
         )
 

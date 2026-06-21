@@ -94,6 +94,9 @@ class JSONTranspiler(TranspilerBase, Visitor):
         elif isinstance(node, nodes.TimelineAppearanceNode):
             result["timeline"] = node.timeline
             result["range"] = self._to_dict(node.range)
+        elif isinstance(node, nodes.ExistsAtMostNode):
+            result["limit"] = self._to_dict(node.limit)
+            result["window"] = self._to_dict(node.window)
         elif isinstance(node, nodes.FunctionCallNode):
             result["callee"] = self._to_dict(node.callee)
             result["args"] = [self._to_dict(a) for a in node.args]

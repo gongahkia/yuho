@@ -120,6 +120,9 @@ class Visitor:
     def visit_timeline_appearance(self, node: nodes.TimelineAppearanceNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_exists_at_most(self, node: nodes.ExistsAtMostNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_function_call(self, node: nodes.FunctionCallNode) -> Any:
         return self.generic_visit(node)
 
