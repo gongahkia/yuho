@@ -23,6 +23,29 @@ from yuho.services.errors import (
 )
 
 
+ANALYSIS_ERROR_CODES: dict[str, str] = {
+    "file_not_found": "Y0001",
+    "not_a_file": "Y0002",
+    "file_too_large": "Y0003",
+    "encoding_error": "Y0004",
+    "file_read_failed": "Y0005",
+    "null_bytes": "Y0006",
+    "source_too_large": "Y0007",
+    "parse_error": "Y0100",
+    "parse_missing_node": "Y0101",
+    "parse_unexpected_syntax": "Y0102",
+    "parser_failed": "Y0199",
+    "ast_build_failed": "Y0200",
+    "lint_analysis_failed": "Y0300",
+    "semantic_issue": "Y0400",
+    "semantic_analysis_failed": "Y0499",
+}
+
+
+def _code(name: str) -> str:
+    return ANALYSIS_ERROR_CODES[name]
+
+
 @dataclass(frozen=True)
 class AnalysisError:
     """Structured analysis error across parse, AST, and semantic phases."""
@@ -261,7 +284,7 @@ class AnalysisResult:
                     "stage": "parse",
                     "severity": "error",
                     "message": err.message,
-                    "error_code": "parse_error",
+                    "error_code": _parse_error_code(err),
                     "node_type": err.node_type,
                     "line": err.location.line,
                     "column": err.location.col,
@@ -310,7 +333,7 @@ class AnalysisResult:
                     "stage": "semantic",
                     "severity": issue.severity,
                     "message": issue.message,
-                    "error_code": "semantic_issue",
+                    "error_code": _code("semantic_issue"),
                     "node_type": None,
                     "line": issue.line,
                     "column": issue.column,
@@ -436,7 +459,7 @@ def analyze_file(
                 AnalysisError(
                     stage="parse",
                     message=f"File not found: {file_path}",
-                    error_code="file_not_found",
+                    error_code=_code("file_not_found"),
                 )
             ],
         )
@@ -448,7 +471,7 @@ def analyze_file(
                 AnalysisError(
                     stage="parse",
                     message=f"Not a regular file: {file_path}",
-                    error_code="not_a_file",
+                    error_code=_code("not_a_file"),
                 )
             ],
         )
@@ -464,7 +487,7 @@ def analyze_file(
                 AnalysisError(
                     stage="parse",
                     message=f"File exceeds maximum size ({MAX_FILE_SIZE} bytes): {file_path}",
-                    error_code="file_too_large",
+                    error_code=_code("file_too_large"),
                 )
             ],
         )
@@ -479,7 +502,7 @@ def analyze_file(
                 AnalysisError(
                     stage="parse",
                     message=f"File is not valid {encoding}: {file_path} ({exc.reason})",
-                    error_code="encoding_error",
+                    error_code=_code("encoding_error"),
                 )
             ],
         )
@@ -491,7 +514,7 @@ def analyze_file(
                 AnalysisError(
                     stage="parse",
                     message=f"Failed to read file: {exc}",
-                    error_code="file_read_failed",
+                    error_code=_code("file_read_failed"),
                 )
             ],
         )
@@ -523,7 +546,7 @@ def analyze_source(
                 AnalysisError(
                     stage="parse",
                     message="Source contains null bytes (possible binary file)",
-                    error_code="null_bytes",
+                    error_code=_code("null_bytes"),
                 )
             ],
         )
@@ -535,7 +558,7 @@ def analyze_source(
                 AnalysisError(
                     stage="parse",
                     message=f"Source exceeds maximum length ({MAX_SOURCE_LENGTH} chars)",
-                    error_code="source_too_large",
+                    error_code=_code("source_too_large"),
                 )
             ],
         )
@@ -560,7 +583,7 @@ def analyze_source(
             AnalysisError(
                 stage="parse",
                 message=str(exc),
-                error_code="parser_failed",
+                error_code=_code("parser_failed"),
             )
         )
         result.total_duration_ms = (perf_counter() - start_total) * 1000.0
@@ -591,7 +614,7 @@ def analyze_source(
             AnalysisError(
                 stage="ast",
                 message=str(exc),
-                error_code="ast_build_failed",
+                error_code=_code("ast_build_failed"),
             )
         )
         result.total_duration_ms = (perf_counter() - start_total) * 1000.0
@@ -615,7 +638,7 @@ def analyze_source(
             AnalysisError(
                 stage="lint",
                 message=f"Lint analysis failed: {exc}",
-                error_code="lint_analysis_failed",
+                error_code=_code("lint_analysis_failed"),
             )
         )
 
@@ -629,7 +652,7 @@ def analyze_source(
                 AnalysisError(
                     stage="semantic",
                     message=f"Semantic analysis failed: {exc}",
-                    error_code="semantic_analysis_failed",
+                    error_code=_code("semantic_analysis_failed"),
                 )
             )
         result.semantic_duration_ms = (perf_counter() - start_semantic) * 1000.0
@@ -664,21 +687,23 @@ def _build_clock_load_scale(result: AnalysisResult) -> ClockLoadScale:
     )
 
 
+def _parse_error_code(error: ParseError) -> str:
+    if error.node_type and error.node_type.startswith("MISSING:"):
+        return _code("parse_missing_node")
+    if "Unexpected syntax" in error.message:
+        return _code("parse_unexpected_syntax")
+    return _code("parse_error")
+
+
 def _parse_errors_to_analysis_errors(parse_errors: list[ParseError]) -> list[AnalysisError]:
     """Convert parser errors to normalized analysis errors."""
     normalized: list[AnalysisError] = []
     for error in parse_errors:
-        error_code = "parse_error"
-        if error.node_type and error.node_type.startswith("MISSING:"):
-            error_code = "parse_missing_node"
-        elif "Unexpected syntax" in error.message:
-            error_code = "parse_unexpected_syntax"
-
         normalized.append(
             AnalysisError(
                 stage="parse",
                 message=error.message,
-                error_code=error_code,
+                error_code=_parse_error_code(error),
                 location=error.location,
                 node_type=error.node_type,
             )

@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(A) 2026-06-21 Stabilise error_code scheme: migrate snake_case strings in services/analysis.py to Y0001-Y9999 and expand docs/user/error-codes.md with per-code anchored explainers +compiler @analysis effort:M
 (A) 2026-06-21 Formatter idempotency Hypothesis property test fmt(fmt(x)) == fmt(x) in tests/test_properties.py +compiler @tests effort:S
 (A) 2026-06-21 Differential test interpreter vs Z3 backend on 90 runtime-sweep fixtures; fail on disagreement +compiler @verify effort:M
 (A) 2026-06-21 Wire eval/debugger.py to new `yuho debug --break-on element FACTS.yh STATUTE.yh` CLI subcommand +compiler @cli effort:M
