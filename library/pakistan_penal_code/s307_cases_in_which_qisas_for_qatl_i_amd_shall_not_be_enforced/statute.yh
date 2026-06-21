@@ -1,0 +1,14 @@
+/// @jurisdiction pakistan
+/// @meta act=Pakistan Penal Code 1860
+/// @meta source=https://www.unodc.org/cld/uploads/res/document/pak/1860/pakistan_penal_code_1860_html/Pakistan_Penal_Code_1860_incorporating_amendments_to_16_February_2017.pdf
+/// @meta official_page=https://pakistancode.gov.pk/english/UY2FqaJw1-apaUY2Fqa-apaUY2Npa5lo-sg-jjjjjjjjjjjjj
+/// @meta official_pdf=https://pakistancode.gov.pk/pdffiles/administratord5622ea3f15bfa00b17d2cf7770a8434.pdf
+/// @meta source_note=Pakistan Code official PDF unreachable locally; UNODC PDF last amended 2017-02-16 used.
+/// @meta skeleton=true
+
+statute 307 "Cases in which qisas for qatl-i-amd shall not be enforced." jurisdiction pakistan effective 1860-10-06 {
+    definitions {
+        skeleton_note := "Generated skeleton from UNODC-hosted PPC PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Cases in which Qisas for qatl-e-amd shall not be enforced. (1) Qisas for qatl-i-amd shall not be enforced in the following cases, namely: (a) when the offender dies before the enforcement of qisas \u037e (b) when any wali voluntarily and without duress, to the satisfaction of the court, waives the right of qisas under section 309 or compounds under section 310\u037e and (c) when the right of qisas devolves on the offender as a result of the death of the wali of the victim, or on the person who has no right of qisas against the offender. (2) To satisfy itself that the wali has waived the right of qisas under section 309 or compounded the right of qisas under section 310 voluntarily and without duress the court shall take down the state- ment of the wali and such other persons as it may deem necessary on oath and record an opinion that it is satisfied that the waiver or, as the case may be, the composition, was voluntary and not the result of any duress. Illustrations (i) A kills Z, the maternal uncle of his son B. Z has no other wali except D, the wife of A. D has the right of qisas from A. But if D dies, the right of qisas shall devolve on her son B who is also the son of the offender A. B cannot claim qisas against his father. Therefore, the qisas cannot be enforced. (ii) B kills Z, the brother of her husband A. Z has no heir except A. Here A can claim qisas from his wife B. But if A dies, the right of qisas shall devolve on his son D who is also son of B, the qisas cannot be enforced against B.";
+    }
+}

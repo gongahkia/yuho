@@ -1,0 +1,14 @@
+/// @jurisdiction pakistan
+/// @meta act=Pakistan Penal Code 1860
+/// @meta source=https://www.unodc.org/cld/uploads/res/document/pak/1860/pakistan_penal_code_1860_html/Pakistan_Penal_Code_1860_incorporating_amendments_to_16_February_2017.pdf
+/// @meta official_page=https://pakistancode.gov.pk/english/UY2FqaJw1-apaUY2Fqa-apaUY2Npa5lo-sg-jjjjjjjjjjjjj
+/// @meta official_pdf=https://pakistancode.gov.pk/pdffiles/administratord5622ea3f15bfa00b17d2cf7770a8434.pdf
+/// @meta source_note=Pakistan Code official PDF unreachable locally; UNODC PDF last amended 2017-02-16 used.
+/// @meta skeleton=true
+
+statute 383 "Extortion." jurisdiction pakistan effective 1860-10-06 {
+    definitions {
+        skeleton_note := "Generated skeleton from UNODC-hosted PPC PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever intentionally puts any person in fear of any injury to that person, or to any other, and thereby dishonestly induces the person so put in fear to deliver to any person any pro- perty or valuable security or anything signed or sealed which may be converted into a valuable security, commits \u2015extortion\u2016. 1Ins. by Act 1 of 1996, s.2 2Added by Act XVI of 1996, s.2 Illustrations (a) A threatens to publish a defamatory libel concerning Z unless Z gives him money. He thus induces Z to give him money. A has committed extortion. (b) A threatens Z that he will keep Z\u2018s child in wrongful confinement unless Z will sign and deliver to A a promissory note binding Z to pay certain money to A. Z signs and delivers the note. A has committed extortion. (c) A threatens to send club-men to plough up Z\u2018s field unless Z will sign and deliver to B a bond binding Z under a penalty to deliver certain produce to B, and thereby induces Z to sign and deliver the bond. A has committed extortion. (d) A, by putting Z in fear of grievous hurt, dishonestly induces Z to sign or affix his seal to a blank paper and deliver it to A. Z signs and delivers the paper to A. Here, as the paper so signed may be converted into a valuable security, A has committed extortion.";
+    }
+}

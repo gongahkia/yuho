@@ -1,0 +1,14 @@
+/// @jurisdiction pakistan
+/// @meta act=Pakistan Penal Code 1860
+/// @meta source=https://www.unodc.org/cld/uploads/res/document/pak/1860/pakistan_penal_code_1860_html/Pakistan_Penal_Code_1860_incorporating_amendments_to_16_February_2017.pdf
+/// @meta official_page=https://pakistancode.gov.pk/english/UY2FqaJw1-apaUY2Fqa-apaUY2Npa5lo-sg-jjjjjjjjjjjjj
+/// @meta official_pdf=https://pakistancode.gov.pk/pdffiles/administratord5622ea3f15bfa00b17d2cf7770a8434.pdf
+/// @meta source_note=Pakistan Code official PDF unreachable locally; UNODC PDF last amended 2017-02-16 used.
+/// @meta skeleton=true
+
+statute 319 "Punishment for qatl-i-khata." jurisdiction pakistan effective 1860-10-06 {
+    definitions {
+        skeleton_note := "Generated skeleton from UNODC-hosted PPC PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever commits qatl-i-khata shall be liable to diyat: Provided that, where qatl-i-khata is committed by any rash or negligent act, other than rash or negligent driving, the offender may, in addition to diyat, also be punished with imprisonment of either description for a term which may extend to five years as ta'zir.";
+    }
+}

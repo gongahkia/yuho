@@ -1,0 +1,14 @@
+/// @jurisdiction pakistan
+/// @meta act=Pakistan Penal Code 1860
+/// @meta source=https://www.unodc.org/cld/uploads/res/document/pak/1860/pakistan_penal_code_1860_html/Pakistan_Penal_Code_1860_incorporating_amendments_to_16_February_2017.pdf
+/// @meta official_page=https://pakistancode.gov.pk/english/UY2FqaJw1-apaUY2Fqa-apaUY2Npa5lo-sg-jjjjjjjjjjjjj
+/// @meta official_pdf=https://pakistancode.gov.pk/pdffiles/administratord5622ea3f15bfa00b17d2cf7770a8434.pdf
+/// @meta source_note=Pakistan Code official PDF unreachable locally; UNODC PDF last amended 2017-02-16 used.
+/// @meta skeleton=true
+
+statute 6 "Definitions in the Code to be understood subject to exceptions." jurisdiction pakistan effective 1860-10-06 {
+    definitions {
+        skeleton_note := "Generated skeleton from UNODC-hosted PPC PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Throughout this Code every definition of an offence, every penal provision and every illustration of every such definition or penal provision, shall be understood subject to the exceptions contained in the chapter entitled \u2015General Exceptions,\u2016 though those exceptions are not repeated in such definition, penal provision or illustration. Illustrations (a) The sections in this Code, which contain definitions of offences, do not express that a child under seven years of age cannot commit such offences \u037e but the definitions are to be understood subject to the general exception which provides that nothing shall be an offence which is done by a child under seven years of age. (b) A, a police officer, without warrant, apprehends Z who has committed murder. Here A is not guilty of the offence of wrongful confinement \u037e for he was bound by law to apprehend Z, and therefore the case falls within the general exception which provides that \u2015nothing is an offence which is done by a person who is bound by law to do it\u2016.";
+    }
+}

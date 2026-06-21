@@ -1,0 +1,14 @@
+/// @jurisdiction pakistan
+/// @meta act=Pakistan Penal Code 1860
+/// @meta source=https://www.unodc.org/cld/uploads/res/document/pak/1860/pakistan_penal_code_1860_html/Pakistan_Penal_Code_1860_incorporating_amendments_to_16_February_2017.pdf
+/// @meta official_page=https://pakistancode.gov.pk/english/UY2FqaJw1-apaUY2Fqa-apaUY2Npa5lo-sg-jjjjjjjjjjjjj
+/// @meta official_pdf=https://pakistancode.gov.pk/pdffiles/administratord5622ea3f15bfa00b17d2cf7770a8434.pdf
+/// @meta source_note=Pakistan Code official PDF unreachable locally; UNODC PDF last amended 2017-02-16 used.
+/// @meta skeleton=true
+
+statute 1 "Title and extent of operation of the Code." jurisdiction pakistan effective 1860-10-06 {
+    definitions {
+        skeleton_note := "Generated skeleton from UNODC-hosted PPC PDF; doctrinal elements pending manual encoding.";
+        raw_text := "This Act shall be called the 3[Pakistan] Penal Code, and shall take effect 4* * * throughout 5[Pakistan].";
+    }
+}

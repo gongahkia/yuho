@@ -1,0 +1,14 @@
+/// @jurisdiction pakistan
+/// @meta act=Pakistan Penal Code 1860
+/// @meta source=https://www.unodc.org/cld/uploads/res/document/pak/1860/pakistan_penal_code_1860_html/Pakistan_Penal_Code_1860_incorporating_amendments_to_16_February_2017.pdf
+/// @meta official_page=https://pakistancode.gov.pk/english/UY2FqaJw1-apaUY2Fqa-apaUY2Npa5lo-sg-jjjjjjjjjjjjj
+/// @meta official_pdf=https://pakistancode.gov.pk/pdffiles/administratord5622ea3f15bfa00b17d2cf7770a8434.pdf
+/// @meta source_note=Pakistan Code official PDF unreachable locally; UNODC PDF last amended 2017-02-16 used.
+/// @meta skeleton=true
+
+statute 304 "Proof of qatl-i-amd liable to qisas, etc." jurisdiction pakistan effective 1860-10-06 {
+    definitions {
+        skeleton_note := "Generated skeleton from UNODC-hosted PPC PDF; doctrinal elements pending manual encoding.";
+        raw_text := "(1) Proof of qatl-e-amd shall be in any of the following forms, namely : (a) the accused makes before a court competent to try the offence a voluntary and true confession of the commission of the offence\u037e or (b) by the evidence as provided in Article 17 of the Qanun-e-Shahadat, 1984 (P.O. No. 10 of 1984). (2) The provisions of sub-section (1) shall, mutatis mutandis, apply to a hurt liable to qisas. 1Added, Ins. by Act XLIII of 2016, s.3.";
+    }
+}

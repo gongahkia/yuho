@@ -1,0 +1,14 @@
+/// @jurisdiction pakistan
+/// @meta act=Pakistan Penal Code 1860
+/// @meta source=https://www.unodc.org/cld/uploads/res/document/pak/1860/pakistan_penal_code_1860_html/Pakistan_Penal_Code_1860_incorporating_amendments_to_16_February_2017.pdf
+/// @meta official_page=https://pakistancode.gov.pk/english/UY2FqaJw1-apaUY2Fqa-apaUY2Npa5lo-sg-jjjjjjjjjjjjj
+/// @meta official_pdf=https://pakistancode.gov.pk/pdffiles/administratord5622ea3f15bfa00b17d2cf7770a8434.pdf
+/// @meta source_note=Pakistan Code official PDF unreachable locally; UNODC PDF last amended 2017-02-16 used.
+/// @meta skeleton=true
+
+statute 302 "Punishment of qatl-i-amd." jurisdiction pakistan effective 1860-10-06 {
+    definitions {
+        skeleton_note := "Generated skeleton from UNODC-hosted PPC PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Punishment of qatl-e-amd. Whoever commits qatl-e-amd shall, subject to the provisions of this Chapter be (a) punished with death as qisas\u037e (b) punished with death for imprisonment for life as ta'zir having regard to the facts and circumstances of the case, if the proof in either of the forms specified in section 304 is not available\u037e or (c) punished with imprisonment of either description for a term which may extend to twenty- five years, where according to the Injunctions of Islam the punishment of qisas is not applicable.1[\u037e] 1[Provided that nothing in clause (c) shall apply where the principle of fasad-fil-arz is attracted and in such cases only clause (a) or clause (b) shal apply.]";
+    }
+}
