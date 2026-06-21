@@ -464,6 +464,9 @@ class Transformer(Visitor):
             return nodes.FieldDef(
                 type_annotation=new_type,
                 name=node.name,
+                doc_comment=node.doc_comment,
+                agent=node.agent,
+                patient=node.patient,
                 source_location=node.source_location,
             )
         return node
@@ -641,6 +644,7 @@ class Transformer(Visitor):
                 actor=node.actor,
                 patient=node.patient,
                 interpretations=new_interpretations,
+                agent=node.agent,
                 source_location=node.source_location,
             )
         return node
@@ -655,6 +659,8 @@ class Transformer(Visitor):
                 name=node.name,
                 description=new_desc,
                 doc_comment=node.doc_comment,
+                agent=node.agent,
+                patient=node.patient,
                 source_location=node.source_location,
             )
         return node

@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(C) 2026-06-21 Grammar: agent/patient role tags on element/struct fields +language @grammar effort:M
 (C) 2026-06-21 AST: FactEventNode with timestamped action + role-typed participants +language @ast effort:M
 (C) 2026-06-21 Bounded quantification primitive `exists_at_most N within DURATION` for sentencing aggravators +language @ast effort:M
 (C) 2026-06-21 ASP/Datalog backend under src/yuho/explain/ producing justification trace per element +tooling @verify effort:XL

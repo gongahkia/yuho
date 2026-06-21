@@ -777,16 +777,6 @@
     "type": "element_entry",
     "named": true,
     "fields": {
-      "actor": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
       "burden": {
         "multiple": false,
         "required": false,
@@ -960,17 +950,17 @@
             "named": true
           }
         ]
-      },
-      "patient": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "element_role_tag",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1015,6 +1005,42 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "element_role_tag",
+    "named": true,
+    "fields": {
+      "actor": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "agent": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "patient": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1644,6 +1670,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "field_role_tag",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1678,6 +1714,32 @@
           },
           {
             "type": "wildcard_pattern",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "field_role_tag",
+    "named": true,
+    "fields": {
+      "agent": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "patient": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
             "named": true
           }
         ]
@@ -4716,6 +4778,10 @@
   },
   {
     "type": "after",
+    "named": false
+  },
+  {
+    "type": "agent",
     "named": false
   },
   {

@@ -621,6 +621,8 @@ class FieldDef(ASTNode):
     type_annotation: TypeNode
     name: str
     doc_comment: Optional[str] = None
+    agent: Optional[str] = None
+    patient: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_field_def(self)
@@ -883,6 +885,8 @@ class CivilPrimitiveNode(ASTNode):
     name: str
     description: ASTNode
     doc_comment: Optional[str] = None
+    agent: Optional[str] = None
+    patient: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_civil_primitive(self)
@@ -909,6 +913,7 @@ class ElementNode(ASTNode):
     actor: Optional[str] = None  # party role performing the act
     patient: Optional[str] = None  # party role receiving the act
     interpretations: Tuple[InterpretationNode, ...] = ()
+    agent: Optional[str] = None  # party role performing the act
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_element(self)

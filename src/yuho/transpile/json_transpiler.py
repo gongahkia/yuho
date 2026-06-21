@@ -143,6 +143,10 @@ class JSONTranspiler(TranspilerBase, Visitor):
         elif isinstance(node, nodes.FieldDef):
             result["type"] = self._to_dict(node.type_annotation)
             result["name"] = node.name
+            if node.agent:
+                result["agent"] = node.agent
+            if node.patient:
+                result["patient"] = node.patient
         elif isinstance(node, nodes.StructDefNode):
             result["name"] = node.name
             result["fields"] = [self._to_dict(f) for f in node.fields]
@@ -201,12 +205,18 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["burden_standard"] = node.burden_standard
             if node.actor:
                 result["actor"] = node.actor
+            if node.agent:
+                result["agent"] = node.agent
             if node.patient:
                 result["patient"] = node.patient
         elif isinstance(node, nodes.CivilPrimitiveNode):
             result["primitive_type"] = node.primitive_type
             result["name"] = node.name
             result["description"] = self._to_dict(node.description)
+            if node.agent:
+                result["agent"] = node.agent
+            if node.patient:
+                result["patient"] = node.patient
             if node.doc_comment:
                 result["doc_comment"] = node.doc_comment
         elif isinstance(node, nodes.PartyNode):

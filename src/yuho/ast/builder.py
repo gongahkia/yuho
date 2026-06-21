@@ -136,6 +136,18 @@ class ASTBuilder:
                     break
         return result
 
+    def _role_tags(self, node, tag_type: str) -> dict:
+        result = {}
+        for tag in self._children_by_type(node, tag_type):
+            ident = self._child_by_type(tag, "identifier")
+            if ident is None:
+                continue
+            text = self._text(tag)
+            for key in ("agent", "actor", "patient"):
+                if text.startswith(f"{key} "):
+                    result[key] = self._text(ident)
+        return result
+
     # =========================================================================
     # Module and top-level declarations
     # =========================================================================
@@ -291,6 +303,7 @@ class ASTBuilder:
         """Build FieldDef from field_definition node."""
         type_node = self._child_by_field(node, "type")
         name_node = self._child_by_field(node, "name")
+        role_tags = self._role_tags(node, "field_role_tag")
 
         type_ann = self._build_type(type_node) if type_node else nodes.BuiltinType(name="void")
         name = self._text(name_node) if name_node else ""
@@ -299,6 +312,8 @@ class ASTBuilder:
             type_annotation=type_ann,
             name=name,
             doc_comment=self._get_doc_comment(node),
+            agent=role_tags.get("agent"),
+            patient=role_tags.get("patient"),
             source_location=self._loc(node),
         )
 
@@ -1309,18 +1324,19 @@ class ASTBuilder:
         description = (
             self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
         )
+        role_tags = self._role_tags(node, "element_role_tag")
         if element_type in CIVIL_ELEMENT_TYPES:
             return nodes.CivilPrimitiveNode(
                 primitive_type=element_type,
                 name=self._text(name_node) if name_node else "",
                 description=description,
                 doc_comment=self._get_doc_comment(node),
+                agent=role_tags.get("agent"),
+                patient=role_tags.get("patient"),
                 source_location=self._loc(node),
             )
         caused_by_node = self._child_by_field(node, "caused_by")
         burden_node = self._child_by_type(node, "burden_qualifier")
-        actor_node = self._child_by_field(node, "actor")
-        patient_node = self._child_by_field(node, "patient")
 
         burden = burden_standard = None
         if burden_node:
@@ -1343,12 +1359,13 @@ class ASTBuilder:
             burden=burden,
             burden_standard=burden_standard,
             doc_comment=self._get_doc_comment(node),
-            actor=self._text(actor_node) if actor_node else None,
-            patient=self._text(patient_node) if patient_node else None,
+            actor=role_tags.get("actor"),
+            patient=role_tags.get("patient"),
             interpretations=tuple(
                 self._build_interpretation(child)
                 for child in self._children_by_field(node, "interpretation")
             ),
+            agent=role_tags.get("agent"),
             source_location=self._loc(node),
         )
 

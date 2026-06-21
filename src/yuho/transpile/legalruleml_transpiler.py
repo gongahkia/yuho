@@ -316,8 +316,9 @@ class LegalRuleMLTranspiler(TranspilerBase):
     def _element(self, el: nodes.ElementNode) -> List[str]:
         rel = f"{self._slug(el.element_type)}_{self._slug(el.name)}"
         args = [self._expr_text(el.description)]
-        if el.actor:
-            args.append(f"actor:{el.actor}")
+        agent = el.agent or el.actor
+        if agent:
+            args.append(f"actor:{agent}")
         if el.patient:
             args.append(f"patient:{el.patient}")
         atom = self._atom(f"atom_{rel}", rel, args)
@@ -327,8 +328,8 @@ class LegalRuleMLTranspiler(TranspilerBase):
         key = f"{deontic.lower()}_{self._slug(el.name)}"
         lines = [self._pad(f'<lrml:{deontic} key="{escape(key)}">')]
         self._depth += 1
-        if el.actor:
-            lines.extend(self._bearer(el.actor))
+        if agent:
+            lines.extend(self._bearer(agent))
         lines.extend(atom)
         self._depth -= 1
         lines.append(self._pad(f"</lrml:{deontic}>"))

@@ -172,7 +172,7 @@ YUHO_KEYWORDS = [
     # element qualifiers (Phase 12)
     "burden", "prosecution", "defence",
     "beyond_reasonable_doubt", "balance_of_probabilities", "prima_facie",
-    "causedBy", "actor", "patient", "precedes", "during", "after",
+    "causedBy", "agent", "actor", "patient", "precedes", "during", "after",
     # penalty primitives + combinators (G8, G9, G12, G14)
     "imprisonment", "fine", "caning", "death_penalty", "supplementary",
     "cumulative", "alternative", "or_both", "when",

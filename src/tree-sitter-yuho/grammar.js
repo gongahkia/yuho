@@ -235,7 +235,13 @@ module.exports = grammar({
       repeat(field('doc_comment', $.doc_comment)),
       field('type', $._type),
       field('name', $.identifier),
+      repeat($.field_role_tag),
       optional(','),
+    ),
+
+    field_role_tag: $ => choice(
+      seq('agent', field('agent', $.identifier)),
+      seq('patient', field('patient', $.identifier)),
     ),
 
     struct_literal: $ => seq(
@@ -473,10 +479,15 @@ module.exports = grammar({
       field('description', $._expression),
       optional(seq('caused_by', field('caused_by', $.identifier))),
       optional(field('burden', $.burden_qualifier)),
-      optional(seq('actor', field('actor', $.identifier))),
-      optional(seq('patient', field('patient', $.identifier))),
+      repeat($.element_role_tag),
       optional(seq('interpretations', '{', repeat(field('interpretation', $.interpretation_block)), '}')),
       optional(';'),
+    ),
+
+    element_role_tag: $ => choice(
+      seq('agent', field('agent', $.identifier)),
+      seq('actor', field('actor', $.identifier)),
+      seq('patient', field('patient', $.identifier)),
     ),
 
     civil_element_type: $ => token(choice(
