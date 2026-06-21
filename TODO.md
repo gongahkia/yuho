@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(B) 2026-06-21 Atheris fuzz harness on Parser.parse + ASTBuilder.build to surface crashes on malformed input +compiler @parser effort:M
 (B) 2026-06-21 Z3 ↔ Alloy differential test in verify/combined.py logging per-fixture disagreements as machine-readable JSON +compiler @verify effort:M
 (B) 2026-06-21 Source-map provenance in transpilers: JSON sidecar mapping output spans to AST source_locations (V3 source-map shape) +compiler @transpile effort:L
 (C) 2026-06-21 Watch mode `yuho check --watch FILE` re-running on .yh file change via watchdog +compiler @cli effort:S
