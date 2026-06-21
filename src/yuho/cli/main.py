@@ -378,6 +378,31 @@ def explain(
 
 
 @cli.command()
+@click.argument("statute_file", type=click.Path(exists=True))
+@click.option("--facts", "facts_file", type=click.Path(exists=True), required=True)
+@click.option(
+    "--feature",
+    "features",
+    multiple=True,
+    type=click.Choice(["civil"]),
+    help="Enable experimental language feature",
+)
+def irac(
+    statute_file: str,
+    facts_file: str,
+    features: tuple[str, ...],
+) -> None:
+    """Emit IRAC-structured English for a statute and facts."""
+    from yuho.cli.commands.irac import run_irac
+
+    run_irac(
+        statute_file=statute_file,
+        facts_file=facts_file,
+        features=set(features),
+    )
+
+
+@cli.command()
 @click.argument("section", required=False)
 @click.option("--library", "library_dir", type=click.Path(), default=None, help="Library root")
 @click.option("--in", "in_only", is_flag=True, help="Only show incoming edges")

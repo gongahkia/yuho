@@ -47,6 +47,31 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._visit_explain_element(element)
         return "\n".join(self._output)
 
+    def render_irac(
+        self,
+        statute: nodes.StatuteNode,
+        trace: JustificationTrace,
+    ) -> str:
+        """Render an element trace as IRAC-structured English."""
+        self._output = []
+        self._indent_level = 0
+        title = statute.title.value if statute.title else "Untitled"
+        status = "satisfied" if trace.overall_satisfied else "not satisfied"
+        self._emit("ISSUE")
+        self._emit(f"Whether section {trace.statute_section} ({title}) is satisfied.")
+        self._emit_blank()
+        self._emit("RULE")
+        for element in trace.elements:
+            self._visit_irac_rule(element)
+        self._emit_blank()
+        self._emit("APPLICATION")
+        for element in trace.elements:
+            self._visit_explain_element(element)
+        self._emit_blank()
+        self._emit("CONCLUSION")
+        self._emit(f"Section {trace.statute_section} is {status}.")
+        return "\n".join(self._output)
+
     def _emit(self, text: str) -> None:
         """Add a line to output with current indentation."""
         indent = "  " * self._indent_level
@@ -65,6 +90,14 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._indent_level += 1
             for child in element.children:
                 self._visit_explain_element(child)
+            self._indent_level -= 1
+
+    def _visit_irac_rule(self, element: ElementTrace) -> None:
+        self._emit(f"The rule requires {element.element_type}: {element.name}.")
+        if element.children:
+            self._indent_level += 1
+            for child in element.children:
+                self._visit_irac_rule(child)
             self._indent_level -= 1
 
     # =========================================================================
