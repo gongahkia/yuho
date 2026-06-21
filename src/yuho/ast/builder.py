@@ -1094,6 +1094,7 @@ class ASTBuilder:
         """Build StatuteNode from statute_block node."""
         section_node = self._child_by_field(node, "section_number")
         title_node = self._child_by_field(node, "title")
+        jurisdiction_node = self._child_by_field(node, "jurisdiction")
 
         section_number = self._text(section_node) if section_node else ""
         title = self._build_string_lit(title_node) if title_node else None
@@ -1138,7 +1139,12 @@ class ASTBuilder:
         annotations = self._build_annotations(node)
 
         doc = self._get_doc_comment(node)
-        jurisdiction, jurisdiction_meta = self._extract_jurisdiction(doc)
+        doc_jurisdiction, jurisdiction_meta = self._extract_jurisdiction(doc)
+        jurisdiction = (
+            self._build_jurisdiction_value(jurisdiction_node)
+            if jurisdiction_node
+            else doc_jurisdiction
+        )
 
         # phase 11/13: temporal and hierarchy metadata
         # G6: collect all effective_date fields (the grammar now allows `repeat(...)`)
@@ -1172,6 +1178,11 @@ class ASTBuilder:
             annotations=tuple(annotations),
             source_location=self._loc(node),
         )
+
+    def _build_jurisdiction_value(self, node) -> str:
+        if node.type == "string_literal":
+            return self._build_string_lit(node).value
+        return self._text(node)
 
     def _build_subsection(self, node) -> nodes.SubsectionNode:
         """G5: build a SubsectionNode from subsection_block. Recursively walks

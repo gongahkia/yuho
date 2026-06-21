@@ -231,6 +231,12 @@
 (statute_block
   title: (string_literal) @string.title)
 
+(statute_block
+  jurisdiction: (identifier) @constant.jurisdiction)
+
+(statute_block
+  jurisdiction: (string_literal) @string.jurisdiction)
+
 (definition_entry
   term: (identifier) @constant.definition)
 

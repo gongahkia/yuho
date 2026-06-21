@@ -369,6 +369,7 @@ module.exports = grammar({
       'statute',
       field('section_number', $.section_number),
       optional(field('title', $.string_literal)),
+      optional(seq('jurisdiction', field('jurisdiction', choice($.identifier, $.string_literal)))),
       repeat(seq('effective', field('effective_date', $.date_literal))),  // G6: allow multiple effective dates for amendments
       optional(seq('repealed', field('repealed_date', $.date_literal))),
       optional(seq('subsumes', field('subsumes', $.section_number))),

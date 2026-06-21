@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(C) 2026-06-21 Grammar: promote `@jurisdiction` annotation to first-class statute parameter +corpus @grammar effort:M
 (C) 2026-06-21 AST: JurisdictionNode and jurisdiction-scoped definition table in ast/scope_analysis.py +corpus @ast effort:M
 (C) 2026-06-21 Resolver: enforce same-jurisdiction or explicit cross-jurisdiction import in services/analysis.py +corpus @resolver effort:M
 (C) 2026-06-21 Encode 5 representative IPC sections under jurisdiction-typed scheme as proof-of-concept +corpus @library effort:L

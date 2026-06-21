@@ -3745,6 +3745,20 @@
           }
         ]
       },
+      "jurisdiction": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
       "repealed_date": {
         "multiple": false,
         "required": false,
@@ -4951,6 +4965,10 @@
   },
   {
     "type": "interpretations",
+    "named": false
+  },
+  {
+    "type": "jurisdiction",
     "named": false
   },
   {
