@@ -1480,9 +1480,9 @@ class Z3Generator:
         """
         Encode exception guards as Z3 implications.
 
-        For each ExceptionNode: if exception guard is satisfied,
-        then conviction is negated.
-            exception_satisfied && NOT(defeated_by_higher) => NOT(conviction)
+        For ordinary/rebutting ExceptionNodes: if the guard is satisfied,
+        conviction is negated. Undercutting exceptions only suppress the
+        target exception's inference.
 
         G13: respect the `defeats` edges and the `priority` ordering. A higher-
         priority exception (lower priority integer, or explicit `defeats`)
@@ -1491,6 +1491,8 @@ class Z3Generator:
         """
         if not Z3_AVAILABLE:
             return
+
+        from yuho.ast.nodes import UndercutsRelation
 
         conviction_key = f"{statute_id}_conviction"
         if conviction_key not in self._consts:
@@ -1504,6 +1506,7 @@ class Z3Generator:
         label_of_index: list[str | None] = []
         priorities: dict[str, int] = {}
         defeats_of: dict[str, str] = {}
+        undercuts: set[str] = set()
         for i, exc in enumerate(statute.exceptions):
             exc_label = exc.label or f"exception_{i}"
             safe_label = exc_label.replace(" ", "_").replace("-", "_")
@@ -1515,6 +1518,8 @@ class Z3Generator:
                 priorities[exc_label] = exc.priority
             if exc.defeats:
                 defeats_of[exc_label] = exc.defeats
+            if isinstance(exc.defeat_relation, UndercutsRelation):
+                undercuts.add(exc_label)
 
             if exc.guard is not None:
                 guard_z3 = self._translate_expr_to_z3(statute_id, exc.guard)
@@ -1566,10 +1571,13 @@ class Z3Generator:
             # shape Lean uses (mechanisation/Yuho/Generator.lean:204).
             # When there are no exceptions, `any_fires` collapses to
             # `False`; the bicond stays structurally identical.
-            if len(exc_fires) > 1:
-                any_fires = z3.Or(*exc_fires.values())
-            elif len(exc_fires) == 1:
-                any_fires = next(iter(exc_fires.values()))
+            conclusion_fires = [
+                fires for label, fires in exc_fires.items() if label not in undercuts
+            ]
+            if len(conclusion_fires) > 1:
+                any_fires = z3.Or(*conclusion_fires)
+            elif len(conclusion_fires) == 1:
+                any_fires = conclusion_fires[0]
             else:
                 any_fires = z3.BoolVal(False)
             self._assertions.append(
