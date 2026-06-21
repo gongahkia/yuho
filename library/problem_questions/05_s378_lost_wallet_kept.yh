@@ -1,0 +1,37 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr378-#pr378-
+/// @meta problem_question=s378_lost_wallet_kept
+referencing penal_code/s378_theft;
+
+// A finds B's wallet on a cafe table, sees B's identity card, and keeps the cash.
+struct TheftWalletFacts {
+    string accused,
+    string victim,
+    string property,
+    bool intention,
+    bool taking,
+    bool possession,
+    bool consent,
+    bool movement,
+}
+
+fact TheftWalletFacts facts := TheftWalletFacts {
+    accused := "A",
+    victim := "B",
+    property := "wallet cash",
+    intention := TRUE,
+    taking := TRUE,
+    possession := TRUE,
+    consent := TRUE,
+    movement := TRUE,
+};
+
+fact bool intention := TRUE;
+fact bool taking := TRUE;
+fact bool possession := TRUE;
+fact bool consent := TRUE;
+fact bool movement := TRUE;
+
+assert intention && taking && possession && consent && movement, "s378 theft facts are framed as satisfied";
+

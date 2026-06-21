@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr354-#pr354-
+/// @meta problem_question=s354_crowded_train_touch
+referencing penal_code/s354_assault_or_criminal_force_to_outrage_modesty;
+
+// A deliberately touches B on a crowded train without consent.
+struct OutrageModestyTrainFacts {
+    string accused,
+    string victim,
+    string place,
+    bool intention,
+    bool force_or_assault,
+    bool modesty_outraged,
+}
+
+fact OutrageModestyTrainFacts facts := OutrageModestyTrainFacts {
+    accused := "A",
+    victim := "B",
+    place := "crowded train",
+    intention := TRUE,
+    force_or_assault := TRUE,
+    modesty_outraged := TRUE,
+};
+
+fact bool intention := TRUE;
+fact bool force_or_assault := TRUE;
+fact bool modesty_outraged := TRUE;
+
+assert intention && force_or_assault && modesty_outraged, "s354 facts are framed as satisfied";
+

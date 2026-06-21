@@ -1,0 +1,34 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr324-#pr324-
+/// @meta problem_question=s324_broken_bottle_cut
+referencing penal_code/s324_voluntarily_causing_hurt_dangerous_weapons;
+
+// A swings a broken glass bottle at B, cutting B's arm.
+struct DangerousWeaponHurtFacts {
+    string accused,
+    string victim,
+    string instrument,
+    bool not_section_334_case,
+    bool voluntary,
+    bool causes_hurt,
+    bool instrument_for_shooting_stabbing_or_cutting,
+}
+
+fact DangerousWeaponHurtFacts facts := DangerousWeaponHurtFacts {
+    accused := "A",
+    victim := "B",
+    instrument := "broken glass bottle",
+    not_section_334_case := TRUE,
+    voluntary := TRUE,
+    causes_hurt := TRUE,
+    instrument_for_shooting_stabbing_or_cutting := TRUE,
+};
+
+fact bool not_section_334_case := TRUE;
+fact bool voluntary := TRUE;
+fact bool causes_hurt := TRUE;
+fact bool instrument_for_shooting_stabbing_or_cutting := TRUE;
+
+assert not_section_334_case && voluntary && causes_hurt && instrument_for_shooting_stabbing_or_cutting, "s324 cutting-instrument facts are framed as satisfied";
+

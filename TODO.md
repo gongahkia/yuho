@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(A) 2026-06-21 Curate library/problem_questions/ with 10 canonical SG criminal-law hypos as .yh fact patterns +education @library effort:M
 (B) 2026-06-21 Mermaid theme colour-coding AR (red) MR (blue) circumstance (green) exception (amber) in mermaid_transpiler.py +positioning @viz effort:S
 (B) 2026-06-21 BNS 2023 raw scrape via scripts/scrape_bns.py mirroring scripts/scrape_sso.py +jurisdiction @scrape effort:L
 (B) 2026-06-21 Encode 358-section BNS skeleton under library/bharatiya_nyaya_sanhita/ with L1+L2 pass +jurisdiction @library effort:XL

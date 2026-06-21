@@ -1,0 +1,34 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr420-#pr420-
+/// @meta problem_question=s420_fake_investment_transfer
+referencing penal_code/s420_cheating_inducing_delivery;
+
+// A falsely tells B that a non-existent investment is government-backed and B transfers money.
+struct CheatingInvestmentTransferFacts {
+    string accused,
+    string victim,
+    string representation,
+    bool cheating,
+    bool inducement,
+    bool dishonesty,
+    bool deliver_property,
+}
+
+fact CheatingInvestmentTransferFacts facts := CheatingInvestmentTransferFacts {
+    accused := "A",
+    victim := "B",
+    representation := "government-backed investment",
+    cheating := TRUE,
+    inducement := TRUE,
+    dishonesty := TRUE,
+    deliver_property := TRUE,
+};
+
+fact bool cheating := TRUE;
+fact bool inducement := TRUE;
+fact bool dishonesty := TRUE;
+fact bool deliver_property := TRUE;
+
+assert cheating && inducement && dishonesty && deliver_property, "s420 delivery-of-property facts are framed as satisfied";
+

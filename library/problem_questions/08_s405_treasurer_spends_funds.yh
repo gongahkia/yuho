@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr405-#pr405-
+/// @meta problem_question=s405_treasurer_spends_funds
+referencing penal_code/s405_criminal_breach_trust;
+
+// A is treasurer of a club and spends entrusted club funds on personal bills.
+struct CriminalBreachTrustFundsFacts {
+    string accused,
+    string victim,
+    string property,
+    bool entrustment_or_dominion,
+    bool dishonestly_uses_or_disposes,
+    bool uses_or_disposes_in_breach,
+}
+
+fact CriminalBreachTrustFundsFacts facts := CriminalBreachTrustFundsFacts {
+    accused := "A",
+    victim := "club",
+    property := "club funds",
+    entrustment_or_dominion := TRUE,
+    dishonestly_uses_or_disposes := TRUE,
+    uses_or_disposes_in_breach := TRUE,
+};
+
+fact bool entrustment_or_dominion := TRUE;
+fact bool dishonestly_uses_or_disposes := TRUE;
+fact bool uses_or_disposes_in_breach := TRUE;
+
+assert entrustment_or_dominion && dishonestly_uses_or_disposes && uses_or_disposes_in_breach, "s405 breach-of-trust facts are framed as satisfied";
+

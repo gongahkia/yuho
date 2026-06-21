@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr300-#pr300-
+/// @meta problem_question=s300_murder_stabbing_death
+referencing penal_code/s300_murder;
+
+// A deliberately stabs B in the chest during an argument. B dies from the wound.
+struct MurderStabbingFacts {
+    string accused,
+    string victim,
+    string weapon,
+    bool causeDeath,
+    bool intent1,
+    bool provocationException,
+}
+
+fact MurderStabbingFacts facts := MurderStabbingFacts {
+    accused := "A",
+    victim := "B",
+    weapon := "knife",
+    causeDeath := TRUE,
+    intent1 := TRUE,
+    provocationException := FALSE,
+};
+
+fact bool causeDeath := TRUE;
+fact bool intent1 := TRUE;
+fact bool provocation := FALSE;
+
+assert causeDeath && intent1, "s300 limb (a) facts are framed as satisfied";
+

@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr411-#pr411-
+/// @meta problem_question=s411_cheap_stolen_phone
+referencing penal_code/s411_dishonestly_receiving_stolen_property;
+
+// A buys a new phone from B at a very low price after B says it was taken from someone else.
+struct ReceivingStolenPhoneFacts {
+    string accused,
+    string seller,
+    string property,
+    bool stolen,
+    bool knowledge,
+    bool receiving,
+}
+
+fact ReceivingStolenPhoneFacts facts := ReceivingStolenPhoneFacts {
+    accused := "A",
+    seller := "B",
+    property := "phone",
+    stolen := TRUE,
+    knowledge := TRUE,
+    receiving := TRUE,
+};
+
+fact bool stolen := TRUE;
+fact bool knowledge := TRUE;
+fact bool receiving := TRUE;
+
+assert stolen && knowledge && receiving, "s411 receiving-stolen-property facts are framed as satisfied";
+

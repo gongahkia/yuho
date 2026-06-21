@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr321-#pr321-
+/// @meta problem_question=s321_voluntary_hurt_punch
+referencing penal_code/s321_voluntarily_causing_hurt;
+
+// A punches B once in the face after a quarrel. B suffers pain and bruising.
+struct VoluntaryHurtPunchFacts {
+    string accused,
+    string victim,
+    string act,
+    bool intention,
+    bool causing_hurt,
+    bool hurt_caused,
+}
+
+fact VoluntaryHurtPunchFacts facts := VoluntaryHurtPunchFacts {
+    accused := "A",
+    victim := "B",
+    act := "single punch",
+    intention := TRUE,
+    causing_hurt := TRUE,
+    hurt_caused := TRUE,
+};
+
+fact bool intention := TRUE;
+fact bool causing_hurt := TRUE;
+fact bool hurt_caused := TRUE;
+
+assert intention && causing_hurt && hurt_caused, "s321 facts are framed as satisfied";
+

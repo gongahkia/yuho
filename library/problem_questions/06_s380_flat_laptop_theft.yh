@@ -1,0 +1,31 @@
+/// @jurisdiction singapore
+/// @meta act=Penal Code 1871
+/// @meta source=https://sso.agc.gov.sg/Act/PC1871?ProvIds=pr380-#pr380-
+/// @meta problem_question=s380_flat_laptop_theft
+referencing penal_code/s380_theft_dwelling_house_etc;
+
+// A enters B's flat as a guest and takes B's laptop from the bedroom.
+struct DwellingTheftLaptopFacts {
+    string accused,
+    string victim,
+    string property,
+    bool commission_of_theft,
+    bool dishonest_intention,
+    bool aggravating_place,
+}
+
+fact DwellingTheftLaptopFacts facts := DwellingTheftLaptopFacts {
+    accused := "A",
+    victim := "B",
+    property := "laptop",
+    commission_of_theft := TRUE,
+    dishonest_intention := TRUE,
+    aggravating_place := TRUE,
+};
+
+fact bool commission_of_theft := TRUE;
+fact bool dishonest_intention := TRUE;
+fact bool aggravating_place := TRUE;
+
+assert commission_of_theft && dishonest_intention && aggravating_place, "s380 dwelling-theft facts are framed as satisfied";
+
