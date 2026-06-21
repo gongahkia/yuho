@@ -1,0 +1,14 @@
+/// @jurisdiction malaysia
+/// @meta act=Penal Code Act 574
+/// @meta source=https://lom.agc.gov.my/ilims/upload/portal/akta/outputaktap/1841145_BI/WJW23%EF%80%A21011%20Act%20574.pdf
+/// @meta official_page=https://lom.agc.gov.my/act-detail.php?act=574&lang=BI
+/// @meta as_at=2023-07-04
+/// @meta source_note=Official AGC LOM PDF reprint as at 2023-07-04 used.
+/// @meta skeleton=true
+
+statute 379 "Punishment for theft" jurisdiction malaysia effective 1976-03-31 {
+    definitions {
+        skeleton_note := "Generated skeleton from official AGC LOM Act 574 PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever commits theft shall be punished with imprisonment for a term which may extend to seven years or with fine or with both, and for a second or subsequent offence shall be punished with imprisonment and shall also be liable to fine or to whipping. Punishment for theft of a motor vehicle 379 a . (1) Whoever commits theft of a motor vehicle or any component part of a motor vehicle shall be punished with imprisonment for a term of not less than one year and not more than seven years, and shall also be liable to fine. (2) In this section\u2014 \u201ccomponent part\u201d, in relation to a motor vehicle, includes any tyre, accessory or equipment; \u201cmotor vehicle\u201d means a mechanically propelled vehicle intended or adapted for use on roads, and includes a trailer drawn by a motor vehicle.";
+    }
+}

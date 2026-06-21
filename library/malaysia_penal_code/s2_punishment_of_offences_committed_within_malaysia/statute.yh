@@ -1,0 +1,14 @@
+/// @jurisdiction malaysia
+/// @meta act=Penal Code Act 574
+/// @meta source=https://lom.agc.gov.my/ilims/upload/portal/akta/outputaktap/1841145_BI/WJW23%EF%80%A21011%20Act%20574.pdf
+/// @meta official_page=https://lom.agc.gov.my/act-detail.php?act=574&lang=BI
+/// @meta as_at=2023-07-04
+/// @meta source_note=Official AGC LOM PDF reprint as at 2023-07-04 used.
+/// @meta skeleton=true
+
+statute 2 "Punishment of offences committed within Malaysia" jurisdiction malaysia effective 1976-03-31 {
+    definitions {
+        skeleton_note := "Generated skeleton from official AGC LOM Act 574 PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Every person shall be liable to punishment under this Code and not otherwise for every act or omission contrary to the provisions thereof, of which he shall be guilty within Malaysia.";
+    }
+}

@@ -1,0 +1,14 @@
+/// @jurisdiction malaysia
+/// @meta act=Penal Code Act 574
+/// @meta source=https://lom.agc.gov.my/ilims/upload/portal/akta/outputaktap/1841145_BI/WJW23%EF%80%A21011%20Act%20574.pdf
+/// @meta official_page=https://lom.agc.gov.my/act-detail.php?act=574&lang=BI
+/// @meta as_at=2023-07-04
+/// @meta source_note=Official AGC LOM PDF reprint as at 2023-07-04 used.
+/// @meta skeleton=true
+
+statute 320 "Grievous hurt" jurisdiction malaysia effective 1976-03-31 {
+    definitions {
+        skeleton_note := "Generated skeleton from official AGC LOM Act 574 PDF; doctrinal elements pending manual encoding.";
+        raw_text := "The following kinds of hurt only are designated as \u201cgrievous\u201d: (a) emasculation; (b) permanent privation of the sight of either eye; (c) permanent privation of the hearing of either ear; (d) privation of any member or joint; (e) destruction or permanent impairing of the powers of any member or joint; (f) permanent disfiguration of the head or face; (g) fracture or dislocation of a bone; (h) any hurt which endangers life, or which causes the sufferer to be, during the space of ten days, in severe bodily pain, or unable to follow his ordinary pursuits.";
+    }
+}

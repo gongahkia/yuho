@@ -1,0 +1,14 @@
+/// @jurisdiction malaysia
+/// @meta act=Penal Code Act 574
+/// @meta source=https://lom.agc.gov.my/ilims/upload/portal/akta/outputaktap/1841145_BI/WJW23%EF%80%A21011%20Act%20574.pdf
+/// @meta official_page=https://lom.agc.gov.my/act-detail.php?act=574&lang=BI
+/// @meta as_at=2023-07-04
+/// @meta source_note=Official AGC LOM PDF reprint as at 2023-07-04 used.
+/// @meta skeleton=true
+
+statute 322 "Voluntarily causing grievous hurt" jurisdiction malaysia effective 1976-03-31 {
+    definitions {
+        skeleton_note := "Generated skeleton from official AGC LOM Act 574 PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever voluntarily causes hurt, if the hurt which he intends to cause or knows himself to be likely to cause is grievous hurt, and if the hurt which he causes is grievous hurt, is said \u201cvoluntarily to cause grievous hurt\u201d. Explanation\u2014A person is not said voluntarily to cause grievous hurt except when he both causes grievous hurt and intends or knows himself to be likely to cause grievous hurt. But he is said voluntarily to cause grievous hurt if, intending or knowing himself to be likely to cause grievous hurt of one kind, he actually causes grievous hurt of another kind. ILLUSTRATION A, intending or knowing himself to be likely permanently to disfigure Z\u2019s face, gives Z a blow which does not permanently disfigure Z\u2019s face, but which causes Z to suffer severe bodily pain for the space of ten days. A has voluntarily caused grievous hurt.";
+    }
+}

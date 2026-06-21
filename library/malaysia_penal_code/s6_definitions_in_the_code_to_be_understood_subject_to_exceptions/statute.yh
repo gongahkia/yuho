@@ -1,0 +1,14 @@
+/// @jurisdiction malaysia
+/// @meta act=Penal Code Act 574
+/// @meta source=https://lom.agc.gov.my/ilims/upload/portal/akta/outputaktap/1841145_BI/WJW23%EF%80%A21011%20Act%20574.pdf
+/// @meta official_page=https://lom.agc.gov.my/act-detail.php?act=574&lang=BI
+/// @meta as_at=2023-07-04
+/// @meta source_note=Official AGC LOM PDF reprint as at 2023-07-04 used.
+/// @meta skeleton=true
+
+statute 6 "Definitions in the Code to be understood subject to exceptions" jurisdiction malaysia effective 1976-03-31 {
+    definitions {
+        skeleton_note := "Generated skeleton from official AGC LOM Act 574 PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Throughout this Code every definition of an offence, every penal provision and every illustration of every such definition or penal provision, shall be understood subject to the exceptions contained in the Chapter entitled \u201cGeneral Exceptions\u201d, though those exceptions are not repeated in such definition, penal provision or illustration. ILLUSTRATIONS (a) The sections in this Code which contain definitions of offences, do not express that a child under ten years of age cannot commit such offences, but the definitions are to be understood subject to the general exception which provides that \u201cnothing shall be an offence which is done by a child under ten years of age\u201d. (b) A, a police officer, without warrant, apprehends Z, who has committed murder. Here A is not guilty of the offence of wrongful confinement, for he was bound by law to apprehend Z, and therefore the case falls within the general exception which provides that \u201cnothing is an offence which is done by a person who is bound by law to do it\u201d.";
+    }
+}

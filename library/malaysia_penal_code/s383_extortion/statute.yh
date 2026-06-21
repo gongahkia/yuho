@@ -1,0 +1,14 @@
+/// @jurisdiction malaysia
+/// @meta act=Penal Code Act 574
+/// @meta source=https://lom.agc.gov.my/ilims/upload/portal/akta/outputaktap/1841145_BI/WJW23%EF%80%A21011%20Act%20574.pdf
+/// @meta official_page=https://lom.agc.gov.my/act-detail.php?act=574&lang=BI
+/// @meta as_at=2023-07-04
+/// @meta source_note=Official AGC LOM PDF reprint as at 2023-07-04 used.
+/// @meta skeleton=true
+
+statute 383 "Extortion" jurisdiction malaysia effective 1976-03-31 {
+    definitions {
+        skeleton_note := "Generated skeleton from official AGC LOM Act 574 PDF; doctrinal elements pending manual encoding.";
+        raw_text := "Whoever intentionally puts any person in fear of any injury to that person or to any other, and thereby dishonestly induces the person so put in fear to deliver to any person any property or valuable security, or anything signed or sealed which may be converted into a valuable security, commits \u201cextortion\u201d. ILLUSTRATIONS (a) A threatens to publish a defamatory libel concerning Z, unless Z gives him money. He thus induces Z to give him money. A has committed extortion. (b) A threatens Z that he will keep Z\u2019s child in wrongful confinement, unless Z will sign and deliver to A a promissory note binding Z to pay certain moneys to A. Z signs and delivers the note. A has committed extortion. (c) A threatens to send men to plough up Z\u2019s field, unless Z will sign and deliver to B a bond, binding Z under a penalty to deliver certain produce to B, and thereby induces Z to sign and deliver the bond. A has committed extortion. (d) A, by putting Z in fear of grievous hurt, dishonestly induces Z to sign or affix his seal to a blank paper and deliver it to A. Z signs and delivers the paper to A. Here, as the paper so signed may be converted into a valuable security, A has committed extortion.";
+    }
+}
