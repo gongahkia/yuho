@@ -617,9 +617,11 @@ module.exports = grammar({
       optional(field('effect', $.string_literal)),
       optional(seq('when', field('guard', $._expression))),
       optional(seq('priority', field('priority', $.integer_literal))),
-      optional(seq('defeats', field('defeats', $.identifier))),
+      optional(seq(field('defeat_relation', $.defeat_relation), field('defeats', $.identifier))),
       '}'
     ),
+
+    defeat_relation: $ => choice('defeats', 'rebuts', 'undercuts'),
 
     caselaw_block: $ => seq(
       'caselaw',
