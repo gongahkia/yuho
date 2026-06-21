@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from yuho.ast.statute_lint import lint_module
 from yuho.ast.nodes import ElementNode
 from yuho.parser import get_parser
 from yuho.services.analysis import analyze_source
@@ -50,7 +51,33 @@ def test_builder_attaches_element_interpretations():
     assert broad.endorsement == "persuasive"
 
 
+def test_lint_warns_on_unendorsed_competing_interpretations():
+    source = """
+statute 1 "Demo" {
+  elements {
+    actus_reus deception := "deception" interpretations {
+      interpretation narrow { "express representation only" }
+      interpretation broad { "conduct can imply representation" }
+    }
+  }
+}
+"""
+    messages = lint_messages(source)
+    assert any("competing interpretations" in message for message in messages)
+
+
+def test_lint_accepts_endorsed_competing_interpretations():
+    messages = lint_messages(SOURCE)
+    assert not any("competing interpretations" in message for message in messages)
+
+
 def has_node_type(node, node_type: str) -> bool:
     if node.type == node_type:
         return True
     return any(has_node_type(child, node_type) for child in node.children)
+
+
+def lint_messages(source: str) -> list[str]:
+    result = analyze_source(source, file="<interpretation>", run_semantic=False)
+    assert not result.parse_errors
+    return [warning.message for warning in lint_module(result.ast)]

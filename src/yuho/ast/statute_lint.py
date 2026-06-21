@@ -225,6 +225,30 @@ def _check_deontic_conflict(statute: StatuteNode) -> List[LintWarning]:
     return warnings
 
 
+def _check_competing_interpretations(statute: StatuteNode) -> List[LintWarning]:
+    warnings: List[LintWarning] = []
+    for element in _flatten_elements(statute.elements):
+        if len(element.interpretations) < 2:
+            continue
+        endorsed = {
+            interpretation.endorsement
+            for interpretation in element.interpretations
+            if interpretation.endorsement in {"binding", "persuasive"}
+        }
+        if not endorsed:
+            warnings.append(
+                LintWarning(
+                    statute_section=statute.section_number,
+                    message=(
+                        f"element '{element.name}' has competing interpretations "
+                        "with no binding or persuasive endorsement"
+                    ),
+                    severity="warning",
+                )
+            )
+    return warnings
+
+
 def _check_defeats_target(statute: StatuteNode) -> List[LintWarning]:
     """Verify relation labels reference existing exceptions in the same statute."""
     warnings: List[LintWarning] = []
@@ -315,6 +339,7 @@ def lint_statute(statute: StatuteNode) -> List[LintWarning]:
     warnings.extend(_check_defeats_target(statute))
     warnings.extend(_check_defeats_cycles(statute))  # G13: DAG validity
     warnings.extend(_check_deontic_conflict(statute))
+    warnings.extend(_check_competing_interpretations(statute))
     return warnings
 
 
