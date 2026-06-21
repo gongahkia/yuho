@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(C) 2026-06-21 Type checker: civil-law primitive type rules in src/yuho/ast/type_check.py +language @typecheck effort:M
 (C) 2026-06-21 Proof-of-concept: encode one contract-law section under civil feature flag +language @library effort:M
 (C) 2026-06-21 Grammar: agent/patient role tags on element/struct fields +language @grammar effort:M
 (C) 2026-06-21 AST: FactEventNode with timestamped action + role-typed participants +language @ast effort:M

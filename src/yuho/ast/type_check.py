@@ -120,6 +120,7 @@ class TypeCheckVisitor(Visitor):
     )
     # types that can be ordered (< > <= >=)
     ORDERABLE_TYPES = frozenset({"int", "float", "money", "percent", "date", "duration"})
+    CIVIL_PRIMITIVE_TYPES = frozenset({"party", "obligation_to", "condition_precedent", "breach"})
 
     def __init__(
         self,
@@ -301,6 +302,30 @@ class TypeCheckVisitor(Visitor):
                 severity="warning",
             )
         return self.generic_visit(node)
+
+    def visit_civil_primitive(self, node: nodes.CivilPrimitiveNode) -> None:
+        if node.primitive_type not in self.CIVIL_PRIMITIVE_TYPES:
+            self.result.add_error(
+                f"Unknown civil primitive type '{node.primitive_type}'",
+                node,
+            )
+        if not node.name:
+            self.result.add_error("Civil primitive name cannot be empty", node)
+
+        self.visit(node.description)
+        actual_type = self._get_type(node.description)
+        if actual_type == UNKNOWN_TYPE:
+            return None
+        allowed_types = (
+            (STRING_TYPE,) if node.primitive_type == "party" else (STRING_TYPE, BOOL_TYPE)
+        )
+        if not any(self._types_compatible(expected, actual_type) for expected in allowed_types):
+            expected = "string" if node.primitive_type == "party" else "string or bool"
+            self.result.add_error(
+                f"{node.primitive_type} civil primitive description must be {expected}, got {actual_type}",
+                node,
+            )
+        return None
 
     # =========================================================================
     # Expression nodes

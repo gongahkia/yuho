@@ -67,6 +67,62 @@ def test_civil_primitives_build_ast_nodes():
     assert civil_nodes[0].name == "buyer"
 
 
+def test_civil_primitive_descriptions_type_check():
+    result = analyze_source(
+        CIVIL_SOURCE,
+        file="<civil>",
+        run_semantic=True,
+        features={"civil"},
+    )
+
+    assert result.semantic_summary is not None
+    assert not result.semantic_summary.has_errors
+
+
+def test_civil_condition_description_may_be_bool():
+    result = analyze_source(
+        'statute 1 "Civil demo" { elements { breach non_delivery := TRUE; } }',
+        file="<civil>",
+        run_semantic=True,
+        features={"civil"},
+    )
+
+    assert result.semantic_summary is not None
+    assert not result.semantic_summary.has_errors
+
+
+def test_party_description_must_be_string():
+    result = analyze_source(
+        'statute 1 "Civil demo" { elements { party buyer := 123; } }',
+        file="<civil>",
+        run_semantic=True,
+        features={"civil"},
+    )
+
+    assert result.semantic_summary is not None
+    messages = [issue.message for issue in result.semantic_summary.issues]
+    assert any(
+        "party civil primitive description must be string, got int" in message
+        for message in messages
+    )
+
+
+def test_civil_condition_description_must_be_string_or_bool():
+    result = analyze_source(
+        'statute 1 "Civil demo" { elements { breach non_delivery := 123; } }',
+        file="<civil>",
+        run_semantic=True,
+        features={"civil"},
+    )
+
+    assert result.semantic_summary is not None
+    messages = [issue.message for issue in result.semantic_summary.issues]
+    assert any(
+        "breach civil primitive description must be string or bool, got int" in message
+        for message in messages
+    )
+
+
 def test_check_feature_civil_allows_file(tmp_path: Path):
     path = tmp_path / "civil.yh"
     path.write_text(CIVIL_SOURCE, encoding="utf-8")
@@ -87,9 +143,7 @@ def civil_element_types(node, source: str) -> list[str]:
         element_type = node.child_by_field_name("element_type")
         if element_type is not None:
             source_bytes = source.encode("utf-8")
-            text = source_bytes[
-                element_type.start_byte:element_type.end_byte
-            ].decode("utf-8")
+            text = source_bytes[element_type.start_byte : element_type.end_byte].decode("utf-8")
             if text in {"party", "obligation_to", "condition_precedent", "breach"}:
                 out.append(text)
     for child in node.children:
