@@ -1,0 +1,70 @@
+{
+  "name": "yuho-vscode",
+  "displayName": "Yuho",
+  "description": "VS Code support for Yuho .yh files.",
+  "version": "0.1.0",
+  "publisher": "gongahkia",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:yuho"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "yuho",
+        "aliases": [
+          "Yuho",
+          "yuho"
+        ],
+        "extensions": [
+          ".yh"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "yuho",
+        "scopeName": "source.yuho",
+        "path": "./syntaxes/yuho.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "Yuho",
+      "properties": {
+        "yuho.lsp.command": {
+          "type": "string",
+          "default": "yuho-lsp",
+          "description": "Command used to launch the Yuho language server."
+        },
+        "yuho.lsp.args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Arguments passed to the Yuho language server command."
+        },
+        "yuho.treeSitter.modulePath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional path to a built tree-sitter-yuho Node module. Empty uses bundled/dev lookup and falls back to TextMate highlighting."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "check": "node --check extension.js"
+  },
+  "dependencies": {
+    "tree-sitter": "^0.21.1",
+    "vscode-languageclient": "^9.0.1"
+  }
+}

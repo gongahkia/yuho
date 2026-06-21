@@ -1,0 +1,10 @@
+src/**
+test/**
+*.vsix
+*.log
+package-lock.json
+node_modules/**/.cache/**
+node_modules/**/test/**
+node_modules/**/tests/**
+node_modules/**/docs/**
+node_modules/**/examples/**

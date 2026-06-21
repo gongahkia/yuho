@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(A) 2026-06-21 VS Code extension under editors/vscode-yuho/ wiring tree-sitter highlight + LSP client +tooling @lsp effort:M
 (B) 2026-06-21 Grammar: add `rebuts` and `undercuts` keywords to exception block in src/tree-sitter-yuho/grammar.js +language @grammar effort:S
 (B) 2026-06-21 Regenerate parser via tree-sitter generate + recompile libtree-sitter-yuho.dylib +language @grammar effort:XS
 (B) 2026-06-21 AST: split DefeatsRelation into RebutsRelation + UndercutsRelation in src/yuho/ast/nodes.py and builder.py +language @ast effort:S
