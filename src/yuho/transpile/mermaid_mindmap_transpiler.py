@@ -46,7 +46,7 @@ from __future__ import annotations
 from typing import Iterable, List, Optional
 
 from yuho.ast import nodes
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 
 
 _INDENT = "  "  # mermaid mindmap parser is whitespace-sensitive; keep at 2.
@@ -67,12 +67,12 @@ class MermaidMindmapTranspiler(TranspilerBase):
     # Top level
     # ------------------------------------------------------------------
 
-    def transpile(self, ast: nodes.ModuleNode) -> str:
+    def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         self._lines = ["mindmap"]
         statutes = list(ast.statutes)
         if not statutes:
             self._lines.append(f"{_INDENT}No statutes")
-            return "\n".join(self._lines)
+            return self.result("\n".join(self._lines), manifest={"format": "mermaid-mindmap"})
         if len(statutes) == 1:
             self._render_statute(statutes[0], depth=1)
         else:
@@ -82,7 +82,7 @@ class MermaidMindmapTranspiler(TranspilerBase):
             self._lines.append(f"{_INDENT}{module_label}")
             for s in statutes:
                 self._render_statute(s, depth=2)
-        return "\n".join(self._lines)
+        return self.result("\n".join(self._lines), manifest={"format": "mermaid-mindmap"})
 
     # ------------------------------------------------------------------
     # Per-statute hierarchy

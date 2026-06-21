@@ -151,7 +151,7 @@ def run_transpile(
             from yuho.transpile.mermaid_transpiler import MermaidTranspiler
             from yuho.transpile.mermaid_renderer import render_mermaid
 
-            mermaid_text = MermaidTranspiler().transpile(ast)
+            mermaid_text = MermaidTranspiler().transpile(ast).output
             ext = f".{tgt.lower()}"
             render_out = output or (
                 str(out_dir / f"{file_path.stem}{ext}")
@@ -179,7 +179,8 @@ def run_transpile(
                 transpiler = MermaidTranspiler(shape=shape)
             else:
                 transpiler = get_transpiler(transpile_target)
-            output_text = transpiler.transpile(ast)
+            transpile_result = transpiler.transpile(ast)
+            output_text = transpile_result.output
         except ValueError as e:
             click.echo(colorize(f"error: {e}", Colors.RED), err=True)
             sys.exit(1)
@@ -193,7 +194,14 @@ def run_transpile(
                 out_path = file_path.parent / f"{file_path.stem}{transpile_target.file_extension}"
 
             out_path.write_text(output_text, encoding="utf-8")
-            results.append({"target": tgt, "output": str(out_path)})
+            results.append(
+                {
+                    "target": tgt,
+                    "output": str(out_path),
+                    "warnings": list(transpile_result.warnings),
+                    "manifest": transpile_result.manifest,
+                }
+            )
 
             if not json_output:
                 click.echo(f"  -> {out_path}")
@@ -203,7 +211,14 @@ def run_transpile(
             out_path = Path(output)
             out_path.parent.mkdir(parents=True, exist_ok=True)
             out_path.write_text(output_text, encoding="utf-8")
-            results.append({"target": tgt, "output": str(out_path)})
+            results.append(
+                {
+                    "target": tgt,
+                    "output": str(out_path),
+                    "warnings": list(transpile_result.warnings),
+                    "manifest": transpile_result.manifest,
+                }
+            )
 
             if not json_output:
                 click.echo(f"  -> {out_path}")
@@ -211,7 +226,14 @@ def run_transpile(
         else:
             # Single target to stdout
             print(output_text)
-            results.append({"target": tgt, "output": "stdout"})
+            results.append(
+                {
+                    "target": tgt,
+                    "output": "stdout",
+                    "warnings": list(transpile_result.warnings),
+                    "manifest": transpile_result.manifest,
+                }
+            )
 
     if json_output:
         print(

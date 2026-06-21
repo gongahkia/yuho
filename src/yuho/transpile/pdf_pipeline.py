@@ -43,7 +43,7 @@ def generate_pdf(
     """
     registry = TranspilerRegistry.instance()
     latex_transpiler = registry.get(TranspileTarget.LATEX)
-    tex_source = latex_transpiler.transpile(ast)
+    tex_source = latex_transpiler.transpile(ast).output
     engine = latex_engine or _find_latex_engine()
     if engine is None:
         raise PDFGenerationError(

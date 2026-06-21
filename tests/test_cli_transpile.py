@@ -4,7 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 from yuho.cli.commands.transpile import ALL_TARGETS, run_transpile
-from yuho.transpile.base import TranspileTarget
+from yuho.transpile.base import TranspileResult, TranspileTarget
 
 
 def test_transpile_all_generates_every_target_output(tmp_path: Path, monkeypatch) -> None:
@@ -18,8 +18,12 @@ def test_transpile_all_generates_every_target_output(tmp_path: Path, monkeypatch
         def __init__(self, target: TranspileTarget):
             self._target = target
 
-        def transpile(self, _ast: object) -> str:
-            return f"generated:{self._target.name.lower()}"
+        def transpile(self, _ast: object) -> TranspileResult:
+            output = f"generated:{self._target.name.lower()}"
+            return TranspileResult(
+                output,
+                manifest={"target": self._target.name.lower()},
+            )
 
     def fake_get_transpiler(target: TranspileTarget) -> DummyTranspiler:
         return DummyTranspiler(target)

@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 
 
 class JSONTranspiler(TranspilerBase, Visitor):
@@ -35,10 +35,11 @@ class JSONTranspiler(TranspilerBase, Visitor):
     def target(self) -> TranspileTarget:
         return TranspileTarget.JSON
 
-    def transpile(self, ast: nodes.ModuleNode) -> str:
+    def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         """Transpile AST to JSON string."""
         data = self._to_dict(ast)
-        return json.dumps(data, indent=self.indent if self.indent else None, ensure_ascii=False)
+        output = json.dumps(data, indent=self.indent if self.indent else None, ensure_ascii=False)
+        return self.result(output, manifest={"format": "json"})
 
     def _to_dict(self, node: nodes.ASTNode) -> Dict[str, Any]:
         """Convert an AST node to a dictionary."""

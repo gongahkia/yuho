@@ -57,7 +57,7 @@ from html import escape
 from typing import List, Optional
 
 from yuho.ast import nodes
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 
 
 _AKN_NAMESPACE = "http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
@@ -88,7 +88,7 @@ class AkomaNtosoTranspiler(TranspilerBase):
     # Top level
     # ------------------------------------------------------------------
 
-    def transpile(self, ast: nodes.ModuleNode) -> str:
+    def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         self._depth = 0
         lines: List[str] = []
         lines.append('<?xml version="1.0" encoding="UTF-8"?>')
@@ -96,7 +96,10 @@ class AkomaNtosoTranspiler(TranspilerBase):
         self._depth = 1
         lines.extend(self._render_act(ast))
         lines.append("</akomaNtoso>")
-        return "\n".join(lines) + "\n"
+        return self.result(
+            "\n".join(lines) + "\n",
+            manifest={"format": "akomantoso", "namespace": _AKN_NAMESPACE},
+        )
 
     def _render_act(self, ast: nodes.ModuleNode) -> List[str]:
         lines: List[str] = []
@@ -119,15 +122,9 @@ class AkomaNtosoTranspiler(TranspilerBase):
         # FRBRWork — abstract Work level (the Act itself).
         lines.append(self._pad("<FRBRWork>"))
         self._depth += 1
-        lines.append(self._pad(
-            f'<FRBRthis value="/akn/{self.country}/act/{self.act_name}/main"/>'
-        ))
-        lines.append(self._pad(
-            f'<FRBRuri value="/akn/{self.country}/act/{self.act_name}"/>'
-        ))
-        lines.append(self._pad(
-            f'<FRBRdate date="{escape(date_attr)}" name="Generation"/>'
-        ))
+        lines.append(self._pad(f'<FRBRthis value="/akn/{self.country}/act/{self.act_name}/main"/>'))
+        lines.append(self._pad(f'<FRBRuri value="/akn/{self.country}/act/{self.act_name}"/>'))
+        lines.append(self._pad(f'<FRBRdate date="{escape(date_attr)}" name="Generation"/>'))
         lines.append(self._pad(f'<FRBRauthor href="#{escape(self.author_id)}"/>'))
         lines.append(self._pad(f'<FRBRcountry value="{escape(self.country)}"/>'))
         self._depth -= 1
@@ -136,15 +133,11 @@ class AkomaNtosoTranspiler(TranspilerBase):
         # language-level realisation of the Work.
         lines.append(self._pad("<FRBRExpression>"))
         self._depth += 1
-        lines.append(self._pad(
-            f'<FRBRthis value="/akn/{self.country}/act/{self.act_name}/eng@/main"/>'
-        ))
-        lines.append(self._pad(
-            f'<FRBRuri value="/akn/{self.country}/act/{self.act_name}/eng@"/>'
-        ))
-        lines.append(self._pad(
-            f'<FRBRdate date="{escape(date_attr)}" name="Generation"/>'
-        ))
+        lines.append(
+            self._pad(f'<FRBRthis value="/akn/{self.country}/act/{self.act_name}/eng@/main"/>')
+        )
+        lines.append(self._pad(f'<FRBRuri value="/akn/{self.country}/act/{self.act_name}/eng@"/>'))
+        lines.append(self._pad(f'<FRBRdate date="{escape(date_attr)}" name="Generation"/>'))
         lines.append(self._pad(f'<FRBRauthor href="#{escape(self.author_id)}"/>'))
         lines.append(self._pad('<FRBRlanguage language="eng"/>'))
         self._depth -= 1
@@ -152,15 +145,13 @@ class AkomaNtosoTranspiler(TranspilerBase):
         # FRBRManifestation — required third FRBR sibling per XSD.
         lines.append(self._pad("<FRBRManifestation>"))
         self._depth += 1
-        lines.append(self._pad(
-            f'<FRBRthis value="/akn/{self.country}/act/{self.act_name}/eng@/main.xml"/>'
-        ))
-        lines.append(self._pad(
-            f'<FRBRuri value="/akn/{self.country}/act/{self.act_name}/eng@/main.xml"/>'
-        ))
-        lines.append(self._pad(
-            f'<FRBRdate date="{escape(date_attr)}" name="Generation"/>'
-        ))
+        lines.append(
+            self._pad(f'<FRBRthis value="/akn/{self.country}/act/{self.act_name}/eng@/main.xml"/>')
+        )
+        lines.append(
+            self._pad(f'<FRBRuri value="/akn/{self.country}/act/{self.act_name}/eng@/main.xml"/>')
+        )
+        lines.append(self._pad(f'<FRBRdate date="{escape(date_attr)}" name="Generation"/>'))
         lines.append(self._pad(f'<FRBRauthor href="#{escape(self.author_id)}"/>'))
         self._depth -= 1
         lines.append(self._pad("</FRBRManifestation>"))
@@ -238,9 +229,11 @@ class AkomaNtosoTranspiler(TranspilerBase):
         # Effective dates
         if stat.effective_dates:
             for d in stat.effective_dates:
-                lines.append(self._pad(
-                    f'<p refersTo="#effective"><date date="{escape(d)}">{escape(d)}</date></p>'
-                ))
+                lines.append(
+                    self._pad(
+                        f'<p refersTo="#effective"><date date="{escape(d)}">{escape(d)}</date></p>'
+                    )
+                )
         # Definitions
         if stat.definitions:
             lines.append(self._pad('<blockList class="definitions">'))
@@ -254,10 +247,12 @@ class AkomaNtosoTranspiler(TranspilerBase):
                 # ontology we don't carry; surface the term as plain text
                 # inside a `<def>`-tagged `<p>` so the document validates.
                 term_id = self._slug(str(term)) or "term"
-                lines.append(self._pad(
-                    f'<item><p><def refersTo="#term_{escape(term_id)}">'
-                    f"{escape(str(term))}</def>: {escape(value_str)}</p></item>"
-                ))
+                lines.append(
+                    self._pad(
+                        f'<item><p><def refersTo="#term_{escape(term_id)}">'
+                        f"{escape(str(term))}</def>: {escape(value_str)}</p></item>"
+                    )
+                )
             self._depth -= 1
             lines.append(self._pad("</blockList>"))
         # Elements
@@ -272,26 +267,30 @@ class AkomaNtosoTranspiler(TranspilerBase):
                 # `<term>` requires a `refersTo` ontology reference per
                 # the XSD; render the element name as plain bold text
                 # inside `<p>` instead.
-                lines.append(self._pad(
-                    f"<item {attrs}><p><b>{escape(el.name)}</b>: "
-                    f"{escape(str(desc))}</p></item>"
-                ))
+                lines.append(
+                    self._pad(
+                        f"<item {attrs}><p><b>{escape(el.name)}</b>: "
+                        f"{escape(str(desc))}</p></item>"
+                    )
+                )
             self._depth -= 1
             lines.append(self._pad("</blockList>"))
         # Penalty as a single descriptive paragraph (no AKN canonical form)
         if stat.penalty is not None:
-            lines.append(self._pad(
-                f'<p class="penalty">{escape(self._render_penalty(stat.penalty))}</p>'
-            ))
+            lines.append(
+                self._pad(f'<p class="penalty">{escape(self._render_penalty(stat.penalty))}</p>')
+            )
         # Illustrations
         for illus in stat.illustrations:
             label = getattr(illus, "label", None) or getattr(illus, "name", "")
             desc = getattr(illus, "description", None)
             text = desc.value if hasattr(desc, "value") else str(desc or "")
-            lines.append(self._pad(
-                f'<p class="illustration" eId="ill_{escape(self._slug(label))}">'
-                f"{escape(text)}</p>"
-            ))
+            lines.append(
+                self._pad(
+                    f'<p class="illustration" eId="ill_{escape(self._slug(label))}">'
+                    f"{escape(text)}</p>"
+                )
+            )
         return lines
 
     def _render_exception(self, exc: nodes.ExceptionNode) -> List[str]:
@@ -351,11 +350,13 @@ class AkomaNtosoTranspiler(TranspilerBase):
             for el in elements_flat:
                 desc_node = getattr(el, "description", None)
                 desc = desc_node.value if hasattr(desc_node, "value") else (desc_node or "")
-                lines.append(self._pad(
-                    f'<item class="{escape(el.element_type)}">'
-                    f"<p><b>{escape(el.name)}</b>: "
-                    f"{escape(str(desc))}</p></item>"
-                ))
+                lines.append(
+                    self._pad(
+                        f'<item class="{escape(el.element_type)}">'
+                        f"<p><b>{escape(el.name)}</b>: "
+                        f"{escape(str(desc))}</p></item>"
+                    )
+                )
             self._depth -= 1
             lines.append(self._pad("</blockList>"))
             self._depth -= 1

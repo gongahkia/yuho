@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 
 
 class AlloyTranspiler(TranspilerBase, Visitor):
@@ -31,7 +31,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
     def target(self) -> TranspileTarget:
         return TranspileTarget.ALLOY
 
-    def transpile(self, ast: nodes.ModuleNode) -> str:
+    def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         """Transpile AST to Alloy specification."""
         self._output = []
         self._indent = 0
@@ -72,7 +72,7 @@ class AlloyTranspiler(TranspilerBase, Visitor):
         # Run commands
         self._emit_run_commands(ast)
 
-        return "\n".join(self._output)
+        return self.result("\n".join(self._output), manifest={"format": "alloy"})
 
     def _emit(self, line: str = "") -> None:
         """Add a line to output with indentation."""

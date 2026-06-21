@@ -8,7 +8,7 @@ from typing import Dict, List, Optional
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 
 
 class MermaidTranspiler(TranspilerBase, Visitor):
@@ -72,7 +72,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
     def target(self) -> TranspileTarget:
         return TranspileTarget.MERMAID
 
-    def transpile(self, ast: nodes.ModuleNode) -> str:
+    def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         """Transpile AST to Mermaid diagram."""
         self._output = []
         self._node_counter = 0
@@ -94,7 +94,10 @@ class MermaidTranspiler(TranspilerBase, Visitor):
             for func in ast.function_defs:
                 self._transpile_function(func)
         self._emit_theme_classes()
-        return "\n".join(self._output)
+        return self.result(
+            "\n".join(self._output),
+            manifest={"format": "mermaid", "shape": self.shape},
+        )
 
     def _emit(self, line: str) -> None:
         self._output.append(line)
@@ -448,7 +451,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
 
             enum_name = self._infer_enum_name(field.name)
             enum_struct = enum_map.get(enum_name)
-            is_last_field = (i == len(case_struct.fields) - 1)
+            is_last_field = i == len(case_struct.fields) - 1
 
             # Build the "continue to next field" anchor up-front so every
             # variant edge that doesn't terminate in a consequence can
@@ -472,19 +475,13 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 emitted_any = False
                 for variant in enum_struct.fields:
                     branch_label = f"{enum_struct.name}.{variant.name}"
-                    term = consequence_terminals.get(
-                        (field.name, variant.name.lower())
-                    )
+                    term = consequence_terminals.get((field.name, variant.name.lower()))
                     if term is not None:
                         leaf_id = self._new_node_id("CON")
                         self._emit(f"    {leaf_id}[{self._q(term)}]")
-                        self._emit(
-                            f"    {decision_id} -->|{self._q(branch_label)}| {leaf_id}"
-                        )
+                        self._emit(f"    {decision_id} -->|{self._q(branch_label)}| {leaf_id}")
                     else:
-                        self._emit(
-                            f"    {decision_id} -->|{self._q(branch_label)}| {cont_id}"
-                        )
+                        self._emit(f"    {decision_id} -->|{self._q(branch_label)}| {cont_id}")
                     emitted_any = True
                 if not emitted_any:
                     self._emit(f"    {decision_id} --> {cont_id}")
@@ -500,14 +497,21 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         """
         if not getattr(ast, "type_defs", None):
             return None
-        case_named = [s for s in ast.type_defs
-                      if isinstance(s, nodes.StructDefNode) and s.name.endswith("Case")]
+        case_named = [
+            s
+            for s in ast.type_defs
+            if isinstance(s, nodes.StructDefNode) and s.name.endswith("Case")
+        ]
         if case_named:
             return case_named[0]
         # Fallback: largest non-enum struct.
-        candidates = [s for s in ast.type_defs
-                      if isinstance(s, nodes.StructDefNode) and s.fields
-                      and any(self._field_is_typed(f) for f in s.fields)]
+        candidates = [
+            s
+            for s in ast.type_defs
+            if isinstance(s, nodes.StructDefNode)
+            and s.fields
+            and any(self._field_is_typed(f) for f in s.fields)
+        ]
         return max(candidates, key=lambda s: len(s.fields), default=None)
 
     def _find_enum_structs(self, ast: nodes.ModuleNode):
@@ -521,6 +525,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
         the rendering loop stays uniform.
         """
         from types import SimpleNamespace
+
         out: Dict[str, object] = {}
         for e in getattr(ast, "enum_defs", ()) or ():
             # Adapt EnumDefNode -> a struct-like object with .name + .fields.
@@ -577,9 +582,7 @@ class MermaidTranspiler(TranspilerBase, Visitor):
                 return fn
         return None
 
-    def _consequences_by_field_value(
-        self, fn: nodes.FunctionDefNode
-    ) -> Dict[tuple, str]:
+    def _consequences_by_field_value(self, fn: nodes.FunctionDefNode) -> Dict[tuple, str]:
         """Walk a fn's match arms and bucket consequences by (field, value)."""
         out: Dict[tuple, str] = {}
         match_exprs = self._find_match_exprs(fn.body)

@@ -17,7 +17,7 @@ import shutil
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 from yuho.transpile.latex_preamble import generate_preamble
 from yuho.transpile.latex_utils import (
     escape_latex,
@@ -67,7 +67,7 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
     def target(self) -> TranspileTarget:
         return TranspileTarget.LATEX
 
-    def transpile(self, ast: nodes.ModuleNode) -> str:
+    def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         """Transpile AST to LaTeX document."""
         self._output = []
         self._indent_level = 0
@@ -103,7 +103,7 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
         self._emit("")
         self._emit(r"\end{document}")
 
-        return "\n".join(self._output)
+        return self.result("\n".join(self._output), manifest={"format": "latex"})
 
     def _emit(self, text: str) -> None:
         """Add a line to output with current indentation."""

@@ -9,7 +9,7 @@ Supports transpilation to:
 - Alloy: Formal verification models
 """
 
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 from yuho.transpile.json_transpiler import JSONTranspiler
 from yuho.transpile.english_transpiler import EnglishTranspiler
 from yuho.transpile.mermaid_transpiler import MermaidTranspiler
@@ -23,6 +23,7 @@ from yuho.transpile.registry import TranspilerRegistry
 
 __all__ = [
     "TranspileTarget",
+    "TranspileResult",
     "TranspilerBase",
     "TranspilerRegistry",
     "JSONTranspiler",

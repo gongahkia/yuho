@@ -7,7 +7,7 @@ from html import escape
 from typing import Iterable, List, Optional, Sequence, Union
 
 from yuho.ast import nodes
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 
 
 _LRML_NS = "http://docs.oasis-open.org/legalruleml/ns/v1.0/"
@@ -39,7 +39,7 @@ class LegalRuleMLTranspiler(TranspilerBase):
     def target(self) -> TranspileTarget:
         return TranspileTarget.LEGALRULEML
 
-    def transpile(self, ast: nodes.ModuleNode) -> str:
+    def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         self._depth = 0
         lines: List[str] = ['<?xml version="1.0" encoding="UTF-8"?>']
         lines.append(
@@ -64,7 +64,10 @@ class LegalRuleMLTranspiler(TranspilerBase):
         lines.append(self._pad("</lrml:Statements>"))
         self._depth = 0
         lines.append("</lrml:LegalRuleML>")
-        return "\n".join(lines) + "\n"
+        return self.result(
+            "\n".join(lines) + "\n",
+            manifest={"format": "legalruleml", "namespace": _LRML_NS},
+        )
 
     def _legal_sources(self, statutes: Sequence[nodes.StatuteNode]) -> List[str]:
         if not statutes:

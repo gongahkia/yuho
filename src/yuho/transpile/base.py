@@ -3,6 +3,7 @@ Transpiler base class and target enum.
 """
 
 from abc import ABC, abstractmethod
+from typing import Any, Mapping, Sequence
 from enum import Enum, auto
 
 from yuho.ast.nodes import ModuleNode
@@ -65,6 +66,33 @@ class TranspileTarget(Enum):
         return extensions.get(self, ".txt")
 
 
+class TranspileResult(str):
+    """String-compatible transpilation result with diagnostics metadata."""
+
+    output: str
+    warnings: tuple[str, ...]
+    manifest: dict[str, Any]
+
+    def __new__(
+        cls,
+        output: str,
+        warnings: Sequence[str] = (),
+        manifest: Mapping[str, Any] | None = None,
+    ) -> "TranspileResult":
+        obj = str.__new__(cls, output)
+        obj.output = output
+        obj.warnings = tuple(warnings)
+        obj.manifest = dict(manifest or {})
+        return obj
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "output": self.output,
+            "warnings": list(self.warnings),
+            "manifest": self.manifest,
+        }
+
+
 class TranspilerBase(ABC):
     """
     Abstract base class for transpilers.
@@ -80,7 +108,7 @@ class TranspilerBase(ABC):
         pass
 
     @abstractmethod
-    def transpile(self, ast: ModuleNode) -> str:
+    def transpile(self, ast: ModuleNode) -> TranspileResult:
         """
         Transpile a Yuho AST to the target format.
 
@@ -88,9 +116,23 @@ class TranspilerBase(ABC):
             ast: The root ModuleNode of the AST
 
         Returns:
-            The transpiled output as a string
+            String-compatible result with output, warnings, and manifest
         """
         pass
+
+    def result(
+        self,
+        output: str,
+        warnings: Sequence[str] = (),
+        manifest: Mapping[str, Any] | None = None,
+    ) -> TranspileResult:
+        payload = {
+            "target": self.target.name.lower(),
+            "extension": self.target.file_extension,
+        }
+        if manifest:
+            payload.update(manifest)
+        return TranspileResult(output, warnings=warnings, manifest=payload)
 
     def transpile_to_file(self, ast: ModuleNode, path: str) -> None:
         """
@@ -100,6 +142,6 @@ class TranspilerBase(ABC):
             ast: The root ModuleNode of the AST
             path: Output file path
         """
-        output = self.transpile(ast)
+        output = self.transpile(ast).output
         with open(path, "w", encoding="utf-8") as f:
             f.write(output)

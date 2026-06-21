@@ -10,7 +10,7 @@ from typing import List, Optional
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
 from yuho.explain import ElementTrace, JustificationTrace
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 
 
 class EnglishTranspiler(TranspilerBase, Visitor):
@@ -30,12 +30,12 @@ class EnglishTranspiler(TranspilerBase, Visitor):
     def target(self) -> TranspileTarget:
         return TranspileTarget.ENGLISH
 
-    def transpile(self, ast: nodes.ModuleNode) -> str:
+    def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         """Transpile AST to English text."""
         self._output = []
         self._indent_level = 0
         self._visit_module(ast)
-        return "\n".join(self._output)
+        return self.result("\n".join(self._output), manifest={"format": "text"})
 
     def render_explain_trace(self, trace: JustificationTrace) -> str:
         """Render an explain trace as controlled English."""

@@ -16,7 +16,7 @@ from typing import List, Optional, Tuple
 from xml.sax.saxutils import escape as xml_escape
 
 from yuho.ast import nodes
-from yuho.transpile.base import TranspileTarget, TranspilerBase
+from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 
 
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
@@ -25,8 +25,8 @@ W_PREFIX = 'xmlns:w="' + W_NS + '"'
 
 @dataclass
 class _Para:
-    style: str                           # Heading1 / Heading2 / Heading3 / Normal / Quote / ListNumber
-    runs: Tuple[Tuple[str, str], ...]    # (formatting flag, text) — flag ∈ "", "b", "i", "bi"
+    style: str  # Heading1 / Heading2 / Heading3 / Normal / Quote / ListNumber
+    runs: Tuple[Tuple[str, str], ...]  # (formatting flag, text) — flag ∈ "", "b", "i", "bi"
 
 
 class DOCXTranspiler(TranspilerBase):
@@ -43,10 +43,10 @@ class DOCXTranspiler(TranspilerBase):
     # Public API
     # ------------------------------------------------------------------
 
-    def transpile(self, ast: nodes.ModuleNode) -> str:
+    def transpile(self, ast: nodes.ModuleNode) -> TranspileResult:
         self._paras = []
         self._visit_module(ast)
-        return self._serialize_document_xml()
+        return self.result(self._serialize_document_xml(), manifest={"format": "word/document.xml"})
 
     def write_docx(self, ast: nodes.ModuleNode, path: str) -> None:
         self._paras = []
@@ -198,11 +198,11 @@ class DOCXTranspiler(TranspilerBase):
     def _serialize_document_xml(self) -> str:
         out: List[str] = []
         out.append('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>')
-        out.append(f'<w:document {W_PREFIX}><w:body>')
+        out.append(f"<w:document {W_PREFIX}><w:body>")
         for p in self._paras:
             out.append(_para_xml(p))
         out.append(_sectPr_xml())
-        out.append('</w:body></w:document>')
+        out.append("</w:body></w:document>")
         return "".join(out)
 
 
@@ -230,11 +230,11 @@ def _run_xml(flag: str, text: str) -> str:
 
 def _sectPr_xml() -> str:
     return (
-        '<w:sectPr>'
+        "<w:sectPr>"
         '<w:pgSz w:w="12240" w:h="15840"/>'
         '<w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" '
         'w:header="720" w:footer="720" w:gutter="0"/>'
-        '</w:sectPr>'
+        "</w:sectPr>"
     )
 
 
@@ -283,7 +283,9 @@ def _format_penalty(p: nodes.PenaltyNode) -> List[str]:
         for sub in _format_penalty(p.nested):
             lines.append("  " + sub)
     if p.mandatory_min_imprisonment:
-        lines.append(f"mandatory minimum imprisonment: {_fmt_duration(p.mandatory_min_imprisonment)}")
+        lines.append(
+            f"mandatory minimum imprisonment: {_fmt_duration(p.mandatory_min_imprisonment)}"
+        )
     if p.mandatory_min_fine:
         lines.append(f"mandatory minimum fine: {_fmt_money(p.mandatory_min_fine)}")
     return lines
@@ -341,7 +343,7 @@ _DOCUMENT_RELS = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 _STYLES_XML = (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    f'<w:styles {W_PREFIX}>'
+    f"<w:styles {W_PREFIX}>"
     '<w:style w:type="paragraph" w:default="1" w:styleId="Normal">'
     '<w:name w:val="Normal"/><w:qFormat/></w:style>'
     '<w:style w:type="paragraph" w:styleId="Heading1">'
@@ -359,11 +361,11 @@ _STYLES_XML = (
     '<w:style w:type="paragraph" w:styleId="Quote">'
     '<w:name w:val="Quote"/><w:basedOn w:val="Normal"/><w:qFormat/>'
     '<w:pPr><w:ind w:left="720"/></w:pPr>'
-    '<w:rPr><w:i/></w:rPr></w:style>'
+    "<w:rPr><w:i/></w:rPr></w:style>"
     '<w:style w:type="paragraph" w:styleId="ListBullet">'
     '<w:name w:val="List Bullet"/><w:basedOn w:val="Normal"/><w:qFormat/>'
     '<w:pPr><w:ind w:left="360" w:hanging="360"/></w:pPr></w:style>'
-    '</w:styles>'
+    "</w:styles>"
 )
 
 
