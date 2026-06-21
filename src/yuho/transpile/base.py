@@ -19,6 +19,7 @@ class TranspileTarget(Enum):
     ALLOY = auto()
     DOCX = auto()
     AKOMANTOSO = auto()
+    LEGALRULEML = auto()
 
     @classmethod
     def from_string(cls, name: str) -> "TranspileTarget":
@@ -57,6 +58,7 @@ class TranspileTarget(Enum):
             TranspileTarget.ALLOY: ".als",
             TranspileTarget.DOCX: ".docx",
             TranspileTarget.AKOMANTOSO: ".xml",
+            TranspileTarget.LEGALRULEML: ".lrml",
         }
         return extensions.get(self, ".txt")
 
