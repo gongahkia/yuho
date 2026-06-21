@@ -96,7 +96,7 @@
         },
         {
           "name": "keyword.other.legal.yuho",
-          "match": "\\b(?:definitions|elements|penalty|illustration|exceptions|case_law|subsumes|amends|effective|repealed|imprisonment|fine|supplementary|actus_reus|mens_rea|circumstance|all_of|any_of|none_of|when|priority|defeats)\\b"
+          "match": "\\b(?:definitions|elements|penalty|illustration|interpretations|interpretation|citation|court|endorsement|binding|persuasive|none|exceptions|case_law|subsumes|amends|effective|repealed|imprisonment|fine|supplementary|actus_reus|mens_rea|circumstance|all_of|any_of|none_of|when|priority|defeats|rebuts|undercuts)\\b"
         }
       ]
     },

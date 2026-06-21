@@ -473,8 +473,23 @@ module.exports = grammar({
       optional(field('burden', $.burden_qualifier)),
       optional(seq('actor', field('actor', $.identifier))),
       optional(seq('patient', field('patient', $.identifier))),
+      optional(seq('interpretations', '{', repeat(field('interpretation', $.interpretation_block)), '}')),
       optional(';'),
     ),
+
+    interpretation_block: $ => seq(
+      'interpretation',
+      field('name', $.identifier),
+      '{',
+      field('reading', $.string_literal),
+      optional(';'),
+      optional(seq('citation', field('citation', $.string_literal), optional(';'))),
+      optional(seq('court', field('court', $.string_literal), optional(';'))),
+      optional(seq('endorsement', field('endorsement', $.endorsement_kind), optional(';'))),
+      '}',
+    ),
+
+    endorsement_kind: $ => choice('binding', 'persuasive', 'none'),
 
     burden_qualifier: $ => seq(
       'burden',

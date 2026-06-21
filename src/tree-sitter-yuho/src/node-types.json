@@ -927,6 +927,16 @@
           }
         ]
       },
+      "interpretation": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "interpretation_block",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -1015,6 +1025,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "endorsement_kind",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "enum_definition",
@@ -2058,6 +2073,62 @@
           },
           {
             "type": "unary_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "interpretation_block",
+    "named": true,
+    "fields": {
+      "citation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "court": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      },
+      "endorsement": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "endorsement_kind",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "reading": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_literal",
             "named": true
           }
         ]
@@ -4611,6 +4682,10 @@
     "named": false
   },
   {
+    "type": "binding",
+    "named": false
+  },
+  {
     "type": "bool",
     "named": false
   },
@@ -4639,6 +4714,10 @@
     "named": false
   },
   {
+    "type": "citation",
+    "named": false
+  },
+  {
     "type": "comment",
     "named": true,
     "extra": true
@@ -4661,6 +4740,10 @@
   },
   {
     "type": "consequence",
+    "named": false
+  },
+  {
+    "type": "court",
     "named": false
   },
   {
@@ -4721,6 +4804,10 @@
   },
   {
     "type": "elements",
+    "named": false
+  },
+  {
+    "type": "endorsement",
     "named": false
   },
   {
@@ -4800,6 +4887,14 @@
     "named": true
   },
   {
+    "type": "interpretation",
+    "named": false
+  },
+  {
+    "type": "interpretations",
+    "named": false
+  },
+  {
     "type": "legal_test",
     "named": false
   },
@@ -4845,6 +4940,10 @@
     "extra": true
   },
   {
+    "type": "none",
+    "named": false
+  },
+  {
     "type": "obligation",
     "named": false
   },
@@ -4874,6 +4973,10 @@
   },
   {
     "type": "permission",
+    "named": false
+  },
+  {
+    "type": "persuasive",
     "named": false
   },
   {
