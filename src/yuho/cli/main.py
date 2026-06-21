@@ -347,6 +347,37 @@ def verify(
 
 
 @cli.command()
+@click.argument("section")
+@click.option("--facts", "facts_file", type=click.Path(exists=True), required=True)
+@click.option("--library", "library_dir", type=click.Path(), default=None, help="Library root")
+@click.option("--json", "json_output", is_flag=True, help="Emit JSON")
+@click.option(
+    "--feature",
+    "features",
+    multiple=True,
+    type=click.Choice(["civil"]),
+    help="Enable experimental language feature",
+)
+def explain(
+    section: str,
+    facts_file: str,
+    library_dir: Optional[str],
+    json_output: bool,
+    features: tuple[str, ...],
+) -> None:
+    """Explain element-by-element statute satisfaction."""
+    from yuho.cli.commands.explain import run_explain
+
+    run_explain(
+        section=section,
+        facts_file=facts_file,
+        library_dir=library_dir,
+        json_output=json_output,
+        features=set(features),
+    )
+
+
+@cli.command()
 @click.argument("section", required=False)
 @click.option("--library", "library_dir", type=click.Path(), default=None, help="Library root")
 @click.option("--in", "in_only", is_flag=True, help="Only show incoming edges")
