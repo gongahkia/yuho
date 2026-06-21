@@ -717,6 +717,13 @@ def _run_semantic_checks(
     error_count = 0
     warning_count = 0
 
+    for item in _check_jurisdiction_references(ast, resolver, source_path):
+        if item.severity == "warning":
+            warning_count += 1
+        else:
+            error_count += 1
+        issues.append(item)
+
     for scope_err in scope_visitor.result.errors:
         severity = getattr(scope_err, "severity", "error")
         line = getattr(scope_err, "line", 0)
@@ -748,3 +755,58 @@ def _run_semantic_checks(
         errors=error_count,
         warnings=warning_count,
     )
+
+
+def _check_jurisdiction_references(
+    ast: ModuleNode,
+    resolver,
+    source_path: Optional[Path],
+) -> list[SemanticIssue]:
+    if resolver is None or source_path is None:
+        return []
+    source_jurisdictions = _module_jurisdictions(ast)
+    if not source_jurisdictions:
+        return []
+
+    issues: list[SemanticIssue] = []
+    for ref in ast.references:
+        try:
+            target = resolver.resolve_reference(ref, source_path)
+        except Exception:
+            continue
+        target_jurisdictions = _module_jurisdictions(target)
+        if not target_jurisdictions:
+            continue
+        if source_jurisdictions & target_jurisdictions:
+            continue
+        if ref.cross_jurisdiction:
+            continue
+        line, column = _node_line_col(ref)
+        issues.append(
+            SemanticIssue(
+                severity="error",
+                message=(
+                    f"cross-jurisdiction reference '{ref.path}' from "
+                    f"{', '.join(sorted(source_jurisdictions))} to "
+                    f"{', '.join(sorted(target_jurisdictions))} requires "
+                    "/// @cross_jurisdiction"
+                ),
+                line=line,
+                column=column,
+            )
+        )
+    return issues
+
+
+def _module_jurisdictions(ast: ModuleNode) -> set[str]:
+    return {
+        statute.jurisdiction
+        for statute in ast.statutes
+        if statute.jurisdiction
+    }
+
+
+def _node_line_col(node: ASTNode) -> tuple[int, int]:
+    if node.source_location:
+        return node.source_location.line, node.source_location.col
+    return 0, 0

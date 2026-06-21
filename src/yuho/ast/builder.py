@@ -194,10 +194,27 @@ class ASTBuilder:
         """Build ReferencingStmt from referencing_statement node."""
         path_node = self._child_by_field(node, "path")
         path = self._text(path_node) if path_node else ""
+        doc = self._get_doc_comment(node)
         return nodes.ReferencingStmt(
             path=path,
+            doc_comment=doc,
+            cross_jurisdiction=self._has_doc_flag(doc, "cross_jurisdiction"),
             source_location=self._loc(node),
         )
+
+    @staticmethod
+    def _has_doc_flag(doc: Optional[str], flag: str) -> bool:
+        if not doc:
+            return False
+        aliases = {flag, flag.replace("_", "-")}
+        for line in doc.split("\n"):
+            stripped = line.strip().removeprefix("@").strip()
+            has_alias_prefix = any(
+                stripped.startswith(f"{alias} ") for alias in aliases
+            )
+            if stripped in aliases or has_alias_prefix:
+                return True
+        return False
 
     def _build_assert(self, node) -> nodes.AssertStmt:
         """Build AssertStmt from assert_statement node."""

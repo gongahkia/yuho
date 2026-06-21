@@ -814,6 +814,8 @@ class ReferencingStmt(ASTNode):
     """Referencing statement for test files to import statutes."""
 
     path: str  # e.g., "s300_murder/statute"
+    doc_comment: Optional[str] = None
+    cross_jurisdiction: bool = False
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_referencing_stmt(self)
