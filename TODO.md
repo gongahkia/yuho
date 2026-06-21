@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(C) 2026-06-21 ASP/Datalog backend under src/yuho/explain/ producing justification trace per element +tooling @verify effort:XL
 (C) 2026-06-21 New CLI `yuho explain --facts FILE SECTION` returning element-by-element satisfaction trace +tooling @cli effort:M
 (C) 2026-06-21 English-render the explain trace through existing transpile/english_transpiler.py +tooling @transpile effort:M
 (A) 2026-06-21 New CLI `yuho irac --facts FILE STATUTE.yh` emitting IRAC-structured English via english_transpiler.py +education @cli effort:M
