@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(B) 2026-06-21 Lean: add mechanisation/Yuho/Defeasibility.lean splitting Cross.lean defeats lemmas into two soundness theorems +language @lean effort:L
 (B) 2026-06-21 Corpus sweep: convert existing `defeats` clauses to `rebuts` (default conservative mapping) via scripts/migrate_defeats.py +language @library effort:S
 (B) 2026-06-21 Grammar: add `interpretation` block on element with named alternative readings +language @grammar effort:M
 (B) 2026-06-21 AST: InterpretationNode carrying citation + court + endorsement (binding|persuasive|none) +language @ast effort:S

@@ -44,14 +44,24 @@ arbitrary boolean expressions, but for the purposes of §6 only
 the eventual truth value matters. -/
 abbrev Guard := (String → Bool) → Bool
 
+/-- The effect of a fired exception relation. A rebutting exception
+negates the statute conclusion; an undercutting exception only
+negates the target exception's inference. -/
+inductive DefeatKind where
+  | rebuts : DefeatKind
+  | undercuts : DefeatKind
+deriving Repr, DecidableEq, BEq, Inhabited
+
 /-- An exception node. `defeats` carries the labels of sibling
-exceptions this one overrides; the linter (in the wider toolchain)
-enforces the resulting relation is acyclic so the well-founded
-recursion in `Exception.fires` terminates. -/
+exceptions this one targets; `relation` says whether the target is
+rebutted at conclusion level or undercut at inference level. The
+linter (in the wider toolchain) enforces the relation DAGs are
+acyclic. -/
 structure Exception where
   label : String
   guard : Guard
   defeats : List String
+  relation : DefeatKind := .rebuts
 deriving Inhabited
 
 /-- A statute. Penalty + subsection + metadata fields are elided

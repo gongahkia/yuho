@@ -195,13 +195,14 @@ def encodeExceptionBiconds (s : Statute) : List SMTFormula :=
          (.var (s.section_number ++ "_exc_" ++ x.label ++ "_firedSet")))
 
 /-- The conviction biconditional: `<sX>_conviction ↔
-<sX>_elements_satisfied ∧ ¬(any exception fires)`. Closes
-`<sX>_conviction` definitionally; mirrors lines 1521–1538 of
-`z3_solver.py`. -/
+`<sX>_elements_satisfied ∧ ¬(any rebutting exception fires)`.
+Undercut atoms remain encoded by `encodeExceptionBiconds`, but
+are excluded from the conclusion-negating disjunction. -/
 def encodeConvictionBicond (s : Statute) : SMTFormula :=
   let anyFires :=
     s.exceptions.foldr
-      (fun x acc => .or (.var (exceptionAtomName s x)) acc)
+      (fun x acc =>
+        if x.rebutsConclusion then .or (.var (exceptionAtomName s x)) acc else acc)
       (.const false)
   .iff (.var (convictionAtomName s))
        (.and (.var (elementsAtomName s)) (.not anyFires))

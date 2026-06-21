@@ -76,14 +76,39 @@ def Exception.firedSet (xs : List Exception) (F : Facts) : List String :=
 def Exception.fires (xs : List Exception) (F : Facts) (label : String) : Bool :=
   decide (label ∈ Exception.firedSet xs F)
 
+/-- Whether a fired exception negates the statute conclusion. -/
+def Exception.rebutsConclusion (x : Exception) : Bool :=
+  decide (x.relation = .rebuts)
+
+/-- Whether a concrete exception node fires as an active inference. -/
+def Exception.nodeFires (xs : List Exception) (F : Facts) (x : Exception) : Bool :=
+  decide (x.label ∈ Exception.firedSet xs F)
+
+/-- Whether a concrete exception node fires as a rebuttal. -/
+def Exception.rebutFires (xs : List Exception) (F : Facts) (x : Exception) : Bool :=
+  x.rebutsConclusion && x.nodeFires xs F
+
+/-- Whether a concrete exception node fires as an undercut. -/
+def Exception.undercutFires (xs : List Exception) (F : Facts) (x : Exception) : Bool :=
+  (decide (x.relation = .undercuts)) && x.nodeFires xs F
+
+/-- Any active rebutting exception negates the statute conclusion. -/
+def Exception.anyRebutFires (xs : List Exception) (F : Facts) : Bool :=
+  xs.any (fun x => x.rebutFires xs F)
+
+/-- Any active undercutting exception suppresses an inference. -/
+def Exception.anyUndercutFires (xs : List Exception) (F : Facts) : Bool :=
+  xs.any (fun x => x.undercutFires xs F)
+
 /-- A statute convicts iff its elements are all satisfied AND no
-exception fires. Corresponds to `Conviction` /
-`NoConviction-Elements` / `NoConviction-Excused` in §4.3. -/
+rebutting exception fires. Undercuts are still active in
+`Exception.firedSet`, but do not negate the conclusion by
+themselves. -/
 def Statute.elementsSatisfied (s : Statute) (F : Facts) : Bool :=
   s.elements.eval F
 
 def Statute.anyExceptionFires (s : Statute) (F : Facts) : Bool :=
-  !(Exception.firedSet s.exceptions F).isEmpty
+  Exception.anyRebutFires s.exceptions F
 
 def Statute.convicts (s : Statute) (F : Facts) : Bool :=
   s.elementsSatisfied F && !s.anyExceptionFires F

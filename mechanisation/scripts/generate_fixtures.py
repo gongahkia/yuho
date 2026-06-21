@@ -46,6 +46,7 @@ from yuho.ast.nodes import (  # noqa: E402
     ElementGroupNode,
     ElementNode,
     StatuteNode,
+    UndercutsRelation,
 )
 from yuho.parser import get_parser  # noqa: E402
 
@@ -129,10 +130,14 @@ def _emit_exceptions(statute: StatuteNode) -> str:
             if defeats
             else "[]"
         )
+        relation = (
+            ".undercuts" if isinstance(exc.defeat_relation, UndercutsRelation) else ".rebuts"
+        )
         parts.append(
             f'  {{ label := "{_esc(label)}", '
             f'guard := fun F => F "exc_{_safe_id(label)}", '
-            f"defeats := {defeats_lit} }}"
+            f"defeats := {defeats_lit}, "
+            f"relation := {relation} }}"
         )
     if not parts:
         return "[]"
