@@ -247,6 +247,9 @@ class Visitor:
     def visit_definition_entry(self, node: nodes.DefinitionEntry) -> Any:
         return self.generic_visit(node)
 
+    def visit_interpretation(self, node: nodes.InterpretationNode) -> Any:
+        return self.generic_visit(node)
+
     def visit_element(self, node: nodes.ElementNode) -> Any:
         return self.generic_visit(node)
 

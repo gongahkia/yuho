@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+from yuho.ast.nodes import ElementNode
 from yuho.parser import get_parser
+from yuho.services.analysis import analyze_source
 
 
-def test_element_interpretation_blocks_parse():
-    source = """
+SOURCE = """
 statute 1 "Demo" {
   elements {
     actus_reus deception := "deception" interpretations {
@@ -24,9 +25,29 @@ statute 1 "Demo" {
   }
 }
 """
-    result = get_parser().parse(source, "<interpretation>")
+
+
+def test_element_interpretation_blocks_parse():
+    result = get_parser().parse(SOURCE, "<interpretation>")
     assert not result.errors, [str(error) for error in result.errors]
     assert has_node_type(result.root_node, "interpretation_block")
+
+
+def test_builder_attaches_element_interpretations():
+    result = analyze_source(SOURCE, file="<interpretation>", run_semantic=False)
+    assert not result.parse_errors
+    element = result.ast.statutes[0].elements[0]
+    assert isinstance(element, ElementNode)
+    assert len(element.interpretations) == 2
+
+    narrow, broad = element.interpretations
+    assert narrow.name == "narrow"
+    assert narrow.reading.value == "express representation only"
+    assert narrow.citation and narrow.citation.value == "Foo v Bar"
+    assert narrow.court and narrow.court.value == "CA"
+    assert narrow.endorsement == "binding"
+    assert broad.name == "broad"
+    assert broad.endorsement == "persuasive"
 
 
 def has_node_type(node, node_type: str) -> bool:

@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(B) 2026-06-21 AST: InterpretationNode carrying citation + court + endorsement (binding|persuasive|none) +language @ast effort:S
 (B) 2026-06-21 Lint: warn when element has competing interpretations with no endorsement metadata +language @lint effort:S
 (B) 2026-06-21 Reference encodings: rewrite s415_cheating and s300_murder using `interpretation` instead of dual-function pattern +language @library effort:S
 (B) 2026-06-21 Grammar: add `treatment followed|distinguished|overruled` to caselaw block +corpus @grammar effort:S

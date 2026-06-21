@@ -166,6 +166,9 @@ class Transformer(Visitor):
     def visit_definition_entry(self, node):
         return self.transform_definition_entry(node)
 
+    def visit_interpretation(self, node):
+        return self.transform_interpretation(node)
+
     def visit_element(self, node):
         return self.transform_element(node)
 
@@ -591,13 +594,44 @@ class Transformer(Visitor):
             )
         return node
 
+    def transform_interpretation(
+        self, node: nodes.InterpretationNode
+    ) -> nodes.InterpretationNode:
+        new_reading = self._transform_typed(node.reading)
+        new_citation = self._transform_optional_typed(node.citation)
+        new_court = self._transform_optional_typed(node.court)
+        if (
+            new_reading is not node.reading
+            or new_citation is not node.citation
+            or new_court is not node.court
+        ):
+            return nodes.InterpretationNode(
+                name=node.name,
+                reading=new_reading,
+                citation=new_citation,
+                court=new_court,
+                endorsement=node.endorsement,
+                source_location=node.source_location,
+            )
+        return node
+
     def transform_element(self, node: nodes.ElementNode) -> nodes.ElementNode:
         new_desc = self.transform(node.description)
-        if new_desc is not node.description:
+        new_interpretations, interpretations_changed = self._transform_children_typed(
+            list(node.interpretations)
+        )
+        if new_desc is not node.description or interpretations_changed:
             return nodes.ElementNode(
                 element_type=node.element_type,
                 name=node.name,
                 description=new_desc,
+                caused_by=node.caused_by,
+                burden=node.burden,
+                burden_standard=node.burden_standard,
+                doc_comment=node.doc_comment,
+                actor=node.actor,
+                patient=node.patient,
+                interpretations=new_interpretations,
                 source_location=node.source_location,
             )
         return node

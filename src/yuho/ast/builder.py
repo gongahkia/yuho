@@ -1260,52 +1260,71 @@ class ASTBuilder:
                 )
         return parties
 
+    def _build_element_entry(self, node) -> nodes.ElementNode:
+        type_node = self._child_by_field(node, "element_type")
+        name_node = self._child_by_field(node, "name")
+        desc_node = self._child_by_field(node, "description")
+        caused_by_node = self._child_by_field(node, "caused_by")
+        burden_node = self._child_by_type(node, "burden_qualifier")
+        actor_node = self._child_by_field(node, "actor")
+        patient_node = self._child_by_field(node, "patient")
+
+        burden = burden_standard = None
+        if burden_node:
+            for bc in burden_node.children:
+                t = self._text(bc)
+                if t in ("prosecution", "defence"):
+                    burden = t
+                elif t in (
+                    "beyond_reasonable_doubt",
+                    "balance_of_probabilities",
+                    "prima_facie",
+                ):
+                    burden_standard = t
+
+        return nodes.ElementNode(
+            element_type=self._text(type_node) if type_node else "actus_reus",
+            name=self._text(name_node) if name_node else "",
+            description=self._build_expression(desc_node) if desc_node else nodes.StringLit(value=""),
+            caused_by=self._text(caused_by_node) if caused_by_node else None,
+            burden=burden,
+            burden_standard=burden_standard,
+            doc_comment=self._get_doc_comment(node),
+            actor=self._text(actor_node) if actor_node else None,
+            patient=self._text(patient_node) if patient_node else None,
+            interpretations=tuple(
+                self._build_interpretation(child)
+                for child in self._children_by_field(node, "interpretation")
+            ),
+            source_location=self._loc(node),
+        )
+
+    def _build_interpretation(self, node) -> nodes.InterpretationNode:
+        name_node = self._child_by_field(node, "name")
+        reading_node = self._child_by_field(node, "reading")
+        citation_node = self._child_by_field(node, "citation")
+        court_node = self._child_by_field(node, "court")
+        endorsement_node = self._child_by_field(node, "endorsement")
+        return nodes.InterpretationNode(
+            name=self._text(name_node) if name_node else "",
+            reading=(
+                self._build_string_lit(reading_node)
+                if reading_node
+                else nodes.StringLit(value="")
+            ),
+            citation=self._build_string_lit(citation_node) if citation_node else None,
+            court=self._build_string_lit(court_node) if court_node else None,
+            endorsement=self._text(endorsement_node) if endorsement_node else "none",
+            source_location=self._loc(node),
+        )
+
     def _build_elements_block(self, node) -> tuple:
         """Build list of ElementNode/ElementGroupNode and TemporalConstraintNode from elements_block."""
         elements: list = []
         temporals: List[nodes.TemporalConstraintNode] = []
         for child in node.children:
             if child.type == "element_entry":
-                type_node = self._child_by_field(child, "element_type")
-                name_node = self._child_by_field(child, "name")
-                desc_node = self._child_by_field(child, "description")
-
-                elem_type = self._text(type_node) if type_node else "actus_reus"
-                name = self._text(name_node) if name_node else ""
-                description = (
-                    self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
-                )
-
-                caused_by_node = self._child_by_field(child, "caused_by")
-                burden_node = self._child_by_type(child, "burden_qualifier")
-                actor_node = self._child_by_field(child, "actor")
-                patient_node = self._child_by_field(child, "patient")
-                burden = burden_standard = None
-                if burden_node:
-                    for bc in burden_node.children:
-                        t = self._text(bc)
-                        if t in ("prosecution", "defence"):
-                            burden = t
-                        elif t in (
-                            "beyond_reasonable_doubt",
-                            "balance_of_probabilities",
-                            "prima_facie",
-                        ):
-                            burden_standard = t
-                elements.append(
-                    nodes.ElementNode(
-                        element_type=elem_type,
-                        name=name,
-                        description=description,
-                        caused_by=self._text(caused_by_node) if caused_by_node else None,
-                        burden=burden,
-                        burden_standard=burden_standard,
-                        doc_comment=self._get_doc_comment(child),
-                        actor=self._text(actor_node) if actor_node else None,
-                        patient=self._text(patient_node) if patient_node else None,
-                        source_location=self._loc(child),
-                    )
-                )
+                elements.append(self._build_element_entry(child))
             elif child.type == "element_group":
                 elements.append(self._build_element_group(child))
             elif child.type == "temporal_constraint":
@@ -1329,23 +1348,7 @@ class ASTBuilder:
         members: list = []
         for child in node.children:
             if child.type == "element_entry":
-                type_node = self._child_by_field(child, "element_type")
-                name_node = self._child_by_field(child, "name")
-                desc_node = self._child_by_field(child, "description")
-                elem_type = self._text(type_node) if type_node else "actus_reus"
-                name = self._text(name_node) if name_node else ""
-                description = (
-                    self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
-                )
-                members.append(
-                    nodes.ElementNode(
-                        element_type=elem_type,
-                        name=name,
-                        description=description,
-                        doc_comment=self._get_doc_comment(child),
-                        source_location=self._loc(child),
-                    )
-                )
+                members.append(self._build_element_entry(child))
             elif child.type == "element_group":
                 members.append(self._build_element_group(child))
         return nodes.ElementGroupNode(

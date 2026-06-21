@@ -852,6 +852,28 @@ class DefinitionEntry(ASTNode):
 
 
 @dataclass(frozen=True)
+class InterpretationNode(ASTNode):
+    """Named reading attached to a statutory element."""
+
+    name: str
+    reading: StringLit
+    citation: Optional[StringLit] = None
+    court: Optional[StringLit] = None
+    endorsement: str = "none"
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_interpretation(self)
+
+    def children(self) -> List[ASTNode]:
+        result: List[ASTNode] = [self.reading]
+        if self.citation:
+            result.append(self.citation)
+        if self.court:
+            result.append(self.court)
+        return result
+
+
+@dataclass(frozen=True)
 class ElementNode(ASTNode):
     """
     Element of an offense (actus reus or mens rea).
@@ -868,12 +890,13 @@ class ElementNode(ASTNode):
     doc_comment: Optional[str] = None
     actor: Optional[str] = None  # party role performing the act
     patient: Optional[str] = None  # party role receiving the act
+    interpretations: Tuple[InterpretationNode, ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_element(self)
 
     def children(self) -> List[ASTNode]:
-        return [self.description]
+        return [self.description, *self.interpretations]
 
 
 @dataclass(frozen=True)

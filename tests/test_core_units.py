@@ -45,6 +45,7 @@ from yuho.ast.nodes import (
     ImportNode,
     IndexAccessNode,
     IntLit,
+    InterpretationNode,
     LiteralPattern,
     MatchArm,
     MatchExprNode,
@@ -338,6 +339,24 @@ class TestASTNodeChildren:
         assert title in children
         assert elem in children
         assert illus in children
+
+    def test_element_node_children_include_interpretations(self):
+        reading = StringLit(value="narrow reading")
+        citation = StringLit(value="Foo v Bar")
+        interpretation = InterpretationNode(
+            name="narrow",
+            reading=reading,
+            citation=citation,
+            endorsement="binding",
+        )
+        elem = ElementNode(
+            element_type="actus_reus",
+            name="deception",
+            description=StringLit(value="deception"),
+            interpretations=(interpretation,),
+        )
+        assert interpretation.children() == [reading, citation]
+        assert interpretation in elem.children()
 
     def test_import_node_wildcard(self):
         imp = ImportNode(path="foo", imported_names=("*",))
