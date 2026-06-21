@@ -953,6 +953,26 @@ class IllustrationNode(ASTNode):
 
 
 @dataclass(frozen=True)
+class RebutsRelation(ASTNode):
+    """Exception relation where one exception rebuts another's conclusion."""
+
+    target: str
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_rebuts_relation(self)
+
+
+@dataclass(frozen=True)
+class UndercutsRelation(ASTNode):
+    """Exception relation where one exception undercuts another's inference."""
+
+    target: str
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_undercuts_relation(self)
+
+
+@dataclass(frozen=True)
 class ExceptionNode(ASTNode):
     """
     Exception/proviso/defence within a statute.
@@ -967,6 +987,13 @@ class ExceptionNode(ASTNode):
     guard: Optional[ASTNode] = None
     priority: Optional[int] = None
     defeats: Optional[str] = None
+    defeat_relation: Optional[Union[RebutsRelation, UndercutsRelation]] = None
+
+    def __post_init__(self):
+        if self.defeat_relation is None and self.defeats:
+            object.__setattr__(self, "defeat_relation", RebutsRelation(target=self.defeats))
+        elif self.defeat_relation is not None and self.defeats is None:
+            object.__setattr__(self, "defeats", self.defeat_relation.target)
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_exception(self)
@@ -977,6 +1004,8 @@ class ExceptionNode(ASTNode):
             result.append(self.effect)
         if self.guard:
             result.append(self.guard)
+        if self.defeat_relation:
+            result.append(self.defeat_relation)
         return result
 
 

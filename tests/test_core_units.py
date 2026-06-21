@@ -58,6 +58,7 @@ from yuho.ast.nodes import (
     PenaltyNode,
     PercentNode,
     ReferencingStmt,
+    RebutsRelation,
     ReturnStmt,
     StatuteNode,
     StringLit,
@@ -65,6 +66,7 @@ from yuho.ast.nodes import (
     StructLiteralNode,
     StructPattern,
     UnaryExprNode,
+    UndercutsRelation,
     VariableDecl,
     WildcardPattern,
 )
@@ -300,6 +302,23 @@ class TestASTNodeChildren:
         assert cond in children
         assert effect in children
         assert guard in children
+
+    def test_exception_node_legacy_defeats_defaults_to_rebuts(self):
+        exc = ExceptionNode(label="a", condition=StringLit(value="a"), defeats="b")
+        assert isinstance(exc.defeat_relation, RebutsRelation)
+        assert exc.defeat_relation.target == "b"
+        assert exc.defeats == "b"
+        assert exc.defeat_relation in exc.children()
+
+    def test_exception_node_relation_sets_legacy_defeats_target(self):
+        relation = UndercutsRelation(target="a")
+        exc = ExceptionNode(
+            label="b",
+            condition=StringLit(value="b"),
+            defeat_relation=relation,
+        )
+        assert exc.defeats == "a"
+        assert exc.defeat_relation is relation
 
     def test_statute_node_children(self):
         title = StringLit(value="Theft")

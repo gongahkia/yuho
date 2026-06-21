@@ -259,6 +259,12 @@ class Visitor:
     def visit_exception(self, node: nodes.ExceptionNode) -> Any:
         return self.generic_visit(node)
 
+    def visit_rebuts_relation(self, node: nodes.RebutsRelation) -> Any:
+        return self.generic_visit(node)
+
+    def visit_undercuts_relation(self, node: nodes.UndercutsRelation) -> Any:
+        return self.generic_visit(node)
+
     def visit_caselaw(self, node: nodes.CaseLawNode) -> Any:
         return self.generic_visit(node)
 

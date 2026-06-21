@@ -1550,6 +1550,7 @@ class ASTBuilder:
         effect_node = self._child_by_field(node, "effect")
         guard_node = self._child_by_field(node, "guard")
         priority_node = self._child_by_field(node, "priority")
+        defeat_relation_node = self._child_by_field(node, "defeat_relation")
         defeats_node = self._child_by_field(node, "defeats")
 
         label = self._text(label_node) if label_node else None
@@ -1560,6 +1561,7 @@ class ASTBuilder:
         guard = self._build_expression(guard_node) if guard_node else None
         priority = int(self._text(priority_node)) if priority_node else None
         defeats = self._text(defeats_node) if defeats_node else None
+        defeat_relation = self._build_defeat_relation(defeat_relation_node, defeats_node, defeats)
 
         return nodes.ExceptionNode(
             label=label,
@@ -1568,8 +1570,18 @@ class ASTBuilder:
             guard=guard,
             priority=priority,
             defeats=defeats,
+            defeat_relation=defeat_relation,
             source_location=self._loc(node),
         )
+
+    def _build_defeat_relation(self, relation_node, target_node, target):
+        if not target:
+            return None
+        relation = self._text(relation_node) if relation_node else "defeats"
+        loc_node = relation_node or target_node
+        if relation == "undercuts":
+            return nodes.UndercutsRelation(target=target, source_location=self._loc(loc_node))
+        return nodes.RebutsRelation(target=target, source_location=self._loc(loc_node))
 
     def _build_caselaw(self, node) -> nodes.CaseLawNode:
         """Build CaseLawNode from caselaw_block node."""
