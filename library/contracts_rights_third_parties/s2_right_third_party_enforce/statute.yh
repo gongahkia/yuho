@@ -1,0 +1,22 @@
+/// @meta act=Contracts (Rights of Third Parties) Act 2001
+/// @meta source=https://sso.agc.gov.sg/Act/CRTPA2001?ProvIds=pr2-
+/// @meta feature=civil
+
+statute 2 "Right of third party to enforce contractual term" jurisdiction singapore effective 2002-01-01 {
+    definitions {
+        third_party_enforcement := "A non-party may enforce a contractual term when the contract expressly permits enforcement or the term benefits the non-party, subject to contrary intention and identification limits.";
+    }
+
+    elements {
+        all_of {
+            party third_party := "a person who is not a party to the contract";
+            party promisor := "the contracting party against whom enforcement is sought";
+            any_of {
+                obligation_to express_enforcement_right := "the contract states that the third party may enforce the term";
+                obligation_to benefit_term := "the term appears to confer a benefit on the third party";
+            }
+            condition_precedent enforceability_not_excluded := "the contract does not show that the parties meant to exclude third-party enforcement";
+            condition_precedent third_party_identified := "the contract identifies the third party by name, class, or description";
+        }
+    }
+}
