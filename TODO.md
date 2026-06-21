@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(B) 2026-06-21 Per-transpiler conformance matrix: golden snapshots for 524 statutes × 8 transpilers under tests/snapshots/ with insta-style accept/reject +compiler @tests effort:L
 (B) 2026-06-21 Atheris fuzz harness on Parser.parse + ASTBuilder.build to surface crashes on malformed input +compiler @parser effort:M
 (B) 2026-06-21 Z3 ↔ Alloy differential test in verify/combined.py logging per-fixture disagreements as machine-readable JSON +compiler @verify effort:M
 (B) 2026-06-21 Source-map provenance in transpilers: JSON sidecar mapping output spans to AST source_locations (V3 source-map shape) +compiler @transpile effort:L
