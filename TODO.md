@@ -7,7 +7,6 @@ Contexts: @grammar @ast @lint @lean @verify @transpile @cli @lsp @resolver @libr
 
 ```todo
 (A) 2026-06-21 Update MEMORY.md key paths after fossil deletion +housekeeping @memory effort:XS
-(A) 2026-06-21 Wire eval/debugger.py to new `yuho debug --break-on element FACTS.yh STATUTE.yh` CLI subcommand +compiler @cli effort:M
 (A) 2026-06-21 Tighten src/tree-sitter-yuho/grammar.js conflicts list: replace explicit conflicts entries with prec.left/prec.right/prec.dynamic where possible +compiler @grammar effort:M
 (B) 2026-06-21 Incremental reparse via tree-sitter Tree.edit() in parser/wrapper.py to support per-keystroke LSP reparse +compiler @parser effort:M
 (B) 2026-06-21 Query-based incremental compilation keyed on (file_hash, stage) memoising parse + AST + analysis between yuho invocations +compiler @analysis effort:L

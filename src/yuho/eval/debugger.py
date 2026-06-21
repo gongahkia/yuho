@@ -91,6 +91,57 @@ class DebuggerPause(Exception):
         self.reason = reason
 
 
+@dataclass
+class ElementBreakpointHit:
+    """A non-interactive element breakpoint hit."""
+
+    breakpoint: Breakpoint
+    statute_section: str
+    statute_title: str
+    element_name: str
+    element_type: str
+    satisfied: bool
+    description: str = ""
+    fact_value: Optional[Value] = None
+
+
+def debug_element_breakpoints(
+    statute: nodes.StatuteNode,
+    facts: "StructInstance",
+    env: Optional[Environment] = None,
+) -> Tuple[Any, List[ElementBreakpointHit]]:
+    """Evaluate a statute and emit one breakpoint hit per evaluated element."""
+    from yuho.eval.statute_evaluator import StatuteEvaluator
+
+    result = StatuteEvaluator().evaluate(statute, facts, env)
+    title = statute.title.value if statute.title else "(untitled)"
+    hits: List[ElementBreakpointHit] = []
+    for index, element in enumerate(result.element_results, start=1):
+        hits.append(
+            ElementBreakpointHit(
+                breakpoint=Breakpoint(id=1, function="element", hit_count=index),
+                statute_section=statute.section_number,
+                statute_title=title,
+                element_name=element.element_name,
+                element_type=element.element_type,
+                satisfied=element.satisfied,
+                description=element.description,
+                fact_value=_lookup_fact(facts, element.element_name),
+            )
+        )
+    return result, hits
+
+
+def _lookup_fact(facts: "StructInstance", name: str) -> Optional[Value]:
+    if name in facts.fields:
+        return facts.fields[name]
+    norm = name.lower().replace(" ", "_").replace("-", "_")
+    for key, value in facts.fields.items():
+        if key.lower().replace(" ", "_").replace("-", "_") == norm:
+            return value
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Node classification helpers
 # ---------------------------------------------------------------------------

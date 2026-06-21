@@ -374,6 +374,34 @@ def verify(
     )
 
 
+@cli.command(name="debug")
+@click.argument("facts_file", type=click.Path(exists=True))
+@click.argument("statute_file", type=click.Path(exists=True))
+@click.option(
+    "--break-on",
+    "break_on",
+    type=click.Choice(["element"], case_sensitive=False),
+    required=True,
+    help="Breakpoint target",
+)
+@click.option("--json", "json_output", is_flag=True, help="Emit JSON")
+def debug_cmd(
+    facts_file: str,
+    statute_file: str,
+    break_on: str,
+    json_output: bool,
+) -> None:
+    """Debug statute evaluation against facts."""
+    from yuho.cli.commands.debug import run_debug
+
+    run_debug(
+        facts_file=facts_file,
+        statute_file=statute_file,
+        break_on=break_on,
+        json_output=json_output,
+    )
+
+
 @cli.command()
 @click.argument("section")
 @click.option("--facts", "facts_file", type=click.Path(exists=True), required=True)
