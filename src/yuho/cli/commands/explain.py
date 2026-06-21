@@ -10,8 +10,9 @@ from typing import Optional
 
 import click
 
-from yuho.explain import DatalogExplainer, ElementTrace
+from yuho.explain import DatalogExplainer
 from yuho.services.analysis import analyze_file
+from yuho.transpile.english_transpiler import EnglishTranspiler
 
 
 def run_explain(
@@ -79,16 +80,4 @@ def _load_facts(path: Path) -> dict[str, object]:
 
 
 def _emit_text(trace) -> None:
-    status = "SATISFIED" if trace.overall_satisfied else "NOT SATISFIED"
-    click.echo(f"Section {trace.statute_section}: {status}")
-    for element in trace.elements:
-        _emit_element(element, indent=0)
-
-
-def _emit_element(element: ElementTrace, indent: int) -> None:
-    pad = "  " * indent
-    mark = "[x]" if element.satisfied else "[ ]"
-    click.echo(f"{pad}{mark} {element.element_type}: {element.name}")
-    click.echo(f"{pad}    {element.reason}")
-    for child in element.children:
-        _emit_element(child, indent + 1)
+    click.echo(EnglishTranspiler().render_explain_trace(trace))

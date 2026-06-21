@@ -9,6 +9,7 @@ from typing import List, Optional
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
+from yuho.explain import ElementTrace, JustificationTrace
 from yuho.transpile.base import TranspileTarget, TranspilerBase
 
 
@@ -36,6 +37,16 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         self._visit_module(ast)
         return "\n".join(self._output)
 
+    def render_explain_trace(self, trace: JustificationTrace) -> str:
+        """Render an explain trace as controlled English."""
+        self._output = []
+        self._indent_level = 0
+        status = "satisfied" if trace.overall_satisfied else "not satisfied"
+        self._emit(f"Section {trace.statute_section} is {status}.")
+        for element in trace.elements:
+            self._visit_explain_element(element)
+        return "\n".join(self._output)
+
     def _emit(self, text: str) -> None:
         """Add a line to output with current indentation."""
         indent = "  " * self._indent_level
@@ -44,6 +55,17 @@ class EnglishTranspiler(TranspilerBase, Visitor):
     def _emit_blank(self) -> None:
         """Add a blank line."""
         self._output.append("")
+
+    def _visit_explain_element(self, element: ElementTrace) -> None:
+        status = "satisfied" if element.satisfied else "not satisfied"
+        self._emit(
+            f"The {element.element_type} element {element.name} is {status} because {element.reason}."
+        )
+        if element.children:
+            self._indent_level += 1
+            for child in element.children:
+                self._visit_explain_element(child)
+            self._indent_level -= 1
 
     # =========================================================================
     # Module and imports

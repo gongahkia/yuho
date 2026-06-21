@@ -39,9 +39,9 @@ def test_explain_cli_outputs_element_trace(tmp_path: Path):
     )
 
     assert result.exit_code == 0
-    assert "Section 1: NOT SATISFIED" in result.output
-    assert "[x] actus_reus: taking" in result.output
-    assert "[ ] mens_rea: intent" in result.output
+    assert "Section 1 is not satisfied." in result.output
+    assert "The actus_reus element taking is satisfied" in result.output
+    assert "The mens_rea element intent is not satisfied" in result.output
 
 
 def test_explain_cli_json_output(tmp_path: Path):
