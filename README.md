@@ -78,6 +78,17 @@ Run the retained verification gate:
 make verify-core
 ```
 
+## Verification backends
+
+`uv pip install -e '.[dev]'` installs the Python Z3 binding used by
+`yuho verify --engine z3`. Alloy is out-of-band: install the Alloy 6
+Analyzer separately from the [Alloy download page](https://alloytools.org/download.html)
+and pass the jar when invoking the Alloy backend:
+
+```sh
+yuho verify --engine alloy --alloy-jar path/to/org.alloytools.alloy.dist.jar FILE.yh
+```
+
 ## Architecture
 
 ```text
