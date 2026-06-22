@@ -19,7 +19,7 @@ encoding a different statute family under Yuho.
 | D — Grammar refactor + L3 sweep | Close grammar gaps; agent-driven re-encoding; L3 review dispatcher. | 524/524 L3-stamped at human-verified tier. |
 
 For per-section provenance see [`/library/penal_code/_ledger/LEDGER.md`](../library/penal_code/_ledger/LEDGER.md).
-For per-gap detail see [`researcher/phase-c-gaps.md`](researcher/phase-c-gaps.md).
+For per-gap detail see [`researcher/archive/phase-c-gaps.md`](researcher/archive/phase-c-gaps.md).
 
 ---
 
@@ -60,7 +60,7 @@ Phase D's core mechanism was a dispatcher that renders a structured
 prompt per section and invokes an agentic coder
 (`gpt-5.4` `high`) on each. Three flavours:
 
-- **Re-encoder** (`docs/researcher/phase-d-reencoding-prompt.md`) — given a section, produce a clean encoding from the canonical text + the gap-aware grammar.
+- **Re-encoder** (`docs/researcher/archive/phase-d-reencoding-prompt.md`) — given a section, produce a clean encoding from the canonical text + the gap-aware grammar.
 - **L3 reviewer** (`scripts/l3_audit.py`) — given a section's encoding, run the 11-point checklist and STAMP or FLAG.
 - **Flag-fixer** (`scripts/apply_flag_fix.py`) — given a `_L3_FLAG.md`, apply the minimum edit that addresses the flag.
 
@@ -239,10 +239,10 @@ human reviewers could have used to triage flagged sections faster.
 If you're encoding a statute family other than the SG Penal Code,
 read this in order:
 
-1. [`researcher/phase-c-gaps.md`](researcher/phase-c-gaps.md) — every grammar gap, with the offending shape and the fix.
-2. [`researcher/phase-d-l3-review-prompt.md`](researcher/phase-d-l3-review-prompt.md) — the 11-point checklist.
-3. [`researcher/phase-d-reencoding-prompt.md`](researcher/phase-d-reencoding-prompt.md) — the structured re-encoding prompt.
-4. [`researcher/phase-d-flag-fix-prompt.md`](researcher/phase-d-flag-fix-prompt.md) — the minimum-edit flag-fix prompt.
+1. [`researcher/archive/phase-c-gaps.md`](researcher/archive/phase-c-gaps.md) — every grammar gap, with the offending shape and the fix.
+2. [`researcher/archive/phase-d-l3-review-prompt.md`](researcher/archive/phase-d-l3-review-prompt.md) — the 11-point checklist.
+3. [`researcher/archive/phase-d-reencoding-prompt.md`](researcher/archive/phase-d-reencoding-prompt.md) — the structured re-encoding prompt.
+4. [`researcher/archive/phase-d-flag-fix-prompt.md`](researcher/archive/phase-d-flag-fix-prompt.md) — the minimum-edit flag-fix prompt.
 5. [`contributor/porting-guide.md`](contributor/porting-guide.md) — file-level porting steps.
 
 The non-negotiable conventions, distilled:

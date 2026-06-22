@@ -37,18 +37,21 @@ Audience: reviewers, researchers, and contributors tracing the design.
 - [Formal semantics](researcher/formal-semantics.md)
 - [Yuho and L4 positioning](positioning/yuho-vs-l4.md)
 - [Why criminal law](positioning/why-criminal-law.md)
-- [Phase C gaps](researcher/phase-c-gaps.md)
 - [Grammar quirks](grammar-quirks.md)
 - [OpenAPI note](researcher/openapi.yaml)
 - [Retrospective](retrospective.md)
+
+### Archive
+
+- [Phase C gaps](researcher/archive/phase-c-gaps.md)
+- [Phase D L3 review prompt](researcher/archive/phase-d-l3-review-prompt.md)
+- [Phase D re-encoding prompt](researcher/archive/phase-d-reencoding-prompt.md)
+- [Phase D flag-fix prompt](researcher/archive/phase-d-flag-fix-prompt.md)
 
 ## Corpus Work
 
 - [Encoded Penal Code library](../library/penal_code/)
 - [Legislative drafting cookbook](cookbook/legislative-drafting.md)
-- [Phase D L3 review prompt](researcher/phase-d-l3-review-prompt.md)
-- [Phase D re-encoding prompt](researcher/phase-d-reencoding-prompt.md)
-- [Phase D flag-fix prompt](researcher/phase-d-flag-fix-prompt.md)
 
 ## See Also
 
