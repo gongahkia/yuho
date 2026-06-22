@@ -8,7 +8,6 @@ Contexts: @workflows @pyproject @cli @transpile @lsp @parser @upgrade @docs @tes
 Each item carries the exact paths needed for an independent agent to execute it without re-running the source audit. Audit reference: see git log around 2026-06-22 and docs/retrospective.md for the post-scope-reduction baseline this list patches against.
 
 ```todo
-(A) 2026-06-22 Add `z3-solver>=4.12,<5.0` to [project.optional-dependencies].dev list in pyproject.toml so `pip install -e '.[dev]'` provisions the SMT backend used by src/yuho/verify/z3_solver.py +packaging @pyproject effort:XS
 (A) 2026-06-22 Add `pytest.importorskip("z3")` at module top of tests/test_structural_diff_strict.py (above the `importlib.util.spec_from_file_location` block) so pytest collection succeeds when z3 is absent; verify pytest collects without error +packaging @tests effort:XS
 (A) 2026-06-22 Document Alloy 6 as out-of-band dependency: add a "Verification backends" subsection to README.md noting `pip install -e '.[dev]'` covers Z3 but Alloy must be installed separately (link to Alloy 6 download); cross-link from docs/user/getting-started.md +packaging @docs effort:S
 (A) 2026-06-22 Add four subcommand sections to docs/user/cli-reference.md for `debug`, `explain`, `irac`, `upgrade` mirroring the existing `check`/`lint` section template; pull synopsis from each command's `--help` output; ensure all 15 commands listed by `yuho --help` appear in the command summary table at the top +docs @cli effort:M
