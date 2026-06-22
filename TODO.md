@@ -8,7 +8,6 @@ Contexts: @workflows @pyproject @cli @transpile @lsp @parser @upgrade @docs @tes
 Each item carries the exact paths needed for an independent agent to execute it without re-running the source audit. Audit reference: see git log around 2026-06-22 and docs/retrospective.md for the post-scope-reduction baseline this list patches against.
 
 ```todo
-(A) 2026-06-22 Replace `on: workflow_dispatch:` in .github/workflows/ci.yml with `on: { push: { branches: [main] }, pull_request: { branches: [main] }, workflow_dispatch: {} }` so CI auto-runs on push + PR; keep existing concurrency/lint/test-matrix jobs unchanged +ci @workflows effort:XS
 (A) 2026-06-22 Rewrite .github/workflows/integration.yml cli-commands job: delete the `yuho graph examples/...` step (command no longer exists in src/yuho/cli/main.py); replace transpile target loop to iterate `json english latex mermaid mindmap alloy docx akomantoso legalruleml` (drop phantom jsonld/graphql/blocks/bibtex/comparative/prolog; the 9 base targets in src/yuho/transpile/registry.py) +ci @workflows effort:S
 (A) 2026-06-22 Delete .github/workflows/pages.yml — references editors/explorer-site/build.py, scripts/render_svg_cache.py, and library/penal_code/_corpus cache key, all removed during scope reduction (see docs/retrospective.md); no replacement needed +ci @workflows effort:XS
 (A) 2026-06-22 Add `z3-solver>=4.12,<5.0` to [project.optional-dependencies].dev list in pyproject.toml so `pip install -e '.[dev]'` provisions the SMT backend used by src/yuho/verify/z3_solver.py +packaging @pyproject effort:XS
