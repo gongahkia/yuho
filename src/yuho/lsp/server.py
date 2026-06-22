@@ -82,7 +82,9 @@ class YuhoLanguageServer(LanguageServer):
         parsed = self.cached_parse(uri) or self.parse_text_document(uri)
         if parsed is None or parsed.analysis is None:
             return []
-        return analysis_to_diagnostics(parsed.analysis)
+        diagnostics = analysis_to_diagnostics(parsed.analysis)
+        diagnostics.extend(module_resolution_diagnostics(parsed))
+        return diagnostics
 
     def publish_diagnostics_for_uri(self, uri: str) -> None:
         self.text_document_publish_diagnostics(
@@ -305,12 +307,15 @@ def resolved_dependency_modules(
     resolver: ModuleResolver,
     ast: ModuleNode,
     from_file: Path,
+    failures: Optional[list[tuple[ASTNode, ModuleResolutionError]]] = None,
 ) -> list[tuple[ModuleNode, Path]]:
     modules = []
     for import_node in ast.imports:
         try:
             module = resolver.resolve(import_node, from_file)
-        except ModuleResolutionError:
+        except ModuleResolutionError as exc:
+            if failures is not None:
+                failures.append((import_node, exc))
             continue
         path = module_path(resolver, module)
         if path is not None:
@@ -318,7 +323,9 @@ def resolved_dependency_modules(
     for reference in ast.references:
         try:
             module = resolver.resolve_reference(reference, from_file)
-        except ModuleResolutionError:
+        except ModuleResolutionError as exc:
+            if failures is not None:
+                failures.append((reference, exc))
             continue
         path = module_path(resolver, module)
         if path is not None:
@@ -472,6 +479,33 @@ def diagnostic_severity(severity: Optional[str]) -> types.DiagnosticSeverity:
     if severity == "info":
         return types.DiagnosticSeverity.Information
     return types.DiagnosticSeverity.Warning
+
+
+def module_resolution_diagnostics(parsed: ParsedDocument) -> list[types.Diagnostic]:
+    if parsed.ast is None:
+        return []
+    resolver = ModuleResolver(search_paths=resolver_search_paths(Path(parsed.file)))
+    failures: list[tuple[ASTNode, ModuleResolutionError]] = []
+    resolved_dependency_modules(resolver, parsed.ast, Path(parsed.file), failures=failures)
+    return [module_resolution_diagnostic(node, error) for node, error in failures]
+
+
+def module_resolution_diagnostic(
+    node: ASTNode,
+    error: ModuleResolutionError,
+) -> types.Diagnostic:
+    if node.source_location is None:
+        diagnostic_range = range_from_1_based(1, 1, 1, 2)
+    else:
+        diagnostic_range = location_to_range(node.source_location)
+    kind = "reference" if type(node).__name__ == "ReferencingStmt" else "import"
+    return types.Diagnostic(
+        range=diagnostic_range,
+        message=f"Could not resolve {kind} '{error.path}': {error}",
+        severity=types.DiagnosticSeverity.Warning,
+        code="module_resolution",
+        source="yuho:module-resolution",
+    )
 
 
 def hover_markdown(node: ASTNode) -> str:

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from lsprotocol import types
+
 from yuho.library.reference_graph import ReferenceEdge, ReferenceGraph
 from yuho.lsp.server import YuhoLanguageServer, create_server, uri_to_file
 from yuho.parser.wrapper import Parser
@@ -173,6 +175,23 @@ def test_diagnostics_include_type_check_errors():
         diagnostic.message == "Return type string does not match expected int"
         for diagnostic in diagnostics
     )
+
+
+def test_diagnostics_include_unresolved_import_warning(tmp_path):
+    source = 'import "missing.yh"\n\n' + VALID_SOURCE
+    path = tmp_path / "main.yh"
+    path.write_text(source, encoding="utf-8")
+    server = YuhoLanguageServer()
+    server.parse_source(path.as_uri(), source)
+
+    diagnostics = server.diagnostics_for_uri(path.as_uri())
+    matches = [
+        diagnostic for diagnostic in diagnostics if diagnostic.source == "yuho:module-resolution"
+    ]
+    assert matches
+    assert matches[0].severity == types.DiagnosticSeverity.Warning
+    assert "Could not resolve import 'missing.yh'" in matches[0].message
+    assert matches[0].range.start.line == 0
 
 
 def test_publish_diagnostics_for_uri_sends_publish_params(monkeypatch):
