@@ -22,6 +22,7 @@ corpus tooling.
 
 - [Architecture](contributor/architecture.md)
 - [SDK](contributor/sdk.md)
+- [Source maps](contributor/source-maps.md)
 - [Transpiler plugins](contributor/transpiler-plugins.md)
 - [Porting guide](contributor/porting-guide.md)
 - [CI templates](contributor/ci-templates/)
