@@ -101,19 +101,13 @@ jobs:
       - name: Version check
         run: yuho --version
 
-      - name: Graph command
-        run: |
-          yuho graph examples/simple_statute.yh
-          yuho graph examples/cross_reference.yh
-          yuho graph library/penal_code/s415_cheating/statute.yh --format dot
-
       - name: AST command
         run: yuho ast examples/simple_statute.yh
 
       - name: Transpile to all text targets
         run: |
           mkdir -p /tmp/transpile-out
-          for target in json jsonld english latex mermaid alloy graphql blocks bibtex comparative akomantoso prolog; do
+          for target in json english latex mermaid mindmap alloy docx akomantoso legalruleml; do
             echo "--- Transpiling to $target ---"
             yuho transpile library/penal_code/s415_cheating/statute.yh \
               --target "$target" \
@@ -129,7 +123,11 @@ jobs:
         run: yuho schema > /dev/null
 
       - name: Explain command
-        run: yuho explain library/penal_code/s378_theft/statute.yh
+        run: |
+          cat > /tmp/yuho-facts.json <<'JSON'
+          {"taking": true, "intention": true, "possession": true, "consent": true, "movement": true}
+          JSON
+          yuho explain --facts /tmp/yuho-facts.json library/penal_code/s378_theft/statute.yh
 
   property-tests:
     name: Property-Based Tests
