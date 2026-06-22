@@ -55,6 +55,8 @@ def _emit_command(buf: io.StringIO, path: List[str], cmd: click.Command, parent_
     buf.write(help_text + "\n")
     buf.write("```\n\n")
 
+    if full == "yuho check":
+        _emit_check_watch(buf)
     if full == "yuho transpile":
         _emit_transpile_targets(buf)
 
@@ -120,6 +122,17 @@ def _emit_transpile_targets(buf: io.StringIO) -> None:
         "`pdf`, `svg`, and `png` are not registered base transpilers. They are "
         "derived by external renderers from `latex` (PDF) or `mermaid` (SVG/PNG).\n\n"
     )
+
+
+def _emit_check_watch(buf: io.StringIO) -> None:
+    buf.write("### Watch mode\n\n")
+    buf.write(
+        "`yuho check --watch PATH` runs an initial check, then keeps a watchdog observer "
+        "on `PATH`'s parent directory and re-runs when that exact `.yh` file is created, "
+        "modified, or moved. It is not recursive; unrelated events in `.git`, "
+        "`node_modules`, `__pycache__`, or other files do not trigger a re-check.\n\n"
+    )
+    buf.write("```bash\nyuho check --watch library/penal_code/s415_cheating/statute.yh\n```\n\n")
 
 
 def render() -> str:

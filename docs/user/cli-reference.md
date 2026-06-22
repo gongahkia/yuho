@@ -66,6 +66,14 @@ Options:
   --help                      Show this message and exit.
 ```
 
+### Watch mode
+
+`yuho check --watch PATH` runs an initial check, then keeps a watchdog observer on `PATH`'s parent directory and re-runs when that exact `.yh` file is created, modified, or moved. It is not recursive; unrelated events in `.git`, `node_modules`, `__pycache__`, or other files do not trigger a re-check.
+
+```bash
+yuho check --watch library/penal_code/s415_cheating/statute.yh
+```
+
 ## `yuho completion`
 
 Generate shell completion script.
