@@ -8,7 +8,6 @@ Contexts: @workflows @pyproject @cli @transpile @lsp @parser @upgrade @docs @tes
 Each item carries the exact paths needed for an independent agent to execute it without re-running the source audit. Audit reference: see git log around 2026-06-22 and docs/retrospective.md for the post-scope-reduction baseline this list patches against.
 
 ```todo
-(A) 2026-06-22 Delete .github/workflows/pages.yml — references editors/explorer-site/build.py, scripts/render_svg_cache.py, and library/penal_code/_corpus cache key, all removed during scope reduction (see docs/retrospective.md); no replacement needed +ci @workflows effort:XS
 (A) 2026-06-22 Add `z3-solver>=4.12,<5.0` to [project.optional-dependencies].dev list in pyproject.toml so `pip install -e '.[dev]'` provisions the SMT backend used by src/yuho/verify/z3_solver.py +packaging @pyproject effort:XS
 (A) 2026-06-22 Add `pytest.importorskip("z3")` at module top of tests/test_structural_diff_strict.py (above the `importlib.util.spec_from_file_location` block) so pytest collection succeeds when z3 is absent; verify pytest collects without error +packaging @tests effort:XS
 (A) 2026-06-22 Document Alloy 6 as out-of-band dependency: add a "Verification backends" subsection to README.md noting `pip install -e '.[dev]'` covers Z3 but Alloy must be installed separately (link to Alloy 6 download); cross-link from docs/user/getting-started.md +packaging @docs effort:S
