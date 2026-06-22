@@ -169,6 +169,15 @@ def _point_for_offset(source: str, char_offset: int) -> tuple[int, int]:
     return (row, column)
 
 
+def _edit_within_bounds(edit: TreeEdit, old_source: str, new_source: str) -> bool:
+    old_len = len(old_source.encode("utf-8"))
+    new_len = len(new_source.encode("utf-8"))
+    return (
+        0 <= edit.start_byte <= edit.old_end_byte <= old_len
+        and edit.start_byte <= edit.new_end_byte <= new_len
+    )
+
+
 def _normalize_grammar_pragma(
     source: str,
     file: str,
@@ -350,6 +359,9 @@ class Parser:
         if previous.source == source:
             return old_tree
         edit = _compute_tree_edit(previous.source, source)
+        if not _edit_within_bounds(edit, previous.source, source):
+            logger.debug("invalid incremental edit bounds; falling back to full parse")
+            return None
         old_tree.edit(
             edit.start_byte,
             edit.old_end_byte,
