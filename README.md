@@ -42,6 +42,7 @@ Retained surfaces:
 | Transpilers | JSON, English, LaTeX, Mermaid, Mermaid mindmap, Alloy, DOCX, Akoma Ntoso, LegalRuleML |
 | Verification | Z3/Alloy backends via `yuho verify`, plus Lean structural-diff checks |
 | Corpus tools | Penal Code coverage checks, AKN round-trip, runtime test sweep, reference graph via `yuho refs` |
+| Corpora | `library/penal_code` Singapore canonical corpus; `library/bharatiya_nyaya_sanhita` BNS 2023 replacement corpus for IPC; `library/indian_penal_code` raw IPC snapshot; `library/malaysia_penal_code` and `library/pakistan_penal_code` IPC-lineage proof-of-concept corpora |
 
 Non-core product surfaces were removed; this repository now focuses on
 the local compiler, transpilers, verification checks, and corpus tooling.
