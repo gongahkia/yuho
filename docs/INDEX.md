@@ -24,6 +24,7 @@ corpus tooling.
 - [SDK](contributor/sdk.md)
 - [Source maps](contributor/source-maps.md)
 - [Grammar pragma](contributor/grammar-pragma.md)
+- [Transpile snapshot matrix](contributor/conformance-matrix.md)
 - [Transpiler plugins](contributor/transpiler-plugins.md)
 - [Porting guide](contributor/porting-guide.md)
 - [CI templates](contributor/ci-templates/)
