@@ -254,6 +254,24 @@ Options:
   --help                          Show this message and exit.
 ```
 
+### Transpile targets
+
+| Base target | Extension | Aliases | Output |
+|---|---:|---|---|
+| `json` | `.json` | - | Structured JSON representation. |
+| `english` | `.txt` | en | Controlled English rendering. |
+| `latex` | `.tex` | tex | LaTeX source. |
+| `mermaid` | `.mmd` | mmd | Mermaid flowchart source. |
+| `mindmap` | `.mmd` | mermaid-mindmap | Mermaid mindmap source. |
+| `alloy` | `.als` | - | Alloy model source. |
+| `docx` | `.docx` | word | Word document. |
+| `akomantoso` | `.xml` | akn, legaldocml | Akoma Ntoso XML. |
+| `legalruleml` | `.lrml` | lrml | LegalRuleML XML. |
+
+### Derived outputs
+
+`pdf`, `svg`, and `png` are not registered base transpilers. They are derived by external renderers from `latex` (PDF) or `mermaid` (SVG/PNG).
+
 ## `yuho upgrade`
 
 Rewrite Yuho source to the requested grammar version.

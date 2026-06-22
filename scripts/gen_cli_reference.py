@@ -55,6 +55,9 @@ def _emit_command(buf: io.StringIO, path: List[str], cmd: click.Command, parent_
     buf.write(help_text + "\n")
     buf.write("```\n\n")
 
+    if full == "yuho transpile":
+        _emit_transpile_targets(buf)
+
     # Recurse into subcommands (only Group has them).
     if isinstance(cmd, click.Group):
         for sub_name in sorted(cmd.commands):
@@ -73,6 +76,50 @@ def _emit_summary_table(buf: io.StringIO, cli: click.Group) -> None:
         short = short.replace("|", "\\|")
         buf.write(f"| `yuho {name}` | {short} |\n")
     buf.write("\n")
+
+
+def _emit_transpile_targets(buf: io.StringIO) -> None:
+    """Emit canonical base targets from the registered transpiler list."""
+    from yuho.transpile.base import TranspileTarget
+    from yuho.transpile.registry import TranspilerRegistry
+
+    registry = TranspilerRegistry.instance()
+    descriptions = {
+        TranspileTarget.JSON: "Structured JSON representation.",
+        TranspileTarget.ENGLISH: "Controlled English rendering.",
+        TranspileTarget.LATEX: "LaTeX source.",
+        TranspileTarget.MERMAID: "Mermaid flowchart source.",
+        TranspileTarget.MINDMAP: "Mermaid mindmap source.",
+        TranspileTarget.ALLOY: "Alloy model source.",
+        TranspileTarget.DOCX: "Word document.",
+        TranspileTarget.AKOMANTOSO: "Akoma Ntoso XML.",
+        TranspileTarget.LEGALRULEML: "LegalRuleML XML.",
+    }
+    aliases = {
+        TranspileTarget.ENGLISH: "en",
+        TranspileTarget.LATEX: "tex",
+        TranspileTarget.MERMAID: "mmd",
+        TranspileTarget.MINDMAP: "mermaid-mindmap",
+        TranspileTarget.DOCX: "word",
+        TranspileTarget.AKOMANTOSO: "akn, legaldocml",
+        TranspileTarget.LEGALRULEML: "lrml",
+    }
+
+    buf.write("### Transpile targets\n\n")
+    buf.write("| Base target | Extension | Aliases | Output |\n|---|---:|---|---|\n")
+    for target in TranspileTarget:
+        if not registry.is_registered(target):
+            continue
+        name = target.name.lower()
+        buf.write(
+            f"| `{name}` | `{target.file_extension}` | "
+            f"{aliases.get(target, '') or '-'} | {descriptions[target]} |\n"
+        )
+    buf.write(
+        "\n### Derived outputs\n\n"
+        "`pdf`, `svg`, and `png` are not registered base transpilers. They are "
+        "derived by external renderers from `latex` (PDF) or `mermaid` (SVG/PNG).\n\n"
+    )
 
 
 def render() -> str:
