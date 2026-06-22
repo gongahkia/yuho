@@ -8,6 +8,5 @@ Contexts: @workflows @pyproject @cli @transpile @lsp @parser @upgrade @docs @tes
 Each item carries the exact paths needed for an independent agent to execute it without re-running the source audit. Audit reference: see git log around 2026-06-22 and docs/retrospective.md for the post-scope-reduction baseline this list patches against.
 
 ```todo
-(B) 2026-06-22 Extend tests/test_grammar_pragma_upgrade.py with two cases: (1) `.yh` source with no `#yuho` pragma at all — assert upgrade either applies default-version migration or raises a clear error message naming the expected pragma; (2) source declaring an obsolete version that skips multiple targets (e.g., `#yuho v4.0` upgrading toward `v5.1`) — assert the rewriter either chains migrations or errors with the missing-step name +tests @upgrade effort:S
 (B) 2026-06-22 Create docs/researcher/archive/ subdirectory and move phase-c-gaps.md, phase-d-flag-fix-prompt.md, phase-d-l3-review-prompt.md, phase-d-reencoding-prompt.md into it; update docs/retrospective.md cross-refs (search for `phase-c-gaps`, `phase-d-`) and docs/INDEX.md to add an "Archive" subsection under researcher pointing to the new dir; preserve git history with `git mv` +archive @docs effort:S
 ```

@@ -44,12 +44,31 @@ def test_upgrade_source_inserts_current_pragma():
     assert result.source.startswith("#yuho v5.1\n")
 
 
+def test_upgrade_source_without_pragma_records_default_migration():
+    result = upgrade_source(SOURCE, to_version="v5.1")
+
+    assert result.changed
+    assert result.from_version is None
+    assert result.to_version == "5.1"
+    assert result.source.startswith("#yuho v5.1\n")
+
+
 def test_upgrade_source_replaces_existing_pragma():
     result = upgrade_source("#yuho v4.0\n" + SOURCE)
 
     assert result.changed
     assert result.from_version == "4.0"
     assert result.source.startswith("#yuho v5.1\n")
+
+
+def test_upgrade_source_obsolete_version_can_jump_to_current():
+    result = upgrade_source("#yuho v4.0\n" + SOURCE, from_version="v4.0", to_version="v5.1")
+
+    assert result.changed
+    assert result.from_version == "4.0"
+    assert result.to_version == "5.1"
+    assert result.source.startswith("#yuho v5.1\n")
+    assert "#yuho v4.0" not in result.source
 
 
 def test_upgrade_cli_check_and_in_place(tmp_path):
