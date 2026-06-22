@@ -9,6 +9,10 @@ import importlib.util
 import sys
 from pathlib import Path
 
+import pytest
+
+pytest.importorskip("z3")
+
 REPO = Path(__file__).resolve().parent.parent
 
 # Load the script as a module without executing main(). The harness is
