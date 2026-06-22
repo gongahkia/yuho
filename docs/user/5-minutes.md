@@ -231,46 +231,27 @@ Two prose surfaces:
 Renders every type definition, every fn body, and every statute block
 as English. Use when you need provenance: this output is exhaustive.
 
-### `yuho explain` — prose-first summary
+### `yuho explain` — fact-backed element trace
 
-Renders a focused 5-section block (header → what it covers → elements
-in doctrinal form → penalty in prose → first worked example →
-disclaimer). Use when you want a reader-friendly summary of one
-section.
+Explains whether one section is satisfied against a JSON facts object,
+with each element traced back to the matching fact key.
 
 ```sh
-yuho explain library/penal_code/s415_cheating/statute.yh 415
+cat > facts.json <<'JSON'
+{"deception": true, "fraudulent": true, "dishonest": false, "inducement": true, "harm": true}
+JSON
+yuho explain --facts facts.json library/penal_code/s415_cheating/statute.yh
 ```
 
 ```
-Section 415: Cheating
-=====================
-Effective: 1872-01-01
-
-What it covers
---------------
-Whoever, by deceiving any person, fraudulently or dishonestly induces
-the person so deceived to deliver any property, ... is said to cheat.
-
-Elements
---------
-To prove this offence, the prosecution must show:
-  - actus_reus deception: Deceiving any person
-  - mens_rea fraudulent: Fraudulently inducing the person
-  - mens_rea dishonest: Dishonestly inducing the person
-  - actus_reus inducement: Inducing delivery of property, ...
-  - circumstance harm: Causing or likely to cause damage to body, ...
-
-Penalty
--------
-imprisonment of 1 year to 7 years and a fine of $0.00 to $50000.00
-
-Worked example
---------------
-A intentionally deceives B into believing that a worthless article is
-valuable, and thus induces B to buy it. A cheats.
-
--- NOT LEGAL ADVICE -- ...
+Section 415 is satisfied.
+The all_of element top_0 is satisfied because all child elements are satisfied.
+  The actus_reus element deception is satisfied because fact 'deception' is truthy.
+  The any_of element top_0_1 is satisfied because at least one child element is satisfied.
+    The mens_rea element fraudulent is satisfied because fact 'fraudulent' is truthy.
+    The mens_rea element dishonest is not satisfied because fact 'dishonest' is missing or false.
+  The actus_reus element inducement is satisfied because fact 'inducement' is truthy.
+  The circumstance element harm is satisfied because fact 'harm' is truthy.
 ```
 
 Both outputs let you verify your model captures all the elements you intended.
