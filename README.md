@@ -24,12 +24,13 @@
 Yuho is a local statute DSL compiler. Its primary job is to turn `.yh`
 statute encodings into a typed AST, run syntax/semantic/lint checks, and
 emit reviewable artefacts such as JSON, controlled English, LaTeX,
-Mermaid, Alloy, DOCX, and Akoma Ntoso.
+Mermaid, Mermaid mindmap, Alloy, DOCX, Akoma Ntoso, and LegalRuleML.
 
 The repository also carries a checked-in corpus: all 524 sections of the
 Singapore Penal Code 1871 are encoded under `library/penal_code/`. The
-raw Indian Penal Code snapshot remains under `library/indian_penal_code/`
-as corpus material, not as a complete encoded library.
+other corpus material covers the BNS 2023 replacement corpus for IPC, a
+raw Indian Penal Code snapshot, and Malaysia/Pakistan IPC-lineage
+proof-of-concept corpora.
 
 ## Current scope
 

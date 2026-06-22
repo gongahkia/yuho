@@ -561,7 +561,7 @@ def refs(
 @cli.command()
 @click.option("-o", "--output", type=click.Path(), help="Output file path")
 def schema(output: Optional[str]) -> None:
-    """Print JSON Schema for the retained JSON transpiler output."""
+    """Emit the JSON Schema for Yuho JSON transpiler output."""
     from yuho.transpile.json_schema import generate_json_schema
 
     text = generate_json_schema()
@@ -576,7 +576,7 @@ def schema(output: Optional[str]) -> None:
 @click.argument("shell", type=click.Choice(["bash", "zsh", "fish"], case_sensitive=False))
 @click.option("--install", "show_install", is_flag=True, help="Show installation instructions")
 def completion(shell: str, show_install: bool) -> None:
-    """Generate shell completion script."""
+    """Emit a shell completion script for bash, zsh, or fish."""
     from yuho.cli.completions import get_completion_script, get_install_instructions
 
     shell_name = cast(Literal["bash", "zsh", "fish"], shell.lower())

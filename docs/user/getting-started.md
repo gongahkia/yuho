@@ -11,6 +11,9 @@ source .venv/bin/activate
 uv pip install -e '.[dev]'
 ```
 
+If this checkout's venv predates 2026-06-22, rerun
+`uv pip install -e '.[dev]'` to pick up `z3-solver`.
+
 For package use:
 
 ```bash
@@ -61,7 +64,7 @@ yuho refs --scc --json
 ```
 
 The repository ships all 524 Singapore Penal Code sections as `.yh`,
-plus raw corpus material for the Indian Penal Code.
+plus BNS, IPC, Malaysia, and Pakistan corpus material.
 
 ## 5. Verify retained gates
 

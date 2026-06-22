@@ -739,9 +739,7 @@ version = "5.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
-    { name = "pygls" },
     { name = "tree-sitter" },
-    { name = "watchdog" },
 ]
 
 [package.optional-dependencies]
@@ -752,20 +750,30 @@ all = [
     { name = "lxml" },
     { name = "mypy" },
     { name = "playwright" },
+    { name = "pygls" },
     { name = "pytest" },
+    { name = "watchdog" },
     { name = "z3-solver" },
 ]
 dev = [
     { name = "black" },
     { name = "hypothesis" },
     { name = "mypy" },
+    { name = "pygls" },
     { name = "pytest" },
+    { name = "watchdog" },
     { name = "z3-solver" },
+]
+lsp = [
+    { name = "pygls" },
 ]
 scrape = [
     { name = "beautifulsoup4" },
     { name = "lxml" },
     { name = "playwright" },
+]
+watch = [
+    { name = "watchdog" },
 ]
 
 [package.metadata]
@@ -777,14 +785,16 @@ requires-dist = [
     { name = "lxml", marker = "extra == 'scrape'", specifier = ">=5.0,<6.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0,<2.0" },
     { name = "playwright", marker = "extra == 'scrape'", specifier = ">=1.40,<2.0" },
-    { name = "pygls", specifier = ">=2.0,<3.0" },
+    { name = "pygls", marker = "extra == 'dev'", specifier = ">=2.0,<3.0" },
+    { name = "pygls", marker = "extra == 'lsp'", specifier = ">=2.0,<3.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0,<9.0" },
     { name = "tree-sitter", specifier = ">=0.21.0,<1.0" },
-    { name = "watchdog", specifier = ">=4.0,<7.0" },
-    { name = "yuho", extras = ["dev", "scrape"], marker = "extra == 'all'" },
+    { name = "watchdog", marker = "extra == 'dev'", specifier = ">=4.0,<7.0" },
+    { name = "watchdog", marker = "extra == 'watch'", specifier = ">=4.0,<7.0" },
+    { name = "yuho", extras = ["dev", "lsp", "scrape", "watch"], marker = "extra == 'all'" },
     { name = "z3-solver", marker = "extra == 'dev'", specifier = ">=4.12,<5.0" },
 ]
-provides-extras = ["dev", "scrape", "all"]
+provides-extras = ["dev", "lsp", "watch", "scrape", "all"]
 
 [[package]]
 name = "z3-solver"

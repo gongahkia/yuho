@@ -130,7 +130,8 @@ def _emit_check_watch(buf: io.StringIO) -> None:
         "`yuho check --watch PATH` runs an initial check, then keeps a watchdog observer "
         "on `PATH`'s parent directory and re-runs when that exact `.yh` file is created, "
         "modified, or moved. It is not recursive; unrelated events in `.git`, "
-        "`node_modules`, `__pycache__`, or other files do not trigger a re-check.\n\n"
+        "`node_modules`, `__pycache__`, or other files do not trigger a re-check. "
+        "Install `yuho[watch]` or `yuho[dev]` before using watch mode.\n\n"
     )
     buf.write("```bash\nyuho check --watch library/penal_code/s415_cheating/statute.yh\n```\n\n")
 

@@ -11,7 +11,7 @@ This document mirrors the output of `yuho <subcommand> --help` for every impleme
 |---|---|
 | `yuho ast` | Visualize the parsed AST. |
 | `yuho check` | Parse and validate a Yuho source file. |
-| `yuho completion` | Generate shell completion script. |
+| `yuho completion` | Emit a shell completion script for bash, zsh, or fish. |
 | `yuho debug` | Debug statute evaluation against facts. |
 | `yuho diff` | Compare Yuho statute files or corpus sections. |
 | `yuho explain` | Explain element-by-element statute satisfaction. |
@@ -19,7 +19,7 @@ This document mirrors the output of `yuho <subcommand> --help` for every impleme
 | `yuho irac` | Emit IRAC-structured English for a statute and facts. |
 | `yuho lint` | Run statute-core lint and fidelity diagnostics. |
 | `yuho refs` | Query the checked-in corpus reference graph. |
-| `yuho schema` | Print JSON Schema for the retained JSON transpiler output. |
+| `yuho schema` | Emit the JSON Schema for Yuho JSON transpiler output. |
 | `yuho test` | Run legal tests embedded in Yuho files. |
 | `yuho transpile` | Transpile a Yuho source file. |
 | `yuho upgrade` | Rewrite Yuho source to the requested grammar version. |
@@ -68,7 +68,7 @@ Options:
 
 ### Watch mode
 
-`yuho check --watch PATH` runs an initial check, then keeps a watchdog observer on `PATH`'s parent directory and re-runs when that exact `.yh` file is created, modified, or moved. It is not recursive; unrelated events in `.git`, `node_modules`, `__pycache__`, or other files do not trigger a re-check.
+`yuho check --watch PATH` runs an initial check, then keeps a watchdog observer on `PATH`'s parent directory and re-runs when that exact `.yh` file is created, modified, or moved. It is not recursive; unrelated events in `.git`, `node_modules`, `__pycache__`, or other files do not trigger a re-check. Install `yuho[watch]` or `yuho[dev]` before using watch mode.
 
 ```bash
 yuho check --watch library/penal_code/s415_cheating/statute.yh
@@ -76,12 +76,12 @@ yuho check --watch library/penal_code/s415_cheating/statute.yh
 
 ## `yuho completion`
 
-Generate shell completion script.
+Emit a shell completion script for bash, zsh, or fish.
 
 ```
 Usage: yuho completion [OPTIONS] {bash|zsh|fish}
 
-  Generate shell completion script.
+  Emit a shell completion script for bash, zsh, or fish.
 
 Options:
   --install  Show installation instructions
@@ -211,12 +211,12 @@ Options:
 
 ## `yuho schema`
 
-Print JSON Schema for the retained JSON transpiler output.
+Emit the JSON Schema for Yuho JSON transpiler output.
 
 ```
 Usage: yuho schema [OPTIONS]
 
-  Print JSON Schema for the retained JSON transpiler output.
+  Emit the JSON Schema for Yuho JSON transpiler output.
 
 Options:
   -o, --output PATH  Output file path
@@ -335,7 +335,7 @@ Options:
 Commands:
   ast         Visualize the parsed AST.
   check       Parse and validate a Yuho source file.
-  completion  Generate shell completion script.
+  completion  Emit a shell completion script for bash, zsh, or fish.
   debug       Debug statute evaluation against facts.
   diff        Compare Yuho statute files or corpus sections.
   explain     Explain element-by-element statute satisfaction.
@@ -343,7 +343,7 @@ Commands:
   irac        Emit IRAC-structured English for a statute and facts.
   lint        Run statute-core lint and fidelity diagnostics.
   refs        Query the checked-in corpus reference graph.
-  schema      Print JSON Schema for the retained JSON transpiler output.
+  schema      Emit the JSON Schema for Yuho JSON transpiler output.
   test        Run legal tests embedded in Yuho files.
   transpile   Transpile a Yuho source file.
   upgrade     Rewrite Yuho source to the requested grammar version.

@@ -331,7 +331,7 @@ def _run_watch_mode(file: str, run_once: Callable[[], int]) -> int:
     try:
         FileSystemEventHandler, Observer = _load_watchdog()
     except ImportError:
-        click.echo("error: --watch requires watchdog; install the project dependencies", err=True)
+        click.echo("error: --watch requires watchdog; install yuho[watch] or yuho[dev]", err=True)
         return 2
 
     target = Path(file).resolve()

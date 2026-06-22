@@ -43,6 +43,17 @@ def test_watch_reports_missing_watchdog(tmp_path, monkeypatch):
     assert status == 2
 
 
+def test_watch_missing_watchdog_message(tmp_path, monkeypatch, capsys):
+    def missing_watchdog():
+        raise ImportError("no watchdog")
+
+    monkeypatch.setattr(check_cmd, "_load_watchdog", missing_watchdog)
+
+    check_cmd._run_watch_mode(str(tmp_path / "sample.yh"), lambda: 0)
+
+    assert "install yuho[watch] or yuho[dev]" in capsys.readouterr().err
+
+
 def test_watch_event_matches_target(tmp_path):
     target = (tmp_path / "sample.yh").resolve()
     event = SimpleNamespace(src_path=str(target), dest_path=None)

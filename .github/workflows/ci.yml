@@ -51,6 +51,9 @@ jobs:
       - name: Type check with mypy
         run: mypy src/yuho --ignore-missing-imports 2>&1 | tee logs/mypy.log
 
+      - name: Verify CLI reference is up-to-date
+        run: python3 scripts/gen_cli_reference.py --check 2>&1 | tee logs/cli-reference.log
+
       - name: Upload lint logs
         if: always()
         uses: actions/upload-artifact@v4

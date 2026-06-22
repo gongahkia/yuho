@@ -26,6 +26,11 @@ Current after fossil deletion: this repo is the local compiler, corpus, and veri
 - `scripts/`: corpus, scrape, round-trip, fuzz, and verification helpers.
 - `tests/`: pytest suite; `tests/snapshots/` holds transpiler snapshot metadata.
 - `docs/`: retained user, contributor, researcher, and positioning docs.
+- `docs/user/lsp.md`: LSP install and editor setup.
+- `docs/contributor/source-maps.md`: transpile source-map sidecar contract.
+- `docs/contributor/grammar-pragma.md`: grammar pragma upgrade contract.
+- `docs/contributor/conformance-matrix.md`: transpile snapshot matrix contract.
+- `docs/researcher/archive/`: archived phase prompt/research notes.
 - `Makefile`: retained verification gates, especially `make verify-core`.
 
 ## Removed Fossils
