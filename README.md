@@ -39,7 +39,7 @@ Retained surfaces:
 |---|---|
 | Grammar | tree-sitter grammar for statute blocks, structs, functions, tests, imports, cross-section predicates, penalty combinators, and exception priority |
 | Analysis | `yuho check`, `yuho lint`, formatting, AST visualization, source diagnostics |
-| Transpilers | JSON, English, LaTeX/PDF, Mermaid/SVG/PNG, Mermaid mindmap, Alloy, DOCX, Akoma Ntoso |
+| Transpilers | JSON, English, LaTeX, Mermaid, Mermaid mindmap, Alloy, DOCX, Akoma Ntoso, LegalRuleML |
 | Verification | Z3/Alloy backends via `yuho verify`, plus Lean structural-diff checks |
 | Corpus tools | Penal Code coverage checks, AKN round-trip, runtime test sweep, reference graph via `yuho refs` |
 
