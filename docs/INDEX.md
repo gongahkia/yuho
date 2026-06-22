@@ -10,6 +10,7 @@ inspecting the checked-in corpus.
 - [Getting started](user/getting-started.md)
 - [5-minute tour](user/5-minutes.md)
 - [CLI reference](user/cli-reference.md)
+- [LSP setup](user/lsp.md)
 - [CLI exit codes](user/cli-exit-codes.md)
 - [Error codes](user/error-codes.md)
 - [FAQ](user/faq.md)
