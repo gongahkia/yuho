@@ -44,6 +44,15 @@ lake build Tests   # typechecks the smoke tests with native_decide
 `lake build Tests` pass under Lean 4.10.0 with no `sorry`s and no
 linter warnings.
 
+## Claim boundary
+
+| Category | Current Yuho claim | Evidence | Boundary |
+|---|---|---|---|
+| Proved | Element, element-graph, exception, cross-section, and penalty correspondence for the Lean-modeled fragment. | `lake build`, `lake build Tests`, theorem rows below. | Applies to the abstractions encoded in `mechanisation/Yuho/*.lean`, not every parser construct. |
+| Tested | Python `Z3Generator` shape matches Lean-side fixtures for retained smoke/full-corpus structural checks. | `make verify-structural-diff`, `make verify-structural-diff-full` when run. | Differential evidence, not a certified compiler proof. |
+| Trusted | Lean 4.10 kernel, stdlib axioms, Python AST/Z3 encoder, fixture generator, and corpus selection. | `lean-toolchain`, `scripts/verify_structural_diff.py`, `mechanisation/scripts/generate_fixtures.py`. | Bugs in these layers can invalidate conclusions. |
+| Out of scope | Open-textured terms, precedent-sensitive interpretation, procedural burdens, rich evidential facts, and certified Z3 proof reconstruction. | Listed again under deferred decisions. | These are not proved by the current mechanisation. |
+
 ## What's mechanised, with file pointers
 
 | Mechanised claim | File | Theorem name | Proof technique |

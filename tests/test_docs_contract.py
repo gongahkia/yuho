@@ -75,3 +75,11 @@ def test_positioning_docs_are_linked() -> None:
     assert "positioning/comparisons.md" in index
     assert "contributor/expert-review-checklist.md" in index
     assert "faithful executable law" not in readme.lower()
+
+
+def test_mechanisation_readme_states_claim_boundary() -> None:
+    """Lean mechanisation docs should separate proof evidence from trust boundaries."""
+    readme = Path("mechanisation/README.md").read_text(encoding="utf-8")
+
+    for term in ("Proved", "Tested", "Trusted", "Out of scope"):
+        assert f"| {term} |" in readme

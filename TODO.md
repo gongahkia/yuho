@@ -123,9 +123,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 - Close the known Lean proof gaps incrementally.
   - Add binder infrastructure for scoped names.
-  - Add certified reconstruction path or explicitly document solver trust.
   - Add richer doctrine/case-law semantics once runtime semantics exists.
-  - Acceptance: `mechanisation/README.md` separates proved, tested, trusted, and out-of-scope claims in a table.
 
 - Expand beyond smoke fixtures.
   - Generate representative Lean fixtures from corpus strata: simple, nested, exception-heavy, cross-ref-heavy, penalty-heavy.
