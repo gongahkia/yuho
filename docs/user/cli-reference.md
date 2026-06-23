@@ -180,10 +180,12 @@ Usage: yuho init [OPTIONS] [DIRECTORY]
   Create a runnable starter workspace.
 
 Options:
-  --force   Overwrite existing files
-  --no-run  Skip starter smoke checks
-  --json    Emit JSON
-  --help    Show this message and exit.
+  --force                         Overwrite existing files
+  --no-run                        Skip starter smoke checks
+  --template [basic|statute-literate]
+                                  Starter template  [default: basic]
+  --json                          Emit JSON
+  --help                          Show this message and exit.
 ```
 
 ## `yuho irac`
@@ -211,14 +213,14 @@ Usage: yuho lint [OPTIONS] FILES...
   Run statute-core lint and fidelity diagnostics.
 
 Options:
-  -r, --rule TEXT             Specific rules to run
-  -e, --exclude TEXT          Rules to exclude
-  --json                      Output as JSON
-  --fix                       Auto-fix issues where supported
+  -r, --rule TEXT                 Specific rules to run
+  -e, --exclude TEXT              Rules to exclude
+  --json                          Output as JSON
+  --fix                           Auto-fix issues where supported
   --mode [transcription|executable]
-                              Lint posture  [default: transcription]
-  --format [text|json|sarif]  Output format
-  --help                      Show this message and exit.
+                                  Lint posture  [default: transcription]
+  --format [text|json|sarif]      Output format
+  --help                          Show this message and exit.
 ```
 
 ## `yuho refs`

@@ -64,8 +64,22 @@ def doctor(sample: Optional[str], json_output: bool, strict: bool) -> None:
 @click.argument("directory", required=False, default="yuho-starter")
 @click.option("--force", is_flag=True, help="Overwrite existing files")
 @click.option("--no-run", "no_run", is_flag=True, help="Skip starter smoke checks")
+@click.option(
+    "--template",
+    "template",
+    type=click.Choice(["basic", "statute-literate"]),
+    default="basic",
+    show_default=True,
+    help="Starter template",
+)
 @click.option("--json", "json_output", is_flag=True, help="Emit JSON")
-def init(directory: str, force: bool, no_run: bool, json_output: bool) -> None:
+def init(
+    directory: str,
+    force: bool,
+    no_run: bool,
+    template: str,
+    json_output: bool,
+) -> None:
     """Create a runnable starter workspace."""
     from yuho.cli.commands.init import run_init
 
@@ -73,6 +87,7 @@ def init(directory: str, force: bool, no_run: bool, json_output: bool) -> None:
         directory=directory,
         force=force,
         run_smoke=not no_run,
+        template=template,
         json_output=json_output,
     )
 

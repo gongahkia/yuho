@@ -38,6 +38,41 @@ def test_init_json_lists_created_files(tmp_path: Path) -> None:
     assert "yuho check statute.yh" in payload["commands"]
 
 
+def test_init_statute_literate_template_creates_source_anchors(tmp_path: Path) -> None:
+    root = tmp_path / "literate"
+
+    result = CliRunner().invoke(cli, ["init", "--template", "statute-literate", str(root)])
+
+    assert result.exit_code == 0
+    assert (root / "legal-text.md").exists()
+    statute = (root / "statute.yh").read_text(encoding="utf-8")
+    assert "source: legal-text.md#p1" in statute
+    assert "facts.representation.made" in statute
+    assert (root / "out" / "starter.txt").exists()
+
+    explain = CliRunner().invoke(
+        cli,
+        ["explain", "--facts", str(root / "facts.json"), str(root / "statute.yh")],
+    )
+    assert explain.exit_code == 0
+    assert "Section 1 is satisfied." in explain.output
+
+
+def test_init_statute_literate_json_lists_legal_text(tmp_path: Path) -> None:
+    root = tmp_path / "literate"
+
+    result = CliRunner().invoke(
+        cli,
+        ["init", "--template", "statute-literate", "--json", str(root)],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["created"]["template"] == "statute-literate"
+    assert payload["created"]["legal_text"] == str(root / "legal-text.md")
+    assert payload["smoke"]["explains"] is True
+
+
 def test_init_refuses_nonempty_directory_without_force(tmp_path: Path) -> None:
     root = tmp_path / "starter"
     root.mkdir()
