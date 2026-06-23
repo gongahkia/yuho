@@ -305,7 +305,7 @@ statute 415 "Cheating" {
     }
 
     // penalty block — specifies imprisonment and/or fine ranges
-    // ranges use .. operator between two values
+    // ranges use the inclusive .. operator between two values
     penalty {
         imprisonment := 1 year .. 7 years;
         fine := $0.00 .. $50,000.00;

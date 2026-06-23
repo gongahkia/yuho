@@ -92,6 +92,8 @@ class JSONTranspiler(TranspilerBase, Visitor):
         elif isinstance(node, nodes.RangeExprNode):
             result["start"] = self._to_dict(node.start)
             result["end"] = self._to_dict(node.end)
+            result["start_inclusive"] = node.start_inclusive
+            result["end_inclusive"] = node.end_inclusive
         elif isinstance(node, nodes.TimelineAppearanceNode):
             result["timeline"] = node.timeline
             result["range"] = self._to_dict(node.range)

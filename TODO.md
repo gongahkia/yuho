@@ -106,10 +106,11 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 ## P1: Type System And Numeric Semantics
 
 - Add interval endpoint semantics and verifier calendar parity.
+  - `..` range syntax is now documented and serialized as a closed interval with inclusive endpoints.
   - Money now uses Decimal, retained currency, and supported currency minor-unit validation.
   - Fixed day/hour/minute/second durations now compare exactly via `datetime.timedelta`.
   - Runtime calendar durations now compare exactly when a reference date is supplied, with month-end clamping.
-  - Remaining work: define interval endpoints and remove or explicitly isolate verifier 30-day/month and 365-day/year approximations.
+  - Remaining work: remove or explicitly isolate verifier 30-day/month and 365-day/year approximations.
   - Acceptance: no backend uses 30-day/month or 365-day/year approximation except explicitly labeled verifier summaries.
 
 - Align docs with implementation.

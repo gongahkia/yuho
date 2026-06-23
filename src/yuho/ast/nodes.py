@@ -429,10 +429,17 @@ class ListExprNode(ASTNode):
 
 @dataclass(frozen=True)
 class RangeExprNode(ASTNode):
-    """General range expression, e.g. 2024-01-01..2024-01-31."""
+    """General closed range expression, e.g. 2024-01-01..2024-01-31.
+
+    Yuho currently exposes only ``..`` syntax, so both endpoints are
+    inclusive. Future half-open syntax should set these flags instead of
+    overloading the operator text downstream.
+    """
 
     start: ASTNode
     end: ASTNode
+    start_inclusive: bool = True
+    end_inclusive: bool = True
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_range_expr(self)

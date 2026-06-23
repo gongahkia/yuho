@@ -229,6 +229,7 @@ money[c1] op money[c2] is a runtime error when c1 != c2
 duration comparison is exact for fixed day/hour/minute/second durations
 calendar duration comparison with years/months is exact when a reference date is supplied
 calendar month-end addition clamps to the target month's last day
+range expression `a .. b` denotes a closed interval with inclusive endpoints
 ```
 
 ### 2.3 Struct Typing

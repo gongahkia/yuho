@@ -58,6 +58,7 @@ from yuho.ast.nodes import (
     PassStmt,
     PenaltyNode,
     PercentNode,
+    RangeExprNode,
     ReferencingStmt,
     RebutsRelation,
     ReturnStmt,
@@ -404,6 +405,11 @@ class TestASTNodeChildren:
         sl = StructLiteralNode(struct_name="Foo", field_values=(fa,))
         assert sl.get_field("x") == fa
         assert sl.get_field("nonexistent") is None
+
+    def test_range_expr_endpoints_are_inclusive_by_default(self):
+        expr = RangeExprNode(start=IntLit(value=1), end=IntLit(value=3))
+        assert expr.start_inclusive is True
+        assert expr.end_inclusive is True
 
 
 # =========================================================================
