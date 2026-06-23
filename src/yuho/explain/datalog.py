@@ -50,6 +50,7 @@ class DatalogExplainer:
                 member,
                 normalized_facts,
                 runtime_facts,
+                statute.definitions,
                 f"top_{index}",
                 rules,
             )
@@ -68,12 +69,15 @@ class DatalogExplainer:
         member: nodes.ASTNode,
         facts: Mapping[str, object],
         runtime_facts,
+        definitions: tuple[nodes.DefinitionEntry, ...],
         fallback_name: str,
         rules: list[str],
     ) -> ElementTrace:
         if isinstance(member, nodes.ElementGroupNode):
             child_traces = tuple(
-                self._trace_member(child, facts, runtime_facts, f"{fallback_name}_{i}", rules)
+                self._trace_member(
+                    child, facts, runtime_facts, definitions, f"{fallback_name}_{i}", rules
+                )
                 for i, child in enumerate(member.members)
             )
             if member.combinator == "any_of":
@@ -108,7 +112,7 @@ class DatalogExplainer:
         if isinstance(member, (nodes.ElementNode, nodes.CivilPrimitiveNode)) and not isinstance(
             member.description, nodes.StringLit
         ):
-            satisfied = self._predicate_truthy(member.description, runtime_facts)
+            satisfied = self._predicate_truthy(member.description, runtime_facts, definitions)
             rule = f"satisfied({name}) :- predicate({name})."
             reason = (
                 "predicate expression is truthy" if satisfied else "predicate expression is false"
@@ -148,12 +152,24 @@ class DatalogExplainer:
         return f"unsatisfied child elements: {', '.join(failed)}"
 
     @staticmethod
-    def _predicate_truthy(predicate: nodes.ASTNode, runtime_facts) -> bool:
+    def _predicate_truthy(
+        predicate: nodes.ASTNode,
+        runtime_facts,
+        definitions: tuple[nodes.DefinitionEntry, ...] = (),
+    ) -> bool:
         env = Environment()
         env.set("facts", Value(raw=runtime_facts, type_tag="struct"))
         for key, value in runtime_facts.fields.items():
             env.set(key, value)
+        interp = Interpreter(env)
+        for definition in definitions:
+            if isinstance(definition.definition, nodes.StringLit):
+                continue
+            try:
+                env.set(definition.term, interp.visit(definition.definition))
+            except InterpreterError:
+                continue
         try:
-            return Interpreter(env).visit(predicate).is_truthy()
+            return interp.visit(predicate).is_truthy()
         except InterpreterError:
             return False

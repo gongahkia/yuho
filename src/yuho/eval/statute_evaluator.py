@@ -95,7 +95,7 @@ class StatuteEvaluator:
 
         for member in statute.elements:
             if isinstance(member, nodes.ElementNode):
-                er = self._evaluate_element(member, facts, env)
+                er = self._evaluate_element(member, facts, env, statute.definitions)
                 all_element_results.append(er)
                 if not er.satisfied:
                     overall = False
@@ -103,7 +103,9 @@ class StatuteEvaluator:
                         f"Element '{er.element_name}' ({er.element_type}) not satisfied"
                     )
             elif isinstance(member, nodes.ElementGroupNode):
-                group_results, group_ok = self._evaluate_group(member, facts, env)
+                group_results, group_ok = self._evaluate_group(
+                    member, facts, env, statute.definitions
+                )
                 all_element_results.extend(group_results)
                 if not group_ok:
                     overall = False
@@ -148,6 +150,7 @@ class StatuteEvaluator:
         element: nodes.ElementNode,
         facts: StructInstance,
         env: Environment,
+        definitions: Tuple[nodes.DefinitionEntry, ...] = (),
     ) -> ElementResult:
         """Check if a single element is satisfied by the facts."""
         name = element.name
@@ -158,7 +161,9 @@ class StatuteEvaluator:
         if isinstance(element.description, nodes.StringLit):
             desc = element.description.value
         else:
-            satisfied = self._evaluate_predicate_description(element.description, facts, env)
+            satisfied = self._evaluate_predicate_description(
+                element.description, facts, env, definitions
+            )
             return ElementResult(
                 element_name=name,
                 element_type=etype,
@@ -194,21 +199,40 @@ class StatuteEvaluator:
         predicate: nodes.ASTNode,
         facts: StructInstance,
         env: Environment,
+        definitions: Tuple[nodes.DefinitionEntry, ...] = (),
     ) -> bool:
-        predicate_env = env.child()
-        predicate_env.set("facts", Value(raw=facts, type_tag="struct"))
-        for key, value in facts.fields.items():
-            predicate_env.set(key, value)
+        predicate_env = self._predicate_env(facts, env, definitions)
         try:
             return Interpreter(predicate_env).visit(predicate).is_truthy()
         except InterpreterError:
             return False
+
+    def _predicate_env(
+        self,
+        facts: StructInstance,
+        env: Environment,
+        definitions: Tuple[nodes.DefinitionEntry, ...] = (),
+    ) -> Environment:
+        predicate_env = env.child()
+        predicate_env.set("facts", Value(raw=facts, type_tag="struct"))
+        for key, value in facts.fields.items():
+            predicate_env.set(key, value)
+        interp = Interpreter(predicate_env)
+        for definition in definitions:
+            if isinstance(definition.definition, nodes.StringLit):
+                continue
+            try:
+                predicate_env.set(definition.term, interp.visit(definition.definition))
+            except InterpreterError:
+                continue
+        return predicate_env
 
     def _evaluate_group(
         self,
         group: nodes.ElementGroupNode,
         facts: StructInstance,
         env: Environment,
+        definitions: Tuple[nodes.DefinitionEntry, ...] = (),
     ) -> Tuple[List[ElementResult], bool]:
         """Evaluate element group with combinator logic.
 
@@ -219,11 +243,11 @@ class StatuteEvaluator:
         member_statuses: List[bool] = []
         for member in group.members:
             if isinstance(member, nodes.ElementNode):
-                er = self._evaluate_element(member, facts, env)
+                er = self._evaluate_element(member, facts, env, definitions)
                 results.append(er)
                 member_statuses.append(er.satisfied)
             elif isinstance(member, nodes.ElementGroupNode):
-                sub_results, sub_ok = self._evaluate_group(member, facts, env)
+                sub_results, sub_ok = self._evaluate_group(member, facts, env, definitions)
                 results.extend(sub_results)
                 member_statuses.append(sub_ok)
 

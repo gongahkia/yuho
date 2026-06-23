@@ -908,7 +908,7 @@ class DefinitionEntry(ASTNode):
     """Definition entry within a statute's definitions block."""
 
     term: str
-    definition: StringLit
+    definition: ASTNode
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_definition_entry(self)

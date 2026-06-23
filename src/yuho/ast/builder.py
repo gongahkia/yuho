@@ -224,9 +224,7 @@ class ASTBuilder:
         aliases = {flag, flag.replace("_", "-")}
         for line in doc.split("\n"):
             stripped = line.strip().removeprefix("@").strip()
-            has_alias_prefix = any(
-                stripped.startswith(f"{alias} ") for alias in aliases
-            )
+            has_alias_prefix = any(stripped.startswith(f"{alias} ") for alias in aliases)
             if stripped in aliases or has_alias_prefix:
                 return True
         return False
@@ -632,9 +630,7 @@ class ASTBuilder:
         return nodes.ExistsAtMostNode(
             limit=self._build_int_lit(limit_node) if limit_node else nodes.IntLit(value=0),
             window=(
-                self._build_duration(window_node)
-                if window_node
-                else nodes.DurationNode(days=0)
+                self._build_duration(window_node) if window_node else nodes.DurationNode(days=0)
             ),
             source_location=self._loc(node),
         )
@@ -1158,7 +1154,7 @@ class ASTBuilder:
         exceptions: List[nodes.ExceptionNode] = []
         case_law: List[nodes.CaseLawNode] = []
         parties: List[nodes.PartyNode] = []
-        subsections: List[nodes.SubsectionNode] = []           # G5
+        subsections: List[nodes.SubsectionNode] = []  # G5
 
         for child in node.children:
             if child.type == "definitions_block":
@@ -1183,7 +1179,7 @@ class ASTBuilder:
                 case_law.append(self._build_caselaw(child))
             elif child.type == "parties_block":
                 parties.extend(self._build_parties_block(child))
-            elif child.type == "subsection_block":              # G5
+            elif child.type == "subsection_block":  # G5
                 subsections.append(self._build_subsection(child))
 
         annotations = self._build_annotations(node)
@@ -1223,13 +1219,13 @@ class ASTBuilder:
             illustrations=tuple(illustrations),
             exceptions=tuple(exceptions),
             case_law=tuple(case_law),
-            subsections=tuple(subsections),                     # G5
+            subsections=tuple(subsections),  # G5
             doc_comment=doc,
             jurisdiction=jurisdiction,
             jurisdiction_meta=jurisdiction_meta,
             jurisdiction_node=jurisdiction_ast_node,
             effective_date=effective_dates[0] if effective_dates else None,
-            effective_dates=effective_dates,                    # G6
+            effective_dates=effective_dates,  # G6
             repealed_date=self._text(repealed_node) if repealed_node else None,
             subsumes=self._text(subsumes_node) if subsumes_node else None,
             amends=self._text(amends_node) if amends_node else None,
@@ -1301,7 +1297,7 @@ class ASTBuilder:
 
                 term = self._text(term_node) if term_node else ""
                 definition = (
-                    self._build_string_lit(def_node) if def_node else nodes.StringLit(value="")
+                    self._build_expression(def_node) if def_node else nodes.StringLit(value="")
                 )
 
                 entries.append(
@@ -1336,9 +1332,7 @@ class ASTBuilder:
         name_node = self._child_by_field(node, "name")
         desc_node = self._child_by_field(node, "description")
         element_type = self._text(type_node) if type_node else "actus_reus"
-        description = (
-            self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
-        )
+        description = self._build_expression(desc_node) if desc_node else nodes.StringLit(value="")
         role_tags = self._role_tags(node, "element_role_tag")
         if element_type in CIVIL_ELEMENT_TYPES:
             return nodes.CivilPrimitiveNode(
@@ -1393,9 +1387,7 @@ class ASTBuilder:
         return nodes.InterpretationNode(
             name=self._text(name_node) if name_node else "",
             reading=(
-                self._build_string_lit(reading_node)
-                if reading_node
-                else nodes.StringLit(value="")
+                self._build_string_lit(reading_node) if reading_node else nodes.StringLit(value="")
             ),
             citation=self._build_string_lit(citation_node) if citation_node else None,
             court=self._build_string_lit(court_node) if court_node else None,
@@ -1519,8 +1511,8 @@ class ASTBuilder:
                     mandatory_min_imprisonment = self._build_duration(dur_node)
                 if money_node:
                     mandatory_min_fine = self._build_money(money_node)
-            elif child.type == "penalty_sub_block":                # G12: nested combinator
-                nested = self._build_penalty_sub_block(child)      # forward declared below
+            elif child.type == "penalty_sub_block":  # G12: nested combinator
+                nested = self._build_penalty_sub_block(child)  # forward declared below
             else:
                 pass
 
@@ -1705,9 +1697,7 @@ class ASTBuilder:
         return nodes.CaseTreatmentNode(
             kind=self._text(kind_node) if kind_node else "",
             target=(
-                self._build_string_lit(target_node)
-                if target_node
-                else nodes.StringLit(value="")
+                self._build_string_lit(target_node) if target_node else nodes.StringLit(value="")
             ),
             citation=self._build_string_lit(citation_node) if citation_node else None,
             source_location=self._loc(node),
