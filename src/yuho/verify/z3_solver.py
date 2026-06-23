@@ -30,6 +30,16 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+
+def _verifier_duration_days(duration: Any) -> Tuple[int, bool]:
+    """Return verifier day count and whether calendar units were approximated."""
+    return duration.total_days_approx(), bool(getattr(duration, "has_calendar_units", False))
+
+
+def _duration_days_label(approximated: bool) -> str:
+    return "approx days" if approximated else "days"
+
+
 # Try to import z3, provide stub if not available
 try:
     import z3
@@ -773,26 +783,34 @@ class Z3Solver:
 
                 # Check imprisonment range
                 if penalty.imprisonment_min and penalty.imprisonment_max:
-                    min_days = penalty.imprisonment_min.total_days_approx()
-                    max_days = penalty.imprisonment_max.total_days_approx()
+                    min_days, min_approx = _verifier_duration_days(penalty.imprisonment_min)
+                    max_days, max_approx = _verifier_duration_days(penalty.imprisonment_max)
+                    approximated = min_approx or max_approx
+                    day_label = _duration_days_label(approximated)
                     if min_days > max_days:
                         diagnostics.append(
                             Z3Diagnostic(
                                 check_name=f"{statute_id}_imprisonment_range",
                                 passed=False,
                                 message=(
-                                    f"Imprisonment min ({min_days} approx days) "
-                                    f"> max ({max_days} approx days)"
+                                    f"Imprisonment min ({min_days} {day_label}) "
+                                    f"> max ({max_days} {day_label})"
                                 ),
                                 source_location=penalty_loc,
                             )
                         )
                     else:
+                        message = "Imprisonment range is valid"
+                        if approximated:
+                            message += (
+                                " (calendar durations approximated as "
+                                "365-day years/30-day months)"
+                            )
                         diagnostics.append(
                             Z3Diagnostic(
                                 check_name=f"{statute_id}_imprisonment_range",
                                 passed=True,
-                                message="Imprisonment range is valid",
+                                message=message,
                                 source_location=penalty_loc,
                             )
                         )
@@ -1594,17 +1612,22 @@ class Z3Generator:
         if penalty.imprisonment_min or penalty.imprisonment_max:
             imprisonment = z3.Int(f"{statute_id}_imprisonment_days")
             self._consts[f"{statute_id}_imprisonment"] = imprisonment
+            uses_calendar_approx = False
 
             if penalty.imprisonment_min:
-                min_days = penalty.imprisonment_min.total_days_approx()
+                min_days, min_approx = _verifier_duration_days(penalty.imprisonment_min)
+                uses_calendar_approx = uses_calendar_approx or min_approx
                 self._assertions.append(imprisonment >= min_days)
 
             if penalty.imprisonment_max:
-                max_days = penalty.imprisonment_max.total_days_approx()
+                max_days, max_approx = _verifier_duration_days(penalty.imprisonment_max)
+                uses_calendar_approx = uses_calendar_approx or max_approx
                 self._assertions.append(imprisonment <= max_days)
 
             # Imprisonment must be non-negative
             self._assertions.append(imprisonment >= 0)
+            if uses_calendar_approx:
+                self._consts[f"{statute_id}_imprisonment_days_approx"] = imprisonment
 
         # Fine constraints (in cents for precision)
         if penalty.fine_min or penalty.fine_max:
@@ -1926,16 +1949,17 @@ class Z3Generator:
             p_max = parent.penalty.imprisonment_max
             c_max = child.penalty.imprisonment_max
             if p_max is not None and c_max is not None:
-                p_days = p_max.total_days_approx()
-                c_days = c_max.total_days_approx()
+                p_days, p_approx = _verifier_duration_days(p_max)
+                c_days, c_approx = _verifier_duration_days(c_max)
+                day_label = _duration_days_label(p_approx or c_approx)
                 if p_days < c_days:
                     diagnostics.append(
                         Z3Diagnostic(
                             check_name=f"penalty_severity_{parent_sec}_vs_{child_sec}",
                             passed=False,
                             message=(
-                                f"s{parent_sec} max imprisonment ({p_days} approx days) "
-                                f"< s{child_sec} max ({c_days} approx days)"
+                                f"s{parent_sec} max imprisonment ({p_days} {day_label}) "
+                                f"< s{child_sec} max ({c_days} {day_label})"
                             ),
                         )
                     )
@@ -2071,11 +2095,13 @@ class Z3Generator:
 
     def _penalty_imprisonment_bounds(self, penalty: "PenaltyNode") -> Optional[Tuple[int, int]]:
         """Return approximate imprisonment bounds in days when declared."""
-        min_days = penalty.imprisonment_min.total_days_approx() if penalty.imprisonment_min else 0
+        min_days = (
+            _verifier_duration_days(penalty.imprisonment_min)[0] if penalty.imprisonment_min else 0
+        )
         max_duration = penalty.imprisonment_max or penalty.imprisonment_min
         if max_duration is None:
             return None
-        return min_days, max_duration.total_days_approx()
+        return min_days, _verifier_duration_days(max_duration)[0]
 
     def _penalty_fine_bounds(self, penalty: "PenaltyNode") -> Optional[Tuple[int, int]]:
         """Return fine bounds in cents when a statute declares them."""
