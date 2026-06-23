@@ -9,7 +9,7 @@ from typing import List, Optional
 
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
-from yuho.explain import ElementTrace, JustificationTrace
+from yuho.explain import ElementTrace, JustificationTrace, PrecedentTrace
 from yuho.transpile.base import TranspileResult, TranspileTarget, TranspilerBase
 
 
@@ -86,11 +86,27 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         self._emit(
             f"The {element.element_type} element {element.name} is {status} because {element.reason}."
         )
+        for precedent in element.precedents:
+            self._visit_explain_precedent(element.name, precedent)
         if element.children:
             self._indent_level += 1
             for child in element.children:
                 self._visit_explain_element(child)
             self._indent_level -= 1
+
+    def _visit_explain_precedent(self, element_name: str, precedent: PrecedentTrace) -> None:
+        citation = f" {precedent.citation}" if precedent.citation else ""
+        if precedent.status == "overruled":
+            treatment = precedent.treatment or "overruled"
+            self._emit(
+                f"Case law {precedent.case_name}{citation} is {treatment}; "
+                f"holding not treated as active for element {element_name}: {precedent.holding}."
+            )
+            return
+        self._emit(
+            f"Case law {precedent.case_name}{citation} interprets element "
+            f"{element_name}: {precedent.holding}."
+        )
 
     def _visit_irac_rule(self, element: ElementTrace) -> None:
         self._emit(f"The rule requires {element.element_type}: {element.name}.")

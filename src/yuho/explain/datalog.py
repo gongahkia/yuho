@@ -11,6 +11,17 @@ from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, Va
 
 
 @dataclass(frozen=True)
+class PrecedentTrace:
+    """Case-law authority attached to an element explanation."""
+
+    case_name: str
+    citation: str | None
+    holding: str
+    status: str = "active"
+    treatment: str | None = None
+
+
+@dataclass(frozen=True)
 class ElementTrace:
     """Justification for one element or element group."""
 
@@ -20,6 +31,7 @@ class ElementTrace:
     rule: str
     reason: str
     children: tuple["ElementTrace", ...] = ()
+    precedents: tuple[PrecedentTrace, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -42,6 +54,7 @@ class DatalogExplainer:
     ) -> JustificationTrace:
         normalized_facts = normalize_facts(facts)
         runtime_facts = struct_from_facts(normalized_facts)
+        precedent_index = _precedents_by_element(statute.case_law)
         traces: list[ElementTrace] = []
         rules: list[str] = []
         overall = True
@@ -51,6 +64,7 @@ class DatalogExplainer:
                 normalized_facts,
                 runtime_facts,
                 statute.definitions,
+                precedent_index,
                 f"top_{index}",
                 rules,
             )
@@ -70,13 +84,20 @@ class DatalogExplainer:
         facts: Mapping[str, object],
         runtime_facts,
         definitions: tuple[nodes.DefinitionEntry, ...],
+        precedent_index: Mapping[str, tuple[PrecedentTrace, ...]],
         fallback_name: str,
         rules: list[str],
     ) -> ElementTrace:
         if isinstance(member, nodes.ElementGroupNode):
             child_traces = tuple(
                 self._trace_member(
-                    child, facts, runtime_facts, definitions, f"{fallback_name}_{i}", rules
+                    child,
+                    facts,
+                    runtime_facts,
+                    definitions,
+                    precedent_index,
+                    f"{fallback_name}_{i}",
+                    rules,
                 )
                 for i, child in enumerate(member.members)
             )
@@ -129,6 +150,7 @@ class DatalogExplainer:
             satisfied=satisfied,
             rule=rule,
             reason=reason,
+            precedents=precedent_index.get(name, ()),
         )
 
     @staticmethod
@@ -173,3 +195,43 @@ class DatalogExplainer:
             return interp.visit(predicate).is_truthy()
         except InterpreterError:
             return False
+
+
+def _precedents_by_element(
+    case_law: tuple[nodes.CaseLawNode, ...],
+) -> dict[str, tuple[PrecedentTrace, ...]]:
+    overruled_by = _overruled_targets(case_law)
+    result: dict[str, list[PrecedentTrace]] = {}
+    for case in case_law:
+        if not case.element_ref:
+            continue
+        case_name = case.case_name.value
+        treatment = overruled_by.get(_case_key(case_name))
+        status = "overruled" if treatment else "active"
+        result.setdefault(case.element_ref, []).append(
+            PrecedentTrace(
+                case_name=case_name,
+                citation=case.citation.value if case.citation else None,
+                holding=case.holding.value,
+                status=status,
+                treatment=treatment,
+            )
+        )
+    return {element: tuple(precedents) for element, precedents in result.items()}
+
+
+def _overruled_targets(case_law: tuple[nodes.CaseLawNode, ...]) -> dict[str, str]:
+    result: dict[str, str] = {}
+    known = {_case_key(case.case_name.value): case.case_name.value for case in case_law}
+    for case in case_law:
+        for treatment in case.treatments:
+            if treatment.kind != "overruled":
+                continue
+            target_key = _case_key(treatment.target.value)
+            if target_key in known:
+                result[target_key] = f"overruled by {case.case_name.value}"
+    return result
+
+
+def _case_key(value: str) -> str:
+    return " ".join(value.casefold().split())

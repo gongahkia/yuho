@@ -71,15 +71,13 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 ## P0: Case Law And Doctrine
 
-- Promote case law from metadata to semantics.
+- Promote case law from explanation annotations to executable semantics.
+  - Current support: `yuho explain` annotates targeted elements with active case-law holdings and marks same-statute overruled authorities inactive.
+  - Current support: `yuho refs --treatment` exposes case-to-case treatment edges.
   - Model holding, ratio/obiter marker, jurisdiction/court level, date, treatment, element target, and interpretive effect.
   - Encode treatment types: follows, distinguishes, overrules, reverses, approves, disapproves, applies.
   - Add priority rules over cases and statutes where jurisdiction permits.
-  - Acceptance: case-law blocks can alter, narrow, expand, or annotate element predicates in a testable way.
-
-- Add precedent-aware explanation.
-  - `yuho explain` should show which case-law rule affected the result.
-  - `yuho refs` should expose statute-to-case and case-to-case treatment graph.
+  - Acceptance: case-law blocks can alter, narrow, or expand element predicates in a testable way.
   - Acceptance: one fixture demonstrates overruled/distinguished case law changing the outcome.
 
 ## P1: Cross-Section Scope Composition

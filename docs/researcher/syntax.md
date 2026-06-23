@@ -385,6 +385,13 @@ statute 415 "Cheating" {
 }
 ```
 
+`yuho explain` attaches targeted case-law holdings to the affected element trace.
+If another case-law block in the same statute uses `treatment overruled` against
+that case name, the older holding is reported as overruled and is not treated as
+an active interpretive annotation. Holdings are still prose strings; they do not
+change element truth unless the element itself is encoded as an executable
+predicate.
+
 ### Extended Penalty
 
 ```yh

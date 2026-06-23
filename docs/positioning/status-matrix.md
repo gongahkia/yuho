@@ -19,7 +19,7 @@ Status labels:
 | Lint | stable | `tests/test_lint_command.py`, `make verify-coverage` | Includes statute-core and fidelity diagnostics. |
 | Formatter | partial | `tests/test_fmt_cli.py` | Useful for supported statute shapes; not a canonical pretty-printer for every grammar construct yet. |
 | Runtime eval | partial | `scripts/verify_runtime_tests.py`, `tests/test_runtime_z3_differential.py` | Element truth still often comes from boolean fact keys; richer evidential facts remain TODO. |
-| Explain | partial | `tests/test_explain_cli.py` | Explains element satisfaction; does not yet explain mature precedent/proof-standard semantics. |
+| Explain | partial | `tests/test_explain_cli.py`, `tests/test_explain_english.py` | Explains element satisfaction, typed fact metadata, and targeted case-law annotations; does not yet implement mature precedent/proof-standard semantics. |
 | Debug | partial | `tests/test_debug_cli.py` | Useful element trace output; shares runtime fact-model limits. |
 | Reference graph | stable | `tests/test_reference_graph.py`, `tests/test_cli_refs.py` | Corpus graph for statute references and cycles. |
 | Z3 | partial | `tests/test_soundness_sanity.py`, `tests/test_z3_apply_scope.py`, `make verify-runtime-tests` | Conformance-tested SMT backend; solver encoding remains the trust boundary. |

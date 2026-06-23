@@ -125,3 +125,77 @@ def test_explain_cli_element_predicate_uses_structured_facts(tmp_path: Path):
     assert result.exit_code == 0
     assert "predicate expression is truthy" in result.output
     assert "Section 1 is satisfied." in result.output
+
+
+def test_explain_cli_includes_case_law_for_targeted_elements(tmp_path: Path):
+    root = tmp_path / "library"
+    section = root / "s1_precedent"
+    section.mkdir(parents=True)
+    (section / "statute.yh").write_text(
+        """
+        statute 1 "Precedent" {
+            elements {
+                actus_reus taking := "takes";
+            }
+
+            caselaw "Old v PP" "[1990] SGHC 1" {
+                "Taking includes temporary control"
+                element taking
+            }
+
+            caselaw "New v PP" "[2026] SGCA 1" {
+                "Taking requires control plus deprivation"
+                element taking
+                treatment overruled "Old v PP" "[1990] SGHC 1"
+            }
+        }
+        """,
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(json.dumps({"taking": True}), encoding="utf-8")
+
+    result = CliRunner().invoke(
+        cli,
+        ["explain", "--facts", str(facts), "--library", str(root), "1"],
+    )
+
+    assert result.exit_code == 0
+    assert "Case law New v PP [2026] SGCA 1 interprets element taking" in result.output
+    assert "Case law Old v PP [1990] SGHC 1 is overruled by New v PP" in result.output
+    assert "holding not treated as active for element taking" in result.output
+
+
+def test_explain_cli_json_includes_precedent_status(tmp_path: Path):
+    root = tmp_path / "library"
+    section = root / "s1_precedent"
+    section.mkdir(parents=True)
+    (section / "statute.yh").write_text(
+        """
+        statute 1 "Precedent" {
+            elements {
+                actus_reus taking := "takes";
+            }
+
+            caselaw "New v PP" "[2026] SGCA 1" {
+                "Taking requires control plus deprivation"
+                element taking
+            }
+        }
+        """,
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(json.dumps({"taking": True}), encoding="utf-8")
+
+    result = CliRunner().invoke(
+        cli,
+        ["explain", "--facts", str(facts), "--library", str(root), "--json", "1"],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    precedent = payload["elements"][0]["precedents"][0]
+    assert precedent["case_name"] == "New v PP"
+    assert precedent["citation"] == "[2026] SGCA 1"
+    assert precedent["status"] == "active"
