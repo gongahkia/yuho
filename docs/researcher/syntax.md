@@ -509,6 +509,14 @@ the target section's satisfaction as a boolean. The Python
 `StatuteEvaluator.apply_scope(...)` API returns the full evaluation
 result so host tooling can compose with per-element bindings.
 
+`apply_scope` fact arguments use ordered substitution. The first struct
+argument supplies the fact base; later struct arguments override fields
+for that scoped call only:
+
+```yh
+return apply_scope(s299, facts, { intent := TRUE });
+```
+
 ## Annotations
 
 ```yh

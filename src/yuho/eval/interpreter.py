@@ -726,6 +726,28 @@ class Interpreter(Visitor):
             return default
         return depth_value.raw
 
+    @staticmethod
+    def _copy_struct(instance: StructInstance) -> StructInstance:
+        return StructInstance(
+            type_name=instance.type_name,
+            fields=dict(instance.fields),
+        )
+
+    def _facts_from_scope_args(
+        self,
+        args: Tuple[nodes.ASTNode, ...],
+    ) -> Optional[StructInstance]:
+        facts: Optional[StructInstance] = None
+        for arg in args:
+            value = self.visit(arg)
+            if not isinstance(value, Value) or not isinstance(value.raw, StructInstance):
+                continue
+            if facts is None:
+                facts = self._copy_struct(value.raw)
+            else:
+                facts.fields.update(value.raw.fields)
+        return facts
+
     def visit_is_infringed(self, node: nodes.IsInfringedNode) -> "Value":
         """Evaluate `is_infringed(sX)` against the current environment.
 
@@ -762,9 +784,10 @@ class Interpreter(Visitor):
 
         The first arg, by builder convention, is the section reference
         and is already lifted into ``node.section_ref``. The remaining
-        args are evaluated; if at least one resolves to a struct
-        instance, that struct is taken as the fact pattern; otherwise
-        the current environment is used as in :meth:`visit_is_infringed`.
+        args are evaluated; the first struct instance supplies the fact
+        base and later struct instances override fields. If no struct is
+        supplied, the current environment is used as in
+        :meth:`visit_is_infringed`.
         """
         from yuho.eval.statute_evaluator import (
             StatuteEvaluator,
@@ -774,14 +797,9 @@ class Interpreter(Visitor):
         )
 
         self._section_lookup(node.section_ref, node)
-        # Find the first struct-typed arg as the fact pattern; fall back
-        # to environment-derived facts otherwise.
-        facts: Optional[StructInstance] = None
-        for arg in node.args:
-            v = self.visit(arg)
-            if isinstance(v, Value) and isinstance(v.raw, StructInstance):
-                facts = v.raw
-                break
+        # Struct args are ordered fact substitutions: first struct is
+        # the base, later structs override fields.
+        facts = self._facts_from_scope_args(node.args)
         if facts is None:
             facts = self._facts_from_env()
         ev = StatuteEvaluator()

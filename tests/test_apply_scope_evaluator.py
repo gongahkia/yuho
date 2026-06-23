@@ -206,6 +206,66 @@ class TestEmbeddedScopePredicates:
         assert result.bindings()["base_offence"] is True
         assert result.overall_satisfied is True
 
+    def test_apply_scope_struct_overrides_substitute_facts(self):
+        source = """
+        statute 299 "Base" {
+          elements { all_of {
+            actus_reus act := "act";
+            mens_rea intent := "intent";
+          } }
+        }
+
+        statute 300 "Wrapper" {
+          elements {
+            circumstance base := apply_scope(s299, facts, { intent := TRUE });
+          }
+        }
+        """
+        analysis = analyze_source(source, run_semantic=False)
+        assert analysis.ast is not None, [str(error) for error in analysis.parse_errors]
+        interp = Interpreter()
+        interp.interpret(analysis.ast)
+        registry = _registry_from_module(analysis.ast)
+
+        result = StatuteEvaluator().evaluate(
+            registry["300"],
+            _facts(act=True, intent=False),
+            interp.env,
+        )
+
+        assert result.bindings()["base"] is True
+        assert result.overall_satisfied is True
+
+    def test_apply_scope_struct_overrides_can_defeat_facts(self):
+        source = """
+        statute 299 "Base" {
+          elements { all_of {
+            actus_reus act := "act";
+            mens_rea intent := "intent";
+          } }
+        }
+
+        statute 300 "Wrapper" {
+          elements {
+            circumstance base := apply_scope(s299, facts, { intent := FALSE });
+          }
+        }
+        """
+        analysis = analyze_source(source, run_semantic=False)
+        assert analysis.ast is not None, [str(error) for error in analysis.parse_errors]
+        interp = Interpreter()
+        interp.interpret(analysis.ast)
+        registry = _registry_from_module(analysis.ast)
+
+        result = StatuteEvaluator().evaluate(
+            registry["300"],
+            _facts(act=True, intent=True),
+            interp.env,
+        )
+
+        assert result.bindings()["base"] is False
+        assert result.overall_satisfied is False
+
     def test_embedded_apply_scope_cycle_is_diagnosed(self):
         source = """
         statute 1 "A" {

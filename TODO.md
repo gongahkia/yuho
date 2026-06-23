@@ -84,8 +84,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 ## P1: Cross-Section Scope Composition
 
 - Harden embedded `apply_scope` and `is_infringed` runtime semantics.
-  - Current support: predicate elements can resolve `apply_scope` and `is_infringed` through a registered statute environment in runtime and explain traces, and nested section calls carry cycle and depth-limit diagnostics.
-  - Add fact substitution semantics.
+  - Current support: predicate elements can resolve `apply_scope` and `is_infringed` through a registered statute environment in runtime and explain traces, nested section calls carry cycle and depth-limit diagnostics, and `apply_scope` struct args support ordered fact substitution.
   - Acceptance: runtime evaluator, Z3, and Lean smoke fixtures agree on nested cross-section references.
 
 - Add section-call typing.
