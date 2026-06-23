@@ -111,7 +111,8 @@ date anExampleDate := 2020-01-12
 // duration — integer followed by unit(s): year(s), month(s), day(s), hour(s), minute(s), second(s)
 //   multiple parts can be chained
 //   day/hour/minute/second durations have exact timedelta semantics
-//   year/month durations are calendar-relative and require a reference date for ordering
+//   year/month durations compare exactly when a reference date is supplied
+//   month-end addition clamps to the target month's last day
 duration anExampleDuration := 1 day
 duration anotherDuration := 2 years, 6 months
 

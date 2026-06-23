@@ -234,6 +234,15 @@ class TestComparisonSemantics:
         with pytest.raises(InterpreterError, match="reference date"):
             interp.visit(expr)
 
+    def test_calendar_duration_comparison_uses_reference_date(self):
+        interp = Interpreter(reference_date=date(2024, 1, 31))
+        expr = BinaryExprNode(
+            left=DurationNode(months=1),
+            operator=">",
+            right=DurationNode(days=28),
+        )
+        assert interp.visit(expr).raw is True
+
 
 class TestLogicSemantics:
     """T-Logic rules with short-circuit."""

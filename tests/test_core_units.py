@@ -135,6 +135,15 @@ class TestDurationNode:
         with pytest.raises(ValueError, match="reference date"):
             DurationNode(months=1).to_timedelta()
 
+    def test_to_timedelta_uses_reference_date_for_calendar_units(self):
+        d = DurationNode(months=1)
+        assert d.to_timedelta(date(2024, 1, 31)) == timedelta(days=29)
+        assert d.add_to_date(date(2024, 1, 31)) == date(2024, 2, 29)
+
+    def test_calendar_addition_clamps_leap_day(self):
+        d = DurationNode(years=1)
+        assert d.add_to_date(date(2024, 2, 29)) == date(2025, 2, 28)
+
     def test_str_singular(self):
         d = DurationNode(years=1, months=1, days=1)
         s = str(d)

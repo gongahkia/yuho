@@ -7,8 +7,9 @@ and an accept(visitor) method for the Visitor pattern.
 
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from calendar import monthrange
 from dataclasses import dataclass, field
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Optional, List, Dict, Tuple, Union
@@ -309,10 +310,13 @@ class DurationNode(ASTNode):
         """Return true when duration contains years/months."""
         return self.years != 0 or self.months != 0
 
-    def to_timedelta(self) -> timedelta:
-        """Return an exact timedelta for fixed-unit durations."""
+    def to_timedelta(self, reference_date: Optional[date] = None) -> timedelta:
+        """Return elapsed time, requiring a reference date for years/months."""
         if self.has_calendar_units:
-            raise ValueError("Calendar durations with years/months need a reference date")
+            if reference_date is None:
+                raise ValueError("Calendar durations with years/months need a reference date")
+            start = datetime.combine(reference_date, time())
+            return self.add_to_datetime(start) - start
         return timedelta(
             days=self.days,
             hours=self.hours,
@@ -320,9 +324,27 @@ class DurationNode(ASTNode):
             seconds=self.seconds,
         )
 
-    def total_seconds_exact(self) -> int:
-        """Return exact seconds for fixed-unit durations."""
-        return int(self.to_timedelta().total_seconds())
+    def add_to_date(self, reference_date: date) -> date:
+        """Add this duration to a date using calendar month-end clamping."""
+        return self.add_to_datetime(datetime.combine(reference_date, time())).date()
+
+    def add_to_datetime(self, reference_datetime: datetime) -> datetime:
+        """Add this duration to a datetime using calendar month-end clamping."""
+        total_months = reference_datetime.month - 1 + self.months + (self.years * 12)
+        year = reference_datetime.year + total_months // 12
+        month = (total_months % 12) + 1
+        day = min(reference_datetime.day, monthrange(year, month)[1])
+        shifted = reference_datetime.replace(year=year, month=month, day=day)
+        return shifted + timedelta(
+            days=self.days,
+            hours=self.hours,
+            minutes=self.minutes,
+            seconds=self.seconds,
+        )
+
+    def total_seconds_exact(self, reference_date: Optional[date] = None) -> int:
+        """Return exact seconds, requiring a reference date for years/months."""
+        return int(self.to_timedelta(reference_date).total_seconds())
 
     def total_days_approx(self) -> int:
         """Approximate calendar duration as days using 365-day years and 30-day months."""

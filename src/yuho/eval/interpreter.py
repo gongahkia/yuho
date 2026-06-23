@@ -255,8 +255,9 @@ class Environment:
 class Interpreter(Visitor):
     """Tree-walking interpreter for Yuho AST."""
 
-    def __init__(self, env: Optional[Environment] = None):
+    def __init__(self, env: Optional[Environment] = None, reference_date: Optional[date] = None):
         self.env = env or Environment()
+        self.reference_date = reference_date
 
     # -- module entry point -------------------------------------------------
 
@@ -550,8 +551,8 @@ class Interpreter(Visitor):
         # duration comparison
         if left.type_tag == "duration" and right.type_tag == "duration":
             try:
-                ld = left.raw.to_timedelta()
-                rd = right.raw.to_timedelta()
+                ld = left.raw.to_timedelta(self.reference_date)
+                rd = right.raw.to_timedelta(self.reference_date)
             except ValueError as exc:
                 raise InterpreterError(str(exc), node) from exc
             if op == "<":
