@@ -9,6 +9,7 @@ formal verification of statute consistency (parallel to Alloy).
 from __future__ import annotations
 from typing import List, Dict, Any, Optional, Set, Tuple, Union, TYPE_CHECKING
 from dataclasses import dataclass, field
+from datetime import date
 import logging
 
 if TYPE_CHECKING:
@@ -31,9 +32,15 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def _verifier_duration_days(duration: Any) -> Tuple[int, bool]:
+def _verifier_duration_days(
+    duration: Any,
+    reference_date: Optional[date] = None,
+) -> Tuple[int, bool]:
     """Return verifier day count and whether calendar units were approximated."""
-    return duration.total_days_approx(), bool(getattr(duration, "has_calendar_units", False))
+    has_calendar = bool(getattr(duration, "has_calendar_units", False))
+    if has_calendar and reference_date is not None:
+        return int(duration.to_timedelta(reference_date).total_seconds() // 86400), False
+    return duration.total_days_approx(), has_calendar
 
 
 def _duration_days_label(approximated: bool) -> str:
@@ -424,14 +431,20 @@ class Z3Solver:
     - Test case generation from satisfying models
     """
 
-    def __init__(self, timeout_ms: int = 5000):
+    def __init__(
+        self,
+        timeout_ms: int = 5000,
+        reference_date: Optional[date] = None,
+    ):
         """
         Initialize the solver.
 
         Args:
             timeout_ms: Solver timeout in milliseconds
+            reference_date: Reference date for exact calendar-duration conversion
         """
         self.timeout_ms = timeout_ms
+        self.reference_date = reference_date
         self.constraint_generator = ConstraintGenerator()
 
     def is_available(self) -> bool:
@@ -645,7 +658,7 @@ class Z3Solver:
         Returns:
             List of interpretation dictionaries
         """
-        generator = Z3Generator()
+        generator = Z3Generator(reference_date=self.reference_date)
         solver, assertions = generator.generate(ast)
 
         if not Z3_AVAILABLE or solver is None:
@@ -692,7 +705,7 @@ class Z3Solver:
         Returns:
             Tuple of (is_consistent, list of diagnostics)
         """
-        generator = Z3Generator()
+        generator = Z3Generator(reference_date=self.reference_date)
         diagnostics = generator.generate_consistency_check(ast)
 
         is_consistent = all(d.passed for d in diagnostics)
@@ -783,8 +796,14 @@ class Z3Solver:
 
                 # Check imprisonment range
                 if penalty.imprisonment_min and penalty.imprisonment_max:
-                    min_days, min_approx = _verifier_duration_days(penalty.imprisonment_min)
-                    max_days, max_approx = _verifier_duration_days(penalty.imprisonment_max)
+                    min_days, min_approx = _verifier_duration_days(
+                        penalty.imprisonment_min,
+                        self.reference_date,
+                    )
+                    max_days, max_approx = _verifier_duration_days(
+                        penalty.imprisonment_max,
+                        self.reference_date,
+                    )
                     approximated = min_approx or max_approx
                     day_label = _duration_days_label(approximated)
                     if min_days > max_days:
@@ -975,14 +994,18 @@ class Z3Generator:
     satisfiability checking and verification.
     """
 
-    def __init__(self):
+    def __init__(self, reference_date: Optional[date] = None):
         """Initialize the generator."""
         if not Z3_AVAILABLE:
             logger.warning("Z3 not available - constraint generation disabled")
 
+        self.reference_date = reference_date
         self._sorts: Dict[str, Any] = {}  # Custom Z3 sorts
         self._consts: Dict[str, Any] = {}  # Declared constants
         self._assertions: List[Any] = []  # Collected assertions
+
+    def _duration_days(self, duration: Any) -> Tuple[int, bool]:
+        return _verifier_duration_days(duration, self.reference_date)
 
     def generate(self, ast: "ModuleNode") -> Tuple[Any, List[Any]]:
         """
@@ -1615,12 +1638,12 @@ class Z3Generator:
             uses_calendar_approx = False
 
             if penalty.imprisonment_min:
-                min_days, min_approx = _verifier_duration_days(penalty.imprisonment_min)
+                min_days, min_approx = self._duration_days(penalty.imprisonment_min)
                 uses_calendar_approx = uses_calendar_approx or min_approx
                 self._assertions.append(imprisonment >= min_days)
 
             if penalty.imprisonment_max:
-                max_days, max_approx = _verifier_duration_days(penalty.imprisonment_max)
+                max_days, max_approx = self._duration_days(penalty.imprisonment_max)
                 uses_calendar_approx = uses_calendar_approx or max_approx
                 self._assertions.append(imprisonment <= max_days)
 
@@ -1949,8 +1972,8 @@ class Z3Generator:
             p_max = parent.penalty.imprisonment_max
             c_max = child.penalty.imprisonment_max
             if p_max is not None and c_max is not None:
-                p_days, p_approx = _verifier_duration_days(p_max)
-                c_days, c_approx = _verifier_duration_days(c_max)
+                p_days, p_approx = self._duration_days(p_max)
+                c_days, c_approx = self._duration_days(c_max)
                 day_label = _duration_days_label(p_approx or c_approx)
                 if p_days < c_days:
                     diagnostics.append(
@@ -2096,12 +2119,12 @@ class Z3Generator:
     def _penalty_imprisonment_bounds(self, penalty: "PenaltyNode") -> Optional[Tuple[int, int]]:
         """Return approximate imprisonment bounds in days when declared."""
         min_days = (
-            _verifier_duration_days(penalty.imprisonment_min)[0] if penalty.imprisonment_min else 0
+            self._duration_days(penalty.imprisonment_min)[0] if penalty.imprisonment_min else 0
         )
         max_duration = penalty.imprisonment_max or penalty.imprisonment_min
         if max_duration is None:
             return None
-        return min_days, _verifier_duration_days(max_duration)[0]
+        return min_days, self._duration_days(max_duration)[0]
 
     def _penalty_fine_bounds(self, penalty: "PenaltyNode") -> Optional[Tuple[int, int]]:
         """Return fine bounds in cents when a statute declares them."""

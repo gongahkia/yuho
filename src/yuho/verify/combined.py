@@ -7,6 +7,7 @@ to provide higher confidence in verification outcomes.
 
 from typing import List, Dict, Any, Tuple
 from dataclasses import dataclass, field
+from datetime import date
 import json
 import logging
 
@@ -89,6 +90,7 @@ class CombinedVerifier:
         alloy_jar: str | None = None,
         alloy_timeout: int = 30,
         z3_timeout_ms: int = 5000,
+        reference_date: date | None = None,
     ):
         """
         Initialize the combined verifier.
@@ -97,9 +99,10 @@ class CombinedVerifier:
             alloy_jar: Path to Alloy JAR (None to auto-detect)
             alloy_timeout: Alloy timeout in seconds
             z3_timeout_ms: Z3 timeout in milliseconds
+            reference_date: Reference date for exact calendar-duration conversion
         """
         self.alloy_analyzer = AlloyAnalyzer(alloy_jar, alloy_timeout)
-        self.z3_solver = Z3Solver(z3_timeout_ms)
+        self.z3_solver = Z3Solver(z3_timeout_ms, reference_date=reference_date)
 
     def verify(self, ast, fixture: str = "<memory>") -> CombinedVerificationResult:
         """

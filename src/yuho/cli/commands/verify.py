@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import shutil
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
@@ -61,6 +62,20 @@ BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
 }
 
 
+def _parse_reference_date(value: Optional[str], *, json_output: bool) -> Optional[date]:
+    if value is None:
+        return None
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        message = f"invalid --reference-date {value!r}; expected YYYY-MM-DD"
+        if json_output:
+            print(json.dumps({"ok": False, "error": message}, indent=2))
+        else:
+            click.echo(f"error: {message}", err=True)
+        sys.exit(2)
+
+
 def run_verify(
     file: Optional[str],
     *,
@@ -68,13 +83,15 @@ def run_verify(
     alloy_jar: Optional[str] = None,
     alloy_timeout: int = 30,
     z3_timeout_ms: int = 5000,
+    reference_date: Optional[str] = None,
     capabilities_only: bool = False,
     json_output: bool = False,
     verbose: bool = False,
 ) -> None:
     """Run formal verification on a Yuho file, or report backend capabilities."""
+    reference = _parse_reference_date(reference_date, json_output=json_output)
     alloy_analyzer = AlloyAnalyzer(alloy_jar=alloy_jar, timeout=alloy_timeout)
-    z3_solver = Z3Solver(timeout_ms=z3_timeout_ms)
+    z3_solver = Z3Solver(timeout_ms=z3_timeout_ms, reference_date=reference)
     capabilities = _build_capabilities(
         alloy_analyzer=alloy_analyzer,
         z3_solver=z3_solver,
@@ -217,6 +234,7 @@ def run_verify(
         alloy_jar=alloy_jar,
         alloy_timeout=alloy_timeout,
         z3_timeout_ms=z3_timeout_ms,
+        reference_date=reference,
     )
     combined = verifier.verify(ast, fixture=file)
     alloy_failed = (

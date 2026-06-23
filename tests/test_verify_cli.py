@@ -34,3 +34,13 @@ def test_verify_capabilities_text_reports_status_labels() -> None:
     assert "[conformance-tested]" in result.output
     assert "Lean:" in result.output
     assert "[spec/proof]" in result.output
+
+
+def test_verify_reference_date_rejects_bad_iso_date() -> None:
+    result = CliRunner().invoke(
+        cli,
+        ["verify", "--capabilities", "--reference-date", "2024-02-31"],
+    )
+
+    assert result.exit_code == 2
+    assert "invalid --reference-date" in result.output

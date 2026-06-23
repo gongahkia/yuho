@@ -1,5 +1,7 @@
 """E2E tests: verification pipeline."""
 
+from datetime import date
+
 import pytest
 from yuho.verify.alloy import AlloyUnsupportedFeature
 from yuho.ast.nodes import (
@@ -110,6 +112,36 @@ class TestVerifyPipeline:
         diagnostics = Z3Solver().verify_statute_elements(ast)
         messages = [diag.message for diag in diagnostics]
         assert any("365-day years/30-day months" in msg for msg in messages)
+
+    def test_z3_calendar_duration_reference_date_is_exact(self, parse_source):
+        """Calendar-unit penalty bounds should use runtime day counts with a reference date."""
+        try:
+            from yuho.verify.z3_solver import Z3Generator, Z3Solver, Z3_AVAILABLE
+        except ImportError:
+            pytest.skip("z3 module not importable")
+        if not Z3_AVAILABLE:
+            pytest.skip("z3-solver package not installed")
+        ast = parse_source(
+            """
+            statute 1 "Calendar penalty" {
+                elements { actus_reus act := "act"; }
+                penalty {
+                    imprisonment := 1 months .. 1 months;
+                }
+            }
+            """
+        )
+        gen = Z3Generator(reference_date=date(2024, 1, 31))
+        gen.generate(ast)
+        imprisonment = gen._consts["1_imprisonment"]
+        constraints = [str(assertion) for assertion in gen._assertions]
+        assert "1_imprisonment_days_approx" not in gen._consts
+        assert f"{imprisonment} >= 29" in constraints
+        assert f"{imprisonment} <= 29" in constraints
+
+        diagnostics = Z3Solver(reference_date=date(2024, 1, 31)).verify_statute_elements(ast)
+        messages = [diag.message for diag in diagnostics]
+        assert not any("365-day years/30-day months" in msg for msg in messages)
 
     def test_z3_conviction_variable_created(self, parse_source):
         """Z3 should create a conviction boolean variable for each statute."""

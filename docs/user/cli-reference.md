@@ -367,6 +367,7 @@ Options:
   --alloy-jar PATH              Path to Alloy analyzer JAR
   --alloy-timeout INTEGER       [default: 30]
   --z3-timeout-ms INTEGER       [default: 5000]
+  --reference-date TEXT         YYYY-MM-DD date for exact calendar durations
   --capabilities                Show backend status
   --json                        Output as JSON
   --help                        Show this message and exit.

@@ -64,8 +64,9 @@ Runtime:
 Z3:
 
 - Conformance-tested for retained criminal-statute verification fixtures.
-- Penalty duration bounds use explicitly labeled approximate day counts for
-  calendar units.
+- Penalty duration bounds use exact runtime month-end clamping when a
+  verifier reference date is supplied; otherwise calendar units use explicitly
+  labeled approximate day counts.
 
 Alloy:
 

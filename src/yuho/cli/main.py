@@ -440,6 +440,7 @@ def test(
 @click.option("--alloy-jar", type=click.Path(exists=True), help="Path to Alloy analyzer JAR")
 @click.option("--alloy-timeout", type=int, default=30, show_default=True)
 @click.option("--z3-timeout-ms", type=int, default=5000, show_default=True)
+@click.option("--reference-date", default=None, help="YYYY-MM-DD date for exact calendar durations")
 @click.option("--capabilities", "capabilities_only", is_flag=True, help="Show backend status")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.pass_context
@@ -450,6 +451,7 @@ def verify(
     alloy_jar: Optional[str],
     alloy_timeout: int,
     z3_timeout_ms: int,
+    reference_date: Optional[str],
     capabilities_only: bool,
     json_output: bool,
 ) -> None:
@@ -462,6 +464,7 @@ def verify(
         alloy_jar=alloy_jar,
         alloy_timeout=alloy_timeout,
         z3_timeout_ms=z3_timeout_ms,
+        reference_date=reference_date,
         capabilities_only=capabilities_only,
         json_output=json_output,
         verbose=ctx.obj["verbose"],

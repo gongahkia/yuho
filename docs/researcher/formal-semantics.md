@@ -545,9 +545,10 @@ produce instances of the declared struct type.
 ### 6.3 Limitations
 
 - Runtime money arithmetic is Decimal/currency-aware; runtime calendar-duration
-  comparison is reference-date-aware; verifier penalty ordering still exposes
-  approximate day counts for calendar durations where no reference date is
-  available (365 days/year, 30 days/month)
+  comparison is reference-date-aware; Z3 verifier penalty ordering uses exact
+  calendar day counts when `--reference-date YYYY-MM-DD` is supplied, and
+  otherwise exposes approximate day counts for calendar durations where no
+  reference date is available (365 days/year, 30 days/month)
 - Optional types require explicit null checks (no gradual typing)
 - Generic type parameters are parsed and preserved as metadata, but not fully
   substituted or checked; runtime/export layers erase or simplify type arguments
