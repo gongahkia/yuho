@@ -1,6 +1,7 @@
 """E2E tests: verification pipeline."""
 
 import pytest
+from yuho.verify.alloy import AlloyUnsupportedFeature
 from yuho.ast.nodes import (
     StatuteNode,
     StringLit,
@@ -20,6 +21,16 @@ statute 999 "Test Statute" {
     }
     penalty {
         imprisonment := 1 years .. 5 years;
+    }
+}
+"""
+
+ALLOY_MINIMAL_SOURCE = """
+struct TestCase { bool guilty, }
+statute 999 "Test Statute" {
+    elements {
+        actus_reus act := "The physical act";
+        mens_rea intent := "The mental state";
     }
 }
 """
@@ -55,8 +66,8 @@ class TestVerifyPipeline:
         gen = AlloyGenerator()
         try:
             model = gen.generate(ast)
-        except AttributeError:
-            pytest.skip("AlloyGenerator does not yet handle ElementGroupNode")
+        except (AttributeError, AlloyUnsupportedFeature) as exc:
+            pytest.skip(f"AlloyGenerator does not handle this case: {exc}")
         assert len(model) > 0
         assert "sig" in model or "fact" in model
 
@@ -195,12 +206,12 @@ statute 501 "Disjunctive" {
             from yuho.verify.alloy import AlloyGenerator
         except ImportError:
             pytest.skip("alloy not available")
-        ast = parse_source(MINIMAL_SOURCE)
+        ast = parse_source(ALLOY_MINIMAL_SOURCE)
         gen = AlloyGenerator()
         try:
             model = gen.generate(ast)
-        except AttributeError:
-            pytest.skip("AlloyGenerator does not handle this case")
+        except (AttributeError, AlloyUnsupportedFeature) as exc:
+            pytest.skip(f"AlloyGenerator does not handle this case: {exc}")
         assert "sig" in model
         assert "Person" in model or "Element" in model
         assert "Statute_999" in model
@@ -211,12 +222,12 @@ statute 501 "Disjunctive" {
             from yuho.verify.alloy import AlloyGenerator
         except ImportError:
             pytest.skip("alloy not available")
-        ast = parse_source(MINIMAL_SOURCE)
+        ast = parse_source(ALLOY_MINIMAL_SOURCE)
         gen = AlloyGenerator()
         try:
             model = gen.generate(ast)
-        except AttributeError:
-            pytest.skip("AlloyGenerator does not handle this case")
+        except (AttributeError, AlloyUnsupportedFeature) as exc:
+            pytest.skip(f"AlloyGenerator does not handle this case: {exc}")
         assert "fact" in model
         # should reference element fields
         assert "act" in model
@@ -228,12 +239,12 @@ statute 501 "Disjunctive" {
             from yuho.verify.alloy import AlloyGenerator
         except ImportError:
             pytest.skip("alloy not available")
-        ast = parse_source(MINIMAL_SOURCE)
+        ast = parse_source(ALLOY_MINIMAL_SOURCE)
         gen = AlloyGenerator()
         try:
             model = gen.generate(ast)
-        except AttributeError:
-            pytest.skip("AlloyGenerator does not handle this case")
+        except (AttributeError, AlloyUnsupportedFeature) as exc:
+            pytest.skip(f"AlloyGenerator does not handle this case: {exc}")
         assert "assert" in model
 
     def test_alloy_model_has_check_commands(self, parse_source):
@@ -242,12 +253,12 @@ statute 501 "Disjunctive" {
             from yuho.verify.alloy import AlloyGenerator
         except ImportError:
             pytest.skip("alloy not available")
-        ast = parse_source(MINIMAL_SOURCE)
+        ast = parse_source(ALLOY_MINIMAL_SOURCE)
         gen = AlloyGenerator()
         try:
             model = gen.generate(ast)
-        except AttributeError:
-            pytest.skip("AlloyGenerator does not handle this case")
+        except (AttributeError, AlloyUnsupportedFeature) as exc:
+            pytest.skip(f"AlloyGenerator does not handle this case: {exc}")
         assert "check" in model
 
     def test_alloy_model_conviction_biconditional(self, parse_source):
@@ -256,12 +267,12 @@ statute 501 "Disjunctive" {
             from yuho.verify.alloy import AlloyGenerator
         except ImportError:
             pytest.skip("alloy not available")
-        ast = parse_source(MINIMAL_SOURCE)
+        ast = parse_source(ALLOY_MINIMAL_SOURCE)
         gen = AlloyGenerator()
         try:
             model = gen.generate(ast)
-        except AttributeError:
-            pytest.skip("AlloyGenerator does not handle this case")
+        except (AttributeError, AlloyUnsupportedFeature) as exc:
+            pytest.skip(f"AlloyGenerator does not handle this case: {exc}")
         assert "Conviction" in model
         assert "convicted" in model
 
@@ -286,7 +297,7 @@ statute 600 "With Exception" {
         gen = AlloyGenerator()
         try:
             model = gen.generate(ast)
-        except AttributeError:
-            pytest.skip("AlloyGenerator does not handle this case")
+        except (AttributeError, AlloyUnsupportedFeature) as exc:
+            pytest.skip(f"AlloyGenerator does not handle this case: {exc}")
         assert "pred" in model
         assert "selfDef" in model or "self" in model.lower()

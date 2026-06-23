@@ -19,6 +19,16 @@ from yuho.ast import ArrayType, BuiltinType, GenericType, NamedType, OptionalTyp
 logger = logging.getLogger(__name__)
 
 
+@dataclass(frozen=True)
+class AlloyUnsupportedFeature(Exception):
+    """Raised when the verifier-side Alloy backend would emit a partial model."""
+
+    features: Tuple[str, ...]
+
+    def __str__(self) -> str:
+        return "Alloy verifier does not support: " + "; ".join(self.features)
+
+
 @dataclass
 class AlloyCounterexample:
     """A counterexample from Alloy analysis."""
@@ -65,6 +75,7 @@ class AlloyGenerator:
         Returns:
             Alloy model as string
         """
+        self._validate_supported(ast)
         lines = [
             "// Generated Alloy model from Yuho statute",
             "// Run assertions to verify statute consistency",
@@ -86,6 +97,102 @@ class AlloyGenerator:
         lines.extend(self._generate_commands(ast))
 
         return "\n".join(lines)
+
+    def _validate_supported(self, ast) -> None:
+        """Reject constructs this verifier-side Alloy model cannot encode."""
+        from yuho.ast.nodes import (
+            ApplyScopeNode,
+            CaseLawNode,
+            CivilPrimitiveNode,
+            ElementGroupNode,
+            ElementNode,
+            ExceptionNode,
+            ExistsAtMostNode,
+            GenericType,
+            IsInfringedNode,
+            MatchExprNode,
+            PenaltyNode,
+            RangeExprNode,
+            SubsectionNode,
+            TimelineAppearanceNode,
+        )
+
+        unsupported: List[str] = []
+
+        def add(feature: str) -> None:
+            if feature not in unsupported:
+                unsupported.append(feature)
+
+        def visit_expr(expr: Any, where: str) -> None:
+            if isinstance(expr, (ApplyScopeNode, IsInfringedNode)):
+                add(f"{where}: cross-section expression {expr.__class__.__name__}")
+            elif isinstance(expr, (TimelineAppearanceNode, ExistsAtMostNode)):
+                add(f"{where}: temporal/count expression {expr.__class__.__name__}")
+            elif isinstance(expr, (MatchExprNode, RangeExprNode)):
+                add(f"{where}: predicate expression {expr.__class__.__name__}")
+            for child in getattr(expr, "children", lambda: [])():
+                if child is not None:
+                    visit_expr(child, where)
+
+        def visit_penalty(penalty: Optional[PenaltyNode], where: str) -> None:
+            if penalty is None:
+                return
+            add(f"{where}: penalty semantics")
+            if penalty.nested is not None:
+                add(f"{where}: nested penalty combinator")
+
+        def visit_exception(exc: ExceptionNode, where: str) -> None:
+            if exc.guard is not None:
+                add(f"{where}: exception guard")
+                visit_expr(exc.guard, where)
+            if exc.priority is not None:
+                add(f"{where}: exception priority")
+            if exc.defeats or exc.defeat_relation is not None:
+                add(f"{where}: exception defeat relation")
+
+        def visit_elements(elements: Tuple[Any, ...], where: str) -> None:
+            for elem in elements:
+                if isinstance(elem, CivilPrimitiveNode):
+                    add(f"{where}: civil primitive elements")
+                elif isinstance(elem, ElementNode):
+                    if not elem.description.__class__.__name__ == "StringLit":
+                        add(f"{where}.{elem.name}: executable element description")
+                        visit_expr(elem.description, f"{where}.{elem.name}")
+                    if elem.caused_by:
+                        add(f"{where}.{elem.name}: caused_by relation")
+                    if elem.burden or elem.burden_standard:
+                        add(f"{where}.{elem.name}: burden/proof standard")
+                    if elem.interpretations:
+                        add(f"{where}.{elem.name}: interpretation blocks")
+                elif isinstance(elem, ElementGroupNode):
+                    visit_elements(tuple(elem.members), where)
+
+        for struct in getattr(ast, "type_defs", ()):
+            if getattr(struct, "type_params", ()):
+                add(f"struct {struct.name}: generic type parameters")
+            for field_def in getattr(struct, "fields", ()):
+                if isinstance(field_def.type_annotation, GenericType):
+                    add(f"struct {struct.name}.{field_def.name}: generic field type")
+
+        for statute in getattr(ast, "statutes", ()):
+            where = f"s{statute.section_number}"
+            visit_elements(tuple(statute.elements), where)
+            visit_penalty(statute.penalty, where)
+            for i, penalty in enumerate(statute.additional_penalties):
+                visit_penalty(penalty, f"{where}.additional_penalty[{i}]")
+            for exc in statute.exceptions:
+                visit_exception(exc, where)
+            if statute.case_law:
+                for case in statute.case_law:
+                    if isinstance(case, CaseLawNode):
+                        add(f"{where}: case-law semantics")
+            if statute.subsections:
+                for subsection in statute.subsections:
+                    if isinstance(subsection, SubsectionNode):
+                        add(f"{where}: subsection semantics")
+
+        if unsupported:
+            raise AlloyUnsupportedFeature(tuple(unsupported))
 
     def _generate_signatures(self, ast) -> List[str]:
         """Generate Alloy signatures from type definitions."""

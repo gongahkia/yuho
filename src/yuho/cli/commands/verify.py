@@ -8,12 +8,12 @@ import json
 import shutil
 import sys
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 import click
 
 from yuho.services.analysis import analyze_file
-from yuho.verify.alloy import AlloyAnalyzer, AlloyGenerator
+from yuho.verify.alloy import AlloyAnalyzer, AlloyGenerator, AlloyUnsupportedFeature
 from yuho.verify.combined import CombinedVerifier
 from yuho.verify.z3_solver import Z3Solver
 
@@ -161,7 +161,11 @@ def run_verify(
     ast = analysis.ast
     if engine_key == "alloy":
         generator = AlloyGenerator()
-        model = generator.generate(ast)
+        try:
+            model = generator.generate(ast)
+        except AlloyUnsupportedFeature as exc:
+            _emit_unsupported("alloy", exc.features, json_output)
+            sys.exit(2)
         results = alloy_analyzer.analyze(model)
         alloy_failures = [result for result in results if result.violated]
         ok = len(alloy_failures) == 0
@@ -335,3 +339,22 @@ def _emit_unavailable(engine: str, reason: str, json_output: bool) -> None:
         print(json.dumps({"ok": False, "engine": engine, "error": reason}, indent=2))
         return
     click.echo(f"error: {engine} verification unavailable: {reason}", err=True)
+
+
+def _emit_unsupported(engine: str, features: Tuple[str, ...], json_output: bool) -> None:
+    if json_output:
+        print(
+            json.dumps(
+                {
+                    "ok": False,
+                    "engine": engine,
+                    "error": "unsupported features",
+                    "unsupported_features": list(features),
+                },
+                indent=2,
+            )
+        )
+        return
+    click.echo(f"error: {engine} verification unsupported for this file:", err=True)
+    for feature in features:
+        click.echo(f"  - {feature}", err=True)

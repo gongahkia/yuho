@@ -10,7 +10,12 @@ from dataclasses import dataclass, field
 import json
 import logging
 
-from yuho.verify.alloy import AlloyGenerator, AlloyAnalyzer, AlloyCounterexample
+from yuho.verify.alloy import (
+    AlloyAnalyzer,
+    AlloyCounterexample,
+    AlloyGenerator,
+    AlloyUnsupportedFeature,
+)
 from yuho.verify.z3_solver import Z3Solver, Z3Diagnostic
 
 logger = logging.getLogger(__name__)
@@ -119,6 +124,9 @@ class CombinedVerifier:
                 alloy_gen = AlloyGenerator()
                 alloy_model = alloy_gen.generate(ast)
                 alloy_results = self.alloy_analyzer.analyze(alloy_model)
+            except AlloyUnsupportedFeature as e:
+                logger.warning(f"Alloy verification unsupported: {e}")
+                alloy_available = False
             except Exception as e:
                 logger.error(f"Alloy verification failed: {e}")
                 alloy_available = False

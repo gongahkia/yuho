@@ -14,6 +14,7 @@ from yuho.verify.alloy import (
     AlloyGenerator,
     AlloyAnalyzer,
     AlloyCounterexample,
+    AlloyUnsupportedFeature,
 )
 from yuho.verify.z3_solver import (
     Z3Solver,
@@ -53,6 +54,7 @@ __all__ = [
     "AlloyGenerator",
     "AlloyAnalyzer",
     "AlloyCounterexample",
+    "AlloyUnsupportedFeature",
     "Z3Solver",
     "Z3Generator",
     "Z3Diagnostic",

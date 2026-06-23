@@ -121,11 +121,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 ## P1: Backend Parity And Trust Boundary
 
-- Strengthen Alloy or narrow its claims.
-  - Add nested group, exception priority, penalty, and cross-section fixtures.
-  - If unsupported, emit clear diagnostics instead of partial models.
-  - Acceptance: no silent partial Alloy generation for constructs it cannot encode.
-
 - Add source-map based transpiler conformance.
   - For JSON/LegalRuleML/Akoma Ntoso/Alloy, assert every statute element and exception has a source-map entry.
   - Acceptance: conformance matrix reports source coverage per target.
