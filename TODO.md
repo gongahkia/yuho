@@ -86,7 +86,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 ## P1: Type System And Numeric Semantics
 
 - Align docs with implementation.
-  - Current support: docs contract checks command coverage, advanced constructs, generic-support boundaries, and boolean literal spelling against parser behavior.
+  - Current support: docs contract checks command coverage, advanced constructs, generic-support boundaries, boolean literal spelling, and representative syntax feature snippets against parser/JSON export behavior.
   - Audit `docs/researcher/syntax.md` and `docs/researcher/formal-semantics.md` against parser/type-checker/evaluator.
   - Acceptance: every documented feature has a smoke parse test and at least one semantic/lint/transpile test where applicable.
 
