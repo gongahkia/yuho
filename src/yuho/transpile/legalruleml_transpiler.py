@@ -191,6 +191,16 @@ class LegalRuleMLTranspiler(TranspilerBase):
                 args.append(self._expr_text(case.citation))
             if case.element_ref:
                 args.append(case.element_ref)
+            for value in (
+                case.doctrine_role,
+                case.jurisdiction,
+                case.court_level,
+                case.decision_date,
+                case.interpretive_effect,
+                case.effect_fact,
+            ):
+                if value:
+                    args.append(value)
             lines.extend(self._fact(fact_key, "case_law", args))
         return lines
 

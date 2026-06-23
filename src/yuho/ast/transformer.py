@@ -763,6 +763,13 @@ class Transformer(Visitor):
                 holding=new_holding,
                 element_ref=node.element_ref,
                 treatments=new_treatments,
+                doctrine_role=node.doctrine_role,
+                jurisdiction=node.jurisdiction,
+                court_level=node.court_level,
+                decision_date=node.decision_date,
+                interpretive_effect=node.interpretive_effect,
+                effect_fact=node.effect_fact,
+                doc_comment=node.doc_comment,
                 source_location=node.source_location,
             )
         return node

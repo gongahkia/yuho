@@ -46,7 +46,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "case_law_doctrine",
-        "runtime-z3=unsupported; z3-lean=unsupported; alloy=unsupported",
+        "runtime=partial; z3=unsupported; lean=unsupported; alloy=unsupported",
     ),
 )
 

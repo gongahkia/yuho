@@ -1185,6 +1185,13 @@ class CaseLawNode(ASTNode):
     holding: StringLit = field(default_factory=lambda: StringLit(value=""))
     element_ref: Optional[str] = None  # name of element this case interprets
     treatments: Tuple[CaseTreatmentNode, ...] = ()
+    doctrine_role: Optional[str] = None
+    jurisdiction: Optional[str] = None
+    court_level: Optional[str] = None
+    decision_date: Optional[str] = None
+    interpretive_effect: Optional[str] = None
+    effect_fact: Optional[str] = None
+    doc_comment: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_caselaw(self)

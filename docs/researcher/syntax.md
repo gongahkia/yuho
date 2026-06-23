@@ -384,6 +384,11 @@ statute 415 "Cheating" {
         actus_reus deception := "Deceiving any person";
     }
 
+    /// @role ratio
+    /// @jurisdiction singapore
+    /// @court_level apex
+    /// @date 2019-01-01
+    /// @effect requires active_misleading
     caselaw "PP v Tan Cheng Bock" "[2019] SGCA 1" {
         "Deception requires active misleading, not mere silence"
         element deception
@@ -400,9 +405,28 @@ to `followed`, `distinguished`, `overruled`, `reversed`, `approved`,
 
 If another case-law block in the same statute uses `distinguished`,
 `overruled`, `reversed`, or `disapproved` against that case name, the older
-holding is reported as inactive for that explanation. Holdings are still prose
-strings; they do not change element truth unless the element itself is encoded
-as an executable predicate.
+holding is reported as inactive for that explanation and any executable effect
+metadata on the older holding is ignored by runtime evaluation.
+
+Optional doc metadata records doctrine shape and can make targeted holdings
+executable for simple fact-level interpretation:
+
+```yh
+/// @role ratio
+/// @jurisdiction singapore
+/// @court_level apex
+/// @date 2026-01-01
+/// @effect requires control_plus_deprivation
+caselaw "New v PP" "[2026] SGCA 1" {
+    "Taking requires control plus deprivation"
+    element taking
+}
+```
+
+`@effect requires fact_name` narrows the targeted element to `element && fact`;
+`@effect satisfies fact_name` expands it to `element || fact`; `@effect excludes
+fact_name` makes the element fail when the fact is true. Holdings without
+`@effect` remain explanatory prose.
 
 ### Extended Penalty
 

@@ -314,6 +314,9 @@ class EnglishTranspiler(TranspilerBase, Visitor):
                 self._emit(f"Holding: {cl.holding.value}")
                 if cl.element_ref:
                     self._emit(f"Relates to element: {cl.element_ref}")
+                meta = self._case_law_metadata(cl)
+                if meta:
+                    self._emit(f"Doctrine: {', '.join(meta)}")
                 self._emit(self._case_law_provenance(cl))
                 self._indent_level -= 1
             self._indent_level -= 1
@@ -728,6 +731,23 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         if node.element_ref:
             return f"Provenance: judicial authority linked to element {node.element_ref}."
         return "Provenance: judicial authority linked to this statute."
+
+    def _case_law_metadata(self, node: nodes.CaseLawNode) -> list[str]:
+        result = []
+        if node.doctrine_role:
+            result.append(node.doctrine_role)
+        if node.jurisdiction:
+            result.append(node.jurisdiction)
+        if node.court_level:
+            result.append(node.court_level)
+        if node.decision_date:
+            result.append(node.decision_date)
+        if node.interpretive_effect:
+            effect = node.interpretive_effect
+            if node.effect_fact:
+                effect = f"{effect} {node.effect_fact}"
+            result.append(effect)
+        return result
 
     def _operator_to_english(self, op: str) -> str:
         """Convert operator to English."""

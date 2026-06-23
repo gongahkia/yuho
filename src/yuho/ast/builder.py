@@ -138,6 +138,33 @@ class ASTBuilder:
             return nodes.BuiltinType(name=text, source_location=loc)
         return nodes.NamedType(name=text, source_location=loc)
 
+    @staticmethod
+    def _extract_case_law_meta(doc: Optional[str]) -> dict:
+        if not doc:
+            return {}
+        result: dict[str, str] = {}
+        for line in doc.split("\n"):
+            stripped = line.strip()
+            if not stripped.startswith("@"):
+                continue
+            tag, _, value = stripped[1:].partition(" ")
+            key = tag.replace("-", "_")
+            value = value.strip()
+            if key in {"role", "doctrine_role"} and value:
+                result["doctrine_role"] = value
+            elif key == "jurisdiction" and value:
+                result["jurisdiction"] = value
+            elif key in {"court", "court_level"} and value:
+                result["court_level"] = value
+            elif key in {"date", "decision_date"} and value:
+                result["decision_date"] = value
+            elif key in {"effect", "interpretive_effect"} and value:
+                effect, _, fact = value.partition(" ")
+                result["interpretive_effect"] = effect.strip()
+                if fact.strip():
+                    result["effect_fact"] = fact.strip()
+        return result
+
     def build(self, root_node) -> nodes.ModuleNode:
         """
         Build a ModuleNode from a tree-sitter root node.
@@ -1726,6 +1753,8 @@ class ASTBuilder:
             self._build_string_lit(holding_node) if holding_node else nodes.StringLit(value="")
         )
         element_ref = self._text(element_ref_node) if element_ref_node else None
+        doc = self._get_doc_comment(node)
+        meta = self._extract_case_law_meta(doc)
 
         return nodes.CaseLawNode(
             case_name=case_name,
@@ -1733,6 +1762,13 @@ class ASTBuilder:
             holding=holding,
             element_ref=element_ref,
             treatments=tuple(self._build_case_treatment(child) for child in treatment_nodes),
+            doctrine_role=meta.get("doctrine_role"),
+            jurisdiction=meta.get("jurisdiction"),
+            court_level=meta.get("court_level"),
+            decision_date=meta.get("decision_date"),
+            interpretive_effect=meta.get("interpretive_effect"),
+            effect_fact=meta.get("effect_fact"),
+            doc_comment=doc,
             source_location=self._loc(node),
         )
 

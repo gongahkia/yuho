@@ -113,6 +113,12 @@ _CASELAW_NODE = {
         "citation": {"$ref": "#/$defs/stringLit"},
         "holding": {"$ref": "#/$defs/stringLit"},
         "element_ref": {"type": ["string", "null"]},
+        "doctrine_role": {"type": ["string", "null"]},
+        "jurisdiction": {"type": ["string", "null"]},
+        "court_level": {"type": ["string", "null"]},
+        "decision_date": {"type": ["string", "null"]},
+        "interpretive_effect": {"type": ["string", "null"]},
+        "effect_fact": {"type": ["string", "null"]},
         "treatments": {
             "type": "array",
             "items": {"$ref": "#/$defs/caseTreatment"},

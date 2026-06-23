@@ -268,6 +268,18 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["holding"] = self._to_dict(node.holding)
             if node.element_ref:
                 result["element_ref"] = node.element_ref
+            if node.doctrine_role:
+                result["doctrine_role"] = node.doctrine_role
+            if node.jurisdiction:
+                result["jurisdiction"] = node.jurisdiction
+            if node.court_level:
+                result["court_level"] = node.court_level
+            if node.decision_date:
+                result["decision_date"] = node.decision_date
+            if node.interpretive_effect:
+                result["interpretive_effect"] = node.interpretive_effect
+            if node.effect_fact:
+                result["effect_fact"] = node.effect_fact
             if node.treatments:
                 result["treatments"] = [self._to_dict(t) for t in node.treatments]
         elif isinstance(node, nodes.PenaltyNode):

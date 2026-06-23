@@ -434,6 +434,19 @@ Sat(all_of{e1,...,en}, F) iff forall i: Sat(ei, F)
 Sat(any_of{e1,...,en}, F) iff exists i: Sat(ei, F)
 ```
 
+Targeted active case-law effects are applied at element evaluation time.
+A case is inactive when another same-statute case `distinguished`,
+`overruled`, `reversed`, or `disapproved` it. For an active case targeting
+element `e` with metadata `@effect op f`:
+
+```
+Sat_case(requires f, e, F)  iff Sat(e, F) AND F[f]
+Sat_case(satisfies f, e, F) iff Sat(e, F) OR F[f]
+Sat_case(excludes f, e, F)  iff Sat(e, F) AND NOT F[f]
+```
+
+Cases without executable `@effect` metadata remain explanatory authorities.
+
 ### 4.2 Exception Defeat
 
 An exception E **defeats** a statute S given facts F iff:

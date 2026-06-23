@@ -4,6 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Mapping, Optional, Tuple, Union
 from yuho.ast import nodes
+from yuho.caselaw import is_inactive_treatment
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, StructInstance, Value
 
 _DEFAULT_SCOPE_MAX_DEPTH = 32
@@ -24,6 +25,7 @@ class ElementResult:
     element_type: str  # actus_reus, mens_rea, circumstance
     satisfied: bool
     description: str = ""
+    reasoning: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -96,11 +98,19 @@ class StatuteEvaluator:
         all_element_results: List[ElementResult] = []
         reasoning: List[str] = []
         overall = True
+        case_effects = self._active_case_law_effects(statute.case_law)
 
         for member in statute.elements:
             if isinstance(member, nodes.ElementNode):
-                er = self._evaluate_element(member, facts, env, statute.definitions)
+                er = self._evaluate_element(
+                    member,
+                    facts,
+                    env,
+                    statute.definitions,
+                    case_effects,
+                )
                 all_element_results.append(er)
+                reasoning.extend(er.reasoning)
                 if not er.satisfied:
                     overall = False
                     reasoning.append(
@@ -108,9 +118,15 @@ class StatuteEvaluator:
                     )
             elif isinstance(member, nodes.ElementGroupNode):
                 group_results, group_ok = self._evaluate_group(
-                    member, facts, env, statute.definitions
+                    member,
+                    facts,
+                    env,
+                    statute.definitions,
+                    case_effects,
                 )
                 all_element_results.extend(group_results)
+                for er in group_results:
+                    reasoning.extend(er.reasoning)
                 if not group_ok:
                     overall = False
                     reasoning.append(f"Element group ({member.combinator}) not satisfied")
@@ -155,10 +171,12 @@ class StatuteEvaluator:
         facts: StructInstance,
         env: Environment,
         definitions: Tuple[nodes.DefinitionEntry, ...] = (),
+        case_effects: Optional[Mapping[str, Tuple[nodes.CaseLawNode, ...]]] = None,
     ) -> ElementResult:
         """Check if a single element is satisfied by the facts."""
         name = element.name
         etype = element.element_type
+        case_effects = case_effects or {}
 
         # derive description
         desc = ""
@@ -168,11 +186,15 @@ class StatuteEvaluator:
             satisfied = self._evaluate_predicate_description(
                 element.description, facts, env, definitions
             )
-            return ElementResult(
-                element_name=name,
-                element_type=etype,
-                satisfied=satisfied,
-                description=type(element.description).__name__,
+            return self._apply_case_law_effects(
+                ElementResult(
+                    element_name=name,
+                    element_type=etype,
+                    satisfied=satisfied,
+                    description=type(element.description).__name__,
+                ),
+                facts,
+                case_effects.get(name, ()),
             )
 
         # look for a matching field in facts
@@ -191,11 +213,15 @@ class StatuteEvaluator:
             if not found:
                 satisfied = False
 
-        return ElementResult(
-            element_name=name,
-            element_type=etype,
-            satisfied=satisfied,
-            description=desc,
+        return self._apply_case_law_effects(
+            ElementResult(
+                element_name=name,
+                element_type=etype,
+                satisfied=satisfied,
+                description=desc,
+            ),
+            facts,
+            case_effects.get(name, ()),
         )
 
     def _evaluate_predicate_description(
@@ -237,21 +263,29 @@ class StatuteEvaluator:
         facts: StructInstance,
         env: Environment,
         definitions: Tuple[nodes.DefinitionEntry, ...] = (),
+        case_effects: Optional[Mapping[str, Tuple[nodes.CaseLawNode, ...]]] = None,
     ) -> Tuple[List[ElementResult], bool]:
         """Evaluate element group with combinator logic.
 
         all_of: every child must be satisfied
         any_of: at least one child must be satisfied
         """
+        case_effects = case_effects or {}
         results: List[ElementResult] = []
         member_statuses: List[bool] = []
         for member in group.members:
             if isinstance(member, nodes.ElementNode):
-                er = self._evaluate_element(member, facts, env, definitions)
+                er = self._evaluate_element(member, facts, env, definitions, case_effects)
                 results.append(er)
                 member_statuses.append(er.satisfied)
             elif isinstance(member, nodes.ElementGroupNode):
-                sub_results, sub_ok = self._evaluate_group(member, facts, env, definitions)
+                sub_results, sub_ok = self._evaluate_group(
+                    member,
+                    facts,
+                    env,
+                    definitions,
+                    case_effects,
+                )
                 results.extend(sub_results)
                 member_statuses.append(sub_ok)
 
@@ -263,6 +297,88 @@ class StatuteEvaluator:
             ok = all(member_statuses)  # default to all_of
 
         return results, ok
+
+    def _apply_case_law_effects(
+        self,
+        result: ElementResult,
+        facts: StructInstance,
+        cases: Tuple[nodes.CaseLawNode, ...],
+    ) -> ElementResult:
+        satisfied = result.satisfied
+        reasoning = list(result.reasoning)
+        for case in cases:
+            effect = (case.interpretive_effect or "").lower()
+            fact_name = case.effect_fact
+            if not effect or not fact_name:
+                continue
+            fact_value = self._fact_truthy(facts, fact_name)
+            before = satisfied
+            if effect in {"require", "requires", "narrow", "narrows"}:
+                satisfied = satisfied and fact_value
+            elif effect in {"satisfy", "satisfies", "expand", "expands"}:
+                satisfied = satisfied or fact_value
+            elif effect in {"exclude", "excludes"}:
+                satisfied = satisfied and not fact_value
+            else:
+                continue
+            if satisfied != before:
+                reasoning.append(
+                    f"Case law '{case.case_name.value}' {effect} {fact_name} "
+                    f"for element '{result.element_name}'"
+                )
+        if satisfied == result.satisfied and not reasoning:
+            return result
+        return ElementResult(
+            element_name=result.element_name,
+            element_type=result.element_type,
+            satisfied=satisfied,
+            description=result.description,
+            reasoning=reasoning,
+        )
+
+    def _fact_truthy(self, facts: StructInstance, fact_name: str) -> bool:
+        if fact_name in facts.fields:
+            return facts.fields[fact_name].is_truthy()
+        norm = self._normalise(fact_name)
+        for key, value in facts.fields.items():
+            if self._normalise(key) == norm:
+                return value.is_truthy()
+        return False
+
+    def _active_case_law_effects(
+        self,
+        case_law: Tuple[nodes.CaseLawNode, ...],
+    ) -> Dict[str, Tuple[nodes.CaseLawNode, ...]]:
+        inactive = self._inactive_case_targets(case_law)
+        result: Dict[str, List[nodes.CaseLawNode]] = {}
+        for case in case_law:
+            if not case.element_ref:
+                continue
+            if self._case_key(case.case_name.value) in inactive:
+                continue
+            if not case.interpretive_effect or not case.effect_fact:
+                continue
+            result.setdefault(case.element_ref, []).append(case)
+        return {key: tuple(value) for key, value in result.items()}
+
+    @staticmethod
+    def _inactive_case_targets(
+        case_law: Tuple[nodes.CaseLawNode, ...],
+    ) -> set[str]:
+        known = {StatuteEvaluator._case_key(case.case_name.value) for case in case_law}
+        inactive: set[str] = set()
+        for case in case_law:
+            for treatment in case.treatments:
+                if not is_inactive_treatment(treatment.kind):
+                    continue
+                target_key = StatuteEvaluator._case_key(treatment.target.value)
+                if target_key in known:
+                    inactive.add(target_key)
+        return inactive
+
+    @staticmethod
+    def _case_key(value: str) -> str:
+        return " ".join(value.casefold().split())
 
     @staticmethod
     def _normalise(s: str) -> str:
