@@ -252,6 +252,45 @@ class TestEmbeddedScopePredicates:
         with pytest.raises(RecursionError, match="cycle detected"):
             StatuteEvaluator().evaluate(registry["1"], _facts(), interp.env)
 
+    def test_embedded_apply_scope_depth_limit_is_diagnosed(self):
+        source = """
+        statute 1 "A" {
+          elements {
+            circumstance via_b := apply_scope(s2, facts);
+          }
+        }
+
+        statute 2 "B" {
+          elements {
+            circumstance via_c := apply_scope(s3, facts);
+          }
+        }
+
+        statute 3 "C" {
+          elements {
+            actus_reus leaf := "leaf";
+          }
+        }
+        """
+        analysis = analyze_source(source, run_semantic=False)
+        assert analysis.ast is not None, [str(error) for error in analysis.parse_errors]
+        interp = Interpreter()
+        interp.interpret(analysis.ast)
+        registry = _registry_from_module(analysis.ast)
+        facts = _facts(leaf=True)
+
+        ok = StatuteEvaluator().apply_scope("1", facts, registry, env=interp.env)
+        assert ok.overall_satisfied is True
+
+        with pytest.raises(RecursionError, match="depth limit 2 exceeded"):
+            StatuteEvaluator().apply_scope(
+                "1",
+                facts,
+                registry,
+                env=interp.env,
+                max_depth=2,
+            )
+
 
 class TestRecursionGuard:
     def test_explicit_self_call_is_caught(self, registry):

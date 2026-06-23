@@ -720,6 +720,12 @@ class Interpreter(Visitor):
             return []
         return [str(item) for item in trace_value.raw]
 
+    def _scope_max_depth(self, binding_name: str, default: int) -> int:
+        depth_value = self.env.get(binding_name)
+        if depth_value is None or not isinstance(depth_value.raw, int):
+            return default
+        return depth_value.raw
+
     def visit_is_infringed(self, node: nodes.IsInfringedNode) -> "Value":
         """Evaluate `is_infringed(sX)` against the current environment.
 
@@ -727,7 +733,12 @@ class Interpreter(Visitor):
         elements are all satisfied (after exception precedence) under
         the facts visible in the current scope.
         """
-        from yuho.eval.statute_evaluator import StatuteEvaluator, _SCOPE_TRACE_BINDING
+        from yuho.eval.statute_evaluator import (
+            StatuteEvaluator,
+            _DEFAULT_SCOPE_MAX_DEPTH,
+            _SCOPE_MAX_DEPTH_BINDING,
+            _SCOPE_TRACE_BINDING,
+        )
 
         self._section_lookup(node.section_ref, node)
         facts = self._facts_from_env()
@@ -738,6 +749,10 @@ class Interpreter(Visitor):
             self._statute_registry(),
             env=self.env,
             _trace=self._scope_trace(_SCOPE_TRACE_BINDING),
+            max_depth=self._scope_max_depth(
+                _SCOPE_MAX_DEPTH_BINDING,
+                _DEFAULT_SCOPE_MAX_DEPTH,
+            ),
         )
         return Value(raw=bool(result.overall_satisfied), type_tag="bool")
 
@@ -751,7 +766,12 @@ class Interpreter(Visitor):
         instance, that struct is taken as the fact pattern; otherwise
         the current environment is used as in :meth:`visit_is_infringed`.
         """
-        from yuho.eval.statute_evaluator import StatuteEvaluator, _SCOPE_TRACE_BINDING
+        from yuho.eval.statute_evaluator import (
+            StatuteEvaluator,
+            _DEFAULT_SCOPE_MAX_DEPTH,
+            _SCOPE_MAX_DEPTH_BINDING,
+            _SCOPE_TRACE_BINDING,
+        )
 
         self._section_lookup(node.section_ref, node)
         # Find the first struct-typed arg as the fact pattern; fall back
@@ -771,6 +791,10 @@ class Interpreter(Visitor):
             self._statute_registry(),
             env=self.env,
             _trace=self._scope_trace(_SCOPE_TRACE_BINDING),
+            max_depth=self._scope_max_depth(
+                _SCOPE_MAX_DEPTH_BINDING,
+                _DEFAULT_SCOPE_MAX_DEPTH,
+            ),
         )
         return Value(raw=bool(result.overall_satisfied), type_tag="bool")
 

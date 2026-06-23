@@ -6,6 +6,8 @@ from typing import Dict, List, Mapping, Optional, Tuple, Union
 from yuho.ast import nodes
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, StructInstance, Value
 
+_DEFAULT_SCOPE_MAX_DEPTH = 32
+_SCOPE_MAX_DEPTH_BINDING = "__yuho_scope_max_depth"
 _SCOPE_TRACE_BINDING = "__yuho_scope_trace"
 
 
@@ -295,6 +297,7 @@ class StatuteEvaluator:
         *,
         env: Optional[Environment] = None,
         _trace: Optional[List[str]] = None,
+        max_depth: int = _DEFAULT_SCOPE_MAX_DEPTH,
     ) -> EvaluationResult:
         """Evaluate a base section as a callable scope.
 
@@ -322,6 +325,11 @@ class StatuteEvaluator:
                 f"statute registry (known: {sorted(registry.keys())[:5]}…)"
             )
         trace = list(_trace) if _trace else []
+        if max_depth > 0 and len(trace) >= max_depth:
+            raise RecursionError(
+                f"apply_scope: depth limit {max_depth} exceeded in "
+                f"scope-call chain: {' -> '.join(trace + [canonical])}"
+            )
         if canonical in trace:
             raise RecursionError(
                 f"apply_scope: cycle detected in scope-call chain: "
@@ -332,6 +340,10 @@ class StatuteEvaluator:
         if env is not None:
             call_env = env.child()
             call_env.set(_SCOPE_TRACE_BINDING, Value(raw=list(trace), type_tag="list"))
+            call_env.set(
+                _SCOPE_MAX_DEPTH_BINDING,
+                Value(raw=max_depth, type_tag="int"),
+            )
         # Standard evaluation handles elements + exceptions. Embedded
         # apply_scope/is_infringed expressions resolve through the supplied
         # environment's statute registry; the trace guard applies to this
