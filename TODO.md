@@ -88,6 +88,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Acceptance: runtime evaluator, Z3, and Lean smoke fixtures agree on nested cross-section references.
 
 - Add section-call typing.
+  - Current support: lint checks unresolved section calls, empty apply_scope targets, missing fields on struct-literal fact bases, and unknown fields on struct-literal overrides.
   - Define section input/output types.
   - Reject calls with missing facts or incompatible substituted fact schemas.
   - Acceptance: semantic analysis catches invalid `apply_scope` calls before runtime.

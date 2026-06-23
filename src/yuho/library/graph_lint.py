@@ -45,10 +45,10 @@ _TREATMENT_KINDS = (
 class GraphLintWarning:
     """A library-wide reference-graph diagnostic."""
 
-    code: str            # e.g. "cross_section_cycle"
-    sections: tuple      # the sections involved (ordered)
+    code: str  # e.g. "cross_section_cycle"
+    sections: tuple  # the sections involved (ordered)
     message: str
-    severity: str        # "warning" or "info"
+    severity: str  # "warning" or "info"
 
 
 def _check_cross_section_cycles(
@@ -230,7 +230,7 @@ def check_apply_scope_arg_shape(
     composition; library-wide coverage requires the caller to pass a
     populated registry built from the encoded library).
 
-    Two diagnostics:
+    Three diagnostics:
 
     * ``apply_scope_target_empty`` — calling apply_scope on a section that
       has no elements is structurally meaningless: nothing for the inner
@@ -239,6 +239,10 @@ def check_apply_scope_arg_shape(
       literal, every leaf element name on the target must be a field on
       the struct; missing fields would resolve to None at evaluation
       time and silently fail the inner predicate.
+    * ``apply_scope_arg_unknown_fields`` — when a struct literal supplies
+      fields not matching target element names. This is a warning rather
+      than an error because predicate descriptions may read additional
+      fact fields.
 
     Identifier args (the common case — ``apply_scope(s299, facts)``) are
     not statically checkable here; they're left to the runtime.
@@ -267,29 +271,45 @@ def check_apply_scope_arg_shape(
                 )
             )
             continue
-        # Static struct-literal check: only fires when the first arg is a
-        # struct literal (rare in practice, but the strongest signal we
-        # can give without runtime info).
         if not node.args:
             continue
         first = node.args[0]
-        if not isinstance(first, nodes.StructLiteralNode):
-            continue
-        struct_fields = {fa.name for fa in first.field_values}
-        missing = [n for n in element_names if n not in struct_fields]
-        if missing:
-            warnings.append(
-                GraphLintWarning(
-                    code="apply_scope_arg_missing_fields",
-                    sections=(node.section_ref,),
-                    message=(
-                        f"apply_scope(s{node.section_ref}, ...) struct arg "
-                        f"is missing fields the target's elements read: "
-                        f"{', '.join(missing)}"
-                    ),
-                    severity="warning",
+        element_name_set = set(element_names)
+        if isinstance(first, nodes.StructLiteralNode):
+            struct_fields = {fa.name for fa in first.field_values}
+            missing = [n for n in element_names if n not in struct_fields]
+            if missing:
+                warnings.append(
+                    GraphLintWarning(
+                        code="apply_scope_arg_missing_fields",
+                        sections=(node.section_ref,),
+                        message=(
+                            f"apply_scope(s{node.section_ref}, ...) struct arg "
+                            f"is missing fields the target's elements read: "
+                            f"{', '.join(missing)}"
+                        ),
+                        severity="warning",
+                    )
                 )
-            )
+        for arg in node.args:
+            if not isinstance(arg, nodes.StructLiteralNode):
+                continue
+            unknown = [
+                field.name for field in arg.field_values if field.name not in element_name_set
+            ]
+            if unknown:
+                warnings.append(
+                    GraphLintWarning(
+                        code="apply_scope_arg_unknown_fields",
+                        sections=(node.section_ref,),
+                        message=(
+                            f"apply_scope(s{node.section_ref}, ...) struct arg "
+                            f"sets fields the target's elements do not read: "
+                            f"{', '.join(unknown)}"
+                        ),
+                        severity="warning",
+                    )
+                )
     return warnings
 
 
