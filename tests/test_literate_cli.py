@@ -39,6 +39,8 @@ def test_literate_writes_markdown_report_with_trace(tmp_path: Path) -> None:
     assert "## Legal Text" in report
     assert "## Yuho Source" in report
     assert "`legal-text.md#p1`" in report
+    assert "## Executable Element Spans" in report
+    assert "`representation`: lines" in report
     assert "## Result Trace" in report
     assert "Section 1 is satisfied." in report
 
@@ -61,3 +63,5 @@ def test_literate_renders_html_to_stdout(tmp_path: Path) -> None:
     assert result.exit_code == 0
     assert "<title>Yuho Literate Report</title>" in result.output
     assert "legal-text.md#p1" in result.output
+    assert "<h2>Executable Element Spans</h2>" in result.output
+    assert "<code>representation</code>" in result.output

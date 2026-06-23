@@ -10,6 +10,7 @@ from typing import Optional
 
 import click
 
+from yuho.ast import nodes
 from yuho.cli.commands.explain import _load_facts
 from yuho.explain import DatalogExplainer
 from yuho.services.analysis import analyze_file
@@ -51,10 +52,11 @@ def run_literate(
         trace_text = EnglishTranspiler().render_explain_trace(trace)
 
     anchors = _source_anchors(source)
+    element_spans = _element_spans(analysis.ast, source)
     if report_format == "html":
-        report = _render_html(legal_text, source, anchors, trace_text)
+        report = _render_html(legal_text, source, anchors, element_spans, trace_text)
     else:
-        report = _render_markdown(legal_text, source, anchors, trace_text)
+        report = _render_markdown(legal_text, source, anchors, element_spans, trace_text)
 
     if output:
         Path(output).write_text(report, encoding="utf-8")
@@ -67,10 +69,38 @@ def _source_anchors(source: str) -> list[str]:
     return re.findall(r"source:\s*([^\s]+)", source)
 
 
+def _element_spans(
+    ast: nodes.ModuleNode,
+    source: str,
+) -> list[tuple[str, int, int, str]]:
+    lines = source.splitlines()
+    spans: list[tuple[str, int, int, str]] = []
+
+    def walk(member: nodes.ASTNode) -> None:
+        if isinstance(member, nodes.ElementNode):
+            loc = member.source_location
+            if loc is None:
+                return
+            start = max(loc.line, 1)
+            end = max(loc.end_line, start)
+            snippet = "\n".join(lines[start - 1 : end]).strip()
+            spans.append((member.name, start, end, snippet))
+            return
+        if isinstance(member, nodes.ElementGroupNode):
+            for child in member.members:
+                walk(child)
+
+    for statute in ast.statutes:
+        for member in statute.elements:
+            walk(member)
+    return spans
+
+
 def _render_markdown(
     legal_text: str,
     source: str,
     anchors: list[str],
+    element_spans: list[tuple[str, int, int, str]],
     trace_text: Optional[str],
 ) -> str:
     parts = [
@@ -90,6 +120,19 @@ def _render_markdown(
         parts.extend(f"- `{anchor}`" for anchor in anchors)
     else:
         parts.append("- none")
+    parts.extend(["", "## Executable Element Spans"])
+    if element_spans:
+        for name, start, end, snippet in element_spans:
+            parts.extend(
+                [
+                    f"- `{name}`: lines {start}-{end}",
+                    "  ```yuho",
+                    f"  {snippet}",
+                    "  ```",
+                ]
+            )
+    else:
+        parts.append("- none")
     if trace_text is not None:
         parts.extend(["", "## Result Trace", "```text", trace_text.rstrip(), "```"])
     return "\n".join(parts) + "\n"
@@ -99,11 +142,22 @@ def _render_html(
     legal_text: str,
     source: str,
     anchors: list[str],
+    element_spans: list[tuple[str, int, int, str]],
     trace_text: Optional[str],
 ) -> str:
     anchor_items = "\n".join(f"<li><code>{escape(anchor)}</code></li>" for anchor in anchors)
     if not anchor_items:
         anchor_items = "<li>none</li>"
+    span_rows = "\n".join(
+        "<tr>"
+        f"<td><code>{escape(name)}</code></td>"
+        f"<td>{start}-{end}</td>"
+        f"<td><pre>{escape(snippet)}</pre></td>"
+        "</tr>"
+        for name, start, end, snippet in element_spans
+    )
+    if not span_rows:
+        span_rows = '<tr><td colspan="3">none</td></tr>'
     trace = ""
     if trace_text is not None:
         trace = f"<h2>Result Trace</h2>\n<pre>{escape(trace_text.rstrip())}</pre>"
@@ -126,6 +180,13 @@ code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
 <ul>
 {anchor_items}
 </ul>
+<h2>Executable Element Spans</h2>
+<table>
+<thead><tr><th>Element</th><th>Lines</th><th>Source</th></tr></thead>
+<tbody>
+{span_rows}
+</tbody>
+</table>
 {trace}
 </html>
 """
