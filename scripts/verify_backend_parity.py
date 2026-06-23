@@ -41,6 +41,10 @@ FEATURE_COVERAGE = (
         "runtime-z3=partial; z3-lean=smoke; alloy=unsupported-boundary",
     ),
     (
+        "optional_values",
+        "runtime-z3=covered; z3-lean=unsupported-boundary; alloy=unsupported-boundary",
+    ),
+    (
         "case_law_doctrine",
         "runtime-z3=unsupported; z3-lean=unsupported; alloy=unsupported",
     ),
