@@ -86,6 +86,15 @@ class TestTreatmentLint:
 
         assert any(w.code == "overruled_authority_cited" for w in warnings)
 
+    def test_reversed_case_approved_by_later_case(self):
+        g = _g()
+        _add(g, "case:Appeal v Case", "case:Trial v Case", kind="treatment_reversed")
+        _add(g, "case:Later v Case", "case:Trial v Case", kind="treatment_approved")
+
+        warnings = lint_reference_graph(g)
+
+        assert any(w.code == "overruled_authority_cited" for w in warnings)
+
     def test_contradictory_treatment_pair(self):
         g = _g()
         _add(g, "case:New v Case", "case:Old v Case", kind="treatment_followed")

@@ -110,9 +110,16 @@ class TestReferenceGraph:
             kind="treatment_overruled",
             source_path="x",
         ))
+        self.g.add(ReferenceEdge(
+            src="case:Foo v Bar",
+            dst="case:Trial v Case",
+            kind="treatment_reversed",
+            source_path="x",
+        ))
         edge = self.g.outgoing("case:Foo v Bar", kinds=["treatment_overruled"])[0]
         assert edge.dst == "case:Old v Case"
         assert self.g.to_dict()["stats"]["n_treatment_overruled"] == 1
+        assert self.g.to_dict()["stats"]["n_treatment_reversed"] == 1
 
 
 class TestSCC:
@@ -220,7 +227,7 @@ statute 1 "Demo" {
   elements { actus_reus act := "x"; }
   caselaw "Foo v Bar" "[2020] SGCA 1" {
     "holding"
-    treatment overruled "Old v Case" "[1990] 1 SLR 1"
+    treatment reverses "Old v Case" "[1990] 1 SLR 1"
   }
 }
 """,
@@ -229,7 +236,7 @@ statute 1 "Demo" {
 
         graph = build_reference_graph(library)
 
-        edges = graph.outgoing("case:Foo v Bar", kinds=["treatment_overruled"])
+        edges = graph.outgoing("case:Foo v Bar", kinds=["treatment_reversed"])
         assert len(edges) == 1
         assert edges[0].dst == "case:Old v Case"
         assert edges[0].source_path == "library/s1_demo/statute.yh"

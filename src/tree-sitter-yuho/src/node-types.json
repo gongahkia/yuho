@@ -3830,7 +3830,6 @@
   {
     "type": "source_file",
     "named": true,
-    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
@@ -4927,6 +4926,22 @@
     "named": false
   },
   {
+    "type": "applied",
+    "named": false
+  },
+  {
+    "type": "applies",
+    "named": false
+  },
+  {
+    "type": "approved",
+    "named": false
+  },
+  {
+    "type": "approves",
+    "named": false
+  },
+  {
     "type": "assert",
     "named": false
   },
@@ -4980,8 +4995,7 @@
   },
   {
     "type": "comment",
-    "named": true,
-    "extra": true
+    "named": true
   },
   {
     "type": "conclusion",
@@ -5044,7 +5058,19 @@
     "named": false
   },
   {
+    "type": "disapproved",
+    "named": false
+  },
+  {
+    "type": "disapproves",
+    "named": false
+  },
+  {
     "type": "distinguished",
+    "named": false
+  },
+  {
+    "type": "distinguishes",
     "named": false
   },
   {
@@ -5113,6 +5139,10 @@
   },
   {
     "type": "followed",
+    "named": false
+  },
+  {
+    "type": "follows",
     "named": false
   },
   {
@@ -5213,8 +5243,7 @@
   },
   {
     "type": "multiline_comment",
-    "named": true,
-    "extra": true
+    "named": true
   },
   {
     "type": "none",
@@ -5230,6 +5259,10 @@
   },
   {
     "type": "overruled",
+    "named": false
+  },
+  {
+    "type": "overrules",
     "named": false
   },
   {
@@ -5310,6 +5343,14 @@
   },
   {
     "type": "return",
+    "named": false
+  },
+  {
+    "type": "reversed",
+    "named": false
+  },
+  {
+    "type": "reverses",
     "named": false
   },
   {

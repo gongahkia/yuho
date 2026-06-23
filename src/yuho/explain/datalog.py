@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Mapping, Sequence
 
 from yuho.ast import nodes
+from yuho.caselaw import is_inactive_treatment
 from yuho.eval.facts import fact_reason, fact_truthy, normalize_facts, struct_from_facts
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, Value
 
@@ -236,7 +237,7 @@ def _inactive_treatment_targets(
     known = {_case_key(case.case_name.value): case.case_name.value for case in case_law}
     for case in case_law:
         for treatment in case.treatments:
-            if treatment.kind not in {"overruled", "distinguished"}:
+            if not is_inactive_treatment(treatment.kind):
                 continue
             target_key = _case_key(treatment.target.value)
             if target_key in known:

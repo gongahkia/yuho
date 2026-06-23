@@ -1,5 +1,4 @@
 {
-  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "yuho",
   "word": "identifier",
   "rules": {
@@ -3465,11 +3464,55 @@
         },
         {
           "type": "STRING",
+          "value": "follows"
+        },
+        {
+          "type": "STRING",
           "value": "distinguished"
         },
         {
           "type": "STRING",
+          "value": "distinguishes"
+        },
+        {
+          "type": "STRING",
           "value": "overruled"
+        },
+        {
+          "type": "STRING",
+          "value": "overrules"
+        },
+        {
+          "type": "STRING",
+          "value": "reversed"
+        },
+        {
+          "type": "STRING",
+          "value": "reverses"
+        },
+        {
+          "type": "STRING",
+          "value": "approved"
+        },
+        {
+          "type": "STRING",
+          "value": "approves"
+        },
+        {
+          "type": "STRING",
+          "value": "disapproved"
+        },
+        {
+          "type": "STRING",
+          "value": "disapproves"
+        },
+        {
+          "type": "STRING",
+          "value": "applied"
+        },
+        {
+          "type": "STRING",
+          "value": "applies"
         }
       ]
     },
@@ -4986,22 +5029,11 @@
       "expression_statement"
     ],
     [
-      "assignment_statement",
-      "expression_statement"
-    ],
-    [
-      "match_arm"
-    ],
-    [
       "return_statement"
     ],
     [
       "pass_statement",
       "pass_expression"
-    ],
-    [
-      "struct_literal",
-      "expression_statement"
     ],
     [
       "struct_literal",
@@ -5064,6 +5096,5 @@
     "_type",
     "_lvalue"
   ],
-  "supertypes": [],
-  "reserved": {}
+  "supertypes": []
 }

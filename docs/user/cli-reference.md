@@ -254,7 +254,7 @@ Options:
   --library PATH                  Library root
   --in                            Only show incoming edges
   --out                           Only show outgoing edges
-  --kind [subsumes|amends|implicit|authority|treatment_followed|treatment_distinguished|treatment_overruled]
+  --kind [subsumes|amends|implicit|authority|treatment_followed|treatment_distinguished|treatment_overruled|treatment_reversed|treatment_approved|treatment_disapproved|treatment_applied]
                                   Filter edge kind
   --treatment                     Query case-law treatment edges
   --overruled                     Query overruled case-law edges

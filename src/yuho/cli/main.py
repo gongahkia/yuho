@@ -11,6 +11,7 @@ from typing import Literal, Optional, cast
 import click
 
 from yuho import __version__
+from yuho.caselaw import TREATMENT_EDGE_KINDS
 
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
@@ -598,9 +599,7 @@ def literate(
             "amends",
             "implicit",
             "authority",
-            "treatment_followed",
-            "treatment_distinguished",
-            "treatment_overruled",
+            *TREATMENT_EDGE_KINDS,
         ]
     ),
     help="Filter edge kind",

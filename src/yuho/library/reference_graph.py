@@ -25,13 +25,10 @@ from pathlib import Path
 from typing import Iterable, List, Optional, Set, Tuple
 
 from yuho.ast import nodes
+from yuho.caselaw import TREATMENT_EDGE_KINDS
 
 
-_TREATMENT_EDGE_KINDS = (
-    "treatment_followed",
-    "treatment_distinguished",
-    "treatment_overruled",
-)
+_TREATMENT_EDGE_KINDS = TREATMENT_EDGE_KINDS
 _EDGE_KINDS = ("subsumes", "amends", "implicit", "authority", *_TREATMENT_EDGE_KINDS)
 
 # Matches "s415", "s.415", "s. 415", "s.415A", "s. 376AA", "section 415",
@@ -298,6 +295,10 @@ class ReferenceGraph:
                 "n_treatment_followed": self.edge_count("treatment_followed"),
                 "n_treatment_distinguished": self.edge_count("treatment_distinguished"),
                 "n_treatment_overruled": self.edge_count("treatment_overruled"),
+                "n_treatment_reversed": self.edge_count("treatment_reversed"),
+                "n_treatment_approved": self.edge_count("treatment_approved"),
+                "n_treatment_disapproved": self.edge_count("treatment_disapproved"),
+                "n_treatment_applied": self.edge_count("treatment_applied"),
             },
         }
 

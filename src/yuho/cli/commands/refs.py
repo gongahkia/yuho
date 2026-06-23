@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import click
 
+from yuho.caselaw import TREATMENT_EDGE_KINDS
 from yuho.cli.error_formatter import Colors, colorize
 from yuho.library.graph_lint import lint_reference_graph
 from yuho.library.reference_graph import (
@@ -17,11 +18,7 @@ from yuho.library.reference_graph import (
     build_reference_graph,
 )
 
-_TREATMENT_KINDS = (
-    "treatment_followed",
-    "treatment_distinguished",
-    "treatment_overruled",
-)
+_TREATMENT_KINDS = TREATMENT_EDGE_KINDS
 
 _DEFAULT_LIBRARY = Path("library/penal_code")
 _DEFAULT_COMPARE_LIBRARIES: Tuple[Path, ...] = (
@@ -64,7 +61,8 @@ def run_refs(
     graph = build_reference_graph(root)
     edge_kinds = _select_edge_kinds(kinds, treatment=treatment, overruled=overruled)
     if section is not None:
-        section = _normalise_query_node(section, graph, treatment or overruled)
+        case_mode = treatment or overruled or _is_treatment_filter(edge_kinds)
+        section = _normalise_query_node(section, graph, case_mode)
 
     if scc:
         _emit_scc(graph, edge_kinds, json_output)
@@ -240,6 +238,10 @@ def _select_edge_kinds(kinds, *, treatment: bool, overruled: bool):
     return list(kinds) if kinds else None
 
 
+def _is_treatment_filter(kinds) -> bool:
+    return bool(kinds) and all(kind in _TREATMENT_KINDS for kind in kinds)
+
+
 def _normalise_query_node(section: str, graph: ReferenceGraph, case_mode: bool) -> str:
     if section in graph.nodes:
         return section
@@ -310,8 +312,12 @@ def _kind_color(kind: str) -> str:
         "implicit": Colors.YELLOW,
         "authority": Colors.GREEN,
         "treatment_followed": Colors.GREEN,
+        "treatment_approved": Colors.GREEN,
+        "treatment_applied": Colors.GREEN,
         "treatment_distinguished": Colors.YELLOW,
         "treatment_overruled": Colors.RED,
+        "treatment_reversed": Colors.RED,
+        "treatment_disapproved": Colors.RED,
     }.get(kind, Colors.RESET)
 
 

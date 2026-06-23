@@ -22,6 +22,7 @@ statute 1 "Demo" {
   caselaw "Foo v Bar" "[2020] SGCA 1" {
     "holding"
     treatment overruled "Old v Case" "[1990] 1 SLR 1"
+    treatment reverses "Trial v Case" "[1980] 1 SLR 1"
   }
 }
 """,
@@ -40,8 +41,30 @@ def test_refs_overruled_json_flag(tmp_path: Path):
     assert result.exit_code == 0
     payload = json.loads(result.output)
     assert payload["kinds"] == ["treatment_overruled"]
+    assert len(payload["edges"]) == 1
     assert payload["edges"][0]["src"] == "case:Foo v Bar"
     assert payload["edges"][0]["dst"] == "case:Old v Case"
+
+
+def test_refs_new_treatment_kind_json_filter(tmp_path: Path):
+    library = _mk_treatment_library(tmp_path)
+    result = CliRunner().invoke(
+        cli,
+        [
+            "refs",
+            "Foo v Bar",
+            "--library",
+            str(library),
+            "--kind",
+            "treatment_reversed",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["kinds"] == ["treatment_reversed"]
+    assert payload["outgoing"][0]["dst"] == "case:Trial v Case"
 
 
 def test_refs_treatment_case_query_formats_case_nodes(tmp_path: Path, capsys):
@@ -58,4 +81,5 @@ def test_refs_treatment_case_query_formats_case_nodes(tmp_path: Path, capsys):
     out = capsys.readouterr().out
     assert "outgoing from Foo v Bar" in out
     assert "Old v Case" in out
+    assert "Trial v Case" in out
     assert "scase:" not in out

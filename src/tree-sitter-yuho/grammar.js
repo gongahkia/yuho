@@ -673,7 +673,22 @@ module.exports = grammar({
       optional(';'),
     ),
 
-    treatment_kind: $ => choice('followed', 'distinguished', 'overruled'),
+    treatment_kind: $ => choice(
+      'followed',
+      'follows',
+      'distinguished',
+      'distinguishes',
+      'overruled',
+      'overrules',
+      'reversed',
+      'reverses',
+      'approved',
+      'approves',
+      'disapproved',
+      'disapproves',
+      'applied',
+      'applies',
+    ),
 
     // =========================================================================
     // Import statements

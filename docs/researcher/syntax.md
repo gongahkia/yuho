@@ -387,11 +387,17 @@ statute 415 "Cheating" {
 ```
 
 `yuho explain` attaches targeted case-law holdings to the affected element trace.
-If another case-law block in the same statute uses `treatment overruled` or
-`treatment distinguished` against that case name, the older holding is reported
-as inactive for that explanation. Holdings are still prose strings; they do not
-change element truth unless the element itself is encoded as an executable
-predicate.
+Treatment clauses accept `followed`/`follows`, `distinguished`/`distinguishes`,
+`overruled`/`overrules`, `reversed`/`reverses`, `approved`/`approves`,
+`disapproved`/`disapproves`, and `applied`/`applies`. The AST normalizes these
+to `followed`, `distinguished`, `overruled`, `reversed`, `approved`,
+`disapproved`, or `applied`.
+
+If another case-law block in the same statute uses `distinguished`,
+`overruled`, `reversed`, or `disapproved` against that case name, the older
+holding is reported as inactive for that explanation. Holdings are still prose
+strings; they do not change element truth unless the element itself is encoded
+as an executable predicate.
 
 ### Extended Penalty
 

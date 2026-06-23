@@ -46,12 +46,12 @@ def language():
 
     # Try to load the compiled shared library
     lib_paths = [
-        Path(__file__).parent / "yuho.so",
-        Path(__file__).parent / "yuho.dylib",
-        Path(__file__).parent / "yuho.dll",
         Path(__file__).parent / "libtree-sitter-yuho.so",
         Path(__file__).parent / "libtree-sitter-yuho.dylib",
         Path(__file__).parent / "libtree-sitter-yuho.dll",
+        Path(__file__).parent / "yuho.so",
+        Path(__file__).parent / "yuho.dylib",
+        Path(__file__).parent / "yuho.dll",
         Path(__file__).parent.parent.parent.parent / "yuho.so",
         Path(__file__).parent.parent.parent.parent / "yuho.dylib",
         Path(__file__).parent.parent.parent.parent / "yuho.dll",

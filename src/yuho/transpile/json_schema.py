@@ -7,6 +7,8 @@ of the JSON transpiler, enabling downstream tool integration.
 
 import json
 
+from yuho.caselaw import TREATMENT_KINDS
+
 
 def generate_json_schema() -> str:
     """Return JSON Schema for Yuho JSON transpiler output."""
@@ -123,7 +125,7 @@ _CASE_TREATMENT_NODE = {
     "type": "object",
     "properties": {
         "_type": {"const": "CaseTreatmentNode"},
-        "kind": {"enum": ["followed", "distinguished", "overruled"]},
+        "kind": {"enum": list(TREATMENT_KINDS)},
         "target": {"$ref": "#/$defs/stringLit"},
         "citation": {"$ref": "#/$defs/stringLit"},
     },

@@ -7,6 +7,7 @@ from decimal import Decimal
 from typing import Optional, List, Tuple
 
 from yuho.ast import nodes
+from yuho.caselaw import normalize_treatment_kind
 from yuho.parser.source_location import SourceLocation
 
 
@@ -1694,8 +1695,9 @@ class ASTBuilder:
         kind_node = self._child_by_field(node, "kind")
         target_node = self._child_by_field(node, "target")
         citation_node = self._child_by_field(node, "citation")
+        kind = normalize_treatment_kind(self._text(kind_node)) if kind_node else ""
         return nodes.CaseTreatmentNode(
-            kind=self._text(kind_node) if kind_node else "",
+            kind=kind,
             target=(
                 self._build_string_lit(target_node) if target_node else nodes.StringLit(value="")
             ),
