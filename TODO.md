@@ -49,7 +49,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Local evidence: E2E tests skip when `AlloyGenerator` does not handle a case; Z3 has deeper element/group/exception/apply_scope tests.
   - Marking: [Inference] Treat Alloy as secondary until nested groups, exceptions, priority, penalties, and cross-section refs have parity tests.
 - Cross-section reasoning incomplete: valid.
-  - Local evidence: `StatuteEvaluator.apply_scope()` says embedded `ApplyScopeNode` refs inside expression contexts are not yet semantically interpreted by the element-graph executor.
+  - Local evidence: embedded `apply_scope`/`is_infringed` now execute in runtime and explain traces, but section input/output typing and Lean parity remain incomplete.
 - Syntax conventional: valid, but low priority.
   - Local evidence: grammar is conventional statically typed DSL syntax with legal blocks.
   - Marking: [Inference] Esolang experts may not care; PL/DSL experts will care more about semantics, tooling, and conformance.
