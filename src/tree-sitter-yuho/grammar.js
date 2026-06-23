@@ -697,11 +697,16 @@ module.exports = grammar({
     import_statement: $ => seq(
       'import',
       choice(
-        seq('{', sepBy1(',', $.identifier), '}', 'from', $.import_path),
+        seq('{', sepBy1(',', $.import_specifier), '}', 'from', $.import_path),
         seq('*', 'from', $.import_path),
         $.import_path,
       ),
       optional(';'),
+    ),
+
+    import_specifier: $ => seq(
+      field('name', $.identifier),
+      optional(seq('as', field('alias', $.identifier))),
     ),
 
     // Referencing statement for test files to import statutes

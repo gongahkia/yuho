@@ -586,6 +586,9 @@ import "penal_code/s415_cheating"
 // import specific names
 import { CheatingCase, evaluate } from "penal_code/s415_cheating"
 
+// import with local aliases
+import { dishonestly as imported_dishonestly } from "penal_code/s24_definitions"
+
 // import everything
 import * from "penal_code/s415_cheating"
 
@@ -674,4 +677,5 @@ terms. If an importing statute defines the same term locally, the local
 definition is used during predicate evaluation. If multiple imports export the
 same definition term, semantic analysis emits a warning. Named imports also
 carry transitive imported-definition dependencies used by the selected
-definition.
+definition. A named import may use `as` to expose an imported definition under
+a local alias.

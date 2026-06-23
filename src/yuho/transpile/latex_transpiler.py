@@ -160,7 +160,13 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
         if node.is_wildcard:
             self._emit(rf"  \item All definitions from \texttt{{{path}}}")
         elif node.imported_names:
-            names = ", ".join(rf"\texttt{{{escape_latex(n)}}}" for n in node.imported_names)
+            aliases = node.alias_map
+            names = ", ".join(
+                rf"\texttt{{{escape_latex(n)}}} as \texttt{{{escape_latex(aliases[n])}}}"
+                if n in aliases
+                else rf"\texttt{{{escape_latex(n)}}}"
+                for n in node.imported_names
+            )
             self._emit(rf"  \item {names} from \texttt{{{path}}}")
         else:
             self._emit(rf"  \item \texttt{{{path}}}")

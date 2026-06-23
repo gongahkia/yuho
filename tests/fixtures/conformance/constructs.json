@@ -993,6 +993,20 @@
         "human/export formats must retain legal traceability where construct is legal-facing"
       ]
     },
+    "import_specifier": {
+      "parse_node": "import_specifier",
+      "ast_node": "ImportNode.imported_names/aliases",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
     "referencing_statement": {
       "parse_node": "referencing_statement",
       "ast_node": "ReferencingStmt",

@@ -251,17 +251,25 @@ class ASTBuilder:
         path_node = self._child_by_type(node, "import_path")
         path = self._text(path_node).strip('"') if path_node else ""
 
-        # Check for named imports
         names: List[str] = []
+        aliases: List[tuple[str, str]] = []
         for child in node.children:
-            if child.type == "identifier":
-                names.append(self._text(child))
+            if child.type == "import_specifier":
+                name_node = self._child_by_field(child, "name")
+                alias_node = self._child_by_field(child, "alias")
+                if name_node is None:
+                    continue
+                name = self._text(name_node)
+                names.append(name)
+                if alias_node is not None:
+                    aliases.append((name, self._text(alias_node)))
             elif child.type == "*":
                 names.append("*")
 
         return nodes.ImportNode(
             path=path,
             imported_names=tuple(names),
+            aliases=tuple(aliases),
             source_location=self._loc(node),
         )
 

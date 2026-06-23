@@ -62,17 +62,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Add differential tests: runtime verdict == Z3 model verdict == Lean expected verdict where available.
   - Acceptance: runtime, Z3, and Lean fixture parity reports covered and unsupported feature categories explicitly; Alloy remains explicit-unsupported until it has parity coverage.
 
-## P0: Machine-Readable Legal Meaning
-
-- Expose computable definition source syntax and import semantics.
-  - Runtime/explain can evaluate source-level computable definitions and reuse them across elements.
-  - Current support: `definition_entry` accepts either prose strings or executable expressions.
-  - Current support: direct named/wildcard imports expose statute `definitions` as computable terms, and local statute definitions override imported terms during evaluation.
-  - Current support: semantic analysis warns when separate imports expose the same definition term.
-  - Current support: named imports carry transitive imported-definition dependencies needed by the selected definition.
-  - Remaining work: alias syntax.
-  - Acceptance: a source `.yh` definition can be referenced by multiple elements and tested independently.
-
 ## P0: Case Law And Doctrine
 
 - Promote case law from explanation annotations to executable semantics.

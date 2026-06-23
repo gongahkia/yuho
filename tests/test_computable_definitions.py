@@ -194,6 +194,92 @@ statute 1 "Uses Imported Definition" {
     assert result.bindings() == {"deception": True}
 
 
+def test_aliased_imported_computable_definition_evaluates(tmp_path: Path) -> None:
+    (tmp_path / "defs.yh").write_text(
+        """
+statute 24 "Shared Definitions" {
+  definitions {
+    deceptive := facts.representation.falsehood;
+  }
+  elements {
+    actus_reus placeholder := "placeholder";
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    main = tmp_path / "main.yh"
+    main.write_text(
+        """
+import { deceptive as imported_deceptive } from "defs.yh";
+
+statute 1 "Uses Aliased Imported Definition" {
+  elements {
+    actus_reus deception := imported_deceptive;
+  }
+}
+""",
+        encoding="utf-8",
+    )
+
+    analysis = analyze_file(main, run_semantic=True)
+    assert not analysis.errors
+    assert analysis.ast.imports[0].imported_names == ("deceptive",)
+    assert analysis.ast.imports[0].aliases == (("deceptive", "imported_deceptive"),)
+
+    ast = ModuleResolver(search_paths=[tmp_path]).module_with_imported_definitions(
+        analysis.ast,
+        main,
+    )
+    result = StatuteEvaluator().evaluate(
+        ast.statutes[0],
+        struct_from_facts({"representation": {"falsehood": True}}),
+    )
+    formatted = CliRunner().invoke(cli, ["fmt", str(main)])
+
+    assert result.overall_satisfied is True
+    assert result.bindings() == {"deception": True}
+    assert formatted.exit_code == 0
+    assert 'import { deceptive as imported_deceptive } from "defs.yh"' in formatted.output
+
+
+def test_aliased_import_rewrites_definition_dependencies(tmp_path: Path) -> None:
+    (tmp_path / "defs.yh").write_text(
+        """
+statute 24 "Shared Definitions" {
+  definitions {
+    base := facts.base;
+    derived := base;
+  }
+  elements {
+    actus_reus placeholder := "placeholder";
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    statute = tmp_path / "main.yh"
+    statute.write_text(
+        """
+import { base as imported_base, derived as imported_derived } from "defs.yh";
+
+statute 1 "Aliased Dependency" {
+  elements {
+    actus_reus result := imported_derived;
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(json.dumps({"base": True}), encoding="utf-8")
+
+    explained = CliRunner().invoke(cli, ["explain", "--facts", str(facts), str(statute)])
+
+    assert explained.exit_code == 0
+    assert "Section 1 is satisfied." in explained.output
+
+
 def test_explain_uses_imported_computable_definition(tmp_path: Path) -> None:
     (tmp_path / "defs.yh").write_text(
         """

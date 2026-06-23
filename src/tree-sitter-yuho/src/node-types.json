@@ -2078,6 +2078,32 @@
     "fields": {}
   },
   {
+    "type": "import_specifier",
+    "named": true,
+    "fields": {
+      "alias": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "import_statement",
     "named": true,
     "fields": {},
@@ -2086,11 +2112,11 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "import_path",
           "named": true
         },
         {
-          "type": "import_path",
+          "type": "import_specifier",
           "named": true
         }
       ]
@@ -5023,6 +5049,10 @@
   },
   {
     "type": "approves",
+    "named": false
+  },
+  {
+    "type": "as",
     "named": false
   },
   {

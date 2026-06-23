@@ -23,6 +23,7 @@ from yuho.ast.nodes import (
     IdentifierNode,
 )
 from yuho.ast.builder import ASTBuilder
+from yuho.ast.transformer import Transformer
 from yuho.parser import get_parser
 
 logger = logging.getLogger(__name__)
@@ -203,8 +204,11 @@ class ModuleResolver:
         all_symbols = self.get_exported_symbols(module)
         if not import_node.imported_names or import_node.is_wildcard:
             return all_symbols  # import all
+        aliases = import_node.alias_map
         return {
-            name: node for name, node in all_symbols.items() if name in import_node.imported_names
+            aliases.get(name, name): node
+            for name, node in all_symbols.items()
+            if name in import_node.imported_names
         }
 
     def resolve_and_get_definitions(
@@ -225,7 +229,8 @@ class ModuleResolver:
         if not import_node.imported_names or import_node.is_wildcard:
             return definitions
         wanted = set(import_node.imported_names)
-        return _definition_dependency_closure(definitions, wanted)
+        selected = _definition_dependency_closure(definitions, wanted)
+        return _alias_definitions(selected, import_node.alias_map)
 
     def module_with_imported_definitions(
         self,
@@ -412,6 +417,38 @@ def _definition_dependency_closure(
             if name in by_term and name not in included:
                 pending.append(name)
     return tuple(definition for definition in definitions if definition.term in included)
+
+
+class _DefinitionAliasTransformer(Transformer):
+    def __init__(self, aliases: Dict[str, str]):
+        self._aliases = aliases
+
+    def transform_identifier(self, node: IdentifierNode) -> IdentifierNode:
+        alias = self._aliases.get(node.name)
+        if alias is None or alias == node.name:
+            return node
+        return IdentifierNode(name=alias, source_location=node.source_location)
+
+
+def _alias_definitions(
+    definitions: Tuple[DefinitionEntry, ...],
+    aliases: Dict[str, str],
+) -> Tuple[DefinitionEntry, ...]:
+    if not aliases:
+        return definitions
+    transformer = _DefinitionAliasTransformer(aliases)
+    aliased: List[DefinitionEntry] = []
+    for definition in definitions:
+        term = aliases.get(definition.term, definition.term)
+        expression = transformer.transform(definition.definition)
+        if term != definition.term or expression is not definition.definition:
+            definition = replace(
+                definition,
+                term=term,
+                definition=expression,
+            )
+        aliased.append(definition)
+    return tuple(aliased)
 
 
 def _identifier_names(root: ASTNode) -> Set[str]:

@@ -174,7 +174,11 @@ class EnglishTranspiler(TranspilerBase, Visitor):
         if node.is_wildcard:
             self._emit(f'Reference: All definitions from "{node.path}"')
         elif node.imported_names:
-            names = ", ".join(node.imported_names)
+            aliases = node.alias_map
+            names = ", ".join(
+                f"{name} as {aliases[name]}" if name in aliases else name
+                for name in node.imported_names
+            )
             self._emit(f'Reference: {names} from "{node.path}"')
         else:
             self._emit(f'Reference: "{node.path}"')

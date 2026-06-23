@@ -359,6 +359,8 @@ class JSONTranspiler(TranspilerBase, Visitor):
         elif isinstance(node, nodes.ImportNode):
             result["path"] = node.path
             result["imported_names"] = list(node.imported_names)
+            if node.aliases:
+                result["aliases"] = dict(node.aliases)
         elif isinstance(node, nodes.AnnotationNode):
             result["name"] = node.name
             result["args"] = list(node.args)

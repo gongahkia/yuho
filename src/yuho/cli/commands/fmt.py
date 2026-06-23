@@ -85,7 +85,11 @@ def _format_module(ast) -> str:
         if imp.is_wildcard:
             lines.append(f'import * from "{imp.path}"')
         elif imp.imported_names:
-            names = ", ".join(imp.imported_names)
+            aliases = imp.alias_map
+            names = ", ".join(
+                f"{name} as {aliases[name]}" if name in aliases else name
+                for name in imp.imported_names
+            )
             lines.append(f'import {{ {names} }} from "{imp.path}"')
         else:
             lines.append(f'import "{imp.path}"')

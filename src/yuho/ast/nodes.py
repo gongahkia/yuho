@@ -1501,11 +1501,13 @@ class ImportNode(ASTNode):
     """
     Import statement for referencing other .yh files.
 
-    imported_names: List of names to import, or ["*"] for wildcard
+    imported_names: List of source names to import, or ["*"] for wildcard
+    aliases: Tuple of (source name, local name) alias pairs
     """
 
     path: str
     imported_names: Tuple[str, ...]  # Empty tuple means import whole module
+    aliases: Tuple[Tuple[str, str], ...] = ()
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_import(self)
@@ -1513,6 +1515,10 @@ class ImportNode(ASTNode):
     @property
     def is_wildcard(self) -> bool:
         return "*" in self.imported_names
+
+    @property
+    def alias_map(self) -> Dict[str, str]:
+        return dict(self.aliases)
 
 
 # =============================================================================
