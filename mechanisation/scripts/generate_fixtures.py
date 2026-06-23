@@ -43,8 +43,10 @@ sys.path.insert(0, str(REPO / "src"))
 
 from yuho.ast import ASTBuilder  # noqa: E402
 from yuho.ast.nodes import (  # noqa: E402
+    ApplyScopeNode,
     ElementGroupNode,
     ElementNode,
+    IsInfringedNode,
     StatuteNode,
     UndercutsRelation,
 )
@@ -58,6 +60,14 @@ KIND_MAP = {
     "mens_rea": ".mensRea",
     "circumstance": ".circumstance",
 }
+
+CORPUS_STRATA = (
+    "simple_flat_elements",
+    "nested_all_of_any_of",
+    "exception_heavy",
+    "cross_ref_heavy",
+    "penalty_heavy",
+)
 
 
 def _kind(elem_type: str) -> str:
@@ -156,6 +166,53 @@ def _emit_statute(name: str, statute: StatuteNode) -> str:
     )
 
 
+def _representative_entries(entries: List[tuple[str, StatuteNode]]) -> List[tuple[str, str]]:
+    found: dict[str, str] = {}
+    for ident, statute in entries:
+        for stratum in _matching_strata(statute):
+            found.setdefault(stratum, ident)
+        if len(found) == len(CORPUS_STRATA):
+            break
+    return [(stratum, found[stratum]) for stratum in CORPUS_STRATA if stratum in found]
+
+
+def _matching_strata(statute: StatuteNode) -> set[str]:
+    result: set[str] = set()
+    if statute.elements and not any(
+        isinstance(member, ElementGroupNode) for member in statute.elements
+    ):
+        result.add("simple_flat_elements")
+    if _has_nested_group(statute.elements):
+        result.add("nested_all_of_any_of")
+    if len(statute.exceptions) >= 2 or any(
+        exc.priority is not None or exc.defeats for exc in statute.exceptions
+    ):
+        result.add("exception_heavy")
+    if any(isinstance(item, (ApplyScopeNode, IsInfringedNode)) for item in _walk(statute)):
+        result.add("cross_ref_heavy")
+    if statute.penalty is not None or statute.additional_penalties:
+        result.add("penalty_heavy")
+    return result
+
+
+def _has_nested_group(items) -> bool:
+    def walk_group(item, depth: int) -> bool:
+        if not isinstance(item, ElementGroupNode):
+            return False
+        if depth > 0:
+            return True
+        return any(walk_group(member, depth + 1) for member in item.members)
+
+    return any(walk_group(item, 0) for item in items)
+
+
+def _walk(root):
+    yield root
+    for child in root.children():
+        if child is not None:
+            yield from _walk(child)
+
+
 def _parse_statute(path: Path) -> StatuteNode | None:
     """Parse a statute.yh into a StatuteNode (first statute only)."""
     parser = get_parser()
@@ -215,6 +272,12 @@ def main() -> int:
     body.append("  [")
     pairs = ",\n".join(f'    ("{n}", {n})' for n, _ in entries)
     body.append(pairs)
+    body.append("  ]")
+    body.append("")
+    representatives = _representative_entries(entries)
+    body.append("def representativeFixtures : List (String × Statute) :=")
+    body.append("  [")
+    body.append(",\n".join(f'    ("{label}", {ident})' for label, ident in representatives))
     body.append("  ]")
     body.append("")
     body.append("end Yuho.Fixtures")

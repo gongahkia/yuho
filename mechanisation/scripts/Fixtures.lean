@@ -68,14 +68,14 @@ def s107 : Statute :=
     title := "Abetment of the doing of a thing"
     elements := .anyOf [.leaf { kind := .actusReus, name := "instigation", description := "" }, .allOf [.leaf { kind := .actusReus, name := "conspiracy", description := "" }, .leaf { kind := .circumstance, name := "act_or_illegal_omission_in_pursuance", description := "" }, .leaf { kind := .circumstance, name := "in_order_to_do_thing", description := "" }], .leaf { kind := .actusReus, name := "intentional_aid", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -84,12 +84,12 @@ def s108A : Statute :=
     title := "Abetment in Singapore of an offence outside Singapore"
     elements := .allOf [.leaf { kind := .actusReus, name := "abetment_in_singapore", description := "" }, .leaf { kind := .circumstance, name := "singapore_offence_equivalence", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -98,12 +98,12 @@ def s108B : Statute :=
     title := "Abetment outside Singapore of an offence in Singapore"
     elements := .allOf [.leaf { kind := .actusReus, name := "abets_offence_in_singapore", description := "" }, .leaf { kind := .circumstance, name := "abetment_acts_done_outside_singapore", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -112,12 +112,12 @@ def s108 : Statute :=
     title := "Abettor"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -126,14 +126,14 @@ def s109 : Statute :=
     title := "Punishment of abetment if the act abetted is committed in consequence, and where no express provision is made for its punishment"
     elements := .allOf [.leaf { kind := .actusReus, name := "abets_offence", description := "" }, .leaf { kind := .circumstance, name := "act_abetted_committed_in_consequence", description := "" }, .leaf { kind := .circumstance, name := "no_express_provision_for_punishment", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -149,12 +149,12 @@ def s110 : Statute :=
     title := "Punishment of abetment if the person abetted does the act with a different intention from that of the abettor"
     elements := .allOf [.leaf { kind := .actusReus, name := "abets_commission_of_offence", description := "" }, .leaf { kind := .circumstance, name := "person_abetted_does_act", description := "" }, .leaf { kind := .circumstance, name := "different_intention_or_knowledge", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -163,12 +163,12 @@ def s111 : Statute :=
     title := "Liability of abettor when one act is abetted and a different act is done"
     elements := .allOf [.leaf { kind := .actusReus, name := "act_abetted", description := "" }, .leaf { kind := .circumstance, name := "different_act_done", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -177,12 +177,12 @@ def s112 : Statute :=
     title := "Abettor, when liable to cumulative punishment for act abetted and for act done"
     elements := .allOf [.leaf { kind := .circumstance, name := "section_111_liability", description := "" }, .leaf { kind := .actusReus, name := "additional_act_committed", description := "" }, .leaf { kind := .circumstance, name := "distinct_offence", description := "" }, .leaf { kind := .circumstance, name := "cumulative_liability", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -191,12 +191,12 @@ def s113 : Statute :=
     title := "Liability of abettor for an offence caused by the act abetted different from that intended by the abettor"
     elements := .allOf [.leaf { kind := .actusReus, name := "act_abetted", description := "" }, .leaf { kind := .mensRea, name := "intention_to_cause_particular_effect", description := "" }, .leaf { kind := .circumstance, name := "liable_act_causes_different_effect", description := "" }, .leaf { kind := .circumstance, name := "liable_for_effect_caused", description := "" }, .leaf { kind := .mensRea, name := "knowledge_of_likely_effect", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -205,12 +205,12 @@ def s114 : Statute :=
     title := "Abettor present when offence committed"
     elements := .allOf [.leaf { kind := .circumstance, name := "abettor_liability_if_absent", description := "" }, .leaf { kind := .circumstance, name := "presence_at_commission", description := "" }, .leaf { kind := .circumstance, name := "deemed_principal_liability", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -219,14 +219,14 @@ def s115 : Statute :=
     title := "Abetment of offence punishable with death or imprisonment for life"
     elements := .allOf [.leaf { kind := .actusReus, name := "abetment", description := "" }, .leaf { kind := .circumstance, name := "offence_not_committed", description := "" }, .leaf { kind := .circumstance, name := "no_express_provision", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -235,12 +235,12 @@ def s116 : Statute :=
     title := "Abetment of offence punishable with imprisonment"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "abets_offence", description := "" }, .leaf { kind := .circumstance, name := "offence_not_committed", description := "" }, .leaf { kind := .circumstance, name := "no_express_provision", description := "" }], .allOf [.leaf { kind := .circumstance, name := "subsection_1_offence", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "punishment_fixed_by_law", description := "" }, .leaf { kind := .circumstance, name := "specified_minimum_sentence", description := "" }, .leaf { kind := .circumstance, name := "mandatory_minimum_imprisonment", description := "" }, .leaf { kind := .circumstance, name := "mandatory_minimum_fine", description := "" }, .leaf { kind := .circumstance, name := "mandatory_minimum_caning", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -249,14 +249,14 @@ def s117 : Statute :=
     title := "Abetting the commission of an offence by the public or by more than 10 persons"
     elements := .allOf [.leaf { kind := .actusReus, name := "abetment", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "public_generally", description := "" }, .leaf { kind := .circumstance, name := "number_or_class_exceeding_10", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -265,12 +265,12 @@ def s118 : Statute :=
     title := "Concealing a design to commit an offence punishable with death or imprisonment for life"
     elements := .allOf [.leaf { kind := .mensRea, name := "facilitation_intent_or_knowledge", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "concealment", description := "" }, .leaf { kind := .actusReus, name := "false_representation", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "offence_committed", description := "" }, .leaf { kind := .circumstance, name := "offence_not_committed", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -279,12 +279,12 @@ def s119 : Statute :=
     title := "A public servant concealing a design to commit an offence which it is his duty to prevent"
     elements := .allOf [.allOf [.leaf { kind := .circumstance, name := "public_servant_status", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intent_to_facilitate", description := "" }, .leaf { kind := .mensRea, name := "knowledge_likely_facilitate", description := "" }], .leaf { kind := .circumstance, name := "duty_to_prevent_target_offence", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "conceal_design", description := "" }, .leaf { kind := .actusReus, name := "false_representation", description := "" }]], .anyOf [.leaf { kind := .circumstance, name := "offence_committed_noncapital", description := "" }, .leaf { kind := .circumstance, name := "offence_committed_capital_or_life", description := "" }, .leaf { kind := .circumstance, name := "offence_not_committed_noncapital", description := "" }, .leaf { kind := .circumstance, name := "offence_not_committed_capital_or_life", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -314,12 +314,12 @@ def s120 : Statute :=
     title := "Concealing a design to commit an offence punishable with imprisonment"
     elements := .allOf [.anyOf [.leaf { kind := .mensRea, name := "intending_to_facilitate", description := "" }, .leaf { kind := .mensRea, name := "knowing_likely_to_facilitate", description := "" }], .leaf { kind := .circumstance, name := "predicate_offence", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "conceals_design", description := "" }, .leaf { kind := .actusReus, name := "false_representation", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "offence_committed", description := "" }, .leaf { kind := .circumstance, name := "offence_not_committed", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -524,7 +524,7 @@ def s139 : Statute :=
     title := "Saving"
     elements := .allOf [.leaf { kind := .circumstance, name := "corresponding_service_discipline_provision", description := "" }, .leaf { kind := .circumstance, name := "person_subject_to_provision", description := "" }]
     exceptions := [
-  { label := "saving_for_service_discipline", guard := fun F => F "exc_saving_for_service_discipline", defeats := [] }
+  { label := "saving_for_service_discipline", guard := fun F => F "exc_saving_for_service_discipline", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1086,7 +1086,7 @@ def s214 : Statute :=
     title := "Offering gift or restoration of property in consideration of screening offender"
     elements := .allOf [.leaf { kind := .actusReus, name := "giving_or_offering", description := "" }, .leaf { kind := .mensRea, name := "screening_consideration", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "offence_punishable_with_death", description := "" }, .leaf { kind := .circumstance, name := "offence_punishable_with_life_or_20_years", description := "" }, .leaf { kind := .circumstance, name := "offence_punishable_below_20_years", description := "" }]]
     exceptions := [
-  { label := "compoundable_offence", guard := fun F => F "exc_compoundable_offence", defeats := [] }
+  { label := "compoundable_offence", guard := fun F => F "exc_compoundable_offence", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1620,7 +1620,7 @@ def s292 : Statute :=
     title := "Sale of obscene books, etc."
     elements := .allOf [.allOf [.leaf { kind := .circumstance, name := "obscene_object", description := "" }, .leaf { kind := .circumstance, name := "not_authorised_by_written_law", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "paragraph_a", description := "" }, .leaf { kind := .actusReus, name := "paragraph_b", description := "" }, .leaf { kind := .actusReus, name := "paragraph_c", description := "" }, .leaf { kind := .actusReus, name := "paragraph_d", description := "" }, .leaf { kind := .actusReus, name := "paragraph_e", description := "" }]], .allOf [.leaf { kind := .circumstance, name := "offence_under_subsection_1", description := "" }, .leaf { kind := .circumstance, name := "child_depiction", description := "" }]]
     exceptions := [
-  { label := "religious_purposes", guard := fun F => F "exc_religious_purposes", defeats := [] }
+  { label := "religious_purposes", guard := fun F => F "exc_religious_purposes", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1657,19 +1657,19 @@ def s299 : Statute :=
     title := "Culpable Homicide"
     elements := .allOf [.leaf { kind := .actusReus, name := "act", description := "" }, .leaf { kind := .actusReus, name := "omission", description := "" }, .leaf { kind := .circumstance, name := "death", description := "" }, .leaf { kind := .mensRea, name := "intent1", description := "" }, .leaf { kind := .mensRea, name := "intent2", description := "" }, .leaf { kind := .mensRea, name := "knowledge", description := "" }]
     exceptions := [
-  { label := "generalExceptions", guard := fun F => F "exc_generalExceptions", defeats := [] },
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "generalExceptions", guard := fun F => F "exc_generalExceptions", defeats := [], relation := .rebuts },
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1706,15 +1706,15 @@ def s300 : Statute :=
     title := "Murder"
     elements := .allOf [.leaf { kind := .actusReus, name := "causeDeath", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intent1", description := "" }, .leaf { kind := .mensRea, name := "intent2", description := "" }, .leaf { kind := .mensRea, name := "intent3", description := "" }, .leaf { kind := .mensRea, name := "intent4", description := "" }]]
     exceptions := [
-  { label := "provocation", guard := fun F => F "exc_provocation", defeats := [] },
-  { label := "privateDefence", guard := fun F => F "exc_privateDefence", defeats := [] },
-  { label := "publicServant", guard := fun F => F "exc_publicServant", defeats := [] },
-  { label := "suddenFight", guard := fun F => F "exc_suddenFight", defeats := [] },
-  { label := "consent", guard := fun F => F "exc_consent", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] }
+  { label := "provocation", guard := fun F => F "exc_provocation", defeats := [], relation := .rebuts },
+  { label := "privateDefence", guard := fun F => F "exc_privateDefence", defeats := [], relation := .rebuts },
+  { label := "publicServant", guard := fun F => F "exc_publicServant", defeats := [], relation := .rebuts },
+  { label := "suddenFight", guard := fun F => F "exc_suddenFight", defeats := [], relation := .rebuts },
+  { label := "consent", guard := fun F => F "exc_consent", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1723,16 +1723,16 @@ def s301 : Statute :=
     title := "Culpable homicide by causing the death of a person other than the person whose death was intended"
     elements := .allOf [.leaf { kind := .actusReus, name := "doing_act", description := "" }, .leaf { kind := .actusReus, name := "causing_other_person_death", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1741,18 +1741,18 @@ def s302 : Statute :=
     title := "Punishment for Murder"
     elements := .allOf [.leaf { kind := .circumstance, name := "murder_committed", description := "" }, .leaf { kind := .actusReus, name := "conviction", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1761,17 +1761,17 @@ def s304A : Statute :=
     title := "Causing death by rash or negligent act"
     elements := .allOf [.leaf { kind := .actusReus, name := "doing_act", description := "" }, .leaf { kind := .actusReus, name := "causing_death", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "rash_act", description := "" }, .leaf { kind := .mensRea, name := "negligent_act", description := "" }], .leaf { kind := .circumstance, name := "not_culpable_homicide", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1780,16 +1780,16 @@ def s304B : Statute :=
     title := "Causing death of child below 14 years of age, domestic worker or vulnerable person by sustained abuse"
     elements := .allOf [.leaf { kind := .circumstance, name := "relevant_person", description := "" }, .leaf { kind := .actusReus, name := "causes_death", description := "" }, .leaf { kind := .circumstance, name := "protected_person", description := "" }, .leaf { kind := .circumstance, name := "sustained_abuse", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1798,11 +1798,11 @@ def s304C : Statute :=
     title := "Causing or allowing death of child below 14 years of age, domestic worker or vulnerable person in same household"
     elements := .allOf [.leaf { kind := .actusReus, name := "death_of_b", description := "" }, .leaf { kind := .circumstance, name := "unlawful_actor_same_household", description := "" }, .leaf { kind := .circumstance, name := "unlawful_actor_frequent_contact", description := "" }, .leaf { kind := .circumstance, name := "a_same_household_and_contact", description := "" }, .leaf { kind := .circumstance, name := "significant_risk_of_grievous_hurt", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "a_caused_b_death", description := "" }, .allOf [.leaf { kind := .mensRea, name := "awareness_of_significant_risk", description := "" }, .leaf { kind := .actusReus, name := "failure_to_take_protective_steps", description := "" }, .leaf { kind := .circumstance, name := "foreseen_kind_of_circumstances", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1811,17 +1811,17 @@ def s304 : Statute :=
     title := "Culpable Homicide not amounting to Murder"
     elements := .allOf [.leaf { kind := .mensRea, name := "intention", description := "" }, .leaf { kind := .actusReus, name := "causation", description := "" }, .leaf { kind := .circumstance, name := "not_murder", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1830,16 +1830,16 @@ def s305 : Statute :=
     title := "Abetment of suicide or attempted suicide of minor or person who lacks mental capacity"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "victim_commits_suicide", description := "" }, .leaf { kind := .actusReus, name := "abets_commission_of_suicide", description := "" }, .leaf { kind := .mensRea, name := "knows_or_ought_reasonably_to_have_known_status", description := "" }], .allOf [.leaf { kind := .actusReus, name := "victim_attempts_suicide", description := "" }, .leaf { kind := .actusReus, name := "abets_attempted_suicide", description := "" }, .leaf { kind := .mensRea, name := "knows_or_ought_reasonably_to_have_known_status", description := "" }], .allOf [.leaf { kind := .actusReus, name := "victim_attempts_suicide", description := "" }, .leaf { kind := .circumstance, name := "hurt_caused_in_course", description := "" }, .leaf { kind := .actusReus, name := "abets_attempted_suicide", description := "" }, .leaf { kind := .mensRea, name := "knows_or_ought_reasonably_to_have_known_status", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1848,16 +1848,16 @@ def s306 : Statute :=
     title := "Abetment of suicide or attempted suicide"
     elements := .allOf [.leaf { kind := .circumstance, name := "suicide_or_attempted_suicide", description := "" }, .leaf { kind := .actusReus, name := "abetment", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1866,18 +1866,18 @@ def s307 : Statute :=
     title := "Attempt to murder"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "does_any_act", description := "" }, .leaf { kind := .mensRea, name := "intention_of_causing_death", description := "" }, .leaf { kind := .circumstance, name := "would_be_guilty_of_murder", description := "" }], .allOf [.leaf { kind := .circumstance, name := "offending_under_this_section", description := "" }, .leaf { kind := .circumstance, name := "under_sentence_of_imprisonment_for_life", description := "" }, .leaf { kind := .circumstance, name := "hurt_is_caused", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1900,18 +1900,18 @@ def s308 : Statute :=
     title := "Attempt to commit culpable homicide"
     elements := .allOf [.leaf { kind := .actusReus, name := "doing_act", description := "" }, .leaf { kind := .mensRea, name := "intention_to_cause_death", description := "" }, .leaf { kind := .circumstance, name := "culpable_homicide_not_murder_if_death_caused", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s106", guard := fun F => F "exc_general_defence_s106", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -1990,21 +1990,21 @@ def s319 : Statute :=
     title := "Hurt"
     elements := .allOf [.leaf { kind := .actusReus, name := "cause", description := "" }, .leaf { kind := .circumstance, name := "bodily_pain", description := "" }, .leaf { kind := .circumstance, name := "disease", description := "" }, .leaf { kind := .circumstance, name := "infirmity", description := "" }, .leaf { kind := .circumstance, name := "unconsciousness", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2027,21 +2027,21 @@ def s320 : Statute :=
     title := "Grievous hurt"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2050,21 +2050,21 @@ def s321 : Statute :=
     title := "Voluntarily Causing Hurt"
     elements := .allOf [.leaf { kind := .mensRea, name := "intention", description := "" }, .leaf { kind := .actusReus, name := "causing_hurt", description := "" }, .leaf { kind := .circumstance, name := "hurt_caused", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2073,21 +2073,21 @@ def s322 : Statute :=
     title := "Voluntarily causing grievous hurt"
     elements := .allOf [.leaf { kind := .actusReus, name := "voluntarily_causes_hurt", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intends_grievous_hurt", description := "" }, .leaf { kind := .mensRea, name := "knows_likely_grievous_hurt", description := "" }], .leaf { kind := .circumstance, name := "hurt_caused_is_grievous_hurt", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2103,18 +2103,18 @@ def s323 : Statute :=
     title := "Punishment for Voluntarily Causing Hurt"
     elements := .allOf [.leaf { kind := .circumstance, name := "offence_committed", description := "" }, .leaf { kind := .actusReus, name := "conviction", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2123,21 +2123,21 @@ def s324 : Statute :=
     title := "Voluntarily causing hurt by dangerous weapons or means"
     elements := .allOf [.leaf { kind := .circumstance, name := "not_section_334_case", description := "" }, .leaf { kind := .mensRea, name := "voluntary", description := "" }, .leaf { kind := .actusReus, name := "causes_hurt", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "instrument_for_shooting_stabbing_or_cutting", description := "" }, .leaf { kind := .circumstance, name := "weapon_likely_to_cause_death", description := "" }, .leaf { kind := .circumstance, name := "fire_or_heated_substance", description := "" }, .leaf { kind := .circumstance, name := "poison_or_corrosive_substance", description := "" }, .leaf { kind := .circumstance, name := "explosive_substance", description := "" }, .leaf { kind := .circumstance, name := "harmful_substance_to_inhale_swallow_or_receive_into_blood", description := "" }, .leaf { kind := .circumstance, name := "animal", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s95", guard := fun F => F "exc_general_defence_s95", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2146,17 +2146,17 @@ def s325 : Statute :=
     title := "Voluntarily Causing Grievous Hurt"
     elements := .allOf [.leaf { kind := .mensRea, name := "intention", description := "" }, .leaf { kind := .actusReus, name := "causing", description := "" }, .leaf { kind := .circumstance, name := "grievous_result", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s100", guard := fun F => F "exc_general_defence_s100", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2165,20 +2165,20 @@ def s326 : Statute :=
     title := "Voluntarily causing grievous hurt by dangerous weapons or means"
     elements := .allOf [.leaf { kind := .circumstance, name := "not_section_335_case", description := "" }, .leaf { kind := .mensRea, name := "voluntary", description := "" }, .leaf { kind := .actusReus, name := "causes_grievous_hurt", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "instrument_for_shooting_stabbing_or_cutting", description := "" }, .leaf { kind := .circumstance, name := "weapon_likely_to_cause_death", description := "" }, .leaf { kind := .circumstance, name := "fire_or_heated_substance", description := "" }, .leaf { kind := .circumstance, name := "poison_or_corrosive_substance", description := "" }, .leaf { kind := .circumstance, name := "explosive_substance", description := "" }, .leaf { kind := .circumstance, name := "harmful_substance_to_inhale_swallow_or_receive_into_blood", description := "" }, .leaf { kind := .circumstance, name := "animal", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2187,20 +2187,20 @@ def s327 : Statute :=
     title := "Voluntarily causing hurt to extort property or to constrain to an illegal act"
     elements := .allOf [.leaf { kind := .mensRea, name := "voluntary", description := "" }, .leaf { kind := .actusReus, name := "causes_hurt", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "purpose_of_extorting_property", description := "" }, .leaf { kind := .mensRea, name := "purpose_of_constraining_illegal_act", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2209,20 +2209,20 @@ def s328 : Statute :=
     title := "Causing hurt by means of poison, etc., with intent to commit an offence"
     elements := .allOf [.leaf { kind := .actusReus, name := "administers_or_causes_taken", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "poison", description := "" }, .leaf { kind := .circumstance, name := "stupefying_or_intoxicating_substance", description := "" }, .leaf { kind := .circumstance, name := "harmful_substance_to_inhale_swallow_or_receive_into_blood", description := "" }], .anyOf [.leaf { kind := .mensRea, name := "intent_to_cause_hurt", description := "" }, .leaf { kind := .mensRea, name := "intent_to_commit_or_facilitate_offence", description := "" }, .leaf { kind := .mensRea, name := "knowledge_likely_to_cause_hurt", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2231,20 +2231,20 @@ def s329 : Statute :=
     title := "Voluntarily causing grievous hurt to extort property, or to constrain to an illegal act"
     elements := .allOf [.leaf { kind := .actusReus, name := "grievous_hurt", description := "" }, .anyOf [.allOf [.leaf { kind := .mensRea, name := "extortion_purpose", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "property", description := "" }, .leaf { kind := .actusReus, name := "valuable_security", description := "" }]], .allOf [.leaf { kind := .mensRea, name := "constraint_purpose", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "illegal_act", description := "" }, .leaf { kind := .actusReus, name := "facilitate_offence", description := "" }]]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2260,20 +2260,20 @@ def s330 : Statute :=
     title := "Voluntarily causing hurt to extort confession or to compel restoration of property"
     elements := .allOf [.leaf { kind := .actusReus, name := "voluntarily_causes_hurt", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "purpose_of_extorting_confession_or_detection_information", description := "" }, .leaf { kind := .mensRea, name := "purpose_of_constraining_restoration_or_satisfaction", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2282,20 +2282,20 @@ def s331 : Statute :=
     title := "Voluntarily causing grievous hurt to extort confession or to compel restoration of property"
     elements := .allOf [.leaf { kind := .actusReus, name := "voluntarily_causes_grievous_hurt", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "extorting_confession_or_information", description := "" }, .leaf { kind := .mensRea, name := "constraining_restoration_or_satisfaction", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2304,20 +2304,20 @@ def s332 : Statute :=
     title := "Voluntarily causing hurt to deter public servant from his duty"
     elements := .allOf [.leaf { kind := .actusReus, name := "voluntarily_causes_hurt", description := "" }, .leaf { kind := .circumstance, name := "person_is_public_servant", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "hurt_caused_in_discharge_of_duty", description := "" }, .allOf [.leaf { kind := .mensRea, name := "intent_to_prevent_or_deter_public_servant", description := "" }], .leaf { kind := .circumstance, name := "hurt_caused_in_consequence_of_lawful_discharge", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2326,20 +2326,20 @@ def s333 : Statute :=
     title := "Voluntarily causing grievous hurt to deter public servant from his duty"
     elements := .allOf [.leaf { kind := .actusReus, name := "causes_grievous_hurt", description := "" }, .leaf { kind := .circumstance, name := "victim_is_public_servant", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "discharge_of_duty", description := "" }, .leaf { kind := .mensRea, name := "intent_to_prevent_or_deter", description := "" }, .leaf { kind := .circumstance, name := "consequence_of_lawful_discharge", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2355,20 +2355,20 @@ def s334 : Statute :=
     title := "Voluntarily causing hurt on provocation"
     elements := .allOf [.leaf { kind := .actusReus, name := "voluntarily_causes_hurt", description := "" }, .leaf { kind := .circumstance, name := "grave_and_sudden_provocation", description := "" }, .leaf { kind := .mensRea, name := "no_intent_to_hurt_another", description := "" }, .leaf { kind := .mensRea, name := "no_knowledge_likely_to_hurt_another", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2391,20 +2391,20 @@ def s335 : Statute :=
     title := "Causing grievous hurt on provocation"
     elements := .allOf [.leaf { kind := .actusReus, name := "voluntarily_causes_grievous_hurt", description := "" }, .leaf { kind := .circumstance, name := "grave_and_sudden_provocation", description := "" }, .leaf { kind := .mensRea, name := "no_intent_to_cause_grievous_hurt_other_person", description := "" }, .leaf { kind := .mensRea, name := "no_knowledge_likely_to_cause_grievous_hurt_other_person", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2413,20 +2413,20 @@ def s336 : Statute :=
     title := "Punishment for act which endangers life or the personal safety of others"
     elements := .allOf [.leaf { kind := .actusReus, name := "doing_act", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "rash_act", description := "" }, .leaf { kind := .mensRea, name := "negligent_act", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "endangers_human_life", description := "" }, .leaf { kind := .circumstance, name := "endangers_personal_safety_of_others", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2435,20 +2435,20 @@ def s337 : Statute :=
     title := "Causing hurt by an act which endangers life or the personal safety of others"
     elements := .allOf [.leaf { kind := .actusReus, name := "doing_act", description := "" }, .leaf { kind := .actusReus, name := "causing_hurt", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "rash_act", description := "" }, .leaf { kind := .mensRea, name := "negligent_act", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2457,20 +2457,20 @@ def s338 : Statute :=
     title := "Causing grievous hurt by an act which endangers life or the personal safety of others"
     elements := .allOf [.leaf { kind := .actusReus, name := "doing_act", description := "" }, .leaf { kind := .actusReus, name := "causing_grievous_hurt", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "rash_act", description := "" }, .leaf { kind := .mensRea, name := "negligent_act", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "endangers_human_life", description := "" }, .leaf { kind := .circumstance, name := "endangers_personal_safety_of_others", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [] },
-  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [] },
-  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [] },
-  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s96", guard := fun F => F "exc_general_defence_s96", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s87", guard := fun F => F "exc_general_defence_s87", defeats := [], relation := .rebuts },
+  { label := "general_defence_s88", guard := fun F => F "exc_general_defence_s88", defeats := [], relation := .rebuts },
+  { label := "general_defence_s89", guard := fun F => F "exc_general_defence_s89", defeats := [], relation := .rebuts },
+  { label := "general_defence_s92", guard := fun F => F "exc_general_defence_s92", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2479,7 +2479,7 @@ def s339 : Statute :=
     title := "Wrongful restraint"
     elements := .allOf [.leaf { kind := .actusReus, name := "obstruction", description := "" }, .leaf { kind := .actusReus, name := "prevention", description := "" }, .leaf { kind := .circumstance, name := "right_to_proceed", description := "" }]
     exceptions := [
-  { label := "private_way_good_faith", guard := fun F => F "exc_private_way_good_faith", defeats := [] }
+  { label := "private_way_good_faith", guard := fun F => F "exc_private_way_good_faith", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2586,12 +2586,12 @@ def s354A : Statute :=
     title := "Outraging modesty in certain circumstances"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "section_354_context", description := "" }, .leaf { kind := .actusReus, name := "voluntary_causation_or_attempt", description := "" }], .allOf [.leaf { kind := .actusReus, name := "subsection_1_offence", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "lift_in_building", description := "" }, .leaf { kind := .circumstance, name := "victim_below_14", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2600,12 +2600,12 @@ def s354 : Statute :=
     title := "Assault or Criminal Force to Outrage Modesty"
     elements := .allOf [.leaf { kind := .mensRea, name := "intention", description := "" }, .leaf { kind := .actusReus, name := "force_or_assault", description := "" }, .leaf { kind := .circumstance, name := "modesty_outraged", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2642,12 +2642,12 @@ def s359 : Statute :=
     title := "Kidnapping"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2663,12 +2663,12 @@ def s360 : Statute :=
     title := "Kidnapping from Singapore"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2677,13 +2677,13 @@ def s361 : Statute :=
     title := "Kidnapping from lawful guardianship"
     elements := .allOf [.leaf { kind := .actusReus, name := "taking_or_enticing", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "minor_below_16", description := "" }, .leaf { kind := .circumstance, name := "person_of_unsound_mind", description := "" }], .leaf { kind := .circumstance, name := "out_of_guardian_keeping", description := "" }, .leaf { kind := .circumstance, name := "without_guardian_consent", description := "" }]
     exceptions := [
-  { label := "good_faith_claim_to_illegitimate_child_custody", guard := fun F => F "exc_good_faith_claim_to_illegitimate_child_custody", defeats := [] },
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "good_faith_claim_to_illegitimate_child_custody", guard := fun F => F "exc_good_faith_claim_to_illegitimate_child_custody", defeats := [], relation := .rebuts },
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2692,12 +2692,12 @@ def s362 : Statute :=
     title := "Abduction"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2706,12 +2706,12 @@ def s363A : Statute :=
     title := "Punishment for abduction"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2720,12 +2720,12 @@ def s363 : Statute :=
     title := "Punishment for Kidnapping"
     elements := .allOf [.leaf { kind := .mensRea, name := "intention", description := "" }, .leaf { kind := .actusReus, name := "taking", description := "" }, .leaf { kind := .circumstance, name := "without_consent", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2734,12 +2734,12 @@ def s364 : Statute :=
     title := "Kidnapping or abducting in order to murder"
     elements := .allOf [.anyOf [.leaf { kind := .actusReus, name := "kidnaps_person", description := "" }, .leaf { kind := .actusReus, name := "abducts_person", description := "" }], .anyOf [.leaf { kind := .mensRea, name := "purpose_murder", description := "" }, .leaf { kind := .mensRea, name := "purpose_danger_of_murder", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2748,12 +2748,12 @@ def s365 : Statute :=
     title := "Kidnapping or abducting with intent secretly and wrongfully to confine a person"
     elements := .allOf [.leaf { kind := .actusReus, name := "kidnaps_or_abducts", description := "" }, .leaf { kind := .mensRea, name := "intent_secret_wrongful_confinement", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2762,12 +2762,12 @@ def s366 : Statute :=
     title := "Kidnapping or abducting a woman to compel her marriage, etc."
     elements := .allOf [.leaf { kind := .actusReus, name := "kidnaps_or_abducts_woman", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intent_compelled_to_marry", description := "" }, .leaf { kind := .mensRea, name := "knowledge_likely_compelled_to_marry", description := "" }, .leaf { kind := .mensRea, name := "purpose_forced_or_seduced_to_illicit_intercourse", description := "" }, .leaf { kind := .mensRea, name := "purpose_forced_or_seduced_to_life_of_prostitution", description := "" }, .leaf { kind := .mensRea, name := "knowledge_likely_forced_or_seduced_to_illicit_intercourse", description := "" }, .leaf { kind := .mensRea, name := "knowledge_likely_forced_or_seduced_to_life_of_prostitution", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2776,12 +2776,12 @@ def s367 : Statute :=
     title := "Kidnapping or abducting in order to subject a person to grievous hurt, slavery, etc."
     elements := .allOf [.anyOf [.leaf { kind := .actusReus, name := "kidnaps_person", description := "" }, .leaf { kind := .actusReus, name := "abducts_person", description := "" }], .anyOf [.leaf { kind := .mensRea, name := "purpose_subject_or_dispose", description := "" }, .leaf { kind := .mensRea, name := "knowledge_likely_subject_or_dispose", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2790,12 +2790,12 @@ def s368 : Statute :=
     title := "Wrongfully concealing or keeping in confinement a kidnapped person"
     elements := .allOf [.anyOf [.leaf { kind := .mensRea, name := "knowledge_of_kidnapping", description := "" }, .leaf { kind := .mensRea, name := "knowledge_of_abduction", description := "" }], .anyOf [.leaf { kind := .actusReus, name := "wrongful_concealment", description := "" }, .leaf { kind := .actusReus, name := "wrongful_confinement", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2811,12 +2811,12 @@ def s370 : Statute :=
     title := "Buying or disposing of any person as a slave"
     elements := .anyOf [.allOf [.anyOf [.leaf { kind := .actusReus, name := "imports_person", description := "" }, .leaf { kind := .actusReus, name := "exports_person", description := "" }, .leaf { kind := .actusReus, name := "removes_person", description := "" }, .leaf { kind := .actusReus, name := "buys_person", description := "" }, .leaf { kind := .actusReus, name := "sells_person", description := "" }, .leaf { kind := .actusReus, name := "disposes_person", description := "" }]], .allOf [.anyOf [.leaf { kind := .actusReus, name := "accepts_person", description := "" }, .leaf { kind := .actusReus, name := "receives_person", description := "" }, .leaf { kind := .actusReus, name := "detains_person", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2825,12 +2825,12 @@ def s371 : Statute :=
     title := "Habitual dealing in slaves"
     elements := .allOf [.leaf { kind := .actusReus, name := "dealing_in_slaves", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2839,12 +2839,12 @@ def s372 : Statute :=
     title := "Selling minor for purposes of prostitution, etc."
     elements := .allOf [.leaf { kind := .actusReus, name := "disposal_of_person_below_21", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intent_person_employed_or_used_for_prohibited_purpose", description := "" }, .leaf { kind := .mensRea, name := "knowledge_likely_person_employed_or_used_for_prohibited_purpose", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2853,12 +2853,12 @@ def s373A : Statute :=
     title := "Importing woman for purposes of prostitution, etc."
     elements := .anyOf [.allOf [.leaf { kind := .actusReus, name := "brings_or_assists_by_false_means", description := "" }, .leaf { kind := .mensRea, name := "intent_employed_or_used_for_prostitution", description := "" }], .allOf [.leaf { kind := .actusReus, name := "brings_or_assists_for_sale_or_purchase", description := "" }, .leaf { kind := .mensRea, name := "intent_sold_or_bought_for_prostitution", description := "" }], .leaf { kind := .actusReus, name := "sells_or_buys_for_prostitution", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2867,12 +2867,12 @@ def s373 : Statute :=
     title := "Buying minor for purposes of prostitution, etc."
     elements := .allOf [.leaf { kind := .actusReus, name := "buys_hires_or_obtains_possession", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intent_future_employment_or_use", description := "" }, .leaf { kind := .mensRea, name := "knowledge_likely_future_employment_or_use", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2881,12 +2881,12 @@ def s374 : Statute :=
     title := "Unlawful compulsory labour"
     elements := .allOf [.leaf { kind := .actusReus, name := "compels_labour", description := "" }, .leaf { kind := .circumstance, name := "against_will", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2895,12 +2895,12 @@ def s375 : Statute :=
     title := "Rape"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "penetrate_vagina", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "without_her_consent", description := "" }, .leaf { kind := .circumstance, name := "below_14_with_or_without_consent", description := "" }]], .allOf [.leaf { kind := .actusReus, name := "penetrate_anus_or_mouth", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "without_b_consent", description := "" }, .leaf { kind := .circumstance, name := "b_below_14_with_or_without_consent", description := "" }]], .anyOf [.allOf [.leaf { kind := .circumstance, name := "commission_or_facilitation", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "voluntarily_causes_hurt", description := "" }, .leaf { kind := .actusReus, name := "fear_of_death_or_hurt", description := "" }]], .allOf [.leaf { kind := .actusReus, name := "commit_offence_branch_b", description := "" }, .leaf { kind := .circumstance, name := "below_14_without_consent", description := "" }], .allOf [.leaf { kind := .actusReus, name := "commit_offence_branch_c", description := "" }, .leaf { kind := .circumstance, name := "below_14_exploitative_relationship", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2909,12 +2909,12 @@ def s376AA : Statute :=
     title := "Exploitative sexual penetration of minor of or above 16 but below 18 years of age"
     elements := .allOf [.leaf { kind := .circumstance, name := "exploitative_relationship_with_b", description := "" }, .leaf { kind := .circumstance, name := "b_age_range", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "penile_penetration_by_a", description := "" }, .leaf { kind := .actusReus, name := "sexual_penetration_by_a_body_or_object", description := "" }, .leaf { kind := .actusReus, name := "causes_b_penile_penetration", description := "" }, .leaf { kind := .actusReus, name := "causes_b_sexual_penetration", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2923,12 +2923,12 @@ def s376A : Statute :=
     title := "Sexual penetration of minor below 16 years of age"
     elements := .allOf [.anyOf [.leaf { kind := .actusReus, name := "penile_penetration", description := "" }, .leaf { kind := .actusReus, name := "sexual_penetration_of_vagina_or_anus", description := "" }, .leaf { kind := .actusReus, name := "causes_male_b_to_penetrate", description := "" }, .leaf { kind := .actusReus, name := "causes_b_to_sexually_penetrate", description := "" }], .leaf { kind := .circumstance, name := "victim_below_16", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2937,12 +2937,12 @@ def s376B : Statute :=
     title := "Commercial sex with minor below 18 years of age"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "obtain_sexual_services_for_consideration", description := "" }, .leaf { kind := .circumstance, name := "person_below_18_years_of_age", description := "" }], .allOf [.leaf { kind := .actusReus, name := "communicate_for_obtaining_sexual_services", description := "" }, .leaf { kind := .circumstance, name := "person_below_18_years_of_age", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -2951,12 +2951,12 @@ def s376C : Statute :=
     title := "Commercial sex with minor below 18 years of age outside Singapore"
     elements := .allOf [.allOf [.leaf { kind := .circumstance, name := "singapore_status", description := "" }, .leaf { kind := .actusReus, name := "extraterritorial_act", description := "" }], .allOf [.leaf { kind := .actusReus, name := "in_singapore_act", description := "" }, .leaf { kind := .circumstance, name := "hypothetical_s376B_offence", description := "" }], .allOf [.leaf { kind := .actusReus, name := "outside_singapore_act", description := "" }, .leaf { kind := .circumstance, name := "hypothetical_s376B_offence", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3035,12 +3035,12 @@ def s376 : Statute :=
     title := "Sexual assault involving penetration"
     elements := .allOf [.allOf [.anyOf [.leaf { kind := .actusReus, name := "sexual_penetration_of_vagina_or_anus", description := "" }, .leaf { kind := .actusReus, name := "causes_man_to_penetrate", description := "" }, .leaf { kind := .actusReus, name := "causes_person_to_sexually_penetrate", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "without_b_consent", description := "" }, .leaf { kind := .circumstance, name := "b_below_14", description := "" }]], .anyOf [.allOf [.leaf { kind := .circumstance, name := "commission_or_facilitation_of_subsection_2", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "voluntarily_causes_hurt", description := "" }, .leaf { kind := .actusReus, name := "puts_in_fear_of_death_or_hurt", description := "" }]], .allOf [.leaf { kind := .actusReus, name := "commits_subsection_2_offence_b", description := "" }, .leaf { kind := .circumstance, name := "against_person_below_14_without_consent", description := "" }], .allOf [.leaf { kind := .actusReus, name := "commits_subsection_2_offence_c", description := "" }, .leaf { kind := .circumstance, name := "against_person_below_14_in_exploitative_relationship", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3049,12 +3049,12 @@ def s377BA : Statute :=
     title := "Word or gesture intended to insult modesty of any person"
     elements := .allOf [.leaf { kind := .mensRea, name := "insult_modesty", description := "" }, .anyOf [.allOf [.anyOf [.leaf { kind := .actusReus, name := "utter_word", description := "" }, .leaf { kind := .actusReus, name := "make_sound", description := "" }], .leaf { kind := .mensRea, name := "heard_by_person", description := "" }], .allOf [.anyOf [.leaf { kind := .actusReus, name := "make_gesture", description := "" }, .leaf { kind := .actusReus, name := "exhibit_object", description := "" }], .leaf { kind := .mensRea, name := "seen_by_person", description := "" }], .leaf { kind := .actusReus, name := "intrude_privacy", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3063,12 +3063,12 @@ def s377BB : Statute :=
     title := "Voyeurism"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "intentional_observation", description := "" }, .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe_non_consent", description := "" }], .allOf [.leaf { kind := .actusReus, name := "operation_for_observation", description := "" }, .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe_non_consent", description := "" }], .allOf [.leaf { kind := .actusReus, name := "recording_private_act", description := "" }, .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe_non_consent", description := "" }], .allOf [.leaf { kind := .actusReus, name := "operation_for_image_observation", description := "" }, .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe_non_consent", description := "" }], .allOf [.leaf { kind := .actusReus, name := "recording_image", description := "" }, .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe_non_consent", description := "" }], .allOf [.leaf { kind := .actusReus, name := "installs_or_constructs_or_adapts", description := "" }, .leaf { kind := .mensRea, name := "intention_to_enable_voyeurism_offence", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3077,12 +3077,12 @@ def s377BC : Statute :=
     title := "Distribution of voyeuristic image or recording"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "distribution", description := "" }, .leaf { kind := .circumstance, name := "obtained_through_377BB", description := "" }, .leaf { kind := .mensRea, name := "knows_no_consent", description := "" }], .allOf [.leaf { kind := .actusReus, name := "possession_for_distribution", description := "" }, .leaf { kind := .circumstance, name := "obtained_through_377BB", description := "" }, .leaf { kind := .mensRea, name := "knows_no_consent", description := "" }], .leaf { kind := .circumstance, name := "victim_below_14", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3091,12 +3091,12 @@ def s377BD : Statute :=
     title := "Possession of or gaining access to voyeuristic or intimate image or recording"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "possession_or_access", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "obtained_through_377BB", description := "" }, .allOf [.leaf { kind := .mensRea, name := "knows_or_has_reason_to_believe", description := "" }, .leaf { kind := .circumstance, name := "intimate_image_or_recording", description := "" }, .leaf { kind := .circumstance, name := "without_depicted_person_consent", description := "" }, .leaf { kind := .circumstance, name := "likely_humiliation_alarm_or_distress", description := "" }]]], .allOf [.leaf { kind := .circumstance, name := "offence_under_section", description := "" }, .leaf { kind := .circumstance, name := "image_in_subsection_1a_of_person_below_14", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3105,12 +3105,12 @@ def s377BE : Statute :=
     title := "Distributing or threatening to distribute intimate image or recording"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "distribution", description := "" }, .leaf { kind := .circumstance, name := "no_consent", description := "" }, .leaf { kind := .mensRea, name := "knows_likely_distress", description := "" }], .allOf [.leaf { kind := .actusReus, name := "threat_distribution", description := "" }, .leaf { kind := .circumstance, name := "no_consent", description := "" }, .leaf { kind := .mensRea, name := "knows_likely_distress", description := "" }], .leaf { kind := .circumstance, name := "victim_below_14", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3119,12 +3119,12 @@ def s377BF : Statute :=
     title := "Sexual exposure"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "exposure", description := "" }, .leaf { kind := .mensRea, name := "intended_viewing", description := "" }, .leaf { kind := .circumstance, name := "absence_of_consent", description := "" }], .allOf [.leaf { kind := .actusReus, name := "distribution", description := "" }, .leaf { kind := .mensRea, name := "intended_viewing", description := "" }, .leaf { kind := .circumstance, name := "absence_of_consent", description := "" }], .leaf { kind := .circumstance, name := "victim_below_14", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3133,12 +3133,12 @@ def s377BG : Statute :=
     title := "Using or involving child in production of child abuse material"
     elements := .allOf [.leaf { kind := .circumstance, name := "person_below_16_years_of_age", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "uses_child_for_production", description := "" }, .leaf { kind := .actusReus, name := "causes_or_procures_child_to_be_used", description := "" }, .allOf [.leaf { kind := .circumstance, name := "care_or_custody_of_child", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "consents_to_child_being_used", description := "" }, .leaf { kind := .actusReus, name := "allows_child_to_be_used", description := "" }]]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3147,12 +3147,12 @@ def s377BH : Statute :=
     title := "Producing child abuse material"
     elements := .allOf [.leaf { kind := .actusReus, name := "production", description := "" }, .leaf { kind := .mensRea, name := "intention", description := "" }, .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3161,12 +3161,12 @@ def s377BI : Statute :=
     title := "Distributing or selling child abuse material"
     elements := .allOf [.anyOf [.leaf { kind := .actusReus, name := "distributes_child_abuse_material", description := "" }, .leaf { kind := .actusReus, name := "sells_child_abuse_material", description := "" }, .leaf { kind := .actusReus, name := "offers_child_abuse_material_for_sale", description := "" }, .leaf { kind := .actusReus, name := "possesses_for_distribution_sale_or_offer", description := "" }], .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3175,12 +3175,12 @@ def s377BJ : Statute :=
     title := "Advertising or seeking child abuse material"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "advertising_child_abuse_material", description := "" }, .leaf { kind := .mensRea, name := "knowledge_of_child_abuse_material", description := "" }], .allOf [.leaf { kind := .actusReus, name := "announcing_offer_to_acquire_buy_or_gain_access", description := "" }, .leaf { kind := .mensRea, name := "knowledge_of_child_abuse_material", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3189,12 +3189,12 @@ def s377BK : Statute :=
     title := "Possession of or gaining access to child abuse material"
     elements := .allOf [.anyOf [.leaf { kind := .actusReus, name := "possession", description := "" }, .leaf { kind := .actusReus, name := "gained_access", description := "" }], .anyOf [.leaf { kind := .mensRea, name := "knows_material_is_child_abuse_material", description := "" }, .leaf { kind := .mensRea, name := "has_reason_to_believe_material_is_child_abuse_material", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3203,12 +3203,12 @@ def s377BL : Statute :=
     title := "Exploitation by abusive material of minor of or above 16 but below 18 years of age"
     elements := .allOf [.allOf [.leaf { kind := .circumstance, name := "exploitative_relationship_scope", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "uses_b_for_production", description := "" }, .leaf { kind := .actusReus, name := "causes_b_to_be_so_used", description := "" }, .leaf { kind := .actusReus, name := "procures_b_to_be_so_used", description := "" }], .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe_abusive_material", description := "" }], .allOf [.leaf { kind := .circumstance, name := "exploitative_relationship_scope", description := "" }, .leaf { kind := .actusReus, name := "production_of_abusive_material_of_b", description := "" }, .leaf { kind := .mensRea, name := "intentional", description := "" }], .allOf [.leaf { kind := .circumstance, name := "exploitative_relationship_scope", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "distributes_abusive_material_of_b", description := "" }, .leaf { kind := .actusReus, name := "sells_abusive_material_of_b", description := "" }, .leaf { kind := .actusReus, name := "offers_for_sale_abusive_material_of_b", description := "" }, .leaf { kind := .actusReus, name := "possesses_abusive_material_of_b_for_distribution_sale_or_offer_for_sale", description := "" }], .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe_abusive_material_of_b", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3238,12 +3238,12 @@ def s377B : Statute :=
     title := "Sexual penetration with living animal"
     elements := .allOf [.allOf [.leaf { kind := .circumstance, name := "person_a", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "penile_penetration_of_animal", description := "" }, .leaf { kind := .actusReus, name := "causes_or_permits_penetration_by_animal", description := "" }]], .allOf [.anyOf [.leaf { kind := .actusReus, name := "causes_man_to_penetrate_animal", description := "" }, .leaf { kind := .actusReus, name := "causes_person_penetrated_by_animal", description := "" }], .leaf { kind := .circumstance, name := "b_did_not_consent", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3280,12 +3280,12 @@ def s377 : Statute :=
     title := "Sexual penetration, etc., of a corpse"
     elements := .anyOf [.leaf { kind := .actusReus, name := "paragraph_a", description := "" }, .leaf { kind := .actusReus, name := "paragraph_b", description := "" }, .leaf { kind := .actusReus, name := "paragraph_c", description := "" }, .leaf { kind := .actusReus, name := "paragraph_d", description := "" }, .leaf { kind := .actusReus, name := "paragraph_e", description := "" }, .leaf { kind := .actusReus, name := "paragraph_f", description := "" }, .leaf { kind := .actusReus, name := "paragraph_g", description := "" }, .leaf { kind := .actusReus, name := "paragraph_h", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3294,15 +3294,15 @@ def s378 : Statute :=
     title := "Theft"
     elements := .allOf [.leaf { kind := .mensRea, name := "intention", description := "" }, .leaf { kind := .actusReus, name := "taking", description := "" }, .leaf { kind := .circumstance, name := "possession", description := "" }, .leaf { kind := .circumstance, name := "consent", description := "" }, .leaf { kind := .actusReus, name := "movement", description := "" }]
     exceptions := [
-  { label := "claimOfRight", guard := fun F => F "exc_claimOfRight", defeats := [] },
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "claimOfRight", guard := fun F => F "exc_claimOfRight", defeats := [], relation := .rebuts },
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3318,17 +3318,17 @@ def s379 : Statute :=
     title := "Punishment for Theft"
     elements := .allOf [.leaf { kind := .circumstance, name := "theft_committed", description := "" }, .leaf { kind := .actusReus, name := "conviction", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3344,17 +3344,17 @@ def s380 : Statute :=
     title := "Theft in dwelling house, etc."
     elements := .allOf [.leaf { kind := .actusReus, name := "commission_of_theft", description := "" }, .leaf { kind := .mensRea, name := "dishonest_intention", description := "" }, .leaf { kind := .circumstance, name := "aggravating_place", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3363,16 +3363,16 @@ def s381 : Statute :=
     title := "Theft by clerk or servant of property in possession of master"
     elements := .allOf [.leaf { kind := .circumstance, name := "clerk_or_servant_status", description := "" }, .leaf { kind := .actusReus, name := "commits_theft", description := "" }, .leaf { kind := .circumstance, name := "property_in_master_possession", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3381,16 +3381,16 @@ def s382 : Statute :=
     title := "Theft after preparation made for causing death or hurt in order to commit theft"
     elements := .allOf [.leaf { kind := .actusReus, name := "commits_theft", description := "" }, .leaf { kind := .actusReus, name := "made_preparation", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "purpose_commit_theft", description := "" }, .leaf { kind := .mensRea, name := "purpose_escape", description := "" }, .leaf { kind := .mensRea, name := "purpose_retain_property", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3455,17 +3455,17 @@ def s390 : Statute :=
     title := "Robbery"
     elements := .allOf [.leaf { kind := .actusReus, name := "theft", description := "" }, .leaf { kind := .actusReus, name := "extortion", description := "" }, .leaf { kind := .circumstance, name := "violence", description := "" }, .leaf { kind := .circumstance, name := "fear", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3474,17 +3474,17 @@ def s391 : Statute :=
     title := "Gang-robbery"
     elements := .allOf [.anyOf [.leaf { kind := .actusReus, name := "five_or_more_conjointly_commit_or_attempt", description := "" }, .allOf [.leaf { kind := .actusReus, name := "conjointly_committing_or_attempting_robbery", description := "" }, .leaf { kind := .circumstance, name := "persons_present_and_aiding", description := "" }, .leaf { kind := .circumstance, name := "total_amounts_to_five_or_more", description := "" }]], .leaf { kind := .circumstance, name := "person_so_committing_attempting_or_aiding", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3493,17 +3493,17 @@ def s392 : Statute :=
     title := "Punishment for Robbery"
     elements := .allOf [.leaf { kind := .circumstance, name := "robbery_committed", description := "" }, .leaf { kind := .circumstance, name := "time_of_offence", description := "" }, .leaf { kind := .actusReus, name := "conviction", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3512,15 +3512,15 @@ def s393 : Statute :=
     title := "Attempt to commit robbery"
     elements := .allOf [.leaf { kind := .actusReus, name := "attempt", description := "" }, .leaf { kind := .circumstance, name := "target_offence", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3529,17 +3529,17 @@ def s394 : Statute :=
     title := "Voluntarily causing hurt in committing robbery"
     elements := .allOf [.leaf { kind := .actusReus, name := "committing_or_attempting_robbery", description := "" }, .leaf { kind := .actusReus, name := "causes_hurt", description := "" }, .leaf { kind := .mensRea, name := "voluntariness", description := "" }, .leaf { kind := .circumstance, name := "accused_within_liable_class", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3604,15 +3604,15 @@ def s403 : Statute :=
     title := "Dishonest Misappropriation of Property"
     elements := .allOf [.leaf { kind := .circumstance, name := "possession", description := "" }, .leaf { kind := .mensRea, name := "dishonesty", description := "" }, .leaf { kind := .actusReus, name := "conversion", description := "" }, .leaf { kind := .actusReus, name := "disposal", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3621,13 +3621,13 @@ def s404 : Statute :=
     title := "Dishonest misappropriation of property possessed by a deceased person at the time of his death"
     elements := .allOf [.leaf { kind := .mensRea, name := "dishonesty", description := "" }, .leaf { kind := .actusReus, name := "misappropriation_or_conversion", description := "" }, .leaf { kind := .mensRea, name := "knowledge_of_deceased_possession", description := "" }, .leaf { kind := .circumstance, name := "no_intervening_legal_possession", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3636,15 +3636,15 @@ def s405 : Statute :=
     title := "Criminal breach of trust"
     elements := .allOf [.leaf { kind := .circumstance, name := "entrustment_or_dominion", description := "" }, .anyOf [.allOf [.leaf { kind := .mensRea, name := "dishonestly_misappropriates_or_converts", description := "" }, .leaf { kind := .actusReus, name := "misappropriates_or_converts_to_own_use", description := "" }], .allOf [.leaf { kind := .mensRea, name := "dishonestly_uses_or_disposes", description := "" }, .leaf { kind := .actusReus, name := "uses_or_disposes_in_breach", description := "" }], .allOf [.leaf { kind := .mensRea, name := "intentionally_suffers", description := "" }, .leaf { kind := .actusReus, name := "suffers_any_other_person_to_do_so", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3653,15 +3653,15 @@ def s406 : Statute :=
     title := "Punishment for Criminal Breach of Trust"
     elements := .allOf [.leaf { kind := .circumstance, name := "property_entrusted", description := "" }, .leaf { kind := .actusReus, name := "misappropriation", description := "" }, .leaf { kind := .mensRea, name := "dishonesty", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3670,13 +3670,13 @@ def s407 : Statute :=
     title := "Criminal breach of trust of property entrusted for purposes of transportation or storage"
     elements := .allOf [.anyOf [.leaf { kind := .circumstance, name := "entrusted_for_transportation_for_hire", description := "" }, .leaf { kind := .circumstance, name := "entrusted_for_storage_for_rent_or_charge", description := "" }], .leaf { kind := .actusReus, name := "criminal_breach_of_trust", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3685,13 +3685,13 @@ def s408 : Statute :=
     title := "Criminal breach of trust by employees"
     elements := .allOf [.leaf { kind := .circumstance, name := "employee", description := "" }, .leaf { kind := .circumstance, name := "entrusted_in_capacity", description := "" }, .leaf { kind := .actusReus, name := "commits_criminal_breach_of_trust", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3700,13 +3700,13 @@ def s409 : Statute :=
     title := "Criminal breach of trust by public servant, or by banker, merchant, agent, director, officer, partner, key executive or fiduciary"
     elements := .allOf [.leaf { kind := .circumstance, name := "entrusted_with_property_or_dominion", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "public_servant_capacity", description := "" }, .leaf { kind := .circumstance, name := "banker_merchant_factor_broker_attorney_agent_capacity", description := "" }, .leaf { kind := .circumstance, name := "professional_capacity_other_than_paragraph_b", description := "" }, .leaf { kind := .circumstance, name := "director_capacity", description := "" }, .leaf { kind := .circumstance, name := "officer_capacity", description := "" }, .leaf { kind := .circumstance, name := "partner_capacity", description := "" }, .leaf { kind := .circumstance, name := "key_executive_capacity", description := "" }, .leaf { kind := .circumstance, name := "fiduciary_capacity", description := "" }], .leaf { kind := .actusReus, name := "commits_criminal_breach_of_trust", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3757,15 +3757,15 @@ def s415 : Statute :=
     title := "Cheating"
     elements := .allOf [.leaf { kind := .actusReus, name := "deception", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "fraudulent", description := "" }, .leaf { kind := .mensRea, name := "dishonest", description := "" }], .leaf { kind := .actusReus, name := "inducement", description := "" }, .leaf { kind := .circumstance, name := "harm", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3788,13 +3788,13 @@ def s416 : Statute :=
     title := "Cheating by personation"
     elements := .allOf [.leaf { kind := .actusReus, name := "cheating", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "pretending_other_person", description := "" }, .allOf [.leaf { kind := .mensRea, name := "knowledge", description := "" }, .leaf { kind := .actusReus, name := "substitution", description := "" }], .leaf { kind := .actusReus, name := "false_representation_of_identity", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3803,13 +3803,13 @@ def s417 : Statute :=
     title := "Punishment for cheating"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3818,13 +3818,13 @@ def s418 : Statute :=
     title := "Cheating with knowledge that wrongful loss may be thereby caused to a person whose interest the offender is bound to protect"
     elements := .allOf [.leaf { kind := .actusReus, name := "cheating", description := "" }, .leaf { kind := .mensRea, name := "knowledge_wrongful_loss", description := "" }, .leaf { kind := .circumstance, name := "protected_interest", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3833,13 +3833,13 @@ def s419 : Statute :=
     title := "Punishment for cheating by personation"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3862,15 +3862,15 @@ def s420 : Statute :=
     title := "Cheating and dishonestly inducing a delivery of property"
     elements := .allOf [.allOf [.leaf { kind := .actusReus, name := "cheating", description := "" }, .leaf { kind := .actusReus, name := "inducement", description := "" }, .leaf { kind := .mensRea, name := "dishonesty", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "deliver_property", description := "" }, .leaf { kind := .actusReus, name := "cause_delivery_property", description := "" }, .leaf { kind := .actusReus, name := "make_valuable_security", description := "" }, .leaf { kind := .actusReus, name := "alter_valuable_security", description := "" }, .leaf { kind := .actusReus, name := "destroy_valuable_security", description := "" }, .leaf { kind := .actusReus, name := "make_convertible_security", description := "" }, .leaf { kind := .actusReus, name := "alter_convertible_security", description := "" }, .leaf { kind := .actusReus, name := "destroy_convertible_security", description := "" }]], .allOf [.leaf { kind := .actusReus, name := "remote_cheating", description := "" }, .leaf { kind := .actusReus, name := "inducement", description := "" }, .leaf { kind := .mensRea, name := "dishonesty", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3921,16 +3921,16 @@ def s425 : Statute :=
     title := "Mischief"
     elements := .allOf [.anyOf [.leaf { kind := .mensRea, name := "intent_to_cause_wrongful_loss_or_damage", description := "" }, .leaf { kind := .mensRea, name := "knowledge_of_likely_wrongful_loss_or_damage", description := "" }], .anyOf [.leaf { kind := .actusReus, name := "destruction_of_property", description := "" }, .leaf { kind := .actusReus, name := "change_in_property", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3939,16 +3939,16 @@ def s426 : Statute :=
     title := "Punishment for committing mischief"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3957,16 +3957,16 @@ def s427 : Statute :=
     title := "Punishment for committing mischief causing disruption to key service, etc."
     elements := .allOf [.leaf { kind := .actusReus, name := "commits_mischief", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "causes_disruption_to_key_service", description := "" }, .allOf [.leaf { kind := .mensRea, name := "knowledge_of_likely_disruption_to_key_service", description := "" }, .leaf { kind := .circumstance, name := "likely_disruption_to_key_service", description := "" }], .leaf { kind := .circumstance, name := "causes_disruption_to_government_or_public_agency", description := "" }, .allOf [.leaf { kind := .mensRea, name := "knowledge_of_likely_disruption_to_government", description := "" }, .leaf { kind := .circumstance, name := "likely_disruption_to_government_or_public_agency", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -3975,16 +3975,16 @@ def s428 : Statute :=
     title := "Mischief by killing or maiming any animal"
     elements := .allOf [.leaf { kind := .actusReus, name := "commits_mischief", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "killing_animal", description := "" }, .leaf { kind := .actusReus, name := "poisoning_animal", description := "" }, .leaf { kind := .actusReus, name := "maiming_animal", description := "" }, .leaf { kind := .actusReus, name := "rendering_animal_useless", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4000,16 +4000,16 @@ def s435 : Statute :=
     title := "Mischief by fire or explosive substance with intent to cause damage"
     elements := .allOf [.leaf { kind := .actusReus, name := "mischief", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "by_fire", description := "" }, .leaf { kind := .circumstance, name := "by_explosive_substance", description := "" }], .anyOf [.leaf { kind := .mensRea, name := "intent_to_cause_damage", description := "" }, .leaf { kind := .mensRea, name := "knowledge_damage_likely", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4018,16 +4018,16 @@ def s436 : Statute :=
     title := "Mischief by fire or explosive substance with intent to destroy a house, etc."
     elements := .allOf [.leaf { kind := .actusReus, name := "commits_mischief", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "by_fire", description := "" }, .leaf { kind := .circumstance, name := "by_explosive_substance", description := "" }], .leaf { kind := .circumstance, name := "protected_building", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intending_to_cause_destruction", description := "" }, .leaf { kind := .mensRea, name := "knowing_destruction_likely", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4064,16 +4064,16 @@ def s440 : Statute :=
     title := "Mischief committed after preparation made for causing death or hurt"
     elements := .allOf [.leaf { kind := .actusReus, name := "commits_mischief", description := "" }, .leaf { kind := .circumstance, name := "aggravated_preparation", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s81", guard := fun F => F "exc_general_defence_s81", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4082,15 +4082,15 @@ def s441 : Statute :=
     title := "Criminal trespass"
     elements := .anyOf [.allOf [.leaf { kind := .actusReus, name := "enters_into_or_upon_property", description := "" }, .leaf { kind := .circumstance, name := "property_in_possession_of_another", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intent_to_commit_offence", description := "" }, .leaf { kind := .mensRea, name := "intent_to_intimidate_insult_or_annoy_person_in_possession", description := "" }]], .allOf [.leaf { kind := .circumstance, name := "lawful_entry", description := "" }, .leaf { kind := .actusReus, name := "unlawfully_remains_there", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intent_thereby_to_intimidate_insult_or_annoy", description := "" }, .leaf { kind := .mensRea, name := "intent_to_commit_offence_after_entry", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4099,15 +4099,15 @@ def s442 : Statute :=
     title := "House-breaking"
     elements := .allOf [.leaf { kind := .actusReus, name := "base_criminal_trespass", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "entering", description := "" }, .leaf { kind := .actusReus, name := "remaining", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "human_dwelling", description := "" }, .leaf { kind := .circumstance, name := "place_of_worship", description := "" }, .leaf { kind := .circumstance, name := "custody_of_property", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4116,15 +4116,15 @@ def s447 : Statute :=
     title := "Punishment for criminal trespass"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4133,15 +4133,15 @@ def s448 : Statute :=
     title := "Punishment for house-breaking"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4150,14 +4150,14 @@ def s449 : Statute :=
     title := "House-breaking in order to commit an offence punishable with death"
     elements := .allOf [.leaf { kind := .actusReus, name := "house_breaking", description := "" }, .leaf { kind := .mensRea, name := "purpose_of_committing_capital_offence", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4180,14 +4180,14 @@ def s450 : Statute :=
     title := "House-breaking in order to commit an offence punishable with imprisonment for life"
     elements := .allOf [.leaf { kind := .actusReus, name := "commits_house_breaking", description := "" }, .leaf { kind := .mensRea, name := "order_to_commit_life_imprisonment_offence", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4196,14 +4196,14 @@ def s451 : Statute :=
     title := "House-breaking in order to commit an offence punishable with imprisonment"
     elements := .allOf [.leaf { kind := .actusReus, name := "house_breaking", description := "" }, .leaf { kind := .mensRea, name := "purpose_of_committing_imprisonable_offence", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4212,14 +4212,14 @@ def s452 : Statute :=
     title := "House-breaking after preparation made for causing hurt, etc."
     elements := .allOf [.leaf { kind := .actusReus, name := "house_breaking", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "preparation_for_causing_hurt", description := "" }, .leaf { kind := .circumstance, name := "preparation_for_assaulting_person", description := "" }, .leaf { kind := .circumstance, name := "preparation_for_wrongful_restraint", description := "" }, .leaf { kind := .circumstance, name := "preparation_for_fear_of_hurt", description := "" }, .leaf { kind := .circumstance, name := "preparation_for_fear_of_assault", description := "" }, .leaf { kind := .circumstance, name := "preparation_for_fear_of_wrongful_restraint", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4228,14 +4228,14 @@ def s453 : Statute :=
     title := "Possession of house-breaking implements or offensive weapons"
     elements := .allOf [.anyOf [.allOf [.leaf { kind := .actusReus, name := "armed_with_weapon", description := "" }, .leaf { kind := .circumstance, name := "without_lawful_authority_or_purpose", description := "" }], .allOf [.leaf { kind := .actusReus, name := "face_covered_or_disguised", description := "" }, .leaf { kind := .mensRea, name := "intent_to_commit_offence", description := "" }], .leaf { kind := .actusReus, name := "equipped_for_house_breaking", description := "" }], .allOf [.leaf { kind := .circumstance, name := "prosecution_for_subsection_1_a", description := "" }, .leaf { kind := .actusReus, name := "prosecution_allege_and_prove_armed", description := "" }, .leaf { kind := .circumstance, name := "accused_must_show_lawful_authority_or_purpose", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4251,16 +4251,16 @@ def s459 : Statute :=
     title := "Grievous hurt caused while committing house-breaking"
     elements := .allOf [.leaf { kind := .actusReus, name := "committing_house_breaking", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "causes_grievous_hurt", description := "" }, .leaf { kind := .actusReus, name := "attempts_to_cause_death_or_grievous_hurt", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4276,16 +4276,16 @@ def s460 : Statute :=
     title := "House-breaking when death or grievous hurt caused"
     elements := .allOf [.leaf { kind := .actusReus, name := "house_breaking", description := "" }, .leaf { kind := .circumstance, name := "timing", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "voluntarily_causes_death", description := "" }, .leaf { kind := .actusReus, name := "voluntarily_causes_grievous_hurt", description := "" }, .leaf { kind := .actusReus, name := "voluntarily_attempts_to_cause_death", description := "" }, .leaf { kind := .actusReus, name := "voluntarily_attempts_to_cause_grievous_hurt", description := "" }], .leaf { kind := .circumstance, name := "joint_participation", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s103", guard := fun F => F "exc_general_defence_s103", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4294,15 +4294,15 @@ def s461 : Statute :=
     title := "Dishonestly breaking open any closed receptacle containing or supposed to contain property"
     elements := .allOf [.anyOf [.leaf { kind := .mensRea, name := "dishonestly", description := "" }, .leaf { kind := .mensRea, name := "intent_to_commit_mischief", description := "" }], .anyOf [.leaf { kind := .actusReus, name := "breaks_open", description := "" }, .leaf { kind := .actusReus, name := "unfastens", description := "" }], .leaf { kind := .circumstance, name := "closed_receptacle", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "contains_property", description := "" }, .leaf { kind := .circumstance, name := "believes_contains_property", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4311,15 +4311,15 @@ def s462 : Statute :=
     title := "Punishment for same offence when committed by person entrusted with custody"
     elements := .allOf [.leaf { kind := .circumstance, name := "entrustment", description := "" }, .leaf { kind := .circumstance, name := "contents_or_belief", description := "" }, .leaf { kind := .circumstance, name := "lack_of_authority", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "dishonestly", description := "" }, .leaf { kind := .mensRea, name := "intent_to_commit_mischief", description := "" }], .leaf { kind := .actusReus, name := "opening_receptacle", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s80", guard := fun F => F "exc_general_defence_s80", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s97", guard := fun F => F "exc_general_defence_s97", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4328,14 +4328,14 @@ def s463 : Statute :=
     title := "Forgery"
     elements := .allOf [.leaf { kind := .actusReus, name := "making", description := "" }, .leaf { kind := .mensRea, name := "intent_damage", description := "" }, .leaf { kind := .mensRea, name := "intent_support", description := "" }, .leaf { kind := .mensRea, name := "intent_property", description := "" }, .leaf { kind := .mensRea, name := "intent_contract", description := "" }, .leaf { kind := .mensRea, name := "intent_fraud", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4351,14 +4351,14 @@ def s465 : Statute :=
     title := "Punishment for Forgery"
     elements := .allOf [.leaf { kind := .circumstance, name := "forgery_committed", description := "" }, .leaf { kind := .actusReus, name := "conviction", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4374,14 +4374,14 @@ def s467 : Statute :=
     title := "Forgery of a valuable security or will"
     elements := .allOf [.leaf { kind := .actusReus, name := "commits_forgery", description := "" }, .leaf { kind := .mensRea, name := "forgery_intent", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "valuable_security", description := "" }, .leaf { kind := .circumstance, name := "will", description := "" }, .leaf { kind := .circumstance, name := "authority_to_adopt", description := "" }, .leaf { kind := .circumstance, name := "authority_to_make_or_transfer_security", description := "" }, .leaf { kind := .circumstance, name := "authority_to_receive_returns", description := "" }, .leaf { kind := .circumstance, name := "authority_to_receive_or_deliver_property", description := "" }, .leaf { kind := .circumstance, name := "acquittance_or_receipt_for_money", description := "" }, .leaf { kind := .circumstance, name := "acquittance_or_receipt_for_property", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4390,14 +4390,14 @@ def s468 : Statute :=
     title := "Forgery for the purpose of cheating"
     elements := .allOf [.leaf { kind := .actusReus, name := "commits_forgery", description := "" }, .leaf { kind := .circumstance, name := "forged_object", description := "" }, .leaf { kind := .mensRea, name := "intention_for_cheating", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4406,12 +4406,12 @@ def s469 : Statute :=
     title := "Forgery for the purpose of harming the reputation of any person"
     elements := .allOf [.leaf { kind := .actusReus, name := "commits_forgery", description := "" }, .anyOf [.leaf { kind := .mensRea, name := "intent_to_harm_reputation", description := "" }, .leaf { kind := .mensRea, name := "knowledge_of_likely_use", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4434,14 +4434,14 @@ def s471 : Statute :=
     title := "Using as genuine a forged document or forged electronic record"
     elements := .allOf [.anyOf [.leaf { kind := .mensRea, name := "fraudulently", description := "" }, .leaf { kind := .mensRea, name := "dishonestly", description := "" }], .leaf { kind := .actusReus, name := "uses_as_genuine", description := "" }, .leaf { kind := .circumstance, name := "forged_status", description := "" }, .leaf { kind := .mensRea, name := "knows_or_has_reason_to_believe", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4506,14 +4506,14 @@ def s477A : Statute :=
     title := "Falsification of accounts"
     elements := .allOf [.leaf { kind := .circumstance, name := "clerk_officer_or_servant_status", description := "" }, .leaf { kind := .mensRea, name := "intentional_with_intent_to_defraud", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "destroys_alters_conceals_mutilates_or_falsifies", description := "" }, .leaf { kind := .actusReus, name := "false_entry_or_material_omission_or_alteration", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "employer_possession_or_ownership", description := "" }, .leaf { kind := .circumstance, name := "received_for_employer", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [] },
-  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s85", guard := fun F => F "exc_general_defence_s85", defeats := [], relation := .rebuts },
+  { label := "general_defence_s86", guard := fun F => F "exc_general_defence_s86", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4522,12 +4522,12 @@ def s477 : Statute :=
     title := "Fraudulent cancellation, destruction, etc., of a will"
     elements := .allOf [.anyOf [.leaf { kind := .mensRea, name := "fraudulently", description := "" }, .leaf { kind := .mensRea, name := "dishonestly", description := "" }, .leaf { kind := .mensRea, name := "intent_to_cause_damage_or_injury", description := "" }], .anyOf [.leaf { kind := .actusReus, name := "cancels_document", description := "" }, .leaf { kind := .actusReus, name := "destroys_document", description := "" }, .leaf { kind := .actusReus, name := "defaces_document", description := "" }, .leaf { kind := .actusReus, name := "attempts_to_cancel_document", description := "" }, .leaf { kind := .actusReus, name := "attempts_to_destroy_document", description := "" }, .leaf { kind := .actusReus, name := "attempts_to_deface_document", description := "" }, .leaf { kind := .actusReus, name := "secretes_document", description := "" }, .leaf { kind := .actusReus, name := "attempts_to_secrete_document", description := "" }, .leaf { kind := .actusReus, name := "commits_mischief_in_respect_of_document", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "document_is_or_purports_to_be_will", description := "" }, .leaf { kind := .circumstance, name := "document_is_or_purports_to_be_authority_to_adopt_child", description := "" }, .leaf { kind := .circumstance, name := "document_is_or_purports_to_be_valuable_security", description := "" }]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4613,20 +4613,20 @@ def s499 : Statute :=
     title := "Defamation"
     elements := .allOf [.leaf { kind := .actusReus, name := "imputation", description := "" }, .leaf { kind := .actusReus, name := "method", description := "" }, .leaf { kind := .mensRea, name := "intent", description := "" }, .leaf { kind := .mensRea, name := "knowledge", description := "" }, .leaf { kind := .circumstance, name := "harm", description := "" }]
     exceptions := [
-  { label := "truthPublicGood", guard := fun F => F "exc_truthPublicGood", defeats := [] },
-  { label := "publicConduct", guard := fun F => F "exc_publicConduct", defeats := [] },
-  { label := "courtProceedings", guard := fun F => F "exc_courtProceedings", defeats := [] },
-  { label := "goodFaithOpinion", guard := fun F => F "exc_goodFaithOpinion", defeats := [] },
-  { label := "goodFaithAccusation", guard := fun F => F "exc_goodFaithAccusation", defeats := [] },
-  { label := "cautionGoodFaith", guard := fun F => F "exc_cautionGoodFaith", defeats := [] },
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "truthPublicGood", guard := fun F => F "exc_truthPublicGood", defeats := [], relation := .rebuts },
+  { label := "publicConduct", guard := fun F => F "exc_publicConduct", defeats := [], relation := .rebuts },
+  { label := "courtProceedings", guard := fun F => F "exc_courtProceedings", defeats := [], relation := .rebuts },
+  { label := "goodFaithOpinion", guard := fun F => F "exc_goodFaithOpinion", defeats := [], relation := .rebuts },
+  { label := "goodFaithAccusation", guard := fun F => F "exc_goodFaithAccusation", defeats := [], relation := .rebuts },
+  { label := "cautionGoodFaith", guard := fun F => F "exc_cautionGoodFaith", defeats := [], relation := .rebuts },
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4663,14 +4663,14 @@ def s500 : Statute :=
     title := "Punishment for defamation"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4679,14 +4679,14 @@ def s501 : Statute :=
     title := "Printing or engraving matter known to be defamatory"
     elements := .allOf [.leaf { kind := .actusReus, name := "prints_or_engraves_matter", description := "" }, .leaf { kind := .circumstance, name := "matter_defamatory_of_person", description := "" }, .leaf { kind := .mensRea, name := "knowledge_or_reason_to_believe", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4695,14 +4695,14 @@ def s502 : Statute :=
     title := "Sale of printed or engraved substance containing defamatory matter"
     elements := .allOf [.leaf { kind := .actusReus, name := "sells_or_offers_for_sale", description := "" }, .leaf { kind := .mensRea, name := "knows_defamatory_matter", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [] },
-  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [], relation := .rebuts },
+  { label := "general_defence_s78", guard := fun F => F "exc_general_defence_s78", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4711,12 +4711,12 @@ def s503 : Statute :=
     title := "Criminal Breach of Trust"
     elements := .allOf [.leaf { kind := .circumstance, name := "trust", description := "" }, .leaf { kind := .mensRea, name := "dishonesty", description := "" }, .leaf { kind := .actusReus, name := "misappropriate", description := "" }, .leaf { kind := .actusReus, name := "convert", description := "" }, .leaf { kind := .actusReus, name := "violate_law", description := "" }, .leaf { kind := .actusReus, name := "violate_contract", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4725,12 +4725,12 @@ def s504 : Statute :=
     title := "Intentional insult with intent to provoke a breach of the peace"
     elements := .allOf [.leaf { kind := .actusReus, name := "intentional_insult", description := "" }, .leaf { kind := .actusReus, name := "provocation", description := "" }, .leaf { kind := .mensRea, name := "intent_or_knowledge", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4739,12 +4739,12 @@ def s505 : Statute :=
     title := "Statements conducing to public mischief"
     elements := .allOf [.leaf { kind := .actusReus, name := "make_publish_circulate", description := "" }, .anyOf [.anyOf [.leaf { kind := .mensRea, name := "intent_mutiny_or_duty_failure", description := "" }, .leaf { kind := .circumstance, name := "likely_mutiny_or_duty_failure", description := "" }], .allOf [.anyOf [.leaf { kind := .mensRea, name := "intent_fear_alarm", description := "" }, .leaf { kind := .circumstance, name := "likely_fear_alarm", description := "" }], .leaf { kind := .circumstance, name := "induced_state_or_tranquillity_offence", description := "" }], .anyOf [.leaf { kind := .mensRea, name := "intent_incite_class_offence", description := "" }, .leaf { kind := .circumstance, name := "likely_incite_class_offence", description := "" }]]]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4753,13 +4753,13 @@ def s506 : Statute :=
     title := "Punishment for criminal intimidation"
     elements := .allOf []
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] },
-  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts },
+  { label := "general_defence_s77", guard := fun F => F "exc_general_defence_s77", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4782,12 +4782,12 @@ def s511 : Statute :=
     title := "Attempt to commit offence"
     elements := .allOf [.leaf { kind := .circumstance, name := "punishable_offence", description := "" }, .leaf { kind := .mensRea, name := "intention", description := "" }, .leaf { kind := .actusReus, name := "substantial_step", description := "" }]
     exceptions := [
-  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [] },
-  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [] },
-  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [] },
-  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [] },
-  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [] },
-  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [] }
+  { label := "general_defence_s79", guard := fun F => F "exc_general_defence_s79", defeats := [], relation := .rebuts },
+  { label := "general_defence_s84", guard := fun F => F "exc_general_defence_s84", defeats := [], relation := .rebuts },
+  { label := "general_defence_s82", guard := fun F => F "exc_general_defence_s82", defeats := [], relation := .rebuts },
+  { label := "general_defence_s83", guard := fun F => F "exc_general_defence_s83", defeats := [], relation := .rebuts },
+  { label := "general_defence_s94", guard := fun F => F "exc_general_defence_s94", defeats := [], relation := .rebuts },
+  { label := "general_defence_s76", guard := fun F => F "exc_general_defence_s76", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4901,7 +4901,7 @@ def s76 : Statute :=
     title := "Act done by person bound, or justified by law"
     elements := .anyOf [.leaf { kind := .circumstance, name := "bound_by_law", description := "" }, .leaf { kind := .circumstance, name := "justified_by_law", description := "" }]
     exceptions := [
-  { label := "no_offence", guard := fun F => F "exc_no_offence", defeats := [] }
+  { label := "no_offence", guard := fun F => F "exc_no_offence", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4910,7 +4910,7 @@ def s77 : Statute :=
     title := "Act of judge when acting judicially"
     elements := .allOf [.leaf { kind := .circumstance, name := "done_by_judge", description := "" }, .leaf { kind := .circumstance, name := "acting_judicially", description := "" }, .leaf { kind := .circumstance, name := "exercise_of_power", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "power_given_by_law", description := "" }, .leaf { kind := .mensRea, name := "good_faith_belief", description := "" }]]
     exceptions := [
-  { label := "judicial_act", guard := fun F => F "exc_judicial_act", defeats := [] }
+  { label := "judicial_act", guard := fun F => F "exc_judicial_act", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4954,7 +4954,7 @@ def s81 : Statute :=
     title := "Act likely to cause harm but done to prevent other harm"
     elements := .allOf [.leaf { kind := .actusReus, name := "act_likely_to_cause_harm", description := "" }, .leaf { kind := .mensRea, name := "knowledge_likely_harm", description := "" }, .leaf { kind := .mensRea, name := "good_faith", description := "" }, .leaf { kind := .circumstance, name := "preventive_purpose", description := "" }, .leaf { kind := .circumstance, name := "justified_risk", description := "" }]
     exceptions := [
-  { label := "necessity", guard := fun F => F "exc_necessity", defeats := [] }
+  { label := "necessity", guard := fun F => F "exc_necessity", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4963,7 +4963,7 @@ def s82 : Statute :=
     title := "Act of a child below 10 years of age"
     elements := .allOf [.leaf { kind := .actusReus, name := "act_done", description := "" }, .leaf { kind := .circumstance, name := "actor_is_child_below_10", description := "" }]
     exceptions := [
-  { label := "child_below_10", guard := fun F => F "exc_child_below_10", defeats := [] }
+  { label := "child_below_10", guard := fun F => F "exc_child_below_10", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -4972,7 +4972,7 @@ def s83 : Statute :=
     title := "Act of a child of or above 10 and below 12 years of age, who has not sufficient maturity of understanding"
     elements := .allOf [.leaf { kind := .circumstance, name := "actor_is_child", description := "" }, .leaf { kind := .circumstance, name := "age_range", description := "" }, .leaf { kind := .circumstance, name := "lacks_sufficient_maturity", description := "" }, .leaf { kind := .circumstance, name := "judgment_scope", description := "" }, .leaf { kind := .circumstance, name := "occasion", description := "" }]
     exceptions := [
-  { label := "child_without_sufficient_maturity", guard := fun F => F "exc_child_without_sufficient_maturity", defeats := [] }
+  { label := "child_without_sufficient_maturity", guard := fun F => F "exc_child_without_sufficient_maturity", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -5002,7 +5002,7 @@ def s87 : Statute :=
     title := "Act not intended and not known to be likely to cause death or grievous hurt, done by consent"
     elements := .allOf [.leaf { kind := .actusReus, name := "act_causing_harm", description := "" }, .leaf { kind := .mensRea, name := "no_intention_death_or_grievous_hurt", description := "" }, .leaf { kind := .mensRea, name := "no_knowledge_likely_death_or_grievous_hurt", description := "" }, .leaf { kind := .circumstance, name := "person_above_18", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "consent_to_suffer_harm", description := "" }, .leaf { kind := .circumstance, name := "consent_to_take_risk", description := "" }]]
     exceptions := [
-  { label := "adult_consent_to_non_fatal_non_grievous_harm", guard := fun F => F "exc_adult_consent_to_non_fatal_non_grievous_harm", defeats := [] }
+  { label := "adult_consent_to_non_fatal_non_grievous_harm", guard := fun F => F "exc_adult_consent_to_non_fatal_non_grievous_harm", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -5011,7 +5011,7 @@ def s88 : Statute :=
     title := "Act not intended to cause death done by consent in good faith for the benefit of a person"
     elements := .allOf [.leaf { kind := .actusReus, name := "qualifying_act", description := "" }, .leaf { kind := .mensRea, name := "no_intention_to_cause_death", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "harm_caused", description := "" }, .leaf { kind := .mensRea, name := "harm_intended", description := "" }, .leaf { kind := .mensRea, name := "harm_known_likely", description := "" }], .leaf { kind := .circumstance, name := "benefit", description := "" }, .leaf { kind := .mensRea, name := "good_faith", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "express_consent_given", description := "" }, .leaf { kind := .circumstance, name := "implied_consent_given", description := "" }]]
     exceptions := [
-  { label := "consent_good_faith_benefit", guard := fun F => F "exc_consent_good_faith_benefit", defeats := [] }
+  { label := "consent_good_faith_benefit", guard := fun F => F "exc_consent_good_faith_benefit", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -5020,7 +5020,7 @@ def s89 : Statute :=
     title := "Act done in good faith for the benefit of a child or person of unsound mind, by or by consent of guardian"
     elements := .allOf [.leaf { kind := .actusReus, name := "qualifying_act", description := "" }, .leaf { kind := .mensRea, name := "good_faith", description := "" }, .leaf { kind := .circumstance, name := "benefit", description := "" }, .anyOf [.leaf { kind := .actusReus, name := "by_guardian_or_lawful_charge", description := "" }, .leaf { kind := .circumstance, name := "express_guardian_consent", description := "" }, .leaf { kind := .circumstance, name := "implied_guardian_consent", description := "" }], .anyOf [.leaf { kind := .circumstance, name := "harm_caused", description := "" }, .leaf { kind := .mensRea, name := "harm_intended", description := "" }, .leaf { kind := .mensRea, name := "harm_known_likely", description := "" }]]
     exceptions := [
-  { label := "guardian_good_faith_benefit", guard := fun F => F "exc_guardian_good_faith_benefit", defeats := [] }
+  { label := "guardian_good_faith_benefit", guard := fun F => F "exc_guardian_good_faith_benefit", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -5050,7 +5050,7 @@ def s92 : Statute :=
     title := "Act done in good faith for the benefit of a person without consent"
     elements := .allOf [.leaf { kind := .actusReus, name := "qualifying_act", description := "" }, .leaf { kind := .circumstance, name := "beneficiary", description := "" }, .leaf { kind := .mensRea, name := "good_faith", description := "" }, .leaf { kind := .circumstance, name := "without_consent", description := "" }, .anyOf [.leaf { kind := .circumstance, name := "impossible_to_signify_consent", description := "" }, .allOf [.leaf { kind := .circumstance, name := "incapable_of_giving_consent", description := "" }, .leaf { kind := .circumstance, name := "no_guardian_or_lawful_charge_available", description := "" }]]]
     exceptions := [
-  { label := "good_faith_benefit_without_consent", guard := fun F => F "exc_good_faith_benefit_without_consent", defeats := [] }
+  { label := "good_faith_benefit_without_consent", guard := fun F => F "exc_good_faith_benefit_without_consent", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -5059,7 +5059,7 @@ def s93 : Statute :=
     title := "Communication made in good faith"
     elements := .allOf []
     exceptions := [
-  { label := "communication_made_in_good_faith", guard := fun F => F "exc_communication_made_in_good_faith", defeats := [] }
+  { label := "communication_made_in_good_faith", guard := fun F => F "exc_communication_made_in_good_faith", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -5068,9 +5068,9 @@ def s94 : Statute :=
     title := "Act to which a person is compelled by threats"
     elements := .allOf [.leaf { kind := .circumstance, name := "excluded_offences", description := "" }, .leaf { kind := .actusReus, name := "act_done", description := "" }, .leaf { kind := .circumstance, name := "compelled_by_threats", description := "" }, .leaf { kind := .circumstance, name := "timing_of_threats", description := "" }]
     exceptions := [
-  { label := "compulsion_by_threats", guard := fun F => F "exc_compulsion_by_threats", defeats := [] },
-  { label := "explanation_1", guard := fun F => F "exc_explanation_1", defeats := ["compulsion_by_threats"] },
-  { label := "explanation_2", guard := fun F => F "exc_explanation_2", defeats := [] }
+  { label := "compulsion_by_threats", guard := fun F => F "exc_compulsion_by_threats", defeats := [], relation := .rebuts },
+  { label := "explanation_1", guard := fun F => F "exc_explanation_1", defeats := ["compulsion_by_threats"], relation := .rebuts },
+  { label := "explanation_2", guard := fun F => F "exc_explanation_2", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -5079,7 +5079,7 @@ def s95 : Statute :=
     title := "Act causing slight harm"
     elements := .allOf [.anyOf [.leaf { kind := .actusReus, name := "harm_caused", description := "" }, .leaf { kind := .mensRea, name := "harm_intended", description := "" }, .leaf { kind := .mensRea, name := "harm_known_likely", description := "" }], .leaf { kind := .circumstance, name := "harm_is_slight", description := "" }]
     exceptions := [
-  { label := "slight_harm", guard := fun F => F "exc_slight_harm", defeats := [] }
+  { label := "slight_harm", guard := fun F => F "exc_slight_harm", defeats := [], relation := .rebuts }
 ]
   }
 
@@ -5644,6 +5644,15 @@ def fixtures : List (String × Statute) :=
     ("s98", s98),
     ("s99", s99),
     ("s9", s9)
+  ]
+
+def representativeFixtures : List (String × Statute) :=
+  [
+    ("simple_flat_elements", s204),
+    ("nested_all_of_any_of", s101),
+    ("exception_heavy", s107),
+    ("cross_ref_heavy", s107),
+    ("penalty_heavy", s109)
   ]
 
 end Yuho.Fixtures
