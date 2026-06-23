@@ -35,6 +35,7 @@ BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
         "unsupported_features": [
             "case-law semantics",
             "rich evidential fact provenance",
+            "precise calendar-duration verifier parity without a reference date",
             "full precedent and burden-shifting doctrine",
             "solver-independent proof certificates",
         ],

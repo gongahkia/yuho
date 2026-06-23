@@ -15,3 +15,4 @@ def test_backend_parity_summary_lists_evidence_and_boundaries() -> None:
     assert "nested_all_of_any_of: runtime-z3=covered" in summary
     assert "case_law_doctrine: runtime-z3=unsupported" in summary
     assert "Unsupported feature boundaries:" in summary
+    assert "precise calendar-duration verifier parity" in summary

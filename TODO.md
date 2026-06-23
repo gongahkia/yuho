@@ -112,7 +112,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Money now uses Decimal, retained currency, and supported currency minor-unit validation.
   - Fixed day/hour/minute/second durations now compare exactly via `datetime.timedelta`.
   - Runtime calendar durations now compare exactly when a reference date is supplied, with month-end clamping.
-  - Verifier calendar-duration day counts are explicitly labeled as 365-day/year and 30-day/month approximations.
+  - Verifier calendar-duration day counts are explicitly labeled as 365-day/year and 30-day/month approximations, and Z3 capability metadata lists exact calendar parity as unsupported.
   - Remaining work: exact verifier calendar parity.
   - Acceptance: no backend uses 30-day/month or 365-day/year approximation except explicitly labeled verifier summaries.
 
