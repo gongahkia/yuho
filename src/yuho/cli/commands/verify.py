@@ -17,6 +17,48 @@ from yuho.verify.alloy import AlloyAnalyzer, AlloyGenerator
 from yuho.verify.combined import CombinedVerifier
 from yuho.verify.z3_solver import Z3Solver
 
+BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
+    "alloy": {
+        "status": "experimental",
+        "role": "bounded-model-finder",
+        "unsupported_features": [
+            "case-law semantics",
+            "full runtime/Z3 parity for nested exception priority",
+            "whole-code cross-section reasoning",
+            "precise calendar arithmetic",
+            "solver-independent proof certificates",
+        ],
+    },
+    "z3": {
+        "status": "conformance-tested",
+        "role": "smt-checker",
+        "unsupported_features": [
+            "case-law semantics",
+            "rich evidential fact provenance",
+            "full precedent and burden-shifting doctrine",
+            "solver-independent proof certificates",
+        ],
+    },
+    "lean": {
+        "status": "spec/proof",
+        "role": "mechanised-spec",
+        "unsupported_features": [
+            "full corpus proof coverage",
+            "case-law semantics",
+            "rich evidential fact provenance",
+            "certified Z3 result reconstruction",
+        ],
+    },
+    "combined": {
+        "status": "aggregate",
+        "role": "orchestrator",
+        "unsupported_features": [
+            "stronger than the strongest available backend",
+            "canonical-semantics proof",
+        ],
+    },
+}
+
 
 def run_verify(
     file: Optional[str],
@@ -210,6 +252,9 @@ def _build_capabilities(
     alloy_available = alloy_analyzer.is_available()
     z3_available = z3_solver.is_available()
     java_available = shutil.which("java") is not None
+    lake_available = shutil.which("lake") is not None
+    mechanisation_dir = _project_root() / "mechanisation"
+    lean_available = lake_available and mechanisation_dir.exists()
 
     if alloy_available:
         alloy_reason = "Alloy analyzer available"
@@ -231,11 +276,33 @@ def _build_capabilities(
         if combined_available
         else "No verification backends available (Alloy and Z3 are both unavailable)"
     )
+    if lean_available:
+        lean_reason = "Lean mechanisation available"
+    elif not lake_available:
+        lean_reason = "Lean toolchain not on PATH; install elan/lake to verify mechanisation"
+    else:
+        lean_reason = "Lean toolchain found, but mechanisation directory is unavailable"
 
     return {
-        "alloy": {"available": alloy_available, "reason": alloy_reason},
-        "z3": {"available": z3_available, "reason": z3_reason},
-        "combined": {"available": combined_available, "reason": combined_reason},
+        "alloy": _capability("alloy", alloy_available, alloy_reason),
+        "z3": _capability("z3", z3_available, z3_reason),
+        "lean": _capability("lean", lean_available, lean_reason),
+        "combined": _capability("combined", combined_available, combined_reason),
+    }
+
+
+def _project_root() -> Path:
+    return Path(__file__).resolve().parents[4]
+
+
+def _capability(name: str, available: bool, reason: str) -> Dict[str, Any]:
+    metadata = BACKEND_METADATA[name]
+    return {
+        "available": available,
+        "reason": reason,
+        "status": metadata["status"],
+        "role": metadata["role"],
+        "unsupported_features": list(metadata["unsupported_features"]),
     }
 
 
@@ -246,16 +313,20 @@ def _emit_capabilities(capabilities: Dict[str, Dict[str, Any]], *, json_output: 
 
     click.echo("Verification capabilities:")
     click.echo(
-        f"  Alloy:   {'available' if capabilities['alloy']['available'] else 'unavailable'}"
-        f" ({capabilities['alloy']['reason']})"
+        f"  Alloy:   {'available' if capabilities['alloy']['available'] else 'unavailable'} "
+        f"[{capabilities['alloy']['status']}] ({capabilities['alloy']['reason']})"
     )
     click.echo(
-        f"  Z3:      {'available' if capabilities['z3']['available'] else 'unavailable'}"
-        f" ({capabilities['z3']['reason']})"
+        f"  Z3:      {'available' if capabilities['z3']['available'] else 'unavailable'} "
+        f"[{capabilities['z3']['status']}] ({capabilities['z3']['reason']})"
     )
     click.echo(
-        f"  Combined:{'available' if capabilities['combined']['available'] else 'unavailable'}"
-        f" ({capabilities['combined']['reason']})"
+        f"  Lean:    {'available' if capabilities['lean']['available'] else 'unavailable'} "
+        f"[{capabilities['lean']['status']}] ({capabilities['lean']['reason']})"
+    )
+    click.echo(
+        f"  Combined:{'available' if capabilities['combined']['available'] else 'unavailable'} "
+        f"[{capabilities['combined']['status']}] ({capabilities['combined']['reason']})"
     )
 
 
