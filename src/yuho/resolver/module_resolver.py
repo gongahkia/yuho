@@ -20,6 +20,7 @@ from yuho.ast.nodes import (
     StatuteNode,
     VariableDecl,
     DefinitionEntry,
+    IdentifierNode,
 )
 from yuho.ast.builder import ASTBuilder
 from yuho.parser import get_parser
@@ -79,6 +80,7 @@ class ModuleResolver:
         else:
             self._search_paths = [Path.cwd()]
         self._cache: Dict[str, ModuleNode] = {}  # abs path str -> ModuleNode
+        self._module_paths: Dict[int, Path] = {}
         self._currently_resolving: Set[str] = set()
         self._parser = None  # lazily initialized on first resolve
 
@@ -209,9 +211,12 @@ class ModuleResolver:
         self,
         import_node: ImportNode,
         from_file: Path,
+        _stack: Optional[Set[str]] = None,
     ) -> Tuple[DefinitionEntry, ...]:
         """Resolve an import and return exported statute definitions in source order."""
         module = self.resolve(import_node, from_file)
+        module_path = self._module_paths.get(id(module), Path(from_file).resolve())
+        module = self.module_with_imported_definitions(module, module_path, _stack=_stack)
         definitions = tuple(
             definition
             for statute in module.statutes
@@ -220,21 +225,29 @@ class ModuleResolver:
         if not import_node.imported_names or import_node.is_wildcard:
             return definitions
         wanted = set(import_node.imported_names)
-        return tuple(definition for definition in definitions if definition.term in wanted)
+        return _definition_dependency_closure(definitions, wanted)
 
     def module_with_imported_definitions(
         self,
         module: ModuleNode,
         from_file: Path,
+        _stack: Optional[Set[str]] = None,
     ) -> ModuleNode:
         """Prepend imported definitions to each local statute.
 
         Local statute definitions are kept after imported definitions so local
         terms override imports during predicate evaluation.
         """
+        stack = set(_stack or set())
+        module_key = str(Path(from_file).resolve())
+        if module_key in stack:
+            return module
+        stack.add(module_key)
         imported: List[DefinitionEntry] = []
         for import_node in module.imports:
-            imported.extend(self.resolve_and_get_definitions(import_node, from_file))
+            imported.extend(
+                self.resolve_and_get_definitions(import_node, from_file, _stack=stack)
+            )
         if not imported:
             return module
         imported_defs = tuple(imported)
@@ -249,6 +262,7 @@ class ModuleResolver:
     def clear_cache(self) -> None:
         """Clear the module cache."""
         self._cache.clear()
+        self._module_paths.clear()
 
     @property
     def cached_modules(self) -> Dict[str, ModuleNode]:
@@ -342,6 +356,7 @@ class ModuleResolver:
             builder = ASTBuilder(source, file=str(file_path))
             module = builder.build(parse_result.root_node)
             self._cache[key] = module
+            self._module_paths[id(module)] = file_path
             # recursively resolve nested imports
             self._resolve_nested(module, file_path)
             return module
@@ -376,3 +391,35 @@ def _iter_definitions(statute: StatuteNode) -> Tuple[DefinitionEntry, ...]:
         definitions.extend(subsection.definitions)
         stack[0:0] = list(subsection.subsections)
     return tuple(definitions)
+
+
+def _definition_dependency_closure(
+    definitions: Tuple[DefinitionEntry, ...],
+    wanted: Set[str],
+) -> Tuple[DefinitionEntry, ...]:
+    by_term = {definition.term: definition for definition in definitions}
+    included: Set[str] = set()
+    pending = list(wanted)
+    while pending:
+        term = pending.pop()
+        if term in included:
+            continue
+        definition = by_term.get(term)
+        if definition is None:
+            continue
+        included.add(term)
+        for name in _identifier_names(definition.definition):
+            if name in by_term and name not in included:
+                pending.append(name)
+    return tuple(definition for definition in definitions if definition.term in included)
+
+
+def _identifier_names(root: ASTNode) -> Set[str]:
+    names: Set[str] = set()
+    stack: List[ASTNode] = [root]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, IdentifierNode):
+            names.add(node.name)
+        stack.extend(node.children())
+    return names

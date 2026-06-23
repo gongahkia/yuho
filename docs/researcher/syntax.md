@@ -672,4 +672,6 @@ statute 415 "Cheating" {
 Named and wildcard imports expose exported statute `definitions` as computable
 terms. If an importing statute defines the same term locally, the local
 definition is used during predicate evaluation. If multiple imports export the
-same definition term, semantic analysis emits a warning.
+same definition term, semantic analysis emits a warning. Named imports also
+carry transitive imported-definition dependencies used by the selected
+definition.

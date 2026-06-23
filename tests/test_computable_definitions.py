@@ -313,3 +313,54 @@ statute 1 "Duplicate Imports" {
     ]
 
     assert any("Duplicate imported definition 'shared'" in warning for warning in warnings)
+
+
+def test_named_import_carries_transitive_definition_dependencies(tmp_path: Path) -> None:
+    (tmp_path / "base.yh").write_text(
+        """
+statute 10 "Base" {
+  definitions {
+    base := facts.base;
+  }
+  elements {
+    actus_reus placeholder := "placeholder";
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    (tmp_path / "derived.yh").write_text(
+        """
+import { base } from "base.yh";
+
+statute 11 "Derived" {
+  definitions {
+    derived := base;
+  }
+  elements {
+    actus_reus placeholder := "placeholder";
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    statute = tmp_path / "main.yh"
+    statute.write_text(
+        """
+import { derived } from "derived.yh";
+
+statute 1 "Transitive Import" {
+  elements {
+    actus_reus result := derived;
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(json.dumps({"base": True}), encoding="utf-8")
+
+    explained = CliRunner().invoke(cli, ["explain", "--facts", str(facts), str(statute)])
+
+    assert explained.exit_code == 0
+    assert "Section 1 is satisfied." in explained.output
