@@ -502,8 +502,11 @@ fn evaluate_with_base(string facts) : bool {
 ```
 
 `is_infringed` is structural ("does this section exist + are its
-elements satisfied"); `apply_scope` returns the full evaluation
-result so a parent statute can compose with the bindings.
+elements satisfied"). In DSL expressions, `apply_scope` resolves the
+target section through the registered statute environment and returns
+the target section's satisfaction as a boolean. The Python
+`StatuteEvaluator.apply_scope(...)` API returns the full evaluation
+result so host tooling can compose with per-element bindings.
 
 ## Annotations
 

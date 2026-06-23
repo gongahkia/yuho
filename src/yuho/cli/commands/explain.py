@@ -6,10 +6,11 @@ import json
 import sys
 from dataclasses import asdict
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Sequence
 
 import click
 
+from yuho.ast import nodes
 from yuho.explain import DatalogExplainer
 from yuho.services.analysis import analyze_file
 from yuho.transpile.english_transpiler import EnglishTranspiler
@@ -42,8 +43,9 @@ def run_explain(
         sys.exit(1)
 
     facts = _load_facts(Path(facts_file))
-    statute = analysis.ast.statutes[0]
-    trace = DatalogExplainer().explain(statute, facts)
+    statute = _select_statute(analysis.ast.statutes, section)
+    statutes = {st.section_number: st for st in analysis.ast.statutes}
+    trace = DatalogExplainer().explain(statute, facts, statutes)
     if json_output:
         click.echo(json.dumps(asdict(trace), indent=2, sort_keys=True))
         return
@@ -77,6 +79,17 @@ def _load_facts(path: Path) -> dict[str, object]:
         click.echo("error: facts file must be a JSON object", err=True)
         sys.exit(1)
     return data
+
+
+def _select_statute(
+    statutes: Sequence[nodes.StatuteNode],
+    section: str,
+) -> nodes.StatuteNode:
+    normal = section[1:] if section.lower().startswith("s") else section
+    for statute in statutes:
+        if getattr(statute, "section_number", None) == normal:
+            return statute
+    return statutes[0]
 
 
 def _emit_text(trace) -> None:

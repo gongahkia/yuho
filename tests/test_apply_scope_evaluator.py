@@ -11,7 +11,7 @@ from __future__ import annotations
 import pytest
 
 from yuho.ast import nodes
-from yuho.eval.interpreter import StructInstance, Value
+from yuho.eval.interpreter import Interpreter, StructInstance, Value
 from yuho.eval.statute_evaluator import StatuteEvaluator
 from yuho.services.analysis import analyze_source
 
@@ -28,7 +28,7 @@ def _registry_from_module(module: nodes.ModuleNode):
     return {st.section_number: st for st in module.statutes}
 
 
-_BASE_LIBRARY = '''
+_BASE_LIBRARY = """
 statute 299 "Culpable homicide" {
   elements { all_of {
     actus_reus death := "Causes death of a person";
@@ -50,7 +50,7 @@ statute 107 "Abetment" {
     mens_rea abet_intent := "With knowledge that the thing is an offence";
   } }
 }
-'''
+"""
 
 
 @pytest.fixture
@@ -107,8 +107,10 @@ class TestParentScopeCompositionPattern:
         # Facts that satisfy s299 (the abetted base offence) AND s107's
         # own elements (instigation + abet intent).
         facts = _facts(
-            death=True, intent=True,           # s299 base
-            instigation=True, abet_intent=True,  # s107 wrapper
+            death=True,
+            intent=True,  # s299 base
+            instigation=True,
+            abet_intent=True,  # s107 wrapper
         )
         ev = StatuteEvaluator()
         base_result = ev.apply_scope("299", facts, registry)
@@ -127,8 +129,10 @@ class TestParentScopeCompositionPattern:
     def test_parent_short_circuits_when_base_not_satisfied(self, registry):
         # Wrapper elements present, but base offence is missing intent.
         facts = _facts(
-            death=True, intent=False,
-            instigation=True, abet_intent=True,
+            death=True,
+            intent=False,
+            instigation=True,
+            abet_intent=True,
         )
         ev = StatuteEvaluator()
         base_result = ev.apply_scope("299", facts, registry)
@@ -136,8 +140,71 @@ class TestParentScopeCompositionPattern:
         # The parent's composition predicate would fail.
         wrapper_result = ev.apply_scope("107", facts, registry)
         assert wrapper_result.overall_satisfied is True  # wrapper alone is fine
-        assert (base_result.overall_satisfied
-                and wrapper_result.overall_satisfied) is False
+        assert (base_result.overall_satisfied and wrapper_result.overall_satisfied) is False
+
+
+class TestEmbeddedScopePredicates:
+    def test_apply_scope_expression_element_uses_registered_statutes(self):
+        source = """
+        statute 299 "Culpable homicide" {
+          elements { all_of {
+            actus_reus death := "Causes death";
+            mens_rea intent := "With intent";
+          } }
+        }
+
+        statute 300 "Murder" {
+          elements { all_of {
+            circumstance base_offence := apply_scope(s299, facts);
+            mens_rea murder_intent := "With intent to kill";
+          } }
+        }
+        """
+        analysis = analyze_source(source, run_semantic=False)
+        assert analysis.ast is not None, [str(error) for error in analysis.parse_errors]
+        interp = Interpreter()
+        interp.interpret(analysis.ast)
+        registry = _registry_from_module(analysis.ast)
+
+        result = StatuteEvaluator().evaluate(
+            registry["300"],
+            _facts(death=True, intent=True, murder_intent=True),
+            interp.env,
+        )
+
+        bindings = result.bindings()
+        assert bindings["base_offence"] is True
+        assert result.overall_satisfied is True
+
+    def test_is_infringed_expression_element_uses_registered_statutes(self):
+        source = """
+        statute 299 "Culpable homicide" {
+          elements { all_of {
+            actus_reus death := "Causes death";
+            mens_rea intent := "With intent";
+          } }
+        }
+
+        statute 300 "Murder" {
+          elements {
+            circumstance base_offence := is_infringed(s299);
+          }
+        }
+        """
+        analysis = analyze_source(source, run_semantic=False)
+        assert analysis.ast is not None, [str(error) for error in analysis.parse_errors]
+        interp = Interpreter()
+        interp.interpret(analysis.ast)
+        registry = _registry_from_module(analysis.ast)
+
+        result = StatuteEvaluator().evaluate(
+            registry["300"],
+            _facts(death=True, intent=True),
+            interp.env,
+        )
+
+        assert result.bindings()["base_offence"] is True
+        assert result.overall_satisfied is True
 
 
 class TestRecursionGuard:

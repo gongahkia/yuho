@@ -199,3 +199,37 @@ def test_explain_cli_json_includes_precedent_status(tmp_path: Path):
     assert precedent["case_name"] == "New v PP"
     assert precedent["citation"] == "[2026] SGCA 1"
     assert precedent["status"] == "active"
+
+
+def test_explain_cli_resolves_apply_scope_in_predicate_elements(tmp_path: Path):
+    root = tmp_path / "library"
+    section = root / "s300_wrapper"
+    section.mkdir(parents=True)
+    (section / "statute.yh").write_text(
+        """
+        statute 299 "Base" {
+            elements { all_of {
+                actus_reus act := "act";
+                mens_rea intent := "intent";
+            } }
+        }
+
+        statute 300 "Wrapper" {
+            elements {
+                circumstance base := apply_scope(s299, facts);
+            }
+        }
+        """,
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(json.dumps({"act": True, "intent": True}), encoding="utf-8")
+
+    result = CliRunner().invoke(
+        cli,
+        ["explain", "--facts", str(facts), "--library", str(root), "300"],
+    )
+
+    assert result.exit_code == 0
+    assert "Section 300 is satisfied." in result.output
+    assert "predicate expression is truthy" in result.output

@@ -119,7 +119,8 @@ def _run_smoke(statute_path: Path, facts_path: Path, out_path: Path) -> dict[str
 
     statute = analysis.ast.statutes[0]
     facts = json.loads(facts_path.read_text(encoding="utf-8"))
-    trace = DatalogExplainer().explain(statute, facts)
+    statutes = {st.section_number: st for st in analysis.ast.statutes}
+    trace = DatalogExplainer().explain(statute, facts, statutes)
     english = EnglishTranspiler().transpile(analysis.ast).output
     out_path.write_text(english, encoding="utf-8")
     return {

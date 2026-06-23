@@ -326,13 +326,10 @@ class StatuteEvaluator:
                 f"{' -> '.join(trace + [canonical])}"
             )
         trace.append(canonical)
-        # Standard evaluation handles elements + exceptions; ApplyScopeNode
-        # references inside expression contexts of this statute are
-        # not yet semantically interpreted by the element-graph executor
-        # (they currently surface as unresolved expression nodes), so the
-        # recursion entry-point is the parent-issued apply_scope call,
-        # not an embedded one. The ``_trace`` argument is plumbed through
-        # for future depth-bounded recursion.
+        # Standard evaluation handles elements + exceptions. Embedded
+        # apply_scope/is_infringed expressions resolve through the supplied
+        # environment's statute registry; the trace guard applies to this
+        # direct scope call.
         return self.evaluate(target, facts, env)
 
 

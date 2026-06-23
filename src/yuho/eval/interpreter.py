@@ -672,7 +672,7 @@ class Interpreter(Visitor):
         from yuho.eval.statute_evaluator import _canonical_section
 
         canonical = _canonical_section(section_ref)
-        target = self.env.statutes.get(canonical)
+        target = self.env.get_statute(canonical)
         if target is None:
             raise InterpreterError(
                 f"unresolved section reference s{canonical}: not registered "
@@ -701,6 +701,17 @@ class Interpreter(Visitor):
             cur = cur.parent
         fields.update(seen)
         return StructInstance(type_name="Facts", fields=fields)
+
+    def _statute_registry(self) -> Dict[str, nodes.StatuteNode]:
+        registry: Dict[str, nodes.StatuteNode] = {}
+        chain: List[Environment] = []
+        cur: Optional[Environment] = self.env
+        while cur is not None:
+            chain.append(cur)
+            cur = cur.parent
+        for env in reversed(chain):
+            registry.update(env.statutes)
+        return registry
 
     def visit_is_infringed(self, node: nodes.IsInfringedNode) -> "Value":
         """Evaluate `is_infringed(sX)` against the current environment.
@@ -741,7 +752,7 @@ class Interpreter(Visitor):
         if facts is None:
             facts = self._facts_from_env()
         ev = StatuteEvaluator()
-        result = ev.apply_scope(node.section_ref, facts, self.env.statutes, env=self.env)
+        result = ev.apply_scope(node.section_ref, facts, self._statute_registry(), env=self.env)
         return Value(raw=bool(result.overall_satisfied), type_tag="bool")
 
     def visit_function_call(self, node: nodes.FunctionCallNode) -> Value:

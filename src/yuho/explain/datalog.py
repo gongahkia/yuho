@@ -51,6 +51,7 @@ class DatalogExplainer:
         self,
         statute: nodes.StatuteNode,
         facts: Mapping[str, object],
+        statutes: Mapping[str, nodes.StatuteNode] | None = None,
     ) -> JustificationTrace:
         normalized_facts = normalize_facts(facts)
         runtime_facts = struct_from_facts(normalized_facts)
@@ -65,6 +66,7 @@ class DatalogExplainer:
                 runtime_facts,
                 statute.definitions,
                 precedent_index,
+                statutes or {},
                 f"top_{index}",
                 rules,
             )
@@ -85,6 +87,7 @@ class DatalogExplainer:
         runtime_facts,
         definitions: tuple[nodes.DefinitionEntry, ...],
         precedent_index: Mapping[str, tuple[PrecedentTrace, ...]],
+        statutes: Mapping[str, nodes.StatuteNode],
         fallback_name: str,
         rules: list[str],
     ) -> ElementTrace:
@@ -96,6 +99,7 @@ class DatalogExplainer:
                     runtime_facts,
                     definitions,
                     precedent_index,
+                    statutes,
                     f"{fallback_name}_{i}",
                     rules,
                 )
@@ -133,7 +137,9 @@ class DatalogExplainer:
         if isinstance(member, (nodes.ElementNode, nodes.CivilPrimitiveNode)) and not isinstance(
             member.description, nodes.StringLit
         ):
-            satisfied = self._predicate_truthy(member.description, runtime_facts, definitions)
+            satisfied = self._predicate_truthy(
+                member.description, runtime_facts, definitions, statutes
+            )
             rule = f"satisfied({name}) :- predicate({name})."
             reason = (
                 "predicate expression is truthy" if satisfied else "predicate expression is false"
@@ -178,8 +184,10 @@ class DatalogExplainer:
         predicate: nodes.ASTNode,
         runtime_facts,
         definitions: tuple[nodes.DefinitionEntry, ...] = (),
+        statutes: Mapping[str, nodes.StatuteNode] | None = None,
     ) -> bool:
         env = Environment()
+        env.statutes.update(statutes or {})
         env.set("facts", Value(raw=runtime_facts, type_tag="struct"))
         for key, value in runtime_facts.fields.items():
             env.set(key, value)

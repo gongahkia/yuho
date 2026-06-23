@@ -37,5 +37,6 @@ def run_irac(
 
     facts = _load_facts(Path(facts_file))
     statute = analysis.ast.statutes[0]
-    trace = DatalogExplainer().explain(statute, facts)
+    statutes = {st.section_number: st for st in analysis.ast.statutes}
+    trace = DatalogExplainer().explain(statute, facts, statutes)
     click.echo(EnglishTranspiler().render_irac(statute, trace))
