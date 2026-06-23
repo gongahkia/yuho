@@ -101,6 +101,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Add richer doctrine/case-law semantics once runtime semantics exists.
 
 - Expand beyond smoke fixtures.
+  - Current support: `make verify-core` reports Lean mechanisation feature coverage and explicit out-of-scope areas.
   - Generate representative Lean fixtures from corpus strata: simple, nested, exception-heavy, cross-ref-heavy, penalty-heavy.
   - Acceptance: mechanisation CI reports coverage by feature, not only by named sections.
 

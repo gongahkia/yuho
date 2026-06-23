@@ -60,6 +60,7 @@ verify-core: $(LOGS)
 	$(MAKE) verify-source-maps
 	$(MAKE) verify-backend-parity
 	$(MAKE) verify-structural-diff
+	$(MAKE) verify-mechanisation-coverage
 	$(MAKE) verify-mechanisation
 	@echo ""
 	@echo "=== summary ==="
@@ -74,6 +75,8 @@ verify-core: $(LOGS)
 	@printf "Backend parity   : %s\n" "$$(tail -n 1 $(LOGS)/backend-parity.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Structural diff  : %s\n" "$$(tail -n 1 $(LOGS)/structural-diff.log)" \
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "Mech coverage    : %s\n" "$$(tail -n 1 $(LOGS)/mechanisation-coverage.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Mechanisation    : %s\n" "$$(tail -n 1 $(LOGS)/mechanisation.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
@@ -138,6 +141,10 @@ verify-source-maps: $(LOGS)
 verify-backend-parity: $(LOGS)
 	@echo ">>> summarizing backend parity and unsupported features…"
 	$(PYTHON) scripts/verify_backend_parity.py 2>&1 | tee $(LOGS)/backend-parity.log
+
+verify-mechanisation-coverage: $(LOGS)
+	@echo ">>> reporting Lean mechanisation feature coverage…"
+	$(PYTHON) scripts/verify_mechanisation_coverage.py 2>&1 | tee $(LOGS)/mechanisation-coverage.log
 
 verify-mermaid-verbose: $(LOGS)
 	@echo ">>> verifying verbose-shape Mermaid render across 524 sections…"
