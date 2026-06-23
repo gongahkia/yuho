@@ -74,6 +74,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 - Promote case law from explanation annotations to executable semantics.
   - Current support: `yuho explain` annotates targeted elements with active case-law holdings and marks same-statute overruled authorities inactive.
+  - Current support: `yuho explain` also marks same-statute distinguished authorities inactive for the current explanation.
   - Current support: `yuho refs --treatment` exposes case-to-case treatment edges.
   - Model holding, ratio/obiter marker, jurisdiction/court level, date, treatment, element target, and interpretive effect.
   - Encode treatment types: follows, distinguishes, overrules, reverses, approves, disapproves, applies.

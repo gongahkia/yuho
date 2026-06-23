@@ -96,8 +96,8 @@ class EnglishTranspiler(TranspilerBase, Visitor):
 
     def _visit_explain_precedent(self, element_name: str, precedent: PrecedentTrace) -> None:
         citation = f" {precedent.citation}" if precedent.citation else ""
-        if precedent.status == "overruled":
-            treatment = precedent.treatment or "overruled"
+        if precedent.status != "active":
+            treatment = precedent.treatment or precedent.status
             self._emit(
                 f"Case law {precedent.case_name}{citation} is {treatment}; "
                 f"holding not treated as active for element {element_name}: {precedent.holding}."

@@ -208,14 +208,15 @@ class DatalogExplainer:
 def _precedents_by_element(
     case_law: tuple[nodes.CaseLawNode, ...],
 ) -> dict[str, tuple[PrecedentTrace, ...]]:
-    overruled_by = _overruled_targets(case_law)
+    inactive_by = _inactive_treatment_targets(case_law)
     result: dict[str, list[PrecedentTrace]] = {}
     for case in case_law:
         if not case.element_ref:
             continue
         case_name = case.case_name.value
-        treatment = overruled_by.get(_case_key(case_name))
-        status = "overruled" if treatment else "active"
+        inactive = inactive_by.get(_case_key(case_name))
+        status = inactive[0] if inactive else "active"
+        treatment = inactive[1] if inactive else None
         result.setdefault(case.element_ref, []).append(
             PrecedentTrace(
                 case_name=case_name,
@@ -228,16 +229,21 @@ def _precedents_by_element(
     return {element: tuple(precedents) for element, precedents in result.items()}
 
 
-def _overruled_targets(case_law: tuple[nodes.CaseLawNode, ...]) -> dict[str, str]:
-    result: dict[str, str] = {}
+def _inactive_treatment_targets(
+    case_law: tuple[nodes.CaseLawNode, ...],
+) -> dict[str, tuple[str, str]]:
+    result: dict[str, tuple[str, str]] = {}
     known = {_case_key(case.case_name.value): case.case_name.value for case in case_law}
     for case in case_law:
         for treatment in case.treatments:
-            if treatment.kind != "overruled":
+            if treatment.kind not in {"overruled", "distinguished"}:
                 continue
             target_key = _case_key(treatment.target.value)
             if target_key in known:
-                result[target_key] = f"overruled by {case.case_name.value}"
+                result[target_key] = (
+                    treatment.kind,
+                    f"{treatment.kind} by {case.case_name.value}",
+                )
     return result
 
 
