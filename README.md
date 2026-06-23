@@ -16,6 +16,8 @@
   &nbsp;·&nbsp;
   <a href="./docs/INDEX.md">Docs</a>
   &nbsp;·&nbsp;
+  <a href="./docs/positioning/status-matrix.md">Status matrix</a>
+  &nbsp;·&nbsp;
   <a href="./library/penal_code/">Encoded library</a>
 </p>
 
@@ -33,6 +35,9 @@ raw Indian Penal Code snapshot, and Malaysia/Pakistan IPC-lineage
 proof-of-concept corpora.
 
 ## Current scope
+
+See the [feature status matrix](./docs/positioning/status-matrix.md) for
+stable, partial, experimental, and unsupported surfaces.
 
 Retained surfaces:
 

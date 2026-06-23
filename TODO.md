@@ -168,21 +168,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Inspired by L4/Blawx/Catala UX, provide constrained templates for non-compiler users.
   - Acceptance: `yuho init --template statute-literate` creates a starter with legal text anchors and executable predicates.
 
-## P2: Product Positioning And Honesty
-
-- Add a public feature/status matrix.
-  - Rows: parser, type checker, lint, eval, explain, debug, Z3, Alloy, Lean, Akoma Ntoso, LegalRuleML, DOCX, LSP.
-  - Columns: stable, experimental, partial, unsupported, tested by.
-  - Acceptance: README links to status matrix and avoids unqualified "faithful executable law" wording.
-
-- Add comparison docs against Catala, L4, OpenFisca, Blawx, LegalRuleML, Akoma Ntoso.
-  - Be explicit: Yuho is stronger on corpus/transpilation/formal-output breadth; weaker on lawyer-literate executable authoring and mature policy API runtime.
-  - Acceptance: positioning docs state tradeoffs without marketing claims.
-
-- Add an "expert review checklist".
-  - Questions: canonical semantics? proof boundary? opaque text? backend parity? fact model? case law? conformance? corpus methodology?
-  - Acceptance: contributors can run through this before claiming a new feature is semantically supported.
-
 ## Non-Goals For Now
 
 - Do not optimize syntax novelty for esolang appeal.

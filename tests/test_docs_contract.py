@@ -63,3 +63,15 @@ def test_local_markdown_links_resolve() -> None:
                     missing.append((str(md_path), target))
 
     assert not missing, missing
+
+
+def test_positioning_docs_are_linked() -> None:
+    """Public honesty docs should stay discoverable."""
+    readme = Path("README.md").read_text(encoding="utf-8")
+    index = Path("docs/INDEX.md").read_text(encoding="utf-8")
+
+    assert "docs/positioning/status-matrix.md" in readme
+    assert "positioning/status-matrix.md" in index
+    assert "positioning/comparisons.md" in index
+    assert "contributor/expert-review-checklist.md" in index
+    assert "faithful executable law" not in readme.lower()

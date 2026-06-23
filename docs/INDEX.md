@@ -25,6 +25,7 @@ corpus tooling.
 - [Source maps](contributor/source-maps.md)
 - [Grammar pragma](contributor/grammar-pragma.md)
 - [Transpile snapshot matrix](contributor/conformance-matrix.md)
+- [Expert review checklist](contributor/expert-review-checklist.md)
 - [Transpiler plugins](contributor/transpiler-plugins.md)
 - [Porting guide](contributor/porting-guide.md)
 - [CI templates](contributor/ci-templates/)
@@ -35,6 +36,8 @@ Audience: reviewers, researchers, and contributors tracing the design.
 
 - [Syntax reference](researcher/syntax.md)
 - [Formal semantics](researcher/formal-semantics.md)
+- [Feature status matrix](positioning/status-matrix.md)
+- [Comparisons with adjacent systems](positioning/comparisons.md)
 - [Yuho and L4 positioning](positioning/yuho-vs-l4.md)
 - [Why criminal law](positioning/why-criminal-law.md)
 - [Grammar quirks](grammar-quirks.md)
