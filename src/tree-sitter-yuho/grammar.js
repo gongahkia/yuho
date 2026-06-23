@@ -444,7 +444,7 @@ module.exports = grammar({
     definition_entry: $ => seq(
       field('term', $.identifier),
       ':=',
-      field('definition', $.string_literal),
+      field('definition', $._expression),
       optional(';'),
     ),
 

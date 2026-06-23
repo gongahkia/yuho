@@ -2,10 +2,35 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
+from click.testing import CliRunner
+
 from yuho.ast import nodes
+from yuho.cli.main import cli
 from yuho.eval.facts import struct_from_facts
 from yuho.eval.statute_evaluator import StatuteEvaluator
 from yuho.explain import DatalogExplainer
+from yuho.services.analysis import analyze_source
+from yuho.transpile.english_transpiler import EnglishTranspiler
+from yuho.transpile.latex_transpiler import LaTeXTranspiler
+
+
+SOURCE = """
+statute 1 "Computed" {
+  definitions {
+    deceptive := facts.representation.falsehood;
+  }
+  elements {
+    actus_reus deception := deceptive;
+    circumstance harm := deceptive;
+  }
+  penalty {
+    fine := $0.00 .. $1.00;
+  }
+}
+"""
 
 
 def _fact_path(*parts: str) -> nodes.ASTNode:
@@ -69,3 +94,56 @@ def test_explainer_uses_computable_definition() -> None:
 
     assert trace.overall_satisfied is True
     assert [element.satisfied for element in trace.elements] == [True, True]
+
+
+def test_source_level_computable_definition_evaluates() -> None:
+    analysis = analyze_source(SOURCE, file="<computed>", run_semantic=False)
+    assert not analysis.parse_errors
+    statute = analysis.ast.statutes[0]
+
+    result = StatuteEvaluator().evaluate(
+        statute,
+        struct_from_facts({"representation": {"falsehood": True}}),
+    )
+
+    assert result.overall_satisfied is True
+    assert result.bindings() == {"deception": True, "harm": True}
+
+
+def test_source_level_computable_definition_explains() -> None:
+    statute = analyze_source(SOURCE, file="<computed>", run_semantic=False).ast.statutes[0]
+
+    trace = DatalogExplainer().explain(statute, {"representation": {"falsehood": True}})
+
+    assert trace.overall_satisfied is True
+    assert [element.satisfied for element in trace.elements] == [True, True]
+
+
+def test_source_level_computable_definition_tooling(tmp_path: Path) -> None:
+    statute_path = tmp_path / "computed.yh"
+    statute_path.write_text(SOURCE, encoding="utf-8")
+    runner = CliRunner()
+
+    lint = runner.invoke(cli, ["lint", "--mode", "executable", str(statute_path)])
+    assert lint.exit_code == 0
+    assert "opaque-executable-meaning" not in lint.output
+
+    formatted = runner.invoke(cli, ["fmt", str(statute_path)])
+    assert formatted.exit_code == 0
+    assert "deceptive := facts.representation.falsehood;" in formatted.output
+
+    facts = tmp_path / "facts.json"
+    facts.write_text(json.dumps({"representation": {"falsehood": True}}), encoding="utf-8")
+    explained = runner.invoke(cli, ["explain", "--facts", str(facts), str(statute_path)])
+    assert explained.exit_code == 0
+    assert "Section 1 is satisfied." in explained.output
+
+
+def test_computable_definition_exports_do_not_assume_string_values() -> None:
+    statute = analyze_source(SOURCE, file="<computed>", run_semantic=False).ast
+
+    english = EnglishTranspiler().transpile(statute)
+    latex = LaTeXTranspiler().transpile(statute)
+
+    assert "facts's representation's falsehood" in english.output
+    assert r"\textit{facts}.representation.falsehood" in latex.output

@@ -107,7 +107,7 @@ StatuteMember ::= Definitions | Elements | Penalty | Illustration
                | Exception | CaseLaw
 
 Definitions ::= 'definitions' '{' DefEntry* '}'
-DefEntry    ::= Identifier ':=' StringLit
+DefEntry    ::= Identifier ':=' Expr
 
 Elements    ::= 'elements' '{' (Element | ElementGroup)* '}'
 Element     ::= ElementType Identifier ':=' Expr CausedBy? BurdenQual?

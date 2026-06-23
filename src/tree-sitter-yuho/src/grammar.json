@@ -1911,7 +1911,7 @@
           "name": "definition",
           "content": {
             "type": "SYMBOL",
-            "name": "string_literal"
+            "name": "_expression"
           }
         },
         {

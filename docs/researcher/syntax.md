@@ -295,6 +295,7 @@ statute 415 "Cheating" {
         deceive := "To cause a person to believe something that is false";
         fraudulently := "With intent to defraud another person";
         dishonestly := "With intention of causing wrongful gain or wrongful loss";
+        deceptive := facts.representation.falsehood;
     }
 
     // elements block — specifies actus_reus, mens_rea, or circumstance
@@ -322,6 +323,10 @@ statute 415 "Cheating" {
     }
 }
 ```
+
+Definitions may be quoted legal prose or executable expressions. Executable
+definitions are evaluated before predicate elements, so elements can reference
+the defined term instead of repeating a fact path.
 
 ### Element Groups (AND/OR relationships)
 

@@ -65,8 +65,8 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 ## P0: Machine-Readable Legal Meaning
 
 - Expose computable definition source syntax and import semantics.
-  - Runtime/explain can evaluate AST-level computable definitions and reuse them across elements.
-  - Remaining work: update generated parser artifacts for expression-valued `definition_entry`, then add source-level tests.
+  - Runtime/explain can evaluate source-level computable definitions and reuse them across elements.
+  - Current support: `definition_entry` accepts either prose strings or executable expressions.
   - Track aliases, imported definitions, and section-local overrides across files.
   - Acceptance: a source `.yh` definition can be referenced by multiple elements and tested independently.
 

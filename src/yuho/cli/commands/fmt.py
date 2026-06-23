@@ -120,7 +120,7 @@ def _format_module(ast) -> str:
         if statute.definitions:
             lines.append("    definitions {")
             for defn in statute.definitions:
-                lines.append(f'        {defn.term} := "{defn.definition.value}";')
+                lines.append(f"        {defn.term} := {_format_expr(defn.definition)};")
             lines.append("    }")
             lines.append("")
 

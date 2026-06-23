@@ -209,7 +209,11 @@ class LaTeXTranspiler(TranspilerBase, Visitor):
             self._emit(r"\begin{legaldefs}")
             for defn in node.definitions:
                 term = escape_latex(defn.term)
-                definition = escape_latex(defn.definition.value)
+                definition = (
+                    escape_latex(defn.definition.value)
+                    if isinstance(defn.definition, nodes.StringLit)
+                    else expr_to_latex(defn.definition)
+                )
                 self._emit(rf"  \item[\textbf{{{term}}}] {definition}")
             self._emit(r"\end{legaldefs}")
             self._emit_blank()

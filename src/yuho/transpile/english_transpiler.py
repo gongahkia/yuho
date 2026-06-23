@@ -228,7 +228,12 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._emit("Definitions:")
             self._indent_level += 1
             for defn in node.definitions:
-                self._emit(f'"{defn.term}" means {defn.definition.value}')
+                definition = (
+                    defn.definition.value
+                    if isinstance(defn.definition, nodes.StringLit)
+                    else self._expr_to_english(defn.definition)
+                )
+                self._emit(f'"{defn.term}" means {definition}')
             self._indent_level -= 1
             self._emit_blank()
 
