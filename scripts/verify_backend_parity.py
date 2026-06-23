@@ -15,6 +15,7 @@ from yuho.cli.commands.verify import BACKEND_METADATA
 
 PARITY_LINKS = (
     ("runtime-z3", "scripts/verify_runtime_tests.py"),
+    ("penalty-verdicts", "scripts/verify_penalty_verdicts.py"),
     ("z3-lean", "scripts/verify_structural_diff.py"),
     ("lean-verdicts", "scripts/verify_lean_expected_verdicts.py"),
     ("alloy", "explicit unsupported-feature failures"),
@@ -39,7 +40,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "penalties_money_duration",
-        "runtime-z3=partial-money-duration; z3-lean=smoke; alloy=unsupported-boundary",
+        "runtime-z3=imprisonment/fine-model-verdict; z3-lean=penalty-footprint-smoke; alloy=unsupported-boundary",
     ),
     (
         "lean_expected_verdicts",
@@ -71,7 +72,8 @@ def build_summary() -> str:
         unsupported = ", ".join(metadata["unsupported_features"])
         lines.append(f"- {backend} ({metadata['status']}): {unsupported}")
     lines.append(
-        "Backend parity: runtime-z3=runtime-tests; z3-lean=structural-diff; "
+        "Backend parity: runtime-z3=runtime-tests; penalty-verdicts=z3-model; "
+        "z3-lean=structural-diff; "
         "lean-verdicts=expected-verdicts; "
         "alloy=explicit-unsupported"
     )

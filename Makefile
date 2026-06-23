@@ -31,7 +31,7 @@ LOGS = logs
 .PHONY: install doctor smoke verify-all verify-core \
         verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
-        verify-lean-verdicts \
+        verify-penalty-verdicts verify-lean-verdicts \
         verify-source-maps verify-backend-parity verify-mermaid-verbose \
         verify-literate-alignment \
         clean-reproduce
@@ -59,6 +59,7 @@ verify-core: $(LOGS)
 	$(MAKE) verify-coverage
 	$(MAKE) verify-akn-xsd
 	$(MAKE) verify-runtime-tests
+	$(MAKE) verify-penalty-verdicts
 	$(MAKE) verify-source-maps
 	$(MAKE) verify-literate-alignment
 	$(MAKE) verify-backend-parity
@@ -73,6 +74,8 @@ verify-core: $(LOGS)
 	@printf "AKN XSD          : %s\n" "$$(grep -E 'AKN round-trip:' $(LOGS)/akn-xsd.log | tail -n 1)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Runtime tests    : %s\n" "$$(grep -E 'runtime sweep:' $(LOGS)/runtime-tests.log | tail -n 1)" \
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "Penalty verdicts : %s\n" "$$(grep -E '^penalty verdicts:' $(LOGS)/penalty-verdicts.log | tail -n 1)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Source maps      : %s\n" "$$(grep -E '^  [a-z]+:' $(LOGS)/source-maps.log | tr '\n' '; ' | sed 's/; $$//')" \
 		| tee -a $(LOGS)/verify-core-summary.txt
@@ -149,8 +152,12 @@ verify-lean-verdicts: $(LOGS)
 	fi
 
 verify-runtime-tests: $(LOGS)
-	@echo ">>> verifying runtime-eval sweep across 90 rich test fixtures…"
+	@echo ">>> verifying runtime-eval sweep across rich test fixtures…"
 	$(PYTHON) scripts/verify_runtime_tests.py 2>&1 | tee $(LOGS)/runtime-tests.log
+
+verify-penalty-verdicts: $(LOGS)
+	@echo ">>> comparing penalty-bearing runtime verdicts with Z3 model verdicts…"
+	$(PYTHON) scripts/verify_penalty_verdicts.py 2>&1 | tee $(LOGS)/penalty-verdicts.log
 
 verify-source-maps: $(LOGS)
 	@echo ">>> verifying source-map coverage for legal export targets…"
