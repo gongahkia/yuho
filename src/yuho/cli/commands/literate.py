@@ -54,10 +54,25 @@ def run_literate(
 
     anchors = _source_anchors(source)
     element_spans = _element_spans(analysis.ast, source)
+    paragraph_alignments = [] if anchors else _paragraph_alignments(legal_text, analysis.ast)
     if report_format == "html":
-        report = _render_html(legal_text, source, anchors, element_spans, trace_text)
+        report = _render_html(
+            legal_text,
+            source,
+            anchors,
+            element_spans,
+            paragraph_alignments,
+            trace_text,
+        )
     else:
-        report = _render_markdown(legal_text, source, anchors, element_spans, trace_text)
+        report = _render_markdown(
+            legal_text,
+            source,
+            anchors,
+            element_spans,
+            paragraph_alignments,
+            trace_text,
+        )
 
     if output:
         Path(output).write_text(report, encoding="utf-8")
@@ -97,11 +112,66 @@ def _element_spans(
     return spans
 
 
+def _paragraph_alignments(
+    legal_text: str,
+    ast: nodes.ModuleNode,
+) -> list[tuple[str, int, str]]:
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", legal_text) if p.strip()]
+    if not paragraphs:
+        return []
+    result: list[tuple[str, int, str]] = []
+    for name, description in _element_descriptions(ast):
+        element_tokens = _tokens(f"{name} {description}")
+        if not element_tokens:
+            continue
+        best_index = -1
+        best_score = 0
+        for index, paragraph in enumerate(paragraphs, start=1):
+            score = len(element_tokens & _tokens(paragraph))
+            if score > best_score:
+                best_index = index
+                best_score = score
+        if best_index > 0:
+            result.append((name, best_index, paragraphs[best_index - 1]))
+    return result
+
+
+def _element_descriptions(ast: nodes.ModuleNode) -> list[tuple[str, str]]:
+    result: list[tuple[str, str]] = []
+
+    def walk(member: nodes.ASTNode) -> None:
+        if isinstance(member, nodes.ElementNode):
+            description = (
+                member.description.value
+                if isinstance(member.description, nodes.StringLit)
+                else type(member.description).__name__
+            )
+            result.append((member.name, description))
+            return
+        if isinstance(member, nodes.ElementGroupNode):
+            for child in member.members:
+                walk(child)
+
+    for statute in ast.statutes:
+        for member in statute.elements:
+            walk(member)
+    return result
+
+
+def _tokens(text: str) -> set[str]:
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", text.lower())
+        if len(token) >= 3
+    }
+
+
 def _render_markdown(
     legal_text: str,
     source: str,
     anchors: list[str],
     element_spans: list[tuple[str, int, int, str]],
+    paragraph_alignments: list[tuple[str, int, str]],
     trace_text: Optional[str],
 ) -> str:
     parts = [
@@ -134,6 +204,17 @@ def _render_markdown(
             )
     else:
         parts.append("- none")
+    parts.extend(["", "## Paragraph Alignment"])
+    if paragraph_alignments:
+        for name, paragraph, text in paragraph_alignments:
+            parts.extend(
+                [
+                    f"- `{name}`: paragraph {paragraph}",
+                    f"  {text}",
+                ]
+            )
+    else:
+        parts.append("- none")
     if trace_text is not None:
         parts.extend(["", "## Result Trace", "```text", trace_text.rstrip(), "```"])
     return "\n".join(parts) + "\n"
@@ -144,6 +225,7 @@ def _render_html(
     source: str,
     anchors: list[str],
     element_spans: list[tuple[str, int, int, str]],
+    paragraph_alignments: list[tuple[str, int, str]],
     trace_text: Optional[str],
 ) -> str:
     anchor_items = "\n".join(f"<li><code>{escape(anchor)}</code></li>" for anchor in anchors)
@@ -159,6 +241,16 @@ def _render_html(
     )
     if not span_rows:
         span_rows = '<tr><td colspan="3">none</td></tr>'
+    alignment_rows = "\n".join(
+        "<tr>"
+        f"<td><code>{escape(name)}</code></td>"
+        f"<td>{paragraph}</td>"
+        f"<td>{escape(text)}</td>"
+        "</tr>"
+        for name, paragraph, text in paragraph_alignments
+    )
+    if not alignment_rows:
+        alignment_rows = '<tr><td colspan="3">none</td></tr>'
     trace = ""
     if trace_text is not None:
         trace = f"<h2>Result Trace</h2>\n<pre>{escape(trace_text.rstrip())}</pre>"
@@ -186,6 +278,13 @@ code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
 <thead><tr><th>Element</th><th>Lines</th><th>Source</th></tr></thead>
 <tbody>
 {span_rows}
+</tbody>
+</table>
+<h2>Paragraph Alignment</h2>
+<table>
+<thead><tr><th>Element</th><th>Paragraph</th><th>Legal Text</th></tr></thead>
+<tbody>
+{alignment_rows}
 </tbody>
 </table>
 {trace}

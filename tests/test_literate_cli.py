@@ -65,3 +65,38 @@ def test_literate_renders_html_to_stdout(tmp_path: Path) -> None:
     assert "legal-text.md#p1" in result.output
     assert "<h2>Executable Element Spans</h2>" in result.output
     assert "<code>representation</code>" in result.output
+
+
+def test_literate_aligns_paragraphs_when_no_source_anchors(tmp_path: Path) -> None:
+    statute = tmp_path / "statute.yh"
+    statute.write_text(
+        """
+statute 1 "No Anchors" {
+  elements {
+    actus_reus deception := "Deceives another person";
+    circumstance harm := "Causes financial harm";
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    legal_text = tmp_path / "legal.md"
+    legal_text.write_text(
+        "A person deceives another person.\n\nThe conduct causes financial harm.",
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(
+        cli,
+        [
+            "literate",
+            str(statute),
+            "--legal-text",
+            str(legal_text),
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert "## Paragraph Alignment" in result.output
+    assert "`deception`: paragraph 1" in result.output
+    assert "`harm`: paragraph 2" in result.output
