@@ -32,6 +32,7 @@ LOGS = logs
         verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
         verify-source-maps verify-backend-parity verify-mermaid-verbose \
+        verify-literate-alignment \
         clean-reproduce
 
 install:
@@ -58,6 +59,7 @@ verify-core: $(LOGS)
 	$(MAKE) verify-akn-xsd
 	$(MAKE) verify-runtime-tests
 	$(MAKE) verify-source-maps
+	$(MAKE) verify-literate-alignment
 	$(MAKE) verify-backend-parity
 	$(MAKE) verify-structural-diff
 	$(MAKE) verify-mechanisation-coverage
@@ -71,6 +73,8 @@ verify-core: $(LOGS)
 	@printf "Runtime tests    : %s\n" "$$(grep -E 'runtime sweep:' $(LOGS)/runtime-tests.log | tail -n 1)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Source maps      : %s\n" "$$(grep -E '^  [a-z]+:' $(LOGS)/source-maps.log | tr '\n' '; ' | sed 's/; $$//')" \
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "Literate align   : %s\n" "$$(tail -n 1 $(LOGS)/literate-alignment.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Backend parity   : %s\n" "$$(tail -n 1 $(LOGS)/backend-parity.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
@@ -137,6 +141,10 @@ verify-runtime-tests: $(LOGS)
 verify-source-maps: $(LOGS)
 	@echo ">>> verifying source-map coverage for legal export targets…"
 	$(PYTHON) scripts/verify_source_maps.py 2>&1 | tee $(LOGS)/source-maps.log
+
+verify-literate-alignment: $(LOGS)
+	@echo ">>> validating literate paragraph alignment confidence over corpus…"
+	$(PYTHON) scripts/verify_literate_alignment.py 2>&1 | tee $(LOGS)/literate-alignment.log
 
 verify-backend-parity: $(LOGS)
 	@echo ">>> summarizing backend parity and unsupported features…"

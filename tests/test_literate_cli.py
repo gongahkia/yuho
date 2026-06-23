@@ -98,5 +98,6 @@ statute 1 "No Anchors" {
 
     assert result.exit_code == 0
     assert "## Paragraph Alignment" in result.output
-    assert "`deception`: paragraph 1" in result.output
-    assert "`harm`: paragraph 2" in result.output
+    assert "`deception`: paragraph 1 (confidence" in result.output
+    assert "`harm`: paragraph 2 (confidence" in result.output
+    assert "matched terms:" in result.output

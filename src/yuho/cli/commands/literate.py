@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from html import escape
 import re
 import sys
@@ -15,6 +16,15 @@ from yuho.cli.commands.explain import _load_facts, _module_with_imported_definit
 from yuho.explain import DatalogExplainer
 from yuho.services.analysis import analyze_file
 from yuho.transpile.english_transpiler import EnglishTranspiler
+
+
+@dataclass(frozen=True)
+class ParagraphAlignment:
+    element_name: str
+    paragraph_index: int
+    text: str
+    confidence: float
+    matched_terms: tuple[str, ...]
 
 
 def run_literate(
@@ -115,24 +125,32 @@ def _element_spans(
 def _paragraph_alignments(
     legal_text: str,
     ast: nodes.ModuleNode,
-) -> list[tuple[str, int, str]]:
+) -> list[ParagraphAlignment]:
     paragraphs = [p.strip() for p in re.split(r"\n\s*\n", legal_text) if p.strip()]
     if not paragraphs:
         return []
-    result: list[tuple[str, int, str]] = []
+    result: list[ParagraphAlignment] = []
     for name, description in _element_descriptions(ast):
         element_tokens = _tokens(f"{name} {description}")
         if not element_tokens:
             continue
-        best_index = -1
-        best_score = 0
+        best_index = 1
+        best_terms: set[str] = set()
         for index, paragraph in enumerate(paragraphs, start=1):
-            score = len(element_tokens & _tokens(paragraph))
-            if score > best_score:
+            matched = element_tokens & _tokens(paragraph)
+            if len(matched) > len(best_terms):
                 best_index = index
-                best_score = score
-        if best_index > 0:
-            result.append((name, best_index, paragraphs[best_index - 1]))
+                best_terms = matched
+        confidence = len(best_terms) / len(element_tokens)
+        result.append(
+            ParagraphAlignment(
+                element_name=name,
+                paragraph_index=best_index,
+                text=paragraphs[best_index - 1],
+                confidence=confidence,
+                matched_terms=tuple(sorted(best_terms)),
+            )
+        )
     return result
 
 
@@ -171,7 +189,7 @@ def _render_markdown(
     source: str,
     anchors: list[str],
     element_spans: list[tuple[str, int, int, str]],
-    paragraph_alignments: list[tuple[str, int, str]],
+    paragraph_alignments: list[ParagraphAlignment],
     trace_text: Optional[str],
 ) -> str:
     parts = [
@@ -206,11 +224,16 @@ def _render_markdown(
         parts.append("- none")
     parts.extend(["", "## Paragraph Alignment"])
     if paragraph_alignments:
-        for name, paragraph, text in paragraph_alignments:
+        for alignment in paragraph_alignments:
             parts.extend(
                 [
-                    f"- `{name}`: paragraph {paragraph}",
-                    f"  {text}",
+                    (
+                        f"- `{alignment.element_name}`: paragraph "
+                        f"{alignment.paragraph_index} "
+                        f"(confidence {alignment.confidence:.2f})"
+                    ),
+                    f"  matched terms: {', '.join(alignment.matched_terms) or 'none'}",
+                    f"  {alignment.text}",
                 ]
             )
     else:
@@ -225,7 +248,7 @@ def _render_html(
     source: str,
     anchors: list[str],
     element_spans: list[tuple[str, int, int, str]],
-    paragraph_alignments: list[tuple[str, int, str]],
+    paragraph_alignments: list[ParagraphAlignment],
     trace_text: Optional[str],
 ) -> str:
     anchor_items = "\n".join(f"<li><code>{escape(anchor)}</code></li>" for anchor in anchors)
@@ -243,14 +266,16 @@ def _render_html(
         span_rows = '<tr><td colspan="3">none</td></tr>'
     alignment_rows = "\n".join(
         "<tr>"
-        f"<td><code>{escape(name)}</code></td>"
-        f"<td>{paragraph}</td>"
-        f"<td>{escape(text)}</td>"
+        f"<td><code>{escape(alignment.element_name)}</code></td>"
+        f"<td>{alignment.paragraph_index}</td>"
+        f"<td>{alignment.confidence:.2f}</td>"
+        f"<td>{escape(', '.join(alignment.matched_terms))}</td>"
+        f"<td>{escape(alignment.text)}</td>"
         "</tr>"
-        for name, paragraph, text in paragraph_alignments
+        for alignment in paragraph_alignments
     )
     if not alignment_rows:
-        alignment_rows = '<tr><td colspan="3">none</td></tr>'
+        alignment_rows = '<tr><td colspan="5">none</td></tr>'
     trace = ""
     if trace_text is not None:
         trace = f"<h2>Result Trace</h2>\n<pre>{escape(trace_text.rstrip())}</pre>"
@@ -282,7 +307,7 @@ code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
 </table>
 <h2>Paragraph Alignment</h2>
 <table>
-<thead><tr><th>Element</th><th>Paragraph</th><th>Legal Text</th></tr></thead>
+<thead><tr><th>Element</th><th>Paragraph</th><th>Confidence</th><th>Matched Terms</th><th>Legal Text</th></tr></thead>
 <tbody>
 {alignment_rows}
 </tbody>
