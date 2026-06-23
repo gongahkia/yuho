@@ -1668,6 +1668,23 @@ class Z3Generator:
             # Fine must be non-negative
             self._assertions.append(fine >= 0)
 
+        if penalty.caning_min is not None or penalty.caning_max is not None:
+            caning = z3.Int(f"{statute_id}_caning_strokes")
+            self._consts[f"{statute_id}_caning"] = caning
+
+            if penalty.caning_min is not None:
+                self._assertions.append(caning >= penalty.caning_min)
+
+            if penalty.caning_max is not None:
+                self._assertions.append(caning <= penalty.caning_max)
+
+            self._assertions.append(caning >= 0)
+
+        if penalty.death_penalty is not None:
+            death = z3.Bool(f"{statute_id}_death_penalty")
+            self._consts[f"{statute_id}_death_penalty"] = death
+            self._assertions.append(death == z3.BoolVal(bool(penalty.death_penalty)))
+
     def _type_to_sort(self, type_node: "ASTNode") -> Any:
         """Convert Yuho type to Z3 sort."""
         if not Z3_AVAILABLE:

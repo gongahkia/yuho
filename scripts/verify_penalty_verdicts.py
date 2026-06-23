@@ -36,6 +36,8 @@ statute 1 "Penalty offence" {
     penalty {
         imprisonment := 1 days .. 5 days;
         fine := $10.00 .. $20.00;
+        caning := 3 .. 6 strokes;
+        death := TRUE;
     }
 
     exception lawful_authority {
@@ -199,6 +201,39 @@ def _check_penalty_bounds(
             checks += 1
             if _clone_with(assertions, fine > hi).check() != z3.unsat:
                 mismatches.append(PenaltyMismatch(case.name, f"fine upper bound {hi} not enforced"))
+
+    caning = gen._consts.get(f"{statute_id}_caning")
+    if caning is not None:
+        if penalty.caning_min is not None:
+            checks += 1
+            if _clone_with(assertions, caning < penalty.caning_min).check() != z3.unsat:
+                mismatches.append(
+                    PenaltyMismatch(
+                        case.name,
+                        f"caning lower bound {penalty.caning_min} not enforced",
+                    )
+                )
+        if penalty.caning_max is not None:
+            checks += 1
+            if _clone_with(assertions, caning > penalty.caning_max).check() != z3.unsat:
+                mismatches.append(
+                    PenaltyMismatch(
+                        case.name,
+                        f"caning upper bound {penalty.caning_max} not enforced",
+                    )
+                )
+
+    death = gen._consts.get(f"{statute_id}_death_penalty")
+    if death is not None and penalty.death_penalty is not None:
+        checks += 1
+        forbidden = not bool(penalty.death_penalty)
+        if _clone_with(assertions, death == z3.BoolVal(forbidden)).check() != z3.unsat:
+            mismatches.append(
+                PenaltyMismatch(
+                    case.name,
+                    f"death penalty flag {penalty.death_penalty} not enforced",
+                )
+            )
 
     return checks, mismatches
 

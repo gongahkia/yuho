@@ -16,7 +16,7 @@ def test_backend_parity_summary_lists_evidence_and_boundaries() -> None:
     assert "Feature coverage:" in summary
     assert "nested_all_of_any_of: runtime-z3=covered" in summary
     assert "is_infringed_apply_scope: runtime-z3=covered" in summary
-    assert "penalties_money_duration: runtime-z3=imprisonment/fine-model-verdict" in summary
+    assert "penalties_money_duration: runtime-z3=imprisonment/fine/caning/death-model-verdict" in summary
     assert "lean_expected_verdicts: lean-runtime=smoke-verdicts" in summary
     assert "optional_values: runtime-z3=covered" in summary
     assert "case_law_doctrine: runtime=partial" in summary

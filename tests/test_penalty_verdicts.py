@@ -15,6 +15,6 @@ def test_penalty_verdict_fixtures_match_runtime_and_z3_model() -> None:
     assert summary is not None
     assert summary.checked == 3
     assert summary.conviction_matches == 3
-    assert summary.penalty_bound_checks == 12
+    assert summary.penalty_bound_checks == 21
     assert summary.mismatches == ()
     assert summary.errors == ()

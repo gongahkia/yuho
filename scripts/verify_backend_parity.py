@@ -40,7 +40,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "penalties_money_duration",
-        "runtime-z3=imprisonment/fine-model-verdict; z3-lean=penalty-footprint-smoke; alloy=unsupported-boundary",
+        "runtime-z3=imprisonment/fine/caning/death-model-verdict; z3-lean=penalty-footprint-smoke; alloy=unsupported-boundary",
     ),
     (
         "lean_expected_verdicts",
