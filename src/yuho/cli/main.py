@@ -545,6 +545,38 @@ def irac(
 
 
 @cli.command()
+@click.argument("statute_file", type=click.Path(exists=True))
+@click.option("--legal-text", "legal_text_file", type=click.Path(exists=True), required=True)
+@click.option("--facts", "facts_file", type=click.Path(exists=True), default=None)
+@click.option("-o", "--output", type=click.Path(), default=None)
+@click.option(
+    "--format",
+    "report_format",
+    type=click.Choice(["markdown", "html"]),
+    default="markdown",
+    show_default=True,
+    help="Report format",
+)
+def literate(
+    statute_file: str,
+    legal_text_file: str,
+    facts_file: Optional[str],
+    output: Optional[str],
+    report_format: str,
+) -> None:
+    """Generate a literate statute mapping report."""
+    from yuho.cli.commands.literate import run_literate
+
+    run_literate(
+        statute_file=statute_file,
+        legal_text_file=legal_text_file,
+        facts_file=facts_file,
+        output=output,
+        report_format=report_format,
+    )
+
+
+@cli.command()
 @click.argument("section", required=False)
 @click.option("--library", "library_dir", type=click.Path(), default=None, help="Library root")
 @click.option("--in", "in_only", is_flag=True, help="Only show incoming edges")

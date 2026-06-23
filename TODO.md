@@ -118,10 +118,10 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 ## P1: Lawyer-Facing And Researcher UX
 
-- Add literate statute mapping.
-  - Support source text alongside Yuho clauses, with line/paragraph anchors.
-  - Show one-to-one mapping from statutory paragraph to executable element.
-  - Acceptance: HTML/Markdown report shows legal text, Yuho code, result trace, and source maps side by side.
+- Expand literate statute mapping.
+  - Current support: `yuho literate` emits Markdown/HTML reports with legal text, Yuho code, source anchors, and optional result trace.
+  - Remaining work: show one-to-one mapping from statutory paragraph to executable element using source-map spans, not only explicit anchors.
+  - Acceptance: report highlights each statutory paragraph next to its executable element and result trace.
 
 - Expand controlled-authoring mode.
   - Current support: `yuho init --template statute-literate` creates a starter with legal text anchors and executable predicates.

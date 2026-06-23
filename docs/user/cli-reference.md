@@ -20,6 +20,7 @@ This document mirrors the output of `yuho <subcommand> --help` for every impleme
 | `yuho init` | Create a runnable starter workspace. |
 | `yuho irac` | Emit IRAC-structured English for a statute and facts. |
 | `yuho lint` | Run statute-core lint and fidelity diagnostics. |
+| `yuho literate` | Generate a literate statute mapping report. |
 | `yuho refs` | Query the checked-in corpus reference graph. |
 | `yuho schema` | Emit the JSON Schema for Yuho JSON transpiler output. |
 | `yuho test` | Run legal tests embedded in Yuho files. |
@@ -223,6 +224,23 @@ Options:
   --help                          Show this message and exit.
 ```
 
+## `yuho literate`
+
+Generate a literate statute mapping report.
+
+```
+Usage: yuho literate [OPTIONS] STATUTE_FILE
+
+  Generate a literate statute mapping report.
+
+Options:
+  --legal-text PATH         [required]
+  --facts PATH
+  -o, --output PATH
+  --format [markdown|html]  Report format  [default: markdown]
+  --help                    Show this message and exit.
+```
+
 ## `yuho refs`
 
 Query the checked-in corpus reference graph.
@@ -382,6 +400,7 @@ Commands:
   init        Create a runnable starter workspace.
   irac        Emit IRAC-structured English for a statute and facts.
   lint        Run statute-core lint and fidelity diagnostics.
+  literate    Generate a literate statute mapping report.
   refs        Query the checked-in corpus reference graph.
   schema      Emit the JSON Schema for Yuho JSON transpiler output.
   test        Run legal tests embedded in Yuho files.
