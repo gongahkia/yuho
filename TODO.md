@@ -136,10 +136,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Remove or heavily label 30-day/month and 365-day/year approximations.
   - Acceptance: money/duration tests cover edge cases and docs no longer overstate precision.
 
-- Finish or narrow generics.
-  - Either implement generic checking/runtime representation or mark generics as surface-only/experimental.
-  - Acceptance: no docs claim full static generic checking unless tests prove it.
-
 - Align docs with implementation.
   - Audit `docs/researcher/syntax.md` and `docs/researcher/formal-semantics.md` against parser/type-checker/evaluator.
   - Acceptance: every documented feature has a smoke parse test and at least one semantic/lint/transpile test where applicable.

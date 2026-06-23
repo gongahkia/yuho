@@ -37,6 +37,12 @@ ArrayType  ::= '[' Type ']'
 RefinementType ::= Type '{' Expr '..' Expr '}'
 ```
 
+Generic type syntax is represented in the AST, but generic type
+application is surface-only in the current implementation. The checker
+does not yet perform type-parameter substitution, monomorphization, or
+end-to-end enforcement of type arguments, and runtime/export layers may
+erase or simplify generic type arguments.
+
 ### 1.3 Enums and Type Aliases
 
 ```
@@ -533,7 +539,8 @@ produce instances of the declared struct type.
 
 - Duration and money arithmetic are approximate (30 days/month, 365 days/year)
 - Optional types require explicit null checks (no gradual typing)
-- Generic types are not fully checked (erased at runtime)
+- Generic type parameters are parsed and preserved as metadata, but not fully
+  substituted or checked; runtime/export layers erase or simplify type arguments
 - The defeasible layer operates post-type-checking and is not type-directed
 
 ---

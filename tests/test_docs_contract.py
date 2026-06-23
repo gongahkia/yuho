@@ -83,3 +83,19 @@ def test_mechanisation_readme_states_claim_boundary() -> None:
 
     for term in ("Proved", "Tested", "Trusted", "Out of scope"):
         assert f"| {term} |" in readme
+
+
+def test_generic_docs_do_not_overstate_type_support() -> None:
+    """Generic syntax docs should match the current erased implementation."""
+    syntax = Path("docs/researcher/syntax.md").read_text(encoding="utf-8").lower()
+    semantics = Path("docs/researcher/formal-semantics.md").read_text(
+        encoding="utf-8"
+    ).lower()
+
+    assert "surface-only" in syntax
+    assert "does not yet substitute" in syntax
+    assert "runtime and export layers may erase" in syntax
+    assert "generic type syntax is represented in the ast" in semantics
+    assert "not fully" in semantics
+    assert "erase or simplify type arguments" in semantics
+    assert "strongly, statically-typed" not in syntax

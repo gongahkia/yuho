@@ -29,7 +29,7 @@
 ## Introduction
 
 * Yuho source files have the file extension `.yh`
-* strongly, statically-typed
+* statically checked for the core nominal type system
 * Yuho source files follow the snake_case naming scheme
 * variables and functions in the standard library and examples follow snake_case
 * structs, enums, and type-like declarations follow PascalCase
@@ -153,7 +153,10 @@ enum Fruit { apple, orange, pear }
 Fruit myFruit := Fruit.apple
 
 // --- GENERIC STRUCTS ---
-// structs can have type parameters
+// generic struct syntax is experimental/surface-only in the current toolchain:
+// parser, AST, and source maps preserve type parameters, but semantic checking
+// does not yet substitute, monomorphize, or enforce type arguments end-to-end.
+// Runtime and export layers may erase or simplify generic type arguments.
 
 struct Container<T> {
     T value,
