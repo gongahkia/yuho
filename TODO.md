@@ -116,6 +116,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Acceptance: no backend uses 30-day/month or 365-day/year approximation except explicitly labeled verifier summaries.
 
 - Align docs with implementation.
+  - Current support: docs contract checks command coverage, advanced constructs, generic-support boundaries, and boolean literal spelling against parser behavior.
   - Audit `docs/researcher/syntax.md` and `docs/researcher/formal-semantics.md` against parser/type-checker/evaluator.
   - Acceptance: every documented feature has a smoke parse test and at least one semantic/lint/transpile test where applicable.
 

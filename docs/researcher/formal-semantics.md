@@ -273,7 +273,7 @@ core evaluator.
 ```
 v ::= n          (integer)
     | f          (float)
-    | true | false
+    | TRUE | FALSE
     | s          (string)
     | c n        (Decimal money with retained currency)
     | n%         (percent)

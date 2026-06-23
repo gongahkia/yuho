@@ -90,9 +90,7 @@ def test_mechanisation_readme_states_claim_boundary() -> None:
 def test_generic_docs_do_not_overstate_type_support() -> None:
     """Generic syntax docs should match the current erased implementation."""
     syntax = Path("docs/researcher/syntax.md").read_text(encoding="utf-8").lower()
-    semantics = Path("docs/researcher/formal-semantics.md").read_text(
-        encoding="utf-8"
-    ).lower()
+    semantics = Path("docs/researcher/formal-semantics.md").read_text(encoding="utf-8").lower()
 
     assert "surface-only" in syntax
     assert "does not yet substitute" in syntax
@@ -101,3 +99,12 @@ def test_generic_docs_do_not_overstate_type_support() -> None:
     assert "not fully" in semantics
     assert "erase or simplify type arguments" in semantics
     assert "strongly, statically-typed" not in syntax
+
+
+def test_boolean_literal_docs_match_parser_spelling() -> None:
+    """The parser accepts uppercase TRUE/FALSE boolean literals."""
+    syntax = Path("docs/researcher/syntax.md").read_text(encoding="utf-8")
+    semantics = Path("docs/researcher/formal-semantics.md").read_text(encoding="utf-8")
+
+    assert "bool — TRUE or FALSE" in syntax
+    assert "| TRUE | FALSE" in semantics
