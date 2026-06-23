@@ -274,3 +274,42 @@ statute 1 "Local Override" {
 
     assert explained.exit_code == 0
     assert "Section 1 is not satisfied." in explained.output
+
+
+def test_duplicate_imported_definitions_emit_semantic_warning(tmp_path: Path) -> None:
+    for filename, fact_name in (("defs_a.yh", "a"), ("defs_b.yh", "b")):
+        (tmp_path / filename).write_text(
+            f"""
+statute 24 "{filename}" {{
+  definitions {{
+    shared := facts.{fact_name};
+  }}
+  elements {{
+    actus_reus placeholder := "placeholder";
+  }}
+}}
+""",
+            encoding="utf-8",
+        )
+    main = tmp_path / "main.yh"
+    main.write_text(
+        """
+import { shared } from "defs_a.yh";
+import { shared } from "defs_b.yh";
+
+statute 1 "Duplicate Imports" {
+  elements {
+    actus_reus overlap := shared;
+  }
+}
+""",
+        encoding="utf-8",
+    )
+
+    analysis = analyze_file(main, run_semantic=True)
+    warnings = [
+        issue.message for issue in analysis.semantic_summary.issues
+        if issue.severity == "warning"
+    ]
+
+    assert any("Duplicate imported definition 'shared'" in warning for warning in warnings)

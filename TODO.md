@@ -68,7 +68,8 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Runtime/explain can evaluate source-level computable definitions and reuse them across elements.
   - Current support: `definition_entry` accepts either prose strings or executable expressions.
   - Current support: direct named/wildcard imports expose statute `definitions` as computable terms, and local statute definitions override imported terms during evaluation.
-  - Remaining work: alias syntax, transitive imported-definition dependencies, and diagnostics for duplicate imported definition terms.
+  - Current support: semantic analysis warns when separate imports expose the same definition term.
+  - Remaining work: alias syntax and transitive imported-definition dependencies.
   - Acceptance: a source `.yh` definition can be referenced by multiple elements and tested independently.
 
 ## P0: Case Law And Doctrine

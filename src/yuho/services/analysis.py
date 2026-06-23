@@ -867,6 +867,10 @@ def _run_semantic_checks(
             error_count += 1
         issues.append(item)
 
+    for item in _check_duplicate_imported_definitions(ast, resolver, source_path):
+        warning_count += 1
+        issues.append(item)
+
     for warning in check_apply_scope_arg_shape(ast):
         error_count += 1
         issues.append(
@@ -909,6 +913,40 @@ def _run_semantic_checks(
         errors=error_count,
         warnings=warning_count,
     )
+
+
+def _check_duplicate_imported_definitions(
+    ast: ModuleNode,
+    resolver,
+    source_path: Optional[Path],
+) -> list[SemanticIssue]:
+    if resolver is None or source_path is None:
+        return []
+    seen: dict[str, str] = {}
+    issues: list[SemanticIssue] = []
+    for import_node in ast.imports:
+        try:
+            definitions = resolver.resolve_and_get_definitions(import_node, source_path)
+        except Exception:
+            continue
+        for definition in definitions:
+            previous = seen.get(definition.term)
+            if previous is None:
+                seen[definition.term] = import_node.path
+                continue
+            loc = import_node.source_location
+            issues.append(
+                SemanticIssue(
+                    severity="warning",
+                    message=(
+                        f"Duplicate imported definition '{definition.term}' from "
+                        f"{import_node.path}; already imported from {previous}"
+                    ),
+                    line=loc.line if loc else 0,
+                    column=loc.col if loc else 0,
+                )
+            )
+    return issues
 
 
 def _check_jurisdiction_references(
