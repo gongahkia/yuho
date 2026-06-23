@@ -530,9 +530,10 @@ return apply_scope(s299, facts, { intent := TRUE });
 
 Static semantic checks reject structurally visible bad calls: literal fact
 bases missing target element fields, override fields that target elements do
-not read, and obvious non-bool literal values for target element fields.
-Identifier fact arguments such as `facts` remain runtime-checked because their
-field shape is not statically visible.
+not read, and obvious non-bool literal values for target element fields. If an
+identifier argument is visibly bound to a struct literal in the same module or
+through an import, the same checks apply to that identifier. Opaque identifier
+fact arguments such as host-supplied `facts` remain runtime-checked.
 
 ## Annotations
 

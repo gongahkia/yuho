@@ -83,8 +83,8 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 - Add section-call typing.
   - Current support: lint checks unresolved section calls, empty apply_scope targets, missing fields on struct-literal fact bases, unknown fields on struct-literal overrides, and obvious non-bool literal values for target element fields.
   - Current support: semantic analysis rejects structurally invalid `apply_scope` literal fact bases before runtime.
+  - Current support: semantic analysis infers visible identifier fact shapes from local and imported struct-literal bindings and rejects incompatible `apply_scope` schemas before runtime.
   - Remaining work: define named section input/output types beyond the current element-name bool schema.
-  - Remaining work: infer identifier fact shapes across imports and reject incompatible substituted fact schemas that are not literal structs.
   - Acceptance: semantic analysis catches invalid literal `apply_scope` calls before runtime.
 
 ## P1: Formal Mechanisation

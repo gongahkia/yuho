@@ -16,9 +16,11 @@ This test pins those diagnostics + the silent-on-identifier path.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from yuho.ast import nodes
 from yuho.library.graph_lint import check_apply_scope_arg_shape
-from yuho.services.analysis import analyze_source
+from yuho.services.analysis import analyze_file, analyze_source
 
 
 _LIBRARY = """
@@ -135,6 +137,38 @@ def test_struct_literal_non_bool_element_field_warns():
     assert "intent (string)" in warnings[0].message
 
 
+def test_identifier_bound_struct_literal_missing_fields_warns():
+    module = _scope_module(
+        """
+        Facts ctx := { death := TRUE };
+        fn run() : bool { return apply_scope(s299, ctx); }
+    """
+    )
+
+    warnings = check_apply_scope_arg_shape(module)
+
+    assert len(warnings) == 1
+    assert warnings[0].code == "apply_scope_arg_missing_fields"
+    assert "identifier 'ctx'" in warnings[0].message
+    assert "intent" in warnings[0].message
+
+
+def test_identifier_bound_struct_literal_non_bool_field_warns():
+    module = _scope_module(
+        """
+        Facts ctx := { death := TRUE, intent := "yes" };
+        fn run() : bool { return apply_scope(s299, ctx); }
+    """
+    )
+
+    warnings = check_apply_scope_arg_shape(module)
+
+    assert len(warnings) == 1
+    assert warnings[0].code == "apply_scope_arg_incompatible_field_type"
+    assert "identifier 'ctx'" in warnings[0].message
+    assert "intent (string)" in warnings[0].message
+
+
 def test_semantic_analysis_rejects_missing_apply_scope_fields():
     src = _LIBRARY + """
         fn run() : bool { return apply_scope(s299, { death := TRUE }); }
@@ -144,6 +178,23 @@ def test_semantic_analysis_rejects_missing_apply_scope_fields():
 
     assert result.semantic_summary is not None
     assert result.semantic_summary.errors == 1
+    assert "missing fields" in result.semantic_summary.issues[0].message
+
+
+def test_semantic_analysis_rejects_identifier_fact_shape_missing_fields():
+    src = _LIBRARY + """
+        struct Facts { bool death, bool intent, }
+        fn run() : bool {
+            Facts ctx := { death := TRUE };
+            return apply_scope(s299, ctx);
+        }
+    """
+
+    result = analyze_source(src, run_semantic=True)
+
+    assert result.semantic_summary is not None
+    assert result.semantic_summary.errors == 1
+    assert "identifier 'ctx'" in result.semantic_summary.issues[0].message
     assert "missing fields" in result.semantic_summary.issues[0].message
 
 
@@ -159,3 +210,30 @@ def test_semantic_analysis_rejects_non_bool_apply_scope_fields():
     assert result.semantic_summary is not None
     assert result.semantic_summary.errors == 1
     assert "non-bool values" in result.semantic_summary.issues[0].message
+
+
+def test_semantic_analysis_checks_imported_identifier_fact_shape(tmp_path: Path):
+    helper = tmp_path / "helper.yh"
+    helper.write_text(
+        """
+struct Facts { bool death, bool intent, }
+Facts ctx := { death := TRUE };
+""",
+        encoding="utf-8",
+    )
+    main = tmp_path / "main.yh"
+    main.write_text(
+        _LIBRARY
+        + """
+import { ctx } from "helper.yh";
+fn run() : bool { return apply_scope(s299, ctx); }
+""",
+        encoding="utf-8",
+    )
+
+    result = analyze_file(main, run_semantic=True)
+
+    assert result.semantic_summary is not None
+    assert result.semantic_summary.errors == 1
+    assert "identifier 'ctx'" in result.semantic_summary.issues[0].message
+    assert "missing fields" in result.semantic_summary.issues[0].message

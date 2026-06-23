@@ -871,7 +871,8 @@ def _run_semantic_checks(
         warning_count += 1
         issues.append(item)
 
-    for warning in check_apply_scope_arg_shape(ast):
+    imported_symbols = _imported_symbols(ast, resolver, source_path)
+    for warning in check_apply_scope_arg_shape(ast, imported_symbols=imported_symbols):
         error_count += 1
         issues.append(
             SemanticIssue(
@@ -913,6 +914,22 @@ def _run_semantic_checks(
         errors=error_count,
         warnings=warning_count,
     )
+
+
+def _imported_symbols(
+    ast: ModuleNode,
+    resolver,
+    source_path: Optional[Path],
+) -> dict[str, ASTNode]:
+    if resolver is None or source_path is None:
+        return {}
+    symbols: dict[str, ASTNode] = {}
+    for import_node in ast.imports:
+        try:
+            symbols.update(resolver.resolve_and_get_symbols(import_node, source_path))
+        except Exception:
+            continue
+    return symbols
 
 
 def _check_duplicate_imported_definitions(

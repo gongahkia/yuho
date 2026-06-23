@@ -170,26 +170,27 @@ def _check_contradictory_treatments(graph: ReferenceGraph) -> List[GraphLintWarn
 def _walk_is_infringed(root: nodes.ASTNode) -> List[nodes.IsInfringedNode]:
     """Collect every IsInfringedNode reachable from ``root``."""
     out: List[nodes.IsInfringedNode] = []
-    stack: List[nodes.ASTNode] = [root]
-    while stack:
-        n = stack.pop()
+    for n in _walk(root):
         if isinstance(n, nodes.IsInfringedNode):
             out.append(n)
-        children = n.children() if hasattr(n, "children") else []
-        for c in children:
-            if isinstance(c, nodes.ASTNode):
-                stack.append(c)
     return out
 
 
 def _walk_apply_scope(root: nodes.ASTNode) -> List[nodes.ApplyScopeNode]:
     """Collect every ApplyScopeNode reachable from ``root``."""
     out: List[nodes.ApplyScopeNode] = []
+    for n in _walk(root):
+        if isinstance(n, nodes.ApplyScopeNode):
+            out.append(n)
+    return out
+
+
+def _walk(root: nodes.ASTNode) -> List[nodes.ASTNode]:
+    out: List[nodes.ASTNode] = []
     stack: List[nodes.ASTNode] = [root]
     while stack:
         n = stack.pop()
-        if isinstance(n, nodes.ApplyScopeNode):
-            out.append(n)
+        out.append(n)
         children = n.children() if hasattr(n, "children") else []
         for c in children:
             if isinstance(c, nodes.ASTNode):
@@ -237,6 +238,7 @@ def _flatten_element_names(elements) -> List[str]:
 def check_apply_scope_arg_shape(
     module: nodes.ModuleNode,
     registry: Optional[Mapping[str, nodes.StatuteNode]] = None,
+    imported_symbols: Optional[Mapping[str, nodes.ASTNode]] = None,
 ) -> List[GraphLintWarning]:
     """Static type-check for ``apply_scope(<section>, ...)``.
 
@@ -261,11 +263,13 @@ def check_apply_scope_arg_shape(
     * ``apply_scope_arg_incompatible_field_type`` — when a structurally
       visible fact literal has a non-bool value for an element field.
 
-    Identifier args (the common case — ``apply_scope(s299, facts)``) are
-    not statically checkable here; they're left to the runtime.
+    Identifier args are checked when their binding is visible as a struct
+    literal in the current module or imported symbols; otherwise they are
+    left to the runtime.
     """
     if registry is None:
         registry = {st.section_number: st for st in module.statutes}
+    fact_shapes = _struct_literal_bindings(module, imported_symbols or {})
 
     warnings: List[GraphLintWarning] = []
     for node in _walk_apply_scope(module):
@@ -294,8 +298,9 @@ def check_apply_scope_arg_shape(
             continue
         first = node.args[0]
         element_name_set = set(element_names)
-        if isinstance(first, nodes.StructLiteralNode):
-            struct_fields = {fa.name for fa in first.field_values}
+        first_shape = _struct_literal_for_arg(first, fact_shapes)
+        if first_shape is not None:
+            struct_fields = {fa.name for fa in first_shape.field_values}
             missing = [n for n in element_names if n not in struct_fields]
             if missing:
                 warnings.append(
@@ -303,7 +308,8 @@ def check_apply_scope_arg_shape(
                         code="apply_scope_arg_missing_fields",
                         sections=(node.section_ref,),
                         message=(
-                            f"apply_scope(s{node.section_ref}, ...) struct arg "
+                            f"apply_scope(s{node.section_ref}, ...) "
+                            f"{_arg_description(first)} "
                             f"is missing fields the target's elements read: "
                             f"{', '.join(missing)}"
                         ),
@@ -313,10 +319,11 @@ def check_apply_scope_arg_shape(
                     )
                 )
         for arg in node.args:
-            if not isinstance(arg, nodes.StructLiteralNode):
+            shape = _struct_literal_for_arg(arg, fact_shapes)
+            if shape is None:
                 continue
             unknown = [
-                field.name for field in arg.field_values if field.name not in element_name_set
+                field.name for field in shape.field_values if field.name not in element_name_set
             ]
             if unknown:
                 warnings.append(
@@ -324,7 +331,8 @@ def check_apply_scope_arg_shape(
                         code="apply_scope_arg_unknown_fields",
                         sections=(node.section_ref,),
                         message=(
-                            f"apply_scope(s{node.section_ref}, ...) struct arg "
+                            f"apply_scope(s{node.section_ref}, ...) "
+                            f"{_arg_description(arg)} "
                             f"sets fields the target's elements do not read: "
                             f"{', '.join(unknown)}"
                         ),
@@ -335,7 +343,7 @@ def check_apply_scope_arg_shape(
                 )
             incompatible = [
                 f"{field.name} ({type_name})"
-                for field in arg.field_values
+                for field in shape.field_values
                 if field.name in element_name_set
                 for type_name in [_obvious_literal_type(field.value)]
                 if type_name is not None and type_name != "bool"
@@ -346,7 +354,8 @@ def check_apply_scope_arg_shape(
                         code="apply_scope_arg_incompatible_field_type",
                         sections=(node.section_ref,),
                         message=(
-                            f"apply_scope(s{node.section_ref}, ...) struct arg "
+                            f"apply_scope(s{node.section_ref}, ...) "
+                            f"{_arg_description(arg)} "
                             f"sets non-bool values for target element fields: "
                             f"{', '.join(incompatible)}"
                         ),
@@ -356,6 +365,48 @@ def check_apply_scope_arg_shape(
                     )
                 )
     return warnings
+
+
+def _struct_literal_bindings(
+    module: nodes.ModuleNode,
+    imported_symbols: Mapping[str, nodes.ASTNode],
+) -> Mapping[str, nodes.StructLiteralNode]:
+    bindings: dict[str, nodes.StructLiteralNode | None] = {}
+    ambiguous: set[str] = set()
+    for node in _walk(module):
+        if isinstance(node, nodes.VariableDecl) and isinstance(node.value, nodes.StructLiteralNode):
+            if node.name in bindings:
+                ambiguous.add(node.name)
+            else:
+                bindings[node.name] = node.value
+    for name, symbol in imported_symbols.items():
+        if isinstance(symbol, nodes.VariableDecl) and isinstance(symbol.value, nodes.StructLiteralNode):
+            if name in bindings:
+                ambiguous.add(name)
+            else:
+                bindings[name] = symbol.value
+    return {
+        name: value
+        for name, value in bindings.items()
+        if value is not None and name not in ambiguous
+    }
+
+
+def _struct_literal_for_arg(
+    arg: nodes.ASTNode,
+    fact_shapes: Mapping[str, nodes.StructLiteralNode],
+) -> Optional[nodes.StructLiteralNode]:
+    if isinstance(arg, nodes.StructLiteralNode):
+        return arg
+    if isinstance(arg, nodes.IdentifierNode):
+        return fact_shapes.get(arg.name)
+    return None
+
+
+def _arg_description(arg: nodes.ASTNode) -> str:
+    if isinstance(arg, nodes.IdentifierNode):
+        return f"identifier '{arg.name}'"
+    return "struct arg"
 
 
 def _obvious_literal_type(expr: nodes.ASTNode) -> Optional[str]:
