@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Mapping, Sequence
 
 from yuho.ast import nodes
+from yuho.eval.facts import fact_reason, fact_truthy, normalize_facts
 
 
 @dataclass(frozen=True)
@@ -38,11 +39,12 @@ class DatalogExplainer:
         statute: nodes.StatuteNode,
         facts: Mapping[str, object],
     ) -> JustificationTrace:
+        normalized_facts = normalize_facts(facts)
         traces: list[ElementTrace] = []
         rules: list[str] = []
         overall = True
         for index, member in enumerate(statute.elements):
-            trace = self._trace_member(member, facts, f"top_{index}", rules)
+            trace = self._trace_member(member, normalized_facts, f"top_{index}", rules)
             traces.append(trace)
             if not trace.satisfied:
                 overall = False
@@ -94,14 +96,11 @@ class DatalogExplainer:
         else:
             name = fallback_name
             element_type = type(member).__name__
-        satisfied = self._fact_truthy(facts.get(name))
+        fact = facts.get(name)
+        satisfied = fact_truthy(fact)
         rule = f"satisfied({name}) :- fact({name}, true)."
         rules.append(rule)
-        reason = (
-            f"fact '{name}' is truthy"
-            if satisfied
-            else f"fact '{name}' is missing or false"
-        )
+        reason = fact_reason(name, fact, satisfied)
         return ElementTrace(
             name=name,
             element_type=element_type,
@@ -109,16 +108,6 @@ class DatalogExplainer:
             rule=rule,
             reason=reason,
         )
-
-    @staticmethod
-    def _fact_truthy(value: object) -> bool:
-        if value is None:
-            return False
-        is_truthy = getattr(value, "is_truthy", None)
-        if callable(is_truthy):
-            return bool(is_truthy())
-        raw = getattr(value, "raw", value)
-        return bool(raw)
 
     @staticmethod
     def _rule_all(group_name: str, children: Sequence[ElementTrace]) -> str:

@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.local/schema/facts.schema.json",
+  "title": "Yuho facts",
+  "type": "object",
+  "oneOf": [
+    {
+      "required": [
+        "facts"
+      ]
+    },
+    {
+      "not": {
+        "required": [
+          "facts"
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "facts": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/fact"
+      }
+    }
+  },
+  "additionalProperties": {
+    "$ref": "#/$defs/factOrValue"
+  },
+  "$defs": {
+    "factOrValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/fact"
+        },
+        {
+          "type": [
+            "boolean",
+            "number",
+            "integer",
+            "string",
+            "null"
+          ]
+        }
+      ]
+    },
+    "fact": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "boolean",
+            "number",
+            "integer",
+            "string",
+            "null"
+          ]
+        },
+        "type": {
+          "enum": [
+            "bool",
+            "int",
+            "float",
+            "string",
+            "money",
+            "date",
+            "duration"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "jurisdiction": {
+          "type": "string"
+        },
+        "evidential_status": {
+          "type": "string"
+        },
+        "burden": {
+          "type": "string"
+        },
+        "standard_of_proof": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

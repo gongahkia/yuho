@@ -58,3 +58,35 @@ def test_explain_cli_json_output(tmp_path: Path):
     payload = json.loads(result.output)
     assert payload["overall_satisfied"] is True
     assert payload["elements"][0]["name"] == "taking"
+
+
+def test_explain_cli_includes_typed_fact_metadata(tmp_path: Path):
+    root = _write_library(tmp_path)
+    facts = tmp_path / "facts.json"
+    facts.write_text(
+        json.dumps(
+            {
+                "facts": {
+                    "taking": {
+                        "value": True,
+                        "type": "bool",
+                        "source": "witness A",
+                        "evidential_status": "admitted",
+                        "burden": "prosecution",
+                        "standard_of_proof": "beyond_reasonable_doubt",
+                    },
+                    "intent": {"value": False, "type": "bool"},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(
+        cli,
+        ["explain", "--facts", str(facts), "--library", str(root), "1"],
+    )
+
+    assert result.exit_code == 0
+    assert "standard=beyond_reasonable_doubt" in result.output
+    assert "source=witness A" in result.output

@@ -63,12 +63,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 ## P0: Rich Fact Model
 
-- Replace bare truthy-fact matching with typed fact declarations.
-  - Add a first-class `facts` schema DSL or documented JSON Schema.
-  - Model type, source, date, jurisdiction, evidential status, burden, standard of proof, and confidence/provenance metadata.
-  - Keep boolean facts as a compatibility shorthand, not the canonical model.
-  - Acceptance: `yuho explain` can say why a fact satisfies an element and what evidence/proof standard it used.
-
 - Add predicate-backed element satisfaction.
   - Permit elements to bind to computable predicates, not only matching field names.
   - Example shape to design, not final syntax: `actus_reus deception when facts.representation.falsehood && facts.accused.knows_falsehood`.

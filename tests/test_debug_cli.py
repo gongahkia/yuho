@@ -92,3 +92,30 @@ def test_debug_preserves_nested_group_truth(tmp_path: Path):
     assert result.exit_code == 0
     assert "mens_rea reckless -> not satisfied" in result.output
     assert "overall: satisfied" in result.output
+
+
+def test_debug_json_typed_facts_use_value_field(tmp_path: Path):
+    statute = tmp_path / "statute.yh"
+    statute.write_text(STATUTE, encoding="utf-8")
+    facts = tmp_path / "facts.json"
+    facts.write_text(
+        json.dumps(
+            {
+                "facts": {
+                    "taking": {"value": True, "type": "bool"},
+                    "intent": {"value": False, "type": "bool"},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(
+        cli,
+        ["debug", "--break-on", "element", str(facts), str(statute)],
+    )
+
+    assert result.exit_code == 0
+    assert "actus_reus taking -> satisfied" in result.output
+    assert "mens_rea intent -> not satisfied" in result.output
+    assert "overall: not satisfied" in result.output
