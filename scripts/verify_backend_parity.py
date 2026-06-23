@@ -19,11 +19,42 @@ PARITY_LINKS = (
     ("alloy", "explicit unsupported-feature failures"),
 )
 
+FEATURE_COVERAGE = (
+    (
+        "flat_elements",
+        "runtime-z3=covered; z3-lean=smoke; alloy=basic",
+    ),
+    (
+        "nested_all_of_any_of",
+        "runtime-z3=covered; z3-lean=smoke; alloy=unsupported-boundary",
+    ),
+    (
+        "exceptions_defeats",
+        "runtime-z3=covered; z3-lean=smoke; alloy=unsupported-boundary",
+    ),
+    (
+        "is_infringed_apply_scope",
+        "runtime-z3=covered; z3-lean=structural-link; alloy=unsupported-boundary",
+    ),
+    (
+        "penalties_money_duration",
+        "runtime-z3=partial; z3-lean=smoke; alloy=unsupported-boundary",
+    ),
+    (
+        "case_law_doctrine",
+        "runtime-z3=unsupported; z3-lean=unsupported; alloy=unsupported",
+    ),
+)
+
 
 def build_summary() -> str:
     lines = ["=== backend parity ==="]
     for name, evidence in PARITY_LINKS:
         lines.append(f"{name}: {evidence}")
+    lines.append("")
+    lines.append("Feature coverage:")
+    for feature, status in FEATURE_COVERAGE:
+        lines.append(f"- {feature}: {status}")
     lines.append("")
     lines.append("Unsupported feature boundaries:")
     for backend in ("alloy", "z3", "lean", "combined"):
