@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -13,6 +14,13 @@ from yuho.explain import DatalogExplainer
 from yuho.services.analysis import analyze_file
 from yuho.transpile.english_transpiler import EnglishTranspiler
 
+
+TEMPLATE_CHOICES = (
+    "basic",
+    "statute-literate",
+    "statute-exceptions",
+    "statute-cross-reference",
+)
 
 STARTER_STATUTE = """statute 1 "Starter Theft" {
     definitions {
@@ -175,9 +183,17 @@ def run_init(
     force: bool = False,
     run_smoke: bool = True,
     template: str = "basic",
+    guided: bool = False,
     json_output: bool = False,
 ) -> None:
     """Create starter files and optionally validate them."""
+    title: str | None = None
+    if guided:
+        if json_output:
+            click.echo("error: --guided cannot be combined with --json", err=True)
+            sys.exit(2)
+        template, run_smoke, title = _guided_options(template, run_smoke)
+
     root = Path(directory)
     if root.exists() and any(root.iterdir()) and not force:
         click.echo(
@@ -193,6 +209,8 @@ def run_init(
     out_dir = root / "out"
     out_path = out_dir / "starter.txt"
     starter = _template(template)
+    if title:
+        starter = {**starter, "statute": _replace_primary_title(starter["statute"], title)}
 
     root.mkdir(parents=True, exist_ok=True)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -231,6 +249,8 @@ def run_init(
         return
 
     click.echo(f"Created Yuho starter workspace: {root}")
+    if guided:
+        click.echo(f"  guided:  template={template}")
     click.echo(f"  statute: {statute_path}")
     click.echo(f"  facts:   {facts_path}")
     click.echo(f"  readme:  {readme_path}")
@@ -242,6 +262,38 @@ def run_init(
     click.echo("Try:")
     for command in commands:
         click.echo(f"  {command}")
+
+
+def _guided_options(template: str, run_smoke: bool) -> tuple[str, bool, str]:
+    click.echo("Yuho guided init")
+    selected_template = click.prompt(
+        "Template",
+        type=click.Choice(TEMPLATE_CHOICES),
+        default=template,
+        show_choices=True,
+    )
+    title = click.prompt("Primary statute title", default=_default_title(selected_template))
+    if run_smoke:
+        run_smoke = click.confirm("Run smoke checks", default=True)
+    return selected_template, run_smoke, title
+
+
+def _default_title(template: str) -> str:
+    return {
+        "statute-literate": "Literate Starter Misrepresentation",
+        "statute-exceptions": "Starter Offence With Defence",
+        "statute-cross-reference": "Starter Aggravated Offence",
+    }.get(template, "Starter Theft")
+
+
+def _replace_primary_title(statute_source: str, title: str) -> str:
+    safe_title = title.replace('"', "'")
+    return re.sub(
+        r'(statute\s+\S+\s+)".*?"',
+        rf'\1"{safe_title}"',
+        statute_source,
+        count=1,
+    )
 
 
 def _run_smoke(statute_path: Path, facts_path: Path, out_path: Path) -> dict[str, Any]:

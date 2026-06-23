@@ -80,12 +80,14 @@ def doctor(sample: Optional[str], json_output: bool, strict: bool) -> None:
     show_default=True,
     help="Starter template",
 )
+@click.option("--guided", is_flag=True, help="Prompt for starter template and title")
 @click.option("--json", "json_output", is_flag=True, help="Emit JSON")
 def init(
     directory: str,
     force: bool,
     no_run: bool,
     template: str,
+    guided: bool,
     json_output: bool,
 ) -> None:
     """Create a runnable starter workspace."""
@@ -96,6 +98,7 @@ def init(
         force=force,
         run_smoke=not no_run,
         template=template,
+        guided=guided,
         json_output=json_output,
     )
 

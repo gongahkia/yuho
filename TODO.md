@@ -131,7 +131,8 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 - Expand controlled-authoring mode.
   - Current support: `yuho init` templates cover basic statute-only, statute-literate, statute-with-exceptions, and statute-with-cross-reference workflows.
-  - Remaining work: guided prompts or stricter authoring flows beyond static templates.
+  - Current support: `yuho init --guided` prompts for starter template, primary statute title, and smoke-check execution.
+  - Remaining work: stricter authoring flows that validate each prompted legal element before writing files.
 
 ## Non-Goals For Now
 
