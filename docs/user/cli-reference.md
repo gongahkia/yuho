@@ -185,7 +185,7 @@ Options:
   --no-run                        Skip starter smoke checks
   --template [basic|statute-literate|statute-exceptions|statute-cross-reference]
                                   Starter template  [default: basic]
-  --guided                        Prompt for starter template and title
+  --guided                        Prompt for starter template, title, and validated element expressions
   --json                          Emit JSON
   --help                          Show this message and exit.
 ```

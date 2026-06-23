@@ -114,13 +114,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Audit `docs/researcher/syntax.md` and `docs/researcher/formal-semantics.md` against parser/type-checker/evaluator.
   - Acceptance: every documented feature has a smoke parse test and at least one semantic/lint/transpile test where applicable.
 
-## P1: Lawyer-Facing And Researcher UX
-
-- Expand controlled-authoring mode.
-  - Current support: `yuho init` templates cover basic statute-only, statute-literate, statute-with-exceptions, and statute-with-cross-reference workflows.
-  - Current support: `yuho init --guided` prompts for starter template, primary statute title, and smoke-check execution.
-  - Remaining work: stricter authoring flows that validate each prompted legal element before writing files.
-
 ## Non-Goals For Now
 
 - Do not optimize syntax novelty for esolang appeal.

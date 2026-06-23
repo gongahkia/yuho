@@ -120,16 +120,33 @@ def test_init_guided_prompts_for_template_and_title(tmp_path: Path) -> None:
     result = CliRunner().invoke(
         cli,
         ["init", "--guided", "--no-run", str(root)],
-        input="statute-exceptions\nGuided Defence\n",
+        input="statute-exceptions\nGuided Defence\n\n\n",
     )
 
     assert result.exit_code == 0
     assert "Yuho guided init" in result.output
+    assert "Executable elements" in result.output
     assert "guided:  template=statute-exceptions" in result.output
     statute = (root / "statute.yh").read_text(encoding="utf-8")
     assert 'statute 1 "Guided Defence"' in statute
     assert "exception lawful_authority" in statute
     assert not (root / "out" / "starter.txt").exists()
+
+
+def test_init_guided_reprompts_invalid_element_expression(tmp_path: Path) -> None:
+    root = tmp_path / "guided-invalid"
+
+    result = CliRunner().invoke(
+        cli,
+        ["init", "--guided", "--no-run", str(root)],
+        input='basic\nGuided Theft\nfacts.\n"Custom taking"\n\n\n',
+    )
+
+    assert result.exit_code == 0
+    assert "invalid element expression" in result.output
+    statute = (root / "statute.yh").read_text(encoding="utf-8")
+    assert 'actus_reus taking := "Custom taking";' in statute
+    assert "facts." not in statute
 
 
 def test_init_guided_refuses_json_mode(tmp_path: Path) -> None:

@@ -11,7 +11,7 @@ from typing import Any
 import click
 
 from yuho.explain import DatalogExplainer
-from yuho.services.analysis import analyze_file
+from yuho.services.analysis import analyze_file, analyze_source
 from yuho.transpile.english_transpiler import EnglishTranspiler
 
 
@@ -20,6 +20,15 @@ TEMPLATE_CHOICES = (
     "statute-literate",
     "statute-exceptions",
     "statute-cross-reference",
+)
+
+ELEMENT_LINE_RE = re.compile(
+    r"^(?P<indent>\s*)"
+    r"(?P<kind>actus_reus|mens_rea|circumstance|obligation|prohibition|permission|"
+    r"party|obligation_to|condition_precedent|breach)\s+"
+    r"(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*:=\s*"
+    r"(?P<expr>.*?);$",
+    re.MULTILINE,
 )
 
 STARTER_STATUTE = """statute 1 "Starter Theft" {
@@ -211,6 +220,9 @@ def run_init(
     starter = _template(template)
     if title:
         starter = {**starter, "statute": _replace_primary_title(starter["statute"], title)}
+    if guided:
+        starter = {**starter, "statute": _guided_element_expressions(starter["statute"])}
+        _validate_generated_source(starter["statute"])
 
     root.mkdir(parents=True, exist_ok=True)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -276,6 +288,50 @@ def _guided_options(template: str, run_smoke: bool) -> tuple[str, bool, str]:
     if run_smoke:
         run_smoke = click.confirm("Run smoke checks", default=True)
     return selected_template, run_smoke, title
+
+
+def _guided_element_expressions(statute_source: str) -> str:
+    matches = list(ELEMENT_LINE_RE.finditer(statute_source))
+    if not matches:
+        return statute_source
+    click.echo("Executable elements")
+    current = statute_source
+    offset = 0
+    for match in matches:
+        start = match.start("expr") + offset
+        end = match.end("expr") + offset
+        kind = match.group("kind")
+        name = match.group("name")
+        while True:
+            value = click.prompt(
+                f"{kind} {name} expression",
+                default=current[start:end],
+                show_default=True,
+            )
+            candidate = current[:start] + value + current[end:]
+            error = _source_validation_error(candidate)
+            if error is None:
+                offset += len(value) - (end - start)
+                current = candidate
+                break
+            click.echo(f"invalid element expression: {error}", err=True)
+    return current
+
+
+def _validate_generated_source(statute_source: str) -> None:
+    error = _source_validation_error(statute_source)
+    if error is not None:
+        click.echo(f"error: guided starter failed validation before write: {error}", err=True)
+        sys.exit(1)
+
+
+def _source_validation_error(statute_source: str) -> str | None:
+    analysis = analyze_source(statute_source, file="<guided-init>", run_semantic=False)
+    if analysis.parse_errors:
+        return str(analysis.parse_errors[0])
+    if analysis.ast is None:
+        return "no AST produced"
+    return None
 
 
 def _default_title(template: str) -> str:
