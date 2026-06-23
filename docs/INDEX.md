@@ -36,6 +36,7 @@ Audience: reviewers, researchers, and contributors tracing the design.
 
 - [Syntax reference](researcher/syntax.md)
 - [Formal semantics](researcher/formal-semantics.md)
+- [Canonical semantics](researcher/canonical-semantics.md)
 - [Feature status matrix](positioning/status-matrix.md)
 - [Comparisons with adjacent systems](positioning/comparisons.md)
 - [Yuho and L4 positioning](positioning/yuho-vs-l4.md)

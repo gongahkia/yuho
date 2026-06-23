@@ -71,6 +71,8 @@ def test_positioning_docs_are_linked() -> None:
     index = Path("docs/INDEX.md").read_text(encoding="utf-8")
 
     assert "docs/positioning/status-matrix.md" in readme
+    assert "docs/researcher/canonical-semantics.md" in readme
+    assert "researcher/canonical-semantics.md" in index
     assert "positioning/status-matrix.md" in index
     assert "positioning/comparisons.md" in index
     assert "contributor/expert-review-checklist.md" in index

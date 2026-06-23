@@ -56,13 +56,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 ## P0: Canonical Semantics
 
-- Define one canonical Yuho semantics document and make every implementation layer point to it.
-  - Add `docs/researcher/canonical-semantics.md`.
-  - Cover every surface construct in `src/tree-sitter-yuho/grammar.js`.
-  - For each construct, specify parse node, AST node, type rule, runtime rule, Z3 rule, Alloy rule, Lean model status, transpiler obligations.
-  - Add a machine-readable construct matrix under `tests/fixtures/conformance/constructs.json`.
-  - Acceptance: CI fails when a construct is parsed but has no semantic/backend coverage row.
-
 - Make runtime, Z3, Alloy, and Lean agree on shared fixtures.
   - Add fixture categories: flat elements, nested `all_of`, nested `any_of`, mixed groups, exceptions, `defeats`, `is_infringed`, `apply_scope`, penalties, money/duration, optional values.
   - Add differential tests: runtime verdict == Z3 model verdict == Lean expected verdict where available.

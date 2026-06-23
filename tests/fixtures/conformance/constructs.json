@@ -1,0 +1,1431 @@
+{
+  "schema_version": 1,
+  "generated_from": "src/tree-sitter-yuho/grammar.js",
+  "surface_rule_filter": "public grammar rules excluding private underscore rules and Tree-sitter grammar metadata hooks",
+  "required_fields": [
+    "parse_node",
+    "ast_node",
+    "type_rule",
+    "runtime_rule",
+    "z3_rule",
+    "alloy_rule",
+    "lean_status",
+    "transpiler_obligations"
+  ],
+  "constructs": {
+    "source_file": {
+      "parse_node": "source_file",
+      "ast_node": "ModuleNode",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "comment": {
+      "parse_node": "comment",
+      "ast_node": "syntax-only trivia",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "multiline_comment": {
+      "parse_node": "multiline_comment",
+      "ast_node": "syntax-only trivia",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "doc_comment": {
+      "parse_node": "doc_comment",
+      "ast_node": "syntax-only trivia",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "integer_literal": {
+      "parse_node": "integer_literal",
+      "ast_node": "IntLit",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "float_literal": {
+      "parse_node": "float_literal",
+      "ast_node": "FloatLit",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "boolean_literal": {
+      "parse_node": "boolean_literal",
+      "ast_node": "BoolLit",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "string_literal": {
+      "parse_node": "string_literal",
+      "ast_node": "StringLit",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "escape_sequence": {
+      "parse_node": "escape_sequence",
+      "ast_node": "StringLit component",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "money_literal": {
+      "parse_node": "money_literal",
+      "ast_node": "MoneyNode",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "currency_symbol": {
+      "parse_node": "currency_symbol",
+      "ast_node": "MoneyNode.currency",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "money_amount": {
+      "parse_node": "money_amount",
+      "ast_node": "MoneyNode.amount",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "percent_literal": {
+      "parse_node": "percent_literal",
+      "ast_node": "PercentNode",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "date_literal": {
+      "parse_node": "date_literal",
+      "ast_node": "DateNode",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "duration_literal": {
+      "parse_node": "duration_literal",
+      "ast_node": "DurationNode",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "duration_unit": {
+      "parse_node": "duration_unit",
+      "ast_node": "DurationNode component",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "struct_definition": {
+      "parse_node": "struct_definition",
+      "ast_node": "StructDefNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "type_parameters": {
+      "parse_node": "type_parameters",
+      "ast_node": "StructDefNode.type_params",
+      "category": "type",
+      "type_rule": "type annotation rule; generics/refinements limited as documented",
+      "runtime_rule": "runtime-erased type metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "field_definition": {
+      "parse_node": "field_definition",
+      "ast_node": "FieldDef",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "field_role_tag": {
+      "parse_node": "field_role_tag",
+      "ast_node": "FieldDef.role",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "struct_literal": {
+      "parse_node": "struct_literal",
+      "ast_node": "StructLiteralNode",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "field_assignment": {
+      "parse_node": "field_assignment",
+      "ast_node": "FieldAssignment",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "enum_definition": {
+      "parse_node": "enum_definition",
+      "ast_node": "EnumDefNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "enum_variant": {
+      "parse_node": "enum_variant",
+      "ast_node": "EnumVariant",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "type_alias": {
+      "parse_node": "type_alias",
+      "ast_node": "TypeAliasNode",
+      "category": "type",
+      "type_rule": "type annotation rule; generics/refinements limited as documented",
+      "runtime_rule": "runtime-erased type metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "match_expression": {
+      "parse_node": "match_expression",
+      "ast_node": "MatchExprNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "match_arm": {
+      "parse_node": "match_arm",
+      "ast_node": "MatchArm",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "wildcard_pattern": {
+      "parse_node": "wildcard_pattern",
+      "ast_node": "WildcardPattern",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "literal_pattern": {
+      "parse_node": "literal_pattern",
+      "ast_node": "LiteralPattern",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "binding_pattern": {
+      "parse_node": "binding_pattern",
+      "ast_node": "BindingPattern",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "struct_pattern": {
+      "parse_node": "struct_pattern",
+      "ast_node": "StructPattern",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "field_pattern": {
+      "parse_node": "field_pattern",
+      "ast_node": "FieldPattern",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "function_definition": {
+      "parse_node": "function_definition",
+      "ast_node": "FunctionDefNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "parameter_list": {
+      "parse_node": "parameter_list",
+      "ast_node": "ParamDef list",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "parameter": {
+      "parse_node": "parameter",
+      "ast_node": "ParamDef",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "block": {
+      "parse_node": "block",
+      "ast_node": "Block",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "statute_block": {
+      "parse_node": "statute_block",
+      "ast_node": "StatuteNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "section_number": {
+      "parse_node": "section_number",
+      "ast_node": "StatuteNode.section_number",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "subsection_block": {
+      "parse_node": "subsection_block",
+      "ast_node": "SubsectionNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "subsection_number": {
+      "parse_node": "subsection_number",
+      "ast_node": "SubsectionNode.number",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "parties_block": {
+      "parse_node": "parties_block",
+      "ast_node": "PartyNode list",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "unsupported/metadata only",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "party_entry": {
+      "parse_node": "party_entry",
+      "ast_node": "PartyNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "unsupported/metadata only",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "definitions_block": {
+      "parse_node": "definitions_block",
+      "ast_node": "DefinitionEntry list",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "definition_entry": {
+      "parse_node": "definition_entry",
+      "ast_node": "DefinitionEntry",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "elements_block": {
+      "parse_node": "elements_block",
+      "ast_node": "ElementNode/ElementGroupNode list",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "temporal_constraint": {
+      "parse_node": "temporal_constraint",
+      "ast_node": "TemporalConstraintNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "element_entry": {
+      "parse_node": "element_entry",
+      "ast_node": "ElementNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "element_role_tag": {
+      "parse_node": "element_role_tag",
+      "ast_node": "ElementNode.element_type",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "civil_element_type": {
+      "parse_node": "civil_element_type",
+      "ast_node": "CivilPrimitiveNode",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "interpretation_block": {
+      "parse_node": "interpretation_block",
+      "ast_node": "InterpretationNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "endorsement_kind": {
+      "parse_node": "endorsement_kind",
+      "ast_node": "InterpretationNode.endorsement",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "burden_qualifier": {
+      "parse_node": "burden_qualifier",
+      "ast_node": "InterpretationNode.burden",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "element_group": {
+      "parse_node": "element_group",
+      "ast_node": "ElementGroupNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "penalty_block": {
+      "parse_node": "penalty_block",
+      "ast_node": "PenaltyNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "penalty_sub_block": {
+      "parse_node": "penalty_sub_block",
+      "ast_node": "PenaltyNode fields",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "mandatory_minimum_clause": {
+      "parse_node": "mandatory_minimum_clause",
+      "ast_node": "PenaltyNode mandatory-minimum fields",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "imprisonment_clause": {
+      "parse_node": "imprisonment_clause",
+      "ast_node": "PenaltyNode imprisonment fields",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "fine_clause": {
+      "parse_node": "fine_clause",
+      "ast_node": "PenaltyNode fine fields",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "caning_clause": {
+      "parse_node": "caning_clause",
+      "ast_node": "PenaltyNode.caning",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "death_penalty_clause": {
+      "parse_node": "death_penalty_clause",
+      "ast_node": "PenaltyNode.death",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "supplementary_clause": {
+      "parse_node": "supplementary_clause",
+      "ast_node": "PenaltyNode.supplementary",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "duration_range": {
+      "parse_node": "duration_range",
+      "ast_node": "PenaltyNode duration range",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "money_range": {
+      "parse_node": "money_range",
+      "ast_node": "PenaltyNode money range",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "illustration_block": {
+      "parse_node": "illustration_block",
+      "ast_node": "IllustrationNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "unsupported/metadata only",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "exception_block": {
+      "parse_node": "exception_block",
+      "ast_node": "ExceptionNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "defeat_relation": {
+      "parse_node": "defeat_relation",
+      "ast_node": "RebutsRelation/UndercutsRelation",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "caselaw_block": {
+      "parse_node": "caselaw_block",
+      "ast_node": "CaseLawNode",
+      "category": "legal-model",
+      "type_rule": "semantic validation/lint, not all legal meaning type-directed",
+      "runtime_rule": "statute evaluator coverage; case law/doctrine partly metadata",
+      "z3_rule": "unsupported/metadata only",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "treatment_clause": {
+      "parse_node": "treatment_clause",
+      "ast_node": "CaseTreatmentNode",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "unsupported/metadata only",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "treatment_kind": {
+      "parse_node": "treatment_kind",
+      "ast_node": "CaseTreatmentNode.kind",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "import_statement": {
+      "parse_node": "import_statement",
+      "ast_node": "ImportNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "referencing_statement": {
+      "parse_node": "referencing_statement",
+      "ast_node": "ReferencingStmt",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "reference_path": {
+      "parse_node": "reference_path",
+      "ast_node": "ReferencingStmt.path",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "import_path": {
+      "parse_node": "import_path",
+      "ast_node": "ImportNode.path",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "refinement_type": {
+      "parse_node": "refinement_type",
+      "ast_node": "RefinementTypeNode",
+      "category": "type",
+      "type_rule": "type annotation rule; generics/refinements limited as documented",
+      "runtime_rule": "runtime-erased type metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "builtin_type": {
+      "parse_node": "builtin_type",
+      "ast_node": "BuiltinType",
+      "category": "type",
+      "type_rule": "type annotation rule; generics/refinements limited as documented",
+      "runtime_rule": "runtime-erased type metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "generic_type": {
+      "parse_node": "generic_type",
+      "ast_node": "GenericType",
+      "category": "type",
+      "type_rule": "type annotation rule; generics/refinements limited as documented",
+      "runtime_rule": "runtime-erased type metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "optional_type": {
+      "parse_node": "optional_type",
+      "ast_node": "OptionalType",
+      "category": "type",
+      "type_rule": "type annotation rule; generics/refinements limited as documented",
+      "runtime_rule": "runtime-erased type metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "array_type": {
+      "parse_node": "array_type",
+      "ast_node": "ArrayType",
+      "category": "type",
+      "type_rule": "type annotation rule; generics/refinements limited as documented",
+      "runtime_rule": "runtime-erased type metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "assert_statement": {
+      "parse_node": "assert_statement",
+      "ast_node": "AssertStmt",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "variable_declaration": {
+      "parse_node": "variable_declaration",
+      "ast_node": "VariableDecl",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "assignment_statement": {
+      "parse_node": "assignment_statement",
+      "ast_node": "AssignmentStmt",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "expression_statement": {
+      "parse_node": "expression_statement",
+      "ast_node": "ExpressionStmt",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "return_statement": {
+      "parse_node": "return_statement",
+      "ast_node": "ReturnStmt",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "pass_statement": {
+      "parse_node": "pass_statement",
+      "ast_node": "PassStmt",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "pass_expression": {
+      "parse_node": "pass_expression",
+      "ast_node": "PassExprNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "list_literal": {
+      "parse_node": "list_literal",
+      "ast_node": "ListExprNode",
+      "category": "literal",
+      "type_rule": "literal type rule in formal semantics/type inference",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "range_expression": {
+      "parse_node": "range_expression",
+      "ast_node": "RangeExprNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "timeline_appearance": {
+      "parse_node": "timeline_appearance",
+      "ast_node": "TimelineAppearanceNode",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "exists_at_most_expression": {
+      "parse_node": "exists_at_most_expression",
+      "ast_node": "ExistsAtMostNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "field_access": {
+      "parse_node": "field_access",
+      "ast_node": "FieldAccessNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "index_access": {
+      "parse_node": "index_access",
+      "ast_node": "IndexAccessNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "function_call": {
+      "parse_node": "function_call",
+      "ast_node": "FunctionCallNode/ApplyScopeNode/IsInfringedNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "argument_list": {
+      "parse_node": "argument_list",
+      "ast_node": "FunctionCallNode.args",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "binary_expression": {
+      "parse_node": "binary_expression",
+      "ast_node": "BinaryExprNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "unary_expression": {
+      "parse_node": "unary_expression",
+      "ast_node": "UnaryExprNode",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "parenthesized_expression": {
+      "parse_node": "parenthesized_expression",
+      "ast_node": "transparent expression wrapper",
+      "category": "core-runtime",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "tree-walking interpreter/runtime evaluator coverage",
+      "z3_rule": "modeled where used by Z3 generator; see verifier capabilities",
+      "alloy_rule": "experimental/unsupported features fail explicitly",
+      "lean_status": "fixture/smoke fragment only; see mechanisation claim boundary",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "annotation": {
+      "parse_node": "annotation",
+      "ast_node": "AnnotationNode",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "legal_test_block": {
+      "parse_node": "legal_test_block",
+      "ast_node": "LegalTestNode",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "legal_test_field": {
+      "parse_node": "legal_test_field",
+      "ast_node": "LegalTestNode fields",
+      "category": "syntax-component",
+      "type_rule": "syntax-only component; preserved through parent AST node",
+      "runtime_rule": "syntax-only component; preserved through parent AST node",
+      "z3_rule": "syntax-only component; preserved through parent AST node",
+      "alloy_rule": "syntax-only component; preserved through parent AST node",
+      "lean_status": "syntax-only component; preserved through parent AST node",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "conflict_check_block": {
+      "parse_node": "conflict_check_block",
+      "ast_node": "ConflictCheckNode",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    },
+    "identifier": {
+      "parse_node": "identifier",
+      "ast_node": "IdentifierNode/NamedType",
+      "category": "declaration",
+      "type_rule": "core checker or not applicable",
+      "runtime_rule": "declaration registration or metadata",
+      "z3_rule": "not directly modeled",
+      "alloy_rule": "not directly modeled",
+      "lean_status": "not represented directly",
+      "transpiler_obligations": [
+        "JSON must preserve AST shape or explicit metadata loss",
+        "human/export formats must retain legal traceability where construct is legal-facing"
+      ]
+    }
+  }
+}

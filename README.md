@@ -159,6 +159,7 @@ Start with:
 - [Getting started](./docs/user/getting-started.md)
 - [5-minute tour](./docs/user/5-minutes.md)
 - [Syntax reference](./docs/researcher/syntax.md)
+- [Canonical semantics](./docs/researcher/canonical-semantics.md)
 - [Contributor architecture](./docs/contributor/architecture.md)
 
 ## Citation
