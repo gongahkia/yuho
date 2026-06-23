@@ -50,21 +50,52 @@ the local compiler, transpilers, verification checks, and corpus tooling.
 
 ## Quickstart
 
+Install from PyPI when you only need the CLI:
+
+```sh
+uv tool install 'yuho[dev]'
+yuho doctor
+yuho init yuho-starter
+```
+
+Or run from a local checkout with the encoded corpus:
+
 ```sh
 git clone https://github.com/gongahkia/yuho
 cd yuho
+./install.sh --dev
+```
+
+Manual local install:
+
+```sh
 uv venv --python 3.13 .venv
 source .venv/bin/activate
 uv pip install -e '.[dev]'
-yuho --help
-yuho check library/penal_code/s415_cheating/statute.yh
+yuho doctor
 ```
 
-Read an encoded statute:
+Run:
+
+```sh
+yuho --help
+yuho doctor
+yuho init yuho-starter
+yuho check library/penal_code/s415_cheating/statute.yh
+yuho lint library/penal_code/s415_cheating/statute.yh
+yuho ast library/penal_code/s415_cheating/statute.yh --stats --depth 3
+yuho verify --capabilities
+```
+
+Read and transpile an encoded statute:
 
 ```sh
 cat library/penal_code/s415_cheating/statute.yh
-yuho transpile -t english library/penal_code/s415_cheating/statute.yh
+mkdir -p /tmp/yuho-smoke
+yuho transpile -t english library/penal_code/s415_cheating/statute.yh -o /tmp/yuho-smoke/s415.txt
+yuho transpile -t json library/penal_code/s415_cheating/statute.yh -o /tmp/yuho-smoke/s415.json
+yuho transpile -t mermaid library/penal_code/s415_cheating/statute.yh -o /tmp/yuho-smoke/s415.mmd
+yuho transpile -t mindmap library/penal_code/s415_cheating/statute.yh -o /tmp/yuho-smoke/s415-mindmap.mmd
 ```
 
 Inspect the corpus reference graph:
@@ -78,6 +109,21 @@ Run the retained verification gate:
 
 ```sh
 make verify-core
+```
+
+Shell completion:
+
+```sh
+yuho completion zsh --install
+yuho completion bash --install
+yuho completion fish --install
+```
+
+Optional renderers:
+
+```sh
+brew install --cask mactex-no-gui      # PDF target
+npm install -g @mermaid-js/mermaid-cli # SVG/PNG targets
 ```
 
 ## Verification backends

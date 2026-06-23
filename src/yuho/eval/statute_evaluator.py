@@ -193,20 +193,23 @@ class StatuteEvaluator:
         any_of: at least one child must be satisfied
         """
         results: List[ElementResult] = []
+        member_statuses: List[bool] = []
         for member in group.members:
             if isinstance(member, nodes.ElementNode):
                 er = self._evaluate_element(member, facts, env)
                 results.append(er)
+                member_statuses.append(er.satisfied)
             elif isinstance(member, nodes.ElementGroupNode):
-                sub_results, _ = self._evaluate_group(member, facts, env)
+                sub_results, sub_ok = self._evaluate_group(member, facts, env)
                 results.extend(sub_results)
+                member_statuses.append(sub_ok)
 
         if group.combinator == "all_of":
-            ok = all(r.satisfied for r in results)
+            ok = all(member_statuses)
         elif group.combinator == "any_of":
-            ok = any(r.satisfied for r in results)
+            ok = any(member_statuses)
         else:
-            ok = all(r.satisfied for r in results)  # default to all_of
+            ok = all(member_statuses)  # default to all_of
 
         return results, ok
 

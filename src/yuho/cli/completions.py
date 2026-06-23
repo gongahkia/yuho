@@ -13,7 +13,7 @@ import click
 BASH_COMPLETION_SCRIPT = """
 # Yuho bash completion script
 # Add to ~/.bashrc or ~/.bash_completion:
-#   source <(yuho --show-completion bash)
+#   eval "$(yuho completion bash)"
 # Or save to /etc/bash_completion.d/yuho
 
 _yuho_completion() {
@@ -31,7 +31,7 @@ ZSH_COMPLETION_SCRIPT = """
 #compdef yuho
 # Yuho zsh completion script
 # Add to ~/.zshrc:
-#   source <(yuho --show-completion zsh)
+#   eval "$(yuho completion zsh)"
 # Or save to a file in $fpath (e.g., ~/.zsh/completions/_yuho)
 
 _yuho() {
@@ -50,7 +50,7 @@ _yuho() {
         fi
     done
 
-    if [[ -n $googlemock_completions_with_descriptions ]]; then
+    if [[ -n $completions_with_descriptions ]]; then
         _describe -V unsorted completions_with_descriptions -U
     fi
 

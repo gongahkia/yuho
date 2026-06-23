@@ -77,7 +77,7 @@ def language():
 
     raise RuntimeError(
         "Could not find compiled tree-sitter-yuho library. "
-        "Run './setup.sh' or 'make grammar' to build it.\n"
+        "Reinstall from the repo root with `uv pip install -e '.[dev]'`.\n"
         f"Attempted library paths:\n{attempted_details}\n"
         f"Platform hints:\n{hint_text}"
     )
@@ -93,25 +93,25 @@ def _platform_fix_hints():
     if system == "darwin":
         return [
             "Install Xcode Command Line Tools: xcode-select --install",
-            "Reinstall editable package from repo root: pip install -e ./src",
-            "Run setup.sh to regenerate grammar and shared library",
+            "Reinstall editable package from repo root: uv pip install -e '.[dev]'",
+            "Run ./install.sh --dev to reinstall and smoke-test",
         ]
     if system == "linux":
         return [
             "Install a C toolchain (for example: build-essential or gcc/clang)",
-            "Reinstall editable package from repo root: pip install -e ./src",
-            "Run setup.sh to regenerate grammar and shared library",
+            "Reinstall editable package from repo root: uv pip install -e '.[dev]'",
+            "Run ./install.sh --dev to reinstall and smoke-test",
         ]
     if system == "windows":
         return [
             "Install a compatible C toolchain (MSVC or MinGW-w64)",
-            "Reinstall editable package from repo root: pip install -e ./src",
-            "Run setup.sh to regenerate grammar and shared library",
+            "Reinstall editable package from repo root: uv pip install -e '.[dev]'",
+            "Run ./install.sh --dev to reinstall and smoke-test",
         ]
     return [
         f"Confirm shared library support for platform: {platform.system()}",
-        "Reinstall editable package from repo root: pip install -e ./src",
-        "Run setup.sh to regenerate grammar and shared library",
+        "Reinstall editable package from repo root: uv pip install -e '.[dev]'",
+        "Run ./install.sh --dev to reinstall and smoke-test",
     ]
 
 

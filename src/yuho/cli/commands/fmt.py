@@ -127,8 +127,7 @@ def _format_module(ast) -> str:
         if statute.elements:
             lines.append("    elements {")
             for elem in statute.elements:
-                desc = _format_expr(elem.description)
-                lines.append(f"        {elem.element_type} {elem.name} := {desc};")
+                lines.extend(_format_element_member(elem, "        "))
             lines.append("    }")
             lines.append("")
 
@@ -173,6 +172,28 @@ def _format_module(ast) -> str:
             lines.append(f"{type_str} {var.name};")
 
     return "\n".join(lines)
+
+
+def _format_element_member(member, indent: str) -> list[str]:
+    """Format an element block member."""
+    from yuho.ast import nodes
+
+    if isinstance(member, nodes.ElementGroupNode):
+        lines = [f"{indent}{member.combinator} {{"]
+        for child in member.members:
+            lines.extend(_format_element_member(child, indent + "    "))
+        lines.append(f"{indent}}}")
+        return lines
+
+    if isinstance(member, nodes.ElementNode):
+        desc = _format_expr(member.description)
+        return [f"{indent}{member.element_type} {member.name} := {desc};"]
+
+    if isinstance(member, nodes.CivilPrimitiveNode):
+        desc = _format_expr(member.description)
+        return [f"{indent}{member.primitive_type} {member.name} := {desc};"]
+
+    return [f"{indent}?;"]
 
 
 def _format_type(typ) -> str:

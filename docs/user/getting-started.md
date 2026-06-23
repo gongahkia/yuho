@@ -5,10 +5,29 @@ transpiling, verifying, and inspecting statute encodings.
 
 ## 1. Install
 
+For the packaged CLI:
+
+```bash
+uv tool install 'yuho[dev]'
+yuho doctor
+yuho init yuho-starter
+```
+
+For a local checkout with the corpus and verification Make targets:
+
+```bash
+git clone https://github.com/gongahkia/yuho
+cd yuho
+./install.sh --dev
+```
+
+Manual local install:
+
 ```bash
 uv venv --python 3.13 .venv
 source .venv/bin/activate
 uv pip install -e '.[dev]'
+yuho doctor
 ```
 
 If this checkout's venv predates 2026-06-22, rerun
@@ -20,7 +39,22 @@ For package use:
 pip install yuho
 ```
 
-## 2. Parse a statute
+If a shell resolves `yuho` outside the project venv, prefer
+`uv run yuho ...` or reactivate `.venv`.
+
+## 2. Create a starter workspace
+
+```bash
+yuho init yuho-starter
+cd yuho-starter
+yuho check statute.yh
+yuho explain statute.yh --facts facts.json
+```
+
+`yuho init` writes a small statute, a matching facts file, a README, and
+an English transpilation under `out/`.
+
+## 3. Parse a statute
 
 ```bash
 cat > theft.yh <<'YH'
@@ -38,7 +72,7 @@ YH
 yuho check theft.yh
 ```
 
-## 3. Transpile
+## 4. Transpile
 
 ```bash
 yuho transpile -t english    theft.yh
@@ -55,10 +89,12 @@ yuho transpile -t akomantoso theft.yh
 set into a directory. PDF/SVG/PNG outputs are derived from LaTeX or
 Mermaid when the external renderers are installed.
 
-## 4. Explore the checked-in corpus
+## 5. Explore the checked-in corpus
 
 ```bash
 yuho check library/penal_code/s415_cheating/statute.yh
+yuho lint library/penal_code/s415_cheating/statute.yh
+yuho ast library/penal_code/s415_cheating/statute.yh --stats --depth 3
 yuho refs 415
 yuho refs --scc --json
 ```
@@ -66,7 +102,7 @@ yuho refs --scc --json
 The repository ships all 524 Singapore Penal Code sections as `.yh`,
 plus BNS, IPC, Malaysia, and Pakistan corpus material.
 
-## 5. Verify retained gates
+## 6. Verify retained gates
 
 ```bash
 make verify-core
@@ -79,6 +115,21 @@ mechanisation where the Lean toolchain is installed.
 For direct `yuho verify` use, the dev install covers Z3. Alloy 6 is a
 separate jar install; see the README
 [Verification backends](../../README.md#verification-backends) section.
+
+## 7. Shell completion
+
+```bash
+yuho completion zsh --install
+yuho completion bash --install
+yuho completion fish --install
+```
+
+## 8. Optional renderers
+
+```bash
+brew install --cask mactex-no-gui      # PDF target
+npm install -g @mermaid-js/mermaid-cli # SVG/PNG targets
+```
 
 ## Next Steps
 

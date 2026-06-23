@@ -50,6 +50,34 @@ def cli(ctx: click.Context, verbose: bool, use_color: Optional[bool], quiet: boo
 
 
 @cli.command()
+@click.option("--sample", type=click.Path(), help="Sample .yh file to validate")
+@click.option("--json", "json_output", is_flag=True, help="Emit JSON")
+@click.option("--strict", is_flag=True, help="Exit 1 on warnings as well as failures")
+def doctor(sample: Optional[str], json_output: bool, strict: bool) -> None:
+    """Check local install readiness."""
+    from yuho.cli.commands.doctor import run_doctor
+
+    run_doctor(sample=sample, json_output=json_output, strict=strict)
+
+
+@cli.command()
+@click.argument("directory", required=False, default="yuho-starter")
+@click.option("--force", is_flag=True, help="Overwrite existing files")
+@click.option("--no-run", "no_run", is_flag=True, help="Skip starter smoke checks")
+@click.option("--json", "json_output", is_flag=True, help="Emit JSON")
+def init(directory: str, force: bool, no_run: bool, json_output: bool) -> None:
+    """Create a runnable starter workspace."""
+    from yuho.cli.commands.init import run_init
+
+    run_init(
+        directory=directory,
+        force=force,
+        run_smoke=not no_run,
+        json_output=json_output,
+    )
+
+
+@cli.command()
 @click.argument("file", type=str)
 @click.option("--json", "json_output", is_flag=True, help="Output errors as JSON")
 @click.option("--explain-error", "explain_errors", is_flag=True, help="Explain diagnostics")
@@ -304,7 +332,9 @@ def diff(
         return
 
     if len(targets) != 2:
-        raise click.UsageError("diff requires FILE1 FILE2, or --jurisdictions JURISDICTIONS SECTION")
+        raise click.UsageError(
+            "diff requires FILE1 FILE2, or --jurisdictions JURISDICTIONS SECTION"
+        )
     file1, file2 = targets
     if score:
         from yuho.cli.commands.diff import run_diff_score
@@ -498,15 +528,17 @@ def irac(
     "--kind",
     "kinds",
     multiple=True,
-    type=click.Choice([
-        "subsumes",
-        "amends",
-        "implicit",
-        "authority",
-        "treatment_followed",
-        "treatment_distinguished",
-        "treatment_overruled",
-    ]),
+    type=click.Choice(
+        [
+            "subsumes",
+            "amends",
+            "implicit",
+            "authority",
+            "treatment_followed",
+            "treatment_distinguished",
+            "treatment_overruled",
+        ]
+    ),
     help="Filter edge kind",
 )
 @click.option("--treatment", is_flag=True, help="Query case-law treatment edges")

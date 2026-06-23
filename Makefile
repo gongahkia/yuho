@@ -28,11 +28,26 @@ PYTHON ?= python3
 YUHO ?= yuho
 LOGS = logs
 
-.PHONY: verify-all verify-core \
+.PHONY: install doctor smoke verify-all verify-core \
         verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
         verify-mermaid-verbose \
         clean-reproduce
+
+install:
+	./install.sh --dev
+
+doctor:
+	$(YUHO) doctor
+
+smoke: doctor
+	$(YUHO) --version
+	$(YUHO) init /tmp/yuho-starter --force
+	$(YUHO) check library/penal_code/s415_cheating/statute.yh
+	$(YUHO) lint library/penal_code/s415_cheating/statute.yh
+	$(YUHO) transpile -t english library/penal_code/s415_cheating/statute.yh \
+		-o /tmp/yuho-smoke-s415.txt
+	$(YUHO) verify --capabilities
 
 verify-all: verify-core
 
