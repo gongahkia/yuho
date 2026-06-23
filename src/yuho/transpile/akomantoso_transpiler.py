@@ -335,16 +335,21 @@ class AkomaNtosoTranspiler(TranspilerBase):
         lines.append(self._pad("</hcontainer>"))
         return lines
 
-    def _render_subsection(self, sub: nodes.SubsectionNode) -> List[str]:
+    def _render_subsection(self, sub: nodes.SubsectionNode, *, level: int = 0) -> List[str]:
         lines: List[str] = []
         num = getattr(sub, "number", None) or getattr(sub, "label", "")
+        tag = self._hierarchy_tag(level)
         eid = f"sub_{self._slug(str(num))}"
-        lines.append(self._pad(f'<subsection eId="{escape(eid)}">'))
+        lines.append(self._pad(f'<{tag} eId="{escape(eid)}">'))
         self._depth += 1
         lines.append(self._pad(f"<num>({escape(str(num))})</num>"))
         elements_flat = self._flatten_elements(getattr(sub, "elements", ()) or ())
+        has_subdivisions = bool(
+            (getattr(sub, "exceptions", ()) or ()) or (getattr(sub, "subsections", ()) or ())
+        )
         if elements_flat:
-            lines.append(self._pad("<content>"))
+            wrapper = "intro" if has_subdivisions else "content"
+            lines.append(self._pad(f"<{wrapper}>"))
             self._depth += 1
             lines.append(self._pad('<blockList class="elements">'))
             self._depth += 1
@@ -360,10 +365,80 @@ class AkomaNtosoTranspiler(TranspilerBase):
                 )
             self._depth -= 1
             lines.append(self._pad("</blockList>"))
+            for child in getattr(sub, "subsections", ()) or ():
+                child_num = getattr(child, "number", None) or getattr(child, "label", "")
+                lines.append(self._pad(f'<p class="subsection">({escape(str(child_num))})</p>'))
+                lines.extend(self._render_subsection_content(child))
+            self._depth -= 1
+            lines.append(self._pad(f"</{wrapper}>"))
+        elif has_subdivisions:
+            lines.append(self._pad("<intro>"))
+            self._depth += 1
+            lines.append(self._pad("<p>(see source)</p>"))
+            for child in getattr(sub, "subsections", ()) or ():
+                child_num = getattr(child, "number", None) or getattr(child, "label", "")
+                lines.append(self._pad(f'<p class="subsection">({escape(str(child_num))})</p>'))
+                lines.extend(self._render_subsection_content(child))
+            self._depth -= 1
+            lines.append(self._pad("</intro>"))
+        else:
+            lines.append(self._pad("<content>"))
+            self._depth += 1
+            lines.append(self._pad("<p>(see source)</p>"))
             self._depth -= 1
             lines.append(self._pad("</content>"))
+        for exc in getattr(sub, "exceptions", ()) or ():
+            lines.extend(self._render_exception(exc))
         self._depth -= 1
-        lines.append(self._pad("</subsection>"))
+        lines.append(self._pad(f"</{tag}>"))
+        return lines
+
+    def _render_subsection_container(self, sub: nodes.SubsectionNode) -> List[str]:
+        lines: List[str] = []
+        num = getattr(sub, "number", None) or getattr(sub, "label", "")
+        eid = f"sub_{self._slug(str(num))}"
+        lines.append(self._pad(f'<hcontainer eId="{escape(eid)}" name="subsection">'))
+        self._depth += 1
+        lines.append(self._pad(f"<num>({escape(str(num))})</num>"))
+        lines.append(self._pad("<content>"))
+        self._depth += 1
+        lines.extend(self._render_subsection_content(sub))
+        self._depth -= 1
+        lines.append(self._pad("</content>"))
+        self._depth -= 1
+        lines.append(self._pad("</hcontainer>"))
+        return lines
+
+    def _render_subsection_content(self, sub: nodes.SubsectionNode) -> List[str]:
+        lines: List[str] = []
+        elements_flat = self._flatten_elements(getattr(sub, "elements", ()) or ())
+        if elements_flat:
+            lines.append(self._pad('<blockList class="elements">'))
+            self._depth += 1
+            for el in elements_flat:
+                desc_node = getattr(el, "description", None)
+                desc = desc_node.value if hasattr(desc_node, "value") else (desc_node or "")
+                lines.append(
+                    self._pad(
+                        f'<item class="{escape(el.element_type)}">'
+                        f"<p><b>{escape(el.name)}</b>: "
+                        f"{escape(str(desc))}</p></item>"
+                    )
+                )
+            self._depth -= 1
+            lines.append(self._pad("</blockList>"))
+        else:
+            lines.append(self._pad("<p>(see source)</p>"))
+        for exc in getattr(sub, "exceptions", ()) or ():
+            label = exc.label or "unlabeled"
+            text = exc.condition.value if hasattr(exc.condition, "value") else str(exc.condition)
+            lines.append(
+                self._pad(f'<p class="exception"><b>{escape(label)}</b>: {escape(text)}</p>')
+            )
+        for child in getattr(sub, "subsections", ()) or ():
+            child_num = getattr(child, "number", None) or getattr(child, "label", "")
+            lines.append(self._pad(f'<p class="subsection">({escape(str(child_num))})</p>'))
+            lines.extend(self._render_subsection_content(child))
         return lines
 
     # ------------------------------------------------------------------
@@ -410,6 +485,11 @@ class AkomaNtosoTranspiler(TranspilerBase):
     @staticmethod
     def _slug(s: str) -> str:
         return "".join(c if c.isalnum() else "_" for c in s)
+
+    @staticmethod
+    def _hierarchy_tag(level: int) -> str:
+        tags = ("subsection", "paragraph", "subparagraph", "clause", "subclause")
+        return tags[level] if level < len(tags) else "subclause"
 
     def _pad(self, line: str) -> str:
         return " " * (self.indent * self._depth) + line

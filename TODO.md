@@ -119,12 +119,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Reject calls with missing facts or incompatible substituted fact schemas.
   - Acceptance: semantic analysis catches invalid `apply_scope` calls before runtime.
 
-## P1: Backend Parity And Trust Boundary
-
-- Add source-map based transpiler conformance.
-  - For JSON/LegalRuleML/Akoma Ntoso/Alloy, assert every statute element and exception has a source-map entry.
-  - Acceptance: conformance matrix reports source coverage per target.
-
 ## P1: Formal Mechanisation
 
 - Close the known Lean proof gaps incrementally.

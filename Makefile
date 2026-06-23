@@ -31,7 +31,7 @@ LOGS = logs
 .PHONY: install doctor smoke verify-all verify-core \
         verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
-        verify-mermaid-verbose \
+        verify-source-maps verify-mermaid-verbose \
         clean-reproduce
 
 install:
@@ -57,6 +57,7 @@ verify-core: $(LOGS)
 	$(MAKE) verify-coverage
 	$(MAKE) verify-akn-xsd
 	$(MAKE) verify-runtime-tests
+	$(MAKE) verify-source-maps
 	$(MAKE) verify-structural-diff
 	$(MAKE) verify-mechanisation
 	@echo ""
@@ -66,6 +67,8 @@ verify-core: $(LOGS)
 	@printf "AKN XSD          : %s\n" "$$(grep -E 'AKN round-trip:' $(LOGS)/akn-xsd.log | tail -n 1)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Runtime tests    : %s\n" "$$(grep -E 'runtime sweep:' $(LOGS)/runtime-tests.log | tail -n 1)" \
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "Source maps      : %s\n" "$$(grep -E '^  [a-z]+:' $(LOGS)/source-maps.log | tr '\n' '; ' | sed 's/; $$//')" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Structural diff  : %s\n" "$$(tail -n 1 $(LOGS)/structural-diff.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
@@ -124,6 +127,10 @@ verify-structural-diff-full: $(LOGS)
 verify-runtime-tests: $(LOGS)
 	@echo ">>> verifying runtime-eval sweep across 90 rich test fixtures…"
 	$(PYTHON) scripts/verify_runtime_tests.py 2>&1 | tee $(LOGS)/runtime-tests.log
+
+verify-source-maps: $(LOGS)
+	@echo ">>> verifying source-map coverage for legal export targets…"
+	$(PYTHON) scripts/verify_source_maps.py 2>&1 | tee $(LOGS)/source-maps.log
 
 verify-mermaid-verbose: $(LOGS)
 	@echo ">>> verifying verbose-shape Mermaid render across 524 sections…"

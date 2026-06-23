@@ -328,6 +328,57 @@ class AlloyTranspiler(TranspilerBase, Visitor):
                 self._emit("}")
                 self._emit("")
 
+        for exc in statute.exceptions:
+            self._transpile_exception(statute, exc)
+
+        for sub in statute.subsections:
+            self._transpile_subsection(statute, sub)
+
+    def _transpile_exception(
+        self,
+        statute: nodes.StatuteNode,
+        exc: nodes.ExceptionNode,
+        *,
+        name_prefix: str = "",
+    ) -> None:
+        """Emit exception metadata as an explicit Alloy predicate."""
+        safe_name = self._safe_name(statute.section_number)
+        label = exc.label or "unlabeled"
+        safe_label = self._safe_name(f"{name_prefix}_{label}" if name_prefix else label)
+        condition = self._expr_to_alloy(exc.condition)
+        self._emit(f"-- Exception: {label}")
+        self._emit(f"-- Condition: {condition}")
+        if exc.effect:
+            self._emit(f"-- Effect: {self._expr_to_alloy(exc.effect)}")
+        if exc.priority is not None:
+            self._emit(f"-- Priority: {exc.priority}")
+        if exc.defeats:
+            self._emit(f"-- Defeats: {exc.defeats}")
+        self._emit(f"pred {safe_name}_{safe_label}_Exception[o: {safe_name}Offense] {{")
+        self._indent += 1
+        self._emit("o.guilty = False")
+        self._indent -= 1
+        self._emit("}")
+        self._emit("")
+
+    def _transpile_subsection(
+        self,
+        statute: nodes.StatuteNode,
+        sub: nodes.SubsectionNode,
+        *,
+        prefix: str = "",
+    ) -> None:
+        """Emit subsection metadata for source-map traceability."""
+        sub_key = self._safe_name(f"{prefix}_{sub.number}" if prefix else sub.number)
+        self._emit(f"-- Subsection: {sub.number}")
+        for elem in self._flatten_elements(sub.elements):
+            desc = self._expr_to_alloy(elem.description)
+            self._emit(f"-- Element: {elem.name} {desc}")
+        for exc in sub.exceptions:
+            self._transpile_exception(statute, exc, name_prefix=sub_key)
+        for child in sub.subsections:
+            self._transpile_subsection(statute, child, prefix=sub_key)
+
     def _transpile_match_as_constraint(self, match: nodes.MatchExprNode) -> None:
         """Convert match expression to Alloy disjunction constraint."""
         if not match.arms:

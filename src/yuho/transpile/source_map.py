@@ -109,6 +109,45 @@ def build_source_map(
     }
 
 
+def required_source_nodes(ast: nodes.ModuleNode) -> list[dict[str, str]]:
+    """Return AST nodes that must be traceable in legal-facing exports."""
+    required: list[dict[str, str]] = []
+    for path, node in _walk(ast):
+        if isinstance(node, nodes.ElementNode):
+            required.append(
+                {
+                    "path": path,
+                    "node": "ElementNode",
+                    "name": node.name,
+                }
+            )
+        elif isinstance(node, nodes.ExceptionNode):
+            required.append(
+                {
+                    "path": path,
+                    "node": "ExceptionNode",
+                    "name": node.label or "unlabeled",
+                }
+            )
+    return required
+
+
+def source_map_coverage(
+    source_map: dict[str, Any] | None,
+    ast: nodes.ModuleNode,
+) -> dict[str, Any]:
+    """Report required element/exception source-map coverage for one output."""
+    required = required_source_nodes(ast)
+    spans = (source_map or {}).get("x_yuho_spans", [])
+    covered = {(span.get("path"), span.get("node")) for span in spans}
+    missing = [item for item in required if (item["path"], item["node"]) not in covered]
+    return {
+        "required": len(required),
+        "covered": len(required) - len(missing),
+        "missing": missing,
+    }
+
+
 def _walk(root: nodes.ASTNode) -> Iterable[tuple[str, nodes.ASTNode]]:
     stack: list[tuple[str, nodes.ASTNode]] = [("$", root)]
     while stack:
@@ -160,6 +199,11 @@ def _candidate_tokens(node: nodes.ASTNode) -> Iterable[str]:
             values.append(node.description.value)
     elif isinstance(node, nodes.ElementGroupNode):
         values.extend([node.combinator, node.combinator.replace("_", " ").upper()])
+    elif isinstance(node, nodes.ExceptionNode):
+        values.append(node.label or "unlabeled")
+        values.append(node.condition.value)
+        if node.effect:
+            values.append(node.effect.value)
     elif isinstance(node, nodes.StringLit):
         values.append(node.value)
     elif isinstance(node, nodes.IntLit):

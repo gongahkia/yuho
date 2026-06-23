@@ -305,11 +305,21 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["elements"] = [self._to_dict(e) for e in node.elements]
             if node.penalty:
                 result["penalty"] = self._to_dict(node.penalty)
+            if node.additional_penalties:
+                result["additional_penalties"] = [
+                    self._to_dict(p) for p in node.additional_penalties
+                ]
             result["illustrations"] = [self._to_dict(i) for i in node.illustrations]
             if node.exceptions:
                 result["exceptions"] = [self._to_dict(e) for e in node.exceptions]
             if node.case_law:
                 result["case_law"] = [self._to_dict(c) for c in node.case_law]
+            if node.subsections:
+                result["subsections"] = [self._to_dict(s) for s in node.subsections]
+            if node.temporal_constraints:
+                result["temporal_constraints"] = [
+                    self._to_dict(t) for t in node.temporal_constraints
+                ]
             if node.jurisdiction:
                 result["jurisdiction"] = node.jurisdiction
             if node.jurisdiction_meta:
@@ -318,6 +328,8 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["jurisdiction_node"] = self._to_dict(node.jurisdiction_node)
             if node.effective_date:
                 result["effective_date"] = node.effective_date
+            if node.effective_dates:
+                result["effective_dates"] = list(node.effective_dates)
             if node.repealed_date:
                 result["repealed_date"] = node.repealed_date
             if node.subsumes:
@@ -361,6 +373,26 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["target"] = node.target
             if node.annotations:
                 result["annotations"] = [self._to_dict(a) for a in node.annotations]
+        elif isinstance(node, nodes.SubsectionNode):
+            result["number"] = node.number
+            result["definitions"] = [self._to_dict(d) for d in node.definitions]
+            result["elements"] = [self._to_dict(e) for e in node.elements]
+            if node.penalty:
+                result["penalty"] = self._to_dict(node.penalty)
+            if node.additional_penalties:
+                result["additional_penalties"] = [
+                    self._to_dict(p) for p in node.additional_penalties
+                ]
+            if node.illustrations:
+                result["illustrations"] = [self._to_dict(i) for i in node.illustrations]
+            if node.exceptions:
+                result["exceptions"] = [self._to_dict(e) for e in node.exceptions]
+            if node.subsections:
+                result["subsections"] = [self._to_dict(s) for s in node.subsections]
+        elif isinstance(node, nodes.TemporalConstraintNode):
+            result["subject"] = node.subject
+            result["relation"] = node.relation
+            result["object"] = node.object
         elif isinstance(node, nodes.ModuleNode):
             from yuho.transpile.json_schema import AST_SCHEMA_VERSION
 

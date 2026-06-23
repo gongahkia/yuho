@@ -37,6 +37,16 @@ Each target fingerprint stores:
 python3 -m pytest tests/test_transpile_snapshot_matrix.py -q
 ```
 
+Source-map conformance is a separate legal-export gate:
+
+```bash
+python3 scripts/verify_source_maps.py
+make verify-source-maps
+```
+
+It checks JSON, Akoma Ntoso, LegalRuleML, and Alloy exports and fails if any
+statute element or exception lacks a generated-to-source span.
+
 On failure, the test means at least one emitted output changed for at
 least one Penal Code section/target pair.
 
@@ -59,3 +69,16 @@ A hash mismatch does not say whether the new output is better. It only
 says the output changed. Use the changed target and statute path to
 regenerate that one output, inspect the text, then either fix the
 transpiler or accept the snapshot.
+
+## Source-Map Coverage
+
+`scripts/verify_source_maps.py` reports coverage per target. A clean corpus run
+has this shape:
+
+```text
+source-map conformance:
+  json: 3620/3620 element/exception nodes covered across 524 file(s)
+  akomantoso: 3620/3620 element/exception nodes covered across 524 file(s)
+  legalruleml: 3620/3620 element/exception nodes covered across 524 file(s)
+  alloy: 3620/3620 element/exception nodes covered across 524 file(s)
+```

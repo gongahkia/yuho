@@ -60,6 +60,7 @@ class LegalRuleMLTranspiler(TranspilerBase):
             lines.extend(self._facts(statute))
             lines.extend(self._penalties(statute))
             lines.extend(self._exceptions(statute))
+            lines.extend(self._subsection_exceptions(statute))
         self._depth -= 1
         lines.append(self._pad("</lrml:Statements>"))
         self._depth = 0
@@ -104,9 +105,12 @@ class LegalRuleMLTranspiler(TranspilerBase):
         for statute in statutes:
             key = self._statute_key(statute)
             lines.extend(self._context(f"ctx_{key}", "StrictStrength", f"ps_{key}"))
-            for sub in statute.subsections:
+            for sub in self._iter_subsections(statute.subsections):
                 sub_key = self._subsection_key(statute, sub)
                 lines.extend(self._context(f"ctx_{sub_key}", "StrictStrength", f"ps_{sub_key}"))
+                for exc in sub.exceptions:
+                    exc_key = self._subsection_exception_key(statute, sub, exc)
+                    lines.extend(self._context(f"ctx_{exc_key}", "Defeater", f"ps_{exc_key}"))
             for exc in statute.exceptions:
                 exc_key = self._exception_key(statute, exc)
                 lines.extend(self._context(f"ctx_{exc_key}", "Defeater", f"ps_{exc_key}"))
@@ -148,7 +152,7 @@ class LegalRuleMLTranspiler(TranspilerBase):
 
     def _subsection_statements(self, statute: nodes.StatuteNode) -> List[str]:
         lines: List[str] = []
-        for sub in statute.subsections:
+        for sub in self._iter_subsections(statute.subsections):
             key = self._subsection_key(statute, sub)
             lines.append(self._pad(f'<lrml:PrescriptiveStatement key="ps_{escape(key)}">'))
             self._depth += 1
@@ -259,6 +263,37 @@ class LegalRuleMLTranspiler(TranspilerBase):
             )
             self._depth -= 1
             lines.append(self._pad("</lrml:OverrideStatement>"))
+        return lines
+
+    def _subsection_exceptions(self, statute: nodes.StatuteNode) -> List[str]:
+        lines: List[str] = []
+        for sub in self._iter_subsections(statute.subsections):
+            sub_key = self._subsection_key(statute, sub)
+            for exc in sub.exceptions:
+                key = self._subsection_exception_key(statute, sub, exc)
+                target = self._subsection_exception_target_key(statute, sub, exc)
+                lines.append(self._pad(f'<lrml:PrescriptiveStatement key="ps_{escape(key)}">'))
+                self._depth += 1
+                body = [self._exception_atom_for_key(sub_key, exc)]
+                lines.extend(
+                    self._rule(
+                        key=f"rule_{key}",
+                        body=body,
+                        head=self._negated_offence(statute),
+                        strength="defeater",
+                    )
+                )
+                self._depth -= 1
+                lines.append(self._pad("</lrml:PrescriptiveStatement>"))
+                lines.append(self._pad(f'<lrml:OverrideStatement key="ovr_{escape(key)}">'))
+                self._depth += 1
+                lines.append(
+                    self._pad(
+                        f'<lrml:Override over="#ps_{escape(key)}" under="#ps_{escape(target)}"/>'
+                    )
+                )
+                self._depth -= 1
+                lines.append(self._pad("</lrml:OverrideStatement>"))
         return lines
 
     def _rule(
@@ -375,6 +410,9 @@ class LegalRuleMLTranspiler(TranspilerBase):
         return lines
 
     def _exception_atom(self, statute: nodes.StatuteNode, exc: nodes.ExceptionNode) -> List[str]:
+        return self._exception_atom_for_key(self._statute_key(statute), exc)
+
+    def _exception_atom_for_key(self, base_key: str, exc: nodes.ExceptionNode) -> List[str]:
         args = [self._expr_text(exc.condition)]
         if exc.effect:
             args.append(self._expr_text(exc.effect))
@@ -382,7 +420,7 @@ class LegalRuleMLTranspiler(TranspilerBase):
             args.append(f"guard:{self._expr_text(exc.guard)}")
         if exc.priority is not None:
             args.append(f"priority:{exc.priority}")
-        rel = f"exception_{self._statute_key(statute)}_{self._slug(exc.label or 'unlabeled')}"
+        rel = f"exception_{base_key}_{self._slug(exc.label or 'unlabeled')}"
         return self._atom(f"atom_{rel}", rel, args)
 
     def _negated_offence(self, statute: nodes.StatuteNode) -> List[str]:
@@ -498,6 +536,35 @@ class LegalRuleMLTranspiler(TranspilerBase):
 
     def _exception_key(self, statute: nodes.StatuteNode, exc: nodes.ExceptionNode) -> str:
         return f"{self._statute_key(statute)}_exc_{self._slug(exc.label or 'unlabeled')}"
+
+    def _subsection_exception_key(
+        self,
+        statute: nodes.StatuteNode,
+        sub: nodes.SubsectionNode,
+        exc: nodes.ExceptionNode,
+    ) -> str:
+        return f"{self._subsection_key(statute, sub)}_exc_{self._slug(exc.label or 'unlabeled')}"
+
+    def _subsection_exception_target_key(
+        self,
+        statute: nodes.StatuteNode,
+        sub: nodes.SubsectionNode,
+        exc: nodes.ExceptionNode,
+    ) -> str:
+        if exc.defeats:
+            for other in sub.exceptions:
+                if other.label == exc.defeats:
+                    return self._subsection_exception_key(statute, sub, other)
+            return self._slug(exc.defeats)
+        return self._subsection_key(statute, sub)
+
+    def _iter_subsections(
+        self,
+        subsections: Sequence[nodes.SubsectionNode],
+    ) -> Iterable[nodes.SubsectionNode]:
+        for sub in subsections:
+            yield sub
+            yield from self._iter_subsections(sub.subsections)
 
     @staticmethod
     def _slug(value: str) -> str:
