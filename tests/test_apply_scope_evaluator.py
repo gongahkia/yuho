@@ -206,6 +206,52 @@ class TestEmbeddedScopePredicates:
         assert result.bindings()["base_offence"] is True
         assert result.overall_satisfied is True
 
+    def test_embedded_apply_scope_cycle_is_diagnosed(self):
+        source = """
+        statute 1 "A" {
+          elements {
+            circumstance via_b := apply_scope(s2, facts);
+          }
+        }
+
+        statute 2 "B" {
+          elements {
+            circumstance via_a := apply_scope(s1, facts);
+          }
+        }
+        """
+        analysis = analyze_source(source, run_semantic=False)
+        assert analysis.ast is not None, [str(error) for error in analysis.parse_errors]
+        interp = Interpreter()
+        interp.interpret(analysis.ast)
+        registry = _registry_from_module(analysis.ast)
+
+        with pytest.raises(RecursionError, match="cycle detected"):
+            StatuteEvaluator().evaluate(registry["1"], _facts(), interp.env)
+
+    def test_embedded_is_infringed_cycle_is_diagnosed(self):
+        source = """
+        statute 1 "A" {
+          elements {
+            circumstance via_b := is_infringed(s2);
+          }
+        }
+
+        statute 2 "B" {
+          elements {
+            circumstance via_a := is_infringed(s1);
+          }
+        }
+        """
+        analysis = analyze_source(source, run_semantic=False)
+        assert analysis.ast is not None, [str(error) for error in analysis.parse_errors]
+        interp = Interpreter()
+        interp.interpret(analysis.ast)
+        registry = _registry_from_module(analysis.ast)
+
+        with pytest.raises(RecursionError, match="cycle detected"):
+            StatuteEvaluator().evaluate(registry["1"], _facts(), interp.env)
+
 
 class TestRecursionGuard:
     def test_explicit_self_call_is_caught(self, registry):

@@ -714,6 +714,12 @@ class Interpreter(Visitor):
             registry.update(env.statutes)
         return registry
 
+    def _scope_trace(self, binding_name: str) -> List[str]:
+        trace_value = self.env.get(binding_name)
+        if trace_value is None or not isinstance(trace_value.raw, (list, tuple)):
+            return []
+        return [str(item) for item in trace_value.raw]
+
     def visit_is_infringed(self, node: nodes.IsInfringedNode) -> "Value":
         """Evaluate `is_infringed(sX)` against the current environment.
 
@@ -721,12 +727,18 @@ class Interpreter(Visitor):
         elements are all satisfied (after exception precedence) under
         the facts visible in the current scope.
         """
-        from yuho.eval.statute_evaluator import StatuteEvaluator
+        from yuho.eval.statute_evaluator import StatuteEvaluator, _SCOPE_TRACE_BINDING
 
-        target = self._section_lookup(node.section_ref, node)
+        self._section_lookup(node.section_ref, node)
         facts = self._facts_from_env()
         ev = StatuteEvaluator()
-        result = ev.evaluate(target, facts, self.env)
+        result = ev.apply_scope(
+            node.section_ref,
+            facts,
+            self._statute_registry(),
+            env=self.env,
+            _trace=self._scope_trace(_SCOPE_TRACE_BINDING),
+        )
         return Value(raw=bool(result.overall_satisfied), type_tag="bool")
 
     def visit_apply_scope(self, node: nodes.ApplyScopeNode) -> "Value":
@@ -739,9 +751,9 @@ class Interpreter(Visitor):
         instance, that struct is taken as the fact pattern; otherwise
         the current environment is used as in :meth:`visit_is_infringed`.
         """
-        from yuho.eval.statute_evaluator import StatuteEvaluator
+        from yuho.eval.statute_evaluator import StatuteEvaluator, _SCOPE_TRACE_BINDING
 
-        target = self._section_lookup(node.section_ref, node)
+        self._section_lookup(node.section_ref, node)
         # Find the first struct-typed arg as the fact pattern; fall back
         # to environment-derived facts otherwise.
         facts: Optional[StructInstance] = None
@@ -753,7 +765,13 @@ class Interpreter(Visitor):
         if facts is None:
             facts = self._facts_from_env()
         ev = StatuteEvaluator()
-        result = ev.apply_scope(node.section_ref, facts, self._statute_registry(), env=self.env)
+        result = ev.apply_scope(
+            node.section_ref,
+            facts,
+            self._statute_registry(),
+            env=self.env,
+            _trace=self._scope_trace(_SCOPE_TRACE_BINDING),
+        )
         return Value(raw=bool(result.overall_satisfied), type_tag="bool")
 
     def visit_function_call(self, node: nodes.FunctionCallNode) -> Value:

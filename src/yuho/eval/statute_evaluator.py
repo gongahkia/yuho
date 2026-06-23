@@ -6,6 +6,8 @@ from typing import Dict, List, Mapping, Optional, Tuple, Union
 from yuho.ast import nodes
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, StructInstance, Value
 
+_SCOPE_TRACE_BINDING = "__yuho_scope_trace"
+
 
 # ---------------------------------------------------------------------------
 # Result data classes
@@ -326,11 +328,15 @@ class StatuteEvaluator:
                 f"{' -> '.join(trace + [canonical])}"
             )
         trace.append(canonical)
+        call_env = env
+        if env is not None:
+            call_env = env.child()
+            call_env.set(_SCOPE_TRACE_BINDING, Value(raw=list(trace), type_tag="list"))
         # Standard evaluation handles elements + exceptions. Embedded
         # apply_scope/is_infringed expressions resolve through the supplied
         # environment's statute registry; the trace guard applies to this
         # direct scope call.
-        return self.evaluate(target, facts, env)
+        return self.evaluate(target, facts, call_env)
 
 
 def _canonical_section(s: str) -> str:
