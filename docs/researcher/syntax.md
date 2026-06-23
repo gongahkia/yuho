@@ -528,6 +528,12 @@ for that scoped call only:
 return apply_scope(s299, facts, { intent := TRUE });
 ```
 
+Static semantic checks reject structurally visible bad calls: literal fact
+bases missing target element fields, override fields that target elements do
+not read, and obvious non-bool literal values for target element fields.
+Identifier fact arguments such as `facts` remain runtime-checked because their
+field shape is not statically visible.
+
 ## Annotations
 
 ```yh

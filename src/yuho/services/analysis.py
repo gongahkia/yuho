@@ -828,6 +828,7 @@ def _run_semantic_checks(
     from yuho.ast.scope_analysis import ScopeAnalysisVisitor
     from yuho.ast.type_check import TypeCheckVisitor
     from yuho.ast.type_inference import TypeInferenceVisitor
+    from yuho.library.graph_lint import check_apply_scope_arg_shape
     from yuho.resolver import ModuleResolver
 
     source_path = Path(file) if file != "<string>" else None
@@ -865,6 +866,17 @@ def _run_semantic_checks(
         else:
             error_count += 1
         issues.append(item)
+
+    for warning in check_apply_scope_arg_shape(ast):
+        error_count += 1
+        issues.append(
+            SemanticIssue(
+                severity="error",
+                message=warning.message,
+                line=warning.line,
+                column=warning.column,
+            )
+        )
 
     for scope_err in scope_visitor.result.errors:
         severity = getattr(scope_err, "severity", "error")

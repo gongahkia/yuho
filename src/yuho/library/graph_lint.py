@@ -56,6 +56,8 @@ class GraphLintWarning:
     sections: tuple  # the sections involved (ordered)
     message: str
     severity: str  # "warning" or "info"
+    line: int = 0
+    column: int = 0
 
 
 def _check_cross_section_cycles(
@@ -256,6 +258,8 @@ def check_apply_scope_arg_shape(
       fields not matching target element names. This is a warning rather
       than an error because predicate descriptions may read additional
       fact fields.
+    * ``apply_scope_arg_incompatible_field_type`` — when a structurally
+      visible fact literal has a non-bool value for an element field.
 
     Identifier args (the common case — ``apply_scope(s299, facts)``) are
     not statically checkable here; they're left to the runtime.
@@ -281,6 +285,8 @@ def check_apply_scope_arg_shape(
                         f"scope has nothing to evaluate"
                     ),
                     severity="warning",
+                    line=_line(node),
+                    column=_column(node),
                 )
             )
             continue
@@ -302,6 +308,8 @@ def check_apply_scope_arg_shape(
                             f"{', '.join(missing)}"
                         ),
                         severity="warning",
+                        line=_line(first),
+                        column=_column(first),
                     )
                 )
         for arg in node.args:
@@ -321,9 +329,63 @@ def check_apply_scope_arg_shape(
                             f"{', '.join(unknown)}"
                         ),
                         severity="warning",
+                        line=_line(arg),
+                        column=_column(arg),
+                    )
+                )
+            incompatible = [
+                f"{field.name} ({type_name})"
+                for field in arg.field_values
+                if field.name in element_name_set
+                for type_name in [_obvious_literal_type(field.value)]
+                if type_name is not None and type_name != "bool"
+            ]
+            if incompatible:
+                warnings.append(
+                    GraphLintWarning(
+                        code="apply_scope_arg_incompatible_field_type",
+                        sections=(node.section_ref,),
+                        message=(
+                            f"apply_scope(s{node.section_ref}, ...) struct arg "
+                            f"sets non-bool values for target element fields: "
+                            f"{', '.join(incompatible)}"
+                        ),
+                        severity="warning",
+                        line=_line(arg),
+                        column=_column(arg),
                     )
                 )
     return warnings
+
+
+def _obvious_literal_type(expr: nodes.ASTNode) -> Optional[str]:
+    if isinstance(expr, nodes.BoolLit):
+        return "bool"
+    if isinstance(expr, nodes.StringLit):
+        return "string"
+    if isinstance(expr, nodes.IntLit):
+        return "int"
+    if isinstance(expr, nodes.FloatLit):
+        return "float"
+    if isinstance(expr, nodes.MoneyNode):
+        return "money"
+    if isinstance(expr, nodes.PercentNode):
+        return "percent"
+    if isinstance(expr, nodes.DateNode):
+        return "date"
+    if isinstance(expr, nodes.DurationNode):
+        return "duration"
+    return None
+
+
+def _line(node: nodes.ASTNode) -> int:
+    loc = getattr(node, "source_location", None)
+    return int(getattr(loc, "line", 0) or 0)
+
+
+def _column(node: nodes.ASTNode) -> int:
+    loc = getattr(node, "source_location", None)
+    return int(getattr(loc, "col", 0) or 0)
 
 
 def check_is_infringed_resolution(

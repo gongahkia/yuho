@@ -119,3 +119,43 @@ def test_struct_literal_unknown_override_field_warns():
     assert len(warnings) == 1
     assert warnings[0].code == "apply_scope_arg_unknown_fields"
     assert "typo_intent" in warnings[0].message
+
+
+def test_struct_literal_non_bool_element_field_warns():
+    module = _scope_module(
+        """
+        fn run() : bool {
+            return apply_scope(s299, { death := TRUE, intent := "yes" });
+        }
+    """
+    )
+    warnings = check_apply_scope_arg_shape(module)
+    assert len(warnings) == 1
+    assert warnings[0].code == "apply_scope_arg_incompatible_field_type"
+    assert "intent (string)" in warnings[0].message
+
+
+def test_semantic_analysis_rejects_missing_apply_scope_fields():
+    src = _LIBRARY + """
+        fn run() : bool { return apply_scope(s299, { death := TRUE }); }
+    """
+
+    result = analyze_source(src, run_semantic=True)
+
+    assert result.semantic_summary is not None
+    assert result.semantic_summary.errors == 1
+    assert "missing fields" in result.semantic_summary.issues[0].message
+
+
+def test_semantic_analysis_rejects_non_bool_apply_scope_fields():
+    src = _LIBRARY + """
+        fn run() : bool {
+            return apply_scope(s299, { death := TRUE, intent := "yes" });
+        }
+    """
+
+    result = analyze_source(src, run_semantic=True)
+
+    assert result.semantic_summary is not None
+    assert result.semantic_summary.errors == 1
+    assert "non-bool values" in result.semantic_summary.issues[0].message
