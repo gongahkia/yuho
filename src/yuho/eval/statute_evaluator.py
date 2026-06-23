@@ -6,6 +6,7 @@ from datetime import date
 from typing import Dict, List, Mapping, Optional, Tuple, Union
 from yuho.ast import nodes
 from yuho.caselaw import is_inactive_treatment
+from yuho.eval.facts import TypedFact
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, StructInstance, Value
 
 _DEFAULT_SCOPE_MAX_DEPTH = 32
@@ -212,23 +213,10 @@ class StatuteEvaluator:
                 case_effects.get(name, ()),
             )
 
-        # look for a matching field in facts
-        if name in facts.fields:
-            val = facts.fields[name]
-            satisfied = val.is_truthy()
-        else:
-            # try normalised key: lowercase, underscored
-            norm = self._normalise(name)
-            found = False
-            for k, v in facts.fields.items():
-                if self._normalise(k) == norm:
-                    satisfied = v.is_truthy()
-                    found = True
-                    break
-            if not found:
-                satisfied = False
+        fact_value = self._matching_fact_value(facts, name)
+        satisfied = fact_value.is_truthy() if fact_value is not None else False
 
-        return self._apply_case_law_effects(
+        result = self._apply_case_law_effects(
             ElementResult(
                 element_name=name,
                 element_type=etype,
@@ -237,6 +225,23 @@ class StatuteEvaluator:
             ),
             facts,
             case_effects.get(name, ()),
+        )
+        final_satisfied, burden_reason = self._apply_burden_metadata(
+            element,
+            fact_value,
+            result.satisfied,
+        )
+        if not burden_reason and final_satisfied == result.satisfied:
+            return result
+        reasoning = list(result.reasoning)
+        if burden_reason:
+            reasoning.append(burden_reason)
+        return ElementResult(
+            element_name=result.element_name,
+            element_type=result.element_type,
+            satisfied=final_satisfied,
+            description=result.description,
+            reasoning=reasoning,
         )
 
     def _evaluate_predicate_description(
@@ -352,13 +357,46 @@ class StatuteEvaluator:
         )
 
     def _fact_truthy(self, facts: StructInstance, fact_name: str) -> bool:
+        value = self._matching_fact_value(facts, fact_name)
+        return value.is_truthy() if value is not None else False
+
+    def _matching_fact_value(self, facts: StructInstance, fact_name: str) -> Optional[Value]:
         if fact_name in facts.fields:
-            return facts.fields[fact_name].is_truthy()
+            return facts.fields[fact_name]
         norm = self._normalise(fact_name)
         for key, value in facts.fields.items():
             if self._normalise(key) == norm:
-                return value.is_truthy()
-        return False
+                return value
+        return None
+
+    def _apply_burden_metadata(
+        self,
+        element: nodes.ElementNode,
+        fact_value: Optional[Value],
+        satisfied: bool,
+    ) -> tuple[bool, Optional[str]]:
+        if fact_value is None or not satisfied:
+            return satisfied, None
+        metadata = getattr(fact_value, "metadata", None)
+        if not isinstance(metadata, TypedFact):
+            return satisfied, None
+        if element.burden and metadata.burden:
+            if self._normalise(metadata.burden) != self._normalise(element.burden):
+                return (
+                    False,
+                    f"Fact '{element.name}' burden={metadata.burden} does not match declared burden={element.burden}",
+                )
+        if element.burden_standard and metadata.standard_of_proof:
+            if self._normalise(metadata.standard_of_proof) != self._normalise(
+                element.burden_standard
+            ):
+                return (
+                    False,
+                    "Fact "
+                    f"'{element.name}' standard={metadata.standard_of_proof} "
+                    f"does not match declared standard={element.burden_standard}",
+                )
+        return satisfied, None
 
     def _active_case_law_effects(
         self,

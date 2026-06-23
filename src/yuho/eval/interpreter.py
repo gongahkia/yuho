@@ -76,6 +76,7 @@ class Value:
     type_tag: str = (
         ""  # "int","float","bool","string","money","percent","date","duration","struct","list","none"
     )
+    metadata: Any = None
 
     def __post_init__(self):
         if self.type_tag:

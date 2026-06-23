@@ -65,3 +65,23 @@ def test_struct_from_facts_preserves_nested_records() -> None:
     outer = facts.get_field("outer")
     assert outer.type_tag == "struct"
     assert outer.raw.get_field("inner").raw is True
+
+
+def test_struct_from_facts_preserves_typed_fact_metadata() -> None:
+    facts = struct_from_facts(
+        {
+            "facts": {
+                "taking": {
+                    "value": True,
+                    "burden": "prosecution",
+                    "standard_of_proof": "beyond_reasonable_doubt",
+                }
+            }
+        }
+    )
+
+    value = facts.get_field("taking")
+
+    assert value.raw is True
+    assert isinstance(value.metadata, TypedFact)
+    assert value.metadata.burden == "prosecution"

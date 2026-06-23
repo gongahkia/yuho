@@ -451,6 +451,10 @@ Sat(all_of{e1,...,en}, F) iff forall i: Sat(ei, F)
 Sat(any_of{e1,...,en}, F) iff exists i: Sat(ei, F)
 ```
 
+If element `e` declares a burden or proof standard and the matched typed fact
+has corresponding metadata, `Sat(e, F)` additionally requires exact metadata
+agreement. Metadata-free and primitive facts keep legacy truth-value semantics.
+
 Targeted active case-law effects are applied at element evaluation time.
 A case is inactive when another same-statute case `distinguished`,
 `overruled`, `reversed`, or `disapproved` it. For an active case targeting

@@ -78,7 +78,7 @@ assert classify(3, TRUE) == "serious";
 """,
     "statute_groups_exceptions_case_law_penalties": """
 statute 299 "Base" {
-    elements { actus_reus death := "death"; }
+    elements { actus_reus death := "death" burden prosecution beyond_reasonable_doubt; }
 }
 
 statute 300 "Murder" effective 1872-01-01 effective 2012-12-31 subsumes 299 {

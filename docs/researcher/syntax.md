@@ -308,6 +308,7 @@ statute 415 "Cheating" {
         actus_reus deception := "Deceiving any person";
         mens_rea intent := "Fraudulently or dishonestly";
         circumstance harm := "Causing or likely to cause damage to body, mind, reputation, or property";
+        actus_reus proved_taking := "Taking property" burden prosecution beyond_reasonable_doubt;
     }
 
     // penalty block — specifies imprisonment and/or fine ranges
@@ -332,6 +333,11 @@ statute 415 "Cheating" {
 Definitions may be quoted legal prose or executable expressions. Executable
 definitions are evaluated before predicate elements, so elements can reference
 the defined term instead of repeating a fact path.
+
+If an element declares `burden` and a typed fact supplies `burden` or
+`standard_of_proof` metadata, runtime evaluation requires the supplied metadata
+to match the declaration. Legacy primitive facts and typed facts without that
+metadata continue to evaluate by truth value only.
 
 ### Element Groups (AND/OR relationships)
 

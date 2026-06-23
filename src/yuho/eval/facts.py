@@ -124,15 +124,24 @@ def runtime_value_from_fact(value: Any):
     """Convert a JSON/typed fact value into a Yuho runtime Value."""
     from yuho.eval.interpreter import StructInstance, Value
 
+    metadata = value if isinstance(value, TypedFact) else None
     raw = fact_value(value)
     if isinstance(raw, Mapping):
         fields = {
             str(key): runtime_value_from_fact(child) for key, child in normalize_facts(raw).items()
         }
-        return Value(raw=StructInstance(type_name="Facts", fields=fields), type_tag="struct")
+        return Value(
+            raw=StructInstance(type_name="Facts", fields=fields),
+            type_tag="struct",
+            metadata=metadata,
+        )
     if isinstance(raw, list):
-        return Value(raw=[runtime_value_from_fact(child) for child in raw], type_tag="list")
-    return Value(raw=raw)
+        return Value(
+            raw=[runtime_value_from_fact(child) for child in raw],
+            type_tag="list",
+            metadata=metadata,
+        )
+    return Value(raw=raw, metadata=metadata)
 
 
 def struct_from_facts(facts: Mapping[str, Any], type_name: str = "Facts"):
