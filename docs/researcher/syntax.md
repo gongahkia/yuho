@@ -433,6 +433,11 @@ caselaw "New v PP" "[2026] SGCA 1" {
 fact_name` makes the element fail when the fact is true. Holdings without
 `@effect` remain explanatory prose.
 
+When active executable holdings target the same element and fact with
+conflicting `@effect` operations, runtime evaluation selects one holding by
+precedence: matching statute jurisdiction, higher court level, ratio over
+obiter, newer decision date, then later declaration.
+
 ### Extended Penalty
 
 ```yh

@@ -137,3 +137,114 @@ def test_overruled_case_law_effect_is_inactive() -> None:
     assert result.overall_satisfied is True
     assert result.element_results[0].satisfied is True
     assert not any("Old v PP" in item for item in result.reasoning)
+
+
+def test_case_law_conflict_prefers_statute_jurisdiction() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @jurisdiction england
+            /// @court_level apex
+            /// @date 2026-01-01
+            /// @effect satisfies active_misleading
+            caselaw "Foreign v PP" "[2026] UKSC 1" {
+                "Foreign expansive view"
+                element deception
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level high
+            /// @date 2020-01-01
+            /// @effect requires active_misleading
+            caselaw "Local v PP" "[2020] SGHC 1" {
+                "Local restrictive view"
+                element deception
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        _facts(deception=True, active_misleading=False),
+    )
+
+    assert result.overall_satisfied is False
+    assert any("Local v PP" in item for item in result.reasoning)
+    assert not any("Foreign v PP" in item for item in result.reasoning)
+
+
+def test_case_law_conflict_prefers_higher_court_over_newer_date() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @jurisdiction singapore
+            /// @court_level high
+            /// @date 2026-01-01
+            /// @effect satisfies active_misleading
+            caselaw "High Court v PP" "[2026] SGHC 1" {
+                "High Court expansive view"
+                element deception
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2020-01-01
+            /// @effect requires active_misleading
+            caselaw "Apex v PP" "[2020] SGCA 1" {
+                "Apex restrictive view"
+                element deception
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        _facts(deception=True, active_misleading=False),
+    )
+
+    assert result.overall_satisfied is False
+    assert any("Apex v PP" in item for item in result.reasoning)
+    assert not any("High Court v PP" in item for item in result.reasoning)
+
+
+def test_case_law_conflict_prefers_newer_same_court_decision() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2020-01-01
+            /// @effect requires active_misleading
+            caselaw "Old Apex v PP" "[2020] SGCA 1" {
+                "Old restrictive view"
+                element deception
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2026-01-01
+            /// @effect satisfies active_misleading
+            caselaw "New Apex v PP" "[2026] SGCA 1" {
+                "New expansive view"
+                element deception
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        _facts(deception=False, active_misleading=True),
+    )
+
+    assert result.overall_satisfied is True
+    assert any("New Apex v PP" in item for item in result.reasoning)
+    assert not any("Old Apex v PP" in item for item in result.reasoning)

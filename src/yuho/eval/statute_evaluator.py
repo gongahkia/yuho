@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass, field
+from datetime import date
 from typing import Dict, List, Mapping, Optional, Tuple, Union
 from yuho.ast import nodes
 from yuho.caselaw import is_inactive_treatment
@@ -10,6 +11,17 @@ from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, St
 _DEFAULT_SCOPE_MAX_DEPTH = 32
 _SCOPE_MAX_DEPTH_BINDING = "__yuho_scope_max_depth"
 _SCOPE_TRACE_BINDING = "__yuho_scope_trace"
+_COURT_LEVEL_RANKS = {
+    "apex": 50,
+    "supreme": 50,
+    "court_of_appeal": 50,
+    "appellate": 40,
+    "high": 30,
+    "district": 20,
+    "trial": 10,
+    "lower": 10,
+}
+_DOCTRINE_ROLE_RANKS = {"ratio": 20, "holding": 20, "obiter": 10}
 
 
 # ---------------------------------------------------------------------------
@@ -98,7 +110,10 @@ class StatuteEvaluator:
         all_element_results: List[ElementResult] = []
         reasoning: List[str] = []
         overall = True
-        case_effects = self._active_case_law_effects(statute.case_law)
+        case_effects = self._active_case_law_effects(
+            statute.case_law,
+            statute_jurisdiction=statute.jurisdiction,
+        )
 
         for member in statute.elements:
             if isinstance(member, nodes.ElementNode):
@@ -348,6 +363,8 @@ class StatuteEvaluator:
     def _active_case_law_effects(
         self,
         case_law: Tuple[nodes.CaseLawNode, ...],
+        *,
+        statute_jurisdiction: Optional[str] = None,
     ) -> Dict[str, Tuple[nodes.CaseLawNode, ...]]:
         inactive = self._inactive_case_targets(case_law)
         result: Dict[str, List[nodes.CaseLawNode]] = {}
@@ -359,7 +376,109 @@ class StatuteEvaluator:
             if not case.interpretive_effect or not case.effect_fact:
                 continue
             result.setdefault(case.element_ref, []).append(case)
-        return {key: tuple(value) for key, value in result.items()}
+        return {
+            key: self._resolve_case_effect_conflicts(
+                value,
+                statute_jurisdiction=statute_jurisdiction,
+            )
+            for key, value in result.items()
+        }
+
+    @staticmethod
+    def _resolve_case_effect_conflicts(
+        cases: List[nodes.CaseLawNode],
+        *,
+        statute_jurisdiction: Optional[str],
+    ) -> Tuple[nodes.CaseLawNode, ...]:
+        buckets: Dict[str, List[tuple[int, nodes.CaseLawNode]]] = {}
+        for index, case in enumerate(cases):
+            fact_key = StatuteEvaluator._normalise(case.effect_fact or "")
+            buckets.setdefault(fact_key, []).append((index, case))
+
+        selected: List[tuple[int, nodes.CaseLawNode]] = []
+        for bucket in buckets.values():
+            effects = {
+                StatuteEvaluator._normalise_effect(case.interpretive_effect)
+                for _, case in bucket
+            }
+            if len(effects) <= 1:
+                selected.extend(bucket)
+                continue
+            selected.append(
+                max(
+                    bucket,
+                    key=lambda item: StatuteEvaluator._case_precedence_key(
+                        item[1],
+                        statute_jurisdiction=statute_jurisdiction,
+                        declaration_index=item[0],
+                    ),
+                )
+            )
+        return tuple(case for _, case in sorted(selected, key=lambda item: item[0]))
+
+    @staticmethod
+    def _case_precedence_key(
+        case: nodes.CaseLawNode,
+        *,
+        statute_jurisdiction: Optional[str],
+        declaration_index: int,
+    ) -> tuple[int, int, int, date, int]:
+        return (
+            StatuteEvaluator._jurisdiction_rank(case.jurisdiction, statute_jurisdiction),
+            StatuteEvaluator._court_rank(case.court_level),
+            StatuteEvaluator._doctrine_role_rank(case.doctrine_role),
+            StatuteEvaluator._decision_date(case.decision_date),
+            declaration_index,
+        )
+
+    @staticmethod
+    def _jurisdiction_rank(
+        case_jurisdiction: Optional[str],
+        statute_jurisdiction: Optional[str],
+    ) -> int:
+        if not statute_jurisdiction:
+            return 1 if not case_jurisdiction else 0
+        if case_jurisdiction and StatuteEvaluator._case_key(
+            case_jurisdiction
+        ) == StatuteEvaluator._case_key(statute_jurisdiction):
+            return 2
+        if case_jurisdiction is None:
+            return 1
+        return 0
+
+    @staticmethod
+    def _court_rank(court_level: Optional[str]) -> int:
+        if not court_level:
+            return 0
+        key = StatuteEvaluator._normalise(court_level)
+        return _COURT_LEVEL_RANKS.get(key, 0)
+
+    @staticmethod
+    def _doctrine_role_rank(doctrine_role: Optional[str]) -> int:
+        if not doctrine_role:
+            return 0
+        key = StatuteEvaluator._normalise(doctrine_role)
+        return _DOCTRINE_ROLE_RANKS.get(key, 0)
+
+    @staticmethod
+    def _decision_date(value: Optional[str]) -> date:
+        if not value:
+            return date.min
+        try:
+            return date.fromisoformat(value)
+        except ValueError:
+            return date.min
+
+    @staticmethod
+    def _normalise_effect(effect: Optional[str]) -> str:
+        value = (effect or "").casefold()
+        if value in {"require", "requires", "narrow", "narrows"}:
+            return "requires"
+        if value in {"satisfy", "satisfies", "expand", "expands"}:
+            return "satisfies"
+        if value in {"exclude", "excludes"}:
+            return "excludes"
+        return value
 
     @staticmethod
     def _inactive_case_targets(

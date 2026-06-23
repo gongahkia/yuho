@@ -68,7 +68,8 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Current support: `yuho refs --treatment` exposes case-to-case treatment edges.
   - Current support: case-law treatment syntax accepts follows/followed, distinguishes/distinguished, overrules/overruled, reverses/reversed, approves/approved, disapproves/disapproved, and applies/applied.
   - Current support: case-law doc metadata models ratio/obiter role, jurisdiction, court level, decision date, and simple interpretive effects; active `requires`/`satisfies`/`excludes` effects can narrow or expand targeted element truth in runtime evaluation, while inactive overruled/distinguished/reversed/disapproved cases are ignored.
-  - Model richer procedural burden, jurisdictional priority, and precedent conflict rules over cases and statutes where jurisdiction permits.
+  - Current support: conflicting active executable effects over the same element/fact are resolved by matching statute jurisdiction, court level, doctrine role, decision date, then declaration order.
+  - Model richer procedural burden rules over cases and statutes where jurisdiction permits.
 
 ## P1: Formal Mechanisation
 

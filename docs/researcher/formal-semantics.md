@@ -463,6 +463,16 @@ Sat_case(excludes f, e, F)  iff Sat(e, F) AND NOT F[f]
 ```
 
 Cases without executable `@effect` metadata remain explanatory authorities.
+For conflicting active effects over the same element and fact, the evaluator
+selects one case by lexicographic precedence:
+
+```
+Precedence(c, S) =
+  (jurisdictionMatch(c, S), courtRank(c), doctrineRoleRank(c), decisionDate(c), declarationOrder(c))
+```
+
+The highest-precedence case supplies the effect; non-conflicting effects over
+different facts remain cumulative.
 
 ### 4.2 Exception Defeat
 
