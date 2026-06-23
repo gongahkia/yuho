@@ -2,6 +2,7 @@
 ASTBuilder class that walks a tree-sitter Tree and constructs AST nodes.
 """
 
+import re
 from datetime import date
 from decimal import Decimal
 from typing import Optional, List, Tuple
@@ -12,6 +13,18 @@ from yuho.parser.source_location import SourceLocation
 
 
 CIVIL_ELEMENT_TYPES = {"party", "obligation_to", "condition_precedent", "breach"}
+BUILTIN_TYPE_NAMES = {
+    "int",
+    "float",
+    "bool",
+    "string",
+    "money",
+    "percent",
+    "date",
+    "duration",
+    "void",
+}
+TYPE_NAME_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
 
 
 class ASTBuilder:
@@ -88,6 +101,42 @@ class ASTBuilder:
                     k, _, v = rest.partition("=")
                     meta[k.strip()] = v.strip()
         return jurisdiction, meta if meta else None
+
+    def _extract_section_contract(
+        self,
+        doc: Optional[str],
+        source_node,
+    ) -> tuple[Optional[nodes.TypeNode], Optional[nodes.TypeNode]]:
+        if not doc:
+            return None, None
+        input_type = None
+        output_type = None
+        for line in doc.split("\n"):
+            stripped = line.strip()
+            if not stripped.startswith("@"):
+                continue
+            tag, _, value = stripped[1:].partition(" ")
+            key = tag.replace("-", "_")
+            typ = self._type_from_doc_annotation(value.strip(), source_node)
+            if typ is None:
+                continue
+            if key in {"input", "section_input"} and input_type is None:
+                input_type = typ
+            elif key in {"output", "section_output"} and output_type is None:
+                output_type = typ
+        return input_type, output_type
+
+    def _type_from_doc_annotation(
+        self,
+        text: str,
+        source_node,
+    ) -> Optional[nodes.TypeNode]:
+        if not TYPE_NAME_RE.fullmatch(text):
+            return None
+        loc = self._loc(source_node)
+        if text in BUILTIN_TYPE_NAMES:
+            return nodes.BuiltinType(name=text, source_location=loc)
+        return nodes.NamedType(name=text, source_location=loc)
 
     def build(self, root_node) -> nodes.ModuleNode:
         """
@@ -1064,17 +1113,7 @@ class ASTBuilder:
             )
         elif node_type == "identifier":
             text = self._text(node)
-            if text in (
-                "int",
-                "float",
-                "bool",
-                "string",
-                "money",
-                "percent",
-                "date",
-                "duration",
-                "void",
-            ):
+            if text in BUILTIN_TYPE_NAMES:
                 return nodes.BuiltinType(name=text, source_location=self._loc(node))
             return nodes.NamedType(
                 name=text,
@@ -1127,17 +1166,7 @@ class ASTBuilder:
         else:
             # Fallback - treat as identifier type
             text = self._text(node)
-            if text in (
-                "int",
-                "float",
-                "bool",
-                "string",
-                "money",
-                "percent",
-                "date",
-                "duration",
-                "void",
-            ):
+            if text in BUILTIN_TYPE_NAMES:
                 return nodes.BuiltinType(name=text, source_location=self._loc(node))
             return nodes.NamedType(name=text, source_location=self._loc(node))
 
@@ -1149,10 +1178,14 @@ class ASTBuilder:
         """Build StatuteNode from statute_block node."""
         section_node = self._child_by_field(node, "section_number")
         title_node = self._child_by_field(node, "title")
+        input_type_node = self._child_by_field(node, "input_type")
+        output_type_node = self._child_by_field(node, "output_type")
         jurisdiction_node = self._child_by_field(node, "jurisdiction")
 
         section_number = self._text(section_node) if section_node else ""
         title = self._build_string_lit(title_node) if title_node else None
+        input_type = self._build_type(input_type_node) if input_type_node else None
+        output_type = self._build_type(output_type_node) if output_type_node else None
 
         definitions: List[nodes.DefinitionEntry] = []
         elements: list = []
@@ -1194,6 +1227,9 @@ class ASTBuilder:
         annotations = self._build_annotations(node)
 
         doc = self._get_doc_comment(node)
+        doc_input_type, doc_output_type = self._extract_section_contract(doc, node)
+        input_type = input_type or doc_input_type
+        output_type = output_type or doc_output_type
         doc_jurisdiction, jurisdiction_meta = self._extract_jurisdiction(doc)
         jurisdiction = (
             self._build_jurisdiction_value(jurisdiction_node)
@@ -1225,6 +1261,8 @@ class ASTBuilder:
             elements=tuple(elements),
             penalty=penalty,
             additional_penalties=tuple(additional_penalties),
+            input_type=input_type,
+            output_type=output_type,
             illustrations=tuple(illustrations),
             exceptions=tuple(exceptions),
             case_law=tuple(case_law),

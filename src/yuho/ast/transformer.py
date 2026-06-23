@@ -783,6 +783,8 @@ class Transformer(Visitor):
     def transform_statute(self, node: nodes.StatuteNode) -> nodes.StatuteNode:
         new_jurisdiction = self._transform_optional_typed(node.jurisdiction_node)
         new_title = self._transform_optional_typed(node.title)
+        new_input_type = self._transform_optional_typed(node.input_type)
+        new_output_type = self._transform_optional_typed(node.output_type)
         new_defs, defs_changed = self._transform_children_typed(list(node.definitions))
         new_elems, elems_changed = self._transform_children_typed(list(node.elements))
         new_penalty = self._transform_optional_typed(node.penalty)
@@ -799,6 +801,8 @@ class Transformer(Visitor):
         if (
             new_jurisdiction is not node.jurisdiction_node
             or new_title is not node.title
+            or new_input_type is not node.input_type
+            or new_output_type is not node.output_type
             or defs_changed
             or elems_changed
             or new_penalty is not node.penalty
@@ -814,6 +818,8 @@ class Transformer(Visitor):
                 definitions=new_defs,
                 elements=new_elems,
                 penalty=new_penalty,
+                input_type=new_input_type,
+                output_type=new_output_type,
                 illustrations=new_illus,
                 exceptions=new_exc,
                 case_law=new_cl,

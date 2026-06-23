@@ -247,7 +247,7 @@ def check_apply_scope_arg_shape(
     composition; library-wide coverage requires the caller to pass a
     populated registry built from the encoded library).
 
-    Three diagnostics:
+    Diagnostics:
 
     * ``apply_scope_target_empty`` — calling apply_scope on a section that
       has no elements is structurally meaningless: nothing for the inner
@@ -262,6 +262,10 @@ def check_apply_scope_arg_shape(
       fact fields.
     * ``apply_scope_arg_incompatible_field_type`` — when a structurally
       visible fact literal has a non-bool value for an element field.
+    * ``apply_scope_arg_missing_input`` — when a target declares an input
+      contract but the call supplies no facts arg.
+    * ``apply_scope_arg_input_type_mismatch`` — when a visible facts arg
+      type differs from the target input contract.
 
     Identifier args are checked when their binding is visible as a struct
     literal in the current module or imported symbols; otherwise they are
@@ -270,6 +274,8 @@ def check_apply_scope_arg_shape(
     if registry is None:
         registry = {st.section_number: st for st in module.statutes}
     fact_shapes = _struct_literal_bindings(module, imported_symbols or {})
+    fact_types = _type_bindings(module, imported_symbols or {})
+    struct_defs = _struct_definitions(module, imported_symbols or {})
 
     warnings: List[GraphLintWarning] = []
     for node in _walk_apply_scope(module):
@@ -294,14 +300,48 @@ def check_apply_scope_arg_shape(
                 )
             )
             continue
+        input_fields = _input_schema_fields(target.input_type, struct_defs)
+        expected_fields = input_fields or element_names
+        schema_label = "target input schema" if input_fields else "target's elements"
+        if target.input_type and not node.args:
+            warnings.append(
+                GraphLintWarning(
+                    code="apply_scope_arg_missing_input",
+                    sections=(node.section_ref,),
+                    message=(
+                        f"apply_scope(s{node.section_ref}, ...) omits required input "
+                        f"{_type_label(target.input_type)}"
+                    ),
+                    severity="warning",
+                    line=_line(node),
+                    column=_column(node),
+                )
+            )
+            continue
         if not node.args:
             continue
         first = node.args[0]
-        element_name_set = set(element_names)
+        element_name_set = set(expected_fields)
+        first_type = _type_for_arg(first, fact_types)
+        if target.input_type and first_type and not _same_type(target.input_type, first_type):
+            warnings.append(
+                GraphLintWarning(
+                    code="apply_scope_arg_input_type_mismatch",
+                    sections=(node.section_ref,),
+                    message=(
+                        f"apply_scope(s{node.section_ref}, ...) "
+                        f"{_arg_description(first)} has type {_type_label(first_type)}; "
+                        f"expected {_type_label(target.input_type)}"
+                    ),
+                    severity="warning",
+                    line=_line(first),
+                    column=_column(first),
+                )
+            )
         first_shape = _struct_literal_for_arg(first, fact_shapes)
         if first_shape is not None:
             struct_fields = {fa.name for fa in first_shape.field_values}
-            missing = [n for n in element_names if n not in struct_fields]
+            missing = [n for n in expected_fields if n not in struct_fields]
             if missing:
                 warnings.append(
                     GraphLintWarning(
@@ -310,7 +350,7 @@ def check_apply_scope_arg_shape(
                         message=(
                             f"apply_scope(s{node.section_ref}, ...) "
                             f"{_arg_description(first)} "
-                            f"is missing fields the target's elements read: "
+                            f"is missing fields required by {schema_label}: "
                             f"{', '.join(missing)}"
                         ),
                         severity="warning",
@@ -333,7 +373,7 @@ def check_apply_scope_arg_shape(
                         message=(
                             f"apply_scope(s{node.section_ref}, ...) "
                             f"{_arg_description(arg)} "
-                            f"sets fields the target's elements do not read: "
+                            f"sets fields outside {schema_label}: "
                             f"{', '.join(unknown)}"
                         ),
                         severity="warning",
@@ -356,7 +396,7 @@ def check_apply_scope_arg_shape(
                         message=(
                             f"apply_scope(s{node.section_ref}, ...) "
                             f"{_arg_description(arg)} "
-                            f"sets non-bool values for target element fields: "
+                            f"sets non-bool values for {schema_label} fields: "
                             f"{', '.join(incompatible)}"
                         ),
                         severity="warning",
@@ -392,6 +432,49 @@ def _struct_literal_bindings(
     }
 
 
+def _type_bindings(
+    module: nodes.ModuleNode,
+    imported_symbols: Mapping[str, nodes.ASTNode],
+) -> Mapping[str, nodes.TypeNode]:
+    bindings: dict[str, nodes.TypeNode] = {}
+    ambiguous: set[str] = set()
+    for node in _walk(module):
+        if isinstance(node, nodes.VariableDecl):
+            if node.name in bindings:
+                ambiguous.add(node.name)
+            else:
+                bindings[node.name] = node.type_annotation
+    for name, symbol in imported_symbols.items():
+        if isinstance(symbol, nodes.VariableDecl):
+            if name in bindings:
+                ambiguous.add(name)
+            else:
+                bindings[name] = symbol.type_annotation
+    return {name: typ for name, typ in bindings.items() if name not in ambiguous}
+
+
+def _struct_definitions(
+    module: nodes.ModuleNode,
+    imported_symbols: Mapping[str, nodes.ASTNode],
+) -> Mapping[str, nodes.StructDefNode]:
+    structs = {struct.name: struct for struct in module.type_defs}
+    for name, symbol in imported_symbols.items():
+        if isinstance(symbol, nodes.StructDefNode) and name not in structs:
+            structs[name] = symbol
+    return structs
+
+
+def _input_schema_fields(
+    input_type: Optional[nodes.TypeNode],
+    struct_defs: Mapping[str, nodes.StructDefNode],
+) -> list[str]:
+    if isinstance(input_type, nodes.NamedType):
+        struct = struct_defs.get(input_type.name)
+        if struct is not None:
+            return [field.name for field in struct.fields]
+    return []
+
+
 def _struct_literal_for_arg(
     arg: nodes.ASTNode,
     fact_shapes: Mapping[str, nodes.StructLiteralNode],
@@ -401,6 +484,36 @@ def _struct_literal_for_arg(
     if isinstance(arg, nodes.IdentifierNode):
         return fact_shapes.get(arg.name)
     return None
+
+
+def _type_for_arg(
+    arg: nodes.ASTNode,
+    fact_types: Mapping[str, nodes.TypeNode],
+) -> Optional[nodes.TypeNode]:
+    if isinstance(arg, nodes.IdentifierNode):
+        return fact_types.get(arg.name)
+    if isinstance(arg, nodes.StructLiteralNode) and arg.struct_name:
+        return nodes.NamedType(name=arg.struct_name, source_location=arg.source_location)
+    return None
+
+
+def _same_type(left: nodes.TypeNode, right: nodes.TypeNode) -> bool:
+    return _type_label(left) == _type_label(right)
+
+
+def _type_label(type_node: nodes.TypeNode) -> str:
+    if isinstance(type_node, nodes.BuiltinType):
+        return type_node.name
+    if isinstance(type_node, nodes.NamedType):
+        return type_node.name
+    if isinstance(type_node, nodes.OptionalType):
+        return f"{_type_label(type_node.inner)}?"
+    if isinstance(type_node, nodes.ArrayType):
+        return f"[{_type_label(type_node.element_type)}]"
+    if isinstance(type_node, nodes.GenericType):
+        args = ", ".join(_type_label(arg) for arg in type_node.type_args)
+        return f"{type_node.base}<{args}>"
+    return type(type_node).__name__
 
 
 def _arg_description(arg: nodes.ASTNode) -> str:

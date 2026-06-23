@@ -303,6 +303,10 @@ class JSONTranspiler(TranspilerBase, Visitor):
             result["section_number"] = node.section_number
             if node.title:
                 result["title"] = self._to_dict(node.title)
+            if node.input_type:
+                result["input_type"] = self._to_dict(node.input_type)
+            if node.output_type:
+                result["output_type"] = self._to_dict(node.output_type)
             result["definitions"] = [self._to_dict(d) for d in node.definitions]
             result["elements"] = [self._to_dict(e) for e in node.elements]
             if node.penalty:

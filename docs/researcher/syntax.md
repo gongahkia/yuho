@@ -528,12 +528,33 @@ for that scoped call only:
 return apply_scope(s299, facts, { intent := TRUE });
 ```
 
+Sections can declare named call contracts in doc metadata. `@input` points at
+a struct whose fields define the fact schema for `apply_scope`; `@output`
+records the section result type for exports and downstream tooling:
+
+```yh
+struct HomicideFacts {
+    bool death,
+    bool intent,
+}
+
+/// @input HomicideFacts
+/// @output bool
+statute 299 "Culpable homicide" {
+    elements {
+        actus_reus death := "Causes death of a person";
+    }
+}
+```
+
 Static semantic checks reject structurally visible bad calls: literal fact
 bases missing target element fields, override fields that target elements do
 not read, and obvious non-bool literal values for target element fields. If an
 identifier argument is visibly bound to a struct literal in the same module or
-through an import, the same checks apply to that identifier. Opaque identifier
-fact arguments such as host-supplied `facts` remain runtime-checked.
+through an import, the same checks apply to that identifier. When a target
+declares `@input`, the named struct fields replace the fallback element-name
+schema and visible mismatched fact types are rejected. Opaque identifier fact
+arguments such as host-supplied `facts` remain runtime-checked.
 
 ## Annotations
 

@@ -1370,6 +1370,8 @@ class StatuteNode(ASTNode):
     # primary penalty for backwards compatibility; renderers that want the
     # full picture iterate ``(penalty, *additional_penalties)``.
     additional_penalties: Tuple[PenaltyNode, ...] = ()
+    input_type: Optional[TypeNode] = None
+    output_type: Optional[TypeNode] = None
     doc_comment: Optional[str] = None
     jurisdiction: Optional[str] = None
     jurisdiction_meta: Optional[Dict[str, str]] = None
@@ -1406,6 +1408,10 @@ class StatuteNode(ASTNode):
             result.append(self.jurisdiction_node)
         if self.title:
             result.append(self.title)
+        if self.input_type:
+            result.append(self.input_type)
+        if self.output_type:
+            result.append(self.output_type)
         result.extend(self.definitions)
         result.extend(self.elements)
         if self.penalty:

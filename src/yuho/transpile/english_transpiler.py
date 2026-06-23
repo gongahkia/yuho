@@ -211,6 +211,13 @@ class EnglishTranspiler(TranspilerBase, Visitor):
             self._emit(f"Subsumes: Section {node.subsumes}")
         if getattr(node, "amends", None):
             self._emit(f"Amends: Section {node.amends}")
+        if node.input_type or node.output_type:
+            contract = []
+            if node.input_type:
+                contract.append(f"input {self._type_to_english(node.input_type)}")
+            if node.output_type:
+                contract.append(f"output {self._type_to_english(node.output_type)}")
+            self._emit(f"Section contract: {', '.join(contract)}")
         self._emit_blank()
 
         # Parties

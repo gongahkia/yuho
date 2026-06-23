@@ -49,7 +49,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Local evidence: E2E tests skip when `AlloyGenerator` does not handle a case; Z3 has deeper element/group/exception/apply_scope tests.
   - Marking: [Inference] Treat Alloy as secondary until nested groups, exceptions, priority, penalties, and cross-section refs have parity tests.
 - Cross-section reasoning incomplete: valid.
-  - Local evidence: embedded `apply_scope`/`is_infringed` now execute in runtime and explain traces, but section input/output typing and Lean parity remain incomplete.
+  - Local evidence: embedded `apply_scope`/`is_infringed` now execute in runtime and explain traces, but Lean parity remains incomplete.
 - Syntax conventional: valid, but low priority.
   - Local evidence: grammar is conventional statically typed DSL syntax with legal blocks.
   - Marking: [Inference] Esolang experts may not care; PL/DSL experts will care more about semantics, tooling, and conformance.
@@ -79,13 +79,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 - Harden embedded `apply_scope` and `is_infringed` runtime semantics.
   - Current support: predicate elements can resolve `apply_scope` and `is_infringed` through a registered statute environment in runtime and explain traces, nested section calls carry cycle and depth-limit diagnostics, and `apply_scope` struct args support ordered fact substitution.
   - Acceptance: runtime evaluator, Z3, and Lean smoke fixtures agree on nested cross-section references.
-
-- Add section-call typing.
-  - Current support: lint checks unresolved section calls, empty apply_scope targets, missing fields on struct-literal fact bases, unknown fields on struct-literal overrides, and obvious non-bool literal values for target element fields.
-  - Current support: semantic analysis rejects structurally invalid `apply_scope` literal fact bases before runtime.
-  - Current support: semantic analysis infers visible identifier fact shapes from local and imported struct-literal bindings and rejects incompatible `apply_scope` schemas before runtime.
-  - Remaining work: define named section input/output types beyond the current element-name bool schema.
-  - Acceptance: semantic analysis catches invalid literal `apply_scope` calls before runtime.
 
 ## P1: Formal Mechanisation
 
