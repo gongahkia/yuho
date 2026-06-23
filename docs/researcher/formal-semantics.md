@@ -122,7 +122,24 @@ Penalty     ::= 'penalty' Sentencing? '{' PenaltyClauses MandatoryMin? '}'
 Sentencing  ::= 'concurrent' | 'consecutive'
 MandatoryMin ::= 'minimum' ('imprisonment' ':=' DurationLit | 'fine' ':=' MoneyLit)
 Exception   ::= 'exception' Identifier? '{' StringLit StringLit? ('when' Expr)? '}'
-CaseLaw     ::= 'caselaw' StringLit StringLit? '{' StringLit ('element' Identifier)? '}'
+CaseLaw     ::= DocComment* 'caselaw' StringLit StringLit? '{'
+                StringLit ('element' Identifier)? CaseTreatment*
+                '}'
+DocComment  ::= '///' CaseMeta
+CaseMeta    ::= '@role' Identifier
+              | '@jurisdiction' Identifier
+              | '@court' Identifier | '@court_level' Identifier
+              | '@date' DateLit | '@decision_date' DateLit
+              | '@effect' EffectOp Identifier
+EffectOp    ::= 'requires' | 'satisfies' | 'excludes'
+CaseTreatment ::= 'treatment' TreatmentKind StringLit StringLit?
+TreatmentKind ::= 'follows' | 'followed'
+                | 'distinguishes' | 'distinguished'
+                | 'overrules' | 'overruled'
+                | 'reverses' | 'reversed'
+                | 'approves' | 'approved'
+                | 'disapproves' | 'disapproved'
+                | 'applies' | 'applied'
 Illustration ::= 'illustration' Identifier? '{' StringLit '}'
 ```
 

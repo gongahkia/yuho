@@ -395,10 +395,11 @@ class TypeInferenceVisitor(Visitor):
 
     def visit_variable_decl(self, node: nodes.VariableDecl) -> TypeAnnotation:
         """Record variable type in scope."""
+        value_type = self.visit(node.value) if node.value else UNKNOWN_TYPE
         if node.type_annotation:
             var_type = self._type_node_to_annotation(node.type_annotation)
         elif node.value:
-            var_type = self.visit(node.value)
+            var_type = value_type
         else:
             var_type = UNKNOWN_TYPE
 

@@ -55,7 +55,12 @@ multi-line
 comment
 */
 
-/// this is a doc comment
+/// doc comments attach metadata to the following declaration
+statute 900 "Commented statute" {
+    elements {
+        actus_reus act := "act";
+    }
+}
 ```
 
 ## Variable Declaration
