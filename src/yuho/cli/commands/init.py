@@ -100,6 +100,74 @@ LITERATE_LEGAL_TEXT = """# Legal Text
 3. The other person relies on the representation.
 """
 
+EXCEPTIONS_STATUTE = """statute 1 "Starter Offence With Defence" {
+    elements {
+        all_of {
+            actus_reus act := facts.conduct.act;
+            mens_rea intent := facts.accused.intent;
+        }
+    }
+
+    exception lawful_authority {
+        "The conduct is excused when lawful authority applies."
+        when facts.defence.lawful_authority
+    }
+
+    penalty {
+        imprisonment := 1 day .. 6 months;
+        fine := unlimited;
+    }
+}
+"""
+
+EXCEPTIONS_FACTS = {
+    "conduct": {
+        "act": True,
+    },
+    "accused": {
+        "intent": True,
+    },
+    "defence": {
+        "lawful_authority": False,
+    },
+}
+
+CROSS_REFERENCE_STATUTE = """statute 2 "Starter Aggravated Offence" {
+    elements {
+        all_of {
+            circumstance base_offence := apply_scope(s1, facts);
+            circumstance aggravation := facts.context.aggravated;
+        }
+    }
+
+    penalty {
+        imprisonment := 1 month .. 1 year;
+        fine := unlimited;
+    }
+}
+
+statute 1 "Starter Base Offence" {
+    elements {
+        all_of {
+            actus_reus act := facts.conduct.act;
+            mens_rea intent := facts.accused.intent;
+        }
+    }
+}
+"""
+
+CROSS_REFERENCE_FACTS = {
+    "conduct": {
+        "act": True,
+    },
+    "accused": {
+        "intent": True,
+    },
+    "context": {
+        "aggravated": True,
+    },
+}
+
 
 def run_init(
     *,
@@ -215,6 +283,18 @@ def _template(name: str) -> dict[str, Any]:
             "statute": LITERATE_STATUTE,
             "facts": LITERATE_FACTS,
             "legal_text": LITERATE_LEGAL_TEXT,
+        }
+    if name == "statute-exceptions":
+        return {
+            "statute": EXCEPTIONS_STATUTE,
+            "facts": EXCEPTIONS_FACTS,
+            "legal_text": None,
+        }
+    if name == "statute-cross-reference":
+        return {
+            "statute": CROSS_REFERENCE_STATUTE,
+            "facts": CROSS_REFERENCE_FACTS,
+            "legal_text": None,
         }
     return {
         "statute": STARTER_STATUTE,

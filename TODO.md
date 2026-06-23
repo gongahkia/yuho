@@ -126,9 +126,8 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Acceptance: report highlights each statutory paragraph next to its executable element and result trace.
 
 - Expand controlled-authoring mode.
-  - Current support: `yuho init --template statute-literate` creates a starter with legal text anchors and executable predicates.
-  - Inspired by L4/Blawx/Catala UX, add more constrained templates for non-compiler users.
-  - Acceptance: templates cover statute-only, statute-with-exceptions, and statute-with-cross-reference drafting workflows.
+  - Current support: `yuho init` templates cover basic statute-only, statute-literate, statute-with-exceptions, and statute-with-cross-reference workflows.
+  - Remaining work: guided prompts or stricter authoring flows beyond static templates.
 
 ## Non-Goals For Now
 

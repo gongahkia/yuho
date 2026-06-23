@@ -183,7 +183,7 @@ Usage: yuho init [OPTIONS] [DIRECTORY]
 Options:
   --force                         Overwrite existing files
   --no-run                        Skip starter smoke checks
-  --template [basic|statute-literate]
+  --template [basic|statute-literate|statute-exceptions|statute-cross-reference]
                                   Starter template  [default: basic]
   --json                          Emit JSON
   --help                          Show this message and exit.

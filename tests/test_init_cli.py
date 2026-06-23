@@ -73,6 +73,47 @@ def test_init_statute_literate_json_lists_legal_text(tmp_path: Path) -> None:
     assert payload["smoke"]["explains"] is True
 
 
+def test_init_statute_exceptions_template_creates_defence_workflow(tmp_path: Path) -> None:
+    root = tmp_path / "exceptions"
+
+    result = CliRunner().invoke(cli, ["init", "--template", "statute-exceptions", str(root)])
+
+    assert result.exit_code == 0
+    statute = (root / "statute.yh").read_text(encoding="utf-8")
+    facts = json.loads((root / "facts.json").read_text(encoding="utf-8"))
+    assert "exception lawful_authority" in statute
+    assert "when facts.defence.lawful_authority" in statute
+    assert facts["defence"]["lawful_authority"] is False
+
+    check = CliRunner().invoke(cli, ["check", str(root / "statute.yh")])
+    assert check.exit_code == 0
+
+
+def test_init_statute_cross_reference_template_runs_section_two(tmp_path: Path) -> None:
+    root = tmp_path / "crossref"
+
+    result = CliRunner().invoke(
+        cli,
+        ["init", "--template", "statute-cross-reference", str(root)],
+    )
+
+    assert result.exit_code == 0
+    statute = (root / "statute.yh").read_text(encoding="utf-8")
+    assert "apply_scope(s1, facts)" in statute
+
+    explain = CliRunner().invoke(
+        cli,
+        [
+            "explain",
+            str(root / "statute.yh"),
+            "--facts",
+            str(root / "facts.json"),
+        ],
+    )
+    assert explain.exit_code == 0
+    assert "Section 2 is satisfied." in explain.output
+
+
 def test_init_refuses_nonempty_directory_without_force(tmp_path: Path) -> None:
     root = tmp_path / "starter"
     root.mkdir()

@@ -67,7 +67,14 @@ def doctor(sample: Optional[str], json_output: bool, strict: bool) -> None:
 @click.option(
     "--template",
     "template",
-    type=click.Choice(["basic", "statute-literate"]),
+    type=click.Choice(
+        [
+            "basic",
+            "statute-literate",
+            "statute-exceptions",
+            "statute-cross-reference",
+        ]
+    ),
     default="basic",
     show_default=True,
     help="Starter template",
