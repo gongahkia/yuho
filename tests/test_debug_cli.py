@@ -119,3 +119,36 @@ def test_debug_json_typed_facts_use_value_field(tmp_path: Path):
     assert "actus_reus taking -> satisfied" in result.output
     assert "mens_rea intent -> not satisfied" in result.output
     assert "overall: not satisfied" in result.output
+
+
+def test_debug_element_predicate_uses_structured_facts(tmp_path: Path):
+    statute = tmp_path / "statute.yh"
+    statute.write_text(
+        """
+        statute 1 "Predicate" {
+            elements {
+                actus_reus deception := facts.representation.falsehood && facts.accused.knows_falsehood;
+            }
+        }
+        """,
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(
+        json.dumps(
+            {
+                "representation": {"falsehood": True},
+                "accused": {"knows_falsehood": True},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(
+        cli,
+        ["debug", "--break-on", "element", str(facts), str(statute)],
+    )
+
+    assert result.exit_code == 0
+    assert "actus_reus deception -> satisfied" in result.output
+    assert "overall: satisfied" in result.output

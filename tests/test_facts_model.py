@@ -12,6 +12,7 @@ from yuho.eval.facts import (
     fact_truthy,
     fact_value,
     normalize_facts,
+    struct_from_facts,
 )
 
 
@@ -56,3 +57,11 @@ def test_documented_facts_schema_matches_runtime_constant() -> None:
     documented = json.loads(Path("docs/user/facts-schema.json").read_text(encoding="utf-8"))
 
     assert documented == FACTS_SCHEMA
+
+
+def test_struct_from_facts_preserves_nested_records() -> None:
+    facts = struct_from_facts({"outer": {"inner": True}})
+
+    outer = facts.get_field("outer")
+    assert outer.type_tag == "struct"
+    assert outer.raw.get_field("inner").raw is True

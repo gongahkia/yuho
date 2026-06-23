@@ -531,8 +531,16 @@ class ScopeAnalysisVisitor(Visitor):
         self._current_jurisdiction = node.jurisdiction or "<unspecified>"
         if node.jurisdiction_node:
             self.visit_jurisdiction(node.jurisdiction_node)
-        scope_name = f"statute_{self._scope_token(self._current_jurisdiction)}_{node.section_number}"
+        scope_name = (
+            f"statute_{self._scope_token(self._current_jurisdiction)}_{node.section_number}"
+        )
         self._push_scope(scope_name)
+        self._define_symbol(
+            name="facts",
+            kind=SymbolKind.VARIABLE,
+            node=node,
+            type_annotation="Facts",
+        )
         for definition in node.definitions:
             self.visit(definition)
         for element in node.elements:

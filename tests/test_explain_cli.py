@@ -90,3 +90,38 @@ def test_explain_cli_includes_typed_fact_metadata(tmp_path: Path):
     assert result.exit_code == 0
     assert "standard=beyond_reasonable_doubt" in result.output
     assert "source=witness A" in result.output
+
+
+def test_explain_cli_element_predicate_uses_structured_facts(tmp_path: Path):
+    root = tmp_path / "library"
+    section = root / "s1_predicate"
+    section.mkdir(parents=True)
+    (section / "statute.yh").write_text(
+        """
+        statute 1 "Predicate" {
+            elements {
+                actus_reus deception := facts.representation.falsehood && facts.accused.knows_falsehood;
+            }
+        }
+        """,
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(
+        json.dumps(
+            {
+                "representation": {"falsehood": True},
+                "accused": {"knows_falsehood": True},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(
+        cli,
+        ["explain", "--facts", str(facts), "--library", str(root), "1"],
+    )
+
+    assert result.exit_code == 0
+    assert "predicate expression is truthy" in result.output
+    assert "Section 1 is satisfied." in result.output

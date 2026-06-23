@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Mapping, Optional, Tuple, Union
 from yuho.ast import nodes
-from yuho.eval.interpreter import Interpreter, Environment, Value, StructInstance
+from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, StructInstance, Value
 
 
 # ---------------------------------------------------------------------------
@@ -157,6 +157,14 @@ class StatuteEvaluator:
         desc = ""
         if isinstance(element.description, nodes.StringLit):
             desc = element.description.value
+        else:
+            satisfied = self._evaluate_predicate_description(element.description, facts, env)
+            return ElementResult(
+                element_name=name,
+                element_type=etype,
+                satisfied=satisfied,
+                description=type(element.description).__name__,
+            )
 
         # look for a matching field in facts
         if name in facts.fields:
@@ -180,6 +188,21 @@ class StatuteEvaluator:
             satisfied=satisfied,
             description=desc,
         )
+
+    def _evaluate_predicate_description(
+        self,
+        predicate: nodes.ASTNode,
+        facts: StructInstance,
+        env: Environment,
+    ) -> bool:
+        predicate_env = env.child()
+        predicate_env.set("facts", Value(raw=facts, type_tag="struct"))
+        for key, value in facts.fields.items():
+            predicate_env.set(key, value)
+        try:
+            return Interpreter(predicate_env).visit(predicate).is_truthy()
+        except InterpreterError:
+            return False
 
     def _evaluate_group(
         self,
@@ -294,7 +317,7 @@ def _canonical_section(s: str) -> str:
     raw = s.strip()
     lower = raw.lower()
     if lower.startswith("section"):
-        raw = raw[len("section"):].strip().strip(".").strip()
+        raw = raw[len("section") :].strip().strip(".").strip()
     elif lower.startswith("s."):
         raw = raw[2:].strip()
     elif lower.startswith("s") and len(raw) > 1 and raw[1].isdigit():

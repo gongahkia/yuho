@@ -32,6 +32,7 @@ from yuho.ast.type_inference import (
     VOID_TYPE,
     PASS_TYPE,
     UNKNOWN_TYPE,
+    FACT_TYPE,
 )
 
 logger = logging.getLogger(__name__)
@@ -149,6 +150,8 @@ class TypeCheckVisitor(Visitor):
         """Check if two types are compatible."""
         if expected == UNKNOWN_TYPE or actual == UNKNOWN_TYPE:
             return True
+        if expected == FACT_TYPE or actual == FACT_TYPE:
+            return True
         if actual == PASS_TYPE:
             return True
         if expected.type_name == actual.type_name:
@@ -181,13 +184,14 @@ class TypeCheckVisitor(Visitor):
     ) -> None:
         """Check type compatibility for binary operators."""
         op = node.operator
+        dynamic = {"fact", "unknown"}
         if op in ("&&", "||", "and", "or"):
-            if left_type.type_name != "bool":
+            if left_type.type_name not in {"bool", *dynamic}:
                 self.result.add_error(
                     f"Left operand of '{op}' must be bool, got {left_type}",
                     node,
                 )
-            if right_type.type_name != "bool":
+            if right_type.type_name not in {"bool", *dynamic}:
                 self.result.add_error(
                     f"Right operand of '{op}' must be bool, got {right_type}",
                     node,
@@ -199,17 +203,27 @@ class TypeCheckVisitor(Visitor):
                     node,
                 )
         elif op in ("<", ">", "<=", ">="):
-            if left_type.type_name not in self.ORDERABLE_TYPES:
+            if (
+                left_type.type_name not in self.ORDERABLE_TYPES
+                and left_type.type_name not in dynamic
+            ):
                 self.result.add_error(
                     f"Type {left_type} is not orderable",
                     node,
                 )
-            if right_type.type_name not in self.ORDERABLE_TYPES:
+            if (
+                right_type.type_name not in self.ORDERABLE_TYPES
+                and right_type.type_name not in dynamic
+            ):
                 self.result.add_error(
                     f"Type {right_type} is not orderable",
                     node,
                 )
-            if left_type.type_name != right_type.type_name:
+            if (
+                left_type.type_name != right_type.type_name
+                and left_type.type_name not in dynamic
+                and right_type.type_name not in dynamic
+            ):
                 self.result.add_error(
                     f"Cannot compare {left_type} with {right_type}",
                     node,

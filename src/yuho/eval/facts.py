@@ -120,6 +120,32 @@ def fact_value(value: Any) -> Any:
     return value
 
 
+def runtime_value_from_fact(value: Any):
+    """Convert a JSON/typed fact value into a Yuho runtime Value."""
+    from yuho.eval.interpreter import StructInstance, Value
+
+    raw = fact_value(value)
+    if isinstance(raw, Mapping):
+        fields = {
+            str(key): runtime_value_from_fact(child) for key, child in normalize_facts(raw).items()
+        }
+        return Value(raw=StructInstance(type_name="Facts", fields=fields), type_tag="struct")
+    if isinstance(raw, list):
+        return Value(raw=[runtime_value_from_fact(child) for child in raw], type_tag="list")
+    return Value(raw=raw)
+
+
+def struct_from_facts(facts: Mapping[str, Any], type_name: str = "Facts"):
+    """Build a StructInstance from a fact mapping."""
+    from yuho.eval.interpreter import StructInstance
+
+    normalized = normalize_facts(facts)
+    return StructInstance(
+        type_name=type_name,
+        fields={str(key): runtime_value_from_fact(value) for key, value in normalized.items()},
+    )
+
+
 def fact_truthy(value: Any) -> bool:
     """Return Yuho truthiness for a fact or typed fact."""
     if value is None:

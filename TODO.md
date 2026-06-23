@@ -61,13 +61,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Add differential tests: runtime verdict == Z3 model verdict == Lean expected verdict where available.
   - Acceptance: `make verify-core` includes a backend parity summary, with unsupported backend features explicit.
 
-## P0: Rich Fact Model
-
-- Add predicate-backed element satisfaction.
-  - Permit elements to bind to computable predicates, not only matching field names.
-  - Example shape to design, not final syntax: `actus_reus deception when facts.representation.falsehood && facts.accused.knows_falsehood`.
-  - Acceptance: element truth can depend on structured fields, comparisons, dates, amounts, parties, and nested records.
-
 ## P0: Machine-Readable Legal Meaning
 
 - Make definitions computable when possible.

@@ -55,6 +55,7 @@ DURATION_TYPE = TypeAnnotation("duration")
 VOID_TYPE = TypeAnnotation("void")
 PASS_TYPE = TypeAnnotation("pass")
 UNKNOWN_TYPE = TypeAnnotation("unknown")
+FACT_TYPE = TypeAnnotation("fact")
 
 
 @dataclass
@@ -185,6 +186,8 @@ class TypeInferenceVisitor(Visitor):
             inferred_type = TypeAnnotation(self.result.enum_variants[name])
         elif name in getattr(self.result, "type_aliases", {}):
             inferred_type = self.result.type_aliases[name]
+        elif name == "facts":
+            inferred_type = FACT_TYPE
         else:
             inferred_type = UNKNOWN_TYPE
 
@@ -197,7 +200,9 @@ class TypeInferenceVisitor(Visitor):
         field_name = node.field_name
 
         # Check if base is a known struct type
-        if base_type.type_name in self.result.struct_defs:
+        if base_type.type_name in ("fact", "unknown"):
+            inferred_type = FACT_TYPE
+        elif base_type.type_name in self.result.struct_defs:
             struct_fields = self.result.struct_defs[base_type.type_name]
             if field_name in struct_fields:
                 inferred_type = struct_fields[field_name]

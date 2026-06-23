@@ -33,3 +33,20 @@ The schema is [facts-schema.json](facts-schema.json).
 
 Compatibility rule: primitive fact values remain valid. Typed fact objects use
 their `value` field for truth and preserve metadata for explanation output.
+
+Structured objects can back element predicates:
+
+```yh
+actus_reus deception := facts.representation.falsehood && facts.accused.knows_falsehood;
+```
+
+```json
+{
+  "representation": {
+    "falsehood": true
+  },
+  "accused": {
+    "knows_falsehood": true
+  }
+}
+```

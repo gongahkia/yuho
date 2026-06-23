@@ -11,7 +11,7 @@ import click
 
 from yuho.ast import ASTBuilder
 from yuho.eval.debugger import ElementBreakpointHit, debug_element_breakpoints
-from yuho.eval.facts import fact_value, normalize_facts
+from yuho.eval.facts import struct_from_facts
 from yuho.eval.interpreter import Interpreter, StructInstance, Value
 from yuho.parser import get_parser
 
@@ -70,11 +70,7 @@ def _load_json_facts(path: Path) -> StructInstance:
     if not isinstance(data, dict):
         click.echo("error: facts file must be a JSON object", err=True)
         sys.exit(1)
-    normalized = normalize_facts(data)
-    return StructInstance(
-        type_name="Facts",
-        fields={str(key): Value(raw=fact_value(value)) for key, value in normalized.items()},
-    )
+    return struct_from_facts(data)
 
 
 def _parse_file(path: Path):

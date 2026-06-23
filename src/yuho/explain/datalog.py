@@ -6,7 +6,8 @@ from dataclasses import dataclass
 from typing import Mapping, Sequence
 
 from yuho.ast import nodes
-from yuho.eval.facts import fact_reason, fact_truthy, normalize_facts
+from yuho.eval.facts import fact_reason, fact_truthy, normalize_facts, struct_from_facts
+from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, Value
 
 
 @dataclass(frozen=True)
@@ -40,11 +41,18 @@ class DatalogExplainer:
         facts: Mapping[str, object],
     ) -> JustificationTrace:
         normalized_facts = normalize_facts(facts)
+        runtime_facts = struct_from_facts(normalized_facts)
         traces: list[ElementTrace] = []
         rules: list[str] = []
         overall = True
         for index, member in enumerate(statute.elements):
-            trace = self._trace_member(member, normalized_facts, f"top_{index}", rules)
+            trace = self._trace_member(
+                member,
+                normalized_facts,
+                runtime_facts,
+                f"top_{index}",
+                rules,
+            )
             traces.append(trace)
             if not trace.satisfied:
                 overall = False
@@ -59,12 +67,13 @@ class DatalogExplainer:
         self,
         member: nodes.ASTNode,
         facts: Mapping[str, object],
+        runtime_facts,
         fallback_name: str,
         rules: list[str],
     ) -> ElementTrace:
         if isinstance(member, nodes.ElementGroupNode):
             child_traces = tuple(
-                self._trace_member(child, facts, f"{fallback_name}_{i}", rules)
+                self._trace_member(child, facts, runtime_facts, f"{fallback_name}_{i}", rules)
                 for i, child in enumerate(member.members)
             )
             if member.combinator == "any_of":
@@ -96,11 +105,20 @@ class DatalogExplainer:
         else:
             name = fallback_name
             element_type = type(member).__name__
-        fact = facts.get(name)
-        satisfied = fact_truthy(fact)
-        rule = f"satisfied({name}) :- fact({name}, true)."
+        if isinstance(member, (nodes.ElementNode, nodes.CivilPrimitiveNode)) and not isinstance(
+            member.description, nodes.StringLit
+        ):
+            satisfied = self._predicate_truthy(member.description, runtime_facts)
+            rule = f"satisfied({name}) :- predicate({name})."
+            reason = (
+                "predicate expression is truthy" if satisfied else "predicate expression is false"
+            )
+        else:
+            fact = facts.get(name)
+            satisfied = fact_truthy(fact)
+            rule = f"satisfied({name}) :- fact({name}, true)."
+            reason = fact_reason(name, fact, satisfied)
         rules.append(rule)
-        reason = fact_reason(name, fact, satisfied)
         return ElementTrace(
             name=name,
             element_type=element_type,
@@ -128,3 +146,14 @@ class DatalogExplainer:
         if combinator == "any_of":
             return "no child element is satisfied"
         return f"unsatisfied child elements: {', '.join(failed)}"
+
+    @staticmethod
+    def _predicate_truthy(predicate: nodes.ASTNode, runtime_facts) -> bool:
+        env = Environment()
+        env.set("facts", Value(raw=runtime_facts, type_tag="struct"))
+        for key, value in runtime_facts.fields.items():
+            env.set(key, value)
+        try:
+            return Interpreter(env).visit(predicate).is_truthy()
+        except InterpreterError:
+            return False
