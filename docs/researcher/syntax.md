@@ -663,8 +663,12 @@ import { dishonestly } from "penal_code/s24_definitions"
 
 // s415 can now reference the imported definition
 statute 415 "Cheating" {
-    definitions {
-        dishonestly := dishonestly; // from s24
+    elements {
+        mens_rea dishonest := dishonestly;
     }
 }
 ```
+
+Named and wildcard imports expose exported statute `definitions` as computable
+terms. If an importing statute defines the same term locally, the local
+definition is used during predicate evaluation.

@@ -12,6 +12,7 @@ import click
 
 from yuho.ast import nodes
 from yuho.explain import DatalogExplainer
+from yuho.resolver import ModuleResolver
 from yuho.services.analysis import analyze_file
 from yuho.transpile.english_transpiler import EnglishTranspiler
 
@@ -43,8 +44,9 @@ def run_explain(
         sys.exit(1)
 
     facts = _load_facts(Path(facts_file))
-    statute = _select_statute(analysis.ast.statutes, section)
-    statutes = {st.section_number: st for st in analysis.ast.statutes}
+    ast = _module_with_imported_definitions(analysis.ast, statute_path)
+    statute = _select_statute(ast.statutes, section)
+    statutes = {st.section_number: st for st in ast.statutes}
     trace = DatalogExplainer().explain(statute, facts, statutes)
     if json_output:
         click.echo(json.dumps(asdict(trace), indent=2, sort_keys=True))
@@ -79,6 +81,24 @@ def _load_facts(path: Path) -> dict[str, object]:
         click.echo("error: facts file must be a JSON object", err=True)
         sys.exit(1)
     return data
+
+
+def _module_with_imported_definitions(
+    ast: nodes.ModuleNode,
+    statute_path: Path,
+) -> nodes.ModuleNode:
+    if not ast.imports:
+        return ast
+    search_paths = [statute_path.parent, Path.cwd()]
+    lib_path = Path.cwd() / "library"
+    if lib_path.is_dir():
+        search_paths.append(lib_path)
+    resolver = ModuleResolver(search_paths=search_paths)
+    try:
+        return resolver.module_with_imported_definitions(ast, statute_path)
+    except Exception as exc:
+        click.echo(f"error: failed to resolve imports in {statute_path}: {exc}", err=True)
+        sys.exit(1)
 
 
 def _select_statute(

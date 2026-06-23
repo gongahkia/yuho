@@ -11,7 +11,7 @@ from typing import Optional
 import click
 
 from yuho.ast import nodes
-from yuho.cli.commands.explain import _load_facts
+from yuho.cli.commands.explain import _load_facts, _module_with_imported_definitions
 from yuho.explain import DatalogExplainer
 from yuho.services.analysis import analyze_file
 from yuho.transpile.english_transpiler import EnglishTranspiler
@@ -46,8 +46,9 @@ def run_literate(
     trace_text = None
     if facts_file:
         facts = _load_facts(Path(facts_file))
-        statute = analysis.ast.statutes[0]
-        statutes = {st.section_number: st for st in analysis.ast.statutes}
+        ast = _module_with_imported_definitions(analysis.ast, statute_path)
+        statute = ast.statutes[0]
+        statutes = {st.section_number: st for st in ast.statutes}
         trace = DatalogExplainer().explain(statute, facts, statutes)
         trace_text = EnglishTranspiler().render_explain_trace(trace)
 

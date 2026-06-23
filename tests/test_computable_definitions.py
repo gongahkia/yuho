@@ -12,7 +12,8 @@ from yuho.cli.main import cli
 from yuho.eval.facts import struct_from_facts
 from yuho.eval.statute_evaluator import StatuteEvaluator
 from yuho.explain import DatalogExplainer
-from yuho.services.analysis import analyze_source
+from yuho.resolver import ModuleResolver
+from yuho.services.analysis import analyze_file, analyze_source
 from yuho.transpile.english_transpiler import EnglishTranspiler
 from yuho.transpile.latex_transpiler import LaTeXTranspiler
 
@@ -147,3 +148,129 @@ def test_computable_definition_exports_do_not_assume_string_values() -> None:
 
     assert "facts's representation's falsehood" in english.output
     assert r"\textit{facts}.representation.falsehood" in latex.output
+
+
+def test_named_imported_computable_definition_evaluates(tmp_path: Path) -> None:
+    helper = tmp_path / "defs.yh"
+    helper.write_text(
+        """
+statute 24 "Shared Definitions" {
+  definitions {
+    deceptive := facts.representation.falsehood;
+  }
+  elements {
+    actus_reus placeholder := "placeholder";
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    main = tmp_path / "main.yh"
+    main.write_text(
+        """
+import { deceptive } from "defs.yh";
+
+statute 1 "Uses Imported Definition" {
+  elements {
+    actus_reus deception := deceptive;
+  }
+}
+""",
+        encoding="utf-8",
+    )
+
+    analysis = analyze_file(main, run_semantic=True)
+    assert not analysis.errors
+    ast = ModuleResolver(search_paths=[tmp_path]).module_with_imported_definitions(
+        analysis.ast,
+        main,
+    )
+    result = StatuteEvaluator().evaluate(
+        ast.statutes[0],
+        struct_from_facts({"representation": {"falsehood": True}}),
+    )
+
+    assert result.overall_satisfied is True
+    assert result.bindings() == {"deception": True}
+
+
+def test_explain_uses_imported_computable_definition(tmp_path: Path) -> None:
+    (tmp_path / "defs.yh").write_text(
+        """
+statute 24 "Shared Definitions" {
+  definitions {
+    deceptive := facts.representation.falsehood;
+  }
+  elements {
+    actus_reus placeholder := "placeholder";
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    statute = tmp_path / "main.yh"
+    statute.write_text(
+        """
+import { deceptive } from "defs.yh";
+
+statute 1 "Uses Imported Definition" {
+  elements {
+    actus_reus deception := deceptive;
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(
+        json.dumps({"representation": {"falsehood": True}}),
+        encoding="utf-8",
+    )
+
+    explained = CliRunner().invoke(cli, ["explain", "--facts", str(facts), str(statute)])
+
+    assert explained.exit_code == 0
+    assert "Section 1 is satisfied." in explained.output
+    assert "predicate expression is truthy" in explained.output
+
+
+def test_local_definition_overrides_imported_definition(tmp_path: Path) -> None:
+    (tmp_path / "defs.yh").write_text(
+        """
+statute 24 "Shared Definitions" {
+  definitions {
+    deceptive := facts.representation.falsehood;
+  }
+  elements {
+    actus_reus placeholder := "placeholder";
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    statute = tmp_path / "main.yh"
+    statute.write_text(
+        """
+import { deceptive } from "defs.yh";
+
+statute 1 "Local Override" {
+  definitions {
+    deceptive := FALSE;
+  }
+  elements {
+    actus_reus deception := deceptive;
+  }
+}
+""",
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(
+        json.dumps({"representation": {"falsehood": True}}),
+        encoding="utf-8",
+    )
+
+    explained = CliRunner().invoke(cli, ["explain", "--facts", str(facts), str(statute)])
+
+    assert explained.exit_code == 0
+    assert "Section 1 is not satisfied." in explained.output

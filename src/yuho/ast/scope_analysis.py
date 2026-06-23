@@ -272,6 +272,8 @@ class ScopeAnalysisVisitor(Visitor):
                 kind = SymbolKind.FUNCTION
             elif isinstance(decl_node, nodes.VariableDecl):
                 kind = SymbolKind.VARIABLE
+            elif isinstance(decl_node, nodes.DefinitionEntry):
+                kind = SymbolKind.DEFINITION
             self._define_symbol(
                 name=name,
                 kind=kind,

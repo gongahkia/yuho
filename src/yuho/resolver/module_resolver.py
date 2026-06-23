@@ -5,8 +5,9 @@ Resolves ImportNode and ReferencingStmt to parsed ModuleNode ASTs,
 with caching, cycle detection, and exported symbol extraction.
 """
 
+from dataclasses import replace
 from pathlib import Path
-from typing import Dict, List, Set, Optional
+from typing import Dict, List, Set, Optional, Tuple
 import logging
 
 from yuho.ast.nodes import (
@@ -18,6 +19,7 @@ from yuho.ast.nodes import (
     FunctionDefNode,
     StatuteNode,
     VariableDecl,
+    DefinitionEntry,
 )
 from yuho.ast.builder import ASTBuilder
 from yuho.parser import get_parser
@@ -158,6 +160,7 @@ class ModuleResolver:
         - function names -> FunctionDefNode
         - statute section numbers -> StatuteNode
         - top-level variable names -> VariableDecl
+        - statute definition terms -> DefinitionEntry
 
         Args:
             module: a parsed ModuleNode
@@ -172,6 +175,8 @@ class ModuleResolver:
             symbols[func_def.name] = func_def
         for statute in module.statutes:
             symbols[statute.section_number] = statute
+            for definition in _iter_definitions(statute):
+                symbols[definition.term] = definition
         for var_decl in module.variables:
             symbols[var_decl.name] = var_decl
         return symbols
@@ -199,6 +204,47 @@ class ModuleResolver:
         return {
             name: node for name, node in all_symbols.items() if name in import_node.imported_names
         }
+
+    def resolve_and_get_definitions(
+        self,
+        import_node: ImportNode,
+        from_file: Path,
+    ) -> Tuple[DefinitionEntry, ...]:
+        """Resolve an import and return exported statute definitions in source order."""
+        module = self.resolve(import_node, from_file)
+        definitions = tuple(
+            definition
+            for statute in module.statutes
+            for definition in _iter_definitions(statute)
+        )
+        if not import_node.imported_names or import_node.is_wildcard:
+            return definitions
+        wanted = set(import_node.imported_names)
+        return tuple(definition for definition in definitions if definition.term in wanted)
+
+    def module_with_imported_definitions(
+        self,
+        module: ModuleNode,
+        from_file: Path,
+    ) -> ModuleNode:
+        """Prepend imported definitions to each local statute.
+
+        Local statute definitions are kept after imported definitions so local
+        terms override imports during predicate evaluation.
+        """
+        imported: List[DefinitionEntry] = []
+        for import_node in module.imports:
+            imported.extend(self.resolve_and_get_definitions(import_node, from_file))
+        if not imported:
+            return module
+        imported_defs = tuple(imported)
+        return replace(
+            module,
+            statutes=tuple(
+                replace(statute, definitions=imported_defs + statute.definitions)
+                for statute in module.statutes
+            ),
+        )
 
     def clear_cache(self) -> None:
         """Clear the module cache."""
@@ -320,3 +366,13 @@ class ModuleResolver:
                 self.resolve_reference(ref, file_path)
             except ModuleResolutionError as exc:
                 logger.warning("nested reference resolution failed: %s", exc)
+
+
+def _iter_definitions(statute: StatuteNode) -> Tuple[DefinitionEntry, ...]:
+    definitions: List[DefinitionEntry] = list(statute.definitions)
+    stack = list(statute.subsections)
+    while stack:
+        subsection = stack.pop(0)
+        definitions.extend(subsection.definitions)
+        stack[0:0] = list(subsection.subsections)
+    return tuple(definitions)

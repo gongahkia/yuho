@@ -8,7 +8,7 @@ from typing import Optional
 
 import click
 
-from yuho.cli.commands.explain import _load_facts
+from yuho.cli.commands.explain import _load_facts, _module_with_imported_definitions
 from yuho.explain import DatalogExplainer
 from yuho.services.analysis import analyze_file
 from yuho.transpile.english_transpiler import EnglishTranspiler
@@ -36,7 +36,8 @@ def run_irac(
         sys.exit(1)
 
     facts = _load_facts(Path(facts_file))
-    statute = analysis.ast.statutes[0]
-    statutes = {st.section_number: st for st in analysis.ast.statutes}
+    ast = _module_with_imported_definitions(analysis.ast, Path(statute_file))
+    statute = ast.statutes[0]
+    statutes = {st.section_number: st for st in ast.statutes}
     trace = DatalogExplainer().explain(statute, facts, statutes)
     click.echo(EnglishTranspiler().render_irac(statute, trace))
