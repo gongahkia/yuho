@@ -38,7 +38,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "penalties_money_duration",
-        "runtime-z3=partial; z3-lean=smoke; alloy=unsupported-boundary",
+        "runtime-z3=partial-money-duration; z3-lean=smoke; alloy=unsupported-boundary",
     ),
     (
         "optional_values",

@@ -153,3 +153,77 @@ def test_runtime_z3_differential_covers_optional_pass_values(tmp_path):
     assert summary.assertions == 2
     assert summary.failures == ()
     assert summary.errors == ()
+
+
+def test_runtime_z3_differential_covers_mixed_groups_and_is_infringed(tmp_path):
+    pytest.importorskip("z3")
+    test_file = tmp_path / "test_statute.yh"
+    test_file.write_text(
+        """
+        bool act := TRUE
+        bool intent := FALSE
+        bool alternative := TRUE
+
+        struct Facts {
+            bool act,
+            bool intent,
+            bool alternative,
+        }
+
+        statute 1 "Mixed groups" {
+          elements {
+            any_of {
+              all_of {
+                actus_reus act := "act";
+                mens_rea intent := "intent";
+              }
+              circumstance alternative := "alternative";
+            }
+          }
+        }
+
+        Facts facts := Facts {
+            act := TRUE,
+            intent := FALSE,
+            alternative := TRUE,
+        }
+
+        assert is_infringed(s1) == TRUE
+        assert apply_scope(s1, facts) == TRUE
+        assert apply_scope(s1, facts, { alternative := FALSE }) == FALSE
+        """,
+        encoding="utf-8",
+    )
+
+    summary = verify_runtime_tests.run_z3_differential([test_file])
+
+    assert summary is not None
+    assert summary.checked == 1
+    assert summary.assertions == 3
+    assert summary.failures == ()
+    assert summary.errors == ()
+
+
+def test_runtime_z3_differential_covers_money_and_duration_assertions(tmp_path):
+    pytest.importorskip("z3")
+    test_file = tmp_path / "test_statute.yh"
+    test_file.write_text(
+        """
+        money low_fine := $10.00
+        money high_fine := $20.00
+        duration short_term := 1 day
+        duration long_term := 2 days
+
+        assert low_fine < high_fine
+        assert short_term < long_term
+        """,
+        encoding="utf-8",
+    )
+
+    summary = verify_runtime_tests.run_z3_differential([test_file])
+
+    assert summary is not None
+    assert summary.checked == 1
+    assert summary.assertions == 2
+    assert summary.failures == ()
+    assert summary.errors == ()

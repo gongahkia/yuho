@@ -13,6 +13,8 @@ def test_backend_parity_summary_lists_evidence_and_boundaries() -> None:
     assert "alloy=explicit-unsupported" in summary
     assert "Feature coverage:" in summary
     assert "nested_all_of_any_of: runtime-z3=covered" in summary
+    assert "is_infringed_apply_scope: runtime-z3=covered" in summary
+    assert "penalties_money_duration: runtime-z3=partial-money-duration" in summary
     assert "optional_values: runtime-z3=covered" in summary
     assert "case_law_doctrine: runtime=partial" in summary
     assert "Unsupported feature boundaries:" in summary

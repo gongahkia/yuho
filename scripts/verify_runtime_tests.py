@@ -125,6 +125,7 @@ def _runtime_interpreter(ast):
 
 def _value_to_z3(value):
     import z3
+    from yuho.eval.interpreter import MoneyValue
 
     if value.type_tag == "bool":
         return z3.BoolVal(bool(value.raw))
@@ -133,7 +134,8 @@ def _value_to_z3(value):
     if value.type_tag == "float":
         return z3.RealVal(str(value.raw))
     if value.type_tag in ("money", "percent"):
-        return z3.RealVal(str(Decimal(value.raw)))
+        raw = value.raw.amount if isinstance(value.raw, MoneyValue) else value.raw
+        return z3.RealVal(str(Decimal(raw)))
     if value.type_tag in ("string", "enum"):
         return z3.StringVal(str(value.raw))
     if value.type_tag == "date":
