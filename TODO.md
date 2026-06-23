@@ -55,9 +55,9 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 ## P0: Canonical Semantics
 
 - Make runtime, Z3, Alloy, and Lean agree on shared fixtures.
-  - Current support: `make verify-core` includes a backend-parity summary with feature-category rows and explicit unsupported-feature boundaries; runtime/Z3 differential fixtures cover nested `all_of`/`any_of`, mixed groups, exception guards, `is_infringed`, `apply_scope`, scoped fact overrides, money/duration assertions, and optional/pass values.
-  - Expand fixture categories: penalties and Lean expected verdict fixtures beyond structural parity.
-  - Add differential tests: runtime verdict == Z3 model verdict == Lean expected verdict where available.
+  - Current support: `make verify-core` includes a backend-parity summary with feature-category rows and explicit unsupported-feature boundaries; runtime/Z3 differential fixtures cover nested `all_of`/`any_of`, mixed groups, exception guards, `is_infringed`, `apply_scope`, scoped fact overrides, money/duration assertions, and optional/pass values; Lean smoke fixtures now export expected verdict rows checked against the Python runtime.
+  - Expand fixture categories: penalty verdict fixtures and Z3 model verdict extraction beyond assertion/structural parity.
+  - Add differential tests: runtime verdict == Z3 model verdict == Lean expected verdict for the shared penalty-capable fragment.
   - Acceptance: runtime, Z3, and Lean fixture parity reports covered and unsupported feature categories explicitly; Alloy remains explicit-unsupported until it has parity coverage.
 
 ## P0: Case Law And Doctrine

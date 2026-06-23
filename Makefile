@@ -31,6 +31,7 @@ LOGS = logs
 .PHONY: install doctor smoke verify-all verify-core \
         verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
+        verify-lean-verdicts \
         verify-source-maps verify-backend-parity verify-mermaid-verbose \
         verify-literate-alignment \
         clean-reproduce
@@ -62,6 +63,7 @@ verify-core: $(LOGS)
 	$(MAKE) verify-literate-alignment
 	$(MAKE) verify-backend-parity
 	$(MAKE) verify-structural-diff
+	$(MAKE) verify-lean-verdicts
 	$(MAKE) verify-mechanisation-coverage
 	$(MAKE) verify-mechanisation
 	@echo ""
@@ -79,6 +81,8 @@ verify-core: $(LOGS)
 	@printf "Backend parity   : %s\n" "$$(tail -n 1 $(LOGS)/backend-parity.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Structural diff  : %s\n" "$$(tail -n 1 $(LOGS)/structural-diff.log)" \
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "Lean verdicts    : %s\n" "$$(grep -E '^lean expected verdicts:' $(LOGS)/lean-verdicts.log | tail -n 1)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Mech coverage    : %s\n" "$$(tail -n 1 $(LOGS)/mechanisation-coverage.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
@@ -132,6 +136,16 @@ verify-structural-diff-full: $(LOGS)
 	else \
 		echo "Full structural diff: SKIPPED (Lean toolchain not on PATH)" \
 			| tee $(LOGS)/structural-diff-full.log; \
+	fi
+
+verify-lean-verdicts: $(LOGS)
+	@echo ">>> comparing Lean expected verdict fixtures with Python runtime…"
+	@if command -v lake >/dev/null 2>&1; then \
+		$(PYTHON) scripts/verify_lean_expected_verdicts.py 2>&1 \
+			| tee $(LOGS)/lean-verdicts.log; \
+	else \
+		echo "lean expected verdicts: SKIPPED (Lean toolchain not on PATH)" \
+			| tee $(LOGS)/lean-verdicts.log; \
 	fi
 
 verify-runtime-tests: $(LOGS)

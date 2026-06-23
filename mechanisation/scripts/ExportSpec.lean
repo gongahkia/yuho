@@ -1,6 +1,7 @@
 /-
 ExportSpec.lean — emit the verified `Generator.encodeStatute`
-biconditional list as JSON for each smoke fixture.
+biconditional list and Lean expected verdict rows as JSON for smoke
+fixtures.
 
 Driven by `scripts/verify_structural_diff.py` (Python). The Python
 harness invokes `lake env lean --run scripts/ExportSpec.lean` from
@@ -126,6 +127,108 @@ def s415 : Statute :=
 def smokeFixtures : List (String × Statute) :=
   [("s299", s299), ("s300", s300), ("s378", s378), ("s415", s415)]
 
+/-! ## Expected verdict fixtures. -/
+
+structure VerdictFixture where
+  name : String
+  statuteName : String
+  statute : Statute
+  factsName : String
+  factsPairs : List (String × Bool)
+
+def VerdictFixture.facts (vf : VerdictFixture) : Facts :=
+  Facts.fromList vf.factsPairs
+
+def boolJSON (b : Bool) : String :=
+  if b then "true" else "false"
+
+def factPairJSON (p : String × Bool) : String :=
+  "\"" ++ escape p.fst ++ "\":" ++ boolJSON p.snd
+
+def factsJSON (pairs : List (String × Bool)) : String :=
+  "{" ++ String.intercalate "," (pairs.map factPairJSON) ++ "}"
+
+def verdictFixtureJSON (vf : VerdictFixture) : String :=
+  "{"
+    ++ "\"name\":\"" ++ escape vf.name ++ "\","
+    ++ "\"statute\":\"" ++ escape vf.statuteName ++ "\","
+    ++ "\"facts\":\"" ++ escape vf.factsName ++ "\","
+    ++ "\"factValues\":" ++ factsJSON vf.factsPairs ++ ","
+    ++ "\"expected\":" ++ boolJSON (vf.statute.convicts vf.facts)
+    ++ "}"
+
+def verdictsJSON (fixtures : List VerdictFixture) : String :=
+  "[" ++ String.intercalate "," (fixtures.map verdictFixtureJSON) ++ "]"
+
+def verdictFixtures : List VerdictFixture :=
+  [
+    {
+      name := "s299_true"
+      statuteName := "s299"
+      statute := s299
+      factsName := "factsHomicide"
+      factsPairs := [("death", true), ("intent", true)]
+    },
+    {
+      name := "s299_missing_intent"
+      statuteName := "s299"
+      statute := s299
+      factsName := "factsHomicideMissingIntent"
+      factsPairs := [("death", true)]
+    },
+    {
+      name := "s300_true"
+      statuteName := "s300"
+      statute := s300
+      factsName := "factsMurderIntent"
+      factsPairs := [("death", true), ("intent_to_kill", true)]
+    },
+    {
+      name := "s300_consent_exception"
+      statuteName := "s300"
+      statute := s300
+      factsName := "factsMurderConsent"
+      factsPairs := [("death", true), ("intent_to_kill", true), ("exc_consent", true)]
+    },
+    {
+      name := "s378_true"
+      statuteName := "s378"
+      statute := s378
+      factsName := "factsTheft"
+      factsPairs := [
+        ("intention", true), ("taking", true), ("possession", true),
+        ("consent", true), ("movement", true)
+      ]
+    },
+    {
+      name := "s378_claim_of_right_exception"
+      statuteName := "s378"
+      statute := s378
+      factsName := "factsTheftClaimOfRight"
+      factsPairs := [
+        ("intention", true), ("taking", true), ("possession", true),
+        ("consent", true), ("movement", true), ("exc_claimOfRight", true)
+      ]
+    },
+    {
+      name := "s415_true"
+      statuteName := "s415"
+      statute := s415
+      factsName := "factsCheatingFraudulent"
+      factsPairs := [
+        ("deception", true), ("fraudulent", true),
+        ("inducement", true), ("harm", true)
+      ]
+    },
+    {
+      name := "s415_missing_mens_rea"
+      statuteName := "s415"
+      statute := s415
+      factsName := "factsCheatingNoMensRea"
+      factsPairs := [("deception", true), ("inducement", true), ("harm", true)]
+    }
+  ]
+
 def fixtureJSON (name : String) (s : Statute) : String :=
   "\"" ++ name ++ "\":" ++ listToJSON (Generator.encodeStatute s)
 
@@ -136,6 +239,9 @@ def allJSON (fixtures : List (String × Statute)) : String :=
 end Yuho.ExportSpec
 
 def main (args : List String) : IO Unit := do
+  if args.contains "--verdicts" then
+    IO.println (Yuho.ExportSpec.verdictsJSON Yuho.ExportSpec.verdictFixtures)
+    return
   let useFull := args.contains "--full"
   let fixtures :=
     if useFull then Yuho.Fixtures.fixtures
