@@ -48,8 +48,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 - Alloy weaker than Z3/Lean: valid enough to track.
   - Local evidence: E2E tests skip when `AlloyGenerator` does not handle a case; Z3 has deeper element/group/exception/apply_scope tests.
   - Marking: [Inference] Treat Alloy as secondary until nested groups, exceptions, priority, penalties, and cross-section refs have parity tests.
-- Cross-section reasoning incomplete: valid.
-  - Local evidence: embedded `apply_scope`/`is_infringed` now execute in runtime and explain traces, but Lean parity remains incomplete.
 - Syntax conventional: valid, but low priority.
   - Local evidence: grammar is conventional statically typed DSL syntax with legal blocks.
   - Marking: [Inference] Esolang experts may not care; PL/DSL experts will care more about semantics, tooling, and conformance.
@@ -73,12 +71,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Add priority rules over cases and statutes where jurisdiction permits.
   - Acceptance: case-law blocks can alter, narrow, or expand element predicates in a testable way.
   - Acceptance: one fixture demonstrates overruled/distinguished case law changing the outcome.
-
-## P1: Cross-Section Scope Composition
-
-- Harden embedded `apply_scope` and `is_infringed` runtime semantics.
-  - Current support: predicate elements can resolve `apply_scope` and `is_infringed` through a registered statute environment in runtime and explain traces, nested section calls carry cycle and depth-limit diagnostics, and `apply_scope` struct args support ordered fact substitution.
-  - Acceptance: runtime evaluator, Z3, and Lean smoke fixtures agree on nested cross-section references.
 
 ## P1: Formal Mechanisation
 
