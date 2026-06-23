@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 
+from yuho.ast import BuiltinType
 from yuho.services.analysis import analyze_source
 from yuho.verify.alloy import AlloyGenerator, AlloyUnsupportedFeature
 
@@ -47,6 +48,46 @@ def test_alloy_rejects_penalty_semantics() -> None:
         )
 
     assert "s11: penalty semantics" in excinfo.value.features
+
+
+def test_alloy_rejects_duration_struct_fields() -> None:
+    with pytest.raises(AlloyUnsupportedFeature) as excinfo:
+        AlloyGenerator().generate(
+            _ast(
+                """
+                struct Sentence { duration term, }
+                statute 11 "Duration field" {
+                    elements { actus_reus act := "Act"; }
+                }
+                """
+            )
+        )
+
+    assert "struct Sentence.term: duration type" in excinfo.value.features
+
+
+def test_alloy_rejects_duration_literals() -> None:
+    with pytest.raises(AlloyUnsupportedFeature) as excinfo:
+        AlloyGenerator().generate(
+            _ast(
+                """
+                duration term := 1 years;
+                statute 11 "Duration literal" {
+                    elements { actus_reus act := "Act"; }
+                }
+                """
+            )
+        )
+
+    assert "variable term: duration type" in excinfo.value.features
+    assert "variable term: duration literal" in excinfo.value.features
+
+
+def test_alloy_duration_type_mapping_is_not_raw_days() -> None:
+    generator = AlloyGenerator()
+
+    assert generator._type_to_alloy(BuiltinType(name="duration")) == "Duration"
+    assert generator._type_to_alloy("duration") == "Duration"
 
 
 def test_alloy_rejects_case_law_semantics() -> None:

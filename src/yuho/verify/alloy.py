@@ -104,6 +104,7 @@ class AlloyGenerator:
             ApplyScopeNode,
             CaseLawNode,
             CivilPrimitiveNode,
+            DurationNode,
             ElementGroupNode,
             ElementNode,
             ExceptionNode,
@@ -123,9 +124,23 @@ class AlloyGenerator:
             if feature not in unsupported:
                 unsupported.append(feature)
 
+        def visit_type(type_node: Any, where: str) -> None:
+            if isinstance(type_node, BuiltinType):
+                if type_node.name == "duration":
+                    add(f"{where}: duration type")
+            elif isinstance(type_node, OptionalType):
+                visit_type(type_node.inner, where)
+            elif isinstance(type_node, ArrayType):
+                visit_type(type_node.element_type, where)
+            elif isinstance(type_node, GenericType):
+                for type_arg in type_node.type_args:
+                    visit_type(type_arg, where)
+
         def visit_expr(expr: Any, where: str) -> None:
             if isinstance(expr, (ApplyScopeNode, IsInfringedNode)):
                 add(f"{where}: cross-section expression {expr.__class__.__name__}")
+            elif isinstance(expr, DurationNode):
+                add(f"{where}: duration literal")
             elif isinstance(expr, (TimelineAppearanceNode, ExistsAtMostNode)):
                 add(f"{where}: temporal/count expression {expr.__class__.__name__}")
             elif isinstance(expr, (MatchExprNode, RangeExprNode)):
@@ -171,11 +186,28 @@ class AlloyGenerator:
             if getattr(struct, "type_params", ()):
                 add(f"struct {struct.name}: generic type parameters")
             for field_def in getattr(struct, "fields", ()):
+                visit_type(field_def.type_annotation, f"struct {struct.name}.{field_def.name}")
                 if isinstance(field_def.type_annotation, GenericType):
                     add(f"struct {struct.name}.{field_def.name}: generic field type")
 
+        for var in getattr(ast, "variables", ()):
+            visit_type(var.type_annotation, f"variable {var.name}")
+            if var.value is not None:
+                visit_expr(var.value, f"variable {var.name}")
+
+        for func in getattr(ast, "function_defs", ()):
+            for param in getattr(func, "params", ()):
+                visit_type(param.type_annotation, f"fn {func.name}.{param.name}")
+            if func.return_type is not None:
+                visit_type(func.return_type, f"fn {func.name} return")
+            visit_expr(func.body, f"fn {func.name}")
+
         for statute in getattr(ast, "statutes", ()):
             where = f"s{statute.section_number}"
+            if statute.input_type is not None:
+                visit_type(statute.input_type, f"{where}: input contract")
+            if statute.output_type is not None:
+                visit_type(statute.output_type, f"{where}: output contract")
             visit_elements(tuple(statute.elements), where)
             visit_penalty(statute.penalty, where)
             for i, penalty in enumerate(statute.additional_penalties):
@@ -578,7 +610,7 @@ class AlloyGenerator:
                 "money": "Int",  # Represent as cents
                 "percent": "Int",
                 "date": "Int",  # Unix timestamp / day count
-                "duration": "Int",  # Days
+                "duration": "Duration",
                 "void": "none",
             }
             return type_map.get(yuho_type.name, "univ")
@@ -599,7 +631,7 @@ class AlloyGenerator:
                 "money": "Int",
                 "percent": "Int",
                 "date": "Int",
-                "duration": "Int",
+                "duration": "Duration",
                 "void": "none",
             }
             return type_map.get(yuho_type, yuho_type)
