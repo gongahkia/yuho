@@ -49,10 +49,30 @@ class AssertionError_(Exception):
 
 
 @dataclass
+class MoneyValue:
+    """Runtime money value retaining currency."""
+
+    currency: Optional[nodes.Currency]
+    amount: Decimal
+
+    def __post_init__(self):
+        amount = self.amount if isinstance(self.amount, Decimal) else Decimal(str(self.amount))
+        if self.currency is not None:
+            quantum = Decimal(1).scaleb(-self.currency.minor_units)
+            quantized = amount.quantize(quantum)
+            if amount != quantized:
+                raise ValueError(
+                    f"{self.currency.name} amount requires a rounding policy: {amount}"
+                )
+            amount = quantized
+        self.amount = amount
+
+
+@dataclass
 class Value:
     """Runtime value wrapper with type tag."""
 
-    raw: Any  # int, float, bool, str, Decimal, date, nodes.DurationNode, StructInstance, list, None
+    raw: Any  # int, float, bool, str, Decimal, MoneyValue, date, nodes.DurationNode, StructInstance, list, None
     type_tag: str = (
         ""  # "int","float","bool","string","money","percent","date","duration","struct","list","none"
     )
@@ -73,6 +93,8 @@ class Value:
             self.type_tag = "string"
         elif isinstance(self.raw, Decimal):
             self.type_tag = "money"  # ambiguous with percent; caller should set explicitly
+        elif isinstance(self.raw, MoneyValue):
+            self.type_tag = "money"
         elif isinstance(self.raw, date):
             self.type_tag = "date"
         elif isinstance(self.raw, nodes.DurationNode):
@@ -94,7 +116,7 @@ class Value:
         if isinstance(node, nodes.StringLit):
             return Value(node.value, "string")
         if isinstance(node, nodes.MoneyNode):
-            return Value(node.amount, "money")
+            return Value(MoneyValue(node.currency, node.amount), "money")
         if isinstance(node, nodes.PercentNode):
             return Value(node.value, "percent")
         if isinstance(node, nodes.DateNode):
@@ -123,6 +145,8 @@ class Value:
         if self.type_tag == "list":
             return len(self.raw) > 0
         if self.type_tag in ("money", "percent"):
+            if isinstance(self.raw, MoneyValue):
+                return self.raw.amount != Decimal(0)
             return self.raw != Decimal(0)
         return True
 
@@ -287,6 +311,83 @@ class Interpreter(Visitor):
             return (float(ra), float(rb), "float")
         return (ra, rb, "int")
 
+    def _money_value(self, value: Value, node: nodes.ASTNode) -> MoneyValue:
+        if value.type_tag != "money":
+            raise InterpreterError(f"Expected money value, got {value.type_tag}", node)
+        if isinstance(value.raw, MoneyValue):
+            return value.raw
+        if isinstance(value.raw, Decimal):
+            return MoneyValue(None, value.raw)
+        raise InterpreterError(f"Invalid money payload: {type(value.raw).__name__}", node)
+
+    def _scalar_decimal(self, value: Value, node: nodes.ASTNode) -> Decimal:
+        if value.type_tag in ("int", "float"):
+            return Decimal(str(value.raw))
+        raise InterpreterError(f"Expected scalar int/float, got {value.type_tag}", node)
+
+    def _check_money_currency(
+        self, left: MoneyValue, right: MoneyValue, node: nodes.ASTNode
+    ) -> Optional[nodes.Currency]:
+        if (
+            left.currency is not None
+            and right.currency is not None
+            and left.currency != right.currency
+        ):
+            raise InterpreterError(
+                f"Cannot operate on mixed currencies {left.currency.name} and {right.currency.name}",
+                node,
+            )
+        return left.currency or right.currency
+
+    def _new_money(
+        self, currency: Optional[nodes.Currency], amount: Decimal, node: nodes.ASTNode
+    ) -> Value:
+        try:
+            return Value(MoneyValue(currency, amount), "money")
+        except ValueError as exc:
+            raise InterpreterError(str(exc), node) from exc
+
+    def _eval_money_op(self, left: Value, right: Value, op: str, node: nodes.ASTNode) -> Value:
+        if left.type_tag == "money" and right.type_tag == "money":
+            l_money = self._money_value(left, node)
+            r_money = self._money_value(right, node)
+            currency = self._check_money_currency(l_money, r_money, node)
+            if op == "+":
+                return self._new_money(currency, l_money.amount + r_money.amount, node)
+            if op == "-":
+                return self._new_money(currency, l_money.amount - r_money.amount, node)
+            if op == "/":
+                if r_money.amount == 0:
+                    raise InterpreterError("Division by zero", node)
+                return Value(l_money.amount / r_money.amount, "percent")
+            if op in ("<", ">", "<=", ">="):
+                comparisons = {
+                    "<": l_money.amount < r_money.amount,
+                    ">": l_money.amount > r_money.amount,
+                    "<=": l_money.amount <= r_money.amount,
+                    ">=": l_money.amount >= r_money.amount,
+                }
+                return Value(comparisons[op], "bool")
+
+        if left.type_tag == "money" and op in ("*", "/"):
+            money = self._money_value(left, node)
+            scalar = self._scalar_decimal(right, node)
+            if op == "/":
+                if scalar == 0:
+                    raise InterpreterError("Division by zero", node)
+                return self._new_money(money.currency, money.amount / scalar, node)
+            return self._new_money(money.currency, money.amount * scalar, node)
+
+        if right.type_tag == "money" and op == "*":
+            money = self._money_value(right, node)
+            scalar = self._scalar_decimal(left, node)
+            return self._new_money(money.currency, scalar * money.amount, node)
+
+        raise InterpreterError(
+            f"Unsupported money operator '{op}' for types {left.type_tag}, {right.type_tag}",
+            node,
+        )
+
     # ======================================================================
     # Literal visitors
     # ======================================================================
@@ -304,7 +405,7 @@ class Interpreter(Visitor):
         return Value(node.value, "string")
 
     def visit_money(self, node: nodes.MoneyNode) -> Value:
-        return Value(node.amount, "money")
+        return Value(MoneyValue(node.currency, node.amount), "money")
 
     def visit_percent(self, node: nodes.PercentNode) -> Value:
         return Value(node.value, "percent")
@@ -401,10 +502,12 @@ class Interpreter(Visitor):
             return Value(left.raw != right.raw, "bool")
 
         # arithmetic & comparison require numeric
-        if left.type_tag in ("int", "float", "money", "percent") and right.type_tag in (
+        if left.type_tag == "money" or right.type_tag == "money":
+            return self._eval_money_op(left, right, op, node)
+
+        if left.type_tag in ("int", "float", "percent") and right.type_tag in (
             "int",
             "float",
-            "money",
             "percent",
         ):
             la, ra, tag = self._coerce_pair(left, right)
@@ -444,10 +547,13 @@ class Interpreter(Visitor):
             if op == ">=":
                 return Value(left.raw >= right.raw, "bool")
 
-        # duration comparison via total_days
+        # duration comparison
         if left.type_tag == "duration" and right.type_tag == "duration":
-            ld = left.raw.total_days()
-            rd = right.raw.total_days()
+            try:
+                ld = left.raw.to_timedelta()
+                rd = right.raw.to_timedelta()
+            except ValueError as exc:
+                raise InterpreterError(str(exc), node) from exc
             if op == "<":
                 return Value(ld < rd, "bool")
             if op == ">":
@@ -470,7 +576,10 @@ class Interpreter(Visitor):
                 return Value(-operand.raw, "int")
             if operand.type_tag == "float":
                 return Value(-operand.raw, "float")
-            if operand.type_tag in ("money", "percent"):
+            if operand.type_tag == "money":
+                money = self._money_value(operand, node)
+                return self._new_money(money.currency, -money.amount, node)
+            if operand.type_tag == "percent":
                 return Value(-operand.raw, operand.type_tag)
             raise InterpreterError(f"Cannot negate {operand.type_tag}", node)
         raise InterpreterError(f"Unknown unary operator '{node.operator}'", node)
@@ -561,6 +670,7 @@ class Interpreter(Visitor):
 
     def _section_lookup(self, section_ref: str, node: nodes.ASTNode) -> nodes.StatuteNode:
         from yuho.eval.statute_evaluator import _canonical_section
+
         canonical = _canonical_section(section_ref)
         target = self.env.statutes.get(canonical)
         if target is None:
@@ -600,6 +710,7 @@ class Interpreter(Visitor):
         the facts visible in the current scope.
         """
         from yuho.eval.statute_evaluator import StatuteEvaluator
+
         target = self._section_lookup(node.section_ref, node)
         facts = self._facts_from_env()
         ev = StatuteEvaluator()
@@ -617,6 +728,7 @@ class Interpreter(Visitor):
         the current environment is used as in :meth:`visit_is_infringed`.
         """
         from yuho.eval.statute_evaluator import StatuteEvaluator
+
         target = self._section_lookup(node.section_ref, node)
         # Find the first struct-typed arg as the fact pattern; fall back
         # to environment-derived facts otherwise.

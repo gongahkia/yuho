@@ -8,7 +8,7 @@ and an accept(visitor) method for the Visitor pattern.
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Optional, List, Dict, Tuple, Union
@@ -36,6 +36,23 @@ class Currency(Enum):
     AUD = auto()
     CAD = auto()
     CHF = auto()
+
+    @property
+    def minor_units(self) -> int:
+        """ISO 4217 minor-unit precision for supported currencies."""
+        mapping = {
+            Currency.SGD: 2,
+            Currency.USD: 2,
+            Currency.EUR: 2,
+            Currency.GBP: 2,
+            Currency.JPY: 0,
+            Currency.CNY: 2,
+            Currency.INR: 2,
+            Currency.AUD: 2,
+            Currency.CAD: 2,
+            Currency.CHF: 2,
+        }
+        return mapping[self]
 
     @classmethod
     def from_symbol(cls, symbol: str) -> "Currency":
@@ -216,8 +233,15 @@ class MoneyNode(ASTNode):
     amount: Decimal
 
     def __post_init__(self):
-        if not isinstance(self.amount, Decimal):
-            object.__setattr__(self, "amount", Decimal(str(self.amount)))
+        amount = self.amount if isinstance(self.amount, Decimal) else Decimal(str(self.amount))
+        quantum = Decimal(1).scaleb(-self.currency.minor_units)
+        quantized = amount.quantize(quantum)
+        if amount != quantized:
+            raise ValueError(
+                f"{self.currency.name} amount has more than "
+                f"{self.currency.minor_units} minor unit(s): {amount}"
+            )
+        object.__setattr__(self, "amount", quantized)
 
     def accept(self, visitor: "Visitor"):
         return visitor.visit_money(self)
@@ -280,9 +304,33 @@ class DurationNode(ASTNode):
     def accept(self, visitor: "Visitor"):
         return visitor.visit_duration(self)
 
-    def total_days(self) -> int:
-        """Approximate total days (assumes 30 days/month, 365 days/year)."""
+    @property
+    def has_calendar_units(self) -> bool:
+        """Return true when duration contains years/months."""
+        return self.years != 0 or self.months != 0
+
+    def to_timedelta(self) -> timedelta:
+        """Return an exact timedelta for fixed-unit durations."""
+        if self.has_calendar_units:
+            raise ValueError("Calendar durations with years/months need a reference date")
+        return timedelta(
+            days=self.days,
+            hours=self.hours,
+            minutes=self.minutes,
+            seconds=self.seconds,
+        )
+
+    def total_seconds_exact(self) -> int:
+        """Return exact seconds for fixed-unit durations."""
+        return int(self.to_timedelta().total_seconds())
+
+    def total_days_approx(self) -> int:
+        """Approximate calendar duration as days using 365-day years and 30-day months."""
         return self.years * 365 + self.months * 30 + self.days
+
+    def total_days(self) -> int:
+        """Legacy approximate day count; prefer to_timedelta() for fixed durations."""
+        return self.total_days_approx()
 
     def __str__(self) -> str:
         parts = []
@@ -970,13 +1018,21 @@ class PenaltyNode(ASTNode):
     fine_unlimited: bool = False  # G8: `fine := unlimited` — statute-level uncapped fine
     caning_min: Optional[int] = None
     caning_max: Optional[int] = None
-    caning_unspecified: bool = False  # G14: `caning := unspecified` — statute-level "liable to caning" without a stroke count
+    caning_unspecified: bool = (
+        False  # G14: `caning := unspecified` — statute-level "liable to caning" without a stroke count
+    )
     death_penalty: Optional[bool] = None
     supplementary: Optional[StringLit] = None
     sentencing: Optional[str] = None  # phase 14: "concurrent" or "consecutive"
-    combinator: Optional[str] = None  # G8: "cumulative" | "alternative" | "or_both"; None = cumulative (back-compat)
-    condition: Optional[str] = None  # G9: identifier from `penalty when <ident> { ... }` — names a conditional branch
-    nested: Optional["PenaltyNode"] = None  # G12: nested sub-combinator (e.g. `penalty cumulative { imprisonment; or_both { fine; caning } }`)
+    combinator: Optional[str] = (
+        None  # G8: "cumulative" | "alternative" | "or_both"; None = cumulative (back-compat)
+    )
+    condition: Optional[str] = (
+        None  # G9: identifier from `penalty when <ident> { ... }` — names a conditional branch
+    )
+    nested: Optional["PenaltyNode"] = (
+        None  # G12: nested sub-combinator (e.g. `penalty cumulative { imprisonment; or_both { fine; caning } }`)
+    )
     mandatory_min_imprisonment: Optional[DurationNode] = None  # phase 14
     mandatory_min_fine: Optional[MoneyNode] = None  # phase 14
 
@@ -1242,7 +1298,7 @@ class SubsectionNode(ASTNode):
     illustrations: Tuple[IllustrationNode, ...] = ()
     exceptions: Tuple[ExceptionNode, ...] = ()
     additional_penalties: Tuple[PenaltyNode, ...] = ()
-    subsections: Tuple["SubsectionNode", ...] = ()           # nested subsections
+    subsections: Tuple["SubsectionNode", ...] = ()  # nested subsections
     doc_comment: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
@@ -1252,7 +1308,8 @@ class SubsectionNode(ASTNode):
         result: List[ASTNode] = []
         result.extend(self.definitions)
         result.extend(self.elements)
-        if self.penalty: result.append(self.penalty)
+        if self.penalty:
+            result.append(self.penalty)
         result.extend(self.illustrations)
         result.extend(self.exceptions)
         result.extend(self.subsections)
@@ -1276,7 +1333,7 @@ class StatuteNode(ASTNode):
     illustrations: Tuple[IllustrationNode, ...]
     exceptions: Tuple[ExceptionNode, ...] = ()
     case_law: Tuple[CaseLawNode, ...] = ()
-    subsections: Tuple[SubsectionNode, ...] = ()             # G5
+    subsections: Tuple[SubsectionNode, ...] = ()  # G5
     # Sibling penalty blocks beyond the first. The G12 multi-penalty pattern
     # (`penalty cumulative {…} penalty or_both {…}`) is used by ~110 of 524
     # encoded sections; before this field landed, every block after the first

@@ -96,12 +96,13 @@ bool anExampleBool := TRUE
 // string — declared within "" double quotation marks
 string anExampleString := "if the act by which the death is caused is done with the intention of causing death"
 
-// percent — integer suffixed with %, evaluates to a float on the back-end
+// percent — integer suffixed with %, stored as Decimal internally
 percent anExamplePercent := 25%
 
 // money — currency symbol followed by comma-separated amount
 //   supported symbols: $ £ € ¥ ₹ SGD USD EUR GBP JPY CNY INR AUD
-//   on the back-end evaluates to a float, currency-agnostic
+//   stored as Decimal with currency retained; there is no implicit FX conversion
+//   amounts are normalized to each supported currency's ISO-style minor units
 money anExampleMoney := $12,000,298.28
 
 // date — ISO8601 format YYYY-MM-DD
@@ -109,6 +110,8 @@ date anExampleDate := 2020-01-12
 
 // duration — integer followed by unit(s): year(s), month(s), day(s), hour(s), minute(s), second(s)
 //   multiple parts can be chained
+//   day/hour/minute/second durations have exact timedelta semantics
+//   year/month durations are calendar-relative and require a reference date for ordering
 duration anExampleDuration := 1 day
 duration anotherDuration := 2 years, 6 months
 

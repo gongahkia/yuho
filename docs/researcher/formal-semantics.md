@@ -166,7 +166,7 @@ Gamma |- b : bool    where b in {TRUE, FALSE}
 Gamma |- s : string  where s is a string literal
 
 -------------------  (T-Money)
-Gamma |- $n : money
+Gamma |- c n : money[c]
 
 -------------------  (T-Percent)
 Gamma |- n% : percent
@@ -220,9 +220,14 @@ Gamma |- e1 op e2 : bool
 
 ```
 int <: float       (implicit widening)
-money + money -> money  (same currency)
-duration + duration -> duration
-duration arithmetic is component-wise
+money[c] + money[c] -> money[c]
+money[c] - money[c] -> money[c]
+money[c] * scalar -> money[c]
+money[c] / scalar -> money[c]
+money[c] / money[c] -> percent
+money[c1] op money[c2] is a runtime error when c1 != c2
+duration comparison is exact for fixed day/hour/minute/second durations
+calendar duration comparison with years/months requires a reference date
 ```
 
 ### 2.3 Struct Typing
@@ -268,7 +273,7 @@ v ::= n          (integer)
     | f          (float)
     | true | false
     | s          (string)
-    | $n         (money with currency)
+    | c n        (Decimal money with retained currency)
     | n%         (percent)
     | d          (date)
     | dur        (duration)
@@ -537,7 +542,9 @@ produce instances of the declared struct type.
 
 ### 6.3 Limitations
 
-- Duration and money arithmetic are approximate (30 days/month, 365 days/year)
+- Runtime money arithmetic is Decimal/currency-aware; verifier penalty ordering
+  still exposes approximate day counts for calendar durations where no reference
+  date is available (365 days/year, 30 days/month)
 - Optional types require explicit null checks (no gradual typing)
 - Generic type parameters are parsed and preserved as metadata, but not fully
   substituted or checked; runtime/export layers erase or simplify type arguments

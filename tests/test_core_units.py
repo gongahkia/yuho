@@ -10,7 +10,7 @@ fill coverage gaps left by the existing property-based / E2E suites.
 from __future__ import annotations
 
 import pytest
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 
 from yuho.ast.nodes import (
@@ -94,6 +94,10 @@ class TestCurrencyEnum:
         assert Currency.from_symbol("XYZ") == Currency.USD
         assert Currency.from_symbol("") == Currency.USD
 
+    def test_minor_units(self):
+        assert Currency.SGD.minor_units == 2
+        assert Currency.JPY.minor_units == 0
+
     def test_currency_symbols(self):
         assert Currency.from_symbol("£") == Currency.GBP
         assert Currency.from_symbol("€") == Currency.EUR
@@ -116,10 +120,20 @@ class TestDurationNode:
     def test_total_days_mixed(self):
         d = DurationNode(years=1, months=6, days=15)
         assert d.total_days() == 365 + 180 + 15
+        assert d.total_days_approx() == 365 + 180 + 15
 
     def test_total_days_zero(self):
         d = DurationNode()
         assert d.total_days() == 0
+
+    def test_to_timedelta_fixed_units(self):
+        d = DurationNode(days=1, hours=2, minutes=3, seconds=4)
+        assert d.to_timedelta() == timedelta(days=1, hours=2, minutes=3, seconds=4)
+        assert d.total_seconds_exact() == 93784
+
+    def test_to_timedelta_rejects_calendar_units(self):
+        with pytest.raises(ValueError, match="reference date"):
+            DurationNode(months=1).to_timedelta()
 
     def test_str_singular(self):
         d = DurationNode(years=1, months=1, days=1)
@@ -183,6 +197,16 @@ class TestMoneyNode:
     def test_decimal_passthrough(self):
         m = MoneyNode(currency=Currency.USD, amount=Decimal("99.99"))
         assert m.amount == Decimal("99.99")
+
+    def test_minor_unit_quantization(self):
+        m = MoneyNode(currency=Currency.SGD, amount=Decimal("99.9"))
+        assert m.amount == Decimal("99.90")
+
+    def test_rejects_too_many_minor_units(self):
+        with pytest.raises(ValueError, match="more than 2 minor unit"):
+            MoneyNode(currency=Currency.SGD, amount=Decimal("99.999"))
+        with pytest.raises(ValueError, match="more than 0 minor unit"):
+            MoneyNode(currency=Currency.JPY, amount=Decimal("99.01"))
 
 
 # =========================================================================
@@ -877,11 +901,13 @@ class TestValueFromNode:
         assert v.type_tag == "none"
 
     def test_from_money_node(self):
-        from yuho.eval.interpreter import Value
+        from yuho.eval.interpreter import MoneyValue, Value
 
         v = Value.from_node(MoneyNode(currency=Currency.SGD, amount=Decimal("99.99")))
         assert v.type_tag == "money"
-        assert v.raw == Decimal("99.99")
+        assert isinstance(v.raw, MoneyValue)
+        assert v.raw.currency == Currency.SGD
+        assert v.raw.amount == Decimal("99.99")
 
     def test_from_unsupported_raises(self):
         from yuho.eval.interpreter import Value, InterpreterError

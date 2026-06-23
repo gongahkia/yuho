@@ -9,6 +9,7 @@ from yuho.eval.interpreter import (
     Interpreter,
     Environment,
     Value,
+    MoneyValue,
     StructInstance,
     InterpreterError,
     AssertionError_,
@@ -85,7 +86,10 @@ class TestLiteralEvaluation:
     def test_money_literal(self):
         interp = Interpreter()
         v = interp.visit(MoneyNode(currency=Currency.SGD, amount=Decimal("100.50")))
-        assert v.raw == Decimal("100.50") and v.type_tag == "money"
+        assert v.type_tag == "money"
+        assert isinstance(v.raw, MoneyValue)
+        assert v.raw.currency == Currency.SGD
+        assert v.raw.amount == Decimal("100.50")
 
     def test_duration_literal(self):
         interp = Interpreter()
@@ -137,6 +141,49 @@ class TestArithmeticSemantics:
         expr = BinaryExprNode(left=IntLit(value=10), operator="%", right=IntLit(value=3))
         assert interp.visit(expr).raw == 1
 
+    def test_same_currency_money_addition_preserves_currency(self):
+        interp = Interpreter()
+        expr = BinaryExprNode(
+            left=MoneyNode(currency=Currency.SGD, amount=Decimal("10.25")),
+            operator="+",
+            right=MoneyNode(currency=Currency.SGD, amount=Decimal("2.75")),
+        )
+        result = interp.visit(expr)
+        assert result.type_tag == "money"
+        assert result.raw.currency == Currency.SGD
+        assert result.raw.amount == Decimal("13.00")
+
+    def test_mixed_currency_money_addition_raises(self):
+        interp = Interpreter()
+        expr = BinaryExprNode(
+            left=MoneyNode(currency=Currency.SGD, amount=Decimal("10.00")),
+            operator="+",
+            right=MoneyNode(currency=Currency.USD, amount=Decimal("2.00")),
+        )
+        with pytest.raises(InterpreterError, match="mixed currencies"):
+            interp.visit(expr)
+
+    def test_money_scalar_multiplication(self):
+        interp = Interpreter()
+        expr = BinaryExprNode(
+            left=MoneyNode(currency=Currency.SGD, amount=Decimal("10.00")),
+            operator="*",
+            right=IntLit(value=3),
+        )
+        result = interp.visit(expr)
+        assert result.raw.currency == Currency.SGD
+        assert result.raw.amount == Decimal("30.00")
+
+    def test_money_division_rejects_implicit_rounding(self):
+        interp = Interpreter()
+        expr = BinaryExprNode(
+            left=MoneyNode(currency=Currency.SGD, amount=Decimal("10.00")),
+            operator="/",
+            right=IntLit(value=3),
+        )
+        with pytest.raises(InterpreterError, match="rounding policy"):
+            interp.visit(expr)
+
 
 class TestComparisonSemantics:
     """T-Compare rules."""
@@ -167,6 +214,25 @@ class TestComparisonSemantics:
             left=StringLit(value="abc"), operator="==", right=StringLit(value="abc")
         )
         assert interp.visit(expr).raw is True
+
+    def test_fixed_duration_comparison(self):
+        interp = Interpreter()
+        expr = BinaryExprNode(
+            left=DurationNode(days=1, hours=1),
+            operator=">",
+            right=DurationNode(days=1),
+        )
+        assert interp.visit(expr).raw is True
+
+    def test_calendar_duration_comparison_requires_reference_date(self):
+        interp = Interpreter()
+        expr = BinaryExprNode(
+            left=DurationNode(months=1),
+            operator=">",
+            right=DurationNode(days=30),
+        )
+        with pytest.raises(InterpreterError, match="reference date"):
+            interp.visit(expr)
 
 
 class TestLogicSemantics:

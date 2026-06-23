@@ -131,10 +131,11 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 ## P1: Type System And Numeric Semantics
 
-- Make money/date/duration precise.
-  - Define currency, rounding, units, intervals, and calendar arithmetic.
-  - Remove or heavily label 30-day/month and 365-day/year approximations.
-  - Acceptance: money/duration tests cover edge cases and docs no longer overstate precision.
+- Add reference-date calendar arithmetic and interval semantics.
+  - Money now uses Decimal, retained currency, and supported currency minor-unit validation.
+  - Fixed day/hour/minute/second durations now compare exactly via `datetime.timedelta`.
+  - Remaining work: define date + calendar-duration semantics for years/months and interval endpoints.
+  - Acceptance: no backend uses 30-day/month or 365-day/year approximation except explicitly labeled verifier summaries.
 
 - Align docs with implementation.
   - Audit `docs/researcher/syntax.md` and `docs/researcher/formal-semantics.md` against parser/type-checker/evaluator.

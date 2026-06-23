@@ -773,14 +773,17 @@ class Z3Solver:
 
                 # Check imprisonment range
                 if penalty.imprisonment_min and penalty.imprisonment_max:
-                    min_days = penalty.imprisonment_min.total_days()
-                    max_days = penalty.imprisonment_max.total_days()
+                    min_days = penalty.imprisonment_min.total_days_approx()
+                    max_days = penalty.imprisonment_max.total_days_approx()
                     if min_days > max_days:
                         diagnostics.append(
                             Z3Diagnostic(
                                 check_name=f"{statute_id}_imprisonment_range",
                                 passed=False,
-                                message=f"Imprisonment min ({min_days} days) > max ({max_days} days)",
+                                message=(
+                                    f"Imprisonment min ({min_days} approx days) "
+                                    f"> max ({max_days} approx days)"
+                                ),
                                 source_location=penalty_loc,
                             )
                         )
@@ -1154,6 +1157,7 @@ class Z3Generator:
                         if expr is not None:
                             element_exprs.append(expr)
                     _walk_subs(getattr(sub, "subsections", ()))
+
             _walk_subs(getattr(statute, "subsections", ()) or ())
 
         # Top-level elements are implicitly conjunctive (all must hold).
@@ -1501,8 +1505,8 @@ class Z3Generator:
         conviction_var = self._consts[conviction_key]
 
         # First pass: build exc_var per exception, with guard equivalence.
-        exc_vars: dict[str, Any] = {}        # label -> z3 Bool
-        exc_fires: dict[str, Any] = {}       # label -> z3 Bool (after priority suppression)
+        exc_vars: dict[str, Any] = {}  # label -> z3 Bool
+        exc_fires: dict[str, Any] = {}  # label -> z3 Bool (after priority suppression)
         label_of_index: list[str | None] = []
         priorities: dict[str, int] = {}
         defeats_of: dict[str, str] = {}
@@ -1539,7 +1543,8 @@ class Z3Generator:
             my_pri = priorities.get(exc_label)
             if my_pri is not None:
                 for other_label, other_pri in priorities.items():
-                    if other_label == exc_label: continue
+                    if other_label == exc_label:
+                        continue
                     if other_pri < my_pri:  # other has higher precedence (lower number)
                         defeaters.append(exc_vars[other_label])
 
@@ -1551,9 +1556,7 @@ class Z3Generator:
             fires_var = z3.Bool(f"{statute_id}_exc_{safe_label}_fires")
             self._consts[f"{statute_id}_exc_{safe_label}_fires"] = fires_var
             if defeaters:
-                self._assertions.append(
-                    fires_var == z3.And(exc_var, z3.Not(z3.Or(*defeaters)))
-                )
+                self._assertions.append(fires_var == z3.And(exc_var, z3.Not(z3.Or(*defeaters))))
             else:
                 self._assertions.append(fires_var == exc_var)
             exc_fires[exc_label] = fires_var
@@ -1580,26 +1583,24 @@ class Z3Generator:
                 any_fires = conclusion_fires[0]
             else:
                 any_fires = z3.BoolVal(False)
-            self._assertions.append(
-                conviction_var == z3.And(elements_satisfied, z3.Not(any_fires))
-            )
+            self._assertions.append(conviction_var == z3.And(elements_satisfied, z3.Not(any_fires)))
 
     def _generate_penalty_constraints(self, statute_id: str, penalty: "PenaltyNode") -> None:
         """Generate Z3 constraints for penalty specification."""
         if not Z3_AVAILABLE:
             return
 
-        # Imprisonment duration constraints (in days)
+        # Imprisonment duration constraints (approximate days for calendar units)
         if penalty.imprisonment_min or penalty.imprisonment_max:
             imprisonment = z3.Int(f"{statute_id}_imprisonment_days")
             self._consts[f"{statute_id}_imprisonment"] = imprisonment
 
             if penalty.imprisonment_min:
-                min_days = penalty.imprisonment_min.total_days()
+                min_days = penalty.imprisonment_min.total_days_approx()
                 self._assertions.append(imprisonment >= min_days)
 
             if penalty.imprisonment_max:
-                max_days = penalty.imprisonment_max.total_days()
+                max_days = penalty.imprisonment_max.total_days_approx()
                 self._assertions.append(imprisonment <= max_days)
 
             # Imprisonment must be non-negative
@@ -1925,14 +1926,16 @@ class Z3Generator:
             p_max = parent.penalty.imprisonment_max
             c_max = child.penalty.imprisonment_max
             if p_max is not None and c_max is not None:
-                if p_max.total_days() < c_max.total_days():
+                p_days = p_max.total_days_approx()
+                c_days = c_max.total_days_approx()
+                if p_days < c_days:
                     diagnostics.append(
                         Z3Diagnostic(
                             check_name=f"penalty_severity_{parent_sec}_vs_{child_sec}",
                             passed=False,
                             message=(
-                                f"s{parent_sec} max imprisonment ({p_max.total_days()} days) "
-                                f"< s{child_sec} max ({c_max.total_days()} days)"
+                                f"s{parent_sec} max imprisonment ({p_days} approx days) "
+                                f"< s{child_sec} max ({c_days} approx days)"
                             ),
                         )
                     )
@@ -2067,14 +2070,12 @@ class Z3Generator:
         )
 
     def _penalty_imprisonment_bounds(self, penalty: "PenaltyNode") -> Optional[Tuple[int, int]]:
-        """Return imprisonment bounds in days when a statute declares them."""
-        min_days = (
-            penalty.imprisonment_min.total_days() if penalty.imprisonment_min is not None else 0
-        )
+        """Return approximate imprisonment bounds in days when declared."""
+        min_days = penalty.imprisonment_min.total_days_approx() if penalty.imprisonment_min else 0
         max_duration = penalty.imprisonment_max or penalty.imprisonment_min
         if max_duration is None:
             return None
-        return min_days, max_duration.total_days()
+        return min_days, max_duration.total_days_approx()
 
     def _penalty_fine_bounds(self, penalty: "PenaltyNode") -> Optional[Tuple[int, int]]:
         """Return fine bounds in cents when a statute declares them."""
