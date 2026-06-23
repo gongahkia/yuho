@@ -161,6 +161,14 @@ def upgrade(
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON")
 @click.option("--fix", is_flag=True, help="Auto-fix issues where supported")
 @click.option(
+    "--mode",
+    "lint_mode",
+    type=click.Choice(["transcription", "executable"]),
+    default="transcription",
+    show_default=True,
+    help="Lint posture",
+)
+@click.option(
     "--format",
     "output_format",
     type=click.Choice(["text", "json", "sarif"]),
@@ -175,6 +183,7 @@ def lint(
     exclude_rules: tuple[str, ...],
     json_output: bool,
     fix: bool,
+    lint_mode: str,
     output_format: str,
 ) -> None:
     """Run statute-core lint and fidelity diagnostics."""
@@ -189,6 +198,7 @@ def lint(
         color=ctx.obj["color"],
         fix=fix,
         output_format=output_format,
+        mode=lint_mode,
     )
 
 

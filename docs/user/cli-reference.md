@@ -215,6 +215,8 @@ Options:
   -e, --exclude TEXT          Rules to exclude
   --json                      Output as JSON
   --fix                       Auto-fix issues where supported
+  --mode [transcription|executable]
+                              Lint posture  [default: transcription]
   --format [text|json|sarif]  Output format
   --help                      Show this message and exit.
 ```

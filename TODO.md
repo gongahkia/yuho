@@ -70,12 +70,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 ## P0: Machine-Readable Legal Meaning
 
-- Split human text from executable meaning.
-  - Keep `description` for human-readable drafting.
-  - Add required or warning-backed `condition`/`predicate`/`requires` bodies for executable elements.
-  - Add lint level: string-only element is allowed for transcription mode but warned in executable mode.
-  - Acceptance: `yuho lint --mode executable` reports every element/definition/case holding that is only opaque text.
-
 - Make definitions computable when possible.
   - Support definitional predicates and term expansion.
   - Track aliases, imported definitions, and section-local overrides.

@@ -24,6 +24,7 @@ from yuho.ast.nodes import (
     StatuteNode,
     ElementNode,
     ElementGroupNode,
+    CivilPrimitiveNode,
     PenaltyNode,
     DefinitionEntry,
     IllustrationNode,
@@ -474,6 +475,74 @@ class SubsumptionConsistencyRule(LintRule):
         return issues
 
 
+class OpaqueExecutableMeaningRule(LintRule):
+    """Warn when executable-mode legal meaning is only human text."""
+
+    id = "opaque-executable-meaning"
+    severity = Severity.WARNING
+    description = "Executable mode should not rely only on opaque legal text"
+
+    def check(self, ast: ModuleNode, source: str) -> List[LintIssue]:
+        issues: List[LintIssue] = []
+        for statute in ast.statutes:
+            for element in _flatten_executable_members(statute.elements):
+                if isinstance(element.description, StringLit):
+                    loc = element.source_location
+                    issues.append(
+                        LintIssue(
+                            rule=self.id,
+                            severity=self.severity,
+                            message=(
+                                f"Element '{element.name}' in statute {statute.section_number} "
+                                "has only opaque description text"
+                            ),
+                            line=loc.line if loc else None,
+                            suggestion="Add an executable predicate/condition or use transcription mode",
+                        )
+                    )
+            for definition in statute.definitions:
+                if isinstance(definition.definition, StringLit):
+                    loc = definition.source_location
+                    issues.append(
+                        LintIssue(
+                            rule=self.id,
+                            severity=self.severity,
+                            message=(
+                                f"Definition '{definition.term}' in statute "
+                                f"{statute.section_number} is only opaque text"
+                            ),
+                            line=loc.line if loc else None,
+                            suggestion="Add a computable definition predicate when executable behavior is required",
+                        )
+                    )
+            for case in statute.case_law:
+                if isinstance(case.holding, StringLit):
+                    loc = case.source_location
+                    issues.append(
+                        LintIssue(
+                            rule=self.id,
+                            severity=self.severity,
+                            message=(
+                                f"Case holding '{case.case_name.value}' in statute "
+                                f"{statute.section_number} is only opaque text"
+                            ),
+                            line=loc.line if loc else None,
+                            suggestion="Model the interpretive effect or keep this in transcription mode",
+                        )
+                    )
+        return issues
+
+
+def _flatten_executable_members(elements) -> List[ElementNode | CivilPrimitiveNode]:
+    result: List[ElementNode | CivilPrimitiveNode] = []
+    for element in elements:
+        if isinstance(element, ElementGroupNode):
+            result.extend(_flatten_executable_members(element.members))
+        elif isinstance(element, (ElementNode, CivilPrimitiveNode)):
+            result.append(element)
+    return result
+
+
 # All available lint rules
 ALL_RULES: List[LintRule] = [
     MissingStatuteTitleRule(),
@@ -490,6 +559,10 @@ ALL_RULES: List[LintRule] = [
     RepealedStatuteRule(),
     ElementsWithoutPenaltyRule(),
     SubsumptionConsistencyRule(),
+]
+
+EXECUTABLE_RULES: List[LintRule] = [
+    OpaqueExecutableMeaningRule(),
 ]
 
 
@@ -540,6 +613,7 @@ def run_lint(
     color: bool = True,
     fix: bool = False,
     output_format: str = "text",
+    mode: str = "transcription",
 ) -> None:
     """
     Run lint checks on Yuho files.
@@ -567,6 +641,8 @@ def run_lint(
 
     # Select rules to run
     active_rules = ALL_RULES
+    if mode == "executable":
+        active_rules = [*active_rules, *EXECUTABLE_RULES]
 
     if rules:
         active_rules = [r for r in ALL_RULES if r.id in rules]
