@@ -315,6 +315,28 @@ def uniqueStrings (xs : List String) : List String :=
 def allTrueFacts (s : Statute) : List (String × Bool) :=
   (uniqueStrings (leafNames s.elements)).map (fun name => (name, true))
 
+def namePairsWith (first : String) : List String → List (String × String)
+  | [] => []
+  | second :: rest => (first, second) :: namePairsWith first rest
+
+def namePairs : List String → List (String × String)
+  | [] => []
+  | _ :: [] => []
+  | first :: rest => namePairsWith first rest ++ namePairs rest
+
+def pairFacts (pair : String × String) : List (String × Bool) :=
+  [(pair.fst, true), (pair.snd, true)]
+
+def pairVerdictFixture (n : String) (s : Statute) (pair : String × String) :
+    VerdictFixture :=
+  {
+    name := n ++ "_corpus_pair_" ++ pair.fst ++ "_" ++ pair.snd
+    statuteName := n
+    statute := s
+    factsName := n ++ "Pair" ++ pair.fst ++ pair.snd
+    factsPairs := pairFacts pair
+  }
+
 def exceptionFactName (x : Exception) : String :=
   "exc_" ++ x.label
 
@@ -360,7 +382,9 @@ def corpusVerdictFixturesFor (fixture : String × Statute) : List VerdictFixture
       factsName := n ++ "Empty"
       factsPairs := []
     }
-  ] ++ firstOnly ++ s.exceptions.map (exceptionVerdictFixture n s)
+  ] ++ firstOnly
+    ++ (namePairs names).map (pairVerdictFixture n s)
+    ++ s.exceptions.map (exceptionVerdictFixture n s)
 
 def isSmokeFixtureName (name : String) : Bool :=
   name == "s299" || name == "s300" || name == "s378" || name == "s415"
