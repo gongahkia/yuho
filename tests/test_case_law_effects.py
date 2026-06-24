@@ -367,3 +367,49 @@ def test_case_law_burden_shift_is_ignored_for_foreign_jurisdiction() -> None:
 
     assert result.overall_satisfied is True
     assert not any("expects burden=defence" in item for item in result.reasoning)
+
+
+def test_positive_treatment_adopts_target_effect_with_treating_case_precedence() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @jurisdiction england
+            /// @court_level apex
+            /// @date 2020-01-01
+            /// @effect requires active_misleading
+            caselaw "Foreign Restrictive" "[2020] UKSC 1" {
+                "Foreign restrictive view"
+                element deception
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level high
+            /// @date 2021-01-01
+            /// @effect satisfies active_misleading
+            caselaw "Local Expansive" "[2021] SGHC 1" {
+                "Local expansive view"
+                element deception
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2026-01-01
+            caselaw "Adopting Apex" "[2026] SGCA 1" {
+                "Adopts the restrictive view"
+                element deception
+                treatment follows "Foreign Restrictive" "[2020] UKSC 1"
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        _facts(deception=True, active_misleading=False),
+    )
+
+    assert result.overall_satisfied is False
+    assert any("Adopting Apex" in item for item in result.reasoning)
+    assert not any("Local Expansive" in item for item in result.reasoning)

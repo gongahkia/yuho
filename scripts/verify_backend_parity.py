@@ -53,7 +53,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "case_law_doctrine",
-        "runtime=active-effects/burden-shift-partial; z3=unsupported; lean=unsupported; alloy=unsupported",
+        "runtime=active-effects/positive-treatment-adoption/burden-shift-partial; z3=unsupported; lean=unsupported; alloy=unsupported",
     ),
 )
 

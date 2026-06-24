@@ -25,6 +25,7 @@ TREATMENT_KINDS = (
 
 TREATMENT_EDGE_KINDS = tuple(f"treatment_{kind}" for kind in TREATMENT_KINDS)
 INACTIVE_TREATMENT_KINDS = frozenset({"distinguished", "overruled", "reversed", "disapproved"})
+ADOPTING_TREATMENT_KINDS = frozenset({"followed", "approved", "applied"})
 
 
 def normalize_treatment_kind(kind: str) -> str:
@@ -33,3 +34,7 @@ def normalize_treatment_kind(kind: str) -> str:
 
 def is_inactive_treatment(kind: str) -> bool:
     return normalize_treatment_kind(kind) in INACTIVE_TREATMENT_KINDS
+
+
+def is_adopting_treatment(kind: str) -> bool:
+    return normalize_treatment_kind(kind) in ADOPTING_TREATMENT_KINDS

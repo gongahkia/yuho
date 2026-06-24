@@ -1,11 +1,11 @@
 """Statute evaluation against fact patterns."""
 
 from __future__ import annotations
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 from typing import Dict, List, Mapping, Optional, Tuple, Union
 from yuho.ast import nodes
-from yuho.caselaw import is_inactive_treatment
+from yuho.caselaw import is_adopting_treatment, is_inactive_treatment
 from yuho.eval.facts import TypedFact
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, StructInstance, Value
 
@@ -475,8 +475,9 @@ class StatuteEvaluator:
         statute_jurisdiction: Optional[str] = None,
     ) -> Dict[str, Tuple[nodes.CaseLawNode, ...]]:
         inactive = self._inactive_case_targets(case_law)
+        active_case_law = self._case_law_with_adopted_effects(case_law, inactive)
         result: Dict[str, List[nodes.CaseLawNode]] = {}
-        for case in case_law:
+        for case in active_case_law:
             if not case.element_ref:
                 continue
             if self._case_key(case.case_name.value) in inactive:
@@ -491,6 +492,45 @@ class StatuteEvaluator:
             )
             for key, value in result.items()
         }
+
+    @staticmethod
+    def _case_law_with_adopted_effects(
+        case_law: Tuple[nodes.CaseLawNode, ...],
+        inactive: set[str],
+    ) -> Tuple[nodes.CaseLawNode, ...]:
+        by_name = {StatuteEvaluator._case_key(case.case_name.value): case for case in case_law}
+        adopted: List[nodes.CaseLawNode] = list(case_law)
+        for case in case_law:
+            if case.interpretive_effect or case.effect_fact:
+                continue
+            if StatuteEvaluator._case_key(case.case_name.value) in inactive:
+                continue
+            for treatment in case.treatments:
+                if not is_adopting_treatment(treatment.kind):
+                    continue
+                target = by_name.get(StatuteEvaluator._case_key(treatment.target.value))
+                if target is None:
+                    continue
+                if StatuteEvaluator._case_key(target.case_name.value) in inactive:
+                    continue
+                if not target.interpretive_effect or not target.effect_fact:
+                    continue
+                element_ref = case.element_ref or target.element_ref
+                if not element_ref:
+                    continue
+                adopted.append(
+                    replace(
+                        case,
+                        element_ref=element_ref,
+                        interpretive_effect=target.interpretive_effect,
+                        effect_fact=target.effect_fact,
+                        burden_shift=case.burden_shift or target.burden_shift,
+                        burden_shift_standard=case.burden_shift_standard
+                        or target.burden_shift_standard,
+                    )
+                )
+                break
+        return tuple(adopted)
 
     @staticmethod
     def _resolve_case_effect_conflicts(
