@@ -419,6 +419,16 @@ def normalizedFactConflictCase : CaseAuthority :=
     precedence := localApexNewPrecedence
   }
 
+def normalizedFactSameKindCase : CaseAuthority :=
+  { name := "Normalized Same Kind"
+    element := "taking"
+    effect := some { takingRequiresControl with fact := "control-plus-deprivation" }
+    burdenShift := none
+    jurisdiction := none
+    treatments := []
+    precedence := localApexNewPrecedence
+  }
+
 def highCourtNewCase : CaseAuthority :=
   { name := "High Court New"
     element := "taking"
@@ -585,6 +595,13 @@ example :
         [localRestrictiveCase, normalizedFactConflictCase]).map
         (fun authority => authority.name) =
       ["Normalized Fact Conflict"] := by
+  native_decide
+
+example :
+    (CaseAuthority.resolveEffectConflicts
+        [localRestrictiveCase, normalizedFactSameKindCase]).map
+        (fun authority => authority.name) =
+      ["Local Restrictive", "Normalized Same Kind"] := by
   native_decide
 
 example :

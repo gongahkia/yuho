@@ -367,6 +367,37 @@ def test_case_law_conflict_buckets_normalise_effect_fact_key() -> None:
     assert [case.case_name.value for case in selected] == ["Apex v PP"]
 
 
+def test_case_law_same_effect_fact_and_kind_are_not_precedence_collapsed() -> None:
+    first = nodes.CaseLawNode(
+        case_name=nodes.StringLit("First v PP"),
+        element_ref="deception",
+        interpretive_effect="requires",
+        effect_fact="active_misleading",
+        jurisdiction="singapore",
+        court_level="high",
+        decision_date="2020-01-01",
+    )
+    second = nodes.CaseLawNode(
+        case_name=nodes.StringLit("Second v PP"),
+        element_ref="deception",
+        interpretive_effect="requires",
+        effect_fact="active-misleading",
+        jurisdiction="singapore",
+        court_level="apex",
+        decision_date="2020-01-01",
+    )
+
+    selected = StatuteEvaluator._resolve_case_effect_conflicts(
+        [first, second],
+        statute_jurisdiction="singapore",
+    )
+
+    assert [case.case_name.value for case in selected] == [
+        "First v PP",
+        "Second v PP",
+    ]
+
+
 def test_case_law_conflict_prefers_higher_court_over_newer_date() -> None:
     module = _module(
         """
