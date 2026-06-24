@@ -666,6 +666,10 @@ theorem TreatmentKind.followed_adopts :
     TreatmentKind.followed.adopts = true := by
   rfl
 
+theorem TreatmentKind.applied_adopts :
+    TreatmentKind.applied.adopts = true := by
+  rfl
+
 theorem TreatmentKind.overruled_not_adopts :
     TreatmentKind.overruled.adopts = false := by
   rfl
@@ -708,6 +712,10 @@ theorem TreatmentKind.follows_surface_adopts :
 
 theorem TreatmentKind.approves_surface_adopts :
     TreatmentKind.adoptsSurface "approves" = true := by
+  rfl
+
+theorem TreatmentKind.applies_surface_adopts :
+    TreatmentKind.adoptsSurface "applies" = true := by
   rfl
 
 theorem TreatmentKind.overrules_surface_inactivates :
