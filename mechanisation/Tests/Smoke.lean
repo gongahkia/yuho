@@ -232,6 +232,16 @@ def adoptingApexCase : CaseAuthority :=
     precedence := neutralPrecedence
   }
 
+def ownEffectAdoptingCase : CaseAuthority :=
+  { name := "Own Effect"
+    element := "taking"
+    effect := some { takingRequiresControl with kind := .satisfies }
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.followed, "Foreign Restrictive")]
+    precedence := neutralPrecedence
+  }
+
 def burdenAdoptingApexCase : CaseAuthority :=
   { name := "Burden Adopting Apex"
     element := "taking"
@@ -486,6 +496,13 @@ example :
 example :
     adoptingApexCase.adoptedEffectFrom foreignRestrictiveCase =
       some takingRequiresControl := by
+  native_decide
+
+example :
+    ownEffectAdoptingCase.resolvedEffectIn
+        [foreignRestrictiveCase, ownEffectAdoptingCase] 2 =
+      some (ownEffectAdoptingCase.materializeEffect
+        { takingRequiresControl with kind := .satisfies }) := by
   native_decide
 
 example :

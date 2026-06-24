@@ -457,6 +457,41 @@ def test_positive_treatment_adoption_preserves_declaration_order_tiebreak() -> N
     assert not any("Earlier Adopter" in item for item in result.reasoning)
 
 
+def test_case_with_own_effect_does_not_adopt_treatment_target_effect() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @effect requires active_misleading
+            caselaw "Restrictive Source" "[2020] SGCA 1" {
+                "Restrictive source"
+                element deception
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2026-01-01
+            /// @effect satisfies active_misleading
+            caselaw "Own Effect" "[2026] SGCA 1" {
+                "Own effect wins over adopted source"
+                element deception
+                treatment follows "Restrictive Source" "[2020] SGCA 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    selected = effects["deception"][0]
+    assert selected.case_name.value == "Own Effect"
+    assert selected.interpretive_effect == "satisfies"
+
+
 def test_positive_treatment_adoption_resolves_transitive_chain() -> None:
     module = _module(
         """
