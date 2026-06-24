@@ -154,7 +154,7 @@ Decisions deliberately deferred:
   ranking, the executable effect algebra, cumulative non-conflicting effects with
   declaration-order application, negative-treatment non-adoption,
   distinguished/overruled/reversed/disapproved treatment inactivation, own-effect
-  dominance over adoption, ordered positive-treatment adoption including `applied`,
+  dominance over adoption, ordered positive-treatment adoption including `approved`/`applied`,
   positive-treatment non-inactivation,
   missing-target and effectless-target adoption skip,
   adopted-effect target remapping and fact/kind preservation, and bounded positive treatment

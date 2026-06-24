@@ -737,6 +737,17 @@ example :
       some takingRequiresControl := by
   native_decide
 
+example : TreatmentKind.approved.adopts = true := by
+  native_decide
+
+example :
+    ({ adoptingApexCase with treatments := [(.approved, "Foreign Restrictive")] } :
+      CaseAuthority).resolvedEffectIn
+        [foreignRestrictiveCase,
+          { adoptingApexCase with treatments := [(.approved, "Foreign Restrictive")] }] 2 =
+      some takingRequiresControl := by
+  native_decide
+
 example : TreatmentKind.adoptsSurface "applies" = true := by
   native_decide
 
