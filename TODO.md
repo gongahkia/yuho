@@ -70,7 +70,8 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Current support: case-law doc metadata models ratio/obiter role, jurisdiction, court level, decision date, and simple interpretive effects; active `requires`/`satisfies`/`excludes` effects can narrow or expand targeted element truth in runtime evaluation, while inactive overruled/distinguished/reversed/disapproved cases are ignored.
   - Current support: conflicting active executable effects over the same element/fact are resolved by matching statute jurisdiction, court level, doctrine role, decision date, then declaration order.
   - Current support: declared element burdens and proof standards constrain matching typed fact metadata while preserving legacy primitive facts.
-  - Model full burden-shifting doctrine over case-law effects where jurisdiction permits.
+  - Current support: active case-law effects can declare jurisdiction-compatible burden shifts over their effect facts, constraining matching typed fact metadata while preserving legacy primitive facts.
+  - Broaden doctrine beyond targeted effect-fact burden shifts.
 
 ## P1: Formal Mechanisation
 

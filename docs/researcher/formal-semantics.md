@@ -131,6 +131,7 @@ CaseMeta    ::= '@role' Identifier
               | '@court' Identifier | '@court_level' Identifier
               | '@date' DateLit | '@decision_date' DateLit
               | '@effect' EffectOp Identifier
+              | '@burden_shift' ('prosecution' | 'defence') ProofStandard?
 EffectOp    ::= 'requires' | 'satisfies' | 'excludes'
 CaseTreatment ::= 'treatment' TreatmentKind StringLit StringLit?
 TreatmentKind ::= 'follows' | 'followed'
@@ -467,6 +468,11 @@ Sat_case(excludes f, e, F)  iff Sat(e, F) AND NOT F[f]
 ```
 
 Cases without executable `@effect` metadata remain explanatory authorities.
+If an active case-law effect also declares `@burden_shift b p?`, and the case
+jurisdiction is absent or matches the statute jurisdiction, a typed effect fact
+with burden or proof-standard metadata must match the shifted burden metadata.
+Primitive effect facts and typed effect facts without that metadata keep legacy
+truth-value semantics.
 For conflicting active effects over the same element and fact, the evaluator
 selects one case by lexicographic precedence:
 

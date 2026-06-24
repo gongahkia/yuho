@@ -124,6 +124,7 @@ class StatuteEvaluator:
                     env,
                     statute.definitions,
                     case_effects,
+                    statute.jurisdiction,
                 )
                 all_element_results.append(er)
                 reasoning.extend(er.reasoning)
@@ -139,6 +140,7 @@ class StatuteEvaluator:
                     env,
                     statute.definitions,
                     case_effects,
+                    statute.jurisdiction,
                 )
                 all_element_results.extend(group_results)
                 for er in group_results:
@@ -188,6 +190,7 @@ class StatuteEvaluator:
         env: Environment,
         definitions: Tuple[nodes.DefinitionEntry, ...] = (),
         case_effects: Optional[Mapping[str, Tuple[nodes.CaseLawNode, ...]]] = None,
+        statute_jurisdiction: Optional[str] = None,
     ) -> ElementResult:
         """Check if a single element is satisfied by the facts."""
         name = element.name
@@ -211,6 +214,7 @@ class StatuteEvaluator:
                 ),
                 facts,
                 case_effects.get(name, ()),
+                statute_jurisdiction,
             )
 
         fact_value = self._matching_fact_value(facts, name)
@@ -225,6 +229,7 @@ class StatuteEvaluator:
             ),
             facts,
             case_effects.get(name, ()),
+            statute_jurisdiction,
         )
         final_satisfied, burden_reason = self._apply_burden_metadata(
             element,
@@ -284,6 +289,7 @@ class StatuteEvaluator:
         env: Environment,
         definitions: Tuple[nodes.DefinitionEntry, ...] = (),
         case_effects: Optional[Mapping[str, Tuple[nodes.CaseLawNode, ...]]] = None,
+        statute_jurisdiction: Optional[str] = None,
     ) -> Tuple[List[ElementResult], bool]:
         """Evaluate element group with combinator logic.
 
@@ -295,7 +301,14 @@ class StatuteEvaluator:
         member_statuses: List[bool] = []
         for member in group.members:
             if isinstance(member, nodes.ElementNode):
-                er = self._evaluate_element(member, facts, env, definitions, case_effects)
+                er = self._evaluate_element(
+                    member,
+                    facts,
+                    env,
+                    definitions,
+                    case_effects,
+                    statute_jurisdiction,
+                )
                 results.append(er)
                 member_statuses.append(er.satisfied)
             elif isinstance(member, nodes.ElementGroupNode):
@@ -305,6 +318,7 @@ class StatuteEvaluator:
                     env,
                     definitions,
                     case_effects,
+                    statute_jurisdiction,
                 )
                 results.extend(sub_results)
                 member_statuses.append(sub_ok)
@@ -323,6 +337,7 @@ class StatuteEvaluator:
         result: ElementResult,
         facts: StructInstance,
         cases: Tuple[nodes.CaseLawNode, ...],
+        statute_jurisdiction: Optional[str] = None,
     ) -> ElementResult:
         satisfied = result.satisfied
         reasoning = list(result.reasoning)
@@ -331,7 +346,17 @@ class StatuteEvaluator:
             fact_name = case.effect_fact
             if not effect or not fact_name:
                 continue
-            fact_value = self._fact_truthy(facts, fact_name)
+            raw_fact = self._matching_fact_value(facts, fact_name)
+            fact_value = raw_fact.is_truthy() if raw_fact is not None else False
+            burden_reason = self._case_burden_reason(
+                case,
+                fact_name,
+                raw_fact,
+                statute_jurisdiction,
+            )
+            if burden_reason:
+                fact_value = False
+                reasoning.append(burden_reason)
             before = satisfied
             if effect in {"require", "requires", "narrow", "narrows"}:
                 satisfied = satisfied and fact_value
@@ -354,6 +379,51 @@ class StatuteEvaluator:
             satisfied=satisfied,
             description=result.description,
             reasoning=reasoning,
+        )
+
+    def _case_burden_reason(
+        self,
+        case: nodes.CaseLawNode,
+        fact_name: str,
+        fact_value: Optional[Value],
+        statute_jurisdiction: Optional[str],
+    ) -> Optional[str]:
+        if not fact_value or not fact_value.is_truthy() or not case.burden_shift:
+            return None
+        if not self._case_jurisdiction_permits(case, statute_jurisdiction):
+            return None
+        metadata = getattr(fact_value, "metadata", None)
+        if not isinstance(metadata, TypedFact):
+            return None
+        if metadata.burden and self._normalise(metadata.burden) != self._normalise(
+            case.burden_shift
+        ):
+            return (
+                f"Case law '{case.case_name.value}' shifted burden for fact "
+                f"'{fact_name}' expects burden={case.burden_shift}, got burden={metadata.burden}"
+            )
+        if (
+            case.burden_shift_standard
+            and metadata.standard_of_proof
+            and self._normalise(metadata.standard_of_proof)
+            != self._normalise(case.burden_shift_standard)
+        ):
+            return (
+                f"Case law '{case.case_name.value}' shifted burden for fact "
+                f"'{fact_name}' expects standard={case.burden_shift_standard}, "
+                f"got standard={metadata.standard_of_proof}"
+            )
+        return None
+
+    @staticmethod
+    def _case_jurisdiction_permits(
+        case: nodes.CaseLawNode,
+        statute_jurisdiction: Optional[str],
+    ) -> bool:
+        if not statute_jurisdiction or not case.jurisdiction:
+            return True
+        return StatuteEvaluator._case_key(case.jurisdiction) == StatuteEvaluator._case_key(
+            statute_jurisdiction
         )
 
     def _fact_truthy(self, facts: StructInstance, fact_name: str) -> bool:

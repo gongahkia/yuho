@@ -119,6 +119,8 @@ _CASELAW_NODE = {
         "decision_date": {"type": ["string", "null"]},
         "interpretive_effect": {"type": ["string", "null"]},
         "effect_fact": {"type": ["string", "null"]},
+        "burden_shift": {"type": ["string", "null"]},
+        "burden_shift_standard": {"type": ["string", "null"]},
         "treatments": {
             "type": "array",
             "items": {"$ref": "#/$defs/caseTreatment"},

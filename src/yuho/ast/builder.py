@@ -163,6 +163,11 @@ class ASTBuilder:
                 result["interpretive_effect"] = effect.strip()
                 if fact.strip():
                     result["effect_fact"] = fact.strip()
+            elif key in {"burden_shift", "shift_burden"} and value:
+                parts = value.split()
+                result["burden_shift"] = parts[0]
+                if len(parts) > 1:
+                    result["burden_shift_standard"] = parts[1]
         return result
 
     def build(self, root_node) -> nodes.ModuleNode:
@@ -1768,6 +1773,8 @@ class ASTBuilder:
             decision_date=meta.get("decision_date"),
             interpretive_effect=meta.get("interpretive_effect"),
             effect_fact=meta.get("effect_fact"),
+            burden_shift=meta.get("burden_shift"),
+            burden_shift_standard=meta.get("burden_shift_standard"),
             doc_comment=doc,
             source_location=self._loc(node),
         )

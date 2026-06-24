@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 
 from yuho.ast import nodes
+from yuho.eval.facts import struct_from_facts
 from yuho.eval.interpreter import StructInstance, Value
 from yuho.eval.statute_evaluator import StatuteEvaluator
 from yuho.services.analysis import analyze_source
@@ -34,6 +35,7 @@ def test_case_law_doc_metadata_survives_ast_and_json_export() -> None:
             /// @court_level apex
             /// @date 2026-01-01
             /// @effect requires control_plus_deprivation
+            /// @burden_shift prosecution beyond_reasonable_doubt
             caselaw "New v PP" "[2026] SGCA 1" {
                 "Taking requires control plus deprivation"
                 element taking
@@ -50,12 +52,16 @@ def test_case_law_doc_metadata_survives_ast_and_json_export() -> None:
     assert case.decision_date == "2026-01-01"
     assert case.interpretive_effect == "requires"
     assert case.effect_fact == "control_plus_deprivation"
+    assert case.burden_shift == "prosecution"
+    assert case.burden_shift_standard == "beyond_reasonable_doubt"
 
     payload = json.loads(JSONTranspiler(include_locations=False).transpile(module).output)
     encoded = payload["statutes"][0]["case_law"][0]
     assert encoded["doctrine_role"] == "ratio"
     assert encoded["interpretive_effect"] == "requires"
     assert encoded["effect_fact"] == "control_plus_deprivation"
+    assert encoded["burden_shift"] == "prosecution"
+    assert encoded["burden_shift_standard"] == "beyond_reasonable_doubt"
 
 
 def test_active_case_law_can_narrow_target_element() -> None:
@@ -248,3 +254,116 @@ def test_case_law_conflict_prefers_newer_same_court_decision() -> None:
     assert result.overall_satisfied is True
     assert any("New Apex v PP" in item for item in result.reasoning)
     assert not any("Old Apex v PP" in item for item in result.reasoning)
+
+
+def test_case_law_burden_shift_constrains_effect_fact_metadata() -> None:
+    module = _module(
+        """
+        statute 1 "Excuse" jurisdiction singapore {
+            elements { circumstance excuse := "excuse"; }
+
+            /// @jurisdiction singapore
+            /// @effect satisfies lawful_excuse
+            /// @burden_shift defence balance_of_probabilities
+            caselaw "Excuse Case" "[2026] SGCA 3" {
+                "Lawful excuse shifts to the defence"
+                element excuse
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        struct_from_facts(
+            {
+                "facts": {
+                    "excuse": False,
+                    "lawful_excuse": {
+                        "value": True,
+                        "burden": "prosecution",
+                        "standard_of_proof": "balance_of_probabilities",
+                    },
+                }
+            }
+        ),
+    )
+
+    assert result.overall_satisfied is False
+    assert result.element_results[0].satisfied is False
+    assert any("expects burden=defence" in item for item in result.reasoning)
+
+
+def test_case_law_burden_shift_accepts_matching_effect_fact_metadata() -> None:
+    module = _module(
+        """
+        statute 1 "Excuse" jurisdiction singapore {
+            elements { circumstance excuse := "excuse"; }
+
+            /// @jurisdiction singapore
+            /// @effect satisfies lawful_excuse
+            /// @burden_shift defence balance_of_probabilities
+            caselaw "Excuse Case" "[2026] SGCA 3" {
+                "Lawful excuse shifts to the defence"
+                element excuse
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        struct_from_facts(
+            {
+                "facts": {
+                    "excuse": False,
+                    "lawful_excuse": {
+                        "value": True,
+                        "burden": "defence",
+                        "standard_of_proof": "balance_of_probabilities",
+                    },
+                }
+            }
+        ),
+    )
+
+    assert result.overall_satisfied is True
+    assert result.element_results[0].satisfied is True
+    assert any("Excuse Case" in item for item in result.reasoning)
+
+
+def test_case_law_burden_shift_is_ignored_for_foreign_jurisdiction() -> None:
+    module = _module(
+        """
+        statute 1 "Excuse" jurisdiction singapore {
+            elements { circumstance excuse := "excuse"; }
+
+            /// @jurisdiction england
+            /// @effect satisfies lawful_excuse
+            /// @burden_shift defence balance_of_probabilities
+            caselaw "Foreign Excuse Case" "[2026] UKSC 3" {
+                "Foreign shift is not jurisdiction-compatible"
+                element excuse
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        struct_from_facts(
+            {
+                "facts": {
+                    "excuse": False,
+                    "lawful_excuse": {
+                        "value": True,
+                        "burden": "prosecution",
+                        "standard_of_proof": "balance_of_probabilities",
+                    },
+                }
+            }
+        ),
+    )
+
+    assert result.overall_satisfied is True
+    assert not any("expects burden=defence" in item for item in result.reasoning)

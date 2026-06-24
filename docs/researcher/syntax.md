@@ -428,6 +428,7 @@ executable for simple fact-level interpretation:
 /// @court_level apex
 /// @date 2026-01-01
 /// @effect requires control_plus_deprivation
+/// @burden_shift prosecution beyond_reasonable_doubt
 caselaw "New v PP" "[2026] SGCA 1" {
     "Taking requires control plus deprivation"
     element taking
@@ -438,6 +439,10 @@ caselaw "New v PP" "[2026] SGCA 1" {
 `@effect satisfies fact_name` expands it to `element || fact`; `@effect excludes
 fact_name` makes the element fail when the fact is true. Holdings without
 `@effect` remain explanatory prose.
+`@burden_shift burden [standard]` constrains typed metadata on the `@effect`
+fact when the case jurisdiction is absent or matches the statute jurisdiction.
+Primitive effect facts and typed effect facts without burden metadata keep
+legacy truth-value semantics.
 
 When active executable holdings target the same element and fact with
 conflicting `@effect` operations, runtime evaluation selects one holding by

@@ -280,6 +280,10 @@ class JSONTranspiler(TranspilerBase, Visitor):
                 result["interpretive_effect"] = node.interpretive_effect
             if node.effect_fact:
                 result["effect_fact"] = node.effect_fact
+            if node.burden_shift:
+                result["burden_shift"] = node.burden_shift
+            if node.burden_shift_standard:
+                result["burden_shift_standard"] = node.burden_shift_standard
             if node.treatments:
                 result["treatments"] = [self._to_dict(t) for t in node.treatments]
         elif isinstance(node, nodes.PenaltyNode):

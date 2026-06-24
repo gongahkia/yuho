@@ -36,6 +36,8 @@ their `value` field for truth and preserve metadata for explanation output.
 When a Yuho element declares `burden` or a proof standard, typed fact metadata
 with `burden` or `standard_of_proof` must match that declaration; primitive
 facts and typed facts without those metadata fields keep legacy truth behavior.
+The same metadata check applies to typed effect facts used by jurisdiction-
+compatible case-law `@burden_shift` metadata.
 
 Structured objects can back element predicates:
 

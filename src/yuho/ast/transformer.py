@@ -769,6 +769,8 @@ class Transformer(Visitor):
                 decision_date=node.decision_date,
                 interpretive_effect=node.interpretive_effect,
                 effect_fact=node.effect_fact,
+                burden_shift=node.burden_shift,
+                burden_shift_standard=node.burden_shift_standard,
                 doc_comment=node.doc_comment,
                 source_location=node.source_location,
             )

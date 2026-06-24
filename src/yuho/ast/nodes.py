@@ -1191,6 +1191,8 @@ class CaseLawNode(ASTNode):
     decision_date: Optional[str] = None
     interpretive_effect: Optional[str] = None
     effect_fact: Optional[str] = None
+    burden_shift: Optional[str] = None
+    burden_shift_standard: Optional[str] = None
     doc_comment: Optional[str] = None
 
     def accept(self, visitor: "Visitor"):
