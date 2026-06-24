@@ -471,7 +471,8 @@ Cases without executable `@effect` metadata remain explanatory authorities.
 An active case without its own executable effect may adopt the executable
 effect of a known same-statute active target case when it treats that target as
 `followed`, `approved`, or `applied`; this adoption follows positive-treatment
-chains and uses each treating case's precedence metadata.
+chains, cuts off adoption cycles without materialising an effect, and uses each
+treating case's precedence metadata.
 If an active case-law effect also declares `@burden_shift b p?`, and the case
 jurisdiction is absent or matches the statute jurisdiction, a typed effect fact
 with burden or proof-standard metadata must match the shifted burden metadata.

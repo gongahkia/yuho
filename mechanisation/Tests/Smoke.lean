@@ -262,6 +262,26 @@ def chainApexCase : CaseAuthority :=
     precedence := neutralPrecedence
   }
 
+def cycleACase : CaseAuthority :=
+  { name := "Cycle A"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.followed, "Cycle B")]
+    precedence := neutralPrecedence
+  }
+
+def cycleBCase : CaseAuthority :=
+  { name := "Cycle B"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.approved, "Cycle A")]
+    precedence := neutralPrecedence
+  }
+
 def overrulingApexCase : CaseAuthority :=
   { name := "Overruling Apex"
     element := "taking"
@@ -480,6 +500,14 @@ example :
     chainApexCase.resolvedEffectIn
         [foreignRestrictiveCase, intermediateAdopterCase, chainApexCase] 3 =
       some takingRequiresControl := by
+  native_decide
+
+example :
+    cycleACase.resolvedEffectIn [cycleACase, cycleBCase] 4 = none := by
+  native_decide
+
+example :
+    cycleBCase.resolvedEffectIn [cycleACase, cycleBCase] 4 = none := by
   native_decide
 
 example :

@@ -53,7 +53,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "case_law_doctrine",
-        "runtime=active-effects/positive-treatment-adoption/burden-shift-precedence-partial; z3=unsupported; lean=typed-fact-burden+surface-alias+surface-precedence-rank+cumulative-effect+effect-adoption-metadata-inactivation-burden-precedence-rank-conflict-partial; alloy=unsupported",
+        "runtime=active-effects/positive-treatment-adoption/cycle-cutoff/burden-shift-precedence-partial; z3=unsupported; lean=typed-fact-burden+surface-alias+surface-precedence-rank+cumulative-effect+adoption-cycle+effect-adoption-metadata-inactivation-burden-precedence-rank-conflict-partial; alloy=unsupported",
     ),
     (
         "typed_fact_burdens",

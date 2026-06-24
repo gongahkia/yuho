@@ -650,4 +650,11 @@ theorem CaseAuthority.resolvedEffectIn_own
       some (authority.materializeEffect effect) := by
   simp [CaseAuthority.resolvedEffectIn, hActive, h]
 
+theorem CaseAuthority.resolvedEffectIn_inactive
+    (authority : CaseAuthority) (cases : List CaseAuthority)
+    (fuel : Nat)
+    (hInactive : authority.isInactiveIn cases = true) :
+    authority.resolvedEffectIn cases (Nat.succ fuel) = none := by
+  simp [CaseAuthority.resolvedEffectIn, hInactive]
+
 end Yuho

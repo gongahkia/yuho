@@ -507,3 +507,32 @@ def test_positive_treatment_adoption_resolves_transitive_chain() -> None:
     assert result.overall_satisfied is False
     assert any("Apex Chain Adopter" in item for item in result.reasoning)
     assert not any("Local Expansive" in item for item in result.reasoning)
+
+
+def test_positive_treatment_adoption_cycle_does_not_materialize_effect() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            caselaw "Cycle A" "[2026] SGCA 1" {
+                "Adopts Cycle B"
+                element deception
+                treatment follows "Cycle B" "[2026] SGCA 2"
+            }
+
+            caselaw "Cycle B" "[2026] SGCA 2" {
+                "Adopts Cycle A"
+                element deception
+                treatment approved "Cycle A" "[2026] SGCA 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    assert effects == {}
