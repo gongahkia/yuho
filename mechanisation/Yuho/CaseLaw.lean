@@ -185,6 +185,42 @@ def DoctrineRole.rank : DoctrineRole → Nat
   | .holding => 20
   | .obiter => 10
 
+def CourtLevel.fromSurface (level : String) : Option CourtLevel :=
+  if level = "apex" then
+    some .apex
+  else if level = "supreme" then
+    some .supreme
+  else if level = "court_of_appeal" then
+    some .courtOfAppeal
+  else if level = "appellate" then
+    some .appellate
+  else if level = "high" then
+    some .high
+  else if level = "district" then
+    some .district
+  else if level = "trial" then
+    some .trial
+  else if level = "lower" then
+    some .lower
+  else
+    none
+
+def CourtLevel.rankSurface (level : String) : Nat :=
+  (CourtLevel.fromSurface level).map CourtLevel.rank |>.getD 0
+
+def DoctrineRole.fromSurface (role : String) : Option DoctrineRole :=
+  if role = "ratio" then
+    some .ratio
+  else if role = "holding" then
+    some .holding
+  else if role = "obiter" then
+    some .obiter
+  else
+    none
+
+def DoctrineRole.rankSurface (role : String) : Nat :=
+  (DoctrineRole.fromSurface role).map DoctrineRole.rank |>.getD 0
+
 def CasePrecedence.jurisdictionRankFor (caseJurisdiction : Option String)
     (statuteJurisdiction : Option String) : Nat :=
   match statuteJurisdiction, caseJurisdiction with
@@ -202,6 +238,18 @@ def CasePrecedence.fromComponents
       CasePrecedence.jurisdictionRankFor caseJurisdiction statuteJurisdiction
     courtRank := courtLevel.map CourtLevel.rank |>.getD 0
     doctrineRoleRank := doctrineRole.map DoctrineRole.rank |>.getD 0
+    decisionDate := decisionDate
+    declarationOrder := declarationOrder
+  }
+
+def CasePrecedence.fromSurfaceComponents
+    (caseJurisdiction statuteJurisdiction : Option String)
+    (courtLevel doctrineRole : Option String)
+    (decisionDate declarationOrder : Nat) : CasePrecedence :=
+  { jurisdictionRank :=
+      CasePrecedence.jurisdictionRankFor caseJurisdiction statuteJurisdiction
+    courtRank := courtLevel.map CourtLevel.rankSurface |>.getD 0
+    doctrineRoleRank := doctrineRole.map DoctrineRole.rankSurface |>.getD 0
     decisionDate := decisionDate
     declarationOrder := declarationOrder
   }
@@ -492,9 +540,35 @@ theorem CourtLevel.apex_rank : CourtLevel.apex.rank = 50 := by
 theorem DoctrineRole.obiter_rank : DoctrineRole.obiter.rank = 10 := by
   rfl
 
+theorem CourtLevel.courtOfAppeal_surface_rank :
+    CourtLevel.rankSurface "court_of_appeal" = 50 := by
+  rfl
+
+theorem CourtLevel.unknown_surface_rank :
+    CourtLevel.rankSurface "magistrate" = 0 := by
+  rfl
+
+theorem DoctrineRole.holding_surface_rank :
+    DoctrineRole.rankSurface "holding" = 20 := by
+  rfl
+
+theorem DoctrineRole.unknown_surface_rank :
+    DoctrineRole.rankSurface "commentary" = 0 := by
+  rfl
+
 theorem CasePrecedence.local_jurisdiction_rank :
     CasePrecedence.jurisdictionRankFor (some "singapore")
       (some "singapore") = 2 := by
+  rfl
+
+theorem CasePrecedence.surface_components_rank :
+    CasePrecedence.fromSurfaceComponents (some "singapore") (some "singapore")
+      (some "high") (some "obiter") 20260101 3 =
+      { jurisdictionRank := 2
+        courtRank := 30
+        doctrineRoleRank := 10
+        decisionDate := 20260101
+        declarationOrder := 3 } := by
   rfl
 
 theorem CaseAuthority.resolveConflictBucket_nil :

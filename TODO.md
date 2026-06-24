@@ -57,8 +57,8 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 - Close the known Lean proof gaps incrementally.
   - Current support: Lean scoped-name infrastructure centralises statute-local SMT atom names used by the generator.
   - Current support: Lean typed-fact burden metadata guards mechanise element/case-law burden and proof-standard acceptance/rejection.
-  - Current support: Lean case-law effect algebra mechanises lower-case surface alias normalisation, the `requires`/`satisfies`/`excludes` executable fragment, bounded positive-treatment-chain adoption with metadata merge, inactive-treatment suppression, burden-metadata guards, concrete precedence ranks, and same-fact conflict selection.
-  - Add richer doctrine/case-law semantics beyond the typed-fact/surface-alias/effect/adoption-metadata/inactivation/burden-metadata/precedence-rank/conflict fragment.
+  - Current support: Lean case-law effect algebra mechanises lower-case surface alias normalisation, surface court/role precedence ranking, the `requires`/`satisfies`/`excludes` executable fragment, bounded positive-treatment-chain adoption with metadata merge, inactive-treatment suppression, burden-metadata guards, concrete precedence ranks, and same-fact conflict selection.
+  - Add richer doctrine/case-law semantics beyond the typed-fact/surface-alias/surface-precedence-rank/effect/adoption-metadata/inactivation/burden-metadata/precedence-rank/conflict fragment.
 
 ## Non-Goals For Now
 

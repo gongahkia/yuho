@@ -127,6 +127,12 @@ example : CaseEffectKind.applySurface "narrows" true false = some false := by
 example : TreatmentKind.inactivatesSurface "overrules" = true := by
   native_decide
 
+example : CourtLevel.rankSurface "court_of_appeal" = 50 := by
+  native_decide
+
+example : DoctrineRole.rankSurface "holding" = 20 := by
+  native_decide
+
 def defenceBurden : CaseBurdenShift :=
   { burden := "defence", standard := some "balance_of_probabilities" }
 
