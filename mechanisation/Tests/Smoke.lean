@@ -125,7 +125,7 @@ def neutralPrecedence : CasePrecedence :=
 
 def foreignApexPrecedence : CasePrecedence :=
   { jurisdictionRank := 0
-    courtRank := 3
+    courtRank := 50
     doctrineRoleRank := 0
     decisionDate := 20260101
     declarationOrder := 0
@@ -133,7 +133,7 @@ def foreignApexPrecedence : CasePrecedence :=
 
 def localHighPrecedence : CasePrecedence :=
   { jurisdictionRank := 2
-    courtRank := 2
+    courtRank := 30
     doctrineRoleRank := 0
     decisionDate := 20200101
     declarationOrder := 1
@@ -141,7 +141,7 @@ def localHighPrecedence : CasePrecedence :=
 
 def localApexOldPrecedence : CasePrecedence :=
   { jurisdictionRank := 2
-    courtRank := 3
+    courtRank := 50
     doctrineRoleRank := 0
     decisionDate := 20200101
     declarationOrder := 0
@@ -149,7 +149,7 @@ def localApexOldPrecedence : CasePrecedence :=
 
 def localApexNewPrecedence : CasePrecedence :=
   { jurisdictionRank := 2
-    courtRank := 3
+    courtRank := 50
     doctrineRoleRank := 0
     decisionDate := 20260101
     declarationOrder := 1
@@ -268,6 +268,18 @@ example :
 example :
     lawfulExcuseByDefence.applyTyped false mismatchedBurdenCaseFacts
       (some "england") = true := by
+  native_decide
+
+example :
+    CasePrecedence.fromComponents (some "singapore") (some "singapore")
+        (some .high) none 20200101 1 =
+      localHighPrecedence := by
+  native_decide
+
+example :
+    CasePrecedence.fromComponents (some "england") (some "singapore")
+        (some .apex) (some .obiter) 20260101 0 =
+      { foreignApexPrecedence with doctrineRoleRank := 10 } := by
   native_decide
 
 example :

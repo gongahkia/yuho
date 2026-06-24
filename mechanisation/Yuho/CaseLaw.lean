@@ -39,6 +39,23 @@ structure CaseEffect where
   jurisdiction : Option String
 deriving Repr, DecidableEq, BEq
 
+inductive CourtLevel where
+  | apex : CourtLevel
+  | supreme : CourtLevel
+  | courtOfAppeal : CourtLevel
+  | appellate : CourtLevel
+  | high : CourtLevel
+  | district : CourtLevel
+  | trial : CourtLevel
+  | lower : CourtLevel
+deriving Repr, DecidableEq, BEq
+
+inductive DoctrineRole where
+  | ratio : DoctrineRole
+  | holding : DoctrineRole
+  | obiter : DoctrineRole
+deriving Repr, DecidableEq, BEq
+
 structure CasePrecedence where
   jurisdictionRank : Nat
   courtRank : Nat
@@ -144,6 +161,42 @@ def Element.evalWithCases (e : Element) (effects : List CaseEffect) (F : Facts) 
 def Element.evalWithTypedCases (e : Element) (effects : List CaseEffect)
     (F : Facts) (CF : CaseFacts) (statuteJurisdiction : Option String) : Bool :=
   CaseEffect.applyAllTyped e.name (e.eval F) CF statuteJurisdiction effects
+
+def CourtLevel.rank : CourtLevel → Nat
+  | .apex => 50
+  | .supreme => 50
+  | .courtOfAppeal => 50
+  | .appellate => 40
+  | .high => 30
+  | .district => 20
+  | .trial => 10
+  | .lower => 10
+
+def DoctrineRole.rank : DoctrineRole → Nat
+  | .ratio => 20
+  | .holding => 20
+  | .obiter => 10
+
+def CasePrecedence.jurisdictionRankFor (caseJurisdiction : Option String)
+    (statuteJurisdiction : Option String) : Nat :=
+  match statuteJurisdiction, caseJurisdiction with
+  | none, none => 1
+  | none, some _ => 0
+  | some _, none => 1
+  | some statuteJurisdiction, some caseJurisdiction =>
+      if caseJurisdiction = statuteJurisdiction then 2 else 0
+
+def CasePrecedence.fromComponents
+    (caseJurisdiction statuteJurisdiction : Option String)
+    (courtLevel : Option CourtLevel) (doctrineRole : Option DoctrineRole)
+    (decisionDate declarationOrder : Nat) : CasePrecedence :=
+  { jurisdictionRank :=
+      CasePrecedence.jurisdictionRankFor caseJurisdiction statuteJurisdiction
+    courtRank := courtLevel.map CourtLevel.rank |>.getD 0
+    doctrineRoleRank := doctrineRole.map DoctrineRole.rank |>.getD 0
+    decisionDate := decisionDate
+    declarationOrder := declarationOrder
+  }
 
 def CasePrecedence.betterThan (left right : CasePrecedence) : Bool :=
   if left.jurisdictionRank = right.jurisdictionRank then
@@ -337,30 +390,41 @@ theorem CaseFact.truthWithBurden_wrong_burden
   simp [CaseFact.truthWithBurden, CaseFactMetadata.permitsBurden, h]
 
 theorem CasePrecedence.local_beats_foreign_same_court :
-    ({ jurisdictionRank := 2, courtRank := 2, doctrineRoleRank := 0,
+    ({ jurisdictionRank := 2, courtRank := 30, doctrineRoleRank := 0,
        decisionDate := 20200101, declarationOrder := 1 } :
       CasePrecedence).betterThan
-      ({ jurisdictionRank := 0, courtRank := 2, doctrineRoleRank := 0,
+      ({ jurisdictionRank := 0, courtRank := 30, doctrineRoleRank := 0,
          decisionDate := 20260101, declarationOrder := 0 } :
         CasePrecedence) = true := by
   rfl
 
 theorem CasePrecedence.higher_court_beats_newer_date :
-    ({ jurisdictionRank := 2, courtRank := 3, doctrineRoleRank := 0,
+    ({ jurisdictionRank := 2, courtRank := 50, doctrineRoleRank := 0,
        decisionDate := 20200101, declarationOrder := 0 } :
       CasePrecedence).betterThan
-      ({ jurisdictionRank := 2, courtRank := 2, doctrineRoleRank := 0,
+      ({ jurisdictionRank := 2, courtRank := 30, doctrineRoleRank := 0,
          decisionDate := 20260101, declarationOrder := 1 } :
         CasePrecedence) = true := by
   rfl
 
 theorem CasePrecedence.newer_date_breaks_same_court_tie :
-    ({ jurisdictionRank := 2, courtRank := 3, doctrineRoleRank := 0,
+    ({ jurisdictionRank := 2, courtRank := 50, doctrineRoleRank := 0,
        decisionDate := 20260101, declarationOrder := 1 } :
       CasePrecedence).betterThan
-      ({ jurisdictionRank := 2, courtRank := 3, doctrineRoleRank := 0,
+      ({ jurisdictionRank := 2, courtRank := 50, doctrineRoleRank := 0,
          decisionDate := 20200101, declarationOrder := 0 } :
         CasePrecedence) = true := by
+  rfl
+
+theorem CourtLevel.apex_rank : CourtLevel.apex.rank = 50 := by
+  rfl
+
+theorem DoctrineRole.obiter_rank : DoctrineRole.obiter.rank = 10 := by
+  rfl
+
+theorem CasePrecedence.local_jurisdiction_rank :
+    CasePrecedence.jurisdictionRankFor (some "singapore")
+      (some "singapore") = 2 := by
   rfl
 
 theorem CaseAuthority.resolveConflictBucket_nil :
