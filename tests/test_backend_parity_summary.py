@@ -19,7 +19,7 @@ def test_backend_parity_summary_lists_evidence_and_boundaries() -> None:
     assert "is_infringed_apply_scope: runtime-z3=covered" in summary
     assert "penalties_money_duration: runtime-z3=imprisonment/fine/caning/death-model-verdict" in summary
     assert "z3-lean=penalty-footprint-bridge" in summary
-    assert "lean_expected_verdicts: runtime-z3-lean=smoke+full-corpus-mixed-verdicts" in summary
+    assert "lean_expected_verdicts: runtime-z3-lean=smoke+full-corpus-mixed+bounded-arity-verdicts" in summary
     assert "optional_values: runtime-z3=covered" in summary
     assert "case_law_doctrine: runtime=active-effects/burden-shift-partial" in summary
     assert "Unsupported feature boundaries:" in summary

@@ -347,6 +347,27 @@ def nameTriples : List String → List NameTriple
   | _ :: _ :: [] => []
   | first :: rest => nameTriplesWithFirst first rest ++ nameTriples rest
 
+def takeExactly : Nat → List String → Option (List String)
+  | 0, _ => some []
+  | _ + 1, [] => none
+  | n + 1, first :: rest =>
+      match takeExactly n rest with
+      | some taken => some (first :: taken)
+      | none => none
+
+def joinedNamePieces : List String → String
+  | [] => ""
+  | first :: [] => first
+  | first :: rest => first ++ "_" ++ joinedNamePieces rest
+
+def concatNamePieces : List String → String
+  | [] => ""
+  | first :: rest => first ++ concatNamePieces rest
+
+def alternatingFactsFrom (value : Bool) : List String → List (String × Bool)
+  | [] => []
+  | first :: rest => (first, value) :: alternatingFactsFrom (!value) rest
+
 def pairFacts (pair : String × String) : List (String × Bool) :=
   [(pair.fst, true), (pair.snd, true)]
 
@@ -373,6 +394,28 @@ def tripleVerdictFixture (n : String) (s : Statute) (triple : NameTriple) :
     factsName := n ++ "Triple" ++ triple.first ++ triple.second ++ triple.third
     factsPairs := tripleFacts triple
   }
+
+def mixedVerdictFixture (n : String) (s : Statute) (label : String)
+    (names : List String) : VerdictFixture :=
+  {
+    name := n ++ "_corpus_mixed_" ++ label ++ "_" ++ joinedNamePieces names
+    statuteName := n
+    statute := s
+    factsName := n ++ "Mixed" ++ label ++ concatNamePieces names
+    factsPairs := alternatingFactsFrom true names
+  }
+
+def boundedMixedVerdictFixtures (n : String) (s : Statute)
+    (names : List String) : List VerdictFixture :=
+  let quad :=
+    match takeExactly 4 names with
+    | some selected => [mixedVerdictFixture n s "quad" selected]
+    | none => []
+  let quint :=
+    match takeExactly 5 names with
+    | some selected => [mixedVerdictFixture n s "quint" selected]
+    | none => []
+  quad ++ quint
 
 def exceptionFactName (x : Exception) : String :=
   "exc_" ++ x.label
@@ -422,6 +465,7 @@ def corpusVerdictFixturesFor (fixture : String × Statute) : List VerdictFixture
   ] ++ firstOnly
     ++ (namePairs names).map (pairVerdictFixture n s)
     ++ (nameTriples names).map (tripleVerdictFixture n s)
+    ++ boundedMixedVerdictFixtures n s names
     ++ s.exceptions.map (exceptionVerdictFixture n s)
 
 def isSmokeFixtureName (name : String) : Bool :=
