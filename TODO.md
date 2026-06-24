@@ -55,7 +55,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 ## P0: Case Law And Doctrine
 
 - Promote case law from explanation annotations to executable semantics.
-  - Current support: `yuho explain` annotates targeted elements with active case-law holdings and marks same-statute overruled authorities inactive.
+  - Current support: `yuho explain` applies executable case-law effects in element traces, annotates targeted elements with active case-law holdings, and marks same-statute overruled authorities inactive.
   - Current support: `yuho explain` also marks same-statute distinguished, reversed, and disapproved authorities inactive for the current explanation.
   - Current support: `yuho refs --treatment` exposes case-to-case treatment edges.
   - Current support: case-law treatment syntax accepts follows/followed, distinguishes/distinguished, overrules/overruled, reverses/reversed, approves/approved, disapproves/disapproved, and applies/applied.

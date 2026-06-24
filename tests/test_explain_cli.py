@@ -201,6 +201,42 @@ def test_explain_cli_json_includes_precedent_status(tmp_path: Path):
     assert precedent["status"] == "active"
 
 
+def test_explain_cli_applies_executable_case_law_effects(tmp_path: Path):
+    root = tmp_path / "library"
+    section = root / "s1_precedent"
+    section.mkdir(parents=True)
+    (section / "statute.yh").write_text(
+        """
+        statute 1 "Precedent" {
+            elements {
+                actus_reus taking := "takes";
+            }
+
+            /// @effect requires control_plus_deprivation
+            caselaw "New v PP" "[2026] SGCA 1" {
+                "Taking requires control plus deprivation"
+                element taking
+            }
+        }
+        """,
+        encoding="utf-8",
+    )
+    facts = tmp_path / "facts.json"
+    facts.write_text(
+        json.dumps({"taking": True, "control_plus_deprivation": False}),
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(
+        cli,
+        ["explain", "--facts", str(facts), "--library", str(root), "1"],
+    )
+
+    assert result.exit_code == 0
+    assert "Section 1 is not satisfied." in result.output
+    assert "Case law 'New v PP' requires control_plus_deprivation" in result.output
+
+
 def test_explain_cli_marks_distinguished_case_inactive(tmp_path: Path):
     root = tmp_path / "library"
     section = root / "s1_precedent"

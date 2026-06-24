@@ -111,7 +111,7 @@ class StatuteEvaluator:
         all_element_results: List[ElementResult] = []
         reasoning: List[str] = []
         overall = True
-        case_effects = self._active_case_law_effects(
+        case_effects = self.active_case_law_effects(
             statute.case_law,
             statute_jurisdiction=statute.jurisdiction,
         )
@@ -381,6 +381,15 @@ class StatuteEvaluator:
             reasoning=reasoning,
         )
 
+    def apply_case_law_effects(
+        self,
+        result: ElementResult,
+        facts: StructInstance,
+        cases: Tuple[nodes.CaseLawNode, ...],
+        statute_jurisdiction: Optional[str] = None,
+    ) -> ElementResult:
+        return self._apply_case_law_effects(result, facts, cases, statute_jurisdiction)
+
     def _case_burden_reason(
         self,
         case: nodes.CaseLawNode,
@@ -492,6 +501,17 @@ class StatuteEvaluator:
             )
             for key, value in result.items()
         }
+
+    def active_case_law_effects(
+        self,
+        case_law: Tuple[nodes.CaseLawNode, ...],
+        *,
+        statute_jurisdiction: Optional[str] = None,
+    ) -> Dict[str, Tuple[nodes.CaseLawNode, ...]]:
+        return self._active_case_law_effects(
+            case_law,
+            statute_jurisdiction=statute_jurisdiction,
+        )
 
     @staticmethod
     def _case_law_with_adopted_effects(

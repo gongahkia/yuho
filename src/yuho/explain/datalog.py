@@ -9,6 +9,7 @@ from yuho.ast import nodes
 from yuho.caselaw import is_inactive_treatment
 from yuho.eval.facts import fact_reason, fact_truthy, normalize_facts, struct_from_facts
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, Value
+from yuho.eval.statute_evaluator import ElementResult, StatuteEvaluator
 
 
 @dataclass(frozen=True)
@@ -57,6 +58,11 @@ class DatalogExplainer:
         normalized_facts = normalize_facts(facts)
         runtime_facts = struct_from_facts(normalized_facts)
         precedent_index = _precedents_by_element(statute.case_law)
+        evaluator = StatuteEvaluator()
+        case_effects = evaluator.active_case_law_effects(
+            statute.case_law,
+            statute_jurisdiction=statute.jurisdiction,
+        )
         traces: list[ElementTrace] = []
         rules: list[str] = []
         overall = True
@@ -67,6 +73,9 @@ class DatalogExplainer:
                 runtime_facts,
                 statute.definitions,
                 precedent_index,
+                case_effects,
+                evaluator,
+                statute.jurisdiction,
                 statutes or {},
                 f"top_{index}",
                 rules,
@@ -88,6 +97,9 @@ class DatalogExplainer:
         runtime_facts,
         definitions: tuple[nodes.DefinitionEntry, ...],
         precedent_index: Mapping[str, tuple[PrecedentTrace, ...]],
+        case_effects: Mapping[str, tuple[nodes.CaseLawNode, ...]],
+        evaluator: StatuteEvaluator,
+        statute_jurisdiction: str | None,
         statutes: Mapping[str, nodes.StatuteNode],
         fallback_name: str,
         rules: list[str],
@@ -100,6 +112,9 @@ class DatalogExplainer:
                     runtime_facts,
                     definitions,
                     precedent_index,
+                    case_effects,
+                    evaluator,
+                    statute_jurisdiction,
                     statutes,
                     f"{fallback_name}_{i}",
                     rules,
@@ -150,6 +165,21 @@ class DatalogExplainer:
             satisfied = fact_truthy(fact)
             rule = f"satisfied({name}) :- fact({name}, true)."
             reason = fact_reason(name, fact, satisfied)
+        if isinstance(member, nodes.ElementNode):
+            element_result = evaluator.apply_case_law_effects(
+                ElementResult(
+                    element_name=name,
+                    element_type=element_type,
+                    satisfied=satisfied,
+                    description="",
+                ),
+                runtime_facts,
+                case_effects.get(name, ()),
+                statute_jurisdiction,
+            )
+            if element_result.reasoning:
+                reason = "; ".join([reason, *element_result.reasoning])
+            satisfied = element_result.satisfied
         rules.append(rule)
         return ElementTrace(
             name=name,
