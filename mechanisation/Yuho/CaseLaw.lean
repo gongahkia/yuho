@@ -212,6 +212,12 @@ def CaseAuthority.effectsConflict (left right : CaseAuthority) : Bool :=
         decide (leftEffect.kind ≠ rightEffect.kind)
   | _, _ => false
 
+def CaseAuthority.sameEffectFact (left right : CaseAuthority) : Bool :=
+  match left.effect, right.effect with
+  | some leftEffect, some rightEffect =>
+      decide (leftEffect.fact = rightEffect.fact)
+  | _, _ => false
+
 def CaseAuthority.hasEffectConflictIn (authority : CaseAuthority)
     (cases : List CaseAuthority) : Bool :=
   cases.any (fun candidate => authority.effectsConflict candidate)
@@ -230,6 +236,24 @@ def CaseAuthority.resolveConflictBucket (cases : List CaseAuthority) :
     | none => []
   else
     cases
+
+def CaseAuthority.effectBucket (authority : CaseAuthority)
+    (cases : List CaseAuthority) : List CaseAuthority :=
+  cases.filter (fun candidate => authority.sameEffectFact candidate)
+
+def CaseAuthority.keepAfterEffectConflicts (authority : CaseAuthority)
+    (cases : List CaseAuthority) : Bool :=
+  let bucket := authority.effectBucket cases
+  if CaseAuthority.bucketHasEffectConflict bucket then
+    match CaseAuthority.bestByPrecedence? bucket with
+    | some best => decide (authority = best)
+    | none => false
+  else
+    true
+
+def CaseAuthority.resolveEffectConflicts
+    (cases : List CaseAuthority) : List CaseAuthority :=
+  cases.filter (fun authority => authority.keepAfterEffectConflicts cases)
 
 def CaseAuthority.adoptedEffectFrom (authority target : CaseAuthority) :
     Option CaseEffect :=
@@ -341,6 +365,10 @@ theorem CasePrecedence.newer_date_breaks_same_court_tie :
 
 theorem CaseAuthority.resolveConflictBucket_nil :
     CaseAuthority.resolveConflictBucket [] = [] := by
+  rfl
+
+theorem CaseAuthority.resolveEffectConflicts_nil :
+    CaseAuthority.resolveEffectConflicts [] = [] := by
   rfl
 
 theorem TreatmentKind.followed_adopts :

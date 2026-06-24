@@ -211,6 +211,14 @@ def localRestrictiveCase : CaseAuthority :=
     precedence := localHighPrecedence
   }
 
+def differentFactCase : CaseAuthority :=
+  { name := "Different Fact"
+    element := "taking"
+    effect := some { takingRequiresControl with fact := "dishonesty" }
+    treatments := []
+    precedence := neutralPrecedence
+  }
+
 def highCourtNewCase : CaseAuthority :=
   { name := "High Court New"
     element := "taking"
@@ -322,6 +330,20 @@ example :
         [localRestrictiveCase, apexOldCase]).map
         (fun authority => authority.name) =
       ["Local Restrictive", "Apex Old"] := by
+  native_decide
+
+example :
+    (CaseAuthority.resolveEffectConflicts
+        [foreignExpansiveCase, differentFactCase, localRestrictiveCase]).map
+        (fun authority => authority.name) =
+      ["Different Fact", "Local Restrictive"] := by
+  native_decide
+
+example :
+    (CaseAuthority.resolveEffectConflicts
+        [localRestrictiveCase, apexOldCase, differentFactCase]).map
+        (fun authority => authority.name) =
+      ["Local Restrictive", "Apex Old", "Different Fact"] := by
   native_decide
 
 example :
