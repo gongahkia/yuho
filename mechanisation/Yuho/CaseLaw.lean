@@ -14,10 +14,29 @@ inductive CaseEffectKind where
   | excludes : CaseEffectKind
 deriving Repr, DecidableEq, BEq
 
+structure CaseBurdenShift where
+  burden : String
+  standard : Option String
+deriving Repr, DecidableEq, BEq
+
+structure CaseFactMetadata where
+  burden : Option String
+  standard : Option String
+deriving Repr, DecidableEq, BEq
+
+structure CaseFact where
+  truth : Bool
+  metadata : Option CaseFactMetadata
+deriving Repr, DecidableEq, BEq
+
+abbrev CaseFacts := String → CaseFact
+
 structure CaseEffect where
   target : String
   kind : CaseEffectKind
   fact : String
+  burdenShift : Option CaseBurdenShift
+  jurisdiction : Option String
 deriving Repr, DecidableEq, BEq
 
 inductive TreatmentKind where
@@ -49,6 +68,48 @@ def CaseEffect.appliesTo (effect : CaseEffect) (name : String) : Bool :=
 def CaseEffect.apply (effect : CaseEffect) (base : Bool) (F : Facts) : Bool :=
   effect.kind.apply base (F effect.fact)
 
+def CaseFactMetadata.permitsBurden (metadata : CaseFactMetadata)
+    (shift : CaseBurdenShift) : Bool :=
+  let burdenOk :=
+    match metadata.burden with
+    | none => true
+    | some burden => decide (burden = shift.burden)
+  let standardOk :=
+    match shift.standard, metadata.standard with
+    | some expected, some actual => decide (actual = expected)
+    | _, _ => true
+  burdenOk && standardOk
+
+def CaseFact.truthWithBurden (fact : CaseFact) (shift : CaseBurdenShift) :
+    Bool :=
+  if fact.truth then
+    match fact.metadata with
+    | none => true
+    | some metadata => metadata.permitsBurden shift
+  else
+    false
+
+def CaseEffect.jurisdictionPermits (effect : CaseEffect)
+    (statuteJurisdiction : Option String) : Bool :=
+  match effect.jurisdiction, statuteJurisdiction with
+  | some caseJurisdiction, some statuteJurisdiction =>
+      decide (caseJurisdiction = statuteJurisdiction)
+  | _, _ => true
+
+def CaseEffect.effectiveFact (effect : CaseEffect) (F : CaseFacts)
+    (statuteJurisdiction : Option String) : Bool :=
+  let fact := F effect.fact
+  if effect.jurisdictionPermits statuteJurisdiction then
+    match effect.burdenShift with
+    | none => fact.truth
+    | some shift => fact.truthWithBurden shift
+  else
+    fact.truth
+
+def CaseEffect.applyTyped (effect : CaseEffect) (base : Bool)
+    (F : CaseFacts) (statuteJurisdiction : Option String) : Bool :=
+  effect.kind.apply base (effect.effectiveFact F statuteJurisdiction)
+
 def CaseEffect.applyAll (name : String) (base : Bool) (F : Facts) :
     List CaseEffect → Bool
   | [] => base
@@ -56,9 +117,24 @@ def CaseEffect.applyAll (name : String) (base : Bool) (F : Facts) :
       let next := if effect.appliesTo name then effect.apply base F else base
       CaseEffect.applyAll name next F rest
 
+def CaseEffect.applyAllTyped (name : String) (base : Bool) (F : CaseFacts)
+    (statuteJurisdiction : Option String) : List CaseEffect → Bool
+  | [] => base
+  | effect :: rest =>
+      let next :=
+        if effect.appliesTo name then
+          effect.applyTyped base F statuteJurisdiction
+        else
+          base
+      CaseEffect.applyAllTyped name next F statuteJurisdiction rest
+
 def Element.evalWithCases (e : Element) (effects : List CaseEffect) (F : Facts) :
     Bool :=
   CaseEffect.applyAll e.name (e.eval F) F effects
+
+def Element.evalWithTypedCases (e : Element) (effects : List CaseEffect)
+    (F : Facts) (CF : CaseFacts) (statuteJurisdiction : Option String) : Bool :=
+  CaseEffect.applyAllTyped e.name (e.eval F) CF statuteJurisdiction effects
 
 def TreatmentKind.adopts : TreatmentKind → Bool
   | .followed => true
@@ -149,6 +225,31 @@ theorem CaseEffect.applyAll_nil (name : String) (base : Bool) (F : Facts) :
 theorem Element.evalWithCases_nil (e : Element) (F : Facts) :
     e.evalWithCases [] F = e.eval F := by
   rfl
+
+theorem Element.evalWithTypedCases_nil
+    (e : Element) (F : Facts) (CF : CaseFacts)
+    (statuteJurisdiction : Option String) :
+    e.evalWithTypedCases [] F CF statuteJurisdiction = e.eval F := by
+  rfl
+
+theorem CaseFact.truthWithBurden_matching
+    (shift : CaseBurdenShift) :
+    ({ truth := true
+       metadata :=
+        some { burden := some shift.burden, standard := shift.standard }
+     } : CaseFact).truthWithBurden shift = true := by
+  cases shift with
+  | mk burden standard =>
+  cases standard <;>
+    simp [CaseFact.truthWithBurden, CaseFactMetadata.permitsBurden]
+
+theorem CaseFact.truthWithBurden_wrong_burden
+    (shift : CaseBurdenShift) (wrongBurden : String)
+    (h : wrongBurden ≠ shift.burden) :
+    ({ truth := true
+       metadata := some { burden := some wrongBurden, standard := none }
+     } : CaseFact).truthWithBurden shift = false := by
+  simp [CaseFact.truthWithBurden, CaseFactMetadata.permitsBurden, h]
 
 theorem TreatmentKind.followed_adopts :
     TreatmentKind.followed.adopts = true := by

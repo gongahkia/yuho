@@ -77,7 +77,43 @@ def takingElement : Element :=
   { kind := .actusReus, name := "taking", description := "" }
 
 def takingRequiresControl : CaseEffect :=
-  { target := "taking", kind := .requires, fact := "control_plus_deprivation" }
+  { target := "taking"
+    kind := .requires
+    fact := "control_plus_deprivation"
+    burdenShift := none
+    jurisdiction := none
+  }
+
+def defenceBurden : CaseBurdenShift :=
+  { burden := "defence", standard := some "balance_of_probabilities" }
+
+def lawfulExcuseByDefence : CaseEffect :=
+  { target := "excuse"
+    kind := .satisfies
+    fact := "lawful_excuse"
+    burdenShift := some defenceBurden
+    jurisdiction := some "singapore"
+  }
+
+def matchingBurdenCaseFacts : CaseFacts := fun name =>
+  if name = "lawful_excuse" then
+    { truth := true
+      metadata :=
+        some { burden := some "defence"
+               standard := some "balance_of_probabilities" }
+    }
+  else
+    { truth := false, metadata := none }
+
+def mismatchedBurdenCaseFacts : CaseFacts := fun name =>
+  if name = "lawful_excuse" then
+    { truth := true
+      metadata :=
+        some { burden := some "prosecution"
+               standard := some "balance_of_probabilities" }
+    }
+  else
+    { truth := false, metadata := none }
 
 def foreignRestrictiveCase : CaseAuthority :=
   { name := "Foreign Restrictive"
@@ -124,6 +160,21 @@ example :
     takingElement.evalWithCases [takingRequiresControl]
       (Facts.fromList [("taking", true), ("control_plus_deprivation", true)])
       = true := by
+  native_decide
+
+example :
+    lawfulExcuseByDefence.applyTyped false matchingBurdenCaseFacts
+      (some "singapore") = true := by
+  native_decide
+
+example :
+    lawfulExcuseByDefence.applyTyped false mismatchedBurdenCaseFacts
+      (some "singapore") = false := by
+  native_decide
+
+example :
+    lawfulExcuseByDefence.applyTyped false mismatchedBurdenCaseFacts
+      (some "england") = true := by
   native_decide
 
 example :
