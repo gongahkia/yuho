@@ -767,6 +767,14 @@ theorem CaseAuthority.resolvedEffectIn_inactive
     authority.resolvedEffectIn cases (Nat.succ fuel) = none := by
   simp [CaseAuthority.resolvedEffectIn, hInactive]
 
+theorem CaseAuthority.isInactiveIn_reversed_by
+    (authority reverser : CaseAuthority) :
+    authority.isInactiveIn
+        [{ reverser with treatments := [(.reversed, authority.name)] }] =
+      true := by
+  simp [CaseAuthority.isInactiveIn, CaseAuthority.inactivatesCase,
+    TreatmentKind.inactivates]
+
 theorem CaseAuthority.resolvedEffectIn_missing_followed_target
     (authority : CaseAuthority) (cases : List CaseAuthority)
     (fuel : Nat) (targetName : String)

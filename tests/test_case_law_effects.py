@@ -145,6 +145,37 @@ def test_overruled_case_law_effect_is_inactive() -> None:
     assert not any("Old v PP" in item for item in result.reasoning)
 
 
+def test_reversed_case_law_effect_is_inactive() -> None:
+    module = _module(
+        """
+        statute 1 "Theft" {
+            elements { actus_reus taking := "takes"; }
+
+            /// @effect requires control_plus_deprivation
+            caselaw "Trial v PP" "[1990] SGHC 1" {
+                "Taking requires control plus deprivation"
+                element taking
+            }
+
+            caselaw "Appeal v PP" "[2026] SGCA 1" {
+                "Trial v PP is reversed"
+                element taking
+                treatment reverses "Trial v PP" "[1990] SGHC 1"
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        _facts(taking=True, control_plus_deprivation=False),
+    )
+
+    assert result.overall_satisfied is True
+    assert result.element_results[0].satisfied is True
+    assert not any("Trial v PP" in item for item in result.reasoning)
+
+
 def test_negative_treatment_does_not_adopt_target_effect() -> None:
     module = _module(
         """

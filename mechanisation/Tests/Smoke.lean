@@ -744,6 +744,13 @@ example : TreatmentKind.applied.inactivates = false := by
   native_decide
 
 example :
+    foreignRestrictiveCase.isInactiveIn
+        [{ overrulingApexCase with
+          treatments := [(.reversed, "Foreign Restrictive")] }] =
+      true := by
+  native_decide
+
+example :
     appliedAdopterCase.resolvedEffectIn
         [foreignRestrictiveCase, appliedAdopterCase] 2 =
       some takingRequiresControl := by
