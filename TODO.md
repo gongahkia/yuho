@@ -52,12 +52,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Local evidence: grammar is conventional statically typed DSL syntax with legal blocks.
   - Marking: [Inference] Esolang experts may not care; PL/DSL experts will care more about semantics, tooling, and conformance.
 
-## P0: Canonical Semantics
-
-- Make runtime, Z3, Alloy, and Lean agree on shared fixtures.
-  - Current support: `make verify-core` includes a backend-parity summary with feature-category rows and explicit unsupported-feature boundaries; runtime/Z3 differential fixtures cover nested `all_of`/`any_of`, mixed groups, exception guards, `is_infringed`, `apply_scope`, scoped fact overrides, money/duration assertions, and optional/pass values; Lean smoke fixtures and full generated corpus all-true/empty/first-only/all-pairs/all-triples/bounded prefix/suffix arity 4/5 mixed/exception-triggered fact verdict rows are checked against both Python runtime and extracted Z3 conviction atoms; penalty-bearing fixtures compare runtime verdicts to extracted Z3 model conviction atoms and prove imprisonment/fine/caning/death constraints active; Lean penalty footprint rows are checked against Python Z3 footprint constraints.
-  - Acceptance: runtime, Z3, and Lean fixture parity reports covered and unsupported feature categories explicitly; Alloy remains explicit-unsupported until it has parity coverage.
-
 ## P0: Case Law And Doctrine
 
 - Promote case law from explanation annotations to executable semantics.
