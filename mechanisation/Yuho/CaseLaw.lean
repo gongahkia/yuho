@@ -39,6 +39,14 @@ structure CaseEffect where
   jurisdiction : Option String
 deriving Repr, DecidableEq, BEq
 
+structure CasePrecedence where
+  jurisdictionRank : Nat
+  courtRank : Nat
+  doctrineRoleRank : Nat
+  decisionDate : Nat
+  declarationOrder : Nat
+deriving Repr, DecidableEq, BEq
+
 inductive TreatmentKind where
   | followed : TreatmentKind
   | approved : TreatmentKind
@@ -54,7 +62,8 @@ structure CaseAuthority where
   element : String
   effect : Option CaseEffect
   treatments : List (TreatmentKind × String)
-deriving Repr
+  precedence : CasePrecedence
+deriving Repr, DecidableEq, BEq
 
 def CaseEffectKind.apply (kind : CaseEffectKind) (base fact : Bool) : Bool :=
   match kind with
@@ -136,6 +145,21 @@ def Element.evalWithTypedCases (e : Element) (effects : List CaseEffect)
     (F : Facts) (CF : CaseFacts) (statuteJurisdiction : Option String) : Bool :=
   CaseEffect.applyAllTyped e.name (e.eval F) CF statuteJurisdiction effects
 
+def CasePrecedence.betterThan (left right : CasePrecedence) : Bool :=
+  if left.jurisdictionRank = right.jurisdictionRank then
+    if left.courtRank = right.courtRank then
+      if left.doctrineRoleRank = right.doctrineRoleRank then
+        if left.decisionDate = right.decisionDate then
+          decide (right.declarationOrder < left.declarationOrder)
+        else
+          decide (right.decisionDate < left.decisionDate)
+      else
+        decide (right.doctrineRoleRank < left.doctrineRoleRank)
+    else
+      decide (right.courtRank < left.courtRank)
+  else
+    decide (right.jurisdictionRank < left.jurisdictionRank)
+
 def TreatmentKind.adopts : TreatmentKind → Bool
   | .followed => true
   | .approved => true
@@ -169,6 +193,17 @@ def CaseAuthority.inactivatesCase (authority : CaseAuthority)
 def CaseAuthority.isInactiveIn (authority : CaseAuthority)
     (cases : List CaseAuthority) : Bool :=
   cases.any (fun candidate => candidate.inactivatesCase authority.name)
+
+def CaseAuthority.betterThan (left right : CaseAuthority) : Bool :=
+  left.precedence.betterThan right.precedence
+
+def CaseAuthority.bestByPrecedence? : List CaseAuthority → Option CaseAuthority
+  | [] => none
+  | first :: rest =>
+      some (rest.foldl
+        (fun best candidate =>
+          if candidate.betterThan best then candidate else best)
+        first)
 
 def CaseAuthority.adoptedEffectFrom (authority target : CaseAuthority) :
     Option CaseEffect :=
@@ -250,6 +285,33 @@ theorem CaseFact.truthWithBurden_wrong_burden
        metadata := some { burden := some wrongBurden, standard := none }
      } : CaseFact).truthWithBurden shift = false := by
   simp [CaseFact.truthWithBurden, CaseFactMetadata.permitsBurden, h]
+
+theorem CasePrecedence.local_beats_foreign_same_court :
+    ({ jurisdictionRank := 2, courtRank := 2, doctrineRoleRank := 0,
+       decisionDate := 20200101, declarationOrder := 1 } :
+      CasePrecedence).betterThan
+      ({ jurisdictionRank := 0, courtRank := 2, doctrineRoleRank := 0,
+         decisionDate := 20260101, declarationOrder := 0 } :
+        CasePrecedence) = true := by
+  rfl
+
+theorem CasePrecedence.higher_court_beats_newer_date :
+    ({ jurisdictionRank := 2, courtRank := 3, doctrineRoleRank := 0,
+       decisionDate := 20200101, declarationOrder := 0 } :
+      CasePrecedence).betterThan
+      ({ jurisdictionRank := 2, courtRank := 2, doctrineRoleRank := 0,
+         decisionDate := 20260101, declarationOrder := 1 } :
+        CasePrecedence) = true := by
+  rfl
+
+theorem CasePrecedence.newer_date_breaks_same_court_tie :
+    ({ jurisdictionRank := 2, courtRank := 3, doctrineRoleRank := 0,
+       decisionDate := 20260101, declarationOrder := 1 } :
+      CasePrecedence).betterThan
+      ({ jurisdictionRank := 2, courtRank := 3, doctrineRoleRank := 0,
+         decisionDate := 20200101, declarationOrder := 0 } :
+        CasePrecedence) = true := by
+  rfl
 
 theorem TreatmentKind.followed_adopts :
     TreatmentKind.followed.adopts = true := by

@@ -115,11 +115,52 @@ def mismatchedBurdenCaseFacts : CaseFacts := fun name =>
   else
     { truth := false, metadata := none }
 
+def neutralPrecedence : CasePrecedence :=
+  { jurisdictionRank := 0
+    courtRank := 0
+    doctrineRoleRank := 0
+    decisionDate := 0
+    declarationOrder := 0
+  }
+
+def foreignApexPrecedence : CasePrecedence :=
+  { jurisdictionRank := 0
+    courtRank := 3
+    doctrineRoleRank := 0
+    decisionDate := 20260101
+    declarationOrder := 0
+  }
+
+def localHighPrecedence : CasePrecedence :=
+  { jurisdictionRank := 2
+    courtRank := 2
+    doctrineRoleRank := 0
+    decisionDate := 20200101
+    declarationOrder := 1
+  }
+
+def localApexOldPrecedence : CasePrecedence :=
+  { jurisdictionRank := 2
+    courtRank := 3
+    doctrineRoleRank := 0
+    decisionDate := 20200101
+    declarationOrder := 0
+  }
+
+def localApexNewPrecedence : CasePrecedence :=
+  { jurisdictionRank := 2
+    courtRank := 3
+    doctrineRoleRank := 0
+    decisionDate := 20260101
+    declarationOrder := 1
+  }
+
 def foreignRestrictiveCase : CaseAuthority :=
   { name := "Foreign Restrictive"
     element := "taking"
     effect := some takingRequiresControl
     treatments := []
+    precedence := neutralPrecedence
   }
 
 def adoptingApexCase : CaseAuthority :=
@@ -127,6 +168,7 @@ def adoptingApexCase : CaseAuthority :=
     element := "taking"
     effect := none
     treatments := [(.followed, "Foreign Restrictive")]
+    precedence := neutralPrecedence
   }
 
 def intermediateAdopterCase : CaseAuthority :=
@@ -134,6 +176,7 @@ def intermediateAdopterCase : CaseAuthority :=
     element := "taking"
     effect := none
     treatments := [(.approved, "Foreign Restrictive")]
+    precedence := neutralPrecedence
   }
 
 def chainApexCase : CaseAuthority :=
@@ -141,6 +184,7 @@ def chainApexCase : CaseAuthority :=
     element := "taking"
     effect := none
     treatments := [(.applied, "Intermediate Adopter")]
+    precedence := neutralPrecedence
   }
 
 def overrulingApexCase : CaseAuthority :=
@@ -148,6 +192,47 @@ def overrulingApexCase : CaseAuthority :=
     element := "taking"
     effect := none
     treatments := [(.overruled, "Foreign Restrictive")]
+    precedence := neutralPrecedence
+  }
+
+def foreignExpansiveCase : CaseAuthority :=
+  { name := "Foreign Expansive"
+    element := "taking"
+    effect := some { takingRequiresControl with kind := .satisfies }
+    treatments := []
+    precedence := foreignApexPrecedence
+  }
+
+def localRestrictiveCase : CaseAuthority :=
+  { name := "Local Restrictive"
+    element := "taking"
+    effect := some takingRequiresControl
+    treatments := []
+    precedence := localHighPrecedence
+  }
+
+def highCourtNewCase : CaseAuthority :=
+  { name := "High Court New"
+    element := "taking"
+    effect := some { takingRequiresControl with kind := .satisfies }
+    treatments := []
+    precedence := { localHighPrecedence with decisionDate := 20260101 }
+  }
+
+def apexOldCase : CaseAuthority :=
+  { name := "Apex Old"
+    element := "taking"
+    effect := some takingRequiresControl
+    treatments := []
+    precedence := localApexOldPrecedence
+  }
+
+def apexNewCase : CaseAuthority :=
+  { name := "Apex New"
+    element := "taking"
+    effect := some { takingRequiresControl with kind := .satisfies }
+    treatments := []
+    precedence := localApexNewPrecedence
   }
 
 example :
@@ -175,6 +260,44 @@ example :
 example :
     lawfulExcuseByDefence.applyTyped false mismatchedBurdenCaseFacts
       (some "england") = true := by
+  native_decide
+
+example :
+    foreignApexPrecedence.betterThan localHighPrecedence = false := by
+  native_decide
+
+example :
+    localHighPrecedence.betterThan foreignApexPrecedence = true := by
+  native_decide
+
+example :
+    localApexOldPrecedence.betterThan
+      { localHighPrecedence with decisionDate := 20260101 } = true := by
+  native_decide
+
+example :
+    localApexNewPrecedence.betterThan localApexOldPrecedence = true := by
+  native_decide
+
+example :
+    (CaseAuthority.bestByPrecedence?
+        [foreignExpansiveCase, localRestrictiveCase]).map
+        (fun authority => authority.name) =
+      some "Local Restrictive" := by
+  native_decide
+
+example :
+    (CaseAuthority.bestByPrecedence?
+        [highCourtNewCase, apexOldCase]).map
+        (fun authority => authority.name) =
+      some "Apex Old" := by
+  native_decide
+
+example :
+    (CaseAuthority.bestByPrecedence?
+        [apexOldCase, apexNewCase]).map
+        (fun authority => authority.name) =
+      some "Apex New" := by
   native_decide
 
 example :
