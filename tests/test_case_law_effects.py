@@ -176,6 +176,37 @@ def test_reversed_case_law_effect_is_inactive() -> None:
     assert not any("Trial v PP" in item for item in result.reasoning)
 
 
+def test_disapproved_case_law_effect_is_inactive() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @effect requires active_misleading
+            caselaw "Restrictive Source" "[2020] SGCA 1" {
+                "Restrictive source"
+                element deception
+            }
+
+            caselaw "Later Case" "[2026] SGCA 1" {
+                "Disapproves source"
+                element deception
+                treatment disapproves "Restrictive Source" "[2020] SGCA 1"
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        _facts(deception=True, active_misleading=False),
+    )
+
+    assert result.overall_satisfied is True
+    assert result.element_results[0].satisfied is True
+    assert not any("Restrictive Source" in item for item in result.reasoning)
+
+
 def test_negative_treatment_does_not_adopt_target_effect() -> None:
     module = _module(
         """

@@ -152,8 +152,8 @@ Decisions deliberately deferred:
   effect/treatment aliases, normalized effect-fact conflict buckets,
   same-kind same-fact non-conflict retention, surface court/role precedence
   ranking, the executable effect algebra, cumulative non-conflicting effects with
-  declaration-order application, negative-treatment non-adoption, reversed-treatment
-  inactivation, own-effect
+  declaration-order application, negative-treatment non-adoption, reversed/disapproved
+  treatment inactivation, own-effect
   dominance over adoption, ordered positive-treatment adoption including `applied`,
   positive-treatment non-inactivation,
   missing-target and effectless-target adoption skip,

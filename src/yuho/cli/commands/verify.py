@@ -46,7 +46,7 @@ BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
         "role": "mechanised-spec",
         "unsupported_features": [
             "full corpus proof coverage",
-            "full case-law semantics beyond typed-fact/surface-alias/surface-precedence-rank/fact-key/same-kind-nonconflict/effect/cumulative-effect/ordered-cumulative/negative-treatment-nonadoption/reversed-inactivation/own-effect/ordered-positive-adoption/applied-adoption/positive-noninactivation/missing-target/effectless-target/target-remap/payload-preserve/adoption-cycle/adoption-metadata/metadata-override/target-metadata-fallback/inactive-authority/jurisdiction-burden-metadata/precedence-rank/conflict fragment",
+            "full case-law semantics beyond typed-fact/surface-alias/surface-precedence-rank/fact-key/same-kind-nonconflict/effect/cumulative-effect/ordered-cumulative/negative-treatment-nonadoption/reversed-inactivation/disapproved-inactivation/own-effect/ordered-positive-adoption/applied-adoption/positive-noninactivation/missing-target/effectless-target/target-remap/payload-preserve/adoption-cycle/adoption-metadata/metadata-override/target-metadata-fallback/inactive-authority/jurisdiction-burden-metadata/precedence-rank/conflict fragment",
             "rich evidential fact provenance beyond typed burden metadata guards",
             "certified Z3 result reconstruction",
         ],

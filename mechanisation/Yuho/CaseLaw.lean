@@ -775,6 +775,14 @@ theorem CaseAuthority.isInactiveIn_reversed_by
   simp [CaseAuthority.isInactiveIn, CaseAuthority.inactivatesCase,
     TreatmentKind.inactivates]
 
+theorem CaseAuthority.isInactiveIn_disapproved_by
+    (authority disapprover : CaseAuthority) :
+    authority.isInactiveIn
+        [{ disapprover with treatments := [(.disapproved, authority.name)] }] =
+      true := by
+  simp [CaseAuthority.isInactiveIn, CaseAuthority.inactivatesCase,
+    TreatmentKind.inactivates]
+
 theorem CaseAuthority.resolvedEffectIn_missing_followed_target
     (authority : CaseAuthority) (cases : List CaseAuthority)
     (fuel : Nat) (targetName : String)
