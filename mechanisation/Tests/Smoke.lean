@@ -753,6 +753,13 @@ example :
 example :
     foreignRestrictiveCase.isInactiveIn
         [{ overrulingApexCase with
+          treatments := [(.overruled, "Foreign Restrictive")] }] =
+      true := by
+  native_decide
+
+example :
+    foreignRestrictiveCase.isInactiveIn
+        [{ overrulingApexCase with
           treatments := [(.disapproved, "Foreign Restrictive")] }] =
       true := by
   native_decide

@@ -775,6 +775,14 @@ theorem CaseAuthority.isInactiveIn_reversed_by
   simp [CaseAuthority.isInactiveIn, CaseAuthority.inactivatesCase,
     TreatmentKind.inactivates]
 
+theorem CaseAuthority.isInactiveIn_overruled_by
+    (authority overruler : CaseAuthority) :
+    authority.isInactiveIn
+        [{ overruler with treatments := [(.overruled, authority.name)] }] =
+      true := by
+  simp [CaseAuthority.isInactiveIn, CaseAuthority.inactivatesCase,
+    TreatmentKind.inactivates]
+
 theorem CaseAuthority.isInactiveIn_disapproved_by
     (authority disapprover : CaseAuthority) :
     authority.isInactiveIn
