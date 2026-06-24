@@ -52,20 +52,6 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Local evidence: grammar is conventional statically typed DSL syntax with legal blocks.
   - Marking: [Inference] Esolang experts may not care; PL/DSL experts will care more about semantics, tooling, and conformance.
 
-## P0: Case Law And Doctrine
-
-- Promote case law from explanation annotations to executable semantics.
-  - Current support: `yuho explain` applies executable case-law effects in element traces, annotates targeted elements with active case-law holdings, and marks same-statute overruled authorities inactive.
-  - Current support: `yuho explain` also marks same-statute distinguished, reversed, and disapproved authorities inactive for the current explanation.
-  - Current support: `yuho refs --treatment` exposes case-to-case treatment edges.
-  - Current support: case-law treatment syntax accepts follows/followed, distinguishes/distinguished, overrules/overruled, reverses/reversed, approves/approved, disapproves/disapproved, and applies/applied.
-  - Current support: case-law doc metadata models ratio/obiter role, jurisdiction, court level, decision date, and simple interpretive effects; active `requires`/`satisfies`/`excludes` effects can narrow or expand targeted element truth in runtime evaluation, while inactive overruled/distinguished/reversed/disapproved cases are ignored.
-  - Current support: conflicting active executable effects over the same element/fact are resolved by matching statute jurisdiction, court level, doctrine role, decision date, then declaration order.
-  - Current support: active followed/approved/applied treatments can transitively adopt a known active target case's executable effect under the treating case's precedence metadata.
-  - Current support: declared element burdens and proof standards constrain matching typed fact metadata while preserving legacy primitive facts.
-  - Current support: active case-law effects can declare jurisdiction-compatible burden shifts over their effect facts, constraining matching typed fact metadata while preserving legacy primitive facts.
-  - Broaden doctrine beyond targeted effect-fact burden shifts.
-
 ## P1: Formal Mechanisation
 
 - Close the known Lean proof gaps incrementally.
