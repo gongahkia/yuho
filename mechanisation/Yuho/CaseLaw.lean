@@ -108,6 +108,9 @@ def CaseEffectKind.applySurface (effect : String) (base fact : Bool) :
 def CaseEffect.appliesTo (effect : CaseEffect) (name : String) : Bool :=
   decide (effect.target = name)
 
+def CaseEffect.factKey (effect : CaseEffect) : String :=
+  (effect.fact.toLower.replace " " "_").replace "-" "_"
+
 def CaseEffect.apply (effect : CaseEffect) (base : Bool) (F : Facts) : Bool :=
   effect.kind.apply base (F effect.fact)
 
@@ -353,14 +356,14 @@ def CaseAuthority.bestByPrecedence? : List CaseAuthority → Option CaseAuthorit
 def CaseAuthority.effectsConflict (left right : CaseAuthority) : Bool :=
   match left.effect, right.effect with
   | some leftEffect, some rightEffect =>
-      decide (leftEffect.fact = rightEffect.fact) &&
+      decide (leftEffect.factKey = rightEffect.factKey) &&
         decide (leftEffect.kind ≠ rightEffect.kind)
   | _, _ => false
 
 def CaseAuthority.sameEffectFact (left right : CaseAuthority) : Bool :=
   match left.effect, right.effect with
   | some leftEffect, some rightEffect =>
-      decide (leftEffect.fact = rightEffect.fact)
+      decide (leftEffect.factKey = rightEffect.factKey)
   | _, _ => false
 
 def CaseAuthority.hasEffectConflictIn (authority : CaseAuthority)

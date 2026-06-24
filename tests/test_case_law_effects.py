@@ -339,6 +339,34 @@ def test_case_law_conflict_prefers_statute_jurisdiction() -> None:
     assert not any("Foreign v PP" in item for item in result.reasoning)
 
 
+def test_case_law_conflict_buckets_normalise_effect_fact_key() -> None:
+    low = nodes.CaseLawNode(
+        case_name=nodes.StringLit("Low v PP"),
+        element_ref="deception",
+        interpretive_effect="requires",
+        effect_fact="active_misleading",
+        jurisdiction="singapore",
+        court_level="high",
+        decision_date="2020-01-01",
+    )
+    apex = nodes.CaseLawNode(
+        case_name=nodes.StringLit("Apex v PP"),
+        element_ref="deception",
+        interpretive_effect="satisfies",
+        effect_fact="active-misleading",
+        jurisdiction="singapore",
+        court_level="apex",
+        decision_date="2020-01-01",
+    )
+
+    selected = StatuteEvaluator._resolve_case_effect_conflicts(
+        [low, apex],
+        statute_jurisdiction="singapore",
+    )
+
+    assert [case.case_name.value for case in selected] == ["Apex v PP"]
+
+
 def test_case_law_conflict_prefers_higher_court_over_newer_date() -> None:
     module = _module(
         """
