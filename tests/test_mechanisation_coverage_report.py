@@ -17,6 +17,8 @@ def test_mechanisation_coverage_report_lists_boundaries() -> None:
     assert "nested_all_of_any_of: covered" in report
     assert "cross_section_apply_scope: covered" in report
     assert "case_law_doctrine: partial" in report
+    assert "typed_fact_burdens: partial" in report
+    assert "rich_evidential_facts: out-of-scope" in report
     assert "Corpus strata representatives:" in report
     assert "Mechanisation corpus strata:" in report
     for stratum in CORPUS_STRATA:

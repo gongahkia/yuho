@@ -26,6 +26,10 @@ realising the "Missing" case. -/
 def Element.eval (e : Element) (F : Facts) : Bool :=
   F e.name
 
+def Element.evalTyped (e : Element) (F : TypedFacts)
+    (requirement : BurdenRequirement) : Bool :=
+  (F e.name).truthWithBurden requirement
+
 -- ElementGroup.eval and the two list helpers share a mutual-recursion
 -- block. `evalAll` / `evalAny` handle the list recursion explicitly so
 -- the structural-recursion checker is satisfied (foldr-via-lambda

@@ -52,7 +52,7 @@ linter warnings.
 | Proved | Element, element-graph, exception, cross-section, and penalty correspondence for the Lean-modeled fragment. | `lake build`, `lake build Tests`, theorem rows below. | Applies to the abstractions encoded in `mechanisation/Yuho/*.lean`, not every parser construct. |
 | Tested | Python `Z3Generator` shape matches Lean-side fixtures for retained smoke/full-corpus structural checks. | `make verify-structural-diff`, `make verify-structural-diff-full` when run. | Differential evidence, not a certified compiler proof. |
 | Trusted | Lean 4.10 kernel, stdlib axioms, Python AST/Z3 encoder, fixture generator, and corpus selection. | `lean-toolchain`, `scripts/verify_structural_diff.py`, `mechanisation/scripts/generate_fixtures.py`. | Bugs in these layers can invalidate conclusions. |
-| Out of scope | Open-textured terms, full precedent-sensitive interpretation, procedural burdens, rich evidential facts, and certified Z3 proof reconstruction. | Listed again under deferred decisions. | These are not proved by the current mechanisation. |
+| Out of scope | Open-textured terms, full precedent-sensitive interpretation, procedural burdens beyond executable metadata guards, rich evidential provenance beyond typed burden metadata, and certified Z3 proof reconstruction. | Listed again under deferred decisions. | These are not proved by the current mechanisation. |
 
 ## What's mechanised, with file pointers
 
@@ -72,6 +72,7 @@ linter warnings.
 | Cross-section-reference acyclicity (v8) | `Yuho/Cross.lean` | `CrossRefGraph.acyclic` + `acyclic_canonical_cross_satisfies` | Decidable Bool predicate via `reachableIn` fuel ceiling = `nodes.length`; v4 satisfies bundle re-discharged under the linter-enforced acyclicity hypothesis |
 | Deep element-tree base camp (v9) | `Yuho/CrossDeep.lean` | `ElementDeep` AST + `ElementDeep.eval` (fuel-bounded) + `ElementGroup.toDeep` lift + `Statute.deepBody_compat` | Conservative-extension lemma: the v9 deep evaluator agrees with v4–v8 `Statute.elementsSatisfied` on the existing `crossRef`-free surface library at every fuel budget; mutual induction over `ElementGroup` / `List ElementGroup` |
 | `applyScope` lift + cross-ref semantics smoke (v9) | `Yuho/CrossDeep.lean` | `ElementDeep.applyScope` constructor + `eval_crossRef_resolves` / `eval_applyScope_resolves` / `_missing` / `_zero_fuel` (six theorems) | Each branch of the `crossRef` / `applyScope` evaluator is pinned to its inference rule (`is_infringed(n)` → ambient-facts `Statute.convicts`; `apply_scope(n, F')` → substituted-facts `Statute.convicts`; out-of-module → `false`; fuel-exhaustion → `false`) by `simp only` after a `sigma`-lookup hypothesis |
+| Typed fact burden metadata guard | `Yuho/Facts.lean`, `Yuho/Eval.lean` | `TypedFact.truthWithBurden_untyped_true` + `false` + `matching` + `wrong_burden` + `wrong_standard`; `Element.evalTyped` | Direct computation over runtime-style typed fact metadata: legacy true facts remain true, false facts remain false, matching burden/proof-standard metadata is accepted, and mismatched supplied metadata is rejected; smoke tests cover element-level matching/mismatching/untyped facts |
 | Case-law executable effect fragment | `Yuho/CaseLaw.lean` | `CaseEffectKind.requires_false` + `satisfies_true` + `excludes_true` + `CaseFact.truthWithBurden_*` + `CourtLevel.*` + `DoctrineRole.*` + `CasePrecedence.*` + `CaseAuthority.materializeEffect_*` + `resolveEffectConflicts_*` + `TreatmentKind.followed_adopts` + `overruled_inactivates` + `CaseAuthority.resolvedEffectIn_*` lemmas | Direct computation over the three runtime-supported effect operators plus bounded positive-treatment-chain adoption with metadata merge, inactive-treatment suppression, burden-metadata guards, concrete precedence ranks, and same-fact conflict selection; smoke tests cover targeted `requires`, typed burden acceptance/rejection, precedence rank construction/tie-breaking, full-list conflict selection, transitive adopted effect transfer, adoption burden override, and overruled-source suppression |
 
 ## Trusted base
@@ -147,8 +148,9 @@ Decisions deliberately deferred:
   SMTCoq once one exists; today the trust is in the encoder, not
   the solver's reconstruction.
 * **Richer doctrine and case-law semantics.** The current artefact
-  mechanises the executable effect algebra and bounded positive treatment
-  adoption with metadata merge, inactive-treatment suppression,
-  burden-metadata guards, and concrete precedence-rank conflict selection,
+  mechanises typed-fact burden metadata guards, the executable effect algebra,
+  and bounded positive treatment adoption with metadata merge,
+  inactive-treatment suppression, burden-metadata guards, and concrete
+  precedence-rank conflict selection,
   not the full precedent graph, open-textured legal terms, or procedural
   burdens.

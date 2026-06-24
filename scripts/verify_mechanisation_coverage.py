@@ -21,7 +21,8 @@ FEATURE_COVERAGE = (
     ("cross_section_apply_scope", "Yuho/CrossDeep.lean v9 theorems", "covered"),
     ("penalties", "Yuho/Penalty.lean lemmas", "covered"),
     ("case_law_doctrine", "Yuho/CaseLaw.lean effect + transitive adoption/metadata + inactive-treatment + burden-metadata + precedence-rank/conflict lemmas", "partial"),
-    ("rich_evidential_facts", "mechanisation claim boundary", "out-of-scope"),
+    ("typed_fact_burdens", "Yuho/Facts.lean + Yuho/Eval.lean burden/proof-standard guard lemmas", "partial"),
+    ("rich_evidential_facts", "metadata provenance beyond typed burden guards", "out-of-scope"),
 )
 
 CORPUS_STRATA = (

@@ -24,17 +24,11 @@ structure CaseBurdenShift where
   standard : Option String
 deriving Repr, DecidableEq, BEq
 
-structure CaseFactMetadata where
-  burden : Option String
-  standard : Option String
-deriving Repr, DecidableEq, BEq
+abbrev CaseFactMetadata := FactMetadata
 
-structure CaseFact where
-  truth : Bool
-  metadata : Option CaseFactMetadata
-deriving Repr, DecidableEq, BEq
+abbrev CaseFact := TypedFact
 
-abbrev CaseFacts := String → CaseFact
+abbrev CaseFacts := TypedFacts
 
 structure CaseEffect where
   target : String
@@ -101,26 +95,17 @@ def CaseEffect.appliesTo (effect : CaseEffect) (name : String) : Bool :=
 def CaseEffect.apply (effect : CaseEffect) (base : Bool) (F : Facts) : Bool :=
   effect.kind.apply base (F effect.fact)
 
+def CaseBurdenShift.toRequirement (shift : CaseBurdenShift) :
+    BurdenRequirement :=
+  { burden := some shift.burden, standard := shift.standard }
+
 def CaseFactMetadata.permitsBurden (metadata : CaseFactMetadata)
     (shift : CaseBurdenShift) : Bool :=
-  let burdenOk :=
-    match metadata.burden with
-    | none => true
-    | some burden => decide (burden = shift.burden)
-  let standardOk :=
-    match shift.standard, metadata.standard with
-    | some expected, some actual => decide (actual = expected)
-    | _, _ => true
-  burdenOk && standardOk
+  metadata.satisfiesBurden shift.toRequirement
 
 def CaseFact.truthWithBurden (fact : CaseFact) (shift : CaseBurdenShift) :
     Bool :=
-  if fact.truth then
-    match fact.metadata with
-    | none => true
-    | some metadata => metadata.permitsBurden shift
-  else
-    false
+  TypedFact.truthWithBurden fact shift.toRequirement
 
 def CaseEffect.jurisdictionPermits (effect : CaseEffect)
     (statuteJurisdiction : Option String) : Bool :=
@@ -135,7 +120,7 @@ def CaseEffect.effectiveFact (effect : CaseEffect) (F : CaseFacts)
   if effect.jurisdictionPermits statuteJurisdiction then
     match effect.burdenShift with
     | none => fact.truth
-    | some shift => fact.truthWithBurden shift
+    | some shift => CaseFact.truthWithBurden fact shift
   else
     fact.truth
 
@@ -387,22 +372,28 @@ theorem Element.evalWithTypedCases_nil
 
 theorem CaseFact.truthWithBurden_matching
     (shift : CaseBurdenShift) :
-    ({ truth := true
-       metadata :=
-        some { burden := some shift.burden, standard := shift.standard }
-     } : CaseFact).truthWithBurden shift = true := by
+    CaseFact.truthWithBurden
+      ({ truth := true
+         metadata :=
+          some { burden := some shift.burden, standard := shift.standard }
+       } : CaseFact) shift = true := by
   cases shift with
   | mk burden standard =>
   cases standard <;>
-    simp [CaseFact.truthWithBurden, CaseFactMetadata.permitsBurden]
+    simp [CaseFact.truthWithBurden, CaseFactMetadata.permitsBurden,
+      CaseBurdenShift.toRequirement, TypedFact.truthWithBurden,
+      FactMetadata.satisfiesBurden]
 
 theorem CaseFact.truthWithBurden_wrong_burden
     (shift : CaseBurdenShift) (wrongBurden : String)
     (h : wrongBurden ≠ shift.burden) :
-    ({ truth := true
-       metadata := some { burden := some wrongBurden, standard := none }
-     } : CaseFact).truthWithBurden shift = false := by
-  simp [CaseFact.truthWithBurden, CaseFactMetadata.permitsBurden, h]
+    CaseFact.truthWithBurden
+      ({ truth := true
+         metadata := some { burden := some wrongBurden, standard := none }
+       } : CaseFact) shift = false := by
+  simp [CaseFact.truthWithBurden, CaseFactMetadata.permitsBurden,
+    CaseBurdenShift.toRequirement, TypedFact.truthWithBurden,
+    FactMetadata.satisfiesBurden, h]
 
 theorem CasePrecedence.local_beats_foreign_same_court :
     ({ jurisdictionRank := 2, courtRank := 30, doctrineRoleRank := 0,

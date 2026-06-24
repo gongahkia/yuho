@@ -53,7 +53,11 @@ FEATURE_COVERAGE = (
     ),
     (
         "case_law_doctrine",
-        "runtime=active-effects/positive-treatment-adoption/burden-shift-precedence-partial; z3=unsupported; lean=effect-adoption-metadata-inactivation-burden-precedence-rank-conflict-partial; alloy=unsupported",
+        "runtime=active-effects/positive-treatment-adoption/burden-shift-precedence-partial; z3=unsupported; lean=typed-fact-burden+effect-adoption-metadata-inactivation-burden-precedence-rank-conflict-partial; alloy=unsupported",
+    ),
+    (
+        "typed_fact_burdens",
+        "runtime=element+case-law metadata guards; z3=unsupported; lean=burden/proof-standard guard lemmas; alloy=unsupported",
     ),
 )
 

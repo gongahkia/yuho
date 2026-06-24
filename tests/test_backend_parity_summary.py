@@ -21,6 +21,7 @@ def test_backend_parity_summary_lists_evidence_and_boundaries() -> None:
     assert "z3-lean=penalty-footprint-bridge" in summary
     assert "lean_expected_verdicts: runtime-z3-lean=smoke+full-corpus-mixed+bounded-arity-verdicts" in summary
     assert "optional_values: runtime-z3=covered" in summary
-    assert "case_law_doctrine: runtime=active-effects/positive-treatment-adoption/burden-shift-precedence-partial; z3=unsupported; lean=effect-adoption-metadata-inactivation-burden-precedence-rank-conflict-partial" in summary
+    assert "case_law_doctrine: runtime=active-effects/positive-treatment-adoption/burden-shift-precedence-partial; z3=unsupported; lean=typed-fact-burden+effect-adoption-metadata-inactivation-burden-precedence-rank-conflict-partial" in summary
+    assert "typed_fact_burdens: runtime=element+case-law metadata guards" in summary
     assert "Unsupported feature boundaries:" in summary
     assert "precise calendar-duration verifier parity" in summary

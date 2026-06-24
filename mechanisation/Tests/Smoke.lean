@@ -50,6 +50,43 @@ example : s299.elementsSatisfied factsHomicide = true := by
 example : s299.convicts factsHomicide = true := by
   native_decide
 
+def prosecutionProof : BurdenRequirement :=
+  { burden := some "prosecution"
+    standard := some "beyond_reasonable_doubt" }
+
+def typedDeathElement : Element :=
+  { kind := .actusReus, name := "death", description := "" }
+
+def matchingTypedFacts : TypedFacts :=
+  TypedFacts.fromList [
+    ("death",
+      { truth := true
+        metadata :=
+          some { burden := some "prosecution"
+                 standard := some "beyond_reasonable_doubt" } })
+  ]
+
+def mismatchedTypedFacts : TypedFacts :=
+  TypedFacts.fromList [
+    ("death",
+      { truth := true
+        metadata :=
+          some { burden := some "defence"
+                 standard := some "beyond_reasonable_doubt" } })
+  ]
+
+def untypedTrueFacts : TypedFacts :=
+  TypedFacts.fromList [("death", { truth := true, metadata := none })]
+
+example : typedDeathElement.evalTyped matchingTypedFacts prosecutionProof = true := by
+  native_decide
+
+example : typedDeathElement.evalTyped mismatchedTypedFacts prosecutionProof = false := by
+  native_decide
+
+example : typedDeathElement.evalTyped untypedTrueFacts prosecutionProof = true := by
+  native_decide
+
 /-- Example: an exception that fires when `consent = true`. -/
 def s299WithConsent : Statute :=
   { s299 with
