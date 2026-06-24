@@ -740,6 +740,27 @@ theorem CaseAuthority.resolvedEffectIn_missing_followed_target
   intro _
   simp [CaseAuthority.resolvedEffectIn.firstAdopted, hMissing]
 
+theorem CaseAuthority.resolvedEffectIn_skips_unresolved_followed_target
+    (authority target next : CaseAuthority) (cases : List CaseAuthority)
+    (fuel : Nat) (effect : CaseEffect)
+    (hActive :
+      ({ authority with treatments := [(.followed, target.name),
+        (.approved, next.name)] } : CaseAuthority).isInactiveIn cases = false)
+    (hNoEffect : authority.effect = none)
+    (hTarget : CaseAuthority.lookup cases target.name = some target)
+    (hTargetNone : target.resolvedEffectIn cases fuel = none)
+    (hNext : CaseAuthority.lookup cases next.name = some next)
+    (hNextSome : next.resolvedEffectIn cases fuel = some effect) :
+    ({ authority with treatments := [(.followed, target.name),
+      (.approved, next.name)] } : CaseAuthority).resolvedEffectIn
+        cases (Nat.succ fuel) =
+      some (({ authority with treatments := [(.followed, target.name),
+        (.approved, next.name)] } : CaseAuthority).materializeEffect effect) := by
+  simp [hNoEffect] at hActive
+  simp [CaseAuthority.resolvedEffectIn,
+    CaseAuthority.resolvedEffectIn.firstAdopted, TreatmentKind.adopts,
+    hActive, hNoEffect, hTarget, hTargetNone, hNext, hNextSome]
+
 theorem CaseAuthority.resolvedEffectIn_distinguished_not_adopting
     (authority : CaseAuthority) (cases : List CaseAuthority)
     (fuel : Nat) (targetName : String)

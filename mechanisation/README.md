@@ -153,8 +153,8 @@ Decisions deliberately deferred:
   same-kind same-fact non-conflict retention, surface court/role precedence
   ranking, the executable effect algebra, cumulative non-conflicting effects with
   declaration-order application, negative-treatment non-adoption, own-effect
-  dominance over adoption, missing-target adoption skip, adopted-effect target
-  remapping and fact/kind preservation, and bounded positive treatment
+  dominance over adoption, missing-target and effectless-target adoption skip,
+  adopted-effect target remapping and fact/kind preservation, and bounded positive treatment
   adoption with cycle cutoff and metadata merge,
   inactive-authority/adoption suppression, jurisdiction-gated burden-metadata guards,
   and concrete

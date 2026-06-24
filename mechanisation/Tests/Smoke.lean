@@ -284,6 +284,27 @@ def fallbackAdopterCase : CaseAuthority :=
     precedence := neutralPrecedence
   }
 
+def effectlessTargetCase : CaseAuthority :=
+  { name := "Effectless Target"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := []
+    precedence := neutralPrecedence
+  }
+
+def effectlessThenPositiveCase : CaseAuthority :=
+  { name := "Effectless Then Positive"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.followed, "Effectless Target"),
+      (.approved, "Foreign Restrictive")]
+    precedence := neutralPrecedence
+  }
+
 def negativeOnlyCase : CaseAuthority :=
   { name := "Negative Only"
     element := "taking"
@@ -624,6 +645,18 @@ example :
 example :
     fallbackAdopterCase.resolvedEffectIn
         [foreignRestrictiveCase, fallbackAdopterCase] 2 =
+      some takingRequiresControl := by
+  native_decide
+
+example :
+    effectlessTargetCase.resolvedEffectIn [effectlessTargetCase] 2 =
+      none := by
+  native_decide
+
+example :
+    effectlessThenPositiveCase.resolvedEffectIn
+        [foreignRestrictiveCase, effectlessTargetCase,
+          effectlessThenPositiveCase] 2 =
       some takingRequiresControl := by
   native_decide
 

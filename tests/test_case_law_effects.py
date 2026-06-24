@@ -769,6 +769,50 @@ def test_positive_treatment_adoption_skips_unknown_target_before_known_target() 
     assert fallback[0].interpretive_effect == "requires"
 
 
+def test_positive_treatment_adoption_skips_effectless_target_before_known_target() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            caselaw "Effectless Source" "[2020] SGCA 1" {
+                "Explanatory source without a materialized effect"
+                element deception
+            }
+
+            /// @effect satisfies rescue_fact
+            caselaw "Expansive Source" "[2021] SGCA 1" {
+                "Expansive source"
+                element deception
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2026-01-01
+            caselaw "Fallback Adopter" "[2026] SGCA 1" {
+                "Skips effectless target and adopts known source"
+                element deception
+                treatment follows "Effectless Source" "[2020] SGCA 1"
+                treatment approved "Expansive Source" "[2021] SGCA 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    fallback = [
+        case for case in effects["deception"]
+        if case.case_name.value == "Fallback Adopter"
+    ]
+    assert len(fallback) == 1
+    assert fallback[0].interpretive_effect == "satisfies"
+    assert fallback[0].effect_fact == "rescue_fact"
+
+
 def test_positive_treatment_adoption_remaps_effect_to_treating_case_element() -> None:
     module = _module(
         """
