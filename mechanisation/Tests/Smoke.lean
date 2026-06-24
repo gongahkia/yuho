@@ -159,6 +159,8 @@ def foreignRestrictiveCase : CaseAuthority :=
   { name := "Foreign Restrictive"
     element := "taking"
     effect := some takingRequiresControl
+    burdenShift := none
+    jurisdiction := none
     treatments := []
     precedence := neutralPrecedence
   }
@@ -167,6 +169,18 @@ def adoptingApexCase : CaseAuthority :=
   { name := "Adopting Apex"
     element := "taking"
     effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.followed, "Foreign Restrictive")]
+    precedence := neutralPrecedence
+  }
+
+def burdenAdoptingApexCase : CaseAuthority :=
+  { name := "Burden Adopting Apex"
+    element := "taking"
+    effect := none
+    burdenShift := some defenceBurden
+    jurisdiction := some "singapore"
     treatments := [(.followed, "Foreign Restrictive")]
     precedence := neutralPrecedence
   }
@@ -175,6 +189,8 @@ def intermediateAdopterCase : CaseAuthority :=
   { name := "Intermediate Adopter"
     element := "taking"
     effect := none
+    burdenShift := none
+    jurisdiction := none
     treatments := [(.approved, "Foreign Restrictive")]
     precedence := neutralPrecedence
   }
@@ -183,6 +199,8 @@ def chainApexCase : CaseAuthority :=
   { name := "Apex Chain Adopter"
     element := "taking"
     effect := none
+    burdenShift := none
+    jurisdiction := none
     treatments := [(.applied, "Intermediate Adopter")]
     precedence := neutralPrecedence
   }
@@ -191,6 +209,8 @@ def overrulingApexCase : CaseAuthority :=
   { name := "Overruling Apex"
     element := "taking"
     effect := none
+    burdenShift := none
+    jurisdiction := none
     treatments := [(.overruled, "Foreign Restrictive")]
     precedence := neutralPrecedence
   }
@@ -199,6 +219,8 @@ def foreignExpansiveCase : CaseAuthority :=
   { name := "Foreign Expansive"
     element := "taking"
     effect := some { takingRequiresControl with kind := .satisfies }
+    burdenShift := none
+    jurisdiction := none
     treatments := []
     precedence := foreignApexPrecedence
   }
@@ -207,6 +229,8 @@ def localRestrictiveCase : CaseAuthority :=
   { name := "Local Restrictive"
     element := "taking"
     effect := some takingRequiresControl
+    burdenShift := none
+    jurisdiction := none
     treatments := []
     precedence := localHighPrecedence
   }
@@ -215,6 +239,8 @@ def differentFactCase : CaseAuthority :=
   { name := "Different Fact"
     element := "taking"
     effect := some { takingRequiresControl with fact := "dishonesty" }
+    burdenShift := none
+    jurisdiction := none
     treatments := []
     precedence := neutralPrecedence
   }
@@ -223,6 +249,8 @@ def highCourtNewCase : CaseAuthority :=
   { name := "High Court New"
     element := "taking"
     effect := some { takingRequiresControl with kind := .satisfies }
+    burdenShift := none
+    jurisdiction := none
     treatments := []
     precedence := { localHighPrecedence with decisionDate := 20260101 }
   }
@@ -231,6 +259,8 @@ def apexOldCase : CaseAuthority :=
   { name := "Apex Old"
     element := "taking"
     effect := some takingRequiresControl
+    burdenShift := none
+    jurisdiction := none
     treatments := []
     precedence := localApexOldPrecedence
   }
@@ -239,6 +269,8 @@ def apexNewCase : CaseAuthority :=
   { name := "Apex New"
     element := "taking"
     effect := some { takingRequiresControl with kind := .satisfies }
+    burdenShift := none
+    jurisdiction := none
     treatments := []
     precedence := localApexNewPrecedence
   }
@@ -364,9 +396,26 @@ example :
   native_decide
 
 example :
+    burdenAdoptingApexCase.adoptedEffectFrom foreignRestrictiveCase =
+      some { takingRequiresControl with
+        burdenShift := some defenceBurden
+        jurisdiction := some "singapore"
+      } := by
+  native_decide
+
+example :
     chainApexCase.resolvedEffectIn
         [foreignRestrictiveCase, intermediateAdopterCase, chainApexCase] 3 =
       some takingRequiresControl := by
+  native_decide
+
+example :
+    burdenAdoptingApexCase.resolvedEffectIn
+        [foreignRestrictiveCase, burdenAdoptingApexCase] 2 =
+      some { takingRequiresControl with
+        burdenShift := some defenceBurden
+        jurisdiction := some "singapore"
+      } := by
   native_decide
 
 example :

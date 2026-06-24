@@ -8,6 +8,11 @@ import Yuho.Facts
 
 namespace Yuho
 
+def preferOption {α : Type} (preferred fallback : Option α) : Option α :=
+  match preferred with
+  | some value => some value
+  | none => fallback
+
 inductive CaseEffectKind where
   | requires : CaseEffectKind
   | satisfies : CaseEffectKind
@@ -78,6 +83,8 @@ structure CaseAuthority where
   name : String
   element : String
   effect : Option CaseEffect
+  burdenShift : Option CaseBurdenShift
+  jurisdiction : Option String
   treatments : List (TreatmentKind × String)
   precedence : CasePrecedence
 deriving Repr, DecidableEq, BEq
@@ -247,6 +254,14 @@ def CaseAuthority.isInactiveIn (authority : CaseAuthority)
     (cases : List CaseAuthority) : Bool :=
   cases.any (fun candidate => candidate.inactivatesCase authority.name)
 
+def CaseAuthority.materializeEffect (authority : CaseAuthority)
+    (effect : CaseEffect) : CaseEffect :=
+  { effect with
+    target := authority.element
+    burdenShift := preferOption authority.burdenShift effect.burdenShift
+    jurisdiction := preferOption authority.jurisdiction effect.jurisdiction
+  }
+
 def CaseAuthority.betterThan (left right : CaseAuthority) : Bool :=
   left.precedence.betterThan right.precedence
 
@@ -311,7 +326,7 @@ def CaseAuthority.resolveEffectConflicts
 def CaseAuthority.adoptedEffectFrom (authority target : CaseAuthority) :
     Option CaseEffect :=
   if authority.adoptsCase target.name then
-    target.effect.map (fun effect => { effect with target := authority.element })
+    target.effect.map (fun effect => authority.materializeEffect effect)
   else
     none
 
@@ -327,7 +342,7 @@ def CaseAuthority.resolvedEffectIn (authority : CaseAuthority)
         none
       else
         match authority.effect with
-        | some effect => some { effect with target := authority.element }
+        | some effect => some (authority.materializeEffect effect)
         | none =>
             let rec firstAdopted : List (TreatmentKind × String) → Option CaseEffect
               | [] => none
@@ -337,7 +352,7 @@ def CaseAuthority.resolvedEffectIn (authority : CaseAuthority)
                     | some target =>
                         match target.resolvedEffectIn cases fuel with
                         | some effect =>
-                            some { effect with target := authority.element }
+                            some (authority.materializeEffect effect)
                         | none => firstAdopted rest
                     | none => firstAdopted rest
                   else
@@ -435,6 +450,13 @@ theorem CaseAuthority.resolveEffectConflicts_nil :
     CaseAuthority.resolveEffectConflicts [] = [] := by
   rfl
 
+theorem CaseAuthority.materializeEffect_burden_override
+    (authority : CaseAuthority) (effect : CaseEffect)
+    (shift : CaseBurdenShift)
+    (h : authority.burdenShift = some shift) :
+    (authority.materializeEffect effect).burdenShift = some shift := by
+  simp [CaseAuthority.materializeEffect, preferOption, h]
+
 theorem TreatmentKind.followed_adopts :
     TreatmentKind.followed.adopts = true := by
   rfl
@@ -462,7 +484,7 @@ theorem CaseAuthority.resolvedEffectIn_own
     (hActive : authority.isInactiveIn cases = false)
     (h : authority.effect = some effect) :
     authority.resolvedEffectIn cases (Nat.succ fuel) =
-      some { effect with target := authority.element } := by
+      some (authority.materializeEffect effect) := by
   simp [CaseAuthority.resolvedEffectIn, hActive, h]
 
 end Yuho
