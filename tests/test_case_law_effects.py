@@ -215,6 +215,44 @@ def test_negative_treatment_is_skipped_before_positive_adoption() -> None:
     assert adopted[0].interpretive_effect == "satisfies"
 
 
+def test_inactive_adopting_case_does_not_materialize_adopted_effect() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @effect requires active_misleading
+            caselaw "Restrictive Source" "[2020] SGCA 1" {
+                "Restrictive source"
+                element deception
+            }
+
+            caselaw "Inactive Adopter" "[2025] SGCA 1" {
+                "Would adopt source if active"
+                element deception
+                treatment approved "Restrictive Source" "[2020] SGCA 1"
+            }
+
+            caselaw "Overruling Case" "[2026] SGCA 1" {
+                "Overrules adopter"
+                element deception
+                treatment overruled "Inactive Adopter" "[2025] SGCA 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    assert not any(
+        case.case_name.value == "Inactive Adopter"
+        for case in effects["deception"]
+    )
+
+
 def test_cumulative_case_law_effects_apply_in_declaration_order() -> None:
     expansive_then_restrictive = _module(
         """

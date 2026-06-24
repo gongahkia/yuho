@@ -602,6 +602,13 @@ example :
   native_decide
 
 example :
+    adoptingApexCase.resolvedEffectIn
+        [foreignRestrictiveCase, adoptingApexCase,
+          { overrulingApexCase with treatments := [(.overruled, "Adopting Apex")] }] 2 =
+      none := by
+  native_decide
+
+example :
     elementRemapAdopterCase.resolvedEffectIn
         [foreignRestrictiveCase, elementRemapAdopterCase] 2 =
       some { takingRequiresControl with target := "deception" } := by
