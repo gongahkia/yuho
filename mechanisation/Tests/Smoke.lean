@@ -129,6 +129,27 @@ def takingRequiresDishonesty : CaseEffect :=
     jurisdiction := none
   }
 
+def takingSatisfiedByRescue : CaseEffect :=
+  { target := "taking"
+    kind := .satisfies
+    fact := "rescue_fact"
+    burdenShift := none
+    jurisdiction := none
+  }
+
+def orderedCaseFacts : Facts :=
+  Facts.fromList [("rescue_fact", true), ("control_plus_deprivation", false)]
+
+example :
+    CaseEffect.applyAll "taking" false orderedCaseFacts
+      [takingSatisfiedByRescue, takingRequiresControl] = false := by
+  native_decide
+
+example :
+    CaseEffect.applyAll "taking" false orderedCaseFacts
+      [takingRequiresControl, takingSatisfiedByRescue] = true := by
+  native_decide
+
 example : CaseEffectKind.applySurface "narrows" true false = some false := by
   native_decide
 

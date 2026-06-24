@@ -145,6 +145,55 @@ def test_overruled_case_law_effect_is_inactive() -> None:
     assert not any("Old v PP" in item for item in result.reasoning)
 
 
+def test_cumulative_case_law_effects_apply_in_declaration_order() -> None:
+    expansive_then_restrictive = _module(
+        """
+        statute 1 "Cheating" {
+            elements { actus_reus deception := "deception"; }
+
+            /// @effect satisfies rescue_fact
+            caselaw "Expansive First" "[2026] SGCA 1" {
+                "Can satisfy first"
+                element deception
+            }
+
+            /// @effect requires active_misleading
+            caselaw "Restrictive Second" "[2026] SGCA 2" {
+                "Can require second"
+                element deception
+            }
+        }
+        """
+    )
+    restrictive_then_expansive = _module(
+        """
+        statute 1 "Cheating" {
+            elements { actus_reus deception := "deception"; }
+
+            /// @effect requires active_misleading
+            caselaw "Restrictive First" "[2026] SGCA 1" {
+                "Can require first"
+                element deception
+            }
+
+            /// @effect satisfies rescue_fact
+            caselaw "Expansive Second" "[2026] SGCA 2" {
+                "Can satisfy second"
+                element deception
+            }
+        }
+        """
+    )
+    facts = _facts(deception=False, rescue_fact=True, active_misleading=False)
+    evaluator = StatuteEvaluator()
+
+    first = evaluator.evaluate(expansive_then_restrictive.statutes[0], facts)
+    second = evaluator.evaluate(restrictive_then_expansive.statutes[0], facts)
+
+    assert first.overall_satisfied is False
+    assert second.overall_satisfied is True
+
+
 def test_case_law_conflict_prefers_statute_jurisdiction() -> None:
     module = _module(
         """
