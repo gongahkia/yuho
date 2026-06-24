@@ -56,8 +56,8 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 
 - Close the known Lean proof gaps incrementally.
   - Current support: Lean scoped-name infrastructure centralises statute-local SMT atom names used by the generator.
-  - Current support: Lean case-law effect algebra mechanises the `requires`/`satisfies`/`excludes` executable fragment and one-hop positive treatment adoption.
-  - Add richer doctrine/case-law semantics beyond the effect/adoption fragment.
+  - Current support: Lean case-law effect algebra mechanises the `requires`/`satisfies`/`excludes` executable fragment and bounded positive-treatment-chain adoption.
+  - Add richer doctrine/case-law semantics beyond the effect/adoption-chain fragment.
 
 ## Non-Goals For Now
 

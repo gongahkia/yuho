@@ -93,6 +93,20 @@ def adoptingApexCase : CaseAuthority :=
     treatments := [(.followed, "Foreign Restrictive")]
   }
 
+def intermediateAdopterCase : CaseAuthority :=
+  { name := "Intermediate Adopter"
+    element := "taking"
+    effect := none
+    treatments := [(.approved, "Foreign Restrictive")]
+  }
+
+def chainApexCase : CaseAuthority :=
+  { name := "Apex Chain Adopter"
+    element := "taking"
+    effect := none
+    treatments := [(.applied, "Intermediate Adopter")]
+  }
+
 example :
     takingElement.evalWithCases [takingRequiresControl]
       (Facts.fromList [("taking", true), ("control_plus_deprivation", false)])
@@ -107,6 +121,12 @@ example :
 
 example :
     adoptingApexCase.adoptedEffectFrom foreignRestrictiveCase =
+      some takingRequiresControl := by
+  native_decide
+
+example :
+    chainApexCase.resolvedEffectIn
+        [foreignRestrictiveCase, intermediateAdopterCase, chainApexCase] 3 =
       some takingRequiresControl := by
   native_decide
 

@@ -82,6 +82,32 @@ def CaseAuthority.adoptedEffectFrom (authority target : CaseAuthority) :
   else
     none
 
+def CaseAuthority.lookup (cases : List CaseAuthority) (name : String) :
+    Option CaseAuthority :=
+  cases.find? (fun authority => decide (authority.name = name))
+
+def CaseAuthority.resolvedEffectIn (authority : CaseAuthority)
+    (cases : List CaseAuthority) : Nat → Option CaseEffect
+  | 0 => none
+  | Nat.succ fuel =>
+      match authority.effect with
+      | some effect => some { effect with target := authority.element }
+      | none =>
+          let rec firstAdopted : List (TreatmentKind × String) → Option CaseEffect
+            | [] => none
+            | treatment :: rest =>
+                if treatment.fst.adopts then
+                  match CaseAuthority.lookup cases treatment.snd with
+                  | some target =>
+                      match target.resolvedEffectIn cases fuel with
+                      | some effect =>
+                          some { effect with target := authority.element }
+                      | none => firstAdopted rest
+                  | none => firstAdopted rest
+                else
+                  firstAdopted rest
+          firstAdopted authority.treatments
+
 theorem CaseEffectKind.requires_false (base : Bool) :
     CaseEffectKind.apply .requires base false = false := by
   cases base <;> rfl
@@ -109,5 +135,18 @@ theorem TreatmentKind.followed_adopts :
 theorem TreatmentKind.overruled_not_adopts :
     TreatmentKind.overruled.adopts = false := by
   rfl
+
+theorem CaseAuthority.resolvedEffectIn_zero
+    (authority : CaseAuthority) (cases : List CaseAuthority) :
+    authority.resolvedEffectIn cases 0 = none := by
+  simp [CaseAuthority.resolvedEffectIn]
+
+theorem CaseAuthority.resolvedEffectIn_own
+    (authority : CaseAuthority) (cases : List CaseAuthority)
+    (fuel : Nat) (effect : CaseEffect)
+    (h : authority.effect = some effect) :
+    authority.resolvedEffectIn cases (Nat.succ fuel) =
+      some { effect with target := authority.element } := by
+  simp [CaseAuthority.resolvedEffectIn, h]
 
 end Yuho
