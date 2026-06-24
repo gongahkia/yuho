@@ -314,6 +314,17 @@ def effectlessThenPositiveCase : CaseAuthority :=
     precedence := neutralPrecedence
   }
 
+def orderedPositiveAdopterCase : CaseAuthority :=
+  { name := "Ordered Positive Adopter"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.followed, "Foreign Restrictive"),
+      (.approved, "Foreign Expansive")]
+    precedence := neutralPrecedence
+  }
+
 def negativeOnlyCase : CaseAuthority :=
   { name := "Negative Only"
     element := "taking"
@@ -706,6 +717,13 @@ example :
     effectlessThenPositiveCase.resolvedEffectIn
         [foreignRestrictiveCase, effectlessTargetCase,
           effectlessThenPositiveCase] 2 =
+      some takingRequiresControl := by
+  native_decide
+
+example :
+    orderedPositiveAdopterCase.resolvedEffectIn
+        [foreignRestrictiveCase, foreignExpansiveCase,
+          orderedPositiveAdopterCase] 2 =
       some takingRequiresControl := by
   native_decide
 
