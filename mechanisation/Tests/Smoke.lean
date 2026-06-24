@@ -165,12 +165,21 @@ example : DoctrineRole.rankSurface "holding" = 20 := by
 def defenceBurden : CaseBurdenShift :=
   { burden := "defence", standard := some "balance_of_probabilities" }
 
+def prosecutionBurden : CaseBurdenShift :=
+  { burden := "prosecution", standard := some "beyond_reasonable_doubt" }
+
 def lawfulExcuseByDefence : CaseEffect :=
   { target := "excuse"
     kind := .satisfies
     fact := "lawful_excuse"
     burdenShift := some defenceBurden
     jurisdiction := some "singapore"
+  }
+
+def activeMisleadingByProsecution : CaseEffect :=
+  { takingRequiresControl with
+    burdenShift := some prosecutionBurden
+    jurisdiction := some "england"
   }
 
 def matchingBurdenCaseFacts : CaseFacts := fun name =>
@@ -363,6 +372,26 @@ def metadataFallbackAdopterCase : CaseAuthority :=
     burdenShift := none
     jurisdiction := none
     treatments := [(.followed, "Burden Source")]
+    precedence := neutralPrecedence
+  }
+
+def prosecutionBurdenSourceCase : CaseAuthority :=
+  { name := "Prosecution Burden Source"
+    element := "taking"
+    effect := some activeMisleadingByProsecution
+    burdenShift := none
+    jurisdiction := none
+    treatments := []
+    precedence := neutralPrecedence
+  }
+
+def metadataOverrideAdopterCase : CaseAuthority :=
+  { name := "Metadata Override Adopter"
+    element := "taking"
+    effect := none
+    burdenShift := some defenceBurden
+    jurisdiction := some "singapore"
+    treatments := [(.followed, "Prosecution Burden Source")]
     precedence := neutralPrecedence
   }
 
@@ -717,6 +746,15 @@ example :
     metadataFallbackAdopterCase.resolvedEffectIn
         [burdenSourceCase, metadataFallbackAdopterCase] 2 =
       some { lawfulExcuseByDefence with target := "taking" } := by
+  native_decide
+
+example :
+    metadataOverrideAdopterCase.resolvedEffectIn
+        [prosecutionBurdenSourceCase, metadataOverrideAdopterCase] 2 =
+      some { activeMisleadingByProsecution with
+        burdenShift := some defenceBurden
+        jurisdiction := some "singapore"
+      } := by
   native_decide
 
 example :

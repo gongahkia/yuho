@@ -853,6 +853,48 @@ def test_positive_treatment_adoption_preserves_target_metadata_without_override(
     assert adopted[0].jurisdiction == "singapore"
 
 
+def test_positive_treatment_adoption_prefers_treating_case_metadata_override() -> None:
+    module = _module(
+        """
+        statute 1 "Excuse" jurisdiction singapore {
+            elements { circumstance excuse := "excuse"; }
+
+            /// @jurisdiction england
+            /// @effect satisfies lawful_excuse
+            /// @burden_shift prosecution beyond_reasonable_doubt
+            caselaw "Foreign Burden Source" "[2020] UKSC 1" {
+                "Source supplies foreign metadata"
+                element excuse
+            }
+
+            /// @jurisdiction singapore
+            /// @burden_shift defence balance_of_probabilities
+            /// @court_level apex
+            /// @date 2026-01-01
+            caselaw "Metadata Override Adopter" "[2026] SGCA 1" {
+                "Overrides metadata from source"
+                element excuse
+                treatment follows "Foreign Burden Source" "[2020] UKSC 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    adopted = [
+        case for case in effects["excuse"]
+        if case.case_name.value == "Metadata Override Adopter"
+    ]
+    assert len(adopted) == 1
+    assert adopted[0].burden_shift == "defence"
+    assert adopted[0].burden_shift_standard == "balance_of_probabilities"
+    assert adopted[0].jurisdiction == "singapore"
+
+
 def test_positive_treatment_adoption_remaps_effect_to_treating_case_element() -> None:
     module = _module(
         """

@@ -155,7 +155,7 @@ Decisions deliberately deferred:
   declaration-order application, negative-treatment non-adoption, own-effect
   dominance over adoption, missing-target and effectless-target adoption skip,
   adopted-effect target remapping and fact/kind preservation, and bounded positive treatment
-  adoption with cycle cutoff and metadata fallback/merge,
+  adoption with cycle cutoff and metadata override/fallback/merge,
   inactive-authority/adoption suppression, jurisdiction-gated burden-metadata guards,
   and concrete
   precedence-rank conflict selection,
