@@ -20,7 +20,7 @@ FEATURE_COVERAGE = (
     ("exceptions", "s300/s378 smoke fixtures + Lean exception lemmas", "covered"),
     ("cross_section_apply_scope", "Yuho/CrossDeep.lean v9 theorems", "covered"),
     ("penalties", "Yuho/Penalty.lean lemmas", "covered"),
-    ("case_law_doctrine", "Yuho/CaseLaw.lean surface-alias + surface-precedence-rank + fact-key + same-kind-nonconflict + effect + cumulative-effect + ordered-cumulative + negative-treatment-nonadoption + own-effect + ordered-positive-adoption + applied-adoption + missing-target + effectless-target + target-remap + payload-preserve + transitive/cyclic adoption + metadata override/fallback/merge + inactive-authority + jurisdiction-burden-metadata + precedence-rank/conflict lemmas", "partial"),
+    ("case_law_doctrine", "Yuho/CaseLaw.lean surface-alias + surface-precedence-rank + fact-key + same-kind-nonconflict + effect + cumulative-effect + ordered-cumulative + negative-treatment-nonadoption + own-effect + ordered-positive-adoption + applied-adoption + positive-noninactivation + missing-target + effectless-target + target-remap + payload-preserve + transitive/cyclic adoption + metadata override/fallback/merge + inactive-authority + jurisdiction-burden-metadata + precedence-rank/conflict lemmas", "partial"),
     ("typed_fact_burdens", "Yuho/Facts.lean + Yuho/Eval.lean burden/proof-standard guard lemmas", "partial"),
     ("rich_evidential_facts", "metadata provenance beyond typed burden guards", "out-of-scope"),
 )

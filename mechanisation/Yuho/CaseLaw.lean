@@ -706,6 +706,14 @@ theorem TreatmentKind.followed_not_inactivates :
     TreatmentKind.followed.inactivates = false := by
   rfl
 
+theorem TreatmentKind.approved_not_inactivates :
+    TreatmentKind.approved.inactivates = false := by
+  rfl
+
+theorem TreatmentKind.applied_not_inactivates :
+    TreatmentKind.applied.inactivates = false := by
+  rfl
+
 theorem TreatmentKind.follows_surface_adopts :
     TreatmentKind.adoptsSurface "follows" = true := by
   rfl

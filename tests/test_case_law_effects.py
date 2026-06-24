@@ -896,6 +896,36 @@ def test_applies_treatment_adopts_target_effect() -> None:
     assert adopted[0].effect_fact == "active_misleading"
 
 
+def test_positive_treatment_does_not_inactivate_target_effect() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @effect requires active_misleading
+            caselaw "Restrictive Source" "[2020] SGCA 1" {
+                "Restrictive source"
+                element deception
+            }
+
+            caselaw "Applied Adopter" "[2026] SGCA 1" {
+                "Applies source without retiring it"
+                element deception
+                treatment applies "Restrictive Source" "[2020] SGCA 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    names = {case.case_name.value for case in effects["deception"]}
+    assert names == {"Restrictive Source", "Applied Adopter"}
+
+
 def test_positive_treatment_adoption_preserves_target_metadata_without_override() -> None:
     module = _module(
         """

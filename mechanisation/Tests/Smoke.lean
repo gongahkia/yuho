@@ -740,6 +740,9 @@ example :
 example : TreatmentKind.adoptsSurface "applies" = true := by
   native_decide
 
+example : TreatmentKind.applied.inactivates = false := by
+  native_decide
+
 example :
     appliedAdopterCase.resolvedEffectIn
         [foreignRestrictiveCase, appliedAdopterCase] 2 =
