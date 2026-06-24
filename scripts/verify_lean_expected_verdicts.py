@@ -136,7 +136,7 @@ def _add_fact_bindings(solver: Any, gen: Z3Generator, statute: nodes.StatuteNode
         const = gen._consts.get(f"{statute_id}_leaf_{_safe(name)}")
         if const is not None:
             solver.add(const == z3.BoolVal(bool(facts.get(name, False))))
-    for name in identifier_names | set(facts):
+    for name in identifier_names:
         const = gen._consts.get(f"{statute_id}_{_safe(name)}")
         if const is not None:
             solver.add(const == z3.BoolVal(bool(facts.get(name, False))))

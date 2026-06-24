@@ -49,3 +49,17 @@ def test_lean_expected_verdict_comparison_reports_mismatch() -> None:
     assert mismatches[0].expected is False
     assert mismatches[0].runtime is True
     assert mismatches[0].z3 is True
+
+
+def test_lean_expected_verdict_comparison_handles_structural_atom_name_collision() -> None:
+    rows = [
+        {
+            "name": "s74A_conviction_leaf_only",
+            "statute": "s74A",
+            "facts": "factsS74AFirstOnly",
+            "factValues": {"conviction": True},
+            "expected": False,
+        }
+    ]
+
+    assert compare_verdicts(rows) == []

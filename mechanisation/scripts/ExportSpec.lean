@@ -318,6 +318,20 @@ def allTrueFacts (s : Statute) : List (String × Bool) :=
 def corpusVerdictFixturesFor (fixture : String × Statute) : List VerdictFixture :=
   let n := fixture.fst
   let s := fixture.snd
+  let names := uniqueStrings (leafNames s.elements)
+  let firstOnly :=
+    match names with
+    | first :: _second :: _ =>
+        [
+          {
+            name := n ++ "_corpus_first_only"
+            statuteName := n
+            statute := s
+            factsName := n ++ "FirstOnly"
+            factsPairs := [(first, true)]
+          }
+        ]
+    | _ => []
   [
     {
       name := n ++ "_corpus_all_true"
@@ -333,7 +347,7 @@ def corpusVerdictFixturesFor (fixture : String × Statute) : List VerdictFixture
       factsName := n ++ "Empty"
       factsPairs := []
     }
-  ]
+  ] ++ firstOnly
 
 def isSmokeFixtureName (name : String) : Bool :=
   name == "s299" || name == "s300" || name == "s378" || name == "s415"
