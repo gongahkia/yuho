@@ -746,6 +746,13 @@ example : TreatmentKind.applied.inactivates = false := by
 example :
     foreignRestrictiveCase.isInactiveIn
         [{ overrulingApexCase with
+          treatments := [(.distinguished, "Foreign Restrictive")] }] =
+      true := by
+  native_decide
+
+example :
+    foreignRestrictiveCase.isInactiveIn
+        [{ overrulingApexCase with
           treatments := [(.reversed, "Foreign Restrictive")] }] =
       true := by
   native_decide

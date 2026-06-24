@@ -767,6 +767,14 @@ theorem CaseAuthority.resolvedEffectIn_inactive
     authority.resolvedEffectIn cases (Nat.succ fuel) = none := by
   simp [CaseAuthority.resolvedEffectIn, hInactive]
 
+theorem CaseAuthority.isInactiveIn_distinguished_by
+    (authority distinguisher : CaseAuthority) :
+    authority.isInactiveIn
+        [{ distinguisher with treatments := [(.distinguished, authority.name)] }] =
+      true := by
+  simp [CaseAuthority.isInactiveIn, CaseAuthority.inactivatesCase,
+    TreatmentKind.inactivates]
+
 theorem CaseAuthority.isInactiveIn_reversed_by
     (authority reverser : CaseAuthority) :
     authority.isInactiveIn
