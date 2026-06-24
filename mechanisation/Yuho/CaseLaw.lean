@@ -507,6 +507,27 @@ theorem CaseFact.truthWithBurden_wrong_burden
     CaseBurdenShift.toRequirement, TypedFact.truthWithBurden,
     FactMetadata.satisfiesBurden, h]
 
+theorem CaseEffect.effectiveFact_local_jurisdiction_uses_burden
+    (effect : CaseEffect) (F : CaseFacts) (shift : CaseBurdenShift)
+    (statuteJurisdiction : String)
+    (hShift : effect.burdenShift = some shift)
+    (hJurisdiction : effect.jurisdiction = some statuteJurisdiction) :
+    effect.effectiveFact F (some statuteJurisdiction) =
+      CaseFact.truthWithBurden (F effect.fact) shift := by
+  simp [CaseEffect.effectiveFact, CaseEffect.jurisdictionPermits,
+    hShift, hJurisdiction]
+
+theorem CaseEffect.effectiveFact_foreign_jurisdiction_ignores_burden
+    (effect : CaseEffect) (F : CaseFacts) (shift : CaseBurdenShift)
+    (caseJurisdiction statuteJurisdiction : String)
+    (hShift : effect.burdenShift = some shift)
+    (hJurisdiction : effect.jurisdiction = some caseJurisdiction)
+    (hMismatch : caseJurisdiction ≠ statuteJurisdiction) :
+    effect.effectiveFact F (some statuteJurisdiction) =
+      (F effect.fact).truth := by
+  simp [CaseEffect.effectiveFact, CaseEffect.jurisdictionPermits,
+    hShift, hJurisdiction, hMismatch]
+
 theorem CasePrecedence.local_beats_foreign_same_court :
     ({ jurisdictionRank := 2, courtRank := 30, doctrineRoleRank := 0,
        decisionDate := 20200101, declarationOrder := 1 } :
