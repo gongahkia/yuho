@@ -226,6 +226,66 @@ def verdictFixtures : List VerdictFixture :=
       statute := s415
       factsName := "factsCheatingNoMensRea"
       factsPairs := [("deception", true), ("inducement", true), ("harm", true)]
+    },
+    {
+      name := "s204_flat_true"
+      statuteName := "s204"
+      statute := Yuho.Fixtures.s204
+      factsName := "factsS204Flat"
+      factsPairs := [("prohibited_handling", true)]
+    },
+    {
+      name := "s204_flat_missing"
+      statuteName := "s204"
+      statute := Yuho.Fixtures.s204
+      factsName := "factsS204Missing"
+      factsPairs := []
+    },
+    {
+      name := "s101_nested_attempt_branch"
+      statuteName := "s101"
+      statute := Yuho.Fixtures.s101
+      factsName := "factsS101AttemptBranch"
+      factsPairs := [
+        ("reasonable_belief_of_danger_to_body", true),
+        ("attempt_to_commit_offence", true),
+        ("belief_continues_at_time_of_act", true)
+      ]
+    },
+    {
+      name := "s101_nested_missing_any_branch"
+      statuteName := "s101"
+      statute := Yuho.Fixtures.s101
+      factsName := "factsS101MissingAnyBranch"
+      factsPairs := [
+        ("reasonable_belief_of_danger_to_body", true),
+        ("belief_continues_at_time_of_act", true)
+      ]
+    },
+    {
+      name := "s107_any_instigation"
+      statuteName := "s107"
+      statute := Yuho.Fixtures.s107
+      factsName := "factsS107Instigation"
+      factsPairs := [("instigation", true)]
+    },
+    {
+      name := "s107_any_conspiracy_branch"
+      statuteName := "s107"
+      statute := Yuho.Fixtures.s107
+      factsName := "factsS107ConspiracyBranch"
+      factsPairs := [
+        ("conspiracy", true),
+        ("act_or_illegal_omission_in_pursuance", true),
+        ("in_order_to_do_thing", true)
+      ]
+    },
+    {
+      name := "s107_exception_defeats"
+      statuteName := "s107"
+      statute := Yuho.Fixtures.s107
+      factsName := "factsS107GeneralDefence"
+      factsPairs := [("instigation", true), ("exc_general_defence_s79", true)]
     }
   ]
 

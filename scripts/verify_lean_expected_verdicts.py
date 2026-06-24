@@ -16,7 +16,10 @@ if str(SRC) not in sys.path:
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
-from scripts.verify_structural_diff import fixtures as python_fixtures
+from scripts.verify_structural_diff import (
+    fixtures as smoke_python_fixtures,
+    fixtures_from_corpus,
+)
 from yuho.ast import nodes
 from yuho.eval.interpreter import StructInstance, Value
 from yuho.eval.statute_evaluator import StatuteEvaluator
@@ -81,8 +84,9 @@ def _safe(name: str) -> str:
 
 
 def _verdict_statutes() -> dict[str, nodes.StatuteNode]:
-    statutes = python_fixtures()
     out: dict[str, nodes.StatuteNode] = {}
+    statutes = fixtures_from_corpus()
+    statutes.update(smoke_python_fixtures())
     for name, statute in statutes.items():
         exceptions = tuple(
             replace(exc, guard=nodes.IdentifierNode(f"exc_{exc.label}"))
@@ -177,7 +181,7 @@ def compare_verdicts(rows: list[dict[str, Any]]) -> list[VerdictMismatch]:
 
 
 def main() -> int:
-    print("lean expected verdicts: exporting smoke rows...")
+    print("lean expected verdicts: exporting verdict rows...")
     try:
         rows = _run_lean_verdict_export()
     except subprocess.CalledProcessError as exc:

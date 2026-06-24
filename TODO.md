@@ -55,9 +55,9 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 ## P0: Canonical Semantics
 
 - Make runtime, Z3, Alloy, and Lean agree on shared fixtures.
-  - Current support: `make verify-core` includes a backend-parity summary with feature-category rows and explicit unsupported-feature boundaries; runtime/Z3 differential fixtures cover nested `all_of`/`any_of`, mixed groups, exception guards, `is_infringed`, `apply_scope`, scoped fact overrides, money/duration assertions, and optional/pass values; Lean smoke fixtures export expected verdict rows checked against both Python runtime and extracted Z3 conviction atoms; penalty-bearing fixtures compare runtime verdicts to extracted Z3 model conviction atoms and prove imprisonment/fine/caning/death constraints active; Lean penalty footprint rows are checked against Python Z3 footprint constraints.
-  - Expand fixture categories: broader triple verdict fixtures beyond the smoke shared executable fragment.
-  - Add differential tests: runtime verdict == Z3 model verdict == Lean expected verdict for non-smoke shared fragments where Lean carries them.
+  - Current support: `make verify-core` includes a backend-parity summary with feature-category rows and explicit unsupported-feature boundaries; runtime/Z3 differential fixtures cover nested `all_of`/`any_of`, mixed groups, exception guards, `is_infringed`, `apply_scope`, scoped fact overrides, money/duration assertions, and optional/pass values; Lean smoke and selected generated corpus fixtures export expected verdict rows checked against both Python runtime and extracted Z3 conviction atoms; penalty-bearing fixtures compare runtime verdicts to extracted Z3 model conviction atoms and prove imprisonment/fine/caning/death constraints active; Lean penalty footprint rows are checked against Python Z3 footprint constraints.
+  - Expand fixture categories: full generated corpus verdict matrix where Lean carries the executable fragment.
+  - Add differential tests: runtime verdict == Z3 model verdict == Lean expected verdict beyond selected representative generated corpus rows.
   - Acceptance: runtime, Z3, and Lean fixture parity reports covered and unsupported feature categories explicitly; Alloy remains explicit-unsupported until it has parity coverage.
 
 ## P0: Case Law And Doctrine
