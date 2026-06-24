@@ -551,6 +551,7 @@ class StatuteEvaluator:
                     element_ref=element_ref,
                     interpretive_effect=target.interpretive_effect,
                     effect_fact=target.effect_fact,
+                    jurisdiction=case.jurisdiction or target.jurisdiction,
                     burden_shift=case.burden_shift or target.burden_shift,
                     burden_shift_standard=case.burden_shift_standard
                     or target.burden_shift_standard,

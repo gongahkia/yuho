@@ -53,7 +53,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "case_law_doctrine",
-        "runtime=active-effects/positive-treatment-adoption/ordered-cumulative/negative-treatment-nonadoption/fact-key/same-kind-nonconflict/own-effect/missing-target/effectless-target/target-remap/payload-preserve/cycle-cutoff/inactive-authority/jurisdiction-burden-shift-precedence-partial; z3=unsupported; lean=typed-fact-burden+surface-alias+surface-precedence-rank+fact-key+same-kind-nonconflict+cumulative-effect+ordered-cumulative+negative-treatment-nonadoption+own-effect+missing-target+effectless-target+target-remap+payload-preserve+adoption-cycle+effect-adoption-metadata-inactive-authority-jurisdiction-burden-precedence-rank-conflict-partial; alloy=unsupported",
+        "runtime=active-effects/positive-treatment-adoption/ordered-cumulative/negative-treatment-nonadoption/fact-key/same-kind-nonconflict/own-effect/missing-target/effectless-target/target-remap/payload-preserve/target-metadata-fallback/cycle-cutoff/inactive-authority/jurisdiction-burden-shift-precedence-partial; z3=unsupported; lean=typed-fact-burden+surface-alias+surface-precedence-rank+fact-key+same-kind-nonconflict+cumulative-effect+ordered-cumulative+negative-treatment-nonadoption+own-effect+missing-target+effectless-target+target-remap+payload-preserve+adoption-cycle+effect-adoption-metadata+target-metadata-fallback+inactive-authority-jurisdiction-burden-precedence-rank-conflict-partial; alloy=unsupported",
     ),
     (
         "typed_fact_burdens",

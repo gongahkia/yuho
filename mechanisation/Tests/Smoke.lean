@@ -346,6 +346,26 @@ def burdenAdoptingApexCase : CaseAuthority :=
     precedence := neutralPrecedence
   }
 
+def burdenSourceCase : CaseAuthority :=
+  { name := "Burden Source"
+    element := "taking"
+    effect := some lawfulExcuseByDefence
+    burdenShift := none
+    jurisdiction := none
+    treatments := []
+    precedence := neutralPrecedence
+  }
+
+def metadataFallbackAdopterCase : CaseAuthority :=
+  { name := "Metadata Fallback Adopter"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.followed, "Burden Source")]
+    precedence := neutralPrecedence
+  }
+
 def intermediateAdopterCase : CaseAuthority :=
   { name := "Intermediate Adopter"
     element := "taking"
@@ -691,6 +711,12 @@ example :
         burdenShift := some defenceBurden
         jurisdiction := some "singapore"
       } := by
+  native_decide
+
+example :
+    metadataFallbackAdopterCase.resolvedEffectIn
+        [burdenSourceCase, metadataFallbackAdopterCase] 2 =
+      some { lawfulExcuseByDefence with target := "taking" } := by
   native_decide
 
 example :

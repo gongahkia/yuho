@@ -813,6 +813,46 @@ def test_positive_treatment_adoption_skips_effectless_target_before_known_target
     assert fallback[0].effect_fact == "rescue_fact"
 
 
+def test_positive_treatment_adoption_preserves_target_metadata_without_override() -> None:
+    module = _module(
+        """
+        statute 1 "Excuse" jurisdiction singapore {
+            elements { circumstance excuse := "excuse"; }
+
+            /// @jurisdiction singapore
+            /// @effect satisfies lawful_excuse
+            /// @burden_shift defence balance_of_probabilities
+            caselaw "Burden Source" "[2020] SGCA 1" {
+                "Source supplies metadata"
+                element excuse
+            }
+
+            /// @court_level apex
+            /// @date 2026-01-01
+            caselaw "Metadata Fallback Adopter" "[2026] SGCA 1" {
+                "Adopts metadata from source"
+                element excuse
+                treatment follows "Burden Source" "[2020] SGCA 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    adopted = [
+        case for case in effects["excuse"]
+        if case.case_name.value == "Metadata Fallback Adopter"
+    ]
+    assert len(adopted) == 1
+    assert adopted[0].burden_shift == "defence"
+    assert adopted[0].burden_shift_standard == "balance_of_probabilities"
+    assert adopted[0].jurisdiction == "singapore"
+
+
 def test_positive_treatment_adoption_remaps_effect_to_treating_case_element() -> None:
     module = _module(
         """

@@ -624,6 +624,22 @@ theorem CaseAuthority.materializeEffect_burden_override
     (authority.materializeEffect effect).burdenShift = some shift := by
   simp [CaseAuthority.materializeEffect, preferOption, h]
 
+theorem CaseAuthority.materializeEffect_burden_fallback
+    (authority : CaseAuthority) (effect : CaseEffect)
+    (shift : CaseBurdenShift)
+    (hAuthority : authority.burdenShift = none)
+    (hEffect : effect.burdenShift = some shift) :
+    (authority.materializeEffect effect).burdenShift = some shift := by
+  simp [CaseAuthority.materializeEffect, preferOption, hAuthority, hEffect]
+
+theorem CaseAuthority.materializeEffect_jurisdiction_fallback
+    (authority : CaseAuthority) (effect : CaseEffect)
+    (jurisdiction : String)
+    (hAuthority : authority.jurisdiction = none)
+    (hEffect : effect.jurisdiction = some jurisdiction) :
+    (authority.materializeEffect effect).jurisdiction = some jurisdiction := by
+  simp [CaseAuthority.materializeEffect, preferOption, hAuthority, hEffect]
+
 theorem CaseAuthority.materializeEffect_target_override
     (authority : CaseAuthority) (effect : CaseEffect) :
     (authority.materializeEffect effect).target = authority.element := by
