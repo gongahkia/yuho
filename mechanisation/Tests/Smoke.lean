@@ -121,6 +121,14 @@ def takingRequiresControl : CaseEffect :=
     jurisdiction := none
   }
 
+def takingRequiresDishonesty : CaseEffect :=
+  { target := "taking"
+    kind := .requires
+    fact := "dishonesty"
+    burdenShift := none
+    jurisdiction := none
+  }
+
 example : CaseEffectKind.applySurface "narrows" true false = some false := by
   native_decide
 
@@ -333,6 +341,22 @@ example :
 example :
     takingElement.evalWithCases [takingRequiresControl]
       (Facts.fromList [("taking", true), ("control_plus_deprivation", true)])
+      = true := by
+  native_decide
+
+example :
+    takingElement.evalWithCases [takingRequiresControl, takingRequiresDishonesty]
+      (Facts.fromList
+        [("taking", true), ("control_plus_deprivation", true),
+         ("dishonesty", false)])
+      = false := by
+  native_decide
+
+example :
+    takingElement.evalWithCases [takingRequiresControl, takingRequiresDishonesty]
+      (Facts.fromList
+        [("taking", true), ("control_plus_deprivation", true),
+         ("dishonesty", true)])
       = true := by
   native_decide
 

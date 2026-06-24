@@ -579,6 +579,20 @@ theorem CaseAuthority.resolveEffectConflicts_nil :
     CaseAuthority.resolveEffectConflicts [] = [] := by
   rfl
 
+theorem CaseAuthority.keepAfterEffectConflicts_no_bucket_conflict
+    (authority : CaseAuthority) (cases : List CaseAuthority)
+    (h : CaseAuthority.bucketHasEffectConflict
+      (authority.effectBucket cases) = false) :
+    authority.keepAfterEffectConflicts cases = true := by
+  simp [CaseAuthority.keepAfterEffectConflicts, h]
+
+theorem CaseAuthority.resolveEffectConflicts_keeps_pair
+    (left right : CaseAuthority)
+    (hLeft : left.keepAfterEffectConflicts [left, right] = true)
+    (hRight : right.keepAfterEffectConflicts [left, right] = true) :
+    CaseAuthority.resolveEffectConflicts [left, right] = [left, right] := by
+  simp [CaseAuthority.resolveEffectConflicts, hLeft, hRight]
+
 theorem CaseAuthority.materializeEffect_burden_override
     (authority : CaseAuthority) (effect : CaseEffect)
     (shift : CaseBurdenShift)
