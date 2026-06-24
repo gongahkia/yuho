@@ -499,11 +499,14 @@ class StatuteEvaluator:
         inactive: set[str],
     ) -> Tuple[nodes.CaseLawNode, ...]:
         by_name = {StatuteEvaluator._case_key(case.case_name.value): case for case in case_law}
-        adopted: List[nodes.CaseLawNode] = list(case_law)
+        adopted: List[nodes.CaseLawNode] = []
         for case in case_law:
+            adopted_case = case
             if case.interpretive_effect or case.effect_fact:
+                adopted.append(adopted_case)
                 continue
             if StatuteEvaluator._case_key(case.case_name.value) in inactive:
+                adopted.append(adopted_case)
                 continue
             for treatment in case.treatments:
                 if not is_adopting_treatment(treatment.kind):
@@ -518,18 +521,17 @@ class StatuteEvaluator:
                 element_ref = case.element_ref or target.element_ref
                 if not element_ref:
                     continue
-                adopted.append(
-                    replace(
-                        case,
-                        element_ref=element_ref,
-                        interpretive_effect=target.interpretive_effect,
-                        effect_fact=target.effect_fact,
-                        burden_shift=case.burden_shift or target.burden_shift,
-                        burden_shift_standard=case.burden_shift_standard
-                        or target.burden_shift_standard,
-                    )
+                adopted_case = replace(
+                    case,
+                    element_ref=element_ref,
+                    interpretive_effect=target.interpretive_effect,
+                    effect_fact=target.effect_fact,
+                    burden_shift=case.burden_shift or target.burden_shift,
+                    burden_shift_standard=case.burden_shift_standard
+                    or target.burden_shift_standard,
                 )
                 break
+            adopted.append(adopted_case)
         return tuple(adopted)
 
     @staticmethod

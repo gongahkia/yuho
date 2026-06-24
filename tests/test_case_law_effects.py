@@ -413,3 +413,45 @@ def test_positive_treatment_adopts_target_effect_with_treating_case_precedence()
     assert result.overall_satisfied is False
     assert any("Adopting Apex" in item for item in result.reasoning)
     assert not any("Local Expansive" in item for item in result.reasoning)
+
+
+def test_positive_treatment_adoption_preserves_declaration_order_tiebreak() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @effect requires active_misleading
+            caselaw "Restrictive Source" "[2020] SGCA 1" {
+                "Restrictive source"
+                element deception
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2026-01-01
+            caselaw "Earlier Adopter" "[2026] SGCA 2" {
+                "Adopts restrictive source"
+                element deception
+                treatment approved "Restrictive Source" "[2020] SGCA 1"
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2026-01-01
+            /// @effect satisfies active_misleading
+            caselaw "Later Expansive" "[2026] SGCA 3" {
+                "Later equal-precedence expansive view"
+                element deception
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        _facts(deception=True, active_misleading=False),
+    )
+
+    assert result.overall_satisfied is True
+    assert not any("Earlier Adopter" in item for item in result.reasoning)
