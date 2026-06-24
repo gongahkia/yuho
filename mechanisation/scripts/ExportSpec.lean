@@ -324,8 +324,34 @@ def namePairs : List String → List (String × String)
   | _ :: [] => []
   | first :: rest => namePairsWith first rest ++ namePairs rest
 
+structure NameTriple where
+  first : String
+  second : String
+  third : String
+
+def nameTriplesWithPair (first second : String) : List String → List NameTriple
+  | [] => []
+  | third :: rest =>
+      { first := first, second := second, third := third } ::
+        nameTriplesWithPair first second rest
+
+def nameTriplesWithFirst (first : String) : List String → List NameTriple
+  | [] => []
+  | _ :: [] => []
+  | second :: rest =>
+      nameTriplesWithPair first second rest ++ nameTriplesWithFirst first rest
+
+def nameTriples : List String → List NameTriple
+  | [] => []
+  | _ :: [] => []
+  | _ :: _ :: [] => []
+  | first :: rest => nameTriplesWithFirst first rest ++ nameTriples rest
+
 def pairFacts (pair : String × String) : List (String × Bool) :=
   [(pair.fst, true), (pair.snd, true)]
+
+def tripleFacts (triple : NameTriple) : List (String × Bool) :=
+  [(triple.first, true), (triple.second, true), (triple.third, true)]
 
 def pairVerdictFixture (n : String) (s : Statute) (pair : String × String) :
     VerdictFixture :=
@@ -335,6 +361,17 @@ def pairVerdictFixture (n : String) (s : Statute) (pair : String × String) :
     statute := s
     factsName := n ++ "Pair" ++ pair.fst ++ pair.snd
     factsPairs := pairFacts pair
+  }
+
+def tripleVerdictFixture (n : String) (s : Statute) (triple : NameTriple) :
+    VerdictFixture :=
+  {
+    name := n ++ "_corpus_triple_" ++ triple.first ++ "_" ++ triple.second ++
+      "_" ++ triple.third
+    statuteName := n
+    statute := s
+    factsName := n ++ "Triple" ++ triple.first ++ triple.second ++ triple.third
+    factsPairs := tripleFacts triple
   }
 
 def exceptionFactName (x : Exception) : String :=
@@ -384,6 +421,7 @@ def corpusVerdictFixturesFor (fixture : String × Statute) : List VerdictFixture
     }
   ] ++ firstOnly
     ++ (namePairs names).map (pairVerdictFixture n s)
+    ++ (nameTriples names).map (tripleVerdictFixture n s)
     ++ s.exceptions.map (exceptionVerdictFixture n s)
 
 def isSmokeFixtureName (name : String) : Bool :=
