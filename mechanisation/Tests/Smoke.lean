@@ -263,6 +263,16 @@ def fallbackAdopterCase : CaseAuthority :=
     precedence := neutralPrecedence
   }
 
+def elementRemapAdopterCase : CaseAuthority :=
+  { name := "Element Remap Adopter"
+    element := "deception"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.followed, "Foreign Restrictive")]
+    precedence := neutralPrecedence
+  }
+
 def burdenAdoptingApexCase : CaseAuthority :=
   { name := "Burden Adopting Apex"
     element := "taking"
@@ -535,6 +545,12 @@ example :
     fallbackAdopterCase.resolvedEffectIn
         [foreignRestrictiveCase, fallbackAdopterCase] 2 =
       some takingRequiresControl := by
+  native_decide
+
+example :
+    elementRemapAdopterCase.resolvedEffectIn
+        [foreignRestrictiveCase, elementRemapAdopterCase] 2 =
+      some { takingRequiresControl with target := "deception" } := by
   native_decide
 
 example :

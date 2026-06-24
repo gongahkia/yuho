@@ -553,6 +553,46 @@ def test_positive_treatment_adoption_skips_unknown_target_before_known_target() 
     assert fallback[0].interpretive_effect == "requires"
 
 
+def test_positive_treatment_adoption_remaps_effect_to_treating_case_element() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements {
+                actus_reus source_element := "source element";
+                actus_reus deception := "deception";
+            }
+
+            /// @effect requires active_misleading
+            caselaw "Source Element Case" "[2020] SGCA 1" {
+                "Source element rule"
+                element source_element
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2026-01-01
+            caselaw "Element Remap Adopter" "[2026] SGCA 1" {
+                "Applies source rule to deception"
+                element deception
+                treatment follows "Source Element Case" "[2020] SGCA 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    remapped = [
+        case for case in effects["deception"]
+        if case.case_name.value == "Element Remap Adopter"
+    ]
+    assert len(remapped) == 1
+    assert remapped[0].interpretive_effect == "requires"
+
+
 def test_positive_treatment_adoption_resolves_transitive_chain() -> None:
     module = _module(
         """

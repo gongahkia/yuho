@@ -621,6 +621,11 @@ theorem CaseAuthority.materializeEffect_burden_override
     (authority.materializeEffect effect).burdenShift = some shift := by
   simp [CaseAuthority.materializeEffect, preferOption, h]
 
+theorem CaseAuthority.materializeEffect_target_override
+    (authority : CaseAuthority) (effect : CaseEffect) :
+    (authority.materializeEffect effect).target = authority.element := by
+  rfl
+
 theorem TreatmentKind.followed_adopts :
     TreatmentKind.followed.adopts = true := by
   rfl
