@@ -364,6 +364,13 @@ def concatNamePieces : List String → String
   | [] => ""
   | first :: rest => first ++ concatNamePieces rest
 
+def reverseStringsAux : List String → List String → List String
+  | [], acc => acc
+  | first :: rest, acc => reverseStringsAux rest (first :: acc)
+
+def reverseStrings (names : List String) : List String :=
+  reverseStringsAux names []
+
 def alternatingFactsFrom (value : Bool) : List String → List (String × Bool)
   | [] => []
   | first :: rest => (first, value) :: alternatingFactsFrom (!value) rest
@@ -409,13 +416,22 @@ def boundedMixedVerdictFixtures (n : String) (s : Statute)
     (names : List String) : List VerdictFixture :=
   let quad :=
     match takeExactly 4 names with
-    | some selected => [mixedVerdictFixture n s "quad" selected]
+    | some selected => [mixedVerdictFixture n s "prefix_quad" selected]
     | none => []
   let quint :=
     match takeExactly 5 names with
-    | some selected => [mixedVerdictFixture n s "quint" selected]
+    | some selected => [mixedVerdictFixture n s "prefix_quint" selected]
     | none => []
-  quad ++ quint
+  let reversedNames := reverseStrings names
+  let suffixQuad :=
+    match takeExactly 4 reversedNames with
+    | some selected => [mixedVerdictFixture n s "suffix_quad" (reverseStrings selected)]
+    | none => []
+  let suffixQuint :=
+    match takeExactly 5 reversedNames with
+    | some selected => [mixedVerdictFixture n s "suffix_quint" (reverseStrings selected)]
+    | none => []
+  quad ++ quint ++ suffixQuad ++ suffixQuint
 
 def exceptionFactName (x : Exception) : String :=
   "exc_" ++ x.label
