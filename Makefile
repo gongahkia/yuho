@@ -31,7 +31,7 @@ LOGS = logs
 .PHONY: install doctor smoke verify-all verify-core \
         verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
-        verify-penalty-verdicts verify-lean-verdicts \
+        verify-penalty-verdicts verify-lean-verdicts verify-lean-penalty-footprints \
         verify-source-maps verify-backend-parity verify-mermaid-verbose \
         verify-literate-alignment \
         clean-reproduce
@@ -65,6 +65,7 @@ verify-core: $(LOGS)
 	$(MAKE) verify-backend-parity
 	$(MAKE) verify-structural-diff
 	$(MAKE) verify-lean-verdicts
+	$(MAKE) verify-lean-penalty-footprints
 	$(MAKE) verify-mechanisation-coverage
 	$(MAKE) verify-mechanisation
 	@echo ""
@@ -86,6 +87,8 @@ verify-core: $(LOGS)
 	@printf "Structural diff  : %s\n" "$$(tail -n 1 $(LOGS)/structural-diff.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Lean verdicts    : %s\n" "$$(grep -E '^lean expected verdicts:' $(LOGS)/lean-verdicts.log | tail -n 1)" \
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "Lean penalties   : %s\n" "$$(grep -E '^lean penalty footprints:' $(LOGS)/lean-penalty-footprints.log | tail -n 1)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Mech coverage    : %s\n" "$$(tail -n 1 $(LOGS)/mechanisation-coverage.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
@@ -149,6 +152,16 @@ verify-lean-verdicts: $(LOGS)
 	else \
 		echo "lean expected verdicts: SKIPPED (Lean toolchain not on PATH)" \
 			| tee $(LOGS)/lean-verdicts.log; \
+	fi
+
+verify-lean-penalty-footprints: $(LOGS)
+	@echo ">>> comparing Lean penalty footprint rows with Python Z3 constraints…"
+	@if command -v lake >/dev/null 2>&1; then \
+		$(PYTHON) scripts/verify_lean_penalty_footprints.py 2>&1 \
+			| tee $(LOGS)/lean-penalty-footprints.log; \
+	else \
+		echo "lean penalty footprints: SKIPPED (Lean toolchain not on PATH)" \
+			| tee $(LOGS)/lean-penalty-footprints.log; \
 	fi
 
 verify-runtime-tests: $(LOGS)

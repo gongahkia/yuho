@@ -1635,50 +1635,85 @@ class Z3Generator:
         if penalty.imprisonment_min or penalty.imprisonment_max:
             imprisonment = z3.Int(f"{statute_id}_imprisonment_days")
             self._consts[f"{statute_id}_imprisonment"] = imprisonment
+            imprisonment_lo = z3.Int(f"{statute_id}_imprisonment_lo")
+            imprisonment_hi = z3.Int(f"{statute_id}_imprisonment_hi")
+            self._consts[f"{statute_id}_imprisonment_lo"] = imprisonment_lo
+            self._consts[f"{statute_id}_imprisonment_hi"] = imprisonment_hi
             uses_calendar_approx = False
 
             if penalty.imprisonment_min:
                 min_days, min_approx = self._duration_days(penalty.imprisonment_min)
                 uses_calendar_approx = uses_calendar_approx or min_approx
                 self._assertions.append(imprisonment >= min_days)
+                self._assertions.append(imprisonment_lo >= min_days)
 
             if penalty.imprisonment_max:
                 max_days, max_approx = self._duration_days(penalty.imprisonment_max)
                 uses_calendar_approx = uses_calendar_approx or max_approx
                 self._assertions.append(imprisonment <= max_days)
+                self._assertions.append(imprisonment_hi <= max_days)
 
             # Imprisonment must be non-negative
             self._assertions.append(imprisonment >= 0)
+            self._assertions.append(imprisonment_lo >= 0)
+            self._assertions.append(imprisonment_hi >= 0)
+            self._assertions.append(imprisonment_lo <= imprisonment_hi)
             if uses_calendar_approx:
                 self._consts[f"{statute_id}_imprisonment_days_approx"] = imprisonment
 
         # Fine constraints (in cents for precision)
-        if penalty.fine_min or penalty.fine_max:
+        if penalty.fine_min or penalty.fine_max or penalty.fine_unlimited:
             fine = z3.Int(f"{statute_id}_fine_cents")
             self._consts[f"{statute_id}_fine"] = fine
+            fine_lo = z3.Int(f"{statute_id}_fine_lo")
+            fine_hi = z3.Int(f"{statute_id}_fine_hi")
+            fine_unlimited = z3.Bool(f"{statute_id}_fine_unlimited")
+            self._consts[f"{statute_id}_fine_lo"] = fine_lo
+            self._consts[f"{statute_id}_fine_hi"] = fine_hi
+            self._consts[f"{statute_id}_fine_unlimited"] = fine_unlimited
 
             if penalty.fine_min:
                 min_cents = int(penalty.fine_min.amount * 100)
                 self._assertions.append(fine >= min_cents)
+                self._assertions.append(fine_lo >= min_cents)
 
             if penalty.fine_max:
                 max_cents = int(penalty.fine_max.amount * 100)
                 self._assertions.append(fine <= max_cents)
+                self._assertions.append(fine_hi <= max_cents)
 
             # Fine must be non-negative
             self._assertions.append(fine >= 0)
+            self._assertions.append(fine_lo >= 0)
+            self._assertions.append(fine_hi >= 0)
+            self._assertions.append(z3.Or(fine_unlimited, fine_lo <= fine_hi))
 
-        if penalty.caning_min is not None or penalty.caning_max is not None:
+        if (
+            penalty.caning_min is not None
+            or penalty.caning_max is not None
+            or penalty.caning_unspecified
+        ):
             caning = z3.Int(f"{statute_id}_caning_strokes")
             self._consts[f"{statute_id}_caning"] = caning
+            caning_lo = z3.Int(f"{statute_id}_caning_lo")
+            caning_hi = z3.Int(f"{statute_id}_caning_hi")
+            caning_unspecified = z3.Bool(f"{statute_id}_caning_unspecified")
+            self._consts[f"{statute_id}_caning_lo"] = caning_lo
+            self._consts[f"{statute_id}_caning_hi"] = caning_hi
+            self._consts[f"{statute_id}_caning_unspecified"] = caning_unspecified
 
             if penalty.caning_min is not None:
                 self._assertions.append(caning >= penalty.caning_min)
+                self._assertions.append(caning_lo >= penalty.caning_min)
 
             if penalty.caning_max is not None:
                 self._assertions.append(caning <= penalty.caning_max)
+                self._assertions.append(caning_hi <= penalty.caning_max)
 
             self._assertions.append(caning >= 0)
+            self._assertions.append(caning_lo >= 0)
+            self._assertions.append(caning_hi >= 0)
+            self._assertions.append(z3.Or(caning_unspecified, caning_lo <= caning_hi))
 
         if penalty.death_penalty is not None:
             death = z3.Bool(f"{statute_id}_death_penalty")

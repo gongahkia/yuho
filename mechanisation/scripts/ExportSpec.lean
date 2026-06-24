@@ -229,6 +229,114 @@ def verdictFixtures : List VerdictFixture :=
     }
   ]
 
+/-! ## Penalty footprint fixtures. -/
+
+structure PenaltyFootprintFixture where
+  name : String
+  penalty : Penalty
+  footprint : Footprint
+
+def natFieldJSON (name : String) (n : Nat) : String :=
+  "\"" ++ name ++ "\":" ++ toString n
+
+def boolFieldJSON (name : String) (b : Bool) : String :=
+  "\"" ++ name ++ "\":" ++ boolJSON b
+
+def footprintJSON (fp : Footprint) : String :=
+  "{"
+    ++ String.intercalate "," [
+      natFieldJSON "imp_lo" fp.imp_lo,
+      natFieldJSON "imp_hi" fp.imp_hi,
+      natFieldJSON "fine_lo" fp.fine_lo,
+      natFieldJSON "fine_hi" fp.fine_hi,
+      boolFieldJSON "fine_unlimited" fp.fine_unlimited,
+      natFieldJSON "caning_lo" fp.caning_lo,
+      natFieldJSON "caning_hi" fp.caning_hi,
+      boolFieldJSON "caning_unspecified" fp.caning_unspecified,
+      boolFieldJSON "death" fp.death
+    ]
+    ++ "}"
+
+def penaltyFootprintFixtureJSON (pf : PenaltyFootprintFixture) : String :=
+  "{"
+    ++ "\"name\":\"" ++ escape pf.name ++ "\","
+    ++ "\"footprint\":" ++ footprintJSON pf.footprint ++ ","
+    ++ "\"expected\":" ++ boolJSON (pf.penalty.admits pf.footprint)
+    ++ "}"
+
+def penaltyFootprintsJSON (fixtures : List PenaltyFootprintFixture) : String :=
+  "[" ++ String.intercalate "," (fixtures.map penaltyFootprintFixtureJSON) ++ "]"
+
+def penaltyFootprintFixtures : List PenaltyFootprintFixture :=
+  [
+    {
+      name := "imprisonment_admits"
+      penalty := Penalty.imprisonment 1 5
+      footprint := { imp_lo := 1, imp_hi := 5 : Footprint }
+    },
+    {
+      name := "imprisonment_rejects_hi"
+      penalty := Penalty.imprisonment 1 5
+      footprint := { imp_lo := 1, imp_hi := 6 : Footprint }
+    },
+    {
+      name := "fine_admits"
+      penalty := Penalty.fine 1000 2000
+      footprint := { fine_lo := 1000, fine_hi := 2000 : Footprint }
+    },
+    {
+      name := "fine_unlimited_admits"
+      penalty := Penalty.fineUnlimited 0
+      footprint := { fine_lo := 0, fine_hi := 0, fine_unlimited := true : Footprint }
+    },
+    {
+      name := "fine_unlimited_finite_admits"
+      penalty := Penalty.fineUnlimited 0
+      footprint := { fine_lo := 0, fine_hi := 5000 : Footprint }
+    },
+    {
+      name := "caning_admits"
+      penalty := Penalty.caning 3 6
+      footprint := { caning_lo := 3, caning_hi := 6 : Footprint }
+    },
+    {
+      name := "caning_unspecified_admits"
+      penalty := Penalty.caningUnspecified 0
+      footprint := ({
+        caning_lo := 0, caning_hi := 0,
+        caning_unspecified := true
+      } : Footprint)
+    },
+    {
+      name := "caning_unspecified_finite_admits"
+      penalty := Penalty.caningUnspecified 0
+      footprint := { caning_lo := 0, caning_hi := 6 : Footprint }
+    },
+    {
+      name := "death_admits"
+      penalty := Penalty.death
+      footprint := { death := true : Footprint }
+    },
+    {
+      name := "death_rejects"
+      penalty := Penalty.death
+      footprint := { death := false : Footprint }
+    },
+    {
+      name := "cumulative_admits"
+      penalty := Penalty.cumulative [
+        Penalty.imprisonment 1 5, Penalty.fine 1000 2000,
+        Penalty.caning 3 6, Penalty.death
+      ]
+      footprint := {
+        imp_lo := 1, imp_hi := 5,
+        fine_lo := 1000, fine_hi := 2000,
+        caning_lo := 3, caning_hi := 6,
+        death := true : Footprint
+      }
+    }
+  ]
+
 def fixtureJSON (name : String) (s : Statute) : String :=
   "\"" ++ name ++ "\":" ++ listToJSON (Generator.encodeStatute s)
 
@@ -241,6 +349,9 @@ end Yuho.ExportSpec
 def main (args : List String) : IO Unit := do
   if args.contains "--verdicts" then
     IO.println (Yuho.ExportSpec.verdictsJSON Yuho.ExportSpec.verdictFixtures)
+    return
+  if args.contains "--penalty-footprints" then
+    IO.println (Yuho.ExportSpec.penaltyFootprintsJSON Yuho.ExportSpec.penaltyFootprintFixtures)
     return
   let useFull := args.contains "--full"
   let fixtures :=

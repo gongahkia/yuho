@@ -18,6 +18,7 @@ PARITY_LINKS = (
     ("penalty-verdicts", "scripts/verify_penalty_verdicts.py"),
     ("z3-lean", "scripts/verify_structural_diff.py"),
     ("lean-verdicts", "scripts/verify_lean_expected_verdicts.py"),
+    ("lean-penalty-footprints", "scripts/verify_lean_penalty_footprints.py"),
     ("alloy", "explicit unsupported-feature failures"),
 )
 
@@ -40,7 +41,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "penalties_money_duration",
-        "runtime-z3=imprisonment/fine/caning/death-model-verdict; z3-lean=penalty-footprint-smoke; alloy=unsupported-boundary",
+        "runtime-z3=imprisonment/fine/caning/death-model-verdict; z3-lean=penalty-footprint-bridge; alloy=unsupported-boundary",
     ),
     (
         "lean_expected_verdicts",
@@ -74,7 +75,7 @@ def build_summary() -> str:
     lines.append(
         "Backend parity: runtime-z3=runtime-tests; penalty-verdicts=z3-model; "
         "z3-lean=structural-diff; "
-        "lean-verdicts=expected-verdicts; "
+        "lean-verdicts=expected-verdicts; lean-penalty-footprints=z3-footprint; "
         "alloy=explicit-unsupported"
     )
     return "\n".join(lines)
