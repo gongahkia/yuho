@@ -20,7 +20,7 @@ FEATURE_COVERAGE = (
     ("exceptions", "s300/s378 smoke fixtures + Lean exception lemmas", "covered"),
     ("cross_section_apply_scope", "Yuho/CrossDeep.lean v9 theorems", "covered"),
     ("penalties", "Yuho/Penalty.lean lemmas", "covered"),
-    ("case_law_doctrine", "Yuho/CaseLaw.lean effect + transitive treatment-adoption lemmas", "partial"),
+    ("case_law_doctrine", "Yuho/CaseLaw.lean effect + transitive adoption + inactive-treatment lemmas", "partial"),
     ("rich_evidential_facts", "mechanisation claim boundary", "out-of-scope"),
 )
 

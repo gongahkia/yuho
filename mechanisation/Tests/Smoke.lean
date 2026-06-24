@@ -107,6 +107,13 @@ def chainApexCase : CaseAuthority :=
     treatments := [(.applied, "Intermediate Adopter")]
   }
 
+def overrulingApexCase : CaseAuthority :=
+  { name := "Overruling Apex"
+    element := "taking"
+    effect := none
+    treatments := [(.overruled, "Foreign Restrictive")]
+  }
+
 example :
     takingElement.evalWithCases [takingRequiresControl]
       (Facts.fromList [("taking", true), ("control_plus_deprivation", false)])
@@ -128,6 +135,22 @@ example :
     chainApexCase.resolvedEffectIn
         [foreignRestrictiveCase, intermediateAdopterCase, chainApexCase] 3 =
       some takingRequiresControl := by
+  native_decide
+
+example :
+    foreignRestrictiveCase.isInactiveIn
+        [foreignRestrictiveCase, overrulingApexCase] = true := by
+  native_decide
+
+example :
+    foreignRestrictiveCase.resolvedEffectIn
+        [foreignRestrictiveCase, overrulingApexCase] 2 = none := by
+  native_decide
+
+example :
+    chainApexCase.resolvedEffectIn
+        [foreignRestrictiveCase, overrulingApexCase,
+          intermediateAdopterCase, chainApexCase] 3 = none := by
   native_decide
 
 /-- Element correspondence holds trivially on this concrete case. -/

@@ -69,11 +69,30 @@ def TreatmentKind.adopts : TreatmentKind → Bool
   | .reversed => false
   | .disapproved => false
 
+def TreatmentKind.inactivates : TreatmentKind → Bool
+  | .followed => false
+  | .approved => false
+  | .applied => false
+  | .distinguished => true
+  | .overruled => true
+  | .reversed => true
+  | .disapproved => true
+
 def CaseAuthority.adoptsCase (authority : CaseAuthority) (targetName : String) :
     Bool :=
   authority.treatments.any
     (fun treatment =>
       treatment.fst.adopts && decide (treatment.snd = targetName))
+
+def CaseAuthority.inactivatesCase (authority : CaseAuthority)
+    (targetName : String) : Bool :=
+  authority.treatments.any
+    (fun treatment =>
+      treatment.fst.inactivates && decide (treatment.snd = targetName))
+
+def CaseAuthority.isInactiveIn (authority : CaseAuthority)
+    (cases : List CaseAuthority) : Bool :=
+  cases.any (fun candidate => candidate.inactivatesCase authority.name)
 
 def CaseAuthority.adoptedEffectFrom (authority target : CaseAuthority) :
     Option CaseEffect :=
@@ -90,23 +109,26 @@ def CaseAuthority.resolvedEffectIn (authority : CaseAuthority)
     (cases : List CaseAuthority) : Nat → Option CaseEffect
   | 0 => none
   | Nat.succ fuel =>
-      match authority.effect with
-      | some effect => some { effect with target := authority.element }
-      | none =>
-          let rec firstAdopted : List (TreatmentKind × String) → Option CaseEffect
-            | [] => none
-            | treatment :: rest =>
-                if treatment.fst.adopts then
-                  match CaseAuthority.lookup cases treatment.snd with
-                  | some target =>
-                      match target.resolvedEffectIn cases fuel with
-                      | some effect =>
-                          some { effect with target := authority.element }
-                      | none => firstAdopted rest
-                  | none => firstAdopted rest
-                else
-                  firstAdopted rest
-          firstAdopted authority.treatments
+      if authority.isInactiveIn cases then
+        none
+      else
+        match authority.effect with
+        | some effect => some { effect with target := authority.element }
+        | none =>
+            let rec firstAdopted : List (TreatmentKind × String) → Option CaseEffect
+              | [] => none
+              | treatment :: rest =>
+                  if treatment.fst.adopts then
+                    match CaseAuthority.lookup cases treatment.snd with
+                    | some target =>
+                        match target.resolvedEffectIn cases fuel with
+                        | some effect =>
+                            some { effect with target := authority.element }
+                        | none => firstAdopted rest
+                    | none => firstAdopted rest
+                  else
+                    firstAdopted rest
+            firstAdopted authority.treatments
 
 theorem CaseEffectKind.requires_false (base : Bool) :
     CaseEffectKind.apply .requires base false = false := by
@@ -136,6 +158,14 @@ theorem TreatmentKind.overruled_not_adopts :
     TreatmentKind.overruled.adopts = false := by
   rfl
 
+theorem TreatmentKind.overruled_inactivates :
+    TreatmentKind.overruled.inactivates = true := by
+  rfl
+
+theorem TreatmentKind.followed_not_inactivates :
+    TreatmentKind.followed.inactivates = false := by
+  rfl
+
 theorem CaseAuthority.resolvedEffectIn_zero
     (authority : CaseAuthority) (cases : List CaseAuthority) :
     authority.resolvedEffectIn cases 0 = none := by
@@ -144,9 +174,10 @@ theorem CaseAuthority.resolvedEffectIn_zero
 theorem CaseAuthority.resolvedEffectIn_own
     (authority : CaseAuthority) (cases : List CaseAuthority)
     (fuel : Nat) (effect : CaseEffect)
+    (hActive : authority.isInactiveIn cases = false)
     (h : authority.effect = some effect) :
     authority.resolvedEffectIn cases (Nat.succ fuel) =
       some { effect with target := authority.element } := by
-  simp [CaseAuthority.resolvedEffectIn, h]
+  simp [CaseAuthority.resolvedEffectIn, hActive, h]
 
 end Yuho

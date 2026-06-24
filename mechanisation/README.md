@@ -72,7 +72,7 @@ linter warnings.
 | Cross-section-reference acyclicity (v8) | `Yuho/Cross.lean` | `CrossRefGraph.acyclic` + `acyclic_canonical_cross_satisfies` | Decidable Bool predicate via `reachableIn` fuel ceiling = `nodes.length`; v4 satisfies bundle re-discharged under the linter-enforced acyclicity hypothesis |
 | Deep element-tree base camp (v9) | `Yuho/CrossDeep.lean` | `ElementDeep` AST + `ElementDeep.eval` (fuel-bounded) + `ElementGroup.toDeep` lift + `Statute.deepBody_compat` | Conservative-extension lemma: the v9 deep evaluator agrees with v4–v8 `Statute.elementsSatisfied` on the existing `crossRef`-free surface library at every fuel budget; mutual induction over `ElementGroup` / `List ElementGroup` |
 | `applyScope` lift + cross-ref semantics smoke (v9) | `Yuho/CrossDeep.lean` | `ElementDeep.applyScope` constructor + `eval_crossRef_resolves` / `eval_applyScope_resolves` / `_missing` / `_zero_fuel` (six theorems) | Each branch of the `crossRef` / `applyScope` evaluator is pinned to its inference rule (`is_infringed(n)` → ambient-facts `Statute.convicts`; `apply_scope(n, F')` → substituted-facts `Statute.convicts`; out-of-module → `false`; fuel-exhaustion → `false`) by `simp only` after a `sigma`-lookup hypothesis |
-| Case-law executable effect fragment | `Yuho/CaseLaw.lean` | `CaseEffectKind.requires_false` + `satisfies_true` + `excludes_true` + `TreatmentKind.followed_adopts` + `CaseAuthority.resolvedEffectIn_*` lemmas | Direct computation over the three runtime-supported effect operators plus bounded positive-treatment-chain adoption; smoke tests cover `requires` on a targeted element and transitive adopted effect transfer |
+| Case-law executable effect fragment | `Yuho/CaseLaw.lean` | `CaseEffectKind.requires_false` + `satisfies_true` + `excludes_true` + `TreatmentKind.followed_adopts` + `overruled_inactivates` + `CaseAuthority.resolvedEffectIn_*` lemmas | Direct computation over the three runtime-supported effect operators plus bounded positive-treatment-chain adoption and inactive-treatment suppression; smoke tests cover targeted `requires`, transitive adopted effect transfer, and overruled-source suppression |
 
 ## Trusted base
 
@@ -148,5 +148,5 @@ Decisions deliberately deferred:
   the solver's reconstruction.
 * **Richer doctrine and case-law semantics.** The current artefact
   mechanises the executable effect algebra and bounded positive treatment
-  adoption, not the full precedent graph, open-textured legal terms, or
-  procedural burdens.
+  adoption with inactive-treatment suppression, not the full precedent graph,
+  open-textured legal terms, or procedural burdens.
