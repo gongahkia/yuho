@@ -242,6 +242,27 @@ def ownEffectAdoptingCase : CaseAuthority :=
     precedence := neutralPrecedence
   }
 
+def missingTargetAdopterCase : CaseAuthority :=
+  { name := "Missing Target Adopter"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.followed, "Missing Case")]
+    precedence := neutralPrecedence
+  }
+
+def fallbackAdopterCase : CaseAuthority :=
+  { name := "Fallback Adopter"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.followed, "Missing Case"),
+      (.approved, "Foreign Restrictive")]
+    precedence := neutralPrecedence
+  }
+
 def burdenAdoptingApexCase : CaseAuthority :=
   { name := "Burden Adopting Apex"
     element := "taking"
@@ -503,6 +524,17 @@ example :
         [foreignRestrictiveCase, ownEffectAdoptingCase] 2 =
       some (ownEffectAdoptingCase.materializeEffect
         { takingRequiresControl with kind := .satisfies }) := by
+  native_decide
+
+example :
+    missingTargetAdopterCase.resolvedEffectIn [missingTargetAdopterCase] 2 =
+      none := by
+  native_decide
+
+example :
+    fallbackAdopterCase.resolvedEffectIn
+        [foreignRestrictiveCase, fallbackAdopterCase] 2 =
+      some takingRequiresControl := by
   native_decide
 
 example :

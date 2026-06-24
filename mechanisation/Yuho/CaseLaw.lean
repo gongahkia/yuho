@@ -678,4 +678,16 @@ theorem CaseAuthority.resolvedEffectIn_inactive
     authority.resolvedEffectIn cases (Nat.succ fuel) = none := by
   simp [CaseAuthority.resolvedEffectIn, hInactive]
 
+theorem CaseAuthority.resolvedEffectIn_missing_followed_target
+    (authority : CaseAuthority) (cases : List CaseAuthority)
+    (fuel : Nat) (targetName : String)
+    (hNoEffect : authority.effect = none)
+    (hMissing : CaseAuthority.lookup cases targetName = none) :
+    ({ authority with treatments := [(.followed, targetName)] } :
+      CaseAuthority).resolvedEffectIn cases (Nat.succ fuel) = none := by
+  simp [CaseAuthority.resolvedEffectIn,
+    CaseAuthority.resolvedEffectIn.firstAdopted, hNoEffect]
+  intro _
+  simp [CaseAuthority.resolvedEffectIn.firstAdopted, hMissing]
+
 end Yuho
