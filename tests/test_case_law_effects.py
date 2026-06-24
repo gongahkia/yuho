@@ -145,6 +145,76 @@ def test_overruled_case_law_effect_is_inactive() -> None:
     assert not any("Old v PP" in item for item in result.reasoning)
 
 
+def test_negative_treatment_does_not_adopt_target_effect() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @effect requires active_misleading
+            caselaw "Restrictive Source" "[2020] SGCA 1" {
+                "Restrictive source"
+                element deception
+            }
+
+            caselaw "Distinguishing Case" "[2026] SGCA 1" {
+                "Distinguishes source without adopting its effect"
+                element deception
+                treatment distinguished "Restrictive Source" "[2020] SGCA 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    assert effects == {}
+
+
+def test_negative_treatment_is_skipped_before_positive_adoption() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @effect requires active_misleading
+            caselaw "Restrictive Source" "[2020] SGCA 1" {
+                "Restrictive source"
+                element deception
+            }
+
+            /// @effect satisfies rescue_fact
+            caselaw "Expansive Source" "[2021] SGCA 1" {
+                "Expansive source"
+                element deception
+            }
+
+            caselaw "Fallback Adopter" "[2026] SGCA 1" {
+                "Skips negative treatment and adopts positive target"
+                element deception
+                treatment disapproved "Restrictive Source" "[2020] SGCA 1"
+                treatment approved "Expansive Source" "[2021] SGCA 1"
+            }
+        }
+        """
+    )
+
+    effects = StatuteEvaluator().active_case_law_effects(
+        module.statutes[0].case_law,
+        statute_jurisdiction=module.statutes[0].jurisdiction,
+    )
+
+    adopted = [
+        case for case in effects["deception"]
+        if case.case_name.value == "Fallback Adopter"
+    ]
+    assert len(adopted) == 1
+    assert adopted[0].interpretive_effect == "satisfies"
+
+
 def test_cumulative_case_law_effects_apply_in_declaration_order() -> None:
     expansive_then_restrictive = _module(
         """

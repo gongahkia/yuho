@@ -53,7 +53,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "case_law_doctrine",
-        "runtime=active-effects/positive-treatment-adoption/ordered-cumulative/own-effect/missing-target/target-remap/payload-preserve/cycle-cutoff/jurisdiction-burden-shift-precedence-partial; z3=unsupported; lean=typed-fact-burden+surface-alias+surface-precedence-rank+cumulative-effect+ordered-cumulative+own-effect+missing-target+target-remap+payload-preserve+adoption-cycle+effect-adoption-metadata-inactivation-jurisdiction-burden-precedence-rank-conflict-partial; alloy=unsupported",
+        "runtime=active-effects/positive-treatment-adoption/ordered-cumulative/negative-treatment-nonadoption/own-effect/missing-target/target-remap/payload-preserve/cycle-cutoff/jurisdiction-burden-shift-precedence-partial; z3=unsupported; lean=typed-fact-burden+surface-alias+surface-precedence-rank+cumulative-effect+ordered-cumulative+negative-treatment-nonadoption+own-effect+missing-target+target-remap+payload-preserve+adoption-cycle+effect-adoption-metadata-inactivation-jurisdiction-burden-precedence-rank-conflict-partial; alloy=unsupported",
     ),
     (
         "typed_fact_burdens",

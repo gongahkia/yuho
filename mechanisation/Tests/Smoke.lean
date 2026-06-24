@@ -284,6 +284,27 @@ def fallbackAdopterCase : CaseAuthority :=
     precedence := neutralPrecedence
   }
 
+def negativeOnlyCase : CaseAuthority :=
+  { name := "Negative Only"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.distinguished, "Foreign Restrictive")]
+    precedence := neutralPrecedence
+  }
+
+def negativeThenPositiveCase : CaseAuthority :=
+  { name := "Negative Then Positive"
+    element := "taking"
+    effect := none
+    burdenShift := none
+    jurisdiction := none
+    treatments := [(.disapproved, "Local Restrictive"),
+      (.approved, "Foreign Restrictive")]
+    precedence := neutralPrecedence
+  }
+
 def elementRemapAdopterCase : CaseAuthority :=
   { name := "Element Remap Adopter"
     element := "deception"
@@ -565,6 +586,18 @@ example :
 example :
     fallbackAdopterCase.resolvedEffectIn
         [foreignRestrictiveCase, fallbackAdopterCase] 2 =
+      some takingRequiresControl := by
+  native_decide
+
+example :
+    negativeOnlyCase.resolvedEffectIn
+        [foreignRestrictiveCase, negativeOnlyCase] 2 = none := by
+  native_decide
+
+example :
+    negativeThenPositiveCase.resolvedEffectIn
+        [foreignRestrictiveCase, localRestrictiveCase,
+          negativeThenPositiveCase] 2 =
       some takingRequiresControl := by
   native_decide
 

@@ -644,8 +644,32 @@ theorem TreatmentKind.overruled_not_adopts :
     TreatmentKind.overruled.adopts = false := by
   rfl
 
+theorem TreatmentKind.distinguished_not_adopts :
+    TreatmentKind.distinguished.adopts = false := by
+  rfl
+
+theorem TreatmentKind.reversed_not_adopts :
+    TreatmentKind.reversed.adopts = false := by
+  rfl
+
+theorem TreatmentKind.disapproved_not_adopts :
+    TreatmentKind.disapproved.adopts = false := by
+  rfl
+
 theorem TreatmentKind.overruled_inactivates :
     TreatmentKind.overruled.inactivates = true := by
+  rfl
+
+theorem TreatmentKind.distinguished_inactivates :
+    TreatmentKind.distinguished.inactivates = true := by
+  rfl
+
+theorem TreatmentKind.reversed_inactivates :
+    TreatmentKind.reversed.inactivates = true := by
+  rfl
+
+theorem TreatmentKind.disapproved_inactivates :
+    TreatmentKind.disapproved.inactivates = true := by
   rfl
 
 theorem TreatmentKind.followed_not_inactivates :
@@ -666,6 +690,14 @@ theorem TreatmentKind.overrules_surface_inactivates :
 
 theorem TreatmentKind.distinguishes_surface_inactivates :
     TreatmentKind.inactivatesSurface "distinguishes" = true := by
+  rfl
+
+theorem TreatmentKind.reverses_surface_inactivates :
+    TreatmentKind.inactivatesSurface "reverses" = true := by
+  rfl
+
+theorem TreatmentKind.disapproves_surface_inactivates :
+    TreatmentKind.inactivatesSurface "disapproves" = true := by
   rfl
 
 theorem TreatmentKind.unknown_surface_not_adopting :
@@ -704,5 +736,17 @@ theorem CaseAuthority.resolvedEffectIn_missing_followed_target
     CaseAuthority.resolvedEffectIn.firstAdopted, hNoEffect]
   intro _
   simp [CaseAuthority.resolvedEffectIn.firstAdopted, hMissing]
+
+theorem CaseAuthority.resolvedEffectIn_distinguished_not_adopting
+    (authority : CaseAuthority) (cases : List CaseAuthority)
+    (fuel : Nat) (targetName : String)
+    (hNoEffect : authority.effect = none) :
+    ({ authority with treatments := [(.distinguished, targetName)] } :
+      CaseAuthority).resolvedEffectIn cases (Nat.succ fuel) = none := by
+  simp [CaseAuthority.resolvedEffectIn,
+    CaseAuthority.resolvedEffectIn.firstAdopted, hNoEffect]
+  intro _
+  intro hAdopts
+  simp [TreatmentKind.adopts] at hAdopts
 
 end Yuho
