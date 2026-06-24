@@ -79,6 +79,20 @@ def takingElement : Element :=
 def takingRequiresControl : CaseEffect :=
   { target := "taking", kind := .requires, fact := "control_plus_deprivation" }
 
+def foreignRestrictiveCase : CaseAuthority :=
+  { name := "Foreign Restrictive"
+    element := "taking"
+    effect := some takingRequiresControl
+    treatments := []
+  }
+
+def adoptingApexCase : CaseAuthority :=
+  { name := "Adopting Apex"
+    element := "taking"
+    effect := none
+    treatments := [(.followed, "Foreign Restrictive")]
+  }
+
 example :
     takingElement.evalWithCases [takingRequiresControl]
       (Facts.fromList [("taking", true), ("control_plus_deprivation", false)])
@@ -89,6 +103,11 @@ example :
     takingElement.evalWithCases [takingRequiresControl]
       (Facts.fromList [("taking", true), ("control_plus_deprivation", true)])
       = true := by
+  native_decide
+
+example :
+    adoptingApexCase.adoptedEffectFrom foreignRestrictiveCase =
+      some takingRequiresControl := by
   native_decide
 
 /-- Element correspondence holds trivially on this concrete case. -/
