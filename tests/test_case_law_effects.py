@@ -455,3 +455,55 @@ def test_positive_treatment_adoption_preserves_declaration_order_tiebreak() -> N
 
     assert result.overall_satisfied is True
     assert not any("Earlier Adopter" in item for item in result.reasoning)
+
+
+def test_positive_treatment_adoption_resolves_transitive_chain() -> None:
+    module = _module(
+        """
+        statute 1 "Cheating" jurisdiction singapore {
+            elements { actus_reus deception := "deception"; }
+
+            /// @jurisdiction england
+            /// @court_level apex
+            /// @date 2020-01-01
+            /// @effect requires active_misleading
+            caselaw "Foreign Restrictive" "[2020] UKSC 1" {
+                "Foreign restrictive view"
+                element deception
+            }
+
+            caselaw "Intermediate Adopter" "[2024] SGHC 1" {
+                "Follows foreign restrictive view"
+                element deception
+                treatment follows "Foreign Restrictive" "[2020] UKSC 1"
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level high
+            /// @date 2021-01-01
+            /// @effect satisfies active_misleading
+            caselaw "Local Expansive" "[2021] SGHC 1" {
+                "Local expansive view"
+                element deception
+            }
+
+            /// @jurisdiction singapore
+            /// @court_level apex
+            /// @date 2026-01-01
+            caselaw "Apex Chain Adopter" "[2026] SGCA 1" {
+                "Applies the adopted restrictive view"
+                element deception
+                treatment applies "Intermediate Adopter" "[2024] SGHC 1"
+            }
+        }
+        """
+    )
+
+    result = StatuteEvaluator().evaluate(
+        module.statutes[0],
+        _facts(deception=True, active_misleading=False),
+    )
+
+    assert result.overall_satisfied is False
+    assert any("Apex Chain Adopter" in item for item in result.reasoning)
+    assert not any("Local Expansive" in item for item in result.reasoning)

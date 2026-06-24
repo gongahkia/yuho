@@ -68,7 +68,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
   - Current support: case-law treatment syntax accepts follows/followed, distinguishes/distinguished, overrules/overruled, reverses/reversed, approves/approved, disapproves/disapproved, and applies/applied.
   - Current support: case-law doc metadata models ratio/obiter role, jurisdiction, court level, decision date, and simple interpretive effects; active `requires`/`satisfies`/`excludes` effects can narrow or expand targeted element truth in runtime evaluation, while inactive overruled/distinguished/reversed/disapproved cases are ignored.
   - Current support: conflicting active executable effects over the same element/fact are resolved by matching statute jurisdiction, court level, doctrine role, decision date, then declaration order.
-  - Current support: active followed/approved/applied treatments can adopt a known active target case's executable effect under the treating case's precedence metadata.
+  - Current support: active followed/approved/applied treatments can transitively adopt a known active target case's executable effect under the treating case's precedence metadata.
   - Current support: declared element burdens and proof standards constrain matching typed fact metadata while preserving legacy primitive facts.
   - Current support: active case-law effects can declare jurisdiction-compatible burden shifts over their effect facts, constraining matching typed fact metadata while preserving legacy primitive facts.
   - Broaden doctrine beyond targeted effect-fact burden shifts.

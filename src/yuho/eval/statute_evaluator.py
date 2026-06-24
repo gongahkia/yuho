@@ -499,23 +499,28 @@ class StatuteEvaluator:
         inactive: set[str],
     ) -> Tuple[nodes.CaseLawNode, ...]:
         by_name = {StatuteEvaluator._case_key(case.case_name.value): case for case in case_law}
-        adopted: List[nodes.CaseLawNode] = []
-        for case in case_law:
-            adopted_case = case
+        resolved: Dict[str, nodes.CaseLawNode] = {}
+
+        def resolve(case: nodes.CaseLawNode, seen: set[str]) -> nodes.CaseLawNode:
+            case_key = StatuteEvaluator._case_key(case.case_name.value)
+            if case_key in resolved:
+                return resolved[case_key]
             if case.interpretive_effect or case.effect_fact:
-                adopted.append(adopted_case)
-                continue
-            if StatuteEvaluator._case_key(case.case_name.value) in inactive:
-                adopted.append(adopted_case)
-                continue
+                resolved[case_key] = case
+                return case
+            if case_key in inactive or case_key in seen:
+                resolved[case_key] = case
+                return case
             for treatment in case.treatments:
                 if not is_adopting_treatment(treatment.kind):
                     continue
-                target = by_name.get(StatuteEvaluator._case_key(treatment.target.value))
+                target_key = StatuteEvaluator._case_key(treatment.target.value)
+                target = by_name.get(target_key)
                 if target is None:
                     continue
-                if StatuteEvaluator._case_key(target.case_name.value) in inactive:
+                if target_key in inactive:
                     continue
+                target = resolve(target, seen | {case_key})
                 if not target.interpretive_effect or not target.effect_fact:
                     continue
                 element_ref = case.element_ref or target.element_ref
@@ -530,9 +535,12 @@ class StatuteEvaluator:
                     burden_shift_standard=case.burden_shift_standard
                     or target.burden_shift_standard,
                 )
-                break
-            adopted.append(adopted_case)
-        return tuple(adopted)
+                resolved[case_key] = adopted_case
+                return adopted_case
+            resolved[case_key] = case
+            return case
+
+        return tuple(resolve(case, set()) for case in case_law)
 
     @staticmethod
     def _resolve_case_effect_conflicts(
