@@ -289,6 +289,62 @@ def verdictFixtures : List VerdictFixture :=
     }
   ]
 
+mutual
+def leafNames : ElementGroup → List String
+  | .leaf e => [e.name]
+  | .allOf gs => leafNamesList gs
+  | .anyOf gs => leafNamesList gs
+
+def leafNamesList : List ElementGroup → List String
+  | [] => []
+  | g :: rest => leafNames g ++ leafNamesList rest
+end
+
+def containsString (needle : String) : List String → Bool
+  | [] => false
+  | x :: rest => if x == needle then true else containsString needle rest
+
+def uniqueStringsLoop : List String → List String → List String
+  | [], acc => acc
+  | x :: rest, acc =>
+      uniqueStringsLoop rest (if containsString x acc then acc else acc ++ [x])
+
+def uniqueStrings (xs : List String) : List String :=
+  uniqueStringsLoop xs []
+
+def allTrueFacts (s : Statute) : List (String × Bool) :=
+  (uniqueStrings (leafNames s.elements)).map (fun name => (name, true))
+
+def corpusVerdictFixturesFor (fixture : String × Statute) : List VerdictFixture :=
+  let n := fixture.fst
+  let s := fixture.snd
+  [
+    {
+      name := n ++ "_corpus_all_true"
+      statuteName := n
+      statute := s
+      factsName := n ++ "AllTrue"
+      factsPairs := allTrueFacts s
+    },
+    {
+      name := n ++ "_corpus_empty"
+      statuteName := n
+      statute := s
+      factsName := n ++ "Empty"
+      factsPairs := []
+    }
+  ]
+
+def isSmokeFixtureName (name : String) : Bool :=
+  name == "s299" || name == "s300" || name == "s378" || name == "s415"
+
+def corpusVerdictFixtures : List VerdictFixture :=
+  (Yuho.Fixtures.fixtures.filter (fun fixture => !isSmokeFixtureName fixture.fst)).bind
+    corpusVerdictFixturesFor
+
+def allVerdictFixtures : List VerdictFixture :=
+  verdictFixtures ++ corpusVerdictFixtures
+
 /-! ## Penalty footprint fixtures. -/
 
 structure PenaltyFootprintFixture where
@@ -408,7 +464,7 @@ end Yuho.ExportSpec
 
 def main (args : List String) : IO Unit := do
   if args.contains "--verdicts" then
-    IO.println (Yuho.ExportSpec.verdictsJSON Yuho.ExportSpec.verdictFixtures)
+    IO.println (Yuho.ExportSpec.verdictsJSON Yuho.ExportSpec.allVerdictFixtures)
     return
   if args.contains "--penalty-footprints" then
     IO.println (Yuho.ExportSpec.penaltyFootprintsJSON Yuho.ExportSpec.penaltyFootprintFixtures)

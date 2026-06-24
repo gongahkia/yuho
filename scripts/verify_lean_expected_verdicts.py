@@ -88,6 +88,7 @@ def _verdict_statutes() -> dict[str, nodes.StatuteNode]:
     statutes = fixtures_from_corpus()
     statutes.update(smoke_python_fixtures())
     for name, statute in statutes.items():
+        statute = _hoist_subsection_elements(statute)
         exceptions = tuple(
             replace(exc, guard=nodes.IdentifierNode(f"exc_{exc.label}"))
             if exc.label else exc
@@ -95,6 +96,20 @@ def _verdict_statutes() -> dict[str, nodes.StatuteNode]:
         )
         out[name] = replace(statute, exceptions=exceptions)
     return out
+
+
+def _hoist_subsection_elements(statute: nodes.StatuteNode) -> nodes.StatuteNode:
+    if statute.elements:
+        return statute
+    elements: list[nodes.ASTNode] = []
+
+    def walk(subsections: Any) -> None:
+        for subsection in subsections or ():
+            elements.extend(getattr(subsection, "elements", ()) or ())
+            walk(getattr(subsection, "subsections", ()) or ())
+
+    walk(getattr(statute, "subsections", ()) or ())
+    return replace(statute, elements=tuple(elements))
 
 
 def _module_for(statute: nodes.StatuteNode) -> nodes.ModuleNode:
