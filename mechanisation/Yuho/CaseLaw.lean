@@ -89,6 +89,22 @@ def CaseEffectKind.apply (kind : CaseEffectKind) (base fact : Bool) : Bool :=
   | .satisfies => base || fact
   | .excludes => base && !fact
 
+def CaseEffectKind.fromSurface (effect : String) : Option CaseEffectKind :=
+  if effect = "require" || effect = "requires" ||
+      effect = "narrow" || effect = "narrows" then
+    some .requires
+  else if effect = "satisfy" || effect = "satisfies" ||
+      effect = "expand" || effect = "expands" then
+    some .satisfies
+  else if effect = "exclude" || effect = "excludes" then
+    some .excludes
+  else
+    none
+
+def CaseEffectKind.applySurface (effect : String) (base fact : Bool) :
+    Option Bool :=
+  (CaseEffectKind.fromSurface effect).map (fun kind => kind.apply base fact)
+
 def CaseEffect.appliesTo (effect : CaseEffect) (name : String) : Bool :=
   decide (effect.target = name)
 
@@ -223,6 +239,34 @@ def TreatmentKind.inactivates : TreatmentKind → Bool
   | .reversed => true
   | .disapproved => true
 
+def TreatmentKind.fromSurface (kind : String) : Option TreatmentKind :=
+  if kind = "followed" || kind = "follows" then
+    some .followed
+  else if kind = "approved" || kind = "approves" then
+    some .approved
+  else if kind = "applied" || kind = "applies" then
+    some .applied
+  else if kind = "distinguished" || kind = "distinguishes" then
+    some .distinguished
+  else if kind = "overruled" || kind = "overrules" then
+    some .overruled
+  else if kind = "reversed" || kind = "reverses" then
+    some .reversed
+  else if kind = "disapproved" || kind = "disapproves" then
+    some .disapproved
+  else
+    none
+
+def TreatmentKind.adoptsSurface (kind : String) : Bool :=
+  match TreatmentKind.fromSurface kind with
+  | some treatment => treatment.adopts
+  | none => false
+
+def TreatmentKind.inactivatesSurface (kind : String) : Bool :=
+  match TreatmentKind.fromSurface kind with
+  | some treatment => treatment.inactivates
+  | none => false
+
 def CaseAuthority.adoptsCase (authority : CaseAuthority) (targetName : String) :
     Bool :=
   authority.treatments.any
@@ -356,6 +400,26 @@ theorem CaseEffectKind.excludes_true (base : Bool) :
     CaseEffectKind.apply .excludes base true = false := by
   cases base <;> rfl
 
+theorem CaseEffectKind.narrows_fromSurface :
+    CaseEffectKind.fromSurface "narrows" = some .requires := by
+  rfl
+
+theorem CaseEffectKind.expands_fromSurface :
+    CaseEffectKind.fromSurface "expands" = some .satisfies := by
+  rfl
+
+theorem CaseEffectKind.unknown_fromSurface :
+    CaseEffectKind.fromSurface "persuades" = none := by
+  rfl
+
+theorem CaseEffectKind.narrow_surface_false (base : Bool) :
+    CaseEffectKind.applySurface "narrow" base false = some false := by
+  cases base <;> rfl
+
+theorem CaseEffectKind.expand_surface_true (base : Bool) :
+    CaseEffectKind.applySurface "expand" base true = some true := by
+  cases base <;> rfl
+
 theorem CaseEffect.applyAll_nil (name : String) (base : Bool) (F : Facts) :
     CaseEffect.applyAll name base F [] = base := by
   rfl
@@ -462,6 +526,26 @@ theorem TreatmentKind.overruled_inactivates :
 
 theorem TreatmentKind.followed_not_inactivates :
     TreatmentKind.followed.inactivates = false := by
+  rfl
+
+theorem TreatmentKind.follows_surface_adopts :
+    TreatmentKind.adoptsSurface "follows" = true := by
+  rfl
+
+theorem TreatmentKind.approves_surface_adopts :
+    TreatmentKind.adoptsSurface "approves" = true := by
+  rfl
+
+theorem TreatmentKind.overrules_surface_inactivates :
+    TreatmentKind.inactivatesSurface "overrules" = true := by
+  rfl
+
+theorem TreatmentKind.distinguishes_surface_inactivates :
+    TreatmentKind.inactivatesSurface "distinguishes" = true := by
+  rfl
+
+theorem TreatmentKind.unknown_surface_not_adopting :
+    TreatmentKind.adoptsSurface "mentions" = false := by
   rfl
 
 theorem CaseAuthority.resolvedEffectIn_zero

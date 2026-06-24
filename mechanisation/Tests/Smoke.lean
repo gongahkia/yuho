@@ -121,6 +121,12 @@ def takingRequiresControl : CaseEffect :=
     jurisdiction := none
   }
 
+example : CaseEffectKind.applySurface "narrows" true false = some false := by
+  native_decide
+
+example : TreatmentKind.inactivatesSurface "overrules" = true := by
+  native_decide
+
 def defenceBurden : CaseBurdenShift :=
   { burden := "defence", standard := some "balance_of_probabilities" }
 
