@@ -45,7 +45,7 @@ FEATURE_COVERAGE = (
     ),
     (
         "lean_expected_verdicts",
-        "lean-runtime=smoke-verdicts; z3-lean=structural; alloy=unsupported-boundary",
+        "runtime-z3-lean=smoke-verdicts; z3-lean=structural; alloy=unsupported-boundary",
     ),
     (
         "optional_values",

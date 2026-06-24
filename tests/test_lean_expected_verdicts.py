@@ -47,4 +47,5 @@ def test_lean_expected_verdict_comparison_reports_mismatch() -> None:
     assert len(mismatches) == 1
     assert mismatches[0].name == "s299_wrong"
     assert mismatches[0].expected is False
-    assert mismatches[0].actual is True
+    assert mismatches[0].runtime is True
+    assert mismatches[0].z3 is True
