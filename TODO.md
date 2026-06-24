@@ -76,7 +76,7 @@ Scope: strengthen Yuho as a serious computational-law DSL. This is not a feature
 ## P1: Formal Mechanisation
 
 - Close the known Lean proof gaps incrementally.
-  - Add binder infrastructure for scoped names.
+  - Current support: Lean scoped-name infrastructure centralises statute-local SMT atom names used by the generator.
   - Add richer doctrine/case-law semantics once runtime semantics exists.
 
 ## Non-Goals For Now

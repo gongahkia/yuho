@@ -9,6 +9,7 @@ toolchain pinned in `lean-toolchain` (Lean 4.10.0+).
 -/
 
 import Yuho.AST
+import Yuho.ScopedName
 import Yuho.Facts
 import Yuho.Eval
 import Yuho.SMTAbs

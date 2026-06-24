@@ -59,6 +59,7 @@ What this file does *not* do:
 -/
 
 import Yuho.AST
+import Yuho.ScopedName
 import Yuho.Facts
 import Yuho.Eval
 import Yuho.SMTAbs
@@ -113,16 +114,19 @@ section numbers since the Lean AST does not use such numbers. -/
 namespace Generator
 
 def elementAtomName (s : Statute) (e : Element) : String :=
-  s.section_number ++ "_" ++ e.name ++ "_satisfied"
+  (ScopedName.statute s (e.name ++ "_satisfied")).render
 
 def elementsAtomName (s : Statute) : String :=
-  s.section_number ++ "_elements_satisfied"
+  (ScopedName.statute s "elements_satisfied").render
 
 def exceptionAtomName (s : Statute) (x : Exception) : String :=
-  s.section_number ++ "_exc_" ++ x.label ++ "_fires"
+  (ScopedName.statute s ("exc_" ++ x.label ++ "_fires")).render
+
+def exceptionFiredSetAtomName (s : Statute) (x : Exception) : String :=
+  (ScopedName.statute s ("exc_" ++ x.label ++ "_firedSet")).render
 
 def convictionAtomName (s : Statute) : String :=
-  s.section_number ++ "_conviction"
+  (ScopedName.statute s "conviction").render
 
 /-! ## §6.6-v5 layer 3 — Symbolic encoding of a statute
 
@@ -192,7 +196,7 @@ semantically (see `canonical_smt_satisfies`). -/
 def encodeExceptionBiconds (s : Statute) : List SMTFormula :=
   s.exceptions.map (fun x =>
     .iff (.var (exceptionAtomName s x))
-         (.var (s.section_number ++ "_exc_" ++ x.label ++ "_firedSet")))
+         (.var (exceptionFiredSetAtomName s x)))
 
 /-- The conviction biconditional: `<sX>_conviction ↔
 `<sX>_elements_satisfied ∧ ¬(any rebutting exception fires)`.
