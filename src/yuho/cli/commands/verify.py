@@ -46,7 +46,7 @@ BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
         "role": "mechanised-spec",
         "unsupported_features": [
             "full corpus proof coverage",
-            "case-law semantics",
+            "full case-law semantics beyond effect algebra",
             "rich evidential fact provenance",
             "certified Z3 result reconstruction",
         ],

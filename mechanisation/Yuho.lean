@@ -12,6 +12,7 @@ import Yuho.AST
 import Yuho.ScopedName
 import Yuho.Facts
 import Yuho.Eval
+import Yuho.CaseLaw
 import Yuho.SMTAbs
 import Yuho.Soundness
 import Yuho.Graph

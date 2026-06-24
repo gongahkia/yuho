@@ -14,6 +14,7 @@ Run: `cd mechanisation && lake build Tests`.
 import Yuho.AST
 import Yuho.Facts
 import Yuho.Eval
+import Yuho.CaseLaw
 import Yuho.SMTAbs
 import Yuho.Soundness
 import Yuho.Graph
@@ -68,6 +69,26 @@ example : s299WithConsent.elementsSatisfied factsHomicideWithConsent = true := b
 
 example : s299WithConsent.convicts factsHomicideWithConsent = false := by
   -- Elements satisfied but consent exception fires → no conviction.
+  native_decide
+
+/-! ## Executable case-law effect smoke tests. -/
+
+def takingElement : Element :=
+  { kind := .actusReus, name := "taking", description := "" }
+
+def takingRequiresControl : CaseEffect :=
+  { target := "taking", kind := .requires, fact := "control_plus_deprivation" }
+
+example :
+    takingElement.evalWithCases [takingRequiresControl]
+      (Facts.fromList [("taking", true), ("control_plus_deprivation", false)])
+      = false := by
+  native_decide
+
+example :
+    takingElement.evalWithCases [takingRequiresControl]
+      (Facts.fromList [("taking", true), ("control_plus_deprivation", true)])
+      = true := by
   native_decide
 
 /-- Element correspondence holds trivially on this concrete case. -/
