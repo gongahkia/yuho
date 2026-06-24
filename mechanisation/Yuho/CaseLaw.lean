@@ -205,6 +205,32 @@ def CaseAuthority.bestByPrecedence? : List CaseAuthority → Option CaseAuthorit
           if candidate.betterThan best then candidate else best)
         first)
 
+def CaseAuthority.effectsConflict (left right : CaseAuthority) : Bool :=
+  match left.effect, right.effect with
+  | some leftEffect, some rightEffect =>
+      decide (leftEffect.fact = rightEffect.fact) &&
+        decide (leftEffect.kind ≠ rightEffect.kind)
+  | _, _ => false
+
+def CaseAuthority.hasEffectConflictIn (authority : CaseAuthority)
+    (cases : List CaseAuthority) : Bool :=
+  cases.any (fun candidate => authority.effectsConflict candidate)
+
+def CaseAuthority.bucketHasEffectConflict : List CaseAuthority → Bool
+  | [] => false
+  | authority :: rest =>
+      authority.hasEffectConflictIn rest ||
+        CaseAuthority.bucketHasEffectConflict rest
+
+def CaseAuthority.resolveConflictBucket (cases : List CaseAuthority) :
+    List CaseAuthority :=
+  if CaseAuthority.bucketHasEffectConflict cases then
+    match CaseAuthority.bestByPrecedence? cases with
+    | some authority => [authority]
+    | none => []
+  else
+    cases
+
 def CaseAuthority.adoptedEffectFrom (authority target : CaseAuthority) :
     Option CaseEffect :=
   if authority.adoptsCase target.name then
@@ -311,6 +337,10 @@ theorem CasePrecedence.newer_date_breaks_same_court_tie :
       ({ jurisdictionRank := 2, courtRank := 3, doctrineRoleRank := 0,
          decisionDate := 20200101, declarationOrder := 0 } :
         CasePrecedence) = true := by
+  rfl
+
+theorem CaseAuthority.resolveConflictBucket_nil :
+    CaseAuthority.resolveConflictBucket [] = [] := by
   rfl
 
 theorem TreatmentKind.followed_adopts :

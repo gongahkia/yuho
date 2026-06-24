@@ -301,6 +301,30 @@ example :
   native_decide
 
 example :
+    CaseAuthority.bucketHasEffectConflict
+      [foreignExpansiveCase, localRestrictiveCase] = true := by
+  native_decide
+
+example :
+    (CaseAuthority.resolveConflictBucket
+        [foreignExpansiveCase, localRestrictiveCase]).map
+        (fun authority => authority.name) =
+      ["Local Restrictive"] := by
+  native_decide
+
+example :
+    CaseAuthority.bucketHasEffectConflict
+      [localRestrictiveCase, apexOldCase] = false := by
+  native_decide
+
+example :
+    (CaseAuthority.resolveConflictBucket
+        [localRestrictiveCase, apexOldCase]).map
+        (fun authority => authority.name) =
+      ["Local Restrictive", "Apex Old"] := by
+  native_decide
+
+example :
     adoptingApexCase.adoptedEffectFrom foreignRestrictiveCase =
       some takingRequiresControl := by
   native_decide
