@@ -626,6 +626,16 @@ theorem CaseAuthority.materializeEffect_target_override
     (authority.materializeEffect effect).target = authority.element := by
   rfl
 
+theorem CaseAuthority.materializeEffect_kind_preserved
+    (authority : CaseAuthority) (effect : CaseEffect) :
+    (authority.materializeEffect effect).kind = effect.kind := by
+  rfl
+
+theorem CaseAuthority.materializeEffect_fact_preserved
+    (authority : CaseAuthority) (effect : CaseEffect) :
+    (authority.materializeEffect effect).fact = effect.fact := by
+  rfl
+
 theorem TreatmentKind.followed_adopts :
     TreatmentKind.followed.adopts = true := by
   rfl

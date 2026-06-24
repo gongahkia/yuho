@@ -591,6 +591,7 @@ def test_positive_treatment_adoption_remaps_effect_to_treating_case_element() ->
     ]
     assert len(remapped) == 1
     assert remapped[0].interpretive_effect == "requires"
+    assert remapped[0].effect_fact == "active_misleading"
 
 
 def test_positive_treatment_adoption_resolves_transitive_chain() -> None:
