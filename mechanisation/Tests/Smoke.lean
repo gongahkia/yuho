@@ -180,7 +180,22 @@ example : TreatmentKind.inactivatesSurface "disapproves" = true := by
 example : CourtLevel.rankSurface "court_of_appeal" = 50 := by
   native_decide
 
+example : CourtLevel.rankSurface "appellate" = 40 := by
+  native_decide
+
+example : CourtLevel.rankSurface "high" = 30 := by
+  native_decide
+
+example : CourtLevel.rankSurface "district" = 20 := by
+  native_decide
+
+example : CourtLevel.rankSurface "trial" = 10 := by
+  native_decide
+
 example : DoctrineRole.rankSurface "holding" = 20 := by
+  native_decide
+
+example : DoctrineRole.rankSurface "obiter" = 10 := by
   native_decide
 
 def defenceBurden : CaseBurdenShift :=

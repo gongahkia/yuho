@@ -593,19 +593,64 @@ theorem CasePrecedence.newer_date_breaks_same_court_tie :
 theorem CourtLevel.apex_rank : CourtLevel.apex.rank = 50 := by
   rfl
 
+theorem CourtLevel.high_rank : CourtLevel.high.rank = 30 := by
+  rfl
+
+theorem CourtLevel.trial_rank : CourtLevel.trial.rank = 10 := by
+  rfl
+
+theorem DoctrineRole.ratio_rank : DoctrineRole.ratio.rank = 20 := by
+  rfl
+
 theorem DoctrineRole.obiter_rank : DoctrineRole.obiter.rank = 10 := by
+  rfl
+
+theorem CourtLevel.apex_surface_rank :
+    CourtLevel.rankSurface "apex" = 50 := by
+  rfl
+
+theorem CourtLevel.supreme_surface_rank :
+    CourtLevel.rankSurface "supreme" = 50 := by
   rfl
 
 theorem CourtLevel.courtOfAppeal_surface_rank :
     CourtLevel.rankSurface "court_of_appeal" = 50 := by
   rfl
 
+theorem CourtLevel.appellate_surface_rank :
+    CourtLevel.rankSurface "appellate" = 40 := by
+  rfl
+
+theorem CourtLevel.high_surface_rank :
+    CourtLevel.rankSurface "high" = 30 := by
+  rfl
+
+theorem CourtLevel.district_surface_rank :
+    CourtLevel.rankSurface "district" = 20 := by
+  rfl
+
+theorem CourtLevel.trial_surface_rank :
+    CourtLevel.rankSurface "trial" = 10 := by
+  rfl
+
+theorem CourtLevel.lower_surface_rank :
+    CourtLevel.rankSurface "lower" = 10 := by
+  rfl
+
 theorem CourtLevel.unknown_surface_rank :
     CourtLevel.rankSurface "magistrate" = 0 := by
   rfl
 
+theorem DoctrineRole.ratio_surface_rank :
+    DoctrineRole.rankSurface "ratio" = 20 := by
+  rfl
+
 theorem DoctrineRole.holding_surface_rank :
     DoctrineRole.rankSurface "holding" = 20 := by
+  rfl
+
+theorem DoctrineRole.obiter_surface_rank :
+    DoctrineRole.rankSurface "obiter" = 10 := by
   rfl
 
 theorem DoctrineRole.unknown_surface_rank :
