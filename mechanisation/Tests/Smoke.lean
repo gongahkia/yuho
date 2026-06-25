@@ -156,6 +156,15 @@ example : CaseEffectKind.applySurface "narrows" true false = some false := by
 example : TreatmentKind.inactivatesSurface "overrules" = true := by
   native_decide
 
+example : TreatmentKind.inactivatesSurface "distinguishes" = true := by
+  native_decide
+
+example : TreatmentKind.inactivatesSurface "reverses" = true := by
+  native_decide
+
+example : TreatmentKind.inactivatesSurface "disapproves" = true := by
+  native_decide
+
 example : CourtLevel.rankSurface "court_of_appeal" = 50 := by
   native_decide
 
@@ -755,6 +764,12 @@ example :
         [foreignRestrictiveCase,
           { adoptingApexCase with treatments := [(.approved, "Foreign Restrictive")] }] 2 =
       some takingRequiresControl := by
+  native_decide
+
+example : TreatmentKind.adoptsSurface "follows" = true := by
+  native_decide
+
+example : TreatmentKind.adoptsSurface "approves" = true := by
   native_decide
 
 example : TreatmentKind.adoptsSurface "applies" = true := by

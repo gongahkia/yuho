@@ -149,7 +149,7 @@ Decisions deliberately deferred:
   the solver's reconstruction.
 * **Richer doctrine and case-law semantics.** The current artefact
   mechanises typed-fact burden metadata guards, lower-case surface
-  effect/treatment aliases, normalized effect-fact conflict buckets,
+  effect/treatment surface aliases, normalized effect-fact conflict buckets,
   same-kind same-fact non-conflict retention, surface court/role precedence
   ranking, the executable effect algebra, cumulative non-conflicting effects with
   declaration-order application, negative-treatment non-adoption,
