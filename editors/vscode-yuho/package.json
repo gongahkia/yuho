@@ -64,7 +64,7 @@
     "check": "node --check extension.js"
   },
   "dependencies": {
-    "tree-sitter": "^0.21.1",
+    "tree-sitter": "^0.25.0",
     "vscode-languageclient": "^9.0.1"
   }
 }
