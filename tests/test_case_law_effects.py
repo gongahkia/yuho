@@ -1066,33 +1066,38 @@ def test_applies_treatment_adopts_target_effect() -> None:
 
 
 def test_positive_treatment_does_not_inactivate_target_effect() -> None:
-    module = _module(
-        """
-        statute 1 "Cheating" jurisdiction singapore {
-            elements { actus_reus deception := "deception"; }
+    for treatment_kind, adopter_name in (
+        ("follows", "Followed Adopter"),
+        ("approves", "Approved Adopter"),
+        ("applies", "Applied Adopter"),
+    ):
+        module = _module(
+            f"""
+            statute 1 "Cheating" jurisdiction singapore {{
+                elements {{ actus_reus deception := "deception"; }}
 
-            /// @effect requires active_misleading
-            caselaw "Restrictive Source" "[2020] SGCA 1" {
-                "Restrictive source"
-                element deception
-            }
+                /// @effect requires active_misleading
+                caselaw "Restrictive Source" "[2020] SGCA 1" {{
+                    "Restrictive source"
+                    element deception
+                }}
 
-            caselaw "Applied Adopter" "[2026] SGCA 1" {
-                "Applies source without retiring it"
-                element deception
-                treatment applies "Restrictive Source" "[2020] SGCA 1"
-            }
-        }
-        """
-    )
+                caselaw "{adopter_name}" "[2026] SGCA 1" {{
+                    "Positive treatment without retiring source"
+                    element deception
+                    treatment {treatment_kind} "Restrictive Source" "[2020] SGCA 1"
+                }}
+            }}
+            """
+        )
 
-    effects = StatuteEvaluator().active_case_law_effects(
-        module.statutes[0].case_law,
-        statute_jurisdiction=module.statutes[0].jurisdiction,
-    )
+        effects = StatuteEvaluator().active_case_law_effects(
+            module.statutes[0].case_law,
+            statute_jurisdiction=module.statutes[0].jurisdiction,
+        )
 
-    names = {case.case_name.value for case in effects["deception"]}
-    assert names == {"Restrictive Source", "Applied Adopter"}
+        names = {case.case_name.value for case in effects["deception"]}
+        assert names == {"Restrictive Source", adopter_name}
 
 
 def test_positive_treatment_adoption_preserves_target_metadata_without_override() -> None:

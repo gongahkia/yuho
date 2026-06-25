@@ -760,6 +760,12 @@ example :
 example : TreatmentKind.adoptsSurface "applies" = true := by
   native_decide
 
+example : TreatmentKind.followed.inactivates = false := by
+  native_decide
+
+example : TreatmentKind.approved.inactivates = false := by
+  native_decide
+
 example : TreatmentKind.applied.inactivates = false := by
   native_decide
 
