@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://gabrielongzm.com">Gabriel Ong Zhe Mian</a>
+  <a href="https://zenodo.org/records/19935537">Paper</a>
   &nbsp;·&nbsp;
   <a href="./docs/INDEX.md">Docs</a>
   &nbsp;·&nbsp;
@@ -119,6 +119,10 @@ $ yuho completion fish --install
 * [Syntax reference](./docs/researcher/syntax.md)
 * [Canonical semantics](./docs/researcher/canonical-semantics.md)
 * [Contributor architecture](./docs/contributor/architecture.md)
+
+## Paper
+
+You can find my paper *Yuho: A Domain-Specific Language for Encoding the Singapore Penal Code as Executable Statute* published on Zenodo [here](https://zenodo.org/records/19935537).
 
 ## Citation
 
