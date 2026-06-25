@@ -278,6 +278,18 @@ def localApexNewPrecedence : CasePrecedence :=
     declarationOrder := 1
   }
 
+def localApexRatioPrecedence : CasePrecedence :=
+  { localApexNewPrecedence with doctrineRoleRank := DoctrineRole.ratio.rank }
+
+def localApexObiterPrecedence : CasePrecedence :=
+  { localApexNewPrecedence with doctrineRoleRank := DoctrineRole.obiter.rank }
+
+def localHighRatioPrecedence : CasePrecedence :=
+  { localHighPrecedence with doctrineRoleRank := DoctrineRole.ratio.rank }
+
+def foreignApexRatioPrecedence : CasePrecedence :=
+  { foreignApexPrecedence with doctrineRoleRank := DoctrineRole.ratio.rank }
+
 def foreignRestrictiveCase : CaseAuthority :=
   { name := "Foreign Restrictive"
     element := "taking"
@@ -586,6 +598,46 @@ def apexNewCase : CaseAuthority :=
     precedence := localApexNewPrecedence
   }
 
+def bindingApexRatioCase : CaseAuthority :=
+  { name := "Binding Apex Ratio"
+    element := "taking"
+    effect := some takingRequiresControl
+    burdenShift := none
+    jurisdiction := none
+    treatments := []
+    precedence := localApexRatioPrecedence
+  }
+
+def persuasiveApexObiterCase : CaseAuthority :=
+  { name := "Persuasive Apex Obiter"
+    element := "taking"
+    effect := some takingRequiresControl
+    burdenShift := none
+    jurisdiction := none
+    treatments := []
+    precedence := localApexObiterPrecedence
+  }
+
+def coordinateHighRatioCase : CaseAuthority :=
+  { name := "Coordinate High Ratio"
+    element := "taking"
+    effect := some takingRequiresControl
+    burdenShift := none
+    jurisdiction := none
+    treatments := []
+    precedence := localHighRatioPrecedence
+  }
+
+def foreignApexRatioCase : CaseAuthority :=
+  { name := "Foreign Apex Ratio"
+    element := "taking"
+    effect := some takingRequiresControl
+    burdenShift := none
+    jurisdiction := none
+    treatments := []
+    precedence := foreignApexRatioPrecedence
+  }
+
 example :
     takingElement.evalWithCases [takingRequiresControl]
       (Facts.fromList [("taking", true), ("control_plus_deprivation", false)])
@@ -656,6 +708,75 @@ example :
 
 example :
     localApexNewPrecedence.betterThan localApexOldPrecedence = true := by
+  native_decide
+
+example :
+    localApexRatioPrecedence.bindsCourtRank CourtLevel.high.rank = true := by
+  native_decide
+
+example :
+    localApexRatioPrecedence.bindsCourtSurface "high" = true := by
+  native_decide
+
+example :
+    localApexRatioPrecedence.bindsCourtRank CourtLevel.apex.rank = false := by
+  native_decide
+
+example :
+    localHighRatioPrecedence.bindsCourtRank CourtLevel.high.rank = false := by
+  native_decide
+
+example :
+    foreignApexRatioPrecedence.bindsCourtRank CourtLevel.high.rank = false := by
+  native_decide
+
+example :
+    localApexObiterPrecedence.bindsCourtRank CourtLevel.high.rank = false := by
+  native_decide
+
+example :
+    localApexObiterPrecedence.persuasiveCourtRank CourtLevel.high.rank = true := by
+  native_decide
+
+example :
+    foreignApexRatioPrecedence.persuasiveCourtRank CourtLevel.high.rank = true := by
+  native_decide
+
+example :
+    localApexRatioPrecedence.persuasiveCourtRank CourtLevel.high.rank = false := by
+  native_decide
+
+example :
+    (CaseAuthority.bindingAuthoritiesFor
+        [persuasiveApexObiterCase, bindingApexRatioCase,
+          coordinateHighRatioCase, foreignApexRatioCase]
+        CourtLevel.high.rank).map (fun authority => authority.name) =
+      ["Binding Apex Ratio"] := by
+  native_decide
+
+example :
+    (CaseAuthority.persuasiveAuthoritiesFor
+        [persuasiveApexObiterCase, bindingApexRatioCase,
+          coordinateHighRatioCase, foreignApexRatioCase]
+        CourtLevel.high.rank).map (fun authority => authority.name) =
+      ["Persuasive Apex Obiter", "Coordinate High Ratio",
+        "Foreign Apex Ratio"] := by
+  native_decide
+
+example :
+    bindingApexRatioCase.resolvedBindingEffectIn
+        [bindingApexRatioCase] CourtLevel.high.rank 1 =
+      some takingRequiresControl := by
+  native_decide
+
+example :
+    persuasiveApexObiterCase.resolvedBindingEffectIn
+        [persuasiveApexObiterCase] CourtLevel.high.rank 1 = none := by
+  native_decide
+
+example :
+    coordinateHighRatioCase.resolvedBindingEffectIn
+        [coordinateHighRatioCase] CourtLevel.high.rank 1 = none := by
   native_decide
 
 example :

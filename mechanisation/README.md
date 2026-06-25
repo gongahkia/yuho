@@ -73,7 +73,7 @@ linter warnings.
 | Deep element-tree base camp (v9) | `Yuho/CrossDeep.lean` | `ElementDeep` AST + `ElementDeep.eval` (fuel-bounded) + `ElementGroup.toDeep` lift + `Statute.deepBody_compat` | Conservative-extension lemma: the v9 deep evaluator agrees with v4–v8 `Statute.elementsSatisfied` on the existing `crossRef`-free surface library at every fuel budget; mutual induction over `ElementGroup` / `List ElementGroup` |
 | `applyScope` lift + cross-ref semantics smoke (v9) | `Yuho/CrossDeep.lean` | `ElementDeep.applyScope` constructor + `eval_crossRef_resolves` / `eval_applyScope_resolves` / `_missing` / `_zero_fuel` (six theorems) | Each branch of the `crossRef` / `applyScope` evaluator is pinned to its inference rule (`is_infringed(n)` → ambient-facts `Statute.convicts`; `apply_scope(n, F')` → substituted-facts `Statute.convicts`; out-of-module → `false`; fuel-exhaustion → `false`) by `simp only` after a `sigma`-lookup hypothesis |
 | Typed fact burden metadata guard | `Yuho/Facts.lean`, `Yuho/Eval.lean` | `TypedFact.truthWithBurden_untyped_true` + `false` + `matching` + `wrong_burden` + `wrong_standard`; `Element.evalTyped` | Direct computation over runtime-style typed fact metadata: legacy true facts remain true, false facts remain false, matching burden/proof-standard metadata is accepted, and mismatched supplied metadata is rejected; smoke tests cover element-level matching/mismatching/untyped facts |
-| Case-law executable effect fragment | `Yuho/CaseLaw.lean` | `CaseEffectKind.requires_false` + `satisfies_true` + `excludes_true` + `fromSurface_*` + `applySurface_*` + `CaseFact.truthWithBurden_*` + `CaseEffect.effectiveFact_*jurisdiction*` + `CourtLevel.*_surface_rank` + `DoctrineRole.*_surface_rank` + `CasePrecedence.*` + `CaseAuthority.keepAfterEffectConflicts_no_bucket_conflict` + `resolveEffectConflicts_keeps_pair` + `materializeEffect_*` + `TreatmentKind.*_surface_*` + `CaseAuthority.resolvedEffectIn_*` lemmas | Direct computation over lower-case surface effect/treatment aliases, normalized effect-fact conflict buckets, same-kind same-fact non-conflict retention, surface court/role precedence ranking, the three runtime-supported effect operators, cumulative non-conflicting effects with declaration-order application, negative-treatment non-adoption, distinguished/overruled/reversed/disapproved treatment inactivation, own-effect dominance over adoption, missing-target adoption skip, adopted-effect target remapping and fact/kind preservation, bounded positive-treatment-chain adoption with cycle cutoff and metadata merge, inactive-authority/adoption suppression, jurisdiction-gated burden-metadata guards, concrete precedence ranks, and same-fact conflict selection; smoke tests cover targeted `requires`, surface aliases/ranks, typed burden acceptance/rejection, normalized fact-key conflict selection, same-kind same-fact retention, cumulative non-conflicting effects with declaration-order sensitivity, precedence rank construction/tie-breaking, full-list conflict selection, negative-treatment non-adoption, treatment inactivation, own-effect dominance, missing-target adoption skip, adopted-effect target remapping and payload preservation, inactive-adopter suppression, transitive adopted effect transfer, cyclic adoption cutoff, adoption burden override, foreign-jurisdiction burden bypass, and source suppression |
+| Case-law executable effect fragment | `Yuho/CaseLaw.lean` | `CaseEffectKind.requires_false` + `satisfies_true` + `excludes_true` + `fromSurface_*` + `applySurface_*` + `CaseFact.truthWithBurden_*` + `CaseEffect.effectiveFact_*jurisdiction*` + `CourtLevel.*_surface_rank` + `DoctrineRole.*_surface_rank` + `CasePrecedence.*` + `CaseAuthority.keepAfterEffectConflicts_no_bucket_conflict` + `resolveEffectConflicts_keeps_pair` + `materializeEffect_*` + `TreatmentKind.*_surface_*` + `CaseAuthority.resolvedEffectIn_*` + `resolvedBindingEffectIn_*` lemmas | Direct computation over lower-case surface effect/treatment aliases, normalized effect-fact conflict buckets, same-kind same-fact non-conflict retention, surface court/role precedence ranking, vertical-stare-decisis binding/persuasive classification, binding-effect gating, the three runtime-supported effect operators, cumulative non-conflicting effects with declaration-order application, negative-treatment non-adoption, distinguished/overruled/reversed/disapproved treatment inactivation, own-effect dominance over adoption, missing-target adoption skip, adopted-effect target remapping and fact/kind preservation, bounded positive-treatment-chain adoption with cycle cutoff and metadata merge, inactive-authority/adoption suppression, jurisdiction-gated burden-metadata guards, concrete precedence ranks, and same-fact conflict selection; smoke tests cover targeted `requires`, surface aliases/ranks, typed burden acceptance/rejection, normalized fact-key conflict selection, same-kind same-fact retention, cumulative non-conflicting effects with declaration-order sensitivity, precedence rank construction/tie-breaking, vertical binding, horizontal/foreign/obiter non-binding, persuasive authority classification, binding-effect suppression, full-list conflict selection, negative-treatment non-adoption, treatment inactivation, own-effect dominance, missing-target adoption skip, adopted-effect target remapping and payload preservation, inactive-adopter suppression, transitive adopted effect transfer, cyclic adoption cutoff, adoption burden override, foreign-jurisdiction burden bypass, and source suppression |
 
 ## Trusted base
 
@@ -151,17 +151,16 @@ Decisions deliberately deferred:
   mechanises typed-fact burden metadata guards, lower-case surface
   effect/treatment surface aliases, normalized effect-fact conflict buckets,
   same-kind same-fact non-conflict retention, surface court/role precedence
-  ranking, the executable effect algebra, cumulative non-conflicting effects with
-  declaration-order application, negative-treatment non-adoption,
-  distinguished/overruled/reversed/disapproved treatment inactivation, own-effect
-  dominance over adoption, ordered positive-treatment adoption including
-  `followed`/`approved`/`applied`, followed/approved/applied positive-treatment
-  non-inactivation,
-  missing-target and effectless-target adoption skip,
-  adopted-effect target remapping and fact/kind preservation, and bounded positive treatment
-  adoption with cycle cutoff and metadata override/fallback/merge,
-  inactive-authority/adoption suppression, jurisdiction-gated burden-metadata guards,
-  and concrete
-  precedence-rank conflict selection,
-  not the full precedent graph, open-textured legal terms, or procedural
-  burdens.
+  ranking, vertical-stare-decisis binding/persuasive classification,
+  binding-effect gating, the executable effect algebra, cumulative
+  non-conflicting effects with declaration-order application, negative-treatment
+  non-adoption, distinguished/overruled/reversed/disapproved treatment
+  inactivation, own-effect dominance over adoption, ordered positive-treatment
+  adoption including `followed`/`approved`/`applied`,
+  followed/approved/applied positive-treatment non-inactivation, missing-target
+  and effectless-target adoption skip, adopted-effect target remapping and
+  fact/kind preservation, and bounded positive treatment adoption with cycle
+  cutoff and metadata override/fallback/merge, inactive-authority/adoption
+  suppression, jurisdiction-gated burden-metadata guards, and concrete
+  precedence-rank conflict selection, not the full precedent graph,
+  open-textured legal terms, or procedural burdens.

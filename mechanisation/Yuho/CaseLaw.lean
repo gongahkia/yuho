@@ -272,6 +272,26 @@ def CasePrecedence.betterThan (left right : CasePrecedence) : Bool :=
   else
     decide (right.jurisdictionRank < left.jurisdictionRank)
 
+def CasePrecedence.bindsCourtRank (precedent : CasePrecedence)
+    (courtRank : Nat) : Bool :=
+  decide (precedent.jurisdictionRank = 2) &&
+    decide (precedent.doctrineRoleRank = DoctrineRole.ratio.rank) &&
+    decide (courtRank < precedent.courtRank)
+
+def CasePrecedence.bindsCourtSurface (precedent : CasePrecedence)
+    (courtLevel : String) : Bool :=
+  precedent.bindsCourtRank (CourtLevel.rankSurface courtLevel)
+
+def CasePrecedence.persuasiveCourtRank (precedent : CasePrecedence)
+    (courtRank : Nat) : Bool :=
+  !precedent.bindsCourtRank courtRank &&
+    decide (0 < precedent.courtRank) &&
+    decide (0 < precedent.doctrineRoleRank)
+
+def CasePrecedence.persuasiveCourtSurface (precedent : CasePrecedence)
+    (courtLevel : String) : Bool :=
+  precedent.persuasiveCourtRank (CourtLevel.rankSurface courtLevel)
+
 def TreatmentKind.adopts : TreatmentKind → Bool
   | .followed => true
   | .approved => true
@@ -438,6 +458,29 @@ def CaseAuthority.resolvedEffectIn (authority : CaseAuthority)
                   else
                     firstAdopted rest
             firstAdopted authority.treatments
+
+def CaseAuthority.bindsCourtRank (authority : CaseAuthority)
+    (courtRank : Nat) : Bool :=
+  authority.precedence.bindsCourtRank courtRank
+
+def CaseAuthority.persuasiveCourtRank (authority : CaseAuthority)
+    (courtRank : Nat) : Bool :=
+  authority.precedence.persuasiveCourtRank courtRank
+
+def CaseAuthority.bindingAuthoritiesFor (cases : List CaseAuthority)
+    (courtRank : Nat) : List CaseAuthority :=
+  cases.filter (fun authority => authority.bindsCourtRank courtRank)
+
+def CaseAuthority.persuasiveAuthoritiesFor (cases : List CaseAuthority)
+    (courtRank : Nat) : List CaseAuthority :=
+  cases.filter (fun authority => authority.persuasiveCourtRank courtRank)
+
+def CaseAuthority.resolvedBindingEffectIn (authority : CaseAuthority)
+    (cases : List CaseAuthority) (courtRank fuel : Nat) : Option CaseEffect :=
+  if authority.bindsCourtRank courtRank then
+    authority.resolvedEffectIn cases fuel
+  else
+    none
 
 theorem CaseEffectKind.requires_false (base : Bool) :
     CaseEffectKind.apply .requires base false = false := by
@@ -662,6 +705,48 @@ theorem CasePrecedence.local_jurisdiction_rank :
       (some "singapore") = 2 := by
   rfl
 
+theorem CasePrecedence.local_ratio_higher_court_binds :
+    ({ jurisdictionRank := 2, courtRank := 50,
+       doctrineRoleRank := DoctrineRole.ratio.rank,
+       decisionDate := 20260101, declarationOrder := 0 } :
+      CasePrecedence).bindsCourtRank CourtLevel.high.rank = true := by
+  rfl
+
+theorem CasePrecedence.horizontal_ratio_not_binding :
+    ({ jurisdictionRank := 2, courtRank := 30,
+       doctrineRoleRank := DoctrineRole.ratio.rank,
+       decisionDate := 20260101, declarationOrder := 0 } :
+      CasePrecedence).bindsCourtRank CourtLevel.high.rank = false := by
+  rfl
+
+theorem CasePrecedence.foreign_ratio_not_binding :
+    ({ jurisdictionRank := 0, courtRank := 50,
+       doctrineRoleRank := DoctrineRole.ratio.rank,
+       decisionDate := 20260101, declarationOrder := 0 } :
+      CasePrecedence).bindsCourtRank CourtLevel.high.rank = false := by
+  rfl
+
+theorem CasePrecedence.local_obiter_not_binding :
+    ({ jurisdictionRank := 2, courtRank := 50,
+       doctrineRoleRank := DoctrineRole.obiter.rank,
+       decisionDate := 20260101, declarationOrder := 0 } :
+      CasePrecedence).bindsCourtRank CourtLevel.high.rank = false := by
+  rfl
+
+theorem CasePrecedence.local_obiter_persuasive :
+    ({ jurisdictionRank := 2, courtRank := 50,
+       doctrineRoleRank := DoctrineRole.obiter.rank,
+       decisionDate := 20260101, declarationOrder := 0 } :
+      CasePrecedence).persuasiveCourtRank CourtLevel.high.rank = true := by
+  rfl
+
+theorem CasePrecedence.binding_ratio_not_persuasive :
+    ({ jurisdictionRank := 2, courtRank := 50,
+       doctrineRoleRank := DoctrineRole.ratio.rank,
+       decisionDate := 20260101, declarationOrder := 0 } :
+      CasePrecedence).persuasiveCourtRank CourtLevel.high.rank = false := by
+  rfl
+
 theorem CasePrecedence.surface_components_rank :
     CasePrecedence.fromSurfaceComponents (some "singapore") (some "singapore")
       (some "high") (some "obiter") 20260101 3 =
@@ -847,6 +932,21 @@ theorem CaseAuthority.resolvedEffectIn_inactive
     (hInactive : authority.isInactiveIn cases = true) :
     authority.resolvedEffectIn cases (Nat.succ fuel) = none := by
   simp [CaseAuthority.resolvedEffectIn, hInactive]
+
+theorem CaseAuthority.resolvedBindingEffectIn_binding
+    (authority : CaseAuthority) (cases : List CaseAuthority)
+    (courtRank fuel : Nat)
+    (hBinding : authority.bindsCourtRank courtRank = true) :
+    authority.resolvedBindingEffectIn cases courtRank fuel =
+      authority.resolvedEffectIn cases fuel := by
+  simp [CaseAuthority.resolvedBindingEffectIn, hBinding]
+
+theorem CaseAuthority.resolvedBindingEffectIn_nonbinding
+    (authority : CaseAuthority) (cases : List CaseAuthority)
+    (courtRank fuel : Nat)
+    (hBinding : authority.bindsCourtRank courtRank = false) :
+    authority.resolvedBindingEffectIn cases courtRank fuel = none := by
+  simp [CaseAuthority.resolvedBindingEffectIn, hBinding]
 
 theorem CaseAuthority.isInactiveIn_distinguished_by
     (authority distinguisher : CaseAuthority) :
