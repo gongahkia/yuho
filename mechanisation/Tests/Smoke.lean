@@ -153,6 +153,18 @@ example :
 example : CaseEffectKind.applySurface "narrows" true false = some false := by
   native_decide
 
+example : CaseEffectKind.fromSurface "requires" = some .requires := by
+  native_decide
+
+example : CaseEffectKind.fromSurface "satisfies" = some .satisfies := by
+  native_decide
+
+example : CaseEffectKind.fromSurface "excludes" = some .excludes := by
+  native_decide
+
+example : CaseEffectKind.applySurface "exclude" true true = some false := by
+  native_decide
+
 example : TreatmentKind.inactivatesSurface "overrules" = true := by
   native_decide
 

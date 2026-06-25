@@ -451,12 +451,44 @@ theorem CaseEffectKind.excludes_true (base : Bool) :
     CaseEffectKind.apply .excludes base true = false := by
   cases base <;> rfl
 
+theorem CaseEffectKind.require_fromSurface :
+    CaseEffectKind.fromSurface "require" = some .requires := by
+  rfl
+
+theorem CaseEffectKind.requires_fromSurface :
+    CaseEffectKind.fromSurface "requires" = some .requires := by
+  rfl
+
+theorem CaseEffectKind.narrow_fromSurface :
+    CaseEffectKind.fromSurface "narrow" = some .requires := by
+  rfl
+
 theorem CaseEffectKind.narrows_fromSurface :
     CaseEffectKind.fromSurface "narrows" = some .requires := by
   rfl
 
+theorem CaseEffectKind.satisfy_fromSurface :
+    CaseEffectKind.fromSurface "satisfy" = some .satisfies := by
+  rfl
+
+theorem CaseEffectKind.satisfies_fromSurface :
+    CaseEffectKind.fromSurface "satisfies" = some .satisfies := by
+  rfl
+
+theorem CaseEffectKind.expand_fromSurface :
+    CaseEffectKind.fromSurface "expand" = some .satisfies := by
+  rfl
+
 theorem CaseEffectKind.expands_fromSurface :
     CaseEffectKind.fromSurface "expands" = some .satisfies := by
+  rfl
+
+theorem CaseEffectKind.exclude_fromSurface :
+    CaseEffectKind.fromSurface "exclude" = some .excludes := by
+  rfl
+
+theorem CaseEffectKind.excludes_fromSurface :
+    CaseEffectKind.fromSurface "excludes" = some .excludes := by
   rfl
 
 theorem CaseEffectKind.unknown_fromSurface :
