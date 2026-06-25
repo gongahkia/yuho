@@ -700,6 +700,15 @@ example :
       some takingRequiresControl := by
   native_decide
 
+example : TreatmentKind.followed.adopts = true := by
+  native_decide
+
+example :
+    adoptingApexCase.resolvedEffectIn
+        [foreignRestrictiveCase, adoptingApexCase] 2 =
+      some takingRequiresControl := by
+  native_decide
+
 example :
     ownEffectAdoptingCase.resolvedEffectIn
         [foreignRestrictiveCase, ownEffectAdoptingCase] 2 =
