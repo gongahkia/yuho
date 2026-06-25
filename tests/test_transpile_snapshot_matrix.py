@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 
-from yuho.services.analysis import analyze_file
+from yuho.services.analysis import analyze_source
 from yuho.transpile.akomantoso_transpiler import AkomaNtosoTranspiler
 from yuho.transpile.alloy_transpiler import AlloyTranspiler
 from yuho.transpile.english_transpiler import EnglishTranspiler
@@ -52,10 +52,14 @@ def _build_matrix() -> dict:
     snapshots: dict[str, dict[str, dict[str, int | str]]] = {}
     for statute_path in statute_paths:
         rel_path = statute_path.relative_to(REPO)
-        analysis = analyze_file(rel_path, run_semantic=False)
+        rel = rel_path.as_posix()
+        analysis = analyze_source(
+            rel_path.read_text(encoding="utf-8"),
+            file=rel,
+            run_semantic=False,
+        )
         if not analysis.is_valid or analysis.ast is None:
             raise AssertionError(f"invalid statute fixture: {statute_path}")
-        rel = rel_path.as_posix()
         snapshots[rel] = {}
         for target, factory in TARGETS.items():
             output = factory().transpile(analysis.ast).output

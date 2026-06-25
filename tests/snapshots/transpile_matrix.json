@@ -338,9 +338,9 @@
     },
     "library/penal_code/s107_abetment_doing_thing/statute.yh": {
       "akomantoso": {
-        "bytes": 6339,
+        "bytes": 5971,
         "lines": 106,
-        "sha256": "9dab95ec57ef495292162cec0e1dd791bc45ded9b691cf383d249d640fd51bfd"
+        "sha256": "423f732f3fd6d1154e941149a5a5dc81371f49e69aa9b5cc8a97a278523b1c4f"
       },
       "alloy": {
         "bytes": 4593,
@@ -348,9 +348,9 @@
         "sha256": "554a0ec218f0976eb7afab080a046160cbd65a1e311dd8a9b40b9c7677819057"
       },
       "english": {
-        "bytes": 3558,
+        "bytes": 3190,
         "lines": 41,
-        "sha256": "ea3dae52bc38b93a924d5ba667f1f31042576043c7e2497363f1e70e8bbf44ab"
+        "sha256": "c351d3cfeecf72ba8ea65619609507ff0ccb71182ac53ec09146a5f8d326cd51"
       },
       "json": {
         "bytes": 10344,
@@ -358,9 +358,9 @@
         "sha256": "7d5ab176e131ef9d9d51c49a593ec2a02e07daa55922a7c4d368fb3007c8556c"
       },
       "latex": {
-        "bytes": 6809,
+        "bytes": 6119,
         "lines": 133,
-        "sha256": "9523d4a158dfa3122e6186d6c3ab9bd8b8b12808bb7e8d5c133ccc88cfcac455"
+        "sha256": "cef1c40982e0b082bd2fe6bf90c8dd27fc50dc1c850b2a09c59dbb1dddc8e22e"
       },
       "legalruleml": {
         "bytes": 15710,
@@ -380,9 +380,9 @@
     },
     "library/penal_code/s108A_abetment_singapore_offence_outside_singapore/statute.yh": {
       "akomantoso": {
-        "bytes": 4663,
+        "bytes": 4387,
         "lines": 79,
-        "sha256": "fac19c03606d907446985c36d63d993e1ef0f7ece41a167dfed09587d4f9c742"
+        "sha256": "e079293db06e7594b945ca9a54eb0b9988db1d2d7f00ccf5b76985a40672e640"
       },
       "alloy": {
         "bytes": 4113,
@@ -390,9 +390,9 @@
         "sha256": "a3412d3541431b1bb9a17dab5b15ece268b0c9bb0bda34457b58153e127b4222"
       },
       "english": {
-        "bytes": 3060,
+        "bytes": 2784,
         "lines": 37,
-        "sha256": "629c8273b163d95f228c246d1d9af9380e4fee06d9430a4a802d485b562bab04"
+        "sha256": "cfdcf09d7fa19b359c45d1c77b3873974211ee0a3fcb7aed9eeba89ac8e688c8"
       },
       "json": {
         "bytes": 4356,
@@ -422,9 +422,9 @@
     },
     "library/penal_code/s108B_abetment_outside_singapore_offence_singapore/statute.yh": {
       "akomantoso": {
-        "bytes": 4566,
+        "bytes": 4290,
         "lines": 79,
-        "sha256": "64a95e18538d1f40b83ead9c937a2bfbe32a93a9022026111a8ddde6547fc64e"
+        "sha256": "6fb5fcf4b2da513787cf49d84de6ff74b800a77299f343d872dbabcd3f7cb9f4"
       },
       "alloy": {
         "bytes": 4185,
@@ -432,9 +432,9 @@
         "sha256": "1200b8f24175594b7ce47b1f8396e64a82c3f98b68f24d401d93f962423eb67e"
       },
       "english": {
-        "bytes": 2824,
+        "bytes": 2548,
         "lines": 32,
-        "sha256": "d2068870502ff7d5ecf2b89029cc8dee63d342f7014ccdc2827748a89be6dbbb"
+        "sha256": "a51f2e80dbc800f4cd509cc010154ff3882ec32a4851a552b60e7627f54a9a4d"
       },
       "json": {
         "bytes": 4064,
@@ -464,9 +464,9 @@
     },
     "library/penal_code/s108_abettor/statute.yh": {
       "akomantoso": {
-        "bytes": 9309,
+        "bytes": 9033,
         "lines": 91,
-        "sha256": "622abab6b0c6b91c6634255da39d8f73d0c48e32279736feb0782d00f4002bce"
+        "sha256": "5cf9d1d117c493a3cfda2921bcf89e0cca24a3fdf3dd18b6aa4359f5972c0a7e"
       },
       "alloy": {
         "bytes": 3543,
@@ -474,9 +474,9 @@
         "sha256": "c27eb517f3860ec67efe96c71b45f7899f8398dc44f63cf7a96545dfae25128f"
       },
       "english": {
-        "bytes": 7544,
+        "bytes": 7268,
         "lines": 58,
-        "sha256": "8d542313706626e39f58f0269726b28d31b180a77e2c6234f52bff6521cd907f"
+        "sha256": "33d02f619026c62dbbf77f77228cfced9d029a09f40c9861fca661fa15a2e4f8"
       },
       "json": {
         "bytes": 12213,
@@ -484,9 +484,9 @@
         "sha256": "9b6661f980cec9a6b4b4c5f83addfc6a1401c43e37dc0c57a98b99d928fde518"
       },
       "latex": {
-        "bytes": 11049,
+        "bytes": 10359,
         "lines": 168,
-        "sha256": "efcee65b8ed4046a81aea56b77f471c76e66f9c71fd4fe2d440a6bb0c816e912"
+        "sha256": "134da3a5d0b088e4b0bc79c75c3f36f65bdf88cda4c03f7d406ebe9968180216"
       },
       "legalruleml": {
         "bytes": 13529,
@@ -506,9 +506,9 @@
     },
     "library/penal_code/s109_punishment_abetment_if_act_abetted_committed/statute.yh": {
       "akomantoso": {
-        "bytes": 7058,
+        "bytes": 6690,
         "lines": 98,
-        "sha256": "129d2c270e20512184f7801817be6c99092649e7eefca18f1de3b1b68df990d8"
+        "sha256": "68d0d94a04deb850226ea1dba63da8b0ef8894b2daffd65525b67beddea5e1bd"
       },
       "alloy": {
         "bytes": 5135,
@@ -516,9 +516,9 @@
         "sha256": "257483dec5ad462d3def9022379fc5e0757de539cb43495f79eeb124d60d836b"
       },
       "english": {
-        "bytes": 5446,
+        "bytes": 5078,
         "lines": 59,
-        "sha256": "8abb52081c76a55a7f80f20fd2d68158f198e00b90693e9be230cf103db9bb9e"
+        "sha256": "9c498cc5afa73360e4f5d054cf2c2edb84551abc6b1a3f3d498c299bfff6edbb"
       },
       "json": {
         "bytes": 9277,
@@ -526,9 +526,9 @@
         "sha256": "e6290361244e7f2e2d2a8e3ca298666594387340bdfc3cf77ae8b38ed7fec5d6"
       },
       "latex": {
-        "bytes": 9200,
+        "bytes": 8510,
         "lines": 168,
-        "sha256": "3ca95c6c7d193b2ae5fc9f211e562990834fbbf1975c8788e9a2aadbb07ae257"
+        "sha256": "250a84882a7135c79d7ff413fe8e9646699a31d87b34ce16e49529a19ad4a1bb"
       },
       "legalruleml": {
         "bytes": 15775,
@@ -590,9 +590,9 @@
     },
     "library/penal_code/s110_punishment_abetment_if_person_abetted_does/statute.yh": {
       "akomantoso": {
-        "bytes": 4695,
+        "bytes": 4419,
         "lines": 80,
-        "sha256": "7ebd4fbc1891ffcc1916642852e74226668cfce412a99bc4d7dbd94cfa7bb03c"
+        "sha256": "6a6c98957df52b6543d6d4b94bd4eea12fc35324d596960a00c30c447ad77933"
       },
       "alloy": {
         "bytes": 4409,
@@ -600,9 +600,9 @@
         "sha256": "cdec3afb131f0c44e4427c911d87ef18906bac0c183baf7fd95e59da4f2530e0"
       },
       "english": {
-        "bytes": 3129,
+        "bytes": 2853,
         "lines": 38,
-        "sha256": "3ba7c32df2db6b1c32b9de38311b11118d6b419b9ec8d2458991604bd5686fe8"
+        "sha256": "d8e2c06a6b753b27347926b93042cd86ab2506730747ac0c6e09c711b1106157"
       },
       "json": {
         "bytes": 4711,
@@ -632,9 +632,9 @@
     },
     "library/penal_code/s111_liability_abettor_when_one_act_abetted/statute.yh": {
       "akomantoso": {
-        "bytes": 5784,
+        "bytes": 5508,
         "lines": 82,
-        "sha256": "8454cd9bc6e683640492f187ad651b4b332886bfb619da390bdb20fb81c45cd2"
+        "sha256": "09e2bc73d6c23e29ba548d53c4ce82d9998df6958d23e00879b0d94ab8faad36"
       },
       "alloy": {
         "bytes": 3969,
@@ -642,9 +642,9 @@
         "sha256": "75da5085db1b5da0b34c79c62a90b556cf5021442d57407bec27fb0aa7be6b47"
       },
       "english": {
-        "bytes": 4354,
+        "bytes": 4078,
         "lines": 46,
-        "sha256": "3668b1a3ac176efeeca5742530bfd1d04fe8d5f455f05849b0f1c8fa57f2535f"
+        "sha256": "dc027f26d636a36d03d59796e8dda2bcc5e7bdc17981660be5692eaf777c96cb"
       },
       "json": {
         "bytes": 5969,
@@ -674,9 +674,9 @@
     },
     "library/penal_code/s112_abettor_when_liable_cumulative_punishment/statute.yh": {
       "akomantoso": {
-        "bytes": 5804,
+        "bytes": 5528,
         "lines": 86,
-        "sha256": "6dc4a58a05ecff17ac7c589230554237cdc05ec45a27000375d762b45d7bbdee"
+        "sha256": "396ab779ab041579c01ba7e1d4ffe6ee3f21acc4f47a519c33c366e89ef8c5a8"
       },
       "alloy": {
         "bytes": 4457,
@@ -684,9 +684,9 @@
         "sha256": "09cafc83d0192dcc8dcc40c08ee1dadade15660083e4c9e36d01668300e7fef0"
       },
       "english": {
-        "bytes": 3819,
+        "bytes": 3543,
         "lines": 44,
-        "sha256": "39d2a4f9e50bcfaed97eb875b4ea22f6d8e662bb7c4d821aea94642fd37679ba"
+        "sha256": "a8c29ba2756dbd5dd763ca5f633265dfa10815b3b8f44b5028414a0eaa6652f6"
       },
       "json": {
         "bytes": 6122,
@@ -716,9 +716,9 @@
     },
     "library/penal_code/s113_liability_abettor_offence_caused_act_abetted/statute.yh": {
       "akomantoso": {
-        "bytes": 5468,
+        "bytes": 5192,
         "lines": 82,
-        "sha256": "2d86400126a449cc53c5397f1cae9bfa56edeb185bfce0eb4dadce289c486eb9"
+        "sha256": "dc195336cb32cf2a01c0d2f3259118e0b7a7d019cc569d1aa7df24161c10f14c"
       },
       "alloy": {
         "bytes": 4869,
@@ -726,9 +726,9 @@
         "sha256": "6b94aa23f3691e69c96f1c5ac50720edd26e6d31f9bea36304c03c12867b21c8"
       },
       "english": {
-        "bytes": 3678,
+        "bytes": 3402,
         "lines": 40,
-        "sha256": "562bf48bed57a60e7e5396d682a2ac7bb766521b2d652bde1affff1188cd93c8"
+        "sha256": "303c67e1c0ac9f0416c9bc2e86db33470c4946b9b9553bd872de60f33162b745"
       },
       "json": {
         "bytes": 5725,
@@ -758,9 +758,9 @@
     },
     "library/penal_code/s114_abettor_present_when_offence_committed/statute.yh": {
       "akomantoso": {
-        "bytes": 5015,
+        "bytes": 4739,
         "lines": 83,
-        "sha256": "1336a0ba0ed5c2e393eb457d9e35794e95d01a49402e5c5c3c13b227711590ca"
+        "sha256": "fc5a733af2f7e997c46f157852a9162cd1f954f16081b37eb04d5a395430d81c"
       },
       "alloy": {
         "bytes": 4296,
@@ -768,9 +768,9 @@
         "sha256": "fdd233f9d2fb02e89910a4b8cd34d899b38b0c9681fd4f11f91c78f9949a3a2e"
       },
       "english": {
-        "bytes": 3082,
+        "bytes": 2806,
         "lines": 37,
-        "sha256": "d6e537215ec4f1299821f1b814198de991b332d9f06feeec4ead001927e0d3a1"
+        "sha256": "2b7379475f95c605527d5ef6f09e73ed7fcdfd789e6e389fc0e93f7a5b5b34fd"
       },
       "json": {
         "bytes": 4927,
@@ -800,9 +800,9 @@
     },
     "library/penal_code/s115_abetment_offence_punishable_death/statute.yh": {
       "akomantoso": {
-        "bytes": 5973,
+        "bytes": 5605,
         "lines": 94,
-        "sha256": "9730a006c437a95220f788816b9f6168f54af24a85c436037a2d2bb2ca4ef087"
+        "sha256": "b656cdac80149a6f401221789433e790e6ad58289a065c6c80e1efb7e677aa47"
       },
       "alloy": {
         "bytes": 4906,
@@ -810,9 +810,9 @@
         "sha256": "5ca7ec1dbe32d799a66a26dd99547b532d93fd7a3d11af465feed044aeceef19"
       },
       "english": {
-        "bytes": 4533,
+        "bytes": 4165,
         "lines": 57,
-        "sha256": "6fbc2c20f04274d0f8073ff0b746026826cffaf55b3563afcb7dc4347f700e8b"
+        "sha256": "1b481364e6bd60e6d5bbdbc4ce901932e6e034cefb2eb75c1bc6e492926a66e4"
       },
       "json": {
         "bytes": 8475,
@@ -820,9 +820,9 @@
         "sha256": "b56aa4c0e3e1a53c20ace5b8ede287afe39870e54f3dec964498eb26c8b1d62a"
       },
       "latex": {
-        "bytes": 7951,
+        "bytes": 7261,
         "lines": 156,
-        "sha256": "251583e96238f5a361b09699a7760df26abf0c52846c775e3716e95863595897"
+        "sha256": "0ae4ed2b10d855be0e2a2f0f3e9de05117f58d77caec17e07a5d2301c0236a0a"
       },
       "legalruleml": {
         "bytes": 15197,
@@ -842,9 +842,9 @@
     },
     "library/penal_code/s116_abetment_offence_punishable_imprisonment/statute.yh": {
       "akomantoso": {
-        "bytes": 7269,
+        "bytes": 6993,
         "lines": 108,
-        "sha256": "41509eb56a67e51c966a6e948777c19709c10a53b5d41bada55ff3567b41d6c2"
+        "sha256": "da2b9b357423bd44c100f06eafae922695c14042aa8b867e9078b1a5bd238f32"
       },
       "alloy": {
         "bytes": 4684,
@@ -852,9 +852,9 @@
         "sha256": "9cef254fed6ae4e46e1ab86df49d78b37fe913bce1091369b15608842713f6c1"
       },
       "english": {
-        "bytes": 3869,
+        "bytes": 3593,
         "lines": 41,
-        "sha256": "e8a1efc2f746862f4dd34603496b363bf07dbe3585c58b27c32889dda4ea0f4b"
+        "sha256": "66a9e04fb7fdf59c87ecade94797512ff494dfe6920d99e1e663848e4ad58756"
       },
       "json": {
         "bytes": 12602,
@@ -862,9 +862,9 @@
         "sha256": "49e014ae07a8fe82148045f059228c2d8510c5db3a0d79f1f5b4ca2039d180b0"
       },
       "latex": {
-        "bytes": 7641,
+        "bytes": 6951,
         "lines": 141,
-        "sha256": "75d891ad05b8a8a1fdbd32c089dfa53e4e79938b65951126434b179ed5b1f0e1"
+        "sha256": "22c77d13d01a6c6cdd8abee140997ab32a717634f135521f8a8d5c769705e2c3"
       },
       "legalruleml": {
         "bytes": 15224,
@@ -884,9 +884,9 @@
     },
     "library/penal_code/s117_abetting_commission_offence_public_more_than/statute.yh": {
       "akomantoso": {
-        "bytes": 5835,
+        "bytes": 5467,
         "lines": 93,
-        "sha256": "167a945b615fd7188b593a74d0f3930f89c41e7818b06d5608b01faee3d69498"
+        "sha256": "cb3f07f89a636fe0bbed20d9419e968225333603a83a336be61ff305b424f1f9"
       },
       "alloy": {
         "bytes": 4682,
@@ -894,9 +894,9 @@
         "sha256": "d4016f0246e8e8d7f1b459e5c172e96641c1d9c82f6ea616051d5d1ad4cea054"
       },
       "english": {
-        "bytes": 4224,
+        "bytes": 3856,
         "lines": 48,
-        "sha256": "d9370d18818e3f604cf6b7b77f2e0cdce6ca39e27635edcb76579ae14386a578"
+        "sha256": "bee06ba6fffb245cbbbf95d5ea7f61d5ef8252bb80f0a5ea648d3af513422026"
       },
       "json": {
         "bytes": 6183,
@@ -926,9 +926,9 @@
     },
     "library/penal_code/s118_concealing_design_commit_offence_punishable/statute.yh": {
       "akomantoso": {
-        "bytes": 6071,
+        "bytes": 5795,
         "lines": 88,
-        "sha256": "618ceef7533e4c4395cbca272d94fa1e6d6f1451aa47a5c3950ba2cda48de18e"
+        "sha256": "e5e9089a114bd764327104092f999ea6bd6221b703115affc60b3081d9f121d0"
       },
       "alloy": {
         "bytes": 4958,
@@ -936,9 +936,9 @@
         "sha256": "4d373f9294fba872d0be9dce9ebce5cf0c201461170945296ddb1c4e7988ea39"
       },
       "english": {
-        "bytes": 4560,
+        "bytes": 4284,
         "lines": 56,
-        "sha256": "771073500e479c448c0b346e2a98559a50a69d7683938a13d67b7de97638800b"
+        "sha256": "c6d59f98c84a22967d5a4c9e10da80d847fa57054b82a75d58b31ac8a41dc23c"
       },
       "json": {
         "bytes": 9876,
@@ -946,9 +946,9 @@
         "sha256": "10af35080e200f1990d863df048e1f23d7d589681d4d53d6d692094d2f7b68e1"
       },
       "latex": {
-        "bytes": 8607,
+        "bytes": 7917,
         "lines": 165,
-        "sha256": "f585e9719eaeb20bf887cf4e6e1950b349d8047a682c437b708b92f6e9a82831"
+        "sha256": "7aba6ee269d0fe4e2180589faf4fa15fb0a9aa3f3a2e56a0cba70153b386c710"
       },
       "legalruleml": {
         "bytes": 14510,
@@ -968,9 +968,9 @@
     },
     "library/penal_code/s119_public_servant_concealing_design_commit/statute.yh": {
       "akomantoso": {
-        "bytes": 6866,
+        "bytes": 6590,
         "lines": 93,
-        "sha256": "a8393d089af82924520b2d8aad4081f980a74d54425feefb366646b91f8ad07c"
+        "sha256": "0bf97f4e85bdc44e31e238e96bdec04e8c48230cf37857e70276ffb00a4a5d61"
       },
       "alloy": {
         "bytes": 6064,
@@ -978,9 +978,9 @@
         "sha256": "855029b01d5f408f30ca17d6c2440174bc64d0e56a9e93414a142261b01b450a"
       },
       "english": {
-        "bytes": 6331,
+        "bytes": 6055,
         "lines": 83,
-        "sha256": "728e0271d5a3b8267bbb1457b3ea67cab2553032c0fdcc2f15bf5ba42418582d"
+        "sha256": "896867572db0912414c7ef81f15a2eb754925a2d3bd0ad8ac3bb6e77cd34d776"
       },
       "json": {
         "bytes": 11809,
@@ -1072,9 +1072,9 @@
         "sha256": "526cb58a9ee01d6afd7d657a6c1ea1d94a3624743360a3790aaacab2aa382ed9"
       },
       "latex": {
-        "bytes": 5602,
+        "bytes": 4912,
         "lines": 112,
-        "sha256": "f0ae3302f8e0930a1c9a0935d2f24a6ef151fb5394f14247ab23c9fbd5a4a37f"
+        "sha256": "419cec1975608bc6836c7feaa43a5240b4a6e2075ed8f1d0bad5c663812c9a94"
       },
       "legalruleml": {
         "bytes": 7169,
@@ -1114,9 +1114,9 @@
         "sha256": "693047604d88f02ade39160f31e6e6685175cf712163c4bf343da7395ee9d24a"
       },
       "latex": {
-        "bytes": 5809,
+        "bytes": 5119,
         "lines": 119,
-        "sha256": "f4b9fd31f32587111cbd3ff0e33e72c950a7f85981eda27a1d6d5a0fb54b579e"
+        "sha256": "13157f13328705f47d650348181ac9dd7556f7e001c073c1105e0976f66a7552"
       },
       "legalruleml": {
         "bytes": 2448,
@@ -1136,9 +1136,9 @@
     },
     "library/penal_code/s120_concealing_design_commit_offence_punishable/statute.yh": {
       "akomantoso": {
-        "bytes": 5306,
+        "bytes": 5030,
         "lines": 84,
-        "sha256": "c5df0af740fe529570bea3467445f53009269a83c83acf49ba90e8f385d5b34e"
+        "sha256": "913efcff4036c77fc78d74288aa37bc2590045b57cf550590c252233cc8de959"
       },
       "alloy": {
         "bytes": 5063,
@@ -1146,9 +1146,9 @@
         "sha256": "22994dbd7d617e1db68eafe6e50a0609130b202198d750ee51a7e69da1f71f85"
       },
       "english": {
-        "bytes": 4147,
+        "bytes": 3871,
         "lines": 50,
-        "sha256": "c11c52bb754641dc04d8230dbbe735265fde63d5b1f556140f04171a5c7371dc"
+        "sha256": "c193b0a407dd8f0b137939b00c1cde6028c37f7ba88b5011a8e140a10cf4283d"
       },
       "json": {
         "bytes": 7223,
@@ -1198,9 +1198,9 @@
         "sha256": "3fda68c12037a7e5353b898dcd8048fe4ef5076e03cca62442ab36756389354e"
       },
       "latex": {
-        "bytes": 6720,
+        "bytes": 6030,
         "lines": 140,
-        "sha256": "284f897ffc0d629f5eac84302ee55427d6ab8db90c1991e7ed068d02fe5a6a01"
+        "sha256": "7d5750aa93fff2339875f2165d259571d1a05042e11895040a1aab593e2d5d95"
       },
       "legalruleml": {
         "bytes": 4699,
@@ -1240,9 +1240,9 @@
         "sha256": "973e94b5683e153db901515b0c0dae63d235fa49905827ce3dc5abae778a2496"
       },
       "latex": {
-        "bytes": 6081,
+        "bytes": 5391,
         "lines": 132,
-        "sha256": "98006a0645441c31bcc91bb347cb4286efbf4db5f33e82e9d7521ac6995262d7"
+        "sha256": "a208aebf8607e06bf4c663b84dd44e1d939111c71183a1cd46deda0682d9690a"
       },
       "legalruleml": {
         "bytes": 3947,
@@ -1282,9 +1282,9 @@
         "sha256": "0021fa188287f38f4e00f1a80b494b11e72ff1114fd0f7c98b809a624ad48105"
       },
       "latex": {
-        "bytes": 6466,
+        "bytes": 5776,
         "lines": 132,
-        "sha256": "ab4cd81cf61f6e62095a5f1f3cbab86ffcb3fbfbf92e66b25444d350118b57b4"
+        "sha256": "4d1084d7615ba1ec156ffe5ba2f50b24241a2f95bf992302a2fbae775468df41"
       },
       "legalruleml": {
         "bytes": 3294,
@@ -1408,9 +1408,9 @@
         "sha256": "0dc747f021a09e64471f86e01931fe565dc2f788254730a3b58919ae870d2b0b"
       },
       "latex": {
-        "bytes": 6410,
+        "bytes": 5720,
         "lines": 133,
-        "sha256": "febad15f975ed348b81de9934ca68c452f5169cc546fc504605ad4db59cd3c8f"
+        "sha256": "b820ae814556f834fb4982a1543bdc78342057107e0d4896a7dc7c1ba01e66e4"
       },
       "legalruleml": {
         "bytes": 4064,
@@ -1450,9 +1450,9 @@
         "sha256": "c57205c4402aaa13f52b1b93cf8ccea5cf435d0b5e68894e59b2060dc9d26a6f"
       },
       "latex": {
-        "bytes": 6591,
+        "bytes": 5901,
         "lines": 133,
-        "sha256": "8a752b7d4edd9efc418f39ea9305324fa8b8123c33a0a6556df8a7bc4f37aa25"
+        "sha256": "ce29d560f7f8da8f37dca86d7f88d215c98ef7929c6fb3c9380c60a2e2925259"
       },
       "legalruleml": {
         "bytes": 3506,
@@ -1492,9 +1492,9 @@
         "sha256": "a2818c06378d5695444bc004c3adffd5a4ef5c04849214970fdd92fc117def83"
       },
       "latex": {
-        "bytes": 7117,
+        "bytes": 6427,
         "lines": 136,
-        "sha256": "725c3729f6ff10d0fce2684d299e1899eb59be458e188ac3363ce90864e17015"
+        "sha256": "5fdbd09b39a6c79cc9b378a1731865dd24cd5a71cf2250383e5a64ced437d96b"
       },
       "legalruleml": {
         "bytes": 6230,
@@ -1534,9 +1534,9 @@
         "sha256": "a45b2d1297df832700c945322f15b7ef8ec5dc7a371304b5d7d2d2cdbbfb1b6a"
       },
       "latex": {
-        "bytes": 6257,
+        "bytes": 5567,
         "lines": 129,
-        "sha256": "3ada2c7ca2f3c93ca629695727b9f82e08030065ca0f064e8e1a35cb6ca20cd0"
+        "sha256": "4421fe25608d4ad841e60c31ada5e8b4eb4b9aafa78f766e1f17bb32ee21425e"
       },
       "legalruleml": {
         "bytes": 4016,
@@ -1576,9 +1576,9 @@
         "sha256": "10280036eee078fd4b4a1dd96f7e203b3edb9157af22685c1bb41c28b4cc21ef"
       },
       "latex": {
-        "bytes": 6468,
+        "bytes": 5778,
         "lines": 133,
-        "sha256": "5c0677130fa67bfe2d4dde8b34f53efb75a4baacc807e2ae6dac7967167a1f86"
+        "sha256": "9fb7e8ab557c6152f45042ba9fbe39e2081b51ffd763e66e49c5a5c4a72a1cbc"
       },
       "legalruleml": {
         "bytes": 3301,
@@ -1618,9 +1618,9 @@
         "sha256": "00232dcff4cb59b99fe18e20121289c2c4c1768396e97884f13233fd90f5faf2"
       },
       "latex": {
-        "bytes": 6219,
+        "bytes": 5529,
         "lines": 129,
-        "sha256": "0713d4516dd6b03407670c987b10bf76b71bdec5316269fda467c8dc85f3aa2f"
+        "sha256": "9d7785e8c9d35fb8804adf5f65f119186e913d5abe8478faaf600aa5dfd0cd8c"
       },
       "legalruleml": {
         "bytes": 2941,
@@ -1660,9 +1660,9 @@
         "sha256": "1bff3cd481a9b2813853b167369a8efe4b79ddfaf60f419559a46182581f854a"
       },
       "latex": {
-        "bytes": 6690,
+        "bytes": 6000,
         "lines": 134,
-        "sha256": "b0968d133e5e5255464e377ebfd9c8dcfe93ccf986943eda32d8617146a47b50"
+        "sha256": "c23963cb200ee4fa75b2daa08bfaa4f474ebd6221b2f7a1cbbef657d636db789"
       },
       "legalruleml": {
         "bytes": 4205,
@@ -1702,9 +1702,9 @@
         "sha256": "2f66fc571890ab6fd9086531a6e1ed4292ddb5ae14ea2ad93e8db35acc99d760"
       },
       "latex": {
-        "bytes": 6309,
+        "bytes": 5619,
         "lines": 129,
-        "sha256": "cddf30e5a129ca392d23d635cb1a19e7f7838225781139d7148558b6fdb349c8"
+        "sha256": "2d6aa7435c83d4576b92af4f441cf5e87a8a20de3e0ab34a365726296ac420a0"
       },
       "legalruleml": {
         "bytes": 3316,
@@ -1912,9 +1912,9 @@
         "sha256": "aeed098c444ef2a0344212ecc84d2c42bd9212094276682b472c384541e04a20"
       },
       "latex": {
-        "bytes": 6031,
+        "bytes": 5341,
         "lines": 123,
-        "sha256": "2a6160d1d73f7fc5dab57d115f11bfa49f9392ba040fcaa7d058578919cbdfd8"
+        "sha256": "332ff335f3ccfca040c1e8122cfb6902c3cde45372dea6201c2ebf129b0f761a"
       },
       "legalruleml": {
         "bytes": 3371,
@@ -1996,9 +1996,9 @@
         "sha256": "74c56db3ed558fdf604cf9022a851b69eea4df6a84496310c1f8868815ce0f37"
       },
       "latex": {
-        "bytes": 7096,
+        "bytes": 6406,
         "lines": 143,
-        "sha256": "9edb28a5efe5b8ee2cfa508beb38ccddfdf2a528003f3da08f38be5691d28675"
+        "sha256": "506bc39ce90bcbba5e24076379b1f2d641b605f0e84869669edc51dd6cca7ba6"
       },
       "legalruleml": {
         "bytes": 5350,
@@ -2038,9 +2038,9 @@
         "sha256": "335b95a54ff6bef13007892df5155564dcd435f50a7b452482f6ed5b42cd15b9"
       },
       "latex": {
-        "bytes": 6425,
+        "bytes": 5735,
         "lines": 129,
-        "sha256": "89cffe3e65da306ec99ed4b3256f23ea410ffc778b82f4d881e9d4c44e173eb2"
+        "sha256": "e258a2cf1c62d70e4026e47a4cb66c509612ced685813ab31f4bfb690796f118"
       },
       "legalruleml": {
         "bytes": 3834,
@@ -2080,9 +2080,9 @@
         "sha256": "bd103e61f2813eea5fde6b4bc7312593e28780a7d1d0142f6334491287df32ed"
       },
       "latex": {
-        "bytes": 6519,
+        "bytes": 5829,
         "lines": 129,
-        "sha256": "3464bcc53b35f02e77c1333b5cd4f36432e85fcf76a04b2adcdb7baebe5e2764"
+        "sha256": "3470251a2859c3a312eac4d006f42a2ab11993a18294e98614cb1deeb7e3712e"
       },
       "legalruleml": {
         "bytes": 6044,
@@ -2122,9 +2122,9 @@
         "sha256": "ca62aec003611531a097d3fec5a1d924e021f71296cce8a580c127260f820699"
       },
       "latex": {
-        "bytes": 6538,
+        "bytes": 5848,
         "lines": 132,
-        "sha256": "66cdadfaee7fb5d3d7a04e05acb3d3378a6f7d045b87df6835451483ca284b7f"
+        "sha256": "e35e756023418b251706ab34336f76d8f12d64586f20d0a0ca28fb46530d4e0a"
       },
       "legalruleml": {
         "bytes": 3472,
@@ -2248,9 +2248,9 @@
         "sha256": "9c24e61adce3a2e3b617813a074aa2c0e2effef964c69d9112b4da7baa1891a3"
       },
       "latex": {
-        "bytes": 6078,
+        "bytes": 5388,
         "lines": 130,
-        "sha256": "a8bd590bc979424c6ebeafe921c621ee7a035088b2143ae853f609d95a62a149"
+        "sha256": "6559cc713307eaca2177061227b995fecb01fa5d03aa602842c2ac8572afaaa2"
       },
       "legalruleml": {
         "bytes": 3215,
@@ -2290,9 +2290,9 @@
         "sha256": "b025d2e1c819d04a40fc6529f0f08672e82e1c16032cd6c298d0f0cc259886c1"
       },
       "latex": {
-        "bytes": 6779,
+        "bytes": 6089,
         "lines": 133,
-        "sha256": "a940fc152c5a8634daf55969496cc5eb33e65a5979b62c2466ac76e1fc640cc1"
+        "sha256": "7e43906b92ecdde60b544b2e931545bd72614ea5378888e31f0ed9b080f1061b"
       },
       "legalruleml": {
         "bytes": 3849,
@@ -2332,9 +2332,9 @@
         "sha256": "768fe27ebf4164661a837a57937fcfcf8fdb0533afb75590711eefc78a81435d"
       },
       "latex": {
-        "bytes": 6391,
+        "bytes": 5701,
         "lines": 131,
-        "sha256": "38b7237fae9b6f7f086f2ecdd06dee37f1b4c23697068dbf7e25261292d5007a"
+        "sha256": "fb9f5f92e791c29d467d144e130b42a963a80bdfd3963f0b46b61f543da2c579"
       },
       "legalruleml": {
         "bytes": 3406,
@@ -2500,9 +2500,9 @@
         "sha256": "2058349a4af4e0db20f61548a432827bd85ea6836c36ba7f716803ac10f437e2"
       },
       "latex": {
-        "bytes": 6183,
+        "bytes": 5493,
         "lines": 130,
-        "sha256": "384ba6967ae34384ceac29ab81f0221f032ac85e371a02fcea3da1fca3c7945b"
+        "sha256": "84aa51b79e2e7f227d862b0c652b57dc9e95f17860f30ff33b60cf80562ee6f4"
       },
       "legalruleml": {
         "bytes": 3399,
@@ -2668,9 +2668,9 @@
         "sha256": "633ec73a341cda7adf446f67c1a016a846426e385ac5bd5a3b2addf304130d1e"
       },
       "latex": {
-        "bytes": 6889,
+        "bytes": 6199,
         "lines": 139,
-        "sha256": "b4dc67524b1d2a276094c501d06491c0d3368f01eaadb42e8267c6cc1f73f9ef"
+        "sha256": "c8def4554ceafd29c97c50a9daa30c7753843d05f777c9dcedb922fcba92260c"
       },
       "legalruleml": {
         "bytes": 3156,
@@ -2710,9 +2710,9 @@
         "sha256": "7a915418ebce970de105e8aa9da47ad32a4e6dfbbd44e4f759ed5895ca9d3cc6"
       },
       "latex": {
-        "bytes": 6239,
+        "bytes": 5549,
         "lines": 127,
-        "sha256": "372f0a568096979ef6e22bf0a8197773d79390f1b19d8078a730c15424487aed"
+        "sha256": "74c864fcde0301c7b1879008b6f3327e24ef1d585cb915cec77e1832392569f3"
       },
       "legalruleml": {
         "bytes": 2894,
@@ -2836,9 +2836,9 @@
         "sha256": "20a6528c3d1c3b7865b5cbd6cdd04c6e737f179648781022eee0c523a35deeae"
       },
       "latex": {
-        "bytes": 6154,
+        "bytes": 5464,
         "lines": 135,
-        "sha256": "4996dcf41a7f63f51b95c08870a954222a3e43db02b1d45527eb52b04ff03af3"
+        "sha256": "e0232f9d07f28baa4fe238e899b5f3f33db987982d564929fbbc74108a1f4ed5"
       },
       "legalruleml": {
         "bytes": 2900,
@@ -2878,9 +2878,9 @@
         "sha256": "0be3fd99bc5ce200235cff7e83e1dda3334eb6ccc1264cf3f37c2e350d74ff6a"
       },
       "latex": {
-        "bytes": 6508,
+        "bytes": 5818,
         "lines": 121,
-        "sha256": "98728ba6d852c0ee051d53c0770471e2efa74dd4f27c49048c6e3b8b70cea7f2"
+        "sha256": "68bc1360477e2c07796a97cca2c11255570d60fbb115de4f88daa0365081ae64"
       },
       "legalruleml": {
         "bytes": 3057,
@@ -2920,9 +2920,9 @@
         "sha256": "df9d3ca3e09a196d7dba4805f936d61026865ee939db105a1dd08d3f3fdec2ed"
       },
       "latex": {
-        "bytes": 6901,
+        "bytes": 6211,
         "lines": 131,
-        "sha256": "ef7b3fdaa35118cb1a19b697f991545635c34ca8c2bb67cfd80f10695973a1d4"
+        "sha256": "de70eea0276e8b78aaf77a8dc7c66993b82ad6cbac6681f5e1054e81a935e5a1"
       },
       "legalruleml": {
         "bytes": 3955,
@@ -2962,9 +2962,9 @@
         "sha256": "fd872a8960426889b6661932d32468dc952a2f8e4399bb1875c9249aa2cc9d49"
       },
       "latex": {
-        "bytes": 6692,
+        "bytes": 6002,
         "lines": 134,
-        "sha256": "0c4b748de91d13f6516ea373b184cfbfc7c204138cbe698d6cf72baa02103501"
+        "sha256": "3560dd20fd9d8412fd2dffb880cf118e1f2da53701974840ace1ff569ad1374a"
       },
       "legalruleml": {
         "bytes": 3941,
@@ -3004,9 +3004,9 @@
         "sha256": "4e89dd8b20cbd8e2e87f7582fbb45e02d832a67ac662d530950b7613d897fab4"
       },
       "latex": {
-        "bytes": 6955,
+        "bytes": 6265,
         "lines": 136,
-        "sha256": "c9cfe26edabbf04b6911cc06d50c571f8c013e60909b3f4a6664568d38a60554"
+        "sha256": "c0c9d95b4298e9663eeed43498d010221ef9e236049d9fd12fd8a513becf30ec"
       },
       "legalruleml": {
         "bytes": 4528,
@@ -3046,9 +3046,9 @@
         "sha256": "afa209830c78cc553b7874c186ce7e60f6a33d0bb8433542a4890cc948eb3647"
       },
       "latex": {
-        "bytes": 7040,
+        "bytes": 6350,
         "lines": 143,
-        "sha256": "68ef29ac233e3401c12bfa4cf60e2c9002424bffe555788d92d8348201574e79"
+        "sha256": "4a0306579cf9d41b4b7bdca90237c1ee4955a451a2b58818028ba5c3a085e6eb"
       },
       "legalruleml": {
         "bytes": 5208,
@@ -3088,9 +3088,9 @@
         "sha256": "88f60bb52c9fbb1250bc80bff7d280356995dfb5b96ff70d074be0c011b7d460"
       },
       "latex": {
-        "bytes": 7195,
+        "bytes": 6505,
         "lines": 131,
-        "sha256": "6e4ab6f29d4a4985aa90e28ff3988791e415246dfe7051299d044f78888deec3"
+        "sha256": "a8e15c65dbb39baa321dd31aa51ff0fa13d8e63ca4839685fcc62e24ab2869e9"
       },
       "legalruleml": {
         "bytes": 4392,
@@ -3130,9 +3130,9 @@
         "sha256": "11b51ee6dbe059784acd5cef37db9b1f0350a62fbbcbf067bde0ccc525dd9a82"
       },
       "latex": {
-        "bytes": 8292,
+        "bytes": 7602,
         "lines": 154,
-        "sha256": "f7d97d09fa0af03fabe314f5410f4c1aa86b58d119c1158a005b6e51309c219c"
+        "sha256": "88858663935e7a0cb833bf2fdd7a15ea3b4c9b382faa11f05c47077dd833c5d5"
       },
       "legalruleml": {
         "bytes": 6772,
@@ -3172,9 +3172,9 @@
         "sha256": "e1bfd67abaedbdeab635941bb09473f9f931bc0695cc37254a65ab20382c96a9"
       },
       "latex": {
-        "bytes": 7655,
+        "bytes": 6965,
         "lines": 141,
-        "sha256": "3541947e0f4d15db0e9bc6eb499024e3793f1dea1191ffdd759c3aa2e52deddc"
+        "sha256": "d6e920a737750da69424b63045f640cc11366dea3778e2fba008b9e6200a8d1c"
       },
       "legalruleml": {
         "bytes": 5718,
@@ -3214,9 +3214,9 @@
         "sha256": "092d3c67e45aaa669ca10976631c0ca6e7e9e5c8cad15f171e6a6d37070de943"
       },
       "latex": {
-        "bytes": 6612,
+        "bytes": 5922,
         "lines": 129,
-        "sha256": "bade058ca5403c572b23caa141fb9471dde7ac42b9fb64c52330b12c1b45deae"
+        "sha256": "475732d0fb6d046aee7162d52f1651cb569fb57212d87b7935528836065c9802"
       },
       "legalruleml": {
         "bytes": 3589,
@@ -3256,9 +3256,9 @@
         "sha256": "5c8bbd6dbe260a546b901978674fa54e3ef2c155ced555226c2b217b642e580d"
       },
       "latex": {
-        "bytes": 6565,
+        "bytes": 5875,
         "lines": 133,
-        "sha256": "ac4958b89340856ee1b7400f0c9766edd078fb011b5fdc5c569f395968a2922f"
+        "sha256": "bb066b3a761112e0a18b3482d8b5f475897dd825bdb91ba860737a5d86a4bd06"
       },
       "legalruleml": {
         "bytes": 3754,
@@ -3298,9 +3298,9 @@
         "sha256": "810b8a0e50109594a3a12c733442f8ad038bdd4823873c8081a1419c0d750138"
       },
       "latex": {
-        "bytes": 8768,
+        "bytes": 8078,
         "lines": 150,
-        "sha256": "765bd1d7bfc1a679414b8f1800389754a57bd1c279a3c9316cee14daeafc48b5"
+        "sha256": "6be868aed1a6268d78a88fa83f7888314a218dd477a787be3fc32a4618f2cb60"
       },
       "legalruleml": {
         "bytes": 6053,
@@ -3340,9 +3340,9 @@
         "sha256": "15bc8735b67a925efadcd28dce3b43f01c696ee6f4eedeaafb681f2426837417"
       },
       "latex": {
-        "bytes": 7074,
+        "bytes": 6384,
         "lines": 139,
-        "sha256": "b863d8ca67c3dc50bc42f828b0274b69e758054139713da6da65aac289051746"
+        "sha256": "dd4f2f8ebbbfee4c8c75373ba1d4d95581c1202dcdec1ca56ac1a67b79502d2e"
       },
       "legalruleml": {
         "bytes": 4823,
@@ -3382,9 +3382,9 @@
         "sha256": "611944cd350f65612b47eb112d2c46ee5deee2a47d13b7c61e1288d8bc0d6f5c"
       },
       "latex": {
-        "bytes": 8099,
+        "bytes": 7409,
         "lines": 151,
-        "sha256": "8d5d8eff9e1f7012213fdfbb8cee5911c33f70c0e4f3de3f90799f756d3b5842"
+        "sha256": "35acaf37395f93004eba1dac1e18f592fa66d25dc515f8b1a21889037567ae60"
       },
       "legalruleml": {
         "bytes": 5447,
@@ -3466,9 +3466,9 @@
         "sha256": "ee8b3ded9a0cfad73834906d9c427ceb5efdf73270e49d2d830e2986a5f26286"
       },
       "latex": {
-        "bytes": 8840,
+        "bytes": 8150,
         "lines": 165,
-        "sha256": "7b2628e5629cc4355ab31b2327ed0e94bc6d6bbc162af003fcd535011e0e7b4c"
+        "sha256": "0e156ad8b6aac7499bfba7b8d56443418a17c8871949725355a6c5b1a3ab94df"
       },
       "legalruleml": {
         "bytes": 5796,
@@ -3508,9 +3508,9 @@
         "sha256": "00be754c19b293d01f6e5c979586247d5959fa60e9819dbce8ae276c8698518c"
       },
       "latex": {
-        "bytes": 6793,
+        "bytes": 6103,
         "lines": 134,
-        "sha256": "72ae2c65fef997ec5c8b99a7b039318bc52d3e9626745a733beea05726cb3617"
+        "sha256": "e601a042f80fb4f7ca44dd9dcf6cffbed8cd912af8c35fd852e84050981c1658"
       },
       "legalruleml": {
         "bytes": 3266,
@@ -3550,9 +3550,9 @@
         "sha256": "092277dcbaca58bb16f661023da37a42b67824a9dd53787c5858266720c2da99"
       },
       "latex": {
-        "bytes": 6928,
+        "bytes": 6238,
         "lines": 138,
-        "sha256": "b6fb2ea8ab2e3d496bf974090134178079b1e51df75abdbd96f45c5e4b9a6798"
+        "sha256": "cfd205325b08c0ce3f5c9803a98033b2092ff874a2dde9c3c8dece0040a25cd6"
       },
       "legalruleml": {
         "bytes": 4315,
@@ -3592,9 +3592,9 @@
         "sha256": "d8e99e309afc3f0b14f2762f952d586c4a7bd53c2f365e198fd27a9e31ef91a9"
       },
       "latex": {
-        "bytes": 6159,
+        "bytes": 5469,
         "lines": 128,
-        "sha256": "886cacd90afd602f24d3616dd10c4b7e1753b183ff25eb5d77eec1b794ebf551"
+        "sha256": "741a20d7219c94d2093c96bca6399b0c9ea1e53e983ebb2ac8a6682667a0d4ca"
       },
       "legalruleml": {
         "bytes": 3035,
@@ -3634,9 +3634,9 @@
         "sha256": "c70b39ff679a7ba15f394914ebae946b77e826a22711ad62db1465941ed35a46"
       },
       "latex": {
-        "bytes": 6379,
+        "bytes": 5689,
         "lines": 130,
-        "sha256": "26d60e673fc7240c8686a00e9e838ffb4124e6035e4a5f85ca7503d9c874ad56"
+        "sha256": "cba4c39324f2525c8f053fbfa08ddc82a3a7608088d5cd7479511e86a24f4c16"
       },
       "legalruleml": {
         "bytes": 3243,
@@ -3676,9 +3676,9 @@
         "sha256": "521ae5c97215387f92b63186eebe28a72624940ef66eff6aecdd70fa05b75cb5"
       },
       "latex": {
-        "bytes": 6279,
+        "bytes": 5589,
         "lines": 135,
-        "sha256": "021b1f0e880a0a24f845511fba41ed8c3c63766e19216d405fcad277b986e243"
+        "sha256": "009a354bdf622b15224cc01c6158a3c097626b3759e71c220e88e0deec24d91d"
       },
       "legalruleml": {
         "bytes": 3529,
@@ -3718,9 +3718,9 @@
         "sha256": "1a6db84a1edb45eeca856542b9456a99d8d7eca83104271840bb94de7a825437"
       },
       "latex": {
-        "bytes": 6590,
+        "bytes": 5900,
         "lines": 133,
-        "sha256": "65466f03e3bed91610e3841c30f97bc88ad6c31944ffc3bfa200f06ee2d597f8"
+        "sha256": "60dd3aa6b1d7e65950bb5fa678d618889aa241a035008f13bd049d95f0968c9d"
       },
       "legalruleml": {
         "bytes": 3611,
@@ -3760,9 +3760,9 @@
         "sha256": "17e5405bcdcf1fde8961f26eca57534389d3e10135613d7e6d9bf06fccb0d660"
       },
       "latex": {
-        "bytes": 7352,
+        "bytes": 6662,
         "lines": 145,
-        "sha256": "0d03abf878de1fd1f33ca7e6f115dbb0b70cdd753a939c395cf003926bd936d6"
+        "sha256": "32badb1e9e5ddc06db31c19a2f2436c75a53cf14f7404327e529d4a600d39f04"
       },
       "legalruleml": {
         "bytes": 6266,
@@ -3802,9 +3802,9 @@
         "sha256": "0424538e056b3e6059cff7c957db264237e3f57cd29fe541f8d7e915f50915d9"
       },
       "latex": {
-        "bytes": 5545,
+        "bytes": 4855,
         "lines": 107,
-        "sha256": "f1072ed35a4ef8531a90a1e6ed844b01e8131a48373b4aec1fdb2effaca7d465"
+        "sha256": "4fabeb651217a6c22fe6da2d2be3f3df926e6c9374bf31397a8a3a26610d733d"
       },
       "legalruleml": {
         "bytes": 6898,
@@ -3844,9 +3844,9 @@
         "sha256": "70b9bca74600b532b9a4d921cdfd55d8f776ac4c5eec1cb42eb8a28a9c595636"
       },
       "latex": {
-        "bytes": 6245,
+        "bytes": 5555,
         "lines": 117,
-        "sha256": "3f9bc3d6628b36d66a535f5f5c1a71dbf130a3f07ef0aae19a1ea22851d773ad"
+        "sha256": "1ce59d2b05611907c9bea7eb15d0b6e5c9ab50a137ed7eba48d2a4739d1a62ce"
       },
       "legalruleml": {
         "bytes": 6396,
@@ -3886,9 +3886,9 @@
         "sha256": "a94acaaa6883517feec0fa5c410002197aa25f8dc23c7b2de9ba318d76930049"
       },
       "latex": {
-        "bytes": 6998,
+        "bytes": 6308,
         "lines": 139,
-        "sha256": "32953f2cf8e0625354094d6a6bc037aebcf4f339dfafbecabf24a1326f3b5e83"
+        "sha256": "2a700325dcbe320d27e9008cf6962aa4fe41e730b3a089148a40a6904622ba9f"
       },
       "legalruleml": {
         "bytes": 4983,
@@ -3928,9 +3928,9 @@
         "sha256": "54df15747c78b609ec69473ae98c198ebaeef24cbc5518976cb3cb82fb7fefc1"
       },
       "latex": {
-        "bytes": 5554,
+        "bytes": 4864,
         "lines": 107,
-        "sha256": "2e0a2c21074fda1a45338ff07f7f46687882818ceccc5be2d0545aace4ee35c8"
+        "sha256": "702b1d1ce3f061b7005a3354897ddbce280ce2c3808920914488103845d4e2c4"
       },
       "legalruleml": {
         "bytes": 6621,
@@ -4012,9 +4012,9 @@
         "sha256": "ef1aba516ec7e76e5cc2eaa3360360e2dba978271d80bd6fedbd9dc52c979a85"
       },
       "latex": {
-        "bytes": 6224,
+        "bytes": 5534,
         "lines": 128,
-        "sha256": "2c865d633423eced271895dfd8a306f32e9d456d278e4b05cf1fbc02a9c6556f"
+        "sha256": "331fc3f993cc58a0dad05ee05ca6091717a1683712543f38da2a79a807cf73a0"
       },
       "legalruleml": {
         "bytes": 2958,
@@ -4054,9 +4054,9 @@
         "sha256": "6ba22be7e5f6e04445441e531f5ce62be6bb19433aac9f576c61e2911c06d812"
       },
       "latex": {
-        "bytes": 6650,
+        "bytes": 5960,
         "lines": 134,
-        "sha256": "91b56aacd5d2146c64c5ebad75012220739fc0bd752ebe7acec20ed744342d45"
+        "sha256": "061de3d5ec2ab36b626aae2a1ab672c34a9cc85375ee2cee9434dfc24b061b4b"
       },
       "legalruleml": {
         "bytes": 4412,
@@ -4138,9 +4138,9 @@
         "sha256": "d1db81ee1618f7391bc9df164e740fa2dc9b025b6e017364100c22f87a3aa717"
       },
       "latex": {
-        "bytes": 5901,
+        "bytes": 5211,
         "lines": 128,
-        "sha256": "0350772ac7c667404f3cc131c3462dea22a9a5bb7b3a4032f706d4f0ac2f9564"
+        "sha256": "7c7996849b68f221ae513464d4a9a465ea6fa100d1cc9a9f1452edf099a20661"
       },
       "legalruleml": {
         "bytes": 2869,
@@ -4180,9 +4180,9 @@
         "sha256": "8382f5f56a1de6ec5452306688e54cfb3b7d65d7c8b468fe4701d3d5a4528fbb"
       },
       "latex": {
-        "bytes": 6396,
+        "bytes": 5706,
         "lines": 128,
-        "sha256": "4b0d81c13b3af6987244b087e0f3b3a6c89632ff1534bc2012f3a6095bfe0785"
+        "sha256": "53b8610757608043bb0db1b9556f25bb0da805b6926f4d8776a4fd60c9230c93"
       },
       "legalruleml": {
         "bytes": 3259,
@@ -4222,9 +4222,9 @@
         "sha256": "3d915ee1c45533eab5a4674939b3bdb7cea099397dc06a3a6630ca40c4257954"
       },
       "latex": {
-        "bytes": 8896,
+        "bytes": 8206,
         "lines": 155,
-        "sha256": "43fa65cd1340e227d7870ca47db789fcda796da6b2c6aaec9c3868f573569b63"
+        "sha256": "bbca43c4c6dc64ca07e7b8efba5901e26ff7e02153afc8ac28c6fec27c949aaf"
       },
       "legalruleml": {
         "bytes": 4375,
@@ -4264,9 +4264,9 @@
         "sha256": "cec69d9a36a9ae24c0664a5174d8e22e1defcb374327a58779da55e46382323e"
       },
       "latex": {
-        "bytes": 6637,
+        "bytes": 5947,
         "lines": 134,
-        "sha256": "16d03f595b55af9e414fe7db7e07ff9b2cfba3b5d0bc11e8ad16141d40aa41de"
+        "sha256": "e3013f97ed84a284e7772971e40ee764669dd654cae398f3867026f154fc2585"
       },
       "legalruleml": {
         "bytes": 4339,
@@ -4306,9 +4306,9 @@
         "sha256": "705f86af63cbef99fe21ed1972e990c285ba0103f587cc50386cd4edd31a9f99"
       },
       "latex": {
-        "bytes": 6715,
+        "bytes": 6025,
         "lines": 139,
-        "sha256": "d190c343e152fee8dd9c58f5e01b25446a33f11c3e8bbe41e83fc79189ce4c78"
+        "sha256": "846868b2fa5e1c136a0d078f745ce513965f37765d060ff124e41ab188db191f"
       },
       "legalruleml": {
         "bytes": 4842,
@@ -4390,9 +4390,9 @@
         "sha256": "9da4c4647057539043ec923cf69185518e06e835bf6ee023e75b1b2e44cf6abd"
       },
       "latex": {
-        "bytes": 6146,
+        "bytes": 5456,
         "lines": 113,
-        "sha256": "88965007efe8c52acbe6adc399bb1b34d8ddbc97b021958f959ec725f54e763a"
+        "sha256": "b5aa9e9d750de9fd020222f016f6039c8f9f86866f36d8e83a1fc8d41fd44d68"
       },
       "legalruleml": {
         "bytes": 4587,
@@ -4474,9 +4474,9 @@
         "sha256": "b1032ca2597265ceaa7ff76e18c3fdf0d2aa72006c92ba32586b69a87a446f4c"
       },
       "latex": {
-        "bytes": 5932,
+        "bytes": 5242,
         "lines": 113,
-        "sha256": "328d8001c36729b95af2a8e46472bdb6fddb6db6413fde186c94b36566f36e15"
+        "sha256": "7a486fee8afc2d19f0e6306d1f0fb5b0aeb3e185614e36d92f19a0e779171947"
       },
       "legalruleml": {
         "bytes": 6494,
@@ -4516,9 +4516,9 @@
         "sha256": "e10edb0db5a5e7149f5869d52d82a5063b3d4e8d6586af6075d176f994ed130e"
       },
       "latex": {
-        "bytes": 6580,
+        "bytes": 5890,
         "lines": 137,
-        "sha256": "1a79491d375444bae7afe5313ca4bc898eb8ca0fb41680e9a98d893a6ad9fe3d"
+        "sha256": "d41ca058ca2055238eb91b41e5a0d32d4291761af5d231550099a530f4869a5e"
       },
       "legalruleml": {
         "bytes": 4023,
@@ -4600,9 +4600,9 @@
         "sha256": "163a9b69156a8800ac6b21250b7a798fb3656c090c4e55368d31547c37d2d5ac"
       },
       "latex": {
-        "bytes": 8688,
+        "bytes": 7998,
         "lines": 151,
-        "sha256": "1aca4422fc11f20b46fa06a028eb300f7a431f2399027e84d15e81cc16e347b5"
+        "sha256": "95152977d9ed51ccee3d2ae94a621002554523dd23ae658e15c7a3b05a7451c4"
       },
       "legalruleml": {
         "bytes": 4860,
@@ -4642,9 +4642,9 @@
         "sha256": "f01bea604ed6f3ac7bc42421dfc5fbf9a083969420aa8a53c04faad18ab0659c"
       },
       "latex": {
-        "bytes": 7386,
+        "bytes": 6696,
         "lines": 136,
-        "sha256": "f080cd930ea93a26f9ca90a70ae143caea416ead60b1f90b9c17e87f94a0f1ef"
+        "sha256": "2e19171cd1a911fdb104dc51ee8b290d51dbe6725df8b59ce9d1c0106ab4988b"
       },
       "legalruleml": {
         "bytes": 3404,
@@ -4684,9 +4684,9 @@
         "sha256": "f5c91c4180d8aa13f7343fd4f88b589a7c4070af427806e97f806d8725a2fc8b"
       },
       "latex": {
-        "bytes": 8370,
+        "bytes": 7680,
         "lines": 165,
-        "sha256": "3b0700f52d4261939b3cd02071dd5f214e5eeeecd93d07460d379053548407b7"
+        "sha256": "9fb1e949a3a9c9cb7009d48c9ce6a17e992ab39615df16657aafa3b0e07edc21"
       },
       "legalruleml": {
         "bytes": 7426,
@@ -5104,9 +5104,9 @@
         "sha256": "58d6bc1c36957e06ca6b7a56077e7d9dc9539decc2b012c2d3cdebedc7eaabf8"
       },
       "latex": {
-        "bytes": 7354,
+        "bytes": 6664,
         "lines": 144,
-        "sha256": "1b8f77d439cedfcdf3990f45c7a643c92bb42d076929174da96e69efd80296f3"
+        "sha256": "5b52183ae075959ac897c8a7c647ab8e8a2d8b29bd97da44639063149684d99f"
       },
       "legalruleml": {
         "bytes": 6122,
@@ -5188,9 +5188,9 @@
         "sha256": "e3d7fe7ec8b1ebfd37398d40f6bb5fcc3f099625b18b3c93dbe3eef01e6e110d"
       },
       "latex": {
-        "bytes": 6730,
+        "bytes": 6040,
         "lines": 133,
-        "sha256": "dc7dde3c0892b5f00effb6bafa02931141db45cf6c4eff58fa69887c6e91c69c"
+        "sha256": "163fe956c5908fbbbb819cf68ac278abd7d3dccdc27d2948d9884713c88bd864"
       },
       "legalruleml": {
         "bytes": 3918,
@@ -5650,9 +5650,9 @@
         "sha256": "78c388953962fbbce2116246e91a55451110f83b1c5b183a248536bddc6dd1aa"
       },
       "latex": {
-        "bytes": 5153,
+        "bytes": 4463,
         "lines": 107,
-        "sha256": "be3326a12d18274219def9ae9634dd070a257b7c5eb76b754e26f7d6579ef178"
+        "sha256": "9811e1750f0ed1199ab89c18d944e7ee941ce19d87e33b9ba32e42d25b0aa3fa"
       },
       "legalruleml": {
         "bytes": 5288,
@@ -5714,9 +5714,9 @@
     },
     "library/penal_code/s214_offering_gift_restoration_property/statute.yh": {
       "akomantoso": {
-        "bytes": 3819,
+        "bytes": 3635,
         "lines": 52,
-        "sha256": "129412fcb9c9fdb08d4315bd92ae87219d2f9c6bd1548648797dea5ac4391f74"
+        "sha256": "4ec806f0076ee47402cc97d46840c1085dcd3f6b0bfe425ad1edb0b8e059abd9"
       },
       "alloy": {
         "bytes": 3915,
@@ -7456,9 +7456,9 @@
         "sha256": "89021e6538668b03976d74cbffad355035fa61fac00cd36bd7425ce473dba3d3"
       },
       "latex": {
-        "bytes": 6496,
+        "bytes": 5806,
         "lines": 133,
-        "sha256": "c6a0b6a1b6da41fc2c770b941531b65e68b05e67a0cb07a00d2e80191ddd50d3"
+        "sha256": "e4c7b043a8d5025a91e1d2d7959be74d8a35c7ce9193e843906a4c45de44b11c"
       },
       "legalruleml": {
         "bytes": 3702,
@@ -7876,9 +7876,9 @@
         "sha256": "81c3616069cb5ceb833531d5c8d8c9221e02ab7066c6a069baef294c3fc748b5"
       },
       "latex": {
-        "bytes": 6797,
+        "bytes": 6107,
         "lines": 138,
-        "sha256": "5d81a8e911d2d54c40b7ffd3040ebdc034522f1ccb55b2c96774a80fc96945cd"
+        "sha256": "2f90372f9489168ba76289bf41fa3435252b07af68a812f3a03ddb48561490cd"
       },
       "legalruleml": {
         "bytes": 4183,
@@ -8170,9 +8170,9 @@
         "sha256": "2d7eb4fe2635a95ae8d62103eee8af9330bb689da0afc96df1fa5102d8704a78"
       },
       "latex": {
-        "bytes": 6253,
+        "bytes": 5563,
         "lines": 129,
-        "sha256": "25dc67eb9296c0790b988f8c177a2ef8a808b921aed93c7e240c770663d72e58"
+        "sha256": "252996093983d87eb408a1d8538a3876b0095907db96ae3d4f9a2c1ced3fe785"
       },
       "legalruleml": {
         "bytes": 3342,
@@ -8254,9 +8254,9 @@
         "sha256": "7c8a39e07df07e4acc280a4d21213de10df981a48865cf08b2f2c0b07cd912ff"
       },
       "latex": {
-        "bytes": 6460,
+        "bytes": 5770,
         "lines": 137,
-        "sha256": "4aa9cd8b07a0d29f59c9c7548f82ee545e4da0f3b276ef6d9fb226846457a597"
+        "sha256": "500d4d5dc241827a50f9c20f49303ae0205decf58c9713c710a951d4aa7f9e0f"
       },
       "legalruleml": {
         "bytes": 3668,
@@ -8506,9 +8506,9 @@
         "sha256": "91dc743ec2e7acecbf03aa0aeeeca4dbcaa0141a63c1d3d2d30eef7810f320bd"
       },
       "latex": {
-        "bytes": 5531,
+        "bytes": 4841,
         "lines": 107,
-        "sha256": "a54a4b4d6fc2f1226a193a90eebff04c972730b312bad0b1fbeca2d8064a1b6b"
+        "sha256": "c20fff95f531fe4cda412cf36fdabc0679ea09d03a0ac7b1695c9cde2b4074fe"
       },
       "legalruleml": {
         "bytes": 6939,
@@ -8548,9 +8548,9 @@
         "sha256": "9634b2eb428e37c448cf46a5fd0de6028c009fe0fe6ef7f684d242847b4adfda"
       },
       "latex": {
-        "bytes": 5507,
+        "bytes": 4817,
         "lines": 107,
-        "sha256": "d1673e6ae20426f7ed25920213b83a0d895b71cefc2591a9e4c5ab024164dc9a"
+        "sha256": "844ea75a55ebf028210a7cf02732f0daf081dc4d14c21ecac4751273cc119789"
       },
       "legalruleml": {
         "bytes": 6294,
@@ -9010,9 +9010,9 @@
         "sha256": "feb6bd61be8af08064df3cd4fe5389b0e7c0053b510ea60bbeb7c463b9ec4695"
       },
       "latex": {
-        "bytes": 5802,
+        "bytes": 5112,
         "lines": 131,
-        "sha256": "fa8ef65ecd1ec17daf79b22dfc462ab99c1523452e9123b9a79cad5a6a6efa2a"
+        "sha256": "b1c5da2629f8f821eb30ae89e8808016b1211b25bcdf7f7b103f09cccca1d2ce"
       },
       "legalruleml": {
         "bytes": 3137,
@@ -9116,9 +9116,9 @@
     },
     "library/penal_code/s299_culpable_homicide/statute.yh": {
       "akomantoso": {
-        "bytes": 8580,
+        "bytes": 8028,
         "lines": 134,
-        "sha256": "34a0367eb1f78b69dc9c7746fc6afdc7508316561c7101eadfc6c619fead0354"
+        "sha256": "70841d20111d80f8990f4c9d8a40b012044f95da8336cec67e72681f83c00caf"
       },
       "alloy": {
         "bytes": 6640,
@@ -9126,9 +9126,9 @@
         "sha256": "97e8e0dd12acd04373b2d1287dd387d852e7a478a070efb17198ae5cac6e59e0"
       },
       "english": {
-        "bytes": 6961,
+        "bytes": 6409,
         "lines": 94,
-        "sha256": "67968f8cd55e14e397d5b8100f80b83414c6140c1e4e355dd4e64ba3e382320c"
+        "sha256": "b53bf172d71d9104beda9c92c88ca46c0de744d91a5d52f03b516e02754fd254"
       },
       "json": {
         "bytes": 17200,
@@ -9136,9 +9136,9 @@
         "sha256": "cb3bb2667a5f12f0b0017e2eb03753229495029d95ef747bd1482fa5108ae415"
       },
       "latex": {
-        "bytes": 15198,
+        "bytes": 13358,
         "lines": 203,
-        "sha256": "81d2a3e4b79488905901f307358ca8ba794d503010eefb6a6bbfd845678306d1"
+        "sha256": "d78d90029f1a70b4d99ba7a2bbd43553353fc270e250417a44aa3083761529ce"
       },
       "legalruleml": {
         "bytes": 23251,
@@ -9326,9 +9326,9 @@
     },
     "library/penal_code/s300_murder/statute.yh": {
       "akomantoso": {
-        "bytes": 9945,
+        "bytes": 8841,
         "lines": 107,
-        "sha256": "d9e9197c877657e6575904b3039d84ec05a3f7a6c7ae9e884954bd9ab03da254"
+        "sha256": "d0d4a0577ac66f61dced8d301393eda7af983cc2a7747dec040a71969d44ccbd"
       },
       "alloy": {
         "bytes": 5802,
@@ -9336,9 +9336,9 @@
         "sha256": "77aac6abbc4d7070e799a6f0d50481506813d09f7a49431740f1f93073c984b8"
       },
       "english": {
-        "bytes": 4949,
+        "bytes": 4765,
         "lines": 81,
-        "sha256": "15e5aaf548a9e7a8a6351ca81f54b1392e082d436748246fa5caf4f9a5dc98e7"
+        "sha256": "d96f93d4d6c978235bb307a3665b5492e71c4d262a87b020b03b69c56c485544"
       },
       "json": {
         "bytes": 11851,
@@ -9346,9 +9346,9 @@
         "sha256": "9dd776b18652054d359a3ad4812ff08671a562cabe16af0d3497dbb3f1ab4eed"
       },
       "latex": {
-        "bytes": 8617,
+        "bytes": 8065,
         "lines": 189,
-        "sha256": "13895640b236708cc7854ac7ca47d1c3acd682ca5f52471671e2a5cd1768f6f7"
+        "sha256": "7bd6c2d55ea7eabb9cdc1f433a646d95e0700b524cded04aeb6a6b38d7a6a972"
       },
       "legalruleml": {
         "bytes": 18222,
@@ -9368,9 +9368,9 @@
     },
     "library/penal_code/s301_culpable_homicide_causing_death_person_other/statute.yh": {
       "akomantoso": {
-        "bytes": 6765,
+        "bytes": 6305,
         "lines": 114,
-        "sha256": "f0a6cfe332c0cf5f0cbd75af831471f1a41d30e328c9c815916914e7d054f43d"
+        "sha256": "5fd28f27c535538c70f661c775e35830f3ef088f37866c9d66a06b0b58f22d83"
       },
       "alloy": {
         "bytes": 4939,
@@ -9378,9 +9378,9 @@
         "sha256": "11b59c6a9ffbbdac0f97557999bc432378a8411bcba4805813e3ced0be329c13"
       },
       "english": {
-        "bytes": 4237,
+        "bytes": 3777,
         "lines": 42,
-        "sha256": "da92b1c74b8191dbcca4246ca0256b965da90f80ac6e3780e524f79844d4f5c3"
+        "sha256": "1bce2652a72cf3bfba4df0b887d617587cf06a838feebfea6fdaeb985d935f40"
       },
       "json": {
         "bytes": 8971,
@@ -9388,9 +9388,9 @@
         "sha256": "ddd54141c0796416a1f7798708a11aad22bc28c53474e80b731b2441cf66f77b"
       },
       "latex": {
-        "bytes": 7209,
+        "bytes": 6519,
         "lines": 131,
-        "sha256": "a33be9d1aaef296b433ea35504e05864c91cce5fb90389bb071fc80367cc516e"
+        "sha256": "ba09b46e8fcf1d9257a5b6be592e7ec366b39013e02a33fc8b524fc2e24f494b"
       },
       "legalruleml": {
         "bytes": 18368,
@@ -9410,9 +9410,9 @@
     },
     "library/penal_code/s302_punishment_for_murder/statute.yh": {
       "akomantoso": {
-        "bytes": 7538,
+        "bytes": 6986,
         "lines": 121,
-        "sha256": "f048009c7b856339c5f810496f16da4880bba0d69bfa398790145dfac7696995"
+        "sha256": "e8667bb481b2115bd1678f85768daac32bf99c91685a6f841e543f15db7d6321"
       },
       "alloy": {
         "bytes": 5697,
@@ -9420,9 +9420,9 @@
         "sha256": "6ec9bf212f7fa784dcb1a6af855d808a77a16d3e04aa345d9bd147f6ff84aff2"
       },
       "english": {
-        "bytes": 5601,
+        "bytes": 5049,
         "lines": 74,
-        "sha256": "dd8c358c259c782e4a216c3a332f7236078ff991532badc4290382cf636f3973"
+        "sha256": "aefd4ee856754eb0dbcf617fcbec04446d4a8131566e613af430c8878cbb3852"
       },
       "json": {
         "bytes": 9819,
@@ -9430,9 +9430,9 @@
         "sha256": "f8f7cdff49737b98085e4ad8afe3f4be56d9224bbfbcb1d1ced2e2d635aa82e2"
       },
       "latex": {
-        "bytes": 7749,
+        "bytes": 7197,
         "lines": 175,
-        "sha256": "a0aefce3ea3ca5044c1743dd0f46ffd9a015c9e76457b4d794147484b7436bf8"
+        "sha256": "367f849ce6420609ee0b28795c7ed0ffe8d083134f10c3ca911e31f557c10269"
       },
       "legalruleml": {
         "bytes": 20248,
@@ -9452,9 +9452,9 @@
     },
     "library/penal_code/s304A_causing_death_rash_negligent_act/statute.yh": {
       "akomantoso": {
-        "bytes": 6883,
+        "bytes": 6377,
         "lines": 112,
-        "sha256": "c1f8d018c5a7128904dbd460eedd8a18c7e010886c50f8a03c0275afb18f5c91"
+        "sha256": "6e195fab7c54562e1819ebb68d8197052c86dad7c449497c64114fe5dd56cf29"
       },
       "alloy": {
         "bytes": 5917,
@@ -9462,9 +9462,9 @@
         "sha256": "8f62640713de5978c91e55feb7f1ee4c7e77457cbd731c0a0faef1b61a338467"
       },
       "english": {
-        "bytes": 5329,
+        "bytes": 4823,
         "lines": 60,
-        "sha256": "97d68670d82dcf6b777e2e7eec7cd52f6b4a038ce6e83e4676b5a2599145a823"
+        "sha256": "f4b09e88db81aa2beeb9b43c7e2f528b53067ca4d6ad820a97fce7337b9f4713"
       },
       "json": {
         "bytes": 9911,
@@ -9472,9 +9472,9 @@
         "sha256": "7b6808711c2eef8f1fa6111d992fb8481313e0a5a9ed3b59af9312315395671c"
       },
       "latex": {
-        "bytes": 8065,
+        "bytes": 7375,
         "lines": 160,
-        "sha256": "9a81b5efaf553de7034d3ca234f1f08c4524d62d0c23d2cde4c57f9646b77900"
+        "sha256": "73d883002f8873a91deb8f57274772970e4cac011e763713efe4ce6f63aaaac9"
       },
       "legalruleml": {
         "bytes": 19550,
@@ -9494,9 +9494,9 @@
     },
     "library/penal_code/s304B_causing_death_child_below_14_years_age/statute.yh": {
       "akomantoso": {
-        "bytes": 6845,
+        "bytes": 6385,
         "lines": 116,
-        "sha256": "9d08b6921b5523418dddffa46cf05f14c27367dc7f241f34390a32b892bd79ac"
+        "sha256": "70f8c030ee80bdb04212690fd98fe541efea7b27799ef632d6889d530661beb9"
       },
       "alloy": {
         "bytes": 4762,
@@ -9504,9 +9504,9 @@
         "sha256": "091c9292027cd1425b9ef2d4d3053f9c282d5bdae237d495c3f2d574ca0c2c3d"
       },
       "english": {
-        "bytes": 4105,
+        "bytes": 3645,
         "lines": 39,
-        "sha256": "87ee08a7da18a30b41ad439cb78cf08c4d92f6ab22d98206698040eb69fc72c6"
+        "sha256": "b38ff1d1db007a0edb9808a86d6f80583efdedbb9b50dd9158a5b6bfc26a4b27"
       },
       "json": {
         "bytes": 9908,
@@ -9536,9 +9536,9 @@
     },
     "library/penal_code/s304C_causing_allowing_death_child_below_14_years/statute.yh": {
       "akomantoso": {
-        "bytes": 8763,
+        "bytes": 8303,
         "lines": 144,
-        "sha256": "9297ff6d63f54d6b4fcbf4a95180b5fceb53cf2f2db9b5dd32bccb1226c6bda8"
+        "sha256": "e814e6c0b8a28cdd152884dc19f57d70f7aa898456bc14d790ea9d5c8ccca861"
       },
       "alloy": {
         "bytes": 6104,
@@ -9546,9 +9546,9 @@
         "sha256": "6a4c7c8fb5e065684091a908413d3a361e72acb85e763af22008ed4be9ad7ce1"
       },
       "english": {
-        "bytes": 2302,
+        "bytes": 2072,
         "lines": 24,
-        "sha256": "b3d7786304e91282733b9948579c72779191745e45fa10d5b02a5f1932d87d9d"
+        "sha256": "4c2afddfa1539e1922470f878008e5ccdd423a2cc3a57d47282f227ce2a6151e"
       },
       "json": {
         "bytes": 14680,
@@ -9578,9 +9578,9 @@
     },
     "library/penal_code/s304_culpable_homicide_not_amounting_to_murder/statute.yh": {
       "akomantoso": {
-        "bytes": 7552,
+        "bytes": 7046,
         "lines": 116,
-        "sha256": "cef1080069b2f0a371b462967841077afc990ad6c26dc5cae20b12c340dbdaca"
+        "sha256": "fbcd2f968370d8d6b21c26f3714c63d790392ffba36022fdb04d3a80964c1b91"
       },
       "alloy": {
         "bytes": 5937,
@@ -9588,9 +9588,9 @@
         "sha256": "8029af3c591db761544c9cdba6ee826a4428c330044c9432cca4a0432c33fcbb"
       },
       "english": {
-        "bytes": 5871,
+        "bytes": 5365,
         "lines": 74,
-        "sha256": "e66d6d6efd333d86dec30b6aee20fa5b545eed42c0f3d5e77b828e3e2fdb7bdb"
+        "sha256": "cca80d2535c6b9cebd4754c72116db3a846c7c16f97980d33b21813f0c0cc5af"
       },
       "json": {
         "bytes": 14074,
@@ -9598,9 +9598,9 @@
         "sha256": "bc96bcb82aac7731f335918171c4a7695d03eedb78645a8b581f27cf96dab7e9"
       },
       "latex": {
-        "bytes": 14855,
+        "bytes": 13015,
         "lines": 179,
-        "sha256": "20aec945a67a6cab68d6901e075ab158e03f8ab2c14602a0f059767ee6e03693"
+        "sha256": "3efda1c4d00f62434a753f2884b583ee995a8487c9cd2c2eeb65c909259ba711"
       },
       "legalruleml": {
         "bytes": 18968,
@@ -9620,9 +9620,9 @@
     },
     "library/penal_code/s305_abetment_suicide_attempted_suicide_minor/statute.yh": {
       "akomantoso": {
-        "bytes": 8340,
+        "bytes": 7880,
         "lines": 130,
-        "sha256": "5441713d845cd2509396b9b77d807c8556ec2b242ecc9bb4643c0ac5f30b2124"
+        "sha256": "9d15ca4d450cce513a21b373d11a3f4977f435ac97d31288dd3644f5e5f2f347"
       },
       "alloy": {
         "bytes": 5685,
@@ -9630,9 +9630,9 @@
         "sha256": "d2f7c12cee5c7bb98490cef6b9bfb66bc0d78c3ea44a46cfedf2546fd43f4881"
       },
       "english": {
-        "bytes": 4100,
+        "bytes": 3640,
         "lines": 39,
-        "sha256": "34fbf5b5630beef9e6e13478c12b3177c321f43abc5fdaac882cf59d3eee8de7"
+        "sha256": "91d24b6ea747dff8d7940bd0d5c12c5ab17c48247fd98ea602f922db24f7df50"
       },
       "json": {
         "bytes": 15520,
@@ -9662,9 +9662,9 @@
     },
     "library/penal_code/s306_abetment_suicide_attempted_suicide/statute.yh": {
       "akomantoso": {
-        "bytes": 6294,
+        "bytes": 5834,
         "lines": 104,
-        "sha256": "998ec62bad401d0996593594934b54872de901d3e48e2462f26346e9ad5ee794"
+        "sha256": "79742b9624f8b1a78332aface1f7eb846f9f9bf2a42e30c04b9c419cabce0362"
       },
       "alloy": {
         "bytes": 5230,
@@ -9672,9 +9672,9 @@
         "sha256": "222d585f675e0467e40a5b37029a14b7798e7521872659d9462f34087a029a02"
       },
       "english": {
-        "bytes": 4503,
+        "bytes": 4043,
         "lines": 50,
-        "sha256": "ced261de6e6b905b5aa58c3845cfef051ca76e1dde80bddf5c9af5ff1b7bc1b6"
+        "sha256": "4dca8e65931918f33523a779861a8095e01ad6f4bbaa0fde0b95dd723147a06a"
       },
       "json": {
         "bytes": 7936,
@@ -9682,9 +9682,9 @@
         "sha256": "d75dbe3449487d44fc276add47a127997812e93d246a5c5764579c7963ccd885"
       },
       "latex": {
-        "bytes": 7601,
+        "bytes": 6911,
         "lines": 151,
-        "sha256": "f3f49f377c05ff185d6eed5dc8422ad5f223d28725f32f380cbb4a8ccb3617c8"
+        "sha256": "d11bbdcee622118d0406eeeed89ccf386fdc2bff710b6994076ce5ddb44cda14"
       },
       "legalruleml": {
         "bytes": 16632,
@@ -9704,9 +9704,9 @@
     },
     "library/penal_code/s307_attempt_murder/statute.yh": {
       "akomantoso": {
-        "bytes": 8925,
+        "bytes": 8373,
         "lines": 135,
-        "sha256": "47fd941e8036a0b5e144237a0a4fbc501c83ccd9b89db006313b0f0210df6e0e"
+        "sha256": "5af516871f667d9e22777f6591a619ffec8b4678110c46b8af534b21bbe81214"
       },
       "alloy": {
         "bytes": 5487,
@@ -9714,9 +9714,9 @@
         "sha256": "2d7a863607ab8a12327a82c7b9a9c4a86027206049941c095e76ccc6ed999c34"
       },
       "english": {
-        "bytes": 5920,
+        "bytes": 5368,
         "lines": 59,
-        "sha256": "6e02b06aa5823dbfb5aa0732802d81e172147521e254e964f7e5ebe710c805c6"
+        "sha256": "bc2ce0b2d00dcce5a74ca21037cce9e17d4900eeafda44ef5e1f2dfce13296e2"
       },
       "json": {
         "bytes": 14461,
@@ -9724,9 +9724,9 @@
         "sha256": "539a6fc87897114c614ad0500bfef121f6ffe0e7503ff0a149ec2dd22db95201"
       },
       "latex": {
-        "bytes": 8254,
+        "bytes": 7564,
         "lines": 153,
-        "sha256": "30c363961a59f8372c4b3258ee22a411d5cb04d0e36c6f42acd6236dcafe6b6c"
+        "sha256": "200fe9f30a0983b8f63a7fce6a3a53a3067d756e888bf623c7d78f3463dcdf58"
       },
       "legalruleml": {
         "bytes": 21192,
@@ -9830,9 +9830,9 @@
     },
     "library/penal_code/s308_attempt_commit_culpable_homicide/statute.yh": {
       "akomantoso": {
-        "bytes": 7658,
+        "bytes": 7106,
         "lines": 118,
-        "sha256": "bf114d5d259b6c70493463198f800425813e86f99b0585406596a7fdd2c9769b"
+        "sha256": "1ae9147ea4f01c873b12e1330e5aa28a4d8109c399d3bd6d3e754222d3f08853"
       },
       "alloy": {
         "bytes": 5755,
@@ -9840,9 +9840,9 @@
         "sha256": "a0047f608fb4e0dcda7d5ec59a9f116b74f0016a53880aa9730969e60d7a2e43"
       },
       "english": {
-        "bytes": 6402,
+        "bytes": 5850,
         "lines": 66,
-        "sha256": "c4f9d9c511c3d14c52d4870a2a58209e5ec4d87a76b8fc84bdd91a3fa15f9e56"
+        "sha256": "cbfefbf043f12eced5f59f638938f34d1e856b7cb507b45febe413e809b04fca"
       },
       "json": {
         "bytes": 8833,
@@ -10018,9 +10018,9 @@
         "sha256": "eb371a6a025a0610a9e9cefab8ae1fc446d68070aeba8ffdc8cc4bf6b688a28f"
       },
       "latex": {
-        "bytes": 6012,
+        "bytes": 5322,
         "lines": 133,
-        "sha256": "da02b735f08a7bfa92fe2072c30dcae67370db21405f96b5911cedc07bcfac34"
+        "sha256": "4c97c664da93098719d9380da86543ca26b32c8a190455a0a86578e6190b2b65"
       },
       "legalruleml": {
         "bytes": 4271,
@@ -10228,9 +10228,9 @@
         "sha256": "b33c531aa7bcba52b49e2b1b35ffe0ae3e97ba8976837453186ec73cef24a3a3"
       },
       "latex": {
-        "bytes": 7111,
+        "bytes": 6421,
         "lines": 143,
-        "sha256": "5136bfa3727a1e6b5c9fec2f9134e62d2211fd7a5a8a2e1207c3e44ff215a06c"
+        "sha256": "51f5754e1e9f43d7482186d80fe7dbb3d28b02a0323e182c1daa5687aedf3c72"
       },
       "legalruleml": {
         "bytes": 4799,
@@ -10292,9 +10292,9 @@
     },
     "library/penal_code/s319_hurt/statute.yh": {
       "akomantoso": {
-        "bytes": 9156,
+        "bytes": 8466,
         "lines": 145,
-        "sha256": "da622d94a2c7e16325a51ba81b307d8db319597736c62d4de99842d2477cb104"
+        "sha256": "f630e159d4685af7b8fb429f391a4cedd1d7de22d891362bcb1dc048a75f3496"
       },
       "alloy": {
         "bytes": 7046,
@@ -10302,9 +10302,9 @@
         "sha256": "1f3fe4243c04bc426cf950d722e5b8769d638a3cb42fe84746182b990394bdd7"
       },
       "english": {
-        "bytes": 6754,
+        "bytes": 6064,
         "lines": 91,
-        "sha256": "1782b007578e968c411e4e98ac0670660b9ef659bb7877c3c7cb675246bd886f"
+        "sha256": "863c18314f246fe67c6a037e40f5d44f5182e2710cf7497a5cc19e9fd62244cc"
       },
       "json": {
         "bytes": 17121,
@@ -10312,9 +10312,9 @@
         "sha256": "b3256d6e7c65f25369b469cea1e67625527d71fc0d091fe26bec2e8361f9bcae"
       },
       "latex": {
-        "bytes": 15426,
+        "bytes": 13264,
         "lines": 191,
-        "sha256": "82612131d87622213a2944cc8fb10f4b8658d8359f9ed81c0cd1776aa1bebb73"
+        "sha256": "a517223917a8ab992dc8d0887d140bdb6ad9e423397d68c265eaadfc5c969d82"
       },
       "legalruleml": {
         "bytes": 25384,
@@ -10418,9 +10418,9 @@
     },
     "library/penal_code/s320_grievous_hurt/statute.yh": {
       "akomantoso": {
-        "bytes": 10016,
+        "bytes": 9326,
         "lines": 141,
-        "sha256": "a14b3d892224f3274cb9604d2eff49acbc3e8284afc3e8ffa4cdf95188de0fd2"
+        "sha256": "7e2dc0e556e3f3f21f7011fa70209d9ad1b84b682289831ee1bc83a9dc46c49c"
       },
       "alloy": {
         "bytes": 5458,
@@ -10428,9 +10428,9 @@
         "sha256": "29ac9b671c9f7056b4d5cfd178a4c3ee8fb31c74d8dbdd61572d919e5c0894c2"
       },
       "english": {
-        "bytes": 6727,
+        "bytes": 6037,
         "lines": 67,
-        "sha256": "b7e046778318e092227d42a472707553f1a8d9fc10a9cf7f98857fb22c1c772e"
+        "sha256": "efd2fcf47153d48c99c6c1078513530ddfa243314e8144ec71b1d55ff15ecdfd"
       },
       "json": {
         "bytes": 9630,
@@ -10460,9 +10460,9 @@
     },
     "library/penal_code/s321_voluntarily_causing_hurt/statute.yh": {
       "akomantoso": {
-        "bytes": 9025,
+        "bytes": 8335,
         "lines": 140,
-        "sha256": "fc67bd3e2d186a39a6ca778fcc800ec6ab99e4a4f2c8db0141483582f187b067"
+        "sha256": "44f808a05074769c0cc806b67aeb745530034ece9628ea713e2a8e0c92ec50f4"
       },
       "alloy": {
         "bytes": 6728,
@@ -10470,9 +10470,9 @@
         "sha256": "e630489b4049b8df5c031bab5702b418341361efb41b9e2216bd5471f9005cbc"
       },
       "english": {
-        "bytes": 7055,
+        "bytes": 6365,
         "lines": 88,
-        "sha256": "cecc1205892ace98f769dd367229878ad418e3f3a5f8071448d1531cd60dee20"
+        "sha256": "5d9e01b8bcd94b4aa76e426e257db76d4f2bc008ce8ed26b1a83fe5a3caf6db9"
       },
       "json": {
         "bytes": 13926,
@@ -10480,9 +10480,9 @@
         "sha256": "162dd2e7815536886f4192bb35ffc92a62235203678a0652aed0e30522342349"
       },
       "latex": {
-        "bytes": 11672,
+        "bytes": 10476,
         "lines": 187,
-        "sha256": "49f423bcbbfb3b9138c81bbbf0c4a9f3b82e8bef29df058e972f188e4816946b"
+        "sha256": "b3c75c0fb56a2fff97905ea3f9cda1d878245afb506c68d637deb9242d53c6df"
       },
       "legalruleml": {
         "bytes": 24180,
@@ -10502,9 +10502,9 @@
     },
     "library/penal_code/s322_voluntarily_causing_grievous_hurt/statute.yh": {
       "akomantoso": {
-        "bytes": 9847,
+        "bytes": 9157,
         "lines": 139,
-        "sha256": "2fb76dc91f2b10679184be9c86f6833d1b614585db3c1d6de3039bd7fae6e3c6"
+        "sha256": "128d8963065daf3d48660e2136371387a212ad11f60800db75503ba3fc66b491"
       },
       "alloy": {
         "bytes": 6899,
@@ -10512,9 +10512,9 @@
         "sha256": "365e9b6accc708a0c05b61974d0624665f23732a0108434951d021063e414ee9"
       },
       "english": {
-        "bytes": 7470,
+        "bytes": 6780,
         "lines": 74,
-        "sha256": "fa800b353922203d9685de2ff89193f61ef75860044fc6b4d9565f52cbd0a8fb"
+        "sha256": "977f0c6827e3edbaa41217892ad2d4a347162ea4f89a68af69c866f29fc5e4dc"
       },
       "json": {
         "bytes": 11646,
@@ -10522,9 +10522,9 @@
         "sha256": "6c472c5ec5b802b9ef3155e9dccd11c27ebc601b6b594e34d6ef07e809778294"
       },
       "latex": {
-        "bytes": 9535,
+        "bytes": 8845,
         "lines": 167,
-        "sha256": "dfa26c5f05222d4fff34260546c2a31fc41df45901b5aec54a32a7da1ac42882"
+        "sha256": "94261e37a885d8c00840172d99feff51402e2858833af38e1dcee7e6f6d6ec0e"
       },
       "legalruleml": {
         "bytes": 24799,
@@ -10586,9 +10586,9 @@
     },
     "library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh": {
       "akomantoso": {
-        "bytes": 7677,
+        "bytes": 7125,
         "lines": 120,
-        "sha256": "b69a7daea54e0d8175fdc4d0f3c5ea5b5002205ef128ca57a78758cfc69a4775"
+        "sha256": "0f1e67f2f3ac49b32c5d2c7d075b7aec27570dbe1c8a305d6ef21704f056aaf1"
       },
       "alloy": {
         "bytes": 5681,
@@ -10596,9 +10596,9 @@
         "sha256": "7529fd54a7f0edbe8a60b33ea455dfef5486cdfd52d8f4b1af50b2761de3a7b5"
       },
       "english": {
-        "bytes": 5785,
+        "bytes": 5233,
         "lines": 72,
-        "sha256": "549de09d3e659d49ec3b26b5e7e7d1399b4948e2a872ed7d1e060ec840088729"
+        "sha256": "614f426e3bc08b86809b9c9e919d6f7084622abf63469d14391a0f813a301788"
       },
       "json": {
         "bytes": 9668,
@@ -10606,9 +10606,9 @@
         "sha256": "20cce378f4ee5ead2eea6fc913e4acdd5356354fc8ec485ce0d3dcbec60f34f4"
       },
       "latex": {
-        "bytes": 7900,
+        "bytes": 7348,
         "lines": 173,
-        "sha256": "9717ec3ce288906a70a4ff58bbe3a839968263125a30bc2855f485e75e7ad720"
+        "sha256": "8319054e0dc4bc7b0069c58b912ddb7428976bade2d5cd40dc86fc3991b92f34"
       },
       "legalruleml": {
         "bytes": 20096,
@@ -10628,9 +10628,9 @@
     },
     "library/penal_code/s324_voluntarily_causing_hurt_dangerous_weapons/statute.yh": {
       "akomantoso": {
-        "bytes": 9728,
+        "bytes": 9038,
         "lines": 142,
-        "sha256": "a549ca48c50d3e98cc0e3d72d1c981333e5676aae1a7d81213468b6c3314ce90"
+        "sha256": "b50456941a4a9b935597d6f787541a40e9beb57fbbbaeba94f883aab379ff147"
       },
       "alloy": {
         "bytes": 8339,
@@ -10638,9 +10638,9 @@
         "sha256": "ab6b08cdd47eef95778c171f14c07e94178228fb63674c9403897ace7b32f266"
       },
       "english": {
-        "bytes": 7864,
+        "bytes": 7174,
         "lines": 76,
-        "sha256": "bdf0f23693f5c84adb6a1ace8afa6df57a1c7f241fd108e99ecfb980022f5401"
+        "sha256": "930b75774402f9c721e188190ade86f8e2fa2900948e4eea19deb303778081ba"
       },
       "json": {
         "bytes": 13566,
@@ -10648,9 +10648,9 @@
         "sha256": "dc95bae11dc7ad6e597e74c995e311a148c1fe675146467388b1b5e92e6f0517"
       },
       "latex": {
-        "bytes": 10170,
+        "bytes": 9480,
         "lines": 174,
-        "sha256": "1eb0947875376661a14d8e85120946fa3017ed2d97832c25c14816d21b341265"
+        "sha256": "586f6d6f90982603a79335c2abe115165512cb212435622d1ef51082eb37a1f0"
       },
       "legalruleml": {
         "bytes": 26734,
@@ -10670,9 +10670,9 @@
     },
     "library/penal_code/s325_voluntarily_causing_grievous_hurt/statute.yh": {
       "akomantoso": {
-        "bytes": 7608,
+        "bytes": 7102,
         "lines": 116,
-        "sha256": "13df166c685171e292508d408c47a0fb5469c8a7c5450325d66ba8bb82cf33d6"
+        "sha256": "ae1074161cef3ab79b13734777b18111dca79e94887874b84067e0fd96a1bf17"
       },
       "alloy": {
         "bytes": 6363,
@@ -10680,9 +10680,9 @@
         "sha256": "68c9e9985ae17ad0de858785be5a3f07170d7abeea0b111da61b12a1bdf6fc63"
       },
       "english": {
-        "bytes": 6007,
+        "bytes": 5501,
         "lines": 75,
-        "sha256": "08e8df5762ae375ee255df31c84d9f7d11d18716608789625ad5fa85f19d6e9b"
+        "sha256": "d5ceb3a9d4d02dfef39b31c68f79125a4b03a2ecdec4e14f4d25f3ed7b0cd1b6"
       },
       "json": {
         "bytes": 18606,
@@ -10690,9 +10690,9 @@
         "sha256": "a3acd319495b2f28d9ca3972df88bcba47db0d5e79bb0499f228b619ae6f2928"
       },
       "latex": {
-        "bytes": 22704,
+        "bytes": 19254,
         "lines": 179,
-        "sha256": "de5a2b1dad8fdeefe6fdf6b33bad646fc2841a2f1767d1c96bb882e7ba3fdabc"
+        "sha256": "efd70193e711e82bd032277ad2729ebeebc85c3443d3c87186d74133d4e9eec6"
       },
       "legalruleml": {
         "bytes": 19110,
@@ -10712,9 +10712,9 @@
     },
     "library/penal_code/s326_voluntarily_causing_grievous_hurt_dangerous/statute.yh": {
       "akomantoso": {
-        "bytes": 9320,
+        "bytes": 8676,
         "lines": 136,
-        "sha256": "5e8090640dfb57d327365da339a664c6b3d4aee7cd1c34a147957b9288c484b0"
+        "sha256": "47fcfc2206c7beb7c528dd9f4256d470843d4c50acec1ca92479a02949f0e51e"
       },
       "alloy": {
         "bytes": 8169,
@@ -10722,9 +10722,9 @@
         "sha256": "5413e1afad522c6e5e1bc336c779be71e9bfe5b49ee966f04c222b7928bce792"
       },
       "english": {
-        "bytes": 7761,
+        "bytes": 7117,
         "lines": 83,
-        "sha256": "33cb973c88e7e441b05ce09290ae125539e357cd6c51244314cce63a55314da4"
+        "sha256": "278c8c68231b3785380f2acec081e6647d2156ca3b256b3adc37b884caf54ee8"
       },
       "json": {
         "bytes": 13761,
@@ -10732,9 +10732,9 @@
         "sha256": "50e03ad966dd285f575f60c1b40e81f31b564aefebdefe5b19733b4278235e44"
       },
       "latex": {
-        "bytes": 9959,
+        "bytes": 9269,
         "lines": 171,
-        "sha256": "94b213fe88f1f6136c28bb46766c612f23f146b75c1951b2de4e90f3adbaaf52"
+        "sha256": "5927be41e16af2eff0ac450e6aa16a9a9760d913db621c488063dc854f9940aa"
       },
       "legalruleml": {
         "bytes": 26933,
@@ -10754,9 +10754,9 @@
     },
     "library/penal_code/s327_voluntarily_causing_hurt_extort_property/statute.yh": {
       "akomantoso": {
-        "bytes": 8472,
+        "bytes": 7828,
         "lines": 129,
-        "sha256": "8c178293388121b6812b287f471d0f9324ac14c2532cdbc734d78bb2935f59e2"
+        "sha256": "a2e4ff8395a9a39ab3294f7234e5c7528c5111d965c6de30dc8ecebcf33ecd98"
       },
       "alloy": {
         "bytes": 6662,
@@ -10764,9 +10764,9 @@
         "sha256": "606b9d4199a44bee4c34107ab6721a5ca239373ddd8ca8cede5b9ced0fd6cff0"
       },
       "english": {
-        "bytes": 6847,
+        "bytes": 6203,
         "lines": 67,
-        "sha256": "cbb1ccf60449b89491f6104e489eb51eeae0f8394f8d3e247886ec8f4b07dcf2"
+        "sha256": "c8ffa637cd24fe3bd200ca3036ee6c922ed73bc47d75def6509a70a5ff2d9a15"
       },
       "json": {
         "bytes": 10921,
@@ -10774,9 +10774,9 @@
         "sha256": "46816d69581e9b3c2e687174bf142299c20eb4093cf3e90d0187319e93e061d7"
       },
       "latex": {
-        "bytes": 9158,
+        "bytes": 8468,
         "lines": 166,
-        "sha256": "36ae8f40ce92daf6eafa768c1436d8e3abe006ba41717e516a6b063e52bd530c"
+        "sha256": "72a2ab12a0ea2bdb94bf9f322f498fb6723fb45a7297b24cd33e30326feb1135"
       },
       "legalruleml": {
         "bytes": 23914,
@@ -10796,9 +10796,9 @@
     },
     "library/penal_code/s328_causing_hurt_means_poison_etc_intent_commit/statute.yh": {
       "akomantoso": {
-        "bytes": 9025,
+        "bytes": 8381,
         "lines": 133,
-        "sha256": "ce70a4ea059dac342ca49c18b54a29fc907793a9ea3826545fe51440cf6eb82f"
+        "sha256": "d238321e36c2ca06b99cdabf7e3f5dc38d0d6aa7cc5ac54217036887354f8fc5"
       },
       "alloy": {
         "bytes": 7679,
@@ -10806,9 +10806,9 @@
         "sha256": "3ffe938725c25fdb4800a41879f2aa76941f50f96a464b1ae9083db09ce71043"
       },
       "english": {
-        "bytes": 7200,
+        "bytes": 6556,
         "lines": 71,
-        "sha256": "8a6ec399ebc23f0e05c153093f2e9c4ff05dedb28bb48d7c76100c808f2bb856"
+        "sha256": "20f428f04facaf1ad1aa947ddb90458d3076f7a018a003ee1bcbbe423a403af2"
       },
       "json": {
         "bytes": 12291,
@@ -10816,9 +10816,9 @@
         "sha256": "9c5c5ebb3d9b737fee41c3211cc7e2e783609bfab9150fb4b6d29e4260e000fc"
       },
       "latex": {
-        "bytes": 9664,
+        "bytes": 8974,
         "lines": 172,
-        "sha256": "ceb2fc3787502ee22333601a9e51623ad00cc7e084c42d4af91f546d6e1697f8"
+        "sha256": "4b74be4700f0e9ee7968fb0a5f81623892d242ded25fe7b705b822504c0dce1a"
       },
       "legalruleml": {
         "bytes": 24905,
@@ -10838,9 +10838,9 @@
     },
     "library/penal_code/s329_voluntarily_causing_grievous_hurt_extort/statute.yh": {
       "akomantoso": {
-        "bytes": 8722,
+        "bytes": 8078,
         "lines": 132,
-        "sha256": "e3eb88369738df4671a042b8fede2ce1f5368b84211c13c74228fe74e3cd4feb"
+        "sha256": "d60ffad6e651c4f87192ccdba9a4bd78087ec46a94cff7034d8ac7c1517b3a99"
       },
       "alloy": {
         "bytes": 7049,
@@ -10848,9 +10848,9 @@
         "sha256": "99dc201c74f7fc6db98068c6f8470a0c89574155c841c478f2182d9714d334a2"
       },
       "english": {
-        "bytes": 7520,
+        "bytes": 6876,
         "lines": 74,
-        "sha256": "9c0244f12340872cebaf108ccbf52a7acec5e36d2cdaa85518904be623cd3d36"
+        "sha256": "66525464ecfc67727f48317a000f907d8c9083443faf37abf5671fae7303ae5b"
       },
       "json": {
         "bytes": 13274,
@@ -10858,9 +10858,9 @@
         "sha256": "7e46fd4f7be078130f221038cd9ba2c492b283235cfcad2007ecf3dc0f623b78"
       },
       "latex": {
-        "bytes": 9932,
+        "bytes": 9242,
         "lines": 185,
-        "sha256": "7a2abd8eed35c78c8a9bfb7468568505e19588e8f4dd9eade931953c7e7fde7b"
+        "sha256": "fa3b4a438aed314d9a6f0854e6c1d161bb603060e547411aab55860507dd532d"
       },
       "legalruleml": {
         "bytes": 25061,
@@ -10922,9 +10922,9 @@
     },
     "library/penal_code/s330_voluntarily_causing_hurt_extort_confession/statute.yh": {
       "akomantoso": {
-        "bytes": 9355,
+        "bytes": 8711,
         "lines": 131,
-        "sha256": "687a78c9902b209d5043fa149ff7c93b7abfd5391fbe894c16618c3703364fc0"
+        "sha256": "2057065b5d38542817e4531fa828f6fc62f992c0dffaa815640b4b91bc36cc90"
       },
       "alloy": {
         "bytes": 6608,
@@ -10932,9 +10932,9 @@
         "sha256": "ce89d50929ed0cecbedcac75fe0ea4d7584a769380e77a74c6672c09270f748e"
       },
       "english": {
-        "bytes": 8129,
+        "bytes": 7485,
         "lines": 77,
-        "sha256": "e7df58ebbf779c1668501f45135e94ece47e8d37aa9c56680bd4b70cfb6a940a"
+        "sha256": "f794d76a2117cf6d1dd4de12c522271162321aaa04c684f8a5d181e4000a1167"
       },
       "json": {
         "bytes": 10499,
@@ -10964,9 +10964,9 @@
     },
     "library/penal_code/s331_voluntarily_causing_grievous_hurt_extort/statute.yh": {
       "akomantoso": {
-        "bytes": 8660,
+        "bytes": 8016,
         "lines": 128,
-        "sha256": "9b6f44b27ae0cade4331569d0dc7750d997ac6d5a9aeda762ae2389565492095"
+        "sha256": "92527eaacd4eae7b0a5ecbe6cb3742e58d7bdd498d6a07e8f8c668ab8d48184f"
       },
       "alloy": {
         "bytes": 6479,
@@ -10974,9 +10974,9 @@
         "sha256": "31971cd3dde597a3256e7fee3e9232154f35ed92ea0fe50d0ee9a22fbb8c83c8"
       },
       "english": {
-        "bytes": 7345,
+        "bytes": 6701,
         "lines": 68,
-        "sha256": "4d3c4dca39a924b29ca46452250d99ec86602abeabc3837925ba1b7f17aaa048"
+        "sha256": "257e66e8cbd1b004e32abe23adea1de63ad5604d70060acb673d9cd89e6279c4"
       },
       "json": {
         "bytes": 9461,
@@ -11006,9 +11006,9 @@
     },
     "library/penal_code/s332_voluntarily_causing_hurt_deter_public/statute.yh": {
       "akomantoso": {
-        "bytes": 8771,
+        "bytes": 8127,
         "lines": 131,
-        "sha256": "4608b2f39cf6a1f08632c4a3afd0cda1477052dc0395a12eab86a84d4d96d2e6"
+        "sha256": "2335cbbe4c5a938fc48956daa0131dc2f31df8de134b0227f4828f893c1c67c4"
       },
       "alloy": {
         "bytes": 6974,
@@ -11016,9 +11016,9 @@
         "sha256": "fd1954147ed21f1d810e160ac89ec4731c6efc55528a5ed335c0f6322433f795"
       },
       "english": {
-        "bytes": 7363,
+        "bytes": 6719,
         "lines": 71,
-        "sha256": "2a391cdd000126b3f12a702838b69fb6eb71834dad1283e708dca218d94cfb21"
+        "sha256": "1eea2892827406e5ae6f96d8b77e4558ddd8ce857eb80bb3df692b3f745165a0"
       },
       "json": {
         "bytes": 10248,
@@ -11048,9 +11048,9 @@
     },
     "library/penal_code/s333_voluntarily_causing_grievous_hurt_deter/statute.yh": {
       "akomantoso": {
-        "bytes": 8631,
+        "bytes": 7987,
         "lines": 130,
-        "sha256": "f8057d94e7df847755e5c50447f2d65d2c5c4f9a08e47ca2e17d1082958f8c18"
+        "sha256": "45397fa61e66a6e0dc0918a1f66e754dbbd779ccbc7e55b1815370a167e93543"
       },
       "alloy": {
         "bytes": 6695,
@@ -11058,9 +11058,9 @@
         "sha256": "fb592cdaeb5a222df1fc41906a7d72eb49dcfec17af4d8f1ea9929ed60dbbfd6"
       },
       "english": {
-        "bytes": 7063,
+        "bytes": 6419,
         "lines": 70,
-        "sha256": "653686c955363be7c32c85654bcb1b0c21e73472c3033b50ee9ddd46a7a8e7db"
+        "sha256": "8fe46bb015ffea20f52bb7cd7c51f4865c79d4f0c0c6bd14ad6776be51c5039e"
       },
       "json": {
         "bytes": 9719,
@@ -11132,9 +11132,9 @@
     },
     "library/penal_code/s334_voluntarily_causing_hurt_provocation/statute.yh": {
       "akomantoso": {
-        "bytes": 8461,
+        "bytes": 7817,
         "lines": 130,
-        "sha256": "b6114783bc5d69b953bcdf33c612c6dc06c5768dc1bf0f23acf43eeed28fdc11"
+        "sha256": "01f85656c138897a1f952fa50e5487da142bcab74d6d551e57416c2037a97f69"
       },
       "alloy": {
         "bytes": 6557,
@@ -11142,9 +11142,9 @@
         "sha256": "63cde3dddbd0562d3b7e9c9e64be336cc417d914052fb34ac4a7e4bf8dce488e"
       },
       "english": {
-        "bytes": 6567,
+        "bytes": 5923,
         "lines": 63,
-        "sha256": "06befeb379a38fdbfb71113e6c677ab09cdd963f27bf0fe01d875fa1a19a3def"
+        "sha256": "1b04df32a02a0e8dab24928e2390c94e067c6ec695f587a34a8d76318e213e53"
       },
       "json": {
         "bytes": 8949,
@@ -11258,9 +11258,9 @@
     },
     "library/penal_code/s335_causing_grievous_hurt_provocation/statute.yh": {
       "akomantoso": {
-        "bytes": 8776,
+        "bytes": 8132,
         "lines": 133,
-        "sha256": "a0a13d9a79eb39ff683eb70177cb686eea4fc24e6453af84533f429e316af9ff"
+        "sha256": "0726b6b4539d0ec2896587721e53dbadad74a6a947171e00238a161159bf3cec"
       },
       "alloy": {
         "bytes": 6848,
@@ -11268,9 +11268,9 @@
         "sha256": "db48557a85e61614f0c2735d42e4560ec8547bb46c4a6d9002c5b21602f4ee0d"
       },
       "english": {
-        "bytes": 6750,
+        "bytes": 6106,
         "lines": 66,
-        "sha256": "5b7a6a8d0b3aafae387961f94783dfedce4913c818c67b693fc93da2f9916b36"
+        "sha256": "5fffd5362ece1660c20870d9e8af33920da4ec863842d11274e68a588e0e2fbb"
       },
       "json": {
         "bytes": 9381,
@@ -11300,9 +11300,9 @@
     },
     "library/penal_code/s336_punishment_act_which_endangers_life_personal/statute.yh": {
       "akomantoso": {
-        "bytes": 8421,
+        "bytes": 7777,
         "lines": 130,
-        "sha256": "d918d214db1b01e5322639b7089dcc14b6e1c1f96bd8e7d84bdf24e797b79271"
+        "sha256": "4c78535fbbb1cd375d884efabeaba2d9fc2a5f9eb105518379b0b193f79f5d4b"
       },
       "alloy": {
         "bytes": 6519,
@@ -11310,9 +11310,9 @@
         "sha256": "597c683e41c50e7a6846efe45cafcdb75ff5f48bfe64a5cc6be6c12d0424af38"
       },
       "english": {
-        "bytes": 6618,
+        "bytes": 5974,
         "lines": 67,
-        "sha256": "aeaeae77845de34201fb4a0ebe8a62e3bc3ac361c041e0daa8e042ef7beb4a61"
+        "sha256": "bd8c8ad09a17078c299bebc8e5dfd93bf9db16e90509e11d8f8a20ceb95d0de3"
       },
       "json": {
         "bytes": 9881,
@@ -11342,9 +11342,9 @@
     },
     "library/penal_code/s337_causing_hurt_act_which_endangers_life/statute.yh": {
       "akomantoso": {
-        "bytes": 8285,
+        "bytes": 7641,
         "lines": 129,
-        "sha256": "17ab2b753c9eb0ee6ed4b75bdcabaa3b76c950298c36e49bef7faa01d500a07f"
+        "sha256": "73d7724cbca7dec9732d983c6d3d3f3c913956f2eb00a85b40c63dd7743e304f"
       },
       "alloy": {
         "bytes": 6180,
@@ -11352,9 +11352,9 @@
         "sha256": "4781a5f8b08f75d318b4f596c078fcc05b3122a14e65f7856ff62eb9486dc612"
       },
       "english": {
-        "bytes": 6530,
+        "bytes": 5886,
         "lines": 65,
-        "sha256": "89fc9f167e2a18decfdc7489f013dc29fe025cd5fc4c2aeeecb266fc5d4c460e"
+        "sha256": "b4dd2af8a1c49faadcab1f25db28aa2e03da93c75992517eaf66bc6a99b676f1"
       },
       "json": {
         "bytes": 9472,
@@ -11384,9 +11384,9 @@
     },
     "library/penal_code/s338_causing_grievous_hurt_act_which_endangers/statute.yh": {
       "akomantoso": {
-        "bytes": 8509,
+        "bytes": 7865,
         "lines": 131,
-        "sha256": "58ac0d4b40613916b32e22dbe139929917c287c8462b7990386732afcf83aec5"
+        "sha256": "b895b4f908cecf39282dc568f4941441cf96650bbe2afa6dfc18fd39cd79eb20"
       },
       "alloy": {
         "bytes": 6743,
@@ -11394,9 +11394,9 @@
         "sha256": "0b18cb2657457b88c94c6982fac726ebd253b225a04bed6fc2bd630d637d6ac8"
       },
       "english": {
-        "bytes": 6683,
+        "bytes": 6039,
         "lines": 68,
-        "sha256": "6786d18037d0770edcf88e5c9a0d86022acf9043e059564fd504e7b487e2f012"
+        "sha256": "130a766e6f6f44fb750013e8866851abc79078c33cf10f695221e3e53eda2a97"
       },
       "json": {
         "bytes": 10241,
@@ -11446,9 +11446,9 @@
         "sha256": "8ebef45e8ac06fa7e63518db6dc40972cbc3e54b54b82f2671abf208084719d8"
       },
       "latex": {
-        "bytes": 6730,
+        "bytes": 6040,
         "lines": 136,
-        "sha256": "1b44ec1993dd238f6d21dadf0f4a51c63bb7369af8599d25ebfa9172f3e9208f"
+        "sha256": "0aba44ba2bf478d7483829781f0aea3c5f11f26dd4d99902061869bad453ca1e"
       },
       "legalruleml": {
         "bytes": 5573,
@@ -11908,9 +11908,9 @@
         "sha256": "79b7df625ebe2437c5f23d5be017bd2faca400e3f9ad0f5079aafec63fe8d453"
       },
       "latex": {
-        "bytes": 10692,
+        "bytes": 10002,
         "lines": 166,
-        "sha256": "abe9427a4a686b7c24847a3ed780b648535d9862f2d29e815f0f8fe418297dcb"
+        "sha256": "665e6e1214efecb558f843947b99cafc71feac0c18e00539f4fff6a6e4e30430"
       },
       "legalruleml": {
         "bytes": 6116,
@@ -11950,9 +11950,9 @@
         "sha256": "7b4ae289bf953efc8afa2bac32cb2cf6bc8699f26f43d62fc32eaaeb91a954d0"
       },
       "latex": {
-        "bytes": 7549,
+        "bytes": 6859,
         "lines": 141,
-        "sha256": "1073f8ac03168f195798a2f47cfeb23feb739bb9f38532b86e6c1a0c2c58bee1"
+        "sha256": "3f549ab08f9222d698dea00aee8f8c896cd06cd7a7390589bc15d8674c30862d"
       },
       "legalruleml": {
         "bytes": 4314,
@@ -12056,9 +12056,9 @@
     },
     "library/penal_code/s354A_outraging_modesty_certain_circumstances/statute.yh": {
       "akomantoso": {
-        "bytes": 5330,
+        "bytes": 5054,
         "lines": 94,
-        "sha256": "8b8d5cf88d45d0b652024e46c4b63122a693aa75fc20b5de0b7f69553692a2d1"
+        "sha256": "6fe942e50f6f91a942f6c684ec78c7429749ada5e9863e218a9324c03e6fec8c"
       },
       "alloy": {
         "bytes": 3982,
@@ -12066,9 +12066,9 @@
         "sha256": "0da72ac57c7929ec03a9eb3ce58b5b4cc4e0ca374161971ea231377f3964a276"
       },
       "english": {
-        "bytes": 2514,
+        "bytes": 2238,
         "lines": 27,
-        "sha256": "e64cf96085c1587571ff883bc0a32f73257ab946a0bcbc32a0df4e8658fff9ce"
+        "sha256": "333cdf9657fd2a34a2164e3745cf1eb49090e8f446a3d975c4d7d31307d982b3"
       },
       "json": {
         "bytes": 7466,
@@ -12098,9 +12098,9 @@
     },
     "library/penal_code/s354_assault_or_criminal_force_to_outrage_modesty/statute.yh": {
       "akomantoso": {
-        "bytes": 5639,
+        "bytes": 5363,
         "lines": 87,
-        "sha256": "bdc6a9692584a658d2febe3244901cc864432960752f268947187b3338ddd046"
+        "sha256": "39a4c17ed950fa240bb00f14bc2f18c6976ff935fdd05e94cfef89f3adfcc189"
       },
       "alloy": {
         "bytes": 4723,
@@ -12108,9 +12108,9 @@
         "sha256": "3d011ae15a64ed9a7e8ca0de029275d4b45d3467ae9c277201cc17ab257daf2e"
       },
       "english": {
-        "bytes": 4268,
+        "bytes": 3992,
         "lines": 61,
-        "sha256": "3db4aa05c2d8943614d6e0d80ba55564a70d807882facd95b73b49a818c26f8b"
+        "sha256": "4109bbcef6c9a81b0afc7c34ee69e9dab32c14e8b3a495ec5a89ce46ea061624"
       },
       "json": {
         "bytes": 11065,
@@ -12118,9 +12118,9 @@
         "sha256": "21eb80652f98955759e4033d621899d1b53f8eb8937bfecc0a8829df4e3573ca"
       },
       "latex": {
-        "bytes": 11169,
+        "bytes": 9973,
         "lines": 171,
-        "sha256": "3a538fd568ae3e3419367747821ae9188582853a082c0213b8f3834a9011832e"
+        "sha256": "4316171a4ae98f706d392bb0443c69f261acbc8802fb6088857c462b38f279fc"
       },
       "legalruleml": {
         "bytes": 12645,
@@ -12308,9 +12308,9 @@
     },
     "library/penal_code/s359_kidnapping/statute.yh": {
       "akomantoso": {
-        "bytes": 4417,
+        "bytes": 4141,
         "lines": 79,
-        "sha256": "20e5a7b6f55b9ea481cb7a43b612dbaff9847061f7fe492ea8bb729087ccddf0"
+        "sha256": "2e2d7b8a07c301266847183a3da906b357cbddb9d23d2f88912e140cb5d5a786"
       },
       "alloy": {
         "bytes": 3334,
@@ -12318,9 +12318,9 @@
         "sha256": "0ce864329280e259051dcb137b146cae2f196b40e4ac5c29e28221a9a3f2a4f8"
       },
       "english": {
-        "bytes": 2566,
+        "bytes": 2290,
         "lines": 32,
-        "sha256": "0f017dfe04df0f17759cc568c8dd5213242f6caa7470a21d43f42ae6b86a7f97"
+        "sha256": "72afe0db9a132ab6be766b524c9368c58c5e745189169d24bbd5486f9e3c2101"
       },
       "json": {
         "bytes": 3935,
@@ -12392,9 +12392,9 @@
     },
     "library/penal_code/s360_kidnapping_singapore/statute.yh": {
       "akomantoso": {
-        "bytes": 4717,
+        "bytes": 4441,
         "lines": 79,
-        "sha256": "6ba0d22dce92ef3f1a98f57a0ad75b6133aa23c55c959c8a468665441d7690cc"
+        "sha256": "d533fa9a325bb7101b06192ee0a9374ef1aabaf6f5f49a0e3a9d24acf15ff761"
       },
       "alloy": {
         "bytes": 3349,
@@ -12402,9 +12402,9 @@
         "sha256": "8987915d573f17be3b81063f291daf4e36bebb59a8c92c93a7957c9de225439d"
       },
       "english": {
-        "bytes": 2862,
+        "bytes": 2586,
         "lines": 32,
-        "sha256": "2f4a3236671cce972ba49116b008551f96c0deb655a0c45a9dec10146d4e15cf"
+        "sha256": "ddb690d0da32e2946107ad8aa456c12db05b58e266dfbaafc2781e95c5b5bf7e"
       },
       "json": {
         "bytes": 4171,
@@ -12434,9 +12434,9 @@
     },
     "library/penal_code/s361_kidnapping_lawful_guardianship/statute.yh": {
       "akomantoso": {
-        "bytes": 5591,
+        "bytes": 5315,
         "lines": 91,
-        "sha256": "d5ab59cd54a53c0f443bf449c5373c6981b814e4304274f3977d25874c440761"
+        "sha256": "eb814d63e44e5371783f1d7548a3a1e6ca5d6725b2814456990feb372100bb9b"
       },
       "alloy": {
         "bytes": 5144,
@@ -12444,9 +12444,9 @@
         "sha256": "4be97c62f9bceff1ef13e893d5f089da189f55105ff9fd98c8753626bf23e1a2"
       },
       "english": {
-        "bytes": 3767,
+        "bytes": 3491,
         "lines": 41,
-        "sha256": "f72c53e6cc80355ac38cd96ac30e9efbd84f9ef509f50e5a9fb58d00278f4118"
+        "sha256": "5ac94f72e70d58f7083336551c49d9490959b0b466224c7f12a9030e320247a3"
       },
       "json": {
         "bytes": 6382,
@@ -12476,9 +12476,9 @@
     },
     "library/penal_code/s362_abduction/statute.yh": {
       "akomantoso": {
-        "bytes": 4124,
+        "bytes": 3848,
         "lines": 77,
-        "sha256": "8f22b966c7a6000924ca20032ed22c4e2ab432414af87a5526f5628df969efd7"
+        "sha256": "b06e01205f6400a2122073811085187e681206d79945e7a214a6a36a5c6cb5c1"
       },
       "alloy": {
         "bytes": 3333,
@@ -12486,9 +12486,9 @@
         "sha256": "9ba01fa914f5a6ed27bace14e984f988954546170b19b160adcee4ae448894a6"
       },
       "english": {
-        "bytes": 2441,
+        "bytes": 2165,
         "lines": 30,
-        "sha256": "eaa7464922f855e97affb0a475e5a21e445c9aebb018ab5d857c90a87df879a1"
+        "sha256": "a2a5bb098a56e421425d86934441d95fc68ece7697cc26efcf0a6c5a6c81f1ce"
       },
       "json": {
         "bytes": 3486,
@@ -12518,9 +12518,9 @@
     },
     "library/penal_code/s363A_punishment_abduction/statute.yh": {
       "akomantoso": {
-        "bytes": 4018,
+        "bytes": 3742,
         "lines": 75,
-        "sha256": "4f9b342bddf21ca0f023d7a1815f736444b6205d74419891153aa67ba36d7090"
+        "sha256": "11386aaa7932a688e252dcb92029d509079ac9fdb0cd51e97a65c04c416ea0eb"
       },
       "alloy": {
         "bytes": 3408,
@@ -12528,9 +12528,9 @@
         "sha256": "1ca64533e45864f0407ebb1aa82e95c2ee365c6f3d5ad6a9f5cf85db13c2fe73"
       },
       "english": {
-        "bytes": 2749,
+        "bytes": 2473,
         "lines": 34,
-        "sha256": "40b984295c81ff6b0e56de70199d3523dc830f6c3f7f81fad86881a5fcdaadfe"
+        "sha256": "0f9b223cd1b31989ec44d2bec735e07fbb4a8577e7c877429a266e5a1da01ba4"
       },
       "json": {
         "bytes": 3709,
@@ -12560,9 +12560,9 @@
     },
     "library/penal_code/s363_kidnapping/statute.yh": {
       "akomantoso": {
-        "bytes": 5074,
+        "bytes": 4798,
         "lines": 85,
-        "sha256": "fcc1acfc82cb22c116972eab6caa55cc8dc828093ddc91ee9e5a6b499a7210cb"
+        "sha256": "8641d142f0d82988c4bff5fce00f647eb715a83985c1997d451fb598f707c2bb"
       },
       "alloy": {
         "bytes": 4585,
@@ -12570,9 +12570,9 @@
         "sha256": "8b50f12584286691db6f7dc0ed3a428549b699271fb7eafeeb5c145526b78043"
       },
       "english": {
-        "bytes": 3688,
+        "bytes": 3412,
         "lines": 57,
-        "sha256": "064a70c7abe970c8bde7e453d93282c7915c961aa12129436c7e877067c2f1c3"
+        "sha256": "3ef2a5b4be230bc9f345810781ce91b8443ceec4c3b4deed66bc34c0c2cb57f8"
       },
       "json": {
         "bytes": 9481,
@@ -12580,9 +12580,9 @@
         "sha256": "6ae33b142fbcf6e5d14f21d4dfcf0d3b2e101a28109b34fddbb82c28199662b2"
       },
       "latex": {
-        "bytes": 8554,
+        "bytes": 7680,
         "lines": 165,
-        "sha256": "b327c1356981c3002d2d386121884a25e10d7c3a461142d3971045a0b5fad586"
+        "sha256": "ef89d6d75768e329a8ad57155928b4acc945fe3c0b9ba4bb69b821ec6556a32a"
       },
       "legalruleml": {
         "bytes": 12143,
@@ -12602,9 +12602,9 @@
     },
     "library/penal_code/s364_kidnapping_abducting_order_murder/statute.yh": {
       "akomantoso": {
-        "bytes": 5069,
+        "bytes": 4793,
         "lines": 83,
-        "sha256": "4c0d94b58fe4bfa1db593354cce7e35fb1b244d84747dcf54ce071a015786117"
+        "sha256": "da6607baa9f0bcc9dcf352a98d6ee5843f47606af5f9350a4e4af206e567ace8"
       },
       "alloy": {
         "bytes": 4360,
@@ -12612,9 +12612,9 @@
         "sha256": "1d08f2c765a657b616389a7b7f6381b0855208a909fd0edbbc40d30e7408f712"
       },
       "english": {
-        "bytes": 3930,
+        "bytes": 3654,
         "lines": 53,
-        "sha256": "6d7f625e800ef8e74dddaf3472407eec4d3c5c0a6daaeb80fb599060289af23e"
+        "sha256": "9ae859e1c9f3393aee5cb7cf6d96734b2efdc5c5e021e4929187fd47d87195f8"
       },
       "json": {
         "bytes": 6368,
@@ -12644,9 +12644,9 @@
     },
     "library/penal_code/s365_kidnapping_abducting_intent_secretly/statute.yh": {
       "akomantoso": {
-        "bytes": 4503,
+        "bytes": 4227,
         "lines": 79,
-        "sha256": "7dbead09a8bef4314d16cf0c1973eece6d1cf6caf6a63566acc4e8dca210993c"
+        "sha256": "568316c7b7993020bf33d5272af1cff7c18a8358606341fe7f219c4e8f489662"
       },
       "alloy": {
         "bytes": 4143,
@@ -12654,9 +12654,9 @@
         "sha256": "eea691cbd230fbcb8860958a01a612d6d95e321f334ce22d20b509b51fc16db7"
       },
       "english": {
-        "bytes": 3110,
+        "bytes": 2834,
         "lines": 37,
-        "sha256": "bb0a311055b9948ca447f20edaed80a124ecd38f63739de0a0883c68eed907c3"
+        "sha256": "be20b7853b37ce1c2b3df8b620266b70c5b1fa736545b6057fbf8e243e60e304"
       },
       "json": {
         "bytes": 4797,
@@ -12686,9 +12686,9 @@
     },
     "library/penal_code/s366_kidnapping_abducting_woman_compel_her/statute.yh": {
       "akomantoso": {
-        "bytes": 5416,
+        "bytes": 5140,
         "lines": 84,
-        "sha256": "388430feddef1ac1303b50dae0e207c673b3a75ba8d379e59aaf824e81c9baeb"
+        "sha256": "a730f9dc03042c68affdcd7f419966f29133b3d3b1525b2d3d717143f33b6a7c"
       },
       "alloy": {
         "bytes": 6013,
@@ -12696,9 +12696,9 @@
         "sha256": "4512347d49467caf28737c144376ed837219d7657e3d5cf722c58751440b8d6f"
       },
       "english": {
-        "bytes": 4229,
+        "bytes": 3953,
         "lines": 48,
-        "sha256": "1c392477c914492df8973585997e247877313f04ad89ecfd5b8db6bab754e3f8"
+        "sha256": "b998af7d294e071ebaa27a4b1cf961deaf61a74d32e463a378fecbe8fbd2bb43"
       },
       "json": {
         "bytes": 7530,
@@ -12728,9 +12728,9 @@
     },
     "library/penal_code/s367_kidnapping_abducting_order_subject_person/statute.yh": {
       "akomantoso": {
-        "bytes": 4996,
+        "bytes": 4720,
         "lines": 82,
-        "sha256": "823cacbc2e528eaaf99cb360677db9d94da7daaa1f10ee765c6649ce45ecea12"
+        "sha256": "c55f1004c63986602c48943e77d475d0796c13b3b9b247245589b5523c592842"
       },
       "alloy": {
         "bytes": 4540,
@@ -12738,9 +12738,9 @@
         "sha256": "ea1fce4d1cb0c4202e8c0fc36586be221d145e1b2e51a9063e727198e0b3bd9e"
       },
       "english": {
-        "bytes": 3813,
+        "bytes": 3537,
         "lines": 41,
-        "sha256": "775beadc3923099249486b261a62d875d3a3d94e231e571d72791d630ea3e2fc"
+        "sha256": "b1b9c3f9625bd34658573a2e54896f32994f935d09e7a9abdb0af49fb22a5c09"
       },
       "json": {
         "bytes": 6247,
@@ -12770,9 +12770,9 @@
     },
     "library/penal_code/s368_wrongfully_concealing_keeping_confinement/statute.yh": {
       "akomantoso": {
-        "bytes": 4722,
+        "bytes": 4446,
         "lines": 81,
-        "sha256": "fbd63b21ba3a232f49036f4230c0aa91ee61189bdd2dfd23d7122d54345316a2"
+        "sha256": "8b32cce0fbabd7a6f57a910d405d931fe7bc43ffe96aa65c51ee80ef2c58282f"
       },
       "alloy": {
         "bytes": 4469,
@@ -12780,9 +12780,9 @@
         "sha256": "486d2f6fb9207ee4181dc5dec3a4f02a4e54edf3de9459248f6ba9ff84b41907"
       },
       "english": {
-        "bytes": 3495,
+        "bytes": 3219,
         "lines": 41,
-        "sha256": "266d719c456f547b6a387fb9535b9afe244ada803452dd6d54333242ffc2abea"
+        "sha256": "101775f3eec28268e56c7538b85e0aed4922ef22b14e07cce04e22d1d7a91460"
       },
       "json": {
         "bytes": 5554,
@@ -12854,9 +12854,9 @@
     },
     "library/penal_code/s370_buying_disposing_person_slave/statute.yh": {
       "akomantoso": {
-        "bytes": 5096,
+        "bytes": 4820,
         "lines": 86,
-        "sha256": "8a5c1f54dc56caeaa00aa353d37f4454d8127a222179f43b825a75d62970b9b3"
+        "sha256": "61b09ff59e6b9c4374003c8d1caa5533f71e6b467cd55bd700582ac09a69ce39"
       },
       "alloy": {
         "bytes": 5129,
@@ -12864,9 +12864,9 @@
         "sha256": "8608509ef5f7213d663708c8b24e2e35d0789e61733aaa9490e7de1320c0ede9"
       },
       "english": {
-        "bytes": 3646,
+        "bytes": 3370,
         "lines": 46,
-        "sha256": "2b4f7ec4d3090713de9e057019480631457069d5ff007b08d0ade95f0a8af1e9"
+        "sha256": "ac8620ed0e08f56fb53423e8d929f0d8ad7ecb4f06b077947495212c27bd773e"
       },
       "json": {
         "bytes": 7779,
@@ -12896,9 +12896,9 @@
     },
     "library/penal_code/s371_habitual_dealing_slaves/statute.yh": {
       "akomantoso": {
-        "bytes": 4248,
+        "bytes": 3972,
         "lines": 78,
-        "sha256": "9b38932a5ba768c72b6c03881ea962e5649e7cb6417a0d8c420b6d181ce2c2e7"
+        "sha256": "9d7b28b1acce7cf3841b2ba3173b37968c32459906636fc68bbdab8c62e4d257"
       },
       "alloy": {
         "bytes": 3766,
@@ -12906,9 +12906,9 @@
         "sha256": "78a477a7f8659422d4ea85158b6de26ae284bb59a0417e94109ad18d05015912"
       },
       "english": {
-        "bytes": 2886,
+        "bytes": 2610,
         "lines": 39,
-        "sha256": "224ec3cd9f833513d246b3ad54ba4b5ee763c291899c14543a4d53049679207f"
+        "sha256": "08fe721f1ea30ad86e1afc1788c13df08458540eaa1dcb3056c4b63697488fb9"
       },
       "json": {
         "bytes": 4396,
@@ -12938,9 +12938,9 @@
     },
     "library/penal_code/s372_selling_minor_purposes_prostitution_etc/statute.yh": {
       "akomantoso": {
-        "bytes": 5528,
+        "bytes": 5252,
         "lines": 83,
-        "sha256": "803703ca454b9afc0fb4b05131c3694644a0a824cbef9a894a98ee4ff526c799"
+        "sha256": "8f795859537e8710cbfde4b4ac7dce081337355c7390b14fa4f899beb3808fab"
       },
       "alloy": {
         "bytes": 4743,
@@ -12948,9 +12948,9 @@
         "sha256": "ddc59ee35d3dcf8729c4f4dec60d0e46e13ad38e9b659179ac485d2f429d5bea"
       },
       "english": {
-        "bytes": 3759,
+        "bytes": 3483,
         "lines": 40,
-        "sha256": "88320fe484ed4b38d56c565f7b784b06c0557f931974e775156563c5b3b604fd"
+        "sha256": "a91c44547f9234f200bcf322492a1f00161b7312d46403c38e9666a0279fe43a"
       },
       "json": {
         "bytes": 5912,
@@ -12980,9 +12980,9 @@
     },
     "library/penal_code/s373A_importing_woman_purposes_prostitution_etc/statute.yh": {
       "akomantoso": {
-        "bytes": 5121,
+        "bytes": 4845,
         "lines": 82,
-        "sha256": "ca7608df2a7c4451bc3498b2613036b8e42dd89fb972cd28222b731e2f0c86b5"
+        "sha256": "b3e7474f747df48e3ed3b1cb97efee53912f761a84ffe7de9019336bdc6cc18c"
       },
       "alloy": {
         "bytes": 5162,
@@ -12990,9 +12990,9 @@
         "sha256": "6dfa4a7bd092dfb231189ea3e92b48b521a9460f70da5fe146020498b14892ff"
       },
       "english": {
-        "bytes": 3536,
+        "bytes": 3260,
         "lines": 40,
-        "sha256": "a8baeb13af87d74572a4161b31992ef97107df02c40fe5cda98d7aa1fa69334c"
+        "sha256": "9bb9f927f95c09000133fcedd3dc994f698f17f62a0fe60c46fd6f8891a9ee4a"
       },
       "json": {
         "bytes": 6124,
@@ -13022,9 +13022,9 @@
     },
     "library/penal_code/s373_buying_minor_purposes_prostitution_etc/statute.yh": {
       "akomantoso": {
-        "bytes": 5343,
+        "bytes": 5067,
         "lines": 83,
-        "sha256": "93dcc749be99a2f94d9a938a16def3ddf9dbe0ffdf837a58ee603b5bd18680e5"
+        "sha256": "f8df080c7123a6ea070b03d18b7698516b7922f5b2f4fb96262dcc91dd7a9d4a"
       },
       "alloy": {
         "bytes": 4508,
@@ -13032,9 +13032,9 @@
         "sha256": "8703d6456b073ecd7699ed3c2193f7130eed755c5a979abf619d97aae7217bd0"
       },
       "english": {
-        "bytes": 4082,
+        "bytes": 3806,
         "lines": 42,
-        "sha256": "d1151c6eed97c203e567fd78da83b4008f562a80991409affc80460c79d40568"
+        "sha256": "5f5a72d0882d13c9eee57f82424a9b10d0abcff74c9fea86640548c51a158b6b"
       },
       "json": {
         "bytes": 6326,
@@ -13064,9 +13064,9 @@
     },
     "library/penal_code/s374_unlawful_compulsory_labour/statute.yh": {
       "akomantoso": {
-        "bytes": 4338,
+        "bytes": 4062,
         "lines": 79,
-        "sha256": "ca2b92ad93780d94a7b0901892fde28a70260a78086ead209fe3364915de2c12"
+        "sha256": "1239ea165e297bd99a7b8ca5902620694edde425268625e0309a6a74cc151281"
       },
       "alloy": {
         "bytes": 3934,
@@ -13074,9 +13074,9 @@
         "sha256": "a389cd3dbf10062ed8bd4573b9d5f8a7dd41baab889165ba5528ec00c77dbefe"
       },
       "english": {
-        "bytes": 2828,
+        "bytes": 2552,
         "lines": 35,
-        "sha256": "90b6e80c8265ed4496948d60de64dcd6d7e6bbd816dd9489e7f4f67324cdea5d"
+        "sha256": "a8a6f09112a85ce017783cdedea4ea78f34d17ec286137e4e070c47ce1d95888"
       },
       "json": {
         "bytes": 4412,
@@ -13106,9 +13106,9 @@
     },
     "library/penal_code/s375_rape/statute.yh": {
       "akomantoso": {
-        "bytes": 7838,
+        "bytes": 7562,
         "lines": 151,
-        "sha256": "ff75e0803f837c21fedeb49190fb3dd25a7ab29e5fb75692721d19332592323b"
+        "sha256": "78f30db84bd9ec2faaf7f1cc6d20e15a7cc175232f88d578de38518d931862cb"
       },
       "alloy": {
         "bytes": 6186,
@@ -13116,9 +13116,9 @@
         "sha256": "2bf0b3ad0bbce55d7baed14d7f4cfcdc73923211427f856c1133944d01797204"
       },
       "english": {
-        "bytes": 2263,
+        "bytes": 1987,
         "lines": 27,
-        "sha256": "a60f46133b9696332519b5f0276e4a9d079fe6f09f1d97b5ad91860e31f7ba21"
+        "sha256": "f278deaed7cbe8eae4a1b6930cf986c0a15b56a9daf9885baf28074581adb19b"
       },
       "json": {
         "bytes": 15674,
@@ -13148,9 +13148,9 @@
     },
     "library/penal_code/s376AA_exploitative_sexual_penetration_minor_above/statute.yh": {
       "akomantoso": {
-        "bytes": 6040,
+        "bytes": 5764,
         "lines": 100,
-        "sha256": "e96318775d88bcc0df269bcd274bc99170e35ece64674a6dfdb26c461cc1b214"
+        "sha256": "92b0b86230cf1e16cb5b6cc31e386554ab1f90cde8823d62d17da5e8dd81b70c"
       },
       "alloy": {
         "bytes": 4540,
@@ -13158,9 +13158,9 @@
         "sha256": "e2e17333f2dd4fa783c76d3fa3e8e27f88b2931bc6bb9059c6a01253fde061df"
       },
       "english": {
-        "bytes": 2592,
+        "bytes": 2316,
         "lines": 27,
-        "sha256": "d34a03f6405c817780f289615de699dfe7d961271e6d56ec66f95245cb5e0ae3"
+        "sha256": "5a80e7a0596ac7687e246b2c16789922fc37e8fd7755ec82e19fe0c15912626b"
       },
       "json": {
         "bytes": 9556,
@@ -13190,9 +13190,9 @@
     },
     "library/penal_code/s376A_sexual_penetration_minor_below_16_years_age/statute.yh": {
       "akomantoso": {
-        "bytes": 6601,
+        "bytes": 6325,
         "lines": 124,
-        "sha256": "cf99046c0b12c0d54cf4f5cc036890dac1599c3ae0635133b4cf6c769108e7a5"
+        "sha256": "960f5fcb5013b34c2aa887f3929b42803e491b2b456a1368262b5a79331d3bdd"
       },
       "alloy": {
         "bytes": 4736,
@@ -13200,9 +13200,9 @@
         "sha256": "00a6b978fa75b596d8f36bb499564bba2e8e55825238e0ad69683e31712e7863"
       },
       "english": {
-        "bytes": 2553,
+        "bytes": 2277,
         "lines": 27,
-        "sha256": "9af1ac23b531c40293c513787eabdb3090fa8c66d443c503a273e49e6daa19bb"
+        "sha256": "b117bfbfd4daf9fb17c51c357f3214b18fb7d937f5a2108b287e9b365c876285"
       },
       "json": {
         "bytes": 12452,
@@ -13232,9 +13232,9 @@
     },
     "library/penal_code/s376B_commercial_sex_minor_below_18_years_age/statute.yh": {
       "akomantoso": {
-        "bytes": 5683,
+        "bytes": 5407,
         "lines": 111,
-        "sha256": "7753ae47997105a5abbef7ae05786479f3008a37b63807a18e9947dc95b1eb1f"
+        "sha256": "ef82fcf8916cd9e9012b9310485045e42f665b09e1fb92d173708a30cee77147"
       },
       "alloy": {
         "bytes": 4193,
@@ -13242,9 +13242,9 @@
         "sha256": "fc8153a0f5dcac2f75b33efb3fb8251569822949308a66480bdb7fe229160afb"
       },
       "english": {
-        "bytes": 2519,
+        "bytes": 2243,
         "lines": 27,
-        "sha256": "168813e88e365da3116575c96cee73f1ceba73565dcd96f1ce53e2bfc06cd461"
+        "sha256": "160065a426eca65da531b36ec04a29644f2506c9603f1632da2fe8f785f2aff6"
       },
       "json": {
         "bytes": 8686,
@@ -13274,9 +13274,9 @@
     },
     "library/penal_code/s376C_commercial_sex_minor_below_18_years_age/statute.yh": {
       "akomantoso": {
-        "bytes": 5975,
+        "bytes": 5699,
         "lines": 108,
-        "sha256": "594c1e2411472de4606eb482d0d137e58a65addf8a8017aa68ac85c201c00d5c"
+        "sha256": "de300b57e73b9317dbf6c88c49b2fb456a56d6bb775299546dc5381e2a74ff8c"
       },
       "alloy": {
         "bytes": 4266,
@@ -13284,9 +13284,9 @@
         "sha256": "2f30b5419ea5bba0499f70ae7ee2b6f717a6955fa4bcb50220912e61b4474937"
       },
       "english": {
-        "bytes": 2537,
+        "bytes": 2261,
         "lines": 27,
-        "sha256": "b7690097a2422ba8869ea3b6bbd1e10b6a0468dca3e1febd58f738b99972b270"
+        "sha256": "96c6fc7164b434652428dcbec570129c3cf88e202789ecd302932b10b591d4b4"
       },
       "json": {
         "bytes": 7114,
@@ -13736,9 +13736,9 @@
     },
     "library/penal_code/s376_sexual_assault_involving_penetration/statute.yh": {
       "akomantoso": {
-        "bytes": 8500,
+        "bytes": 8224,
         "lines": 138,
-        "sha256": "7b3d178bb71aace5fc36f75561b6e55af6a7f5de33c2ea747338c81f19d1d06f"
+        "sha256": "7901716a1f2dd781db5d268db9e9d62832a37c15286d32049571fdb50a991712"
       },
       "alloy": {
         "bytes": 6590,
@@ -13746,9 +13746,9 @@
         "sha256": "a9506c4c9982dc74d53d93463111245fbd9ef0d3f855a605bd589e76490f8546"
       },
       "english": {
-        "bytes": 2487,
+        "bytes": 2211,
         "lines": 27,
-        "sha256": "0b21085a6047266aaf19e0cf97f887cd8cb0aa824eefb39cd2575096b0bb3dd5"
+        "sha256": "11dc0555833de7a194088817d6c2300f5a398fc6e6137333b8da7be44608f882"
       },
       "json": {
         "bytes": 16448,
@@ -13778,9 +13778,9 @@
     },
     "library/penal_code/s377BA_word_gesture_intended_insult_modesty_person/statute.yh": {
       "akomantoso": {
-        "bytes": 5203,
+        "bytes": 4927,
         "lines": 86,
-        "sha256": "58c4ffc92c90fb6a5588bb8a0b8a0a768b1583ad5bec38e67d6c2dc506995182"
+        "sha256": "a40d5d78ada01ea0d8e0453206140041ad114bf8a7e0f861832c66ce803e528f"
       },
       "alloy": {
         "bytes": 5016,
@@ -13788,9 +13788,9 @@
         "sha256": "0487184d1ed265b7a3963e9da85f47b72c71214a89b90da7d071b1b9c2b89190"
       },
       "english": {
-        "bytes": 3835,
+        "bytes": 3559,
         "lines": 46,
-        "sha256": "c8feeb910fd8791fd30f6ffd4df6a550a866c04b0f097ea49150fce19bc9770f"
+        "sha256": "b35b1abf826fcea02dbd4cab281c2b20d1ce20c9bf83c14384c93aa4ffb8340f"
       },
       "json": {
         "bytes": 7772,
@@ -13820,9 +13820,9 @@
     },
     "library/penal_code/s377BB_voyeurism/statute.yh": {
       "akomantoso": {
-        "bytes": 8508,
+        "bytes": 8232,
         "lines": 148,
-        "sha256": "c899460c6ce66cc0665432d8f64aeccdd6867ab9a65eea4f32193c2c232bb815"
+        "sha256": "03bc50be92931ec3b7dd0f0f9a3481dd4b58ee294ad07ec776f860a872549e2a"
       },
       "alloy": {
         "bytes": 5857,
@@ -13830,9 +13830,9 @@
         "sha256": "2f06196c8a581414481e6c52febb0f443305d912d9f85a76bde5b45f81c64db6"
       },
       "english": {
-        "bytes": 2326,
+        "bytes": 2050,
         "lines": 27,
-        "sha256": "c0d9f8a8935c2976b5dea10469785ecf508655affc3776007d6db271ed55ee9b"
+        "sha256": "f0fc19bf84dcca071606af5e3a221b936ac5a5f42c12c248d42c764831dfb3fc"
       },
       "json": {
         "bytes": 13991,
@@ -13862,9 +13862,9 @@
     },
     "library/penal_code/s377BC_distribution_voyeuristic_image_recording/statute.yh": {
       "akomantoso": {
-        "bytes": 6365,
+        "bytes": 6089,
         "lines": 109,
-        "sha256": "57ec3076e3dfb8dffc2f32a8c1968dd22d4ba1033dba0efd344430483d8eb142"
+        "sha256": "14e67eac3b70b39267df0a916523d9925e879f7cce8d3c2e60ddbdf502c75255"
       },
       "alloy": {
         "bytes": 4632,
@@ -13872,9 +13872,9 @@
         "sha256": "82e1d87076e4951665fcc0ec356760ecd846bb2eb41d433ee4b59ee405e705e8"
       },
       "english": {
-        "bytes": 2539,
+        "bytes": 2263,
         "lines": 27,
-        "sha256": "7baf2873338cdba741270010d83d239276d6b398934f874615392006e6e4c932"
+        "sha256": "2e8ce25d8b0d23b5eb51e5c611ca73e250feffa524b7fda7a5e4f8401270188d"
       },
       "json": {
         "bytes": 9544,
@@ -13904,9 +13904,9 @@
     },
     "library/penal_code/s377BD_possession_gaining_access_voyeuristic/statute.yh": {
       "akomantoso": {
-        "bytes": 6426,
+        "bytes": 6150,
         "lines": 109,
-        "sha256": "995d23092c3ebc420535033d1ed991b83fd403cbee84f2076bd035436fff67fa"
+        "sha256": "76555a04465b28438164602aa818877c48b1cb61cc71ae2f35a9b17ee59b29bd"
       },
       "alloy": {
         "bytes": 4690,
@@ -13914,9 +13914,9 @@
         "sha256": "1da6305e4549611df3328cc359140d30dd764ab7c8890087a27d490dbc630221"
       },
       "english": {
-        "bytes": 2552,
+        "bytes": 2276,
         "lines": 27,
-        "sha256": "de6829e199f926c9b377709fbe6d8814de1906fa96d23f0a4c51ee4d95c55f71"
+        "sha256": "43eaf99025a7d502cbb464f762e2c15c5011b711bb93856ee3e1b31ccf9ec864"
       },
       "json": {
         "bytes": 11199,
@@ -13946,9 +13946,9 @@
     },
     "library/penal_code/s377BE_distributing_threatening_distribute_intimate/statute.yh": {
       "akomantoso": {
-        "bytes": 6394,
+        "bytes": 6118,
         "lines": 115,
-        "sha256": "dea1f38a4c13dd08a2efb87e04358d05231f882d638c8d095748685eb59cf18e"
+        "sha256": "75a51ddba9d08d5e326e8e89828de72aba91b8db475fc995542792247854a7b6"
       },
       "alloy": {
         "bytes": 4499,
@@ -13956,9 +13956,9 @@
         "sha256": "f103521f473f585a1dfe7ae7461bf55663093ec74528e8e2d41067c306e8de3f"
       },
       "english": {
-        "bytes": 2586,
+        "bytes": 2310,
         "lines": 27,
-        "sha256": "e927fde403030cd919d7373855d08066cca0c0935efdbaf51b5c80613beddf04"
+        "sha256": "774e35703f4345d376403054b89ccb6d0734c185d1339ad82cf3e23d30870d58"
       },
       "json": {
         "bytes": 11124,
@@ -13988,9 +13988,9 @@
     },
     "library/penal_code/s377BF_sexual_exposure/statute.yh": {
       "akomantoso": {
-        "bytes": 5940,
+        "bytes": 5664,
         "lines": 109,
-        "sha256": "6ca9ef5d853d2f4e9ac075137c2ba0bcd7b4a0fcd3c169689227c93a33b16409"
+        "sha256": "cb49c778de3554e320fe2cfe96d91d713f53eb04eba4d4c684f2fcba6736c651"
       },
       "alloy": {
         "bytes": 4357,
@@ -13998,9 +13998,9 @@
         "sha256": "d0d653e80e954ab9547c27c79f94de571fb6512f91e34a3729e7264e4e1b78dc"
       },
       "english": {
-        "bytes": 2358,
+        "bytes": 2082,
         "lines": 27,
-        "sha256": "3972d164be19e279fc888952dc748036849cbd6c807aa87d4170ad985df914a0"
+        "sha256": "b70211ef4bad64dc07a09fc99c9cbc229c4d5080e191787bfde0fcbedd481c23"
       },
       "json": {
         "bytes": 8125,
@@ -14030,9 +14030,9 @@
     },
     "library/penal_code/s377BG_using_involving_child_production_child_abuse/statute.yh": {
       "akomantoso": {
-        "bytes": 5678,
+        "bytes": 5402,
         "lines": 100,
-        "sha256": "d9ea3b89080d0c58d7195dbba53e716b83716a338dd74083debf94f0fcce2c36"
+        "sha256": "cfa67ac36f8365b3e648e6d6706cee46bfc8025ae3792596b81ba6cb42a448cf"
       },
       "alloy": {
         "bytes": 4172,
@@ -14040,9 +14040,9 @@
         "sha256": "30b6dc4a655014b5aeed16d4e6827f37a1776a8350cff7bfff633a5021a43326"
       },
       "english": {
-        "bytes": 2579,
+        "bytes": 2303,
         "lines": 27,
-        "sha256": "71f5f7ceb5c284add4e5ba6063a28bbb03faf553c3b4c3d18fcf9223a841ca5c"
+        "sha256": "7085b0e75ce31a032d7d27682082ef168a0133fbbefc5a7ae991539e24fbad9f"
       },
       "json": {
         "bytes": 9844,
@@ -14072,9 +14072,9 @@
     },
     "library/penal_code/s377BH_producing_child_abuse_material/statute.yh": {
       "akomantoso": {
-        "bytes": 5208,
+        "bytes": 4932,
         "lines": 103,
-        "sha256": "0bf0af85ccee1dfb1f57c861cea6ac65afa0a401392829223a6704d9a6fe5dd4"
+        "sha256": "c5013a95bf5a74ed8f63b60b0725915c2fa5510e06302a3f6892ef5c1bff3f2d"
       },
       "alloy": {
         "bytes": 3768,
@@ -14082,9 +14082,9 @@
         "sha256": "204f10a7c2f17660c0c797a9f13d116feef61548ccdcfff209d79714f0e8f00c"
       },
       "english": {
-        "bytes": 2463,
+        "bytes": 2187,
         "lines": 27,
-        "sha256": "6fa8474f77ebf37c4c2c04ece172d0994f46ec801e61b65e861743ebe9b63126"
+        "sha256": "9538b10115ea0c19427d13ad8d744ac589632b0576d0f1adc84500fd6e2bb948"
       },
       "json": {
         "bytes": 7954,
@@ -14114,9 +14114,9 @@
     },
     "library/penal_code/s377BI_distributing_selling_child_abuse_material/statute.yh": {
       "akomantoso": {
-        "bytes": 5300,
+        "bytes": 5024,
         "lines": 93,
-        "sha256": "411b8090bc67e59d3e6a66fe3507bb1ffe47636bb15f0fc2ad1126ff4260a735"
+        "sha256": "be621ae5a49f77e4014f405486b7385a2cbb9bb9af584792d15042b60c4abf72"
       },
       "alloy": {
         "bytes": 4003,
@@ -14124,9 +14124,9 @@
         "sha256": "2e53eecf27eb60bb9b45f74ca4cd8239172a47e773e636eb8864ad721c4ec80f"
       },
       "english": {
-        "bytes": 2543,
+        "bytes": 2267,
         "lines": 27,
-        "sha256": "ba2cab3b203fcc6d9392d82c6434f5a43955862b459b1b453fa36fceaf51ac22"
+        "sha256": "d9679e62a94f1f8c48776c4b47a03027d46ffe249ad604a481f9a24c16c9b35b"
       },
       "json": {
         "bytes": 7322,
@@ -14156,9 +14156,9 @@
     },
     "library/penal_code/s377BJ_advertising_seeking_child_abuse_material/statute.yh": {
       "akomantoso": {
-        "bytes": 5657,
+        "bytes": 5381,
         "lines": 105,
-        "sha256": "815a9b95972a5a48080a445998b803ed110afcedccae2d1812ae800de5045571"
+        "sha256": "9cacfa14b37c3e7660626fbe1b25ecd13049be92606f84908976cd71ce3385dc"
       },
       "alloy": {
         "bytes": 4105,
@@ -14166,9 +14166,9 @@
         "sha256": "8af7fb1b0feb3ae6a5a2c6ca82d5dd193dbbd2989c9e8420a3eb5a8bc043e7ff"
       },
       "english": {
-        "bytes": 2536,
+        "bytes": 2260,
         "lines": 27,
-        "sha256": "fecefb4dd0b3132b187c6dc7e3c8f8889ecd83edbaae2f36b0b1133364fe23bc"
+        "sha256": "e2ebaee8d494f9e70d254fb0ee1eceeffc2eed2c2dab2cbc34044eebb39ce06e"
       },
       "json": {
         "bytes": 8524,
@@ -14198,9 +14198,9 @@
     },
     "library/penal_code/s377BK_possession_gaining_access_child_abuse/statute.yh": {
       "akomantoso": {
-        "bytes": 5424,
+        "bytes": 5148,
         "lines": 102,
-        "sha256": "2a438eef6c8ad83f6dc67555ffcaf843047c8b114556114f4100d72df333fa0a"
+        "sha256": "1a57542c4b8bb3627eaf6ea7812a1e1f710a54f3e59edebbf8a3c337bddc030d"
       },
       "alloy": {
         "bytes": 3952,
@@ -14208,9 +14208,9 @@
         "sha256": "5d5caa96edb33574084139df791f2063a24718ac5c511aa08e5851a45ffdc5f4"
       },
       "english": {
-        "bytes": 2530,
+        "bytes": 2254,
         "lines": 27,
-        "sha256": "d34217efd7036f1b3a4fe3e407ea23cf1a9b5f34a95258aeb306f674937ada79"
+        "sha256": "edf372acb6fb7fac50c1fdff5731323c7d3c344471a79cbcb7e96388f53134f2"
       },
       "json": {
         "bytes": 9482,
@@ -14240,9 +14240,9 @@
     },
     "library/penal_code/s377BL_exploitation_abusive_material_minor_above_16/statute.yh": {
       "akomantoso": {
-        "bytes": 7881,
+        "bytes": 7605,
         "lines": 129,
-        "sha256": "36d81361505ae90120d06320c00c65d77db20ec498dfc806b0d7294ceef9e33a"
+        "sha256": "e68ce3814a397d33947c24728698bca414a87da753f945482240baa4ea03a84c"
       },
       "alloy": {
         "bytes": 5423,
@@ -14250,9 +14250,9 @@
         "sha256": "35756d871ee4e844d5101ee3843956bbd17ab5f7d0582a43cf9def0dc512085b"
       },
       "english": {
-        "bytes": 2611,
+        "bytes": 2335,
         "lines": 27,
-        "sha256": "f08ee8ef94958eb0777d997229c8ea7616cbfc9b73bd5797988f230918e2f36a"
+        "sha256": "5e95c3641c98be1a930c2ab31ae21fea65dccf47fcf82483e3bc03f441a7c9b0"
       },
       "json": {
         "bytes": 18592,
@@ -14408,9 +14408,9 @@
     },
     "library/penal_code/s377B_sexual_penetration_living_animal/statute.yh": {
       "akomantoso": {
-        "bytes": 5806,
+        "bytes": 5530,
         "lines": 107,
-        "sha256": "4de8788fa7a416f9860b4345ca65ee1f05e12c2b490f476a5d4f06aba6017179"
+        "sha256": "54f9f4765eb46db6735a988eaa37939ae6f8627ebc5349b2b226819d30974c1e"
       },
       "alloy": {
         "bytes": 4177,
@@ -14418,9 +14418,9 @@
         "sha256": "7eeb6a1e8314867099979fed733eaf5c56f673a7b91d6acab541a3ab9e82a928"
       },
       "english": {
-        "bytes": 2467,
+        "bytes": 2191,
         "lines": 27,
-        "sha256": "d7d3e5c101023f89d7d3a3bbe194bddbfdee305fd76b92d6ee0cf751e0b15c2c"
+        "sha256": "732bcd2291c76fc81936a316e94dbc3aa35a96cf778f1920408165252fdcac6d"
       },
       "json": {
         "bytes": 8633,
@@ -14618,9 +14618,9 @@
     },
     "library/penal_code/s377_sexual_penetration_etc_corpse/statute.yh": {
       "akomantoso": {
-        "bytes": 6385,
+        "bytes": 6109,
         "lines": 102,
-        "sha256": "07adb960d0b60e7a60a42f12ce9d12695fcc44817b30ef6c4e10a4dd9f4a9a3e"
+        "sha256": "32841f8d4d6d9a188f32af8ffa9edf1b6c7f610a5986a406ad6511c188935f89"
       },
       "alloy": {
         "bytes": 4763,
@@ -14628,9 +14628,9 @@
         "sha256": "8c28ce7162028258ee3bd8bdf34844cbc264809d0a872694933f8fa2e459b33f"
       },
       "english": {
-        "bytes": 2434,
+        "bytes": 2158,
         "lines": 27,
-        "sha256": "eeda7d398067bd0c4160c716b3fbf00efdab1417bff846d7457cdf39fb768d42"
+        "sha256": "b4ec4aabf5ce04e37c8679830b4d9f41a4173c6d72498a9c046301bb75f357ab"
       },
       "json": {
         "bytes": 9375,
@@ -14660,9 +14660,9 @@
     },
     "library/penal_code/s378_theft/statute.yh": {
       "akomantoso": {
-        "bytes": 7109,
+        "bytes": 6741,
         "lines": 111,
-        "sha256": "999077a8eb0466c5f66e62b5057d2a3f74cafc8c0134570f43798f47ed6ec01d"
+        "sha256": "01d57610cb2d31deebf28c2d2cb3496d4b41fb7f7b1177a0e1cfad40e807e9f8"
       },
       "alloy": {
         "bytes": 5557,
@@ -14670,9 +14670,9 @@
         "sha256": "4401622aa5e31cb2d31e85ac73e6b46f207420ee25f5f03f2affbb081d8f4a21"
       },
       "english": {
-        "bytes": 5866,
+        "bytes": 5498,
         "lines": 88,
-        "sha256": "8dc4c2dbc353c2ede38555655d66e063dc5614ce189d7e45623abbbc17b19b27"
+        "sha256": "2b8273adedc6f5622323d597e595cd009014c0363fed787fbed6c6e14c0f4148"
       },
       "json": {
         "bytes": 16854,
@@ -14680,9 +14680,9 @@
         "sha256": "d8ce45bd0d260f7b224d54289903301e8cb25c7ccb52b3914e0a1e4ae2282900"
       },
       "latex": {
-        "bytes": 14359,
+        "bytes": 12519,
         "lines": 197,
-        "sha256": "11d8ce05a555dfbfb423ce91cc33a85a580430745055bc349bff68d6f5f06b64"
+        "sha256": "b0376b02ba00a291d75ed8d830efbb578c5f0f4660a58e30adb4d74251752d96"
       },
       "legalruleml": {
         "bytes": 18473,
@@ -14744,9 +14744,9 @@
     },
     "library/penal_code/s379_punishment_for_theft/statute.yh": {
       "akomantoso": {
-        "bytes": 6902,
+        "bytes": 6396,
         "lines": 114,
-        "sha256": "321d5b07e6a2027f7bd6f565e72aaac917bf2304525e751679ad40cdcc48bcce"
+        "sha256": "82a171dc0200056405d5d2809f9a47b0c06186bca2ac475098e6f9c83a2eb677"
       },
       "alloy": {
         "bytes": 5304,
@@ -14754,9 +14754,9 @@
         "sha256": "9cc29faaea17f5390f814aac722a2cba238b84d6547a1305cf2e3727fb378d5a"
       },
       "english": {
-        "bytes": 4981,
+        "bytes": 4475,
         "lines": 68,
-        "sha256": "2cb1c90e330a206847b12bb24391762aa2a59a20359cd2c76ac13a874fc0c0b4"
+        "sha256": "c2e4dfe0549d97ecbd1a85c831bb18ac87aeb82f36691578654904ac87434583"
       },
       "json": {
         "bytes": 8907,
@@ -14764,9 +14764,9 @@
         "sha256": "0084b9c98d382a65bd7f7540360a088c80d96ed8a992ef4f131f841dae26bd5f"
       },
       "latex": {
-        "bytes": 7272,
+        "bytes": 6720,
         "lines": 170,
-        "sha256": "27d4de499f1566a569f71ae6cdc267a792ccca68acb0d5d7f77caa0155047932"
+        "sha256": "688658967dd098921213a2d15f7dbbcb2127231eef25af53b651a4b35c39c17d"
       },
       "legalruleml": {
         "bytes": 18342,
@@ -14828,9 +14828,9 @@
     },
     "library/penal_code/s380_theft_dwelling_house_etc/statute.yh": {
       "akomantoso": {
-        "bytes": 6762,
+        "bytes": 6256,
         "lines": 110,
-        "sha256": "1215367f5bde6bce3f6714e6c3514fd438ce8a7a06dd6fefe33214747dacd119"
+        "sha256": "f115d574f683d6122fd356fa6b3656a13781b10865d9e5589899eecc0541cd29"
       },
       "alloy": {
         "bytes": 5579,
@@ -14838,9 +14838,9 @@
         "sha256": "36c3b56b347df74cce715ef9fcfe1beb5ec1d17eaa387761c3821ffa62e2a4c5"
       },
       "english": {
-        "bytes": 4876,
+        "bytes": 4370,
         "lines": 54,
-        "sha256": "a5597212774d702d16d47f0c715b816749fb44e90bdeb7acd2069f2ffe6b19b4"
+        "sha256": "2a1f3c89ebad94a4f3fd3f90b170bdaf07d965b59612ae680c9f020344abc43e"
       },
       "json": {
         "bytes": 8639,
@@ -14848,9 +14848,9 @@
         "sha256": "87e75e94a02b080f54cbb0729cba3de2273333ab5d69b44ae9070c61686277f2"
       },
       "latex": {
-        "bytes": 7758,
+        "bytes": 7068,
         "lines": 154,
-        "sha256": "283424c7bdd71fd0a3ad740f80fdb92ba0c69256c51d5188d4151da0cbbac1af"
+        "sha256": "61425e5606ad20a62dbf8bf66e5b9275a644850e200a1cedc6d66c85f372f088"
       },
       "legalruleml": {
         "bytes": 18197,
@@ -14870,9 +14870,9 @@
     },
     "library/penal_code/s381_theft_clerk_servant_property_possession/statute.yh": {
       "akomantoso": {
-        "bytes": 6440,
+        "bytes": 5980,
         "lines": 104,
-        "sha256": "4fed5b00e1af04d3df5c0b5ba0aad6e5b84de0b120c64cb5c408a33379196939"
+        "sha256": "28e30ba6a64110f20811eb7303e61506a44da9628e5b433b8917652a5f99f80a"
       },
       "alloy": {
         "bytes": 5435,
@@ -14880,9 +14880,9 @@
         "sha256": "04e629feb0ea1ae66be3fb15c48d4c9d697e1b75fd04f5719d797120539dedce"
       },
       "english": {
-        "bytes": 4593,
+        "bytes": 4133,
         "lines": 51,
-        "sha256": "95708f01ea51fd3af6c0d31b6ba277e871bc63d0e3e5b6a958078f9b740f4e63"
+        "sha256": "cb3114df1ca58108f003090efccf1b56aa940de0fcf486c0c177fcefbf3f2c7b"
       },
       "json": {
         "bytes": 8218,
@@ -14890,9 +14890,9 @@
         "sha256": "a6b8c7f59edb42a30b75a884c32bf4f990465c82f848729941708725a49da065"
       },
       "latex": {
-        "bytes": 7763,
+        "bytes": 7073,
         "lines": 152,
-        "sha256": "5f74d8715fb39bb389c67c9c9d76930148d25fa9428d20bcf5e3270426f2df6d"
+        "sha256": "62389615613436c57efec2f3a426cc0e9272e9c27f9f00078cc3543d991ca2fd"
       },
       "legalruleml": {
         "bytes": 17089,
@@ -14912,9 +14912,9 @@
     },
     "library/penal_code/s382_theft_after_preparation_made_causing_death/statute.yh": {
       "akomantoso": {
-        "bytes": 7376,
+        "bytes": 6916,
         "lines": 108,
-        "sha256": "bd86b6574278c8fef0ac31769e9dfd3dc506b8406e734b99d88be2e12cdd8615"
+        "sha256": "e79fa2c206ef663261fd91845ed5e1d3f73a73a52c3ffca6d6d7721657bf7528"
       },
       "alloy": {
         "bytes": 5505,
@@ -14922,9 +14922,9 @@
         "sha256": "87a94ee0fd6efe1997c3b626c467723a2b4d751979018004d2e803dd0528d38c"
       },
       "english": {
-        "bytes": 5468,
+        "bytes": 5008,
         "lines": 57,
-        "sha256": "28f4cbcbc3db9c82312c7f182739295e15badb6200c11509402ce67a90601bec"
+        "sha256": "001e0e5454bd993bee2c4f0f3b323c03c3fb238dbac01464fff077a73021e379"
       },
       "json": {
         "bytes": 7842,
@@ -14974,9 +14974,9 @@
         "sha256": "12d61b004fa9f4f6139666d32702382c189b2de6b0fc873b7d789d992b2f40ac"
       },
       "latex": {
-        "bytes": 7619,
+        "bytes": 6745,
         "lines": 157,
-        "sha256": "6ab50f22cb4f873a4dddc8f6f02fdf171f52a2650eca7d94706a651ed4a69caa"
+        "sha256": "08f21d5e5be973ed0baec89af10bb3d1a3ff0fd689f135df1caae10035cf92d1"
       },
       "legalruleml": {
         "bytes": 4692,
@@ -15290,9 +15290,9 @@
     },
     "library/penal_code/s390_robbery/statute.yh": {
       "akomantoso": {
-        "bytes": 7522,
+        "bytes": 7016,
         "lines": 120,
-        "sha256": "9db9c60dc47af80e64db6ace7763443e3df7df82c290fd849f2bb51e2097824d"
+        "sha256": "bf8624c8005c57bceed2a91f7343b4048637ed62bb5cb75dd08ed2364611fb7b"
       },
       "alloy": {
         "bytes": 5657,
@@ -15300,9 +15300,9 @@
         "sha256": "2128537d9877b66c99ec6480e697f2f157918e0b243bb2d3fc7007f534d9c2e4"
       },
       "english": {
-        "bytes": 5530,
+        "bytes": 5024,
         "lines": 82,
-        "sha256": "59c34062f74b8868b700977bc0afae791118fc35e74ad32e64df995ef79f745e"
+        "sha256": "6a04c1d658e9fe0a86e822139e7511cd22df5e86db1bb3595ac36e91011480c1"
       },
       "json": {
         "bytes": 12842,
@@ -15310,9 +15310,9 @@
         "sha256": "0ef6348814e7d88abb488802c73eb0a6bd1ef4f731f5daebf02a7fdf3dc18506"
       },
       "latex": {
-        "bytes": 10261,
+        "bytes": 9203,
         "lines": 184,
-        "sha256": "7dac90a8229d449393345b1dd2aa378def0bd5ad0465e529e56aab16d899fbf0"
+        "sha256": "75c0174d80ea5d66be53d127d0e7f1e2afec0c9df38af2567fa7ae0d804081f1"
       },
       "legalruleml": {
         "bytes": 19870,
@@ -15332,9 +15332,9 @@
     },
     "library/penal_code/s391_gang_robbery/statute.yh": {
       "akomantoso": {
-        "bytes": 7432,
+        "bytes": 6926,
         "lines": 114,
-        "sha256": "3271c8b1305a199b57a29f8ed06fc42bcd3ec4bc05fa3038f5cbaf52dc86feeb"
+        "sha256": "60d9726967b09165107a33067a73cad349d8efa88389e3330a18b282642406f6"
       },
       "alloy": {
         "bytes": 6223,
@@ -15342,9 +15342,9 @@
         "sha256": "5f08ff9ed2160cb862356be32d9505f413d8d50c45907eebb123772f10759db3"
       },
       "english": {
-        "bytes": 5205,
+        "bytes": 4699,
         "lines": 55,
-        "sha256": "565f285b62b4f7c2dbc5273b844fe5e9876bdca9429e52b349a8462674beb29c"
+        "sha256": "fe983dcd0b7a9fb2e8ff68c4ba5388d01fe2d9f65f19f98489ced5748ea1f2df"
       },
       "json": {
         "bytes": 8121,
@@ -15374,9 +15374,9 @@
     },
     "library/penal_code/s392_punishment_for_robbery/statute.yh": {
       "akomantoso": {
-        "bytes": 7331,
+        "bytes": 6825,
         "lines": 116,
-        "sha256": "ad4cb1fe215faba6e7a8b06ba2c84030890d88da0476aa8dcb3fb0522ac854ff"
+        "sha256": "7da00dd2a088c77c136b986079f06e72524d38f0010ead80ef7006783ad5bfc9"
       },
       "alloy": {
         "bytes": 5635,
@@ -15384,9 +15384,9 @@
         "sha256": "21376fbac9dd0029d158331552a39f00da0185db5850bd858f1fc13ddb045a37"
       },
       "english": {
-        "bytes": 5416,
+        "bytes": 4910,
         "lines": 72,
-        "sha256": "17f6d97cb0242eec7f299360c8dc81d9b922dd72c292966a7fb3641adee93946"
+        "sha256": "e74ee7c79d3526e05b656cb42fab9eee3d5d0e90612126938e803ca9be08714f"
       },
       "json": {
         "bytes": 10653,
@@ -15394,9 +15394,9 @@
         "sha256": "563acc12f0faef27f4c80f1b78ecc8e1237a53a5e6f9499f189f3046c03fa4e4"
       },
       "latex": {
-        "bytes": 9324,
+        "bytes": 8450,
         "lines": 176,
-        "sha256": "3f33c6a8fe5009d3bc7e46ce57808c8f198f7bd6d26a5aed30818d51e3ac0f13"
+        "sha256": "44b016d7a25e3e873b13a549b8a137c930f10c676db18e84c7997880ac1b115e"
       },
       "legalruleml": {
         "bytes": 18662,
@@ -15416,9 +15416,9 @@
     },
     "library/penal_code/s393_attempt_commit_robbery/statute.yh": {
       "akomantoso": {
-        "bytes": 5922,
+        "bytes": 5508,
         "lines": 101,
-        "sha256": "433ff66db3ab539073aa038239ecdf3371135e8f336cd01f9650555db86dab26"
+        "sha256": "201dabba565a3a7c1a8ab2c814138b1d8604422fa05ec4f781e10e99ff12d570"
       },
       "alloy": {
         "bytes": 4819,
@@ -15426,9 +15426,9 @@
         "sha256": "46656a0cd87c528ea87d4f89b4303d3d85eabba435613547f447d9cbe5c333d8"
       },
       "english": {
-        "bytes": 4201,
+        "bytes": 3787,
         "lines": 53,
-        "sha256": "c6d820ed1c31ba6a463acf9aada26e813dab97e47be48dc6e104a28fcd9a0276"
+        "sha256": "857b64683f10eb31de0015f77a300337d728671bcf298369bd91fe722b46735d"
       },
       "json": {
         "bytes": 8151,
@@ -15436,9 +15436,9 @@
         "sha256": "ca1cfa93b6751b73352a22f0998a6cb80f5e65d642eeacce9af66152786e0d23"
       },
       "latex": {
-        "bytes": 7544,
+        "bytes": 6854,
         "lines": 158,
-        "sha256": "45dad6fc95cd10400468a84259202dbeb59097c4b158b4b079321d991767fa9b"
+        "sha256": "3f2fd92d2ad09ba7561273f075f853efc7e8a769dd48f3fa8df4f8d930a18baf"
       },
       "legalruleml": {
         "bytes": 15907,
@@ -15458,9 +15458,9 @@
     },
     "library/penal_code/s394_voluntarily_causing_hurt_committing_robbery/statute.yh": {
       "akomantoso": {
-        "bytes": 7061,
+        "bytes": 6555,
         "lines": 111,
-        "sha256": "a18e5fa4acb9b6b5165446f0a954e1ee20ec18fb3c5d144d9b81ea3a52d9a026"
+        "sha256": "8e445d43e01830bab0bcc3a514ca369f305d5615631cafcb047ee75869f2a97b"
       },
       "alloy": {
         "bytes": 5841,
@@ -15468,9 +15468,9 @@
         "sha256": "640c7c6e530c92f0dfa8b13b7ff9472bbefa94d7fbe52257a5c28666064f86e9"
       },
       "english": {
-        "bytes": 5304,
+        "bytes": 4798,
         "lines": 57,
-        "sha256": "c55088697b22cbf6f1b6682f8534e24c3d24832d19b0143632e163491422dcbe"
+        "sha256": "c395c2a592d17337c5f22ddb1941e1609514af2239242c69600a5306221a9a62"
       },
       "json": {
         "bytes": 9239,
@@ -15478,9 +15478,9 @@
         "sha256": "14e3c1f39640c504edd7b98e572e295009549639e19b84068c3622c2dcc95089"
       },
       "latex": {
-        "bytes": 8347,
+        "bytes": 7657,
         "lines": 158,
-        "sha256": "abdd33b3989e3286a3764242fc2a3862109dd04f244e83afc36e60a6d09b9d90"
+        "sha256": "22b3ed148d8f71ef760f0d9747f72ee5e20f625a55b3ed07483e773da10dcb41"
       },
       "legalruleml": {
         "bytes": 18778,
@@ -15520,9 +15520,9 @@
         "sha256": "0577df9920d47500a65e347ffbee64043e866d32faae7a0e8b8d35381751d1c0"
       },
       "latex": {
-        "bytes": 15554,
+        "bytes": 12748,
         "lines": 147,
-        "sha256": "dd3d4dbd3a84a4da6101e9f6b68556f5f67b6353bd399bc8c4ccccdf8b1be6b9"
+        "sha256": "dfa9b94c31b6811e6bed2ce7a252472cd079d5f54da1792afaf837df895a1726"
       },
       "legalruleml": {
         "bytes": 3697,
@@ -15836,9 +15836,9 @@
     },
     "library/penal_code/s403_dishonest_misappropriation/statute.yh": {
       "akomantoso": {
-        "bytes": 6978,
+        "bytes": 6564,
         "lines": 107,
-        "sha256": "496e4848c8fc649bbdee1d63ac0fc045b2fdb779cd011e01c3cbf02b636e51a2"
+        "sha256": "1ac4adeacd5b6b8ae8c225534a3f242aac63df1a1917e0e8faccf301a421c730"
       },
       "alloy": {
         "bytes": 5360,
@@ -15846,9 +15846,9 @@
         "sha256": "9452e2556bd9d15539d70c055daac917d3d156217343902d2f3eef4a1c0c8493"
       },
       "english": {
-        "bytes": 5172,
+        "bytes": 4758,
         "lines": 72,
-        "sha256": "9af9e5d02966e584003d5095a2ca7a90ba9d415228023222515069756248b492"
+        "sha256": "cb86372d7bd78ec3db8a248ec7447c5d2cf46ca75be9420bb844eb7e3813ed88"
       },
       "json": {
         "bytes": 12438,
@@ -15856,9 +15856,9 @@
         "sha256": "cd244ec010dad1c09d4283f299beadfdfa4b5bca63cb1584ff132490f6ac95eb"
       },
       "latex": {
-        "bytes": 11115,
+        "bytes": 9919,
         "lines": 178,
-        "sha256": "e75f79c179e9737d78c784c52721e7696d0689ccf1e586cae578ff026b1b89ab"
+        "sha256": "25cc72f99e6aae208d1d101352f850b82e863b40e170375f7a675dac3e087a17"
       },
       "legalruleml": {
         "bytes": 17147,
@@ -15878,9 +15878,9 @@
     },
     "library/penal_code/s404_dishonest_misappropriation_property/statute.yh": {
       "akomantoso": {
-        "bytes": 5593,
+        "bytes": 5271,
         "lines": 88,
-        "sha256": "c058a52ccde9902b4f1b1bd2dac37759d5c015fb3abf7b5e2c0a439d6b11dd45"
+        "sha256": "0b750634dd9a5d3bac2a3d63c95fe13e153ca67095a762e8d64741cf1787a9dd"
       },
       "alloy": {
         "bytes": 4848,
@@ -15888,9 +15888,9 @@
         "sha256": "4c590572023e77f7b621c545684c596ee21d54e945c61547912ab6877a5e63cf"
       },
       "english": {
-        "bytes": 4044,
+        "bytes": 3722,
         "lines": 48,
-        "sha256": "286dfb2c06ce52f3c895968eb5dc9d61482e5207c9fd8e9ae65caca2f74efedf"
+        "sha256": "cae8987f01d50a14591db209c523e9f3a5cd6284555072b12c535a0ca4bb2f84"
       },
       "json": {
         "bytes": 6591,
@@ -15920,9 +15920,9 @@
     },
     "library/penal_code/s405_criminal_breach_trust/statute.yh": {
       "akomantoso": {
-        "bytes": 9521,
+        "bytes": 9107,
         "lines": 112,
-        "sha256": "9743d1103ba7b3083542e25f41190db98c11a1463b49a3da0ecc061400e30cad"
+        "sha256": "fd3806632b10dcda9052c4d51fb9e92ef6d0ef961fe95efda80ae77047da649f"
       },
       "alloy": {
         "bytes": 6089,
@@ -15930,9 +15930,9 @@
         "sha256": "4171e59b98a47f971f0450c85f5f7d022ad09cf23b6c0925ff136119133b73c5"
       },
       "english": {
-        "bytes": 7554,
+        "bytes": 7140,
         "lines": 68,
-        "sha256": "96acf330a06cd688f702d1d50daacff8edf53e4ecc0775b780e5f65ec25f7d49"
+        "sha256": "e0e8d8b6d0c9f6915797a9ea3b3202bc23e57d70e1fc7ebee559a63971536f32"
       },
       "json": {
         "bytes": 11769,
@@ -15962,9 +15962,9 @@
     },
     "library/penal_code/s406_punishment_for_criminal_breach_of_trust/statute.yh": {
       "akomantoso": {
-        "bytes": 6793,
+        "bytes": 6379,
         "lines": 104,
-        "sha256": "4ffef269e142a1e7edd3d9b100bb4514ddf281ca4c02aa6f69a30957de7e451d"
+        "sha256": "4480ed986798b07ddf142fdea4bcd2b20a4c5b3a44e0b2097b3d0574e9bbf724"
       },
       "alloy": {
         "bytes": 5068,
@@ -15972,9 +15972,9 @@
         "sha256": "2ed612a6de242166aff7cea48f49bcddbbc65644ec89bbed2972c0c899d791a8"
       },
       "english": {
-        "bytes": 4985,
+        "bytes": 4571,
         "lines": 65,
-        "sha256": "3f7d47480a7b91f559f588cbc3c33e62d0eb9a30d2ed61f77c34b3f6d2e7efef"
+        "sha256": "6cebbc48fb428d0411d04fa6b97dba24296e617a0f8f2dc699f306882c0b4494"
       },
       "json": {
         "bytes": 9015,
@@ -15982,9 +15982,9 @@
         "sha256": "9a5e76a2e6823908e29ceac854818de69e7be7a24fe27159cd7ba2e819227d5c"
       },
       "latex": {
-        "bytes": 7767,
+        "bytes": 7215,
         "lines": 171,
-        "sha256": "37045593b221a33e5ab6c090117a59ac13b7019f3a4b65f90694ddca2a6954b4"
+        "sha256": "750287a3c0fcb1a02889cae1c910a6c977ef1281af8c9fc942164870442f4578"
       },
       "legalruleml": {
         "bytes": 16259,
@@ -16004,9 +16004,9 @@
     },
     "library/penal_code/s407_criminal_breach_trust_property_entrusted/statute.yh": {
       "akomantoso": {
-        "bytes": 5602,
+        "bytes": 5280,
         "lines": 88,
-        "sha256": "3c4632ec748ca47fae5238d57da0f1ebd69494f86104078f0f25034b312e1eb9"
+        "sha256": "a48a16890640efa273835775dfd53477e8e559cdc944fb93ce6bc71d21efec43"
       },
       "alloy": {
         "bytes": 4745,
@@ -16014,9 +16014,9 @@
         "sha256": "c5f1a14369db1f61947096f216389787fad5cfe8bc95461883ba1ac5d0aa5e29"
       },
       "english": {
-        "bytes": 4209,
+        "bytes": 3887,
         "lines": 47,
-        "sha256": "64ca00b6b3a6674a28bfe0f71db46ce268e00e12afee9b0d28cc9216cd4c405a"
+        "sha256": "6039b9145a7599339a3db7896c64064023628c82a5fc6fb221010caea190d270"
       },
       "json": {
         "bytes": 6377,
@@ -16046,9 +16046,9 @@
     },
     "library/penal_code/s408_criminal_breach_trust_employees/statute.yh": {
       "akomantoso": {
-        "bytes": 5473,
+        "bytes": 5151,
         "lines": 101,
-        "sha256": "208f36b620147dd9ccc0e3c27dbd3cc63e27326b445f8848b9e2115d66457de4"
+        "sha256": "6fb687eb1f4e86d113ae6ddc699b832143d4f89ee02f987e30eaf2f1bbdfef60"
       },
       "alloy": {
         "bytes": 3942,
@@ -16056,9 +16056,9 @@
         "sha256": "1a926beef50c0f2daf6772224f5b10d8f1f7ee0f3595c5bd9ebf60d3d3a3d296"
       },
       "english": {
-        "bytes": 2681,
+        "bytes": 2359,
         "lines": 27,
-        "sha256": "0abe6b598b508aee8533a577447612baa4c54832d2bc531875b1697834a152d6"
+        "sha256": "9f43520e65f83f28c61616a51ddba4f3c6a4db455b227d9df2d968c4646cc52f"
       },
       "json": {
         "bytes": 6801,
@@ -16088,9 +16088,9 @@
     },
     "library/penal_code/s409_criminal_breach_trust_public_servant_banker/statute.yh": {
       "akomantoso": {
-        "bytes": 6850,
+        "bytes": 6528,
         "lines": 110,
-        "sha256": "f0601fa1e9aaa33a68612e63888f28dab8de9406904118b4b39ab81c6921b52c"
+        "sha256": "ca0a6684a8760d6d2ca7d82f5a3652d0cd2f13615fd9b4d17c473abff682bad7"
       },
       "alloy": {
         "bytes": 4864,
@@ -16098,9 +16098,9 @@
         "sha256": "12ad662ed13cd50f4e07cf6fb283310bcdb942a7ce893119fd52a4c24f313080"
       },
       "english": {
-        "bytes": 2857,
+        "bytes": 2535,
         "lines": 27,
-        "sha256": "eca4eef0922c72dca77db91f4b54453239967517bf2c20538f946e08f32051d2"
+        "sha256": "22fada3042339561171420eb12bdc5734d9533adb4547c0111d99f9d9d2c29a8"
       },
       "json": {
         "bytes": 12496,
@@ -16234,9 +16234,9 @@
         "sha256": "b509ad7d48af1893bdbc6aa9d8e760676e445205f371cbf5f25316cabe935f7e"
       },
       "latex": {
-        "bytes": 9846,
+        "bytes": 8650,
         "lines": 152,
-        "sha256": "bbb8470027e84290260e0ae816815e5c6e8503d950d3c6d00fdb38d46d121439"
+        "sha256": "dc7be44043e9ca03fd4024fc1f17ba5df7ba1b3b04d4570aa0ec51fe23a97f9c"
       },
       "legalruleml": {
         "bytes": 3872,
@@ -16382,9 +16382,9 @@
     },
     "library/penal_code/s415_cheating/statute.yh": {
       "akomantoso": {
-        "bytes": 7044,
+        "bytes": 6630,
         "lines": 110,
-        "sha256": "d9f98f14bb7c76bc69abd2a6f5a6f5c8aeff2982531f6418183693d62b6763fe"
+        "sha256": "e14a117f1f8e1ab9a8fd1effd0e007f83ea0e1cff0425a04b4694e7819edb272"
       },
       "alloy": {
         "bytes": 5535,
@@ -16392,9 +16392,9 @@
         "sha256": "c2a45664e7bd8a84e9695f99afc2ed09408326f5b471eebd70f7b054c2042e40"
       },
       "english": {
-        "bytes": 5357,
+        "bytes": 4943,
         "lines": 79,
-        "sha256": "0c33a0a763575c39adeaed396ffcd80398308f37cd5542e0e1d8525efd289be3"
+        "sha256": "d24f64f3c4035e2100ffe51d217b335373f5f7634bd0a6cf0f76350976f10e8a"
       },
       "json": {
         "bytes": 13612,
@@ -16402,9 +16402,9 @@
         "sha256": "481059f9517c707f423babee722f63ed8415e4c11ed4b1c0416b828b3c77c165"
       },
       "latex": {
-        "bytes": 10715,
+        "bytes": 9611,
         "lines": 191,
-        "sha256": "ff6f9f4a1e51b74f006abe3fc6c07813681d101ec9f254bb64419f98c904e5ff"
+        "sha256": "b9a200353bc2294c6ca70370500d43ed856f8cf93caf83d0f1a3d6d716543803"
       },
       "legalruleml": {
         "bytes": 17542,
@@ -16508,9 +16508,9 @@
     },
     "library/penal_code/s416_cheating_personation/statute.yh": {
       "akomantoso": {
-        "bytes": 5945,
+        "bytes": 5623,
         "lines": 93,
-        "sha256": "45cca2d7cf7f4aa9779a1c807569c245b25943aba15c9f0571c140f643818575"
+        "sha256": "2fc1718c9defb45428b415b3ba9de0ff2d90a3d752dc74900bf097aa98d13d3f"
       },
       "alloy": {
         "bytes": 4719,
@@ -16518,9 +16518,9 @@
         "sha256": "fed91656eb923240d1c4386880c6b8a759f210e4ab838135c829a42361c51b57"
       },
       "english": {
-        "bytes": 4039,
+        "bytes": 3717,
         "lines": 48,
-        "sha256": "7d771fb38986e6d53537772fc22632caff704b6b6443f68d6ff329c1032617e4"
+        "sha256": "261affcf0d9bcbeda7caf0f52867245d91b2010eb461165ee65f8a9615883ba0"
       },
       "json": {
         "bytes": 6649,
@@ -16550,9 +16550,9 @@
     },
     "library/penal_code/s417_punishment_cheating/statute.yh": {
       "akomantoso": {
-        "bytes": 4431,
+        "bytes": 4109,
         "lines": 81,
-        "sha256": "90a616d863497d263096537c6fd1fcdb75f8f77449d2eef50ec2be0369364882"
+        "sha256": "7d959404f77b8d6fbd4dfec14567c41605810e1c8bf94b3279d7947d279e13e6"
       },
       "alloy": {
         "bytes": 3590,
@@ -16560,9 +16560,9 @@
         "sha256": "d5210eb0c50bd911ff81041ada1a9d4e23d95d61ab37c4bfb71043c4bac972c3"
       },
       "english": {
-        "bytes": 2775,
+        "bytes": 2453,
         "lines": 30,
-        "sha256": "40bc18ea35ce50d04938d4300d12fed80e37900e9e3ccf2fbf745f450bf19494"
+        "sha256": "c133208725e4c7b21524a27f9b68e75bba433a49e4c0ac560fd5f28d69593cc5"
       },
       "json": {
         "bytes": 3596,
@@ -16592,9 +16592,9 @@
     },
     "library/penal_code/s418_cheating_knowledge_that_wrongful_loss_may/statute.yh": {
       "akomantoso": {
-        "bytes": 5199,
+        "bytes": 4877,
         "lines": 86,
-        "sha256": "a2adc11f71795c6bdf1a99892dc25ad39632e4a252256904faefdb732155156e"
+        "sha256": "23eeb97d9d70b6282699daf2c41cbd034656ba8cbd957d5b18132f51d925c7e8"
       },
       "alloy": {
         "bytes": 4469,
@@ -16602,9 +16602,9 @@
         "sha256": "b2f0fae2d5f61d87c36edeca9162372a353c79bbedd4325f979962ec769df181"
       },
       "english": {
-        "bytes": 3548,
+        "bytes": 3226,
         "lines": 39,
-        "sha256": "6f35ef0f1d1e3f81e3ae0834a461404e00252593fa8936c498d7adf73f0c1d4c"
+        "sha256": "d61ccf226edad780419cfd853977598f7561bd3f10d581318079d7b8acf03aec"
       },
       "json": {
         "bytes": 5278,
@@ -16634,9 +16634,9 @@
     },
     "library/penal_code/s419_punishment_cheating_personation/statute.yh": {
       "akomantoso": {
-        "bytes": 4530,
+        "bytes": 4208,
         "lines": 81,
-        "sha256": "4122758d6021367e18229f67a2e654489b76d8674b651d254ea93e630bad70d3"
+        "sha256": "d5fd8bb8e62e7fec71f98f65847ed9223e1ad23062a583d52bac82767092a45c"
       },
       "alloy": {
         "bytes": 3605,
@@ -16644,9 +16644,9 @@
         "sha256": "208d7a823a870edb142fb3d4605f22c17e82fa8536e293b0f43ad548b921e6ef"
       },
       "english": {
-        "bytes": 2874,
+        "bytes": 2552,
         "lines": 30,
-        "sha256": "2669d6c933547acda3d2bf28738f507f69b352918bf9e5eea04ac92c21fa6bc3"
+        "sha256": "53fa8a2ce4e6f9d098cc67f676bd4d8c311a6227739a20c9afd0725a1f10b354"
       },
       "json": {
         "bytes": 3611,
@@ -16760,9 +16760,9 @@
     },
     "library/penal_code/s420_cheating_inducing_delivery/statute.yh": {
       "akomantoso": {
-        "bytes": 7867,
+        "bytes": 7453,
         "lines": 122,
-        "sha256": "e559bf52a4f483e9ca974b8f26858eb942e44fc82a373dbbace07be2528099e9"
+        "sha256": "d11dc4ae119fb25423e08cbe62d7063c13a8beaff1e58a59c2426fbf437f9d41"
       },
       "alloy": {
         "bytes": 5676,
@@ -16770,9 +16770,9 @@
         "sha256": "1e9331f4878aae86124e93cdc8e0799fd8818477f579fa9c85b85778821759d8"
       },
       "english": {
-        "bytes": 3592,
+        "bytes": 3178,
         "lines": 39,
-        "sha256": "be7e5b91022d2cd281ac9eebdf533bdb6a9829c5bef11eb3046f6c3e3c5d01d1"
+        "sha256": "8f675a364647f21a2761d11ee23ea71a50857e8e42dac9e174d71fdf66725fd3"
       },
       "json": {
         "bytes": 14944,
@@ -16780,9 +16780,9 @@
         "sha256": "0d400015d4a4de3a9d93de592d8190cf08309c7af0eba8a0561aa7d0f543a462"
       },
       "latex": {
-        "bytes": 6679,
+        "bytes": 5989,
         "lines": 129,
-        "sha256": "203af87d50341e88b48caf111f1cddc35fd1b5f4f6d3851a62e00e807a14da8e"
+        "sha256": "a553a6464f5a532b908bd63d16aee354d4c334351fbb41720e8f7870c3ac1615"
       },
       "legalruleml": {
         "bytes": 19774,
@@ -17054,9 +17054,9 @@
     },
     "library/penal_code/s425_mischief/statute.yh": {
       "akomantoso": {
-        "bytes": 8668,
+        "bytes": 8208,
         "lines": 116,
-        "sha256": "f23e88d8a0e6d5c81cfce864eac14e191dae52097430109fce3736b66736d387"
+        "sha256": "8d1f244f8c228f2aaee8ef31f55de6624f45af0f0c0ebe17111558ccac680880"
       },
       "alloy": {
         "bytes": 5761,
@@ -17064,9 +17064,9 @@
         "sha256": "7d26aef808f18f7590f15951906ef510ee44129a2c1f73f62dd744493c9489de"
       },
       "english": {
-        "bytes": 6786,
+        "bytes": 6326,
         "lines": 72,
-        "sha256": "9967ab7700d1e43cb18e857edb940ca0db0c6b438f8cb926bdf18feaa5e5fd81"
+        "sha256": "98b877e309bb94556d0dd5f530dc24182dc4b2cb0c8517342c99a94347c80125"
       },
       "json": {
         "bytes": 11966,
@@ -17074,9 +17074,9 @@
         "sha256": "99c32980e676a8cba4ede9663af02e739ed807bf9b5c2030d2f3d68b1046f2f1"
       },
       "latex": {
-        "bytes": 9675,
+        "bytes": 8985,
         "lines": 184,
-        "sha256": "b3f07ebabb56156188423109caf0241487de6d35fd698f421cbcb77dd322489a"
+        "sha256": "acb00f69591edca6a27326b5825632911ddf5e43d3f7d72986dbd0daee8d983f"
       },
       "legalruleml": {
         "bytes": 17684,
@@ -17096,9 +17096,9 @@
     },
     "library/penal_code/s426_punishment_committing_mischief/statute.yh": {
       "akomantoso": {
-        "bytes": 5917,
+        "bytes": 5457,
         "lines": 100,
-        "sha256": "7cb6438929802a9b966dfe67d8740e877fac88b2ac4dd53f4d4275cc7a2c0d06"
+        "sha256": "82920221d700be9061b536b7be9c791fe5af442b98182d4fbf2650642baf4c6c"
       },
       "alloy": {
         "bytes": 4305,
@@ -17106,9 +17106,9 @@
         "sha256": "5e71b9d41c7d21e946776eb15aa74d553d77713c2051bc5da3ceb4f6d2c28f58"
       },
       "english": {
-        "bytes": 3966,
+        "bytes": 3506,
         "lines": 39,
-        "sha256": "6103794295bbbb21b7d7707ab7de55a4cb6761acef8baeb9a1c2e9b6c7beb5f9"
+        "sha256": "4a65f02a773ee3e249eeebd618715e92bafe6d269d2aa85ac524d28c076c85e1"
       },
       "json": {
         "bytes": 4759,
@@ -17138,9 +17138,9 @@
     },
     "library/penal_code/s427_punishment_committing_mischief_causing/statute.yh": {
       "akomantoso": {
-        "bytes": 8584,
+        "bytes": 8124,
         "lines": 122,
-        "sha256": "28082be1f419e901a00561d1eb5180976c368727ecbefe11e262c7b1d6fc8709"
+        "sha256": "4d77e90676bc38f83baeefcaa974952e555bd53ff2ca8f118e05112ee5dce4dd"
       },
       "alloy": {
         "bytes": 5284,
@@ -17148,9 +17148,9 @@
         "sha256": "54f52557ed55f906f7cd84dce0184b65c17d524833107b714fcfa4f22e73a0cd"
       },
       "english": {
-        "bytes": 5000,
+        "bytes": 4540,
         "lines": 45,
-        "sha256": "95944900778aa4e4b760ac694258557ed91a6d7910b5433613ccdc42c37c2f6d"
+        "sha256": "e4fe1f364d7049a73a8e80a073f0aec72ae89eb534f76ff082921caa0556709c"
       },
       "json": {
         "bytes": 10772,
@@ -17180,9 +17180,9 @@
     },
     "library/penal_code/s428_mischief_killing_maiming_animal/statute.yh": {
       "akomantoso": {
-        "bytes": 6404,
+        "bytes": 5944,
         "lines": 106,
-        "sha256": "a069037f40572f046cdd5915a3d04ff5b7ae02380b700c78c015d079bf2a30e3"
+        "sha256": "5e8eb49d6b37706f53c964d6e0988858e1eef2fc3a5dff6a78bdf0b7ecac407b"
       },
       "alloy": {
         "bytes": 5470,
@@ -17190,9 +17190,9 @@
         "sha256": "d55ccfe7e5697b12536d956f15eb072640d3cb1ed72c1857fa61fb151fc3c3c1"
       },
       "english": {
-        "bytes": 4559,
+        "bytes": 4099,
         "lines": 51,
-        "sha256": "58125ffeec23c2ca60a6e3eba925280301a228fdf7cbe98e5749c59f030eba00"
+        "sha256": "29b186bd3956297d38ba925ab0302be9c6d9c0da364a9aac9443636093383820"
       },
       "json": {
         "bytes": 7037,
@@ -17264,9 +17264,9 @@
     },
     "library/penal_code/s435_mischief_fire_explosive_substance_intent/statute.yh": {
       "akomantoso": {
-        "bytes": 6633,
+        "bytes": 6173,
         "lines": 106,
-        "sha256": "ee6c22da8d83019ab301d22cfeeacec0b4713edc3b5e6c3edcd17310bcc7f62c"
+        "sha256": "e1d1cc891a5ab91f8165e0d44dc5399ffa25887d07e3630ad5c750a058a7e242"
       },
       "alloy": {
         "bytes": 5484,
@@ -17274,9 +17274,9 @@
         "sha256": "ded7e8aa3a1516f1e523d04391efab4700979d0be4b15d022b561a47289d755d"
       },
       "english": {
-        "bytes": 4793,
+        "bytes": 4333,
         "lines": 52,
-        "sha256": "0695f9538b9ee8d8a6e77728a8cc8409c714198ebe3ce2b505f3d944bd5659a0"
+        "sha256": "77ffec8e5fa44bc1260a2868bc06eb0e1bb9b67bcf6051e57dc822a5d51a7d0d"
       },
       "json": {
         "bytes": 7328,
@@ -17306,9 +17306,9 @@
     },
     "library/penal_code/s436_mischief_fire_explosive_substance_intent/statute.yh": {
       "akomantoso": {
-        "bytes": 7046,
+        "bytes": 6586,
         "lines": 107,
-        "sha256": "00bb7132dc3858fb4c9845ca7b8229f8dd5cdfbf880cdeeff46221082f0838a3"
+        "sha256": "23411ef2dcec1f2f5b45c01133e0fecec30f22d6c42e729d02cc631e179e7d56"
       },
       "alloy": {
         "bytes": 5800,
@@ -17316,9 +17316,9 @@
         "sha256": "bdd004ca81bd50bcca5eca6abe81421df564cff0ebb0f51de30188751fc663f3"
       },
       "english": {
-        "bytes": 5298,
+        "bytes": 4838,
         "lines": 57,
-        "sha256": "07a0312e3a2f9f7969a88262716c76bf2f9ed16c0bb39e76903b550214005fc1"
+        "sha256": "a13432c8318e463ba43aed2c7b1eb12a14956db6ed160cbb75db7bcd0b8381a1"
       },
       "json": {
         "bytes": 8003,
@@ -17516,9 +17516,9 @@
     },
     "library/penal_code/s440_mischief_committed_after_preparation_made/statute.yh": {
       "akomantoso": {
-        "bytes": 6366,
+        "bytes": 5906,
         "lines": 103,
-        "sha256": "40ef8ca1d8af825fa2569110ac45b9907fbfb7f27c884a67cc4212a8fbff0908"
+        "sha256": "5023ff8a8a3784c191f1b4cc77205a2bf3e946de50a6edea2899be835b94d6a0"
       },
       "alloy": {
         "bytes": 4965,
@@ -17526,9 +17526,9 @@
         "sha256": "62d09f22a0bee80511259f20c7b607580ccb404b8868592edc703381ede8bd67"
       },
       "english": {
-        "bytes": 4395,
+        "bytes": 3935,
         "lines": 44,
-        "sha256": "d63e8ce9871c61e5cd8678b2e13d7957ec54a4843790b97e86b408e1e9df4aa8"
+        "sha256": "2b182961a18be5b5deb6198fe00c2d9d4bb589136a704d6fce4e3b0993c7cd84"
       },
       "json": {
         "bytes": 5607,
@@ -17558,9 +17558,9 @@
     },
     "library/penal_code/s441_criminal_trespass/statute.yh": {
       "akomantoso": {
-        "bytes": 6900,
+        "bytes": 6486,
         "lines": 105,
-        "sha256": "3e2e3feaa3c5db0d1eb24c32a5f7ebb10f1be2389c9f44bfb17c995fbce87de5"
+        "sha256": "161f4628fabccd9c1bcffb735f06db5c69527096deaee84d7a43f49cab3834be"
       },
       "alloy": {
         "bytes": 6694,
@@ -17568,9 +17568,9 @@
         "sha256": "36ffd51ba2f7cbc0e498adbb24f214fa571894903f244b3d566fcb23a19e2ee7"
       },
       "english": {
-        "bytes": 4912,
+        "bytes": 4498,
         "lines": 57,
-        "sha256": "8c83b5ef9b0848b0d78445ffd0f6609d8bc3a1f909c128c596dd9c275232874c"
+        "sha256": "a6a842ba20a2914de22b0f7c82a01d4c372f0a66a991c629b407fcd1550fb3f4"
       },
       "json": {
         "bytes": 10600,
@@ -17578,9 +17578,9 @@
         "sha256": "71b634b6a3a2fc241e897c592f8d1d29721084ee41948ec2f909d753f58af175"
       },
       "latex": {
-        "bytes": 8306,
+        "bytes": 7616,
         "lines": 161,
-        "sha256": "e5133d7166887a3b293b4a548771420fb0b63bb7aa5c46f26fc91bf9f33ce119"
+        "sha256": "36d68bd0ac6ef2bac91b05a1609aa58bcb81ffcf0d967500d74cef62cc3a07b2"
       },
       "legalruleml": {
         "bytes": 17098,
@@ -17600,9 +17600,9 @@
     },
     "library/penal_code/s442_house_breaking/statute.yh": {
       "akomantoso": {
-        "bytes": 6640,
+        "bytes": 6226,
         "lines": 105,
-        "sha256": "3af198ab66cae90fb6b4635b4a7b5c505ad7cab13d9100994e6624f22780be51"
+        "sha256": "221b3d6eefec03ea50900a22f2d96bdfcdf66868464d722a0329de6f28f05b96"
       },
       "alloy": {
         "bytes": 5279,
@@ -17610,9 +17610,9 @@
         "sha256": "2114819c160cc5f838573aee2144820bfd937aee7db39ae252cfba67631c6063"
       },
       "english": {
-        "bytes": 4343,
+        "bytes": 3929,
         "lines": 48,
-        "sha256": "b70adf285b3c3d900684cf76b6932a56cf638982bb0d0001ec35c61897ec0217"
+        "sha256": "7e6abf39a24df9f3be43d90ed1cfde74902cae13aa1b7f8e7482229117b2e5dc"
       },
       "json": {
         "bytes": 7090,
@@ -17642,9 +17642,9 @@
     },
     "library/penal_code/s447_punishment_criminal_trespass/statute.yh": {
       "akomantoso": {
-        "bytes": 5377,
+        "bytes": 4963,
         "lines": 93,
-        "sha256": "d3dcc6c96fc2e68babdbd016a76c9d50f7dbe65042ed0ac44914d5fcdade3570"
+        "sha256": "c612b86f0cdc2f40ca40e5dc3cca9b31e71b4ee6723bce957dc606c3eccb3ad1"
       },
       "alloy": {
         "bytes": 4324,
@@ -17652,9 +17652,9 @@
         "sha256": "78610e2466d4fe83c63b863b2461c4d564d208297cc102cd6fdcccfd9ffe7c02"
       },
       "english": {
-        "bytes": 3800,
+        "bytes": 3386,
         "lines": 42,
-        "sha256": "09af330c7f3c71593ddf8a4285eb01c1b8579bc63fe604b6be70d781e324db83"
+        "sha256": "acc2b59d204c39d399a3b68e5f5f5320a604b0b2bc3f98c5728b1eeeaf8ad3f6"
       },
       "json": {
         "bytes": 6937,
@@ -17662,9 +17662,9 @@
         "sha256": "17d0bf49b84bfbade7482ec6ce38c0fee7421435c346b52c01832eeebdd214c3"
       },
       "latex": {
-        "bytes": 6942,
+        "bytes": 6252,
         "lines": 141,
-        "sha256": "f8c170ecaca277a90bdb68c055583a0371ab85c03597020303aeafeaf3d14608"
+        "sha256": "6781c17da33ae8c561a240758f3eac8fb69bfb008fb70606cc509228d653ac94"
       },
       "legalruleml": {
         "bytes": 14551,
@@ -17684,9 +17684,9 @@
     },
     "library/penal_code/s448_punishment_house_breaking/statute.yh": {
       "akomantoso": {
-        "bytes": 5428,
+        "bytes": 5014,
         "lines": 94,
-        "sha256": "ab85d7b6f18232693f18ead203ca12b12c900c1dcbc9c05a67b49eae29de7f6e"
+        "sha256": "46b3a0cbbad068014760563875af5a2d1f19ad9ca79e704ffaee86b81586b2c8"
       },
       "alloy": {
         "bytes": 4056,
@@ -17694,9 +17694,9 @@
         "sha256": "df238c44f999dc060c9b73e109eafcd2029491ac3fd431c5ca3ec6deedc1ef95"
       },
       "english": {
-        "bytes": 3539,
+        "bytes": 3125,
         "lines": 36,
-        "sha256": "1d4a2a969ec427f3a3496bac1d7ac822fbad73727b2dac3f8df9dc34c71c3cdb"
+        "sha256": "be94704359de94e25636715dfc0b7fae7f38be09963df55e6c4eb1e427d308eb"
       },
       "json": {
         "bytes": 4368,
@@ -17726,9 +17726,9 @@
     },
     "library/penal_code/s449_house_breaking_order_commit_offence/statute.yh": {
       "akomantoso": {
-        "bytes": 5418,
+        "bytes": 5050,
         "lines": 92,
-        "sha256": "89b4ccd4f9f1b251dbbf8eeeb2c42a9370028d04203114c23858d765722ce588"
+        "sha256": "b55ec9c93b43ee6345cd6811495a13e21cbb70a8f45b92327a7bcb9709cbf4da"
       },
       "alloy": {
         "bytes": 4535,
@@ -17736,9 +17736,9 @@
         "sha256": "579a0b7bdb1e02d671ee0097b1e16121b6d57ea59645d0a638f690ff901db1c1"
       },
       "english": {
-        "bytes": 4045,
+        "bytes": 3677,
         "lines": 50,
-        "sha256": "e13691533b09ad9dd339e6847fb72e44c0234a89e4c402d4f2cecc38e1bc2717"
+        "sha256": "f9d681ce2d576bee7a6cca0cfcafff618a9191c3adf2829aed2993b4cf1fa141"
       },
       "json": {
         "bytes": 5673,
@@ -17852,9 +17852,9 @@
     },
     "library/penal_code/s450_house_breaking_order_commit_offence/statute.yh": {
       "akomantoso": {
-        "bytes": 5871,
+        "bytes": 5503,
         "lines": 96,
-        "sha256": "e8b5ffc920ffac4a7101d797ff4b2509cfc52a3ebc3032dafec9587598d04ace"
+        "sha256": "28ba8763423ca490e1777609f15e94bb38a0cf2b82772c52f407acd1039bb930"
       },
       "alloy": {
         "bytes": 4652,
@@ -17862,9 +17862,9 @@
         "sha256": "2afe5799f4e3470147380a3856f863d16d732053b9d61da67fd9dff7fa775edc"
       },
       "english": {
-        "bytes": 3732,
+        "bytes": 3364,
         "lines": 42,
-        "sha256": "1f7dbd2489c6997af3e60e001b244ca31c336ace7293b7df0e97f48cfc7e338a"
+        "sha256": "85e8dce08da73c08fb56cb38e15a094f7bb55016ac15c62ff985088fa06e1389"
       },
       "json": {
         "bytes": 5348,
@@ -17894,9 +17894,9 @@
     },
     "library/penal_code/s451_house_breaking_order_commit_offence/statute.yh": {
       "akomantoso": {
-        "bytes": 5455,
+        "bytes": 5087,
         "lines": 92,
-        "sha256": "d2f7c7c0d52750a6ca1c82e477638b48c957f273172483b8476d239c315859f8"
+        "sha256": "310d0f4537a635680327ef11d2ef2a38f3d2336bee745b160eb106eb4a24c944"
       },
       "alloy": {
         "bytes": 4601,
@@ -17904,9 +17904,9 @@
         "sha256": "3cf62481c9dc3ce8c229098d2cfe181b54d89bbf3474310d2d6d59596f9d1880"
       },
       "english": {
-        "bytes": 3537,
+        "bytes": 3169,
         "lines": 38,
-        "sha256": "21d2ebdfe939808d88460d4c453a674b142533a13abc6de9665ee8e9421ab001"
+        "sha256": "d16ab39fdbbb183ca0d0308a5878c7b2183ce8a821305446569ad805ac1834a0"
       },
       "json": {
         "bytes": 4824,
@@ -17936,9 +17936,9 @@
     },
     "library/penal_code/s452_house_breaking_after_preparation_made/statute.yh": {
       "akomantoso": {
-        "bytes": 6221,
+        "bytes": 5853,
         "lines": 97,
-        "sha256": "edd7845f1663d2baf21cb71cdc7b9f2bdaa90081eb780a327ba4589dea91bd22"
+        "sha256": "09a5ba761410912504f406e5fb0986c4b0e8cea27ebb0938e4af3078894ed53c"
       },
       "alloy": {
         "bytes": 5937,
@@ -17946,9 +17946,9 @@
         "sha256": "3e117447a78710b6a32230399f9e1ab0d1309bb46b91f66fa681267012de93ec"
       },
       "english": {
-        "bytes": 4613,
+        "bytes": 4245,
         "lines": 56,
-        "sha256": "36a37d3e62d22eedc5f41cad783bc7927ec8416fc10cd9f1586bfd312a76b6d1"
+        "sha256": "4393c7b7df8ee83218d50787b443f272322ee4bb4cd7cb64539f40e215a891f1"
       },
       "json": {
         "bytes": 7810,
@@ -17978,9 +17978,9 @@
     },
     "library/penal_code/s453_possession_house_breaking_implements/statute.yh": {
       "akomantoso": {
-        "bytes": 7164,
+        "bytes": 6796,
         "lines": 116,
-        "sha256": "0a4887407fef0b1b82a0506f558e39a76b500826b1dcafeddaac74d1122ed55c"
+        "sha256": "d584527c871c15311e62a366c5e3227a55ae5d70e7653be6ee59fcc716fe723d"
       },
       "alloy": {
         "bytes": 5001,
@@ -17988,9 +17988,9 @@
         "sha256": "9bee3bbbb5aca7c5cada466fde11fb46cb9ee1347e60b291df292f72f6a9c746"
       },
       "english": {
-        "bytes": 3217,
+        "bytes": 2849,
         "lines": 33,
-        "sha256": "4be4b14d94e19b57ce09fe61350b1afc4f53ba3c2384c2ef54711e77f25866bf"
+        "sha256": "c71e6ce2195f9505601a5d8f7762a19a2be1d7acb2b5431e5ddb9f59223f3794"
       },
       "json": {
         "bytes": 11502,
@@ -18062,9 +18062,9 @@
     },
     "library/penal_code/s459_grievous_hurt_caused_while_committing_house/statute.yh": {
       "akomantoso": {
-        "bytes": 6854,
+        "bytes": 6394,
         "lines": 109,
-        "sha256": "353871c08889f8b40df9af62aa06935722229d23667dbd0fd1dd956a280ec4fd"
+        "sha256": "b853049e0fe6fe98c397df5d5769cd3e11a397029ef1bf91ccc97e0977da7276"
       },
       "alloy": {
         "bytes": 5581,
@@ -18072,9 +18072,9 @@
         "sha256": "6d2cb81a1635cb7193fab603d35487ced3262799db29936c17bb292e48e7b6e5"
       },
       "english": {
-        "bytes": 4961,
+        "bytes": 4501,
         "lines": 58,
-        "sha256": "c1ab3ba5ab6a091bac0af09b7f754b4a9d44e47e7dd563ed7a0e70a9da10ebc7"
+        "sha256": "c703df40d711a481a8b21f18ace7fcdc1872c7bd6761cd60d003d37ef6caa4bf"
       },
       "json": {
         "bytes": 9139,
@@ -18082,9 +18082,9 @@
         "sha256": "1d151a33900d3e47fa7d4e60be1aabc2e56fd4d630366fec2612316b1046b84f"
       },
       "latex": {
-        "bytes": 8254,
+        "bytes": 7564,
         "lines": 163,
-        "sha256": "992e997ee94fec90d1fc22d51b95a2b33312b3e093b659c113b02140b0b8a96e"
+        "sha256": "c84bfeeaa55d4bf77e5c58b9b64a11ce8484a86f2fc33acbb04cdf464d55a255"
       },
       "legalruleml": {
         "bytes": 17988,
@@ -18146,9 +18146,9 @@
     },
     "library/penal_code/s460_house_breaking_when_death_grievous_hurt/statute.yh": {
       "akomantoso": {
-        "bytes": 7169,
+        "bytes": 6709,
         "lines": 109,
-        "sha256": "ea88991b54eab87ca6fb9fec2bcfb873602c16c97c52a43cc5861fc9aa6bb062"
+        "sha256": "33feb8bedee84a0d3828a21632104d786a116aceb28afadf6bac9415a2600138"
       },
       "alloy": {
         "bytes": 6426,
@@ -18156,9 +18156,9 @@
         "sha256": "a614b07a08d2d912c9ba08d069f831a6d1135a8b79882f5b931f87df95afe437"
       },
       "english": {
-        "bytes": 5083,
+        "bytes": 4623,
         "lines": 56,
-        "sha256": "d1bf27cd3fdcad22eb47e0e3e38ad9de33580357a5369f070aa8382ec361536c"
+        "sha256": "6b6e3d961146e1d2ff269688e29c5b8d7883095a3cb71b233e68db1d326ff068"
       },
       "json": {
         "bytes": 9955,
@@ -18166,9 +18166,9 @@
         "sha256": "dd9c1ad116298cb58157f030baef1200e4d2afd45b2a6e4780ff64de5026160c"
       },
       "latex": {
-        "bytes": 8447,
+        "bytes": 7757,
         "lines": 159,
-        "sha256": "ca4c32e7b10f1370870a6376d7f6512a6cfd44ff5b3fe5093a1f55151596b345"
+        "sha256": "1a82f0fe0031791ff5d3d0928670d996976bc4f31caf179440bcbcec0c88205b"
       },
       "legalruleml": {
         "bytes": 18262,
@@ -18188,9 +18188,9 @@
     },
     "library/penal_code/s461_dishonestly_breaking_open_closed_receptacle/statute.yh": {
       "akomantoso": {
-        "bytes": 6361,
+        "bytes": 5947,
         "lines": 102,
-        "sha256": "e37b7e7e6c1752fc7acb6f45bfd089f0afdcb279ce452257ee212bb07f004d72"
+        "sha256": "96bff7f63fb0423972e3fa325d9f6b6fe6cb4f8ad6aa78d90646207904289971"
       },
       "alloy": {
         "bytes": 5637,
@@ -18198,9 +18198,9 @@
         "sha256": "f160e9a2bcbfc253f3fe1f516a1fc18bd4d8c0729f11a29b33835663050fb469"
       },
       "english": {
-        "bytes": 4591,
+        "bytes": 4177,
         "lines": 52,
-        "sha256": "06e1f43329dfe7f3569573d934e44abcad7d813adb40ea93331f3c98928f4f40"
+        "sha256": "725cfdd9fb9932921d2bea9341e780615270733dc83acf9a4dc4426168dc9fa1"
       },
       "json": {
         "bytes": 7694,
@@ -18230,9 +18230,9 @@
     },
     "library/penal_code/s462_punishment_same_offence_when_committed/statute.yh": {
       "akomantoso": {
-        "bytes": 6268,
+        "bytes": 5854,
         "lines": 101,
-        "sha256": "18a7298f5eaea1154886e7ce0517904abd516915e45112eb5d6e8ddd79928d2c"
+        "sha256": "3f52cbc52320983a65b62238dbac7f79dc11041f65dc70c27576609f27af2c53"
       },
       "alloy": {
         "bytes": 5441,
@@ -18240,9 +18240,9 @@
         "sha256": "39a5f0255faf8d5d0777a076180cb55832bc09db3d3e2b0d173d7a4854d2dbc3"
       },
       "english": {
-        "bytes": 4379,
+        "bytes": 3965,
         "lines": 49,
-        "sha256": "6f8ad3123d0b0b5a54736fb617b5194e8c50bd39b3a5513498aa784b046c91f2"
+        "sha256": "40639afbfae7ef49286ba7741f8d3e1b7b75b0be96c822586728dc72520c9365"
       },
       "json": {
         "bytes": 7009,
@@ -18272,9 +18272,9 @@
     },
     "library/penal_code/s463_forgery/statute.yh": {
       "akomantoso": {
-        "bytes": 6565,
+        "bytes": 6197,
         "lines": 104,
-        "sha256": "f113fe03047b70eb09e0ed8fc4770964cc560f27b6b5b3aaec8d15dc90e2a030"
+        "sha256": "c678aa3a1b450dca18c1ec72324fae455170680a47dc905bd8ba26484d4f71a5"
       },
       "alloy": {
         "bytes": 5354,
@@ -18282,9 +18282,9 @@
         "sha256": "c435d132a319ada55529724e26e4f94fa687545589ff9532582c9d27be2ee3fe"
       },
       "english": {
-        "bytes": 4699,
+        "bytes": 4331,
         "lines": 72,
-        "sha256": "b90880e41ea7f7f3cabd2fbb93ac59d82bdcc0a3cc3470628302cb781bf44b0a"
+        "sha256": "348248c5e78824b8648b882ef6e4f05af9c638153d64eb621a5f0cbb6b5cb4f7"
       },
       "json": {
         "bytes": 11460,
@@ -18292,9 +18292,9 @@
         "sha256": "859f6cd99de75c6363a0d9eeb9be1aa6c055bdd04a98a9d69c0118c2ca4bf352"
       },
       "latex": {
-        "bytes": 9107,
+        "bytes": 8233,
         "lines": 181,
-        "sha256": "32ad9f88731db98595a047dd5b4d70bd29b2e288afebc4445ab4b7b5faa0e65c"
+        "sha256": "28b95a7a4d28fe8342f1a7826f2452ae33d542d7f1cd6d898b52e78503a30e4a"
       },
       "legalruleml": {
         "bytes": 15949,
@@ -18356,9 +18356,9 @@
     },
     "library/penal_code/s465_punishment_for_forgery/statute.yh": {
       "akomantoso": {
-        "bytes": 5674,
+        "bytes": 5306,
         "lines": 96,
-        "sha256": "04d79720f8f8de9f1875b29fe56dd169c086743f950fb665bfbb1562a6476126"
+        "sha256": "fe0f2127588cb597984a5d308c107c991659088125f586116066ee0d37bd3ce4"
       },
       "alloy": {
         "bytes": 4632,
@@ -18366,9 +18366,9 @@
         "sha256": "4f254c2bdb842ad18c0b1d2a33e8d0a59b6c00eada1f148299bf2be4b294d375"
       },
       "english": {
-        "bytes": 3989,
+        "bytes": 3621,
         "lines": 59,
-        "sha256": "c4adcf58d3478166552c49f449db59b777120106e7361fa5d80616252643347f"
+        "sha256": "9c901386ebae9de51b233c8fc8db63ae0de0f64f3d952c978620cf60d49aa537"
       },
       "json": {
         "bytes": 7848,
@@ -18376,9 +18376,9 @@
         "sha256": "a0a2aec44b80901ff2cb4341b476ea62c01d5d9ed9840b1f408a2d70de1ca93f"
       },
       "latex": {
-        "bytes": 6904,
+        "bytes": 6352,
         "lines": 164,
-        "sha256": "b67c08fd7c80ea50521adcbb9aeb34f751da8ad42756e1e91d3df4e113e273de"
+        "sha256": "9ad41c08f5d7e36983194384a9085ec9dfae4f159b92d64c56ebe347571ce783"
       },
       "legalruleml": {
         "bytes": 14303,
@@ -18418,9 +18418,9 @@
         "sha256": "dac8becad35aec653e126c042dc7133a429f612e0edaa751e7c0c19968b2b719"
       },
       "latex": {
-        "bytes": 7621,
+        "bytes": 6931,
         "lines": 138,
-        "sha256": "6e99ea20615645298d42985e5be9605dadae0cbe7d5b4b1b8109487389852b19"
+        "sha256": "8416384528d598a91a0b938a22d7c6c80c7e8cecc4e83d7aab88de1016cf30c8"
       },
       "legalruleml": {
         "bytes": 5436,
@@ -18440,9 +18440,9 @@
     },
     "library/penal_code/s467_forgery_valuable_security_will/statute.yh": {
       "akomantoso": {
-        "bytes": 6660,
+        "bytes": 6292,
         "lines": 99,
-        "sha256": "d08655ae45b07e4646f59024f926490cce05ffa01aee5b49764135e311ebe736"
+        "sha256": "63aad139bdc6b80a6a0ecc76858c1c0e6a3a76b4895824b1f2e164e76b176070"
       },
       "alloy": {
         "bytes": 6619,
@@ -18450,9 +18450,9 @@
         "sha256": "76f14c3344c0aeb875d5b39125e6a6beb423f163ba60c2bb7d5680ed50fcb284"
       },
       "english": {
-        "bytes": 4605,
+        "bytes": 4237,
         "lines": 53,
-        "sha256": "305194a482c1ea142f0570de7969c84b3c98b245758a1d373f7b4fbd843327ac"
+        "sha256": "fb225616b62574b4546cee9843712a0926ed6cab61991caabc62973db253625f"
       },
       "json": {
         "bytes": 10440,
@@ -18460,9 +18460,9 @@
         "sha256": "9e746adf8b94c47755bdae68e17cc69fc1546f9681ec5b409725873be75ab24e"
       },
       "latex": {
-        "bytes": 8479,
+        "bytes": 7789,
         "lines": 158,
-        "sha256": "b4c66bdc5604c74bbac588ff4fa4f57942be8be4f9f466e3c7bc861ff67493a7"
+        "sha256": "e2cd7149cfc6b4590966220e672f41f90383266e89752669f1acf5be140a0aa6"
       },
       "legalruleml": {
         "bytes": 16390,
@@ -18482,9 +18482,9 @@
     },
     "library/penal_code/s468_forgery_purpose_cheating/statute.yh": {
       "akomantoso": {
-        "bytes": 5361,
+        "bytes": 4993,
         "lines": 92,
-        "sha256": "1519e60254338133f2b76bb15494d1d8eabcc68863cc6c4adffeda6a01f13e3c"
+        "sha256": "720fba3b3a631cc15e80f06943950af7bc01ef8b747d91cdcd8e400914529a31"
       },
       "alloy": {
         "bytes": 4863,
@@ -18492,9 +18492,9 @@
         "sha256": "317ffeecc6a1baff242768bc3acbe1aa51ba22dffad4dbda272e1c2da5135e30"
       },
       "english": {
-        "bytes": 3707,
+        "bytes": 3339,
         "lines": 45,
-        "sha256": "a79b7b52b2069504aecefc3ef8b286a804c7762fa2e1a3ee3c47fa462801650a"
+        "sha256": "14133cdb8fe4a2a87dc81ff79e85f91f4e76be64d24e3a9c1a015d491aec1300"
       },
       "json": {
         "bytes": 7420,
@@ -18502,9 +18502,9 @@
         "sha256": "053b5e528e3b62a46a8a446160b1cb233031663ec782e2cb9c1fad9d7ff4dc01"
       },
       "latex": {
-        "bytes": 7196,
+        "bytes": 6506,
         "lines": 148,
-        "sha256": "ef3e50c4dd06fda99999044776c86a62699921f2dfe130ec0767aa63a781d6f8"
+        "sha256": "63ffc516fb57fb7036e9cc6bbb5390dfceaca2ca78b6b798810951a167a197ae"
       },
       "legalruleml": {
         "bytes": 14016,
@@ -18524,9 +18524,9 @@
     },
     "library/penal_code/s469_forgery_purpose_harming_reputation_person/statute.yh": {
       "akomantoso": {
-        "bytes": 4650,
+        "bytes": 4374,
         "lines": 80,
-        "sha256": "0a59faf79d6ae3e58679770b5cd09ee33df7f9ab8673acb14a3f1dbb2d9519f9"
+        "sha256": "0d79ffeffaa58537922e0968bd51240ae78fbd89d32e32af0c0270dde8362e5c"
       },
       "alloy": {
         "bytes": 4278,
@@ -18534,9 +18534,9 @@
         "sha256": "0ff316fca523d7df1581601ede11f74e17690a1d3574996ce3f302cb99ca634f"
       },
       "english": {
-        "bytes": 3143,
+        "bytes": 2867,
         "lines": 37,
-        "sha256": "3900c60564d96af0ac101247e7eb02aa081c12f491879d066e5c3e4ea221eb46"
+        "sha256": "f328e88ebb32c6d372fde7fed34430a474ccfec093c3564e28eef338cd444e0a"
       },
       "json": {
         "bytes": 5047,
@@ -18650,9 +18650,9 @@
     },
     "library/penal_code/s471_using_genuine_forged_document_forged/statute.yh": {
       "akomantoso": {
-        "bytes": 6157,
+        "bytes": 5789,
         "lines": 98,
-        "sha256": "d1269f339eb2013afa0fbf12ff3dfd1911524694beecd3690764df1969df7b2c"
+        "sha256": "6b13d7f6e5f10178e90d6dddbbc5032c9adfa0879e7f3a5b7b07bc5b7e671792"
       },
       "alloy": {
         "bytes": 5227,
@@ -18660,9 +18660,9 @@
         "sha256": "a3e15febeca66931233dc394d4d2c3b461baad76a041f690d75ccdc398a43276"
       },
       "english": {
-        "bytes": 4474,
+        "bytes": 4106,
         "lines": 54,
-        "sha256": "9be51011b9295d50dbf9cdbb21f482ddeffe1fa78429c0775249f8b811222bc1"
+        "sha256": "a7d17fc95076e5a09f5eac1a6b7246cec05961fa587746624b09205320f4174f"
       },
       "json": {
         "bytes": 8795,
@@ -18670,9 +18670,9 @@
         "sha256": "bec1725659d511ede91cf7549610dcb5e9d8eb1ca0ab2ea6ef6ef00590e6cfa8"
       },
       "latex": {
-        "bytes": 8281,
+        "bytes": 7591,
         "lines": 160,
-        "sha256": "977e5976edfb7ca70de1e41a05ed7acdd45bfc9373e77c2c40cd6f8983b8930e"
+        "sha256": "948e16cdfe50453cf539078241aa7cd37c405a6a203996c5979004a7bd79cbc0"
       },
       "legalruleml": {
         "bytes": 15961,
@@ -19028,9 +19028,9 @@
     },
     "library/penal_code/s477A_falsification_accounts/statute.yh": {
       "akomantoso": {
-        "bytes": 7125,
+        "bytes": 6757,
         "lines": 101,
-        "sha256": "7ae0969544cbea18b7927d484b398d9d9c679a2bf624a8dfce2faefa67797d28"
+        "sha256": "fcba2235782949ee89f7b28a38b2d88f702747c3558c9324981010861b474d23"
       },
       "alloy": {
         "bytes": 6119,
@@ -19038,9 +19038,9 @@
         "sha256": "1b4efd5289617f93c8b13a7e81eb176f46ed7c81bab8afb645fc314de7f6bd71"
       },
       "english": {
-        "bytes": 5053,
+        "bytes": 4685,
         "lines": 54,
-        "sha256": "d3d80ec13f49748fe69e4b1c8f7cd82993512989f7642bdd26232457ebb2ce74"
+        "sha256": "faccff8bb98cb5405be8e8597e04b3387d1d1f61a42d6444fb036c3883dea0a1"
       },
       "json": {
         "bytes": 10238,
@@ -19048,9 +19048,9 @@
         "sha256": "bb8dfa99c64c48d4c9da37d4791e481d4465da3526ebde71cf85a3033401df71"
       },
       "latex": {
-        "bytes": 8710,
+        "bytes": 8020,
         "lines": 163,
-        "sha256": "0d1fd61b7c5a03b10c086fa9e23de8b55505a7577f6f10890960144a46bf2af5"
+        "sha256": "5834aed9117d52ac017d57988a5cd7a0cd4c073de7b78f64e9edee14d0e06cd3"
       },
       "legalruleml": {
         "bytes": 16803,
@@ -19070,9 +19070,9 @@
     },
     "library/penal_code/s477_fraudulent_cancellation_destruction_etc_will/statute.yh": {
       "akomantoso": {
-        "bytes": 6063,
+        "bytes": 5787,
         "lines": 92,
-        "sha256": "81235913958c32f22442da8b71a7b0a43762735fbd7f9693c8383a672c5828ee"
+        "sha256": "0810fc2e38466096249eda4d92f828dc359b866f7e21506dacd932db9b2e8071"
       },
       "alloy": {
         "bytes": 7340,
@@ -19080,9 +19080,9 @@
         "sha256": "be1086210cca96295cae4cbe46937e3fcf296ef7022f4ff75d8ee716aae7e556"
       },
       "english": {
-        "bytes": 4034,
+        "bytes": 3758,
         "lines": 51,
-        "sha256": "8eda4cefc69e1a7a46c5fd36b4fd2d01f450b376440ae9c056501941c155b549"
+        "sha256": "049c5243e344f7c1580d707dd63f4586e5848c965df399b3cef011b860623f1b"
       },
       "json": {
         "bytes": 9483,
@@ -19216,9 +19216,9 @@
         "sha256": "2bffdb4bc3f4fa45232a09f331cc0a20ff5ff9cecdfecaff090c3b8c3c7d7dbb"
       },
       "latex": {
-        "bytes": 6288,
+        "bytes": 5598,
         "lines": 127,
-        "sha256": "aee870da1f7f876972e2637bd9174f2c0a18dca6db309696f43067fb919136ed"
+        "sha256": "8ff2223116ccf6cc12037decadd1344c4fa40bbced1ef067a03fbb65a5a063c9"
       },
       "legalruleml": {
         "bytes": 3024,
@@ -19258,9 +19258,9 @@
         "sha256": "cbbbd9180987bc6c2f38343bf7576639d6a52e1be9fd33f3777deb7a968af884"
       },
       "latex": {
-        "bytes": 6352,
+        "bytes": 5662,
         "lines": 128,
-        "sha256": "cdf0452a750b85fd515b572b7a949545dc6d7dea1a05e05cb2ea39ea36f561be"
+        "sha256": "89c92a821103866c52c6b20f041fe895aefc178c4717fa4bd40da439127be6eb"
       },
       "legalruleml": {
         "bytes": 3200,
@@ -19574,9 +19574,9 @@
     },
     "library/penal_code/s499_defamation/statute.yh": {
       "akomantoso": {
-        "bytes": 13138,
+        "bytes": 11666,
         "lines": 139,
-        "sha256": "cdb231f8cdc7a763bdd373289967fb43f9913f6a26fdeb41dd313f622be3faa5"
+        "sha256": "db936bd03ea7f7c539545559bc53500c8913839b42810a089b86fec529e89be0"
       },
       "alloy": {
         "bytes": 6759,
@@ -19584,9 +19584,9 @@
         "sha256": "e2f6f21eb6e11769b4618b0a50218516a967289971c18b33fd8de0c13fa905b1"
       },
       "english": {
-        "bytes": 6009,
+        "bytes": 5641,
         "lines": 89,
-        "sha256": "acbf6fd9e5539e27e302d84e80e26881e41cf02929469cd558387f77adfe4965"
+        "sha256": "6c2fca4762ead1a5fe392e3abfc636eaddc554aebd3d6668ee0b9b19ccb6cd71"
       },
       "json": {
         "bytes": 14693,
@@ -19594,9 +19594,9 @@
         "sha256": "fb265257a4af4f48c78a2ada92dcf7c2c0acd4154311b4227d30e982a2438c53"
       },
       "latex": {
-        "bytes": 11665,
+        "bytes": 10469,
         "lines": 192,
-        "sha256": "80353229e521d2745c1fef81c270565e8da7604a3878b8ee3a5b8c3395aa62de"
+        "sha256": "c8cb51192540c64be87111c25be48ac4a60896aa38ca981e3b0da1a4bacf4587"
       },
       "legalruleml": {
         "bytes": 24017,
@@ -19784,9 +19784,9 @@
     },
     "library/penal_code/s500_punishment_defamation/statute.yh": {
       "akomantoso": {
-        "bytes": 4877,
+        "bytes": 4509,
         "lines": 87,
-        "sha256": "be069b37e9626b3760f5a380b707e9ed143362a42c543874497759040ba6e690"
+        "sha256": "3e374a005345080301a509952cf759a700bdf4f0e8248993d61c651f9d0d3df8"
       },
       "alloy": {
         "bytes": 3806,
@@ -19794,9 +19794,9 @@
         "sha256": "7a78f3d1ff860001fda9afb19bfe8315b7c1e6bd2b537b0068dca4bca61f7e41"
       },
       "english": {
-        "bytes": 3129,
+        "bytes": 2761,
         "lines": 33,
-        "sha256": "caa8b30dd12d57ae90dd4b24b0850504d5a5dd5bc2d93373ceb8474c34dd0dcb"
+        "sha256": "0e316ea4fd2c2faae93303aecbd93a02771d7bb632d83080259be7015395ddd0"
       },
       "json": {
         "bytes": 3954,
@@ -19826,9 +19826,9 @@
     },
     "library/penal_code/s501_printing_engraving_matter_known_defamatory/statute.yh": {
       "akomantoso": {
-        "bytes": 5551,
+        "bytes": 5183,
         "lines": 92,
-        "sha256": "0ab3347bfa93f2b1761293b946fc96d6e83d1935b905ba624cb97e896cb813fb"
+        "sha256": "461b1f8ddafc5821292a87197a3b181d9667e343d07c986ab72fe84ee90a81de"
       },
       "alloy": {
         "bytes": 4808,
@@ -19836,9 +19836,9 @@
         "sha256": "1c09bc9b460e9e13fc208efbd8085a391386dd040bff2aa7dbf5888fb97d73c4"
       },
       "english": {
-        "bytes": 3775,
+        "bytes": 3407,
         "lines": 42,
-        "sha256": "43384139c487e502377085df3fa38e40c2897e0f34b6d200e70553b2e2c4ca1e"
+        "sha256": "2fca02bf77b07bfd414c6abe164fa13f6f91e18bd2a0ad30853cb9f8e2250448"
       },
       "json": {
         "bytes": 5528,
@@ -19868,9 +19868,9 @@
     },
     "library/penal_code/s502_sale_printed_engraved_substance_containing/statute.yh": {
       "akomantoso": {
-        "bytes": 5438,
+        "bytes": 5070,
         "lines": 91,
-        "sha256": "7e46ba57eaaab42724156ca95894fcf0cfe78acfbb6fdf9674f120c828b10969"
+        "sha256": "5d48966df18683059f278791271ececd23ab1892cb6359cdcf108d2fae491830"
       },
       "alloy": {
         "bytes": 4528,
@@ -19878,9 +19878,9 @@
         "sha256": "5cbb18323fc93603085fd6be50b7aa5b32b412f63027703dcb52f4fdc6697c34"
       },
       "english": {
-        "bytes": 3741,
+        "bytes": 3373,
         "lines": 41,
-        "sha256": "028e943e7ee36cb8baf78f3c2a78acc423104114a8ae25e2a4b4272828c18170"
+        "sha256": "73c4bc0d5e7a974e3b99c8c15e375d2eed2200f15a59862bf34fe19378f15ba6"
       },
       "json": {
         "bytes": 5226,
@@ -19910,9 +19910,9 @@
     },
     "library/penal_code/s503_criminal_breach_of_trust/statute.yh": {
       "akomantoso": {
-        "bytes": 5923,
+        "bytes": 5647,
         "lines": 92,
-        "sha256": "066a961992d0f6002b4e4996e04c4c04ea1dbc15d511583c4601a28337e28514"
+        "sha256": "1411ca997a7db354953480fcb6bb263e788712c3f9d68115a02fc9481db30594"
       },
       "alloy": {
         "bytes": 4949,
@@ -19920,9 +19920,9 @@
         "sha256": "95e7ef6b53702570b82309aaaf4be38ff19c7d2cb52d7b494921e02e21e50b9c"
       },
       "english": {
-        "bytes": 4258,
+        "bytes": 3982,
         "lines": 66,
-        "sha256": "8d864ee7c351f32c7201959716fb710bf37beb05fc4a946c2439536fb08bd322"
+        "sha256": "0b5d874a0f514567b26c7f14fce4b568489682f10db5be8d95b232ab8f2cc0f5"
       },
       "json": {
         "bytes": 11850,
@@ -19930,9 +19930,9 @@
         "sha256": "76d4274274d0d09ec6dca6c876689645a3c918693a2d79ec79ef220002626306"
       },
       "latex": {
-        "bytes": 10822,
+        "bytes": 9626,
         "lines": 177,
-        "sha256": "8ff19776da31a687be09a44dfc11f6d47c758bac3526f61f5a7da468c132b8c6"
+        "sha256": "60a8a978734813545cc70a53f7c697e2a9bbdf9ef73120ea384004b0aec88cbd"
       },
       "legalruleml": {
         "bytes": 13338,
@@ -19952,9 +19952,9 @@
     },
     "library/penal_code/s504_intentional_insult_intent_provoke_breach/statute.yh": {
       "akomantoso": {
-        "bytes": 4659,
+        "bytes": 4383,
         "lines": 80,
-        "sha256": "98caa4ea5b0ad7b323986df821d7a762c23f68966afb33707323c6c9291ab45d"
+        "sha256": "5d1d20b7f13e8b482994a0a5d4be1dee4f527111f8eef4141cccb57541c0e764"
       },
       "alloy": {
         "bytes": 4442,
@@ -19962,9 +19962,9 @@
         "sha256": "4a6deb7a909dbc58feb338a3f710d6969e04388c4c76297a0839f729872fca84"
       },
       "english": {
-        "bytes": 3255,
+        "bytes": 2979,
         "lines": 39,
-        "sha256": "f184527d010fc1bf808466c2abab40545fd9241786538f06444f549165c5f71e"
+        "sha256": "d931c43a5ba80b2296c4125a95892c1b01fde66d13ee4ff1f7594073afbcc1ba"
       },
       "json": {
         "bytes": 6806,
@@ -19972,9 +19972,9 @@
         "sha256": "6aab015fcd220ebad21984452e2b5c063082586da8545ffb238b4935f180033b"
       },
       "latex": {
-        "bytes": 7265,
+        "bytes": 6575,
         "lines": 145,
-        "sha256": "3c7a6c3ef4370ec7045486098d2c07565bcc1b72330367b20a9437dcd54fdb12"
+        "sha256": "ba40458b9ff447dcf9069e112470d0b651fdd45b0436268f34f1feb809e3c4ee"
       },
       "legalruleml": {
         "bytes": 11528,
@@ -19994,9 +19994,9 @@
     },
     "library/penal_code/s505_statements_conducing_public_mischief/statute.yh": {
       "akomantoso": {
-        "bytes": 5950,
+        "bytes": 5674,
         "lines": 85,
-        "sha256": "6f6790dca663763336a874a34fa159ae7d1efbe5b2d4018e23170a1f78c803ca"
+        "sha256": "d122bec9916387581d463b09a7cc5b0c3a5191c61f0737d341b6bd693e10926b"
       },
       "alloy": {
         "bytes": 5531,
@@ -20004,9 +20004,9 @@
         "sha256": "64125acf6d105ada2cbb28f480fa37b2d92a081f0a78533961773437e850b4ed"
       },
       "english": {
-        "bytes": 4470,
+        "bytes": 4194,
         "lines": 46,
-        "sha256": "f939796f57ceb5dd5ada09ba478f5f1420e54ad47f0f10446000d4eaf28da04e"
+        "sha256": "42eb56f96cba7af0072604aca622c6f36ff94369f8efe128b39f3cc50dc1e14d"
       },
       "json": {
         "bytes": 8554,
@@ -20036,9 +20036,9 @@
     },
     "library/penal_code/s506_punishment_criminal_intimidation/statute.yh": {
       "akomantoso": {
-        "bytes": 4616,
+        "bytes": 4294,
         "lines": 82,
-        "sha256": "d24b46cfd335117d051f22fbe74b8d3fab314f4b368359cbd2e871a55379b830"
+        "sha256": "1441550d0f371465e925ca5e2fb731fc2481b3fe260088865019c655f6cdaaf7"
       },
       "alloy": {
         "bytes": 3855,
@@ -20046,9 +20046,9 @@
         "sha256": "798fc113aec60839b1d0b544563f911d5118df4090b349d68fc90d32898589e5"
       },
       "english": {
-        "bytes": 3294,
+        "bytes": 2972,
         "lines": 39,
-        "sha256": "1035015ec0da9d83fa30a894d04c5913fed4c6c1608f3933501bd26d5da8591b"
+        "sha256": "638c31ed1a0e722f108e5296ef74cf6b8757540a680a5d8278dd8b138331d9ca"
       },
       "json": {
         "bytes": 6531,
@@ -20056,9 +20056,9 @@
         "sha256": "bb733a0fb7b4efb238724a5854569273b4aff07b1f39ec4adc3e0f768dce461c"
       },
       "latex": {
-        "bytes": 6669,
+        "bytes": 5979,
         "lines": 136,
-        "sha256": "279e9e14d0c755e87a7ea6dd14b2c81397e356f65cc93d22a0df2b37343add34"
+        "sha256": "cd48e0bf4a751eefbe11e7ba92476866d7758e2e7ced332f9ad91ab321f35b53"
       },
       "legalruleml": {
         "bytes": 12570,
@@ -20162,9 +20162,9 @@
     },
     "library/penal_code/s511_attempt_commit_offence/statute.yh": {
       "akomantoso": {
-        "bytes": 4939,
+        "bytes": 4663,
         "lines": 97,
-        "sha256": "ee6c0e85acffb4627143f1ea6e31ff754fbd50e57e9f723eaff94ea27649fc24"
+        "sha256": "3ae9aa10016926bdc9453b96ed692ff6c7d59853c804e4c216a386d9dda585bf"
       },
       "alloy": {
         "bytes": 3664,
@@ -20172,9 +20172,9 @@
         "sha256": "7af77ed59c35f57a2b7cf45a732780e09f7970a3b8720eff56529cddc8b188a0"
       },
       "english": {
-        "bytes": 2380,
+        "bytes": 2104,
         "lines": 27,
-        "sha256": "5a26ee7d5d8e54e173bad0b72adf0369d84e3e979ffc79b97656b31ca5c97d17"
+        "sha256": "441038d181b7910a4df6c68a3a7e5bc7daaa30f32f2427525dae587cf71f39ce"
       },
       "json": {
         "bytes": 8831,
@@ -21170,9 +21170,9 @@
     },
     "library/penal_code/s82_act_child_below_10_years_age/statute.yh": {
       "akomantoso": {
-        "bytes": 3292,
+        "bytes": 3108,
         "lines": 53,
-        "sha256": "220587f3622d6199bfa38423b6a5b301f0c9ae7fad98254dcf3613f0172c5780"
+        "sha256": "903f2162c680c2397d017393e01b8e0d184384f0ff0211b6127151cab2d1eec0"
       },
       "alloy": {
         "bytes": 2743,
