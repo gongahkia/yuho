@@ -28,6 +28,11 @@ the current file, then imported modules resolved through
 `ModuleResolver`, then the checked-in Penal Code reference graph from
 `library/reference_graph.py`.
 
+Completion returns core Yuho keywords and cross-section helpers. References
+returns same-file section uses plus the declaration when requested. Semantic
+tokens classify keywords, strings, and numeric section references. Code actions
+expose a `yuho.check` command for clients that wire command execution.
+
 ## VS Code
 
 The extension lives at `editors/vscode-yuho/`.

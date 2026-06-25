@@ -19,7 +19,7 @@ These are guidelines, not rules. Use your best judgment, and feel free to propos
 
 ## Code of Conduct
 
-This project and everyone contributing to it is governed by this [Code of Conduct](https://github.com/atom/atom/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [gabrielzmong@gmail.com](mailto:gabrielzmong@gmail.com).
+This project and everyone contributing to it is governed by the [Code of Conduct](../CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [gabrielzmong@gmail.com](mailto:gabrielzmong@gmail.com).
 
 ## What should I know before I get started?
 

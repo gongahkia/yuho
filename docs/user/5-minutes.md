@@ -345,9 +345,11 @@ available programmatically through `yuho.library.reference_graph`.
 
 ## Formal verification (advanced)
 
-Yuho can transpile to [Alloy](https://alloytools.org/) for formal consistency checking. This lets you verify properties like:
-
-> "No fact pattern can simultaneously satisfy s299 Culpable Homicide without also satisfying one of s300 Murder's exceptions."
+Yuho can transpile to [Alloy](https://alloytools.org/) for bounded
+shape-smoke checks. Alloy is secondary and explicitly unsupported for
+case-law, penalty, typed-burden, cross-section, and exception-priority
+semantics. Use it for exploratory model inspection, not as a parity trust
+boundary.
 
 ```bash
 yuho transpile library/penal_code/s300_murder/statute.yh -t alloy > murder.als

@@ -22,8 +22,8 @@ Status labels:
 | Explain | partial | `tests/test_explain_cli.py`, `tests/test_explain_english.py` | Explains element satisfaction, typed fact metadata, and targeted case-law annotations; does not yet implement mature precedent/proof-standard semantics. |
 | Debug | partial | `tests/test_debug_cli.py` | Useful element trace output; shares runtime fact-model limits. |
 | Reference graph | stable | `tests/test_reference_graph.py`, `tests/test_cli_refs.py` | Corpus graph for statute references and cycles. |
-| Z3 | partial | `tests/test_soundness_sanity.py`, `tests/test_z3_apply_scope.py`, `make verify-runtime-tests` | Conformance-tested SMT backend; solver encoding remains the trust boundary. |
-| Alloy | experimental | `tests/e2e/test_verify_pipeline.py` | Bounded model output; unsupported constructs must be treated explicitly. |
+| Z3 | partial | `tests/test_soundness_sanity.py`, `tests/test_z3_apply_scope.py`, `make verify-runtime-tests` | Conformance-tested SMT backend; unsupported case-law and typed-burden constructs are rejected explicitly by consistency checking. |
+| Alloy | secondary-explicit-unsupported | `tests/e2e/test_verify_pipeline.py`, `tests/test_alloy_unsupported.py` | Bounded shape smoke output only; unsupported constructs must be treated explicitly. |
 | Lean | partial | `make verify-mechanisation`, `make verify-structural-diff` | Mechanised spec/smoke evidence, not full corpus proof coverage. |
 | JSON transpiler | stable | `tests/test_transpile_snapshot_matrix.py` | Snapshot-tested over SG Penal Code. |
 | English transpiler | stable | `tests/test_transpile_snapshot_matrix.py` | Controlled English, not legal advice. |
@@ -42,6 +42,11 @@ fragment of its DSL. It should not be described as proving end-to-end legal
 correctness. Legal correctness still depends on source fidelity, open-textured
 terms, fact modeling, jurisdictional context, precedent, burden of proof, and
 the verifier/transpiler trust boundary.
+
+Backend parity claims are generated from
+`tests/fixtures/backend_parity/claims.json` by
+`scripts/verify_backend_parity.py`; docs/tests must update that fixture when
+backend claim boundaries change.
 
 ## External Baselines
 

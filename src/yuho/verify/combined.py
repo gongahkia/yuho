@@ -17,7 +17,7 @@ from yuho.verify.alloy import (
     AlloyGenerator,
     AlloyUnsupportedFeature,
 )
-from yuho.verify.z3_solver import Z3Solver, Z3Diagnostic
+from yuho.verify.z3_solver import Z3Solver, Z3Diagnostic, Z3UnsupportedFeature
 
 logger = logging.getLogger(__name__)
 
@@ -139,6 +139,9 @@ class CombinedVerifier:
             try:
                 is_consistent, z3_diags = self.z3_solver.check_statute_consistency(ast)
                 z3_results = z3_diags
+            except Z3UnsupportedFeature as e:
+                logger.warning(f"Z3 verification unsupported: {e}")
+                z3_available = False
             except Exception as e:
                 logger.error(f"Z3 verification failed: {e}")
                 z3_available = False

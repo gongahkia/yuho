@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 import sys
 
@@ -13,63 +14,23 @@ if str(SRC) not in sys.path:
 from yuho.cli.commands.verify import BACKEND_METADATA
 
 
-PARITY_LINKS = (
-    ("runtime-z3", "scripts/verify_runtime_tests.py"),
-    ("penalty-verdicts", "scripts/verify_penalty_verdicts.py"),
-    ("z3-lean", "scripts/verify_structural_diff.py"),
-    ("lean-verdicts", "scripts/verify_lean_expected_verdicts.py"),
-    ("lean-penalty-footprints", "scripts/verify_lean_penalty_footprints.py"),
-    ("alloy", "explicit unsupported-feature failures"),
-)
+PARITY_CLAIMS_REL = Path("tests/fixtures/backend_parity/claims.json")
+PARITY_CLAIMS = REPO / PARITY_CLAIMS_REL
 
-FEATURE_COVERAGE = (
-    (
-        "flat_elements",
-        "runtime-z3=covered; z3-lean=smoke; alloy=basic",
-    ),
-    (
-        "nested_all_of_any_of",
-        "runtime-z3=covered; z3-lean=smoke; alloy=unsupported-boundary",
-    ),
-    (
-        "exceptions_defeats",
-        "runtime-z3=covered; z3-lean=smoke; alloy=unsupported-boundary",
-    ),
-    (
-        "is_infringed_apply_scope",
-        "runtime-z3=covered; z3-lean=structural-link; alloy=unsupported-boundary",
-    ),
-    (
-        "penalties_money_duration",
-        "runtime-z3=imprisonment/fine/caning/death-model-verdict; z3-lean=penalty-footprint-bridge; alloy=unsupported-boundary",
-    ),
-    (
-        "lean_expected_verdicts",
-        "runtime-z3-lean=smoke+full-corpus-mixed+bounded-arity-verdicts; z3-lean=structural; alloy=unsupported-boundary",
-    ),
-    (
-        "optional_values",
-        "runtime-z3=covered; z3-lean=unsupported-boundary; alloy=unsupported-boundary",
-    ),
-    (
-        "case_law_doctrine",
-        "runtime=active-effects/positive-treatment-adoption/ordered-positive-adoption/followed-adoption/approved-adoption/applied-adoption/followed-approved-applied-noninactivation/ordered-cumulative/negative-treatment-nonadoption/distinguished-inactivation/overruled-inactivation/reversed-inactivation/disapproved-inactivation/fact-key/same-kind-nonconflict/own-effect/missing-target/effectless-target/target-remap/payload-preserve/metadata-override/target-metadata-fallback/cycle-cutoff/inactive-authority/jurisdiction-burden-shift-precedence-partial; z3=unsupported; lean=typed-fact-burden+effect-surface-alias+treatment-surface-alias+surface-precedence-rank+fact-key+same-kind-nonconflict+cumulative-effect+ordered-cumulative+negative-treatment-nonadoption+distinguished-inactivation+overruled-inactivation+reversed-inactivation+disapproved-inactivation+own-effect+ordered-positive-adoption+followed-adoption+approved-adoption+applied-adoption+followed-approved-applied-noninactivation+missing-target+effectless-target+target-remap+payload-preserve+adoption-cycle+effect-adoption-metadata+metadata-override+target-metadata-fallback+inactive-authority-jurisdiction-burden-precedence-rank-conflict-partial; alloy=unsupported",
-    ),
-    (
-        "typed_fact_burdens",
-        "runtime=element+case-law metadata guards; z3=unsupported; lean=burden/proof-standard guard lemmas; alloy=unsupported",
-    ),
-)
+
+def load_claims(path: Path = PARITY_CLAIMS) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def build_summary() -> str:
+    claims = load_claims()
     lines = ["=== backend parity ==="]
-    for name, evidence in PARITY_LINKS:
-        lines.append(f"{name}: {evidence}")
+    for link in claims["parity_links"]:
+        lines.append(f"{link['name']}: {link['evidence']}")
     lines.append("")
     lines.append("Feature coverage:")
-    for feature, status in FEATURE_COVERAGE:
-        lines.append(f"- {feature}: {status}")
+    for row in claims["feature_coverage"]:
+        lines.append(f"- {row['feature']}: {row['status']}")
     lines.append("")
     lines.append("Unsupported feature boundaries:")
     for backend in ("alloy", "z3", "lean", "combined"):

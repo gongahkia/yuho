@@ -16,15 +16,18 @@ import click
 from yuho.services.analysis import analyze_file
 from yuho.verify.alloy import AlloyAnalyzer, AlloyGenerator, AlloyUnsupportedFeature
 from yuho.verify.combined import CombinedVerifier
-from yuho.verify.z3_solver import Z3Solver
+from yuho.verify.z3_solver import Z3Solver, Z3UnsupportedFeature
 
 BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
     "alloy": {
-        "status": "experimental",
-        "role": "bounded-model-finder",
+        "status": "secondary-explicit-unsupported",
+        "role": "bounded-shape-smoke",
         "unsupported_features": [
             "case-law semantics",
-            "full runtime/Z3 parity for nested exception priority",
+            "penalty semantics",
+            "typed fact burden/proof-standard metadata",
+            "nested element-group parity beyond smoke fixtures",
+            "exception guards, priority, and defeat relations",
             "whole-code cross-section reasoning",
             "precise calendar arithmetic",
             "solver-independent proof certificates",
@@ -34,7 +37,8 @@ BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
         "status": "conformance-tested",
         "role": "smt-checker",
         "unsupported_features": [
-            "case-law semantics",
+            "case-law semantics (explicitly rejected by consistency checking)",
+            "typed fact burden/proof-standard metadata (explicitly rejected by consistency checking)",
             "rich evidential fact provenance",
             "precise calendar-duration verifier parity without a reference date",
             "full precedent and burden-shifting doctrine",
@@ -46,7 +50,7 @@ BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
         "role": "mechanised-spec",
         "unsupported_features": [
             "full corpus proof coverage",
-            "full case-law semantics beyond typed-fact/effect-surface-alias/treatment-surface-alias/surface-precedence-rank/fact-key/same-kind-nonconflict/effect/cumulative-effect/ordered-cumulative/negative-treatment-nonadoption/distinguished-inactivation/overruled-inactivation/reversed-inactivation/disapproved-inactivation/own-effect/ordered-positive-adoption/followed-adoption/approved-adoption/applied-adoption/followed-approved-applied-noninactivation/missing-target/effectless-target/target-remap/payload-preserve/adoption-cycle/adoption-metadata/metadata-override/target-metadata-fallback/inactive-authority/jurisdiction-burden-metadata/precedence-rank/conflict fragment",
+            "full case-law semantics beyond typed-fact/effect-surface-alias/treatment-surface-alias/surface-precedence-rank/vertical-stare-decisis-binding/binding-effect-gate/fact-key/same-kind-nonconflict/effect/cumulative-effect/ordered-cumulative/negative-treatment-nonadoption/distinguished-inactivation/overruled-inactivation/reversed-inactivation/disapproved-inactivation/own-effect/ordered-positive-adoption/followed-adoption/approved-adoption/applied-adoption/followed-approved-applied-noninactivation/missing-target/effectless-target/target-remap/payload-preserve/adoption-cycle/adoption-metadata/metadata-override/target-metadata-fallback/inactive-authority/jurisdiction-burden-metadata/precedence-rank/conflict fragment",
             "rich evidential fact provenance beyond typed burden metadata guards",
             "certified Z3 result reconstruction",
         ],
@@ -208,7 +212,11 @@ def run_verify(
         sys.exit(0 if ok else 1)
 
     if engine_key == "z3":
-        ok, diagnostics = z3_solver.check_statute_consistency(ast)
+        try:
+            ok, diagnostics = z3_solver.check_statute_consistency(ast)
+        except Z3UnsupportedFeature as exc:
+            _emit_unsupported("z3", exc.features, json_output)
+            sys.exit(2)
         z3_failures = [diagnostic for diagnostic in diagnostics if not diagnostic.passed]
         if json_output:
             print(

@@ -39,6 +39,11 @@ Each public grammar rule must have a matrix row containing:
 `tests/test_conformance_matrix.py` fails when a public grammar rule is added,
 removed, or left without semantic/backend status fields.
 
+Backend parity claim rows live at
+`tests/fixtures/backend_parity/claims.json`. The report generator
+`scripts/verify_backend_parity.py` reads that fixture, and tests verify that
+the fixture, capability metadata, and status docs stay aligned.
+
 ## Backend Status Policy
 
 Use these status meanings consistently:
@@ -67,10 +72,15 @@ Z3:
 - Penalty duration bounds use exact runtime month-end clamping when a
   verifier reference date is supplied; otherwise calendar units use explicitly
   labeled approximate day counts.
+- Case-law semantics and typed fact burden/proof-standard metadata are
+  explicitly rejected by Z3 consistency checking rather than silently encoded.
 
 Alloy:
 
-- Secondary/experimental. Unsupported verifier features fail explicitly.
+- Secondary bounded-shape smoke backend. Unsupported verifier features fail
+  explicitly; Alloy is not a parity trust boundary for penalties, case-law,
+  typed burden metadata, cross-section reasoning, or exception priority/defeat
+  semantics.
 
 Lean:
 

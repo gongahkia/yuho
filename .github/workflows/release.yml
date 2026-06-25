@@ -21,11 +21,15 @@ jobs:
     name: Build Package
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.12"
 
@@ -54,13 +58,36 @@ jobs:
       - name: Check package metadata
         run: twine check dist/*.whl dist/*.tar.gz
 
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
+        with:
+          path: .
+          format: spdx-json
+          output-file: dist/yuho.spdx.json
+          upload-artifact: false
+
+      - name: Generate checksums
+        run: |
+          cd dist
+          shasum -a 256 *.whl *.tar.gz *.spdx.json > SHA256SUMS
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@96b4a1ef7235a096b17240c259729fdd70c83d45
+        with:
+          subject-path: |
+            dist/*.whl
+            dist/*.tar.gz
+            dist/*.spdx.json
+
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: dist
           path: |
             dist/*.whl
             dist/*.tar.gz
+            dist/*.spdx.json
+            dist/SHA256SUMS
 
   docker:
     name: Build & Push Docker Image
@@ -70,24 +97,27 @@ jobs:
     permissions:
       packages: write
       contents: read
+      id-token: write
+      attestations: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
 
       - name: Log in to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push multi-arch
-        uses: docker/build-push-action@v5
+        id: build-and-push
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -97,6 +127,16 @@ jobs:
             ghcr.io/${{ github.repository }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          sbom: true
+          provenance: mode=max
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382
+
+      - name: Sign image digest
+        env:
+          IMAGE_DIGEST: ${{ steps.build-and-push.outputs.digest }}
+        run: cosign sign --yes "ghcr.io/${{ github.repository }}@${IMAGE_DIGEST}"
 
   publish:
     name: Publish to PyPI
@@ -111,10 +151,10 @@ jobs:
       contents: read
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: dist
           path: dist/
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b

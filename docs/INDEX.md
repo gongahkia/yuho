@@ -25,7 +25,9 @@ corpus tooling.
 - [SDK](contributor/sdk.md)
 - [Source maps](contributor/source-maps.md)
 - [Grammar pragma](contributor/grammar-pragma.md)
+- [Branch protection](contributor/branch-protection.md)
 - [Transpile snapshot matrix](contributor/conformance-matrix.md)
+- [Release hardening](contributor/release-hardening.md)
 - [Expert review checklist](contributor/expert-review-checklist.md)
 - [Transpiler plugins](contributor/transpiler-plugins.md)
 - [Porting guide](contributor/porting-guide.md)
@@ -36,6 +38,7 @@ corpus tooling.
 Audience: reviewers, researchers, and contributors tracing the design.
 
 - [Syntax reference](researcher/syntax.md)
+- [DSL spec v1](researcher/dsl-spec-v1.md)
 - [Formal semantics](researcher/formal-semantics.md)
 - [Canonical semantics](researcher/canonical-semantics.md)
 - [Feature status matrix](positioning/status-matrix.md)
@@ -43,7 +46,7 @@ Audience: reviewers, researchers, and contributors tracing the design.
 - [Yuho and L4 positioning](positioning/yuho-vs-l4.md)
 - [Why criminal law](positioning/why-criminal-law.md)
 - [Grammar quirks](grammar-quirks.md)
-- [OpenAPI note](researcher/openapi.yaml)
+- [Decision-service OpenAPI contract](researcher/openapi.yaml)
 - [Retrospective](retrospective.md)
 
 ### Archive
@@ -57,6 +60,11 @@ Audience: reviewers, researchers, and contributors tracing the design.
 
 - [Encoded Penal Code library](../library/penal_code/)
 - [Legislative drafting cookbook](cookbook/legislative-drafting.md)
+
+## Release
+
+- [Release verification](release/verification.md)
+- [Release evidence ledger](release/evidence.md)
 
 ## See Also
 

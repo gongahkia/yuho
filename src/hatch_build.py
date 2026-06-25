@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import hashlib
 import os
 import shutil
+import struct
 import subprocess
 import sys
 from pathlib import Path
@@ -67,7 +69,12 @@ def _compile_tree_sitter_library(
     if os.name == "nt":
         linker_flags = ["-shared"]
     elif sys.platform == "darwin":
-        linker_flags = ["-dynamiclib", "-fPIC"]
+        library_name = output_path.name
+        linker_flags = [
+            "-dynamiclib",
+            "-fPIC",
+            f"-Wl,-install_name,@rpath/{library_name}",
+        ]
     else:
         linker_flags = ["-shared", "-fPIC"]
 
@@ -87,6 +94,58 @@ def _compile_tree_sitter_library(
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as exc:
         raise RuntimeError("Failed to compile tree-sitter shared library") from exc
+
+    if sys.platform == "darwin":
+        _normalize_macho_uuid(output_path)
+        _adhoc_sign_macho(output_path)
+
+
+def _normalize_macho_uuid(path: Path) -> None:
+    data = bytearray(path.read_bytes())
+    if len(data) < 32:
+        raise RuntimeError(f"Invalid Mach-O file: {path}")
+
+    magic = struct.unpack_from("<I", data, 0)[0]
+    if magic != 0xFEEDFACF:
+        raise RuntimeError(f"Unsupported Mach-O format for UUID normalization: {path}")
+
+    ncmds = struct.unpack_from("<I", data, 16)[0]
+    offset = 32
+    for _ in range(ncmds):
+        if offset + 8 > len(data):
+            raise RuntimeError(f"Truncated Mach-O load commands: {path}")
+        cmd, cmdsize = struct.unpack_from("<II", data, offset)
+        if cmdsize < 8 or offset + cmdsize > len(data):
+            raise RuntimeError(f"Invalid Mach-O load command: {path}")
+        if cmd == 0x1B:
+            if cmdsize < 24:
+                raise RuntimeError(f"Invalid LC_UUID command: {path}")
+            uuid_start = offset + 8
+            data[uuid_start : uuid_start + 16] = bytes(16)
+            digest = hashlib.sha256(data).digest()[:16]
+            data[uuid_start : uuid_start + 16] = digest
+            path.write_bytes(data)
+            return
+        offset += cmdsize
+
+    raise RuntimeError(f"Missing LC_UUID command: {path}")
+
+
+def _adhoc_sign_macho(path: Path) -> None:
+    codesign = shutil.which("codesign")
+    if not codesign:
+        raise RuntimeError("codesign is required to build loadable macOS wheels")
+    try:
+        subprocess.run(
+            [codesign, "--force", "--sign", "-", "--timestamp=none", str(path)],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+    except subprocess.CalledProcessError as exc:
+        detail = exc.stderr.strip()
+        raise RuntimeError(f"Failed to ad-hoc sign Mach-O library: {detail}") from exc
 
 
 def _resolve_c_compiler() -> str:

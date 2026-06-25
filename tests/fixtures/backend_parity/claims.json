@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "generated_from": [
+    "scripts/verify_runtime_tests.py",
+    "scripts/verify_penalty_verdicts.py",
+    "scripts/verify_structural_diff.py",
+    "scripts/verify_lean_expected_verdicts.py",
+    "scripts/verify_lean_penalty_footprints.py",
+    "src/yuho/cli/commands/verify.py"
+  ],
+  "parity_links": [
+    {
+      "name": "runtime-z3",
+      "evidence": "scripts/verify_runtime_tests.py"
+    },
+    {
+      "name": "penalty-verdicts",
+      "evidence": "scripts/verify_penalty_verdicts.py"
+    },
+    {
+      "name": "z3-lean",
+      "evidence": "scripts/verify_structural_diff.py"
+    },
+    {
+      "name": "lean-verdicts",
+      "evidence": "scripts/verify_lean_expected_verdicts.py"
+    },
+    {
+      "name": "lean-penalty-footprints",
+      "evidence": "scripts/verify_lean_penalty_footprints.py"
+    },
+    {
+      "name": "alloy",
+      "evidence": "explicit unsupported-feature failures"
+    }
+  ],
+  "feature_coverage": [
+    {
+      "feature": "flat_elements",
+      "status": "runtime-z3=covered; z3-lean=smoke; alloy=basic-shape-smoke"
+    },
+    {
+      "feature": "nested_all_of_any_of",
+      "status": "runtime-z3=covered; z3-lean=smoke; alloy=secondary-smoke-only"
+    },
+    {
+      "feature": "exceptions_defeats",
+      "status": "runtime-z3=covered; z3-lean=smoke; alloy=explicit-unsupported-for-guards-priority-defeats"
+    },
+    {
+      "feature": "is_infringed_apply_scope",
+      "status": "runtime-z3=covered; z3-lean=structural-link; alloy=explicit-unsupported-boundary"
+    },
+    {
+      "feature": "penalties_money_duration",
+      "status": "runtime-z3=imprisonment/fine/caning/death-model-verdict; z3-lean=penalty-footprint-bridge; alloy=explicit-unsupported"
+    },
+    {
+      "feature": "lean_expected_verdicts",
+      "status": "runtime-z3-lean=smoke+full-corpus-mixed+bounded-arity-verdicts; z3-lean=structural; alloy=explicit-unsupported-boundary"
+    },
+    {
+      "feature": "optional_values",
+      "status": "runtime-z3=covered; z3-lean=unsupported-boundary; alloy=explicit-unsupported-boundary"
+    },
+    {
+      "feature": "case_law_doctrine",
+      "status": "runtime=active-effects/positive-treatment-adoption/ordered-positive-adoption/followed-adoption/approved-adoption/applied-adoption/followed-approved-applied-noninactivation/ordered-cumulative/negative-treatment-nonadoption/distinguished-inactivation/overruled-inactivation/reversed-inactivation/disapproved-inactivation/fact-key/same-kind-nonconflict/own-effect/missing-target/effectless-target/target-remap/payload-preserve/metadata-override/target-metadata-fallback/cycle-cutoff/inactive-authority/jurisdiction-burden-shift-precedence-partial; z3=explicit-unsupported; lean=typed-fact-burden+effect-surface-alias+treatment-surface-alias+surface-precedence-rank+vertical-stare-decisis-binding+binding-effect-gate+fact-key+same-kind-nonconflict+cumulative-effect+ordered-cumulative+negative-treatment-nonadoption+distinguished-inactivation+overruled-inactivation+reversed-inactivation+disapproved-inactivation+own-effect+ordered-positive-adoption+followed-adoption+approved-adoption+applied-adoption+followed-approved-applied-noninactivation+missing-target+effectless-target+target-remap+payload-preserve+adoption-cycle+effect-adoption-metadata+metadata-override+target-metadata-fallback+inactive-authority-jurisdiction-burden-precedence-rank-conflict-partial; alloy=explicit-unsupported"
+    },
+    {
+      "feature": "typed_fact_burdens",
+      "status": "runtime=element+case-law metadata guards; z3=explicit-unsupported; lean=burden/proof-standard guard lemmas; alloy=explicit-unsupported"
+    }
+  ]
+}

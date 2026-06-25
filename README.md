@@ -134,9 +134,12 @@ npm install -g @mermaid-js/mermaid-cli # SVG/PNG targets
 ## Verification backends
 
 `uv pip install -e '.[dev]'` installs the Python Z3 binding used by
-`yuho verify --engine z3`. Alloy is out-of-band: install the Alloy 6
-Analyzer separately from the [Alloy download page](https://alloytools.org/download.html)
-and pass the jar when invoking the Alloy backend:
+`yuho verify --engine z3`. Z3 explicitly rejects unsupported case-law
+and typed-burden constructs during consistency checking. Alloy is a
+secondary bounded-shape smoke backend and is out-of-band: install the
+Alloy 6 Analyzer separately from the
+[Alloy download page](https://alloytools.org/download.html) and pass the
+jar when invoking the Alloy backend:
 
 ```sh
 yuho verify --engine alloy --alloy-jar path/to/org.alloytools.alloy.dist.jar FILE.yh

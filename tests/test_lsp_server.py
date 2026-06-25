@@ -156,6 +156,59 @@ statute 299 "Base" {
     assert locations[0].range.start.line == 1
 
 
+def test_completion_lists_core_keywords():
+    server = YuhoLanguageServer()
+    completions = server.completion_at("file:///tmp/demo.yh", 0, 0)
+    labels = {item.label for item in completions.items}
+
+    assert "statute" in labels
+    assert "is_infringed" in labels
+    assert "apply_scope" in labels
+
+
+def test_references_returns_cross_section_uses_and_declaration():
+    source = """
+statute 299 "Base" {
+  elements { actus_reus act := "does the act"; }
+}
+
+fn a() : bool { return is_infringed(s299); }
+fn b() : bool { return apply_scope(s299); }
+"""
+    server = YuhoLanguageServer()
+    uri = "file:///tmp/refs.yh"
+    server.parse_source(uri, source)
+    line, character = position_of(source, "s299")
+    locations = server.references_at(uri, line, character, include_declaration=True)
+
+    assert locations is not None
+    assert len(locations) == 3
+    assert locations[0].range.start.line == 1
+    assert [loc.range.start.line for loc in locations[1:]] == [5, 6]
+
+
+def test_semantic_tokens_marks_keywords_numbers_and_strings():
+    server = YuhoLanguageServer()
+    uri = "file:///tmp/tokens.yh"
+    server.parse_source(uri, VALID_SOURCE)
+    tokens = server.semantic_tokens_full(uri)
+
+    assert tokens.data
+    assert len(tokens.data) % 5 == 0
+
+
+def test_code_action_exposes_check_command():
+    server = YuhoLanguageServer()
+    uri = "file:///tmp/type.yh"
+    server.parse_source(uri, 'fn f() : int { return "x"; }')
+    actions = server.code_actions_for_uri(uri)
+
+    assert actions
+    assert actions[0].title == "Run yuho check"
+    assert actions[0].command is not None
+    assert actions[0].command.command == "yuho.check"
+
+
 def test_diagnostics_include_lint_warnings():
     server = YuhoLanguageServer()
     uri = "file:///tmp/lint.yh"

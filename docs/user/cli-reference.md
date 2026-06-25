@@ -316,6 +316,7 @@ Options:
   --shape [statute|schema|verbose]
                                   Mermaid flowchart shape
   --json                          Output metadata as JSON
+  --provenance                    Write PROV JSON sidecars for generated files
   --help                          Show this message and exit.
 ```
 
@@ -336,6 +337,10 @@ Options:
 ### Derived outputs
 
 `pdf`, `svg`, and `png` are not registered base transpilers. They are derived by external renderers from `latex` (PDF) or `mermaid` (SVG/PNG).
+
+Use `--provenance` with `--output`, `--dir`, or `--all` to write a
+`.prov.json` sidecar containing source/output SHA-256 hashes and a PROV-style
+transpile activity record.
 
 ## `yuho upgrade`
 

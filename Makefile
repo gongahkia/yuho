@@ -23,6 +23,7 @@
 # Python 3.14 with a stale pyexpat ABI):
 #   make verify-all PYTHON=.venv-test/bin/python
 PYTHON ?= python3
+AUDIT_PYTHON ?= python3
 # `yuho` console-script lives on PATH after `pip install -e .[dev]`;
 # fall back to it when `python -m yuho` doesn't expose __main__.
 YUHO ?= yuho
@@ -33,7 +34,9 @@ LOGS = logs
         verify-structural-diff verify-runtime-tests \
         verify-penalty-verdicts verify-lean-verdicts verify-lean-penalty-footprints \
         verify-source-maps verify-backend-parity verify-mermaid-verbose \
-        verify-literate-alignment \
+        verify-literate-alignment verify-dsl-spec verify-action-pins \
+        verify-corpus-provenance verify-reproducible-build verify-release-hardening \
+        release-audit \
         clean-reproduce
 
 install:
@@ -61,6 +64,9 @@ verify-core: $(LOGS)
 	$(MAKE) verify-runtime-tests
 	$(MAKE) verify-penalty-verdicts
 	$(MAKE) verify-source-maps
+	$(MAKE) verify-dsl-spec
+	$(MAKE) verify-action-pins
+	$(MAKE) verify-corpus-provenance
 	$(MAKE) verify-literate-alignment
 	$(MAKE) verify-backend-parity
 	$(MAKE) verify-structural-diff
@@ -79,6 +85,12 @@ verify-core: $(LOGS)
 	@printf "Penalty verdicts : %s\n" "$$(grep -E '^penalty verdicts:' $(LOGS)/penalty-verdicts.log | tail -n 1)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Source maps      : %s\n" "$$(grep -E '^  [a-z]+:' $(LOGS)/source-maps.log | tr '\n' '; ' | sed 's/; $$//')" \
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "DSL spec         : %s\n" "$$(tail -n 1 $(LOGS)/dsl-spec.log)" \
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "Action pins      : %s\n" "$$(tail -n 1 $(LOGS)/action-pins.log)" \
+		| tee -a $(LOGS)/verify-core-summary.txt
+	@printf "Corpus prov      : %s\n" "$$(tail -n 1 $(LOGS)/corpus-provenance.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
 	@printf "Literate align   : %s\n" "$$(tail -n 1 $(LOGS)/literate-alignment.log)" \
 		| tee -a $(LOGS)/verify-core-summary.txt
@@ -175,6 +187,27 @@ verify-penalty-verdicts: $(LOGS)
 verify-source-maps: $(LOGS)
 	@echo ">>> verifying source-map coverage for legal export targets…"
 	$(PYTHON) scripts/verify_source_maps.py 2>&1 | tee $(LOGS)/source-maps.log
+
+verify-dsl-spec: $(LOGS)
+	@echo ">>> verifying executable DSL spec v1 conformance…"
+	$(PYTHON) scripts/verify_dsl_spec.py 2>&1 | tee $(LOGS)/dsl-spec.log
+
+verify-action-pins: $(LOGS)
+	@echo ">>> verifying GitHub Actions immutable SHA pins…"
+	$(PYTHON) scripts/verify_action_pins.py 2>&1 | tee $(LOGS)/action-pins.log
+
+verify-corpus-provenance: $(LOGS)
+	@echo ">>> verifying corpus provenance ledger completeness…"
+	$(PYTHON) scripts/verify_corpus_provenance.py 2>&1 | tee $(LOGS)/corpus-provenance.log
+
+verify-reproducible-build: $(LOGS)
+	@echo ">>> verifying reproducible Python artifacts…"
+	$(PYTHON) scripts/verify_reproducible_build.py 2>&1 | tee $(LOGS)/reproducible-build.log
+
+verify-release-hardening: verify-action-pins verify-corpus-provenance verify-reproducible-build
+
+release-audit:
+	$(AUDIT_PYTHON) scripts/release_audit.py --full --python $(AUDIT_PYTHON)
 
 verify-literate-alignment: $(LOGS)
 	@echo ">>> validating literate paragraph alignment confidence over corpus…"

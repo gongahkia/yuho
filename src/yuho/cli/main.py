@@ -308,6 +308,7 @@ def ast(
     help="Mermaid flowchart shape",
 )
 @click.option("--json", "json_output", is_flag=True, help="Output metadata as JSON")
+@click.option("--provenance", is_flag=True, help="Write PROV JSON sidecars for generated files")
 @click.pass_context
 def transpile(
     ctx: click.Context,
@@ -318,6 +319,7 @@ def transpile(
     all_targets: bool,
     shape: str,
     json_output: bool,
+    provenance: bool,
 ) -> None:
     """Transpile a Yuho source file."""
     from yuho.cli.commands.transpile import run_transpile
@@ -331,6 +333,7 @@ def transpile(
         all_targets=all_targets,
         json_output=json_output,
         verbose=ctx.obj["verbose"],
+        provenance=provenance,
     )
 
 

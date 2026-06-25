@@ -4,7 +4,10 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
 from yuho.cli.commands.transpile import ALL_TARGETS, run_transpile
+from yuho.provenance import sha256_text
 from yuho.transpile.base import TranspileResult, TranspileTarget
 
 
@@ -109,3 +112,51 @@ def test_transpile_writes_source_map_sidecar(tmp_path: Path) -> None:
     assert source_map["sources"] == [str(source_path.resolve())]
     assert isinstance(source_map["mappings"], str)
     assert source_map["x_yuho_spans"]
+
+
+def test_transpile_writes_provenance_sidecar(tmp_path: Path) -> None:
+    source = """
+    statute 1 "Demo" {
+        elements {
+            actus_reus taking := "takes";
+        }
+    }
+    """
+    source_path = tmp_path / "sample.yh"
+    source_path.write_text(source, encoding="utf-8")
+    output_path = tmp_path / "sample.txt"
+
+    run_transpile(
+        file=str(source_path),
+        target="english",
+        output=str(output_path),
+        json_output=False,
+        verbose=False,
+        provenance=True,
+    )
+
+    sidecar = json.loads((tmp_path / "sample.txt.prov.json").read_text(encoding="utf-8"))
+
+    assert sidecar["_schema_version"] == "1.0.0"
+    assert sidecar["@type"] == "prov:Bundle"
+    assert sidecar["entity"]["yuho:source"]["yuho:sha256"] == sha256_text(source)
+    assert sidecar["entity"]["yuho:artifact"]["yuho:target"] == "english"
+    assert sidecar["activity"]["yuho:transpile"]["prov:used"] == "yuho:source"
+
+
+def test_transpile_provenance_rejects_stdout_only(tmp_path: Path) -> None:
+    source_path = tmp_path / "sample.yh"
+    source_path.write_text(
+        'statute 1 "Demo" { elements { actus_reus act := "act"; } }', encoding="utf-8"
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        run_transpile(
+            file=str(source_path),
+            target="english",
+            json_output=False,
+            verbose=False,
+            provenance=True,
+        )
+
+    assert exc.value.code == 2

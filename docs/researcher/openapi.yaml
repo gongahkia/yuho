@@ -1,4 +1,211 @@
-# Yuho does not currently ship a REST/OpenAPI server.
-#
-# The supported integration surface is the local Python package plus the
-# `yuho` CLI. This file intentionally contains no OpenAPI schema.
+openapi: 3.1.0
+info:
+  title: Yuho Decision Service Contract
+  version: 1.0.0
+  summary: Contract for stateless Yuho parse, evaluate, and verify services.
+servers:
+  - url: https://example.invalid/yuho
+    description: Placeholder deployment URL; Yuho does not ship a hosted service.
+paths:
+  /healthz:
+    get:
+      operationId: healthz
+      responses:
+        "200":
+          description: Service readiness.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Health"
+  /evaluate:
+    post:
+      operationId: evaluateStatute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvaluateRequest"
+            examples:
+              simple:
+                value:
+                  source: "statute 1 \"Demo\" { elements { actus_reus act := \"act\"; } }"
+                  section: "1"
+                  facts:
+                    act: true
+      responses:
+        "200":
+          description: Evaluation result.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluateResponse"
+        "422":
+          $ref: "#/components/responses/Diagnostics"
+  /verify:
+    post:
+      operationId: verifyStatute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyRequest"
+      responses:
+        "200":
+          description: Backend verification result.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifyResponse"
+        "422":
+          $ref: "#/components/responses/Diagnostics"
+components:
+  responses:
+    Diagnostics:
+      description: Parse or semantic diagnostics.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Diagnostics"
+  schemas:
+    Health:
+      type: object
+      required: [status, version]
+      properties:
+        status:
+          type: string
+          enum: [ok]
+        version:
+          type: string
+    EvaluateRequest:
+      type: object
+      required: [source, section, facts]
+      additionalProperties: false
+      properties:
+        source:
+          type: string
+          description: Yuho source text.
+        section:
+          type: string
+          description: Statute section number to evaluate.
+        facts:
+          type: object
+          additionalProperties: true
+        features:
+          type: array
+          items:
+            type: string
+            enum: [civil]
+    EvaluateResponse:
+      type: object
+      required: [verdict, section, trace]
+      additionalProperties: false
+      properties:
+        verdict:
+          type: string
+          enum: [convicted, not_convicted, exception_applied, satisfied, unsatisfied]
+        section:
+          type: string
+        trace:
+          type: array
+          items:
+            $ref: "#/components/schemas/TraceStep"
+        diagnostics:
+          $ref: "#/components/schemas/Diagnostics"
+    VerifyRequest:
+      type: object
+      required: [source, engine]
+      additionalProperties: false
+      properties:
+        source:
+          type: string
+        engine:
+          type: string
+          enum: [combined, z3, alloy]
+        reference_date:
+          type: string
+          format: date
+        timeout_ms:
+          type: integer
+          minimum: 1
+    VerifyResponse:
+      type: object
+      required: [engine, status, claims]
+      additionalProperties: false
+      properties:
+        engine:
+          type: string
+        status:
+          type: string
+          enum: [ok, unsupported, counterexample, error]
+        claims:
+          type: array
+          items:
+            type: object
+            required: [name, status]
+            properties:
+              name:
+                type: string
+              status:
+                type: string
+              evidence:
+                type: string
+        diagnostics:
+          $ref: "#/components/schemas/Diagnostics"
+    TraceStep:
+      type: object
+      required: [kind, label, satisfied]
+      properties:
+        kind:
+          type: string
+        label:
+          type: string
+        satisfied:
+          type: boolean
+        source_span:
+          $ref: "#/components/schemas/SourceSpan"
+    SourceSpan:
+      type: object
+      required: [file, line, column]
+      properties:
+        file:
+          type: string
+        line:
+          type: integer
+          minimum: 1
+        column:
+          type: integer
+          minimum: 1
+    Diagnostics:
+      type: object
+      required: [errors, warnings]
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Diagnostic"
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Diagnostic"
+    Diagnostic:
+      type: object
+      required: [stage, severity, message]
+      properties:
+        stage:
+          type: string
+          enum: [parse, semantic, lint, verify]
+        severity:
+          type: string
+          enum: [error, warning, info]
+        message:
+          type: string
+        error_code:
+          type: string
+        line:
+          type: integer
+          minimum: 1
+        column:
+          type: integer
+          minimum: 1

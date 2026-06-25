@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -27,6 +28,32 @@ from yuho.resolver.module_resolver import ModuleResolutionError, ModuleResolver
 from yuho.services.analysis import AnalysisResult, analyze_source
 
 DEFAULT_LIBRARY_DIR = Path("library/penal_code")
+COMPLETION_KEYWORDS = (
+    "statute",
+    "elements",
+    "all_of",
+    "any_of",
+    "actus_reus",
+    "mens_rea",
+    "circumstance",
+    "exception",
+    "caselaw",
+    "penalty",
+    "fn",
+    "return",
+    "is_infringed",
+    "apply_scope",
+)
+SEMANTIC_TOKEN_TYPES = ["keyword", "number", "string"]
+SEMANTIC_TOKEN_LEGEND = types.SemanticTokensLegend(
+    token_types=SEMANTIC_TOKEN_TYPES,
+    token_modifiers=[],
+)
+SEMANTIC_PATTERNS = (
+    ("string", re.compile(r'"(?:\\.|[^"\\])*"')),
+    ("keyword", re.compile(r"\b(" + "|".join(re.escape(k) for k in COMPLETION_KEYWORDS) + r")\b")),
+    ("number", re.compile(r"\bs?\d+\b")),
+)
 
 
 @dataclass(frozen=True)
@@ -121,6 +148,70 @@ class YuhoLanguageServer(LanguageServer):
         location = resolve_section_definition(self, parsed, section)
         return [location] if location is not None else None
 
+    def completion_at(
+        self,
+        uri: str,
+        line: int,
+        character: int,
+    ) -> types.CompletionList:
+        return types.CompletionList(
+            is_incomplete=False,
+            items=[
+                types.CompletionItem(
+                    label=keyword,
+                    kind=types.CompletionItemKind.Keyword,
+                    detail="Yuho keyword",
+                )
+                for keyword in COMPLETION_KEYWORDS
+            ],
+        )
+
+    def references_at(
+        self,
+        uri: str,
+        line: int,
+        character: int,
+        include_declaration: bool = True,
+    ) -> Optional[list[types.Location]]:
+        parsed = self.cached_parse(uri) or self.parse_text_document(uri)
+        if parsed is None:
+            return None
+        section = cross_section_ref_at_lsp_position(parsed, line, character)
+        if section is None:
+            return None
+        references = section_reference_locations(parsed, section)
+        if include_declaration:
+            definition = resolve_section_definition(self, parsed, section)
+            if definition is not None:
+                references.insert(0, definition)
+        return references or None
+
+    def semantic_tokens_full(self, uri: str) -> types.SemanticTokens:
+        parsed = self.cached_parse(uri) or self.parse_text_document(uri)
+        if parsed is None:
+            return types.SemanticTokens(data=[])
+        return types.SemanticTokens(data=encode_semantic_tokens(parsed.source))
+
+    def code_actions_for_uri(
+        self,
+        uri: str,
+        diagnostics: Optional[list[types.Diagnostic]] = None,
+    ) -> list[types.CodeAction]:
+        if diagnostics is None:
+            diagnostics = self.diagnostics_for_uri(uri)
+        return [
+            types.CodeAction(
+                title="Run yuho check",
+                kind=types.CodeActionKind.Source,
+                diagnostics=diagnostics,
+                command=types.Command(
+                    title="Run yuho check",
+                    command="yuho.check",
+                    arguments=[uri_to_file(uri)],
+                ),
+            )
+        ]
+
     def reference_graph(self, library_dir: Path = DEFAULT_LIBRARY_DIR) -> Optional[ReferenceGraph]:
         resolved = library_dir.resolve()
         if not resolved.exists():
@@ -178,6 +269,44 @@ def register_features(server: YuhoLanguageServer) -> None:
             params.text_document.uri,
             params.position.line,
             params.position.character,
+        )
+
+    @server.feature(
+        types.TEXT_DOCUMENT_COMPLETION, types.CompletionOptions(trigger_characters=[" "])
+    )
+    def completion(params: types.CompletionParams) -> types.CompletionList:
+        return server.completion_at(
+            params.text_document.uri,
+            params.position.line,
+            params.position.character,
+        )
+
+    @server.feature(types.TEXT_DOCUMENT_REFERENCES)
+    def references(params: types.ReferenceParams) -> Optional[list[types.Location]]:
+        return server.references_at(
+            params.text_document.uri,
+            params.position.line,
+            params.position.character,
+            include_declaration=params.context.include_declaration,
+        )
+
+    @server.feature(
+        types.TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL,
+        types.SemanticTokensOptions(legend=SEMANTIC_TOKEN_LEGEND, full=True),
+    )
+    def semantic_tokens_full(params: types.SemanticTokensParams) -> types.SemanticTokens:
+        return server.semantic_tokens_full(params.text_document.uri)
+
+    @server.feature(
+        types.TEXT_DOCUMENT_CODE_ACTION,
+        types.CodeActionOptions(
+            code_action_kinds=[types.CodeActionKind.Source, types.CodeActionKind.QuickFix]
+        ),
+    )
+    def code_action(params: types.CodeActionParams) -> list[types.CodeAction]:
+        return server.code_actions_for_uri(
+            params.text_document.uri,
+            diagnostics=list(params.context.diagnostics),
         )
 
 
@@ -245,6 +374,22 @@ def cross_section_refs(node: ASTNode) -> tuple[str, ...]:
     return ()
 
 
+def section_reference_locations(parsed: ParsedDocument, section: str) -> list[types.Location]:
+    locations: list[types.Location] = []
+    pattern = re.compile(rf"\bs?{re.escape(section)}\b")
+    for match in pattern.finditer(parsed.source):
+        token = match.group(0)
+        if token == section:
+            continue
+        locations.append(
+            types.Location(
+                uri=parsed.uri,
+                range=range_from_offsets(parsed.source, match.start(), match.end()),
+            )
+        )
+    return locations
+
+
 def word_at_lsp_position(source: str, line: int, character: int) -> str:
     lines = source.splitlines()
     if line < 0 or line >= len(lines):
@@ -268,6 +413,59 @@ def word_at_lsp_position(source: str, line: int, character: int) -> str:
 
 def is_section_word_char(char: str) -> bool:
     return char.isalnum() or char in "._"
+
+
+def encode_semantic_tokens(source: str) -> list[int]:
+    encoded: list[int] = []
+    previous_line = 0
+    previous_start = 0
+    for line_no, row in enumerate(source.splitlines()):
+        tokens = semantic_line_tokens(row)
+        for start, length, token_type in tokens:
+            delta_line = line_no - previous_line
+            delta_start = start if delta_line else start - previous_start
+            encoded.extend(
+                [
+                    delta_line,
+                    delta_start,
+                    length,
+                    SEMANTIC_TOKEN_TYPES.index(token_type),
+                    0,
+                ]
+            )
+            previous_line = line_no
+            previous_start = start
+    return encoded
+
+
+def semantic_line_tokens(row: str) -> list[tuple[int, int, str]]:
+    candidates: list[tuple[int, int, str]] = []
+    for token_type, pattern in SEMANTIC_PATTERNS:
+        for match in pattern.finditer(row):
+            candidates.append((match.start(), match.end() - match.start(), token_type))
+    candidates.sort(key=lambda item: (item[0], -item[1]))
+    tokens: list[tuple[int, int, str]] = []
+    occupied_until = -1
+    for start, length, token_type in candidates:
+        if start < occupied_until:
+            continue
+        tokens.append((start, length, token_type))
+        occupied_until = start + length
+    return tokens
+
+
+def range_from_offsets(source: str, start: int, end: int) -> types.Range:
+    start_pos = position_from_offset(source, start)
+    end_pos = position_from_offset(source, end)
+    return types.Range(start=start_pos, end=end_pos)
+
+
+def position_from_offset(source: str, offset: int) -> types.Position:
+    prefix = source[:offset]
+    line = prefix.count("\n")
+    last_newline = prefix.rfind("\n")
+    character = offset if last_newline == -1 else offset - last_newline - 1
+    return types.Position(line=line, character=character)
 
 
 def resolve_section_definition(

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "spec_version": "1.0.0",
+  "spec_document": "docs/researcher/dsl-spec-v1.md",
+  "json_schema": "src/yuho/transpile/json_schema.py",
+  "rules": [
+    {
+      "id": "YH-LEX-001",
+      "stage": "parse",
+      "parse_valid": true,
+      "semantic_valid": true,
+      "source": "// comment\n/// doc comment\nstatute 1 \"Comments\" {\n  elements { actus_reus conduct := \"does the act\"; }\n}\n"
+    },
+    {
+      "id": "YH-STATUTE-001",
+      "stage": "ast",
+      "parse_valid": true,
+      "semantic_valid": true,
+      "source": "statute 2 \"Statute\" {\n  elements { all_of {\n    actus_reus conduct := \"does the act\";\n  } }\n}\n"
+    },
+    {
+      "id": "YH-ELEMENT-001",
+      "stage": "ast",
+      "parse_valid": true,
+      "semantic_valid": true,
+      "source": "statute 3 \"Burden\" {\n  elements { all_of {\n    actus_reus taking := \"takes property\" burden prosecution beyond_reasonable_doubt;\n  } }\n}\n"
+    },
+    {
+      "id": "YH-GROUP-001",
+      "stage": "ast",
+      "parse_valid": true,
+      "semantic_valid": true,
+      "source": "statute 4 \"Grouped\" {\n  elements { all_of {\n    actus_reus conduct := \"does the act\";\n    any_of {\n      mens_rea intent := \"intends it\";\n      mens_rea knowledge := \"knows it\";\n    }\n  } }\n}\n"
+    },
+    {
+      "id": "YH-EXCEPTION-001",
+      "stage": "ast",
+      "parse_valid": true,
+      "semantic_valid": true,
+      "source": "statute 5 \"Exception\" {\n  elements { actus_reus conduct := \"does the act\"; }\n  exception excuse {\n    \"excusing condition\"\n    \"not liable\"\n  }\n}\n"
+    },
+    {
+      "id": "YH-CASELAW-001",
+      "stage": "ast",
+      "parse_valid": true,
+      "semantic_valid": true,
+      "source": "statute 6 \"Case\" {\n  elements { actus_reus deception := \"deceives\"; }\n  /// @role ratio\n  /// @jurisdiction singapore\n  /// @court_level apex\n  /// @date 2026-01-01\n  /// @effect requires active_misleading\n  caselaw \"PP v Tan\" \"[2026] SGCA 1\" {\n    \"holding\"\n    element deception\n  }\n}\n"
+    },
+    {
+      "id": "YH-CROSS-001",
+      "stage": "semantic",
+      "parse_valid": true,
+      "semantic_valid": true,
+      "source": "struct Facts {\n  bool act,\n}\n\nstatute 299 \"Base\" {\n  elements { actus_reus act := \"does the act\"; }\n}\nfn run(Facts facts) : bool { return is_infringed(s299) && apply_scope(s299, facts); }\n"
+    },
+    {
+      "id": "YH-TYPE-NEG-001",
+      "stage": "semantic",
+      "parse_valid": true,
+      "semantic_valid": false,
+      "expected_diagnostic": "Return type string does not match expected int",
+      "source": "fn f() : int { return \"x\"; }\n"
+    },
+    {
+      "id": "YH-PARSE-NEG-001",
+      "stage": "parse",
+      "parse_valid": false,
+      "semantic_valid": false,
+      "expected_diagnostic": "Missing closing brace",
+      "source": "statute 1 \"Bad\" {\n"
+    }
+  ]
+}

@@ -109,6 +109,23 @@ def test_alloy_rejects_case_law_semantics() -> None:
     assert "s12: case-law semantics" in excinfo.value.features
 
 
+def test_alloy_rejects_typed_fact_burden_metadata() -> None:
+    with pytest.raises(AlloyUnsupportedFeature) as excinfo:
+        AlloyGenerator().generate(
+            _ast(
+                """
+                statute 12 "Burden" {
+                    elements {
+                        actus_reus act := "Act" burden prosecution beyond_reasonable_doubt;
+                    }
+                }
+                """
+            )
+        )
+
+    assert "s12.act: burden/proof standard" in excinfo.value.features
+
+
 def test_alloy_rejects_exception_priority() -> None:
     with pytest.raises(AlloyUnsupportedFeature) as excinfo:
         AlloyGenerator().generate(

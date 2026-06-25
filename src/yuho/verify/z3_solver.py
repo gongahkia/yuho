@@ -99,6 +99,16 @@ class Z3Diagnostic:
         return diag
 
 
+@dataclass(frozen=True)
+class Z3UnsupportedFeature(Exception):
+    """Raised when Z3 consistency checking would silently drop semantics."""
+
+    features: Tuple[str, ...]
+
+    def __str__(self) -> str:
+        return "Z3 verifier does not support: " + "; ".join(self.features)
+
+
 class Z3CounterexampleExtractor:
     """
     Extracts and converts Z3 counterexamples to human-readable diagnostics.
@@ -705,6 +715,9 @@ class Z3Solver:
         Returns:
             Tuple of (is_consistent, list of diagnostics)
         """
+        unsupported = Z3Generator.unsupported_features(ast)
+        if unsupported:
+            raise Z3UnsupportedFeature(unsupported)
         generator = Z3Generator(reference_date=self.reference_date)
         diagnostics = generator.generate_consistency_check(ast)
 
@@ -1003,6 +1016,41 @@ class Z3Generator:
         self._sorts: Dict[str, Any] = {}  # Custom Z3 sorts
         self._consts: Dict[str, Any] = {}  # Declared constants
         self._assertions: List[Any] = []  # Collected assertions
+
+    @staticmethod
+    def unsupported_features(ast: "ModuleNode") -> Tuple[str, ...]:
+        """Return constructs the Z3 consistency checker must reject explicitly."""
+        from yuho.ast.nodes import CivilPrimitiveNode, ElementGroupNode, ElementNode
+
+        unsupported: List[str] = []
+
+        def add(feature: str) -> None:
+            if feature not in unsupported:
+                unsupported.append(feature)
+
+        def visit_elements(elements: Tuple[Any, ...], where: str) -> None:
+            for elem in elements:
+                if isinstance(elem, CivilPrimitiveNode):
+                    add(f"{where}: civil primitive elements")
+                elif isinstance(elem, ElementNode):
+                    if elem.burden or elem.burden_standard:
+                        add(f"{where}.{elem.name}: typed fact burden/proof standard")
+                elif isinstance(elem, ElementGroupNode):
+                    visit_elements(tuple(elem.members), where)
+
+        def visit_subsections(subsections: Tuple[Any, ...], where: str) -> None:
+            for subsection in subsections:
+                visit_elements(tuple(getattr(subsection, "elements", ()) or ()), where)
+                visit_subsections(tuple(getattr(subsection, "subsections", ()) or ()), where)
+
+        for statute in getattr(ast, "statutes", ()):
+            where = f"s{statute.section_number}"
+            visit_elements(tuple(statute.elements), where)
+            visit_subsections(tuple(getattr(statute, "subsections", ()) or ()), where)
+            if statute.case_law:
+                add(f"{where}: case-law semantics")
+
+        return tuple(unsupported)
 
     def _duration_days(self, duration: Any) -> Tuple[int, bool]:
         return _verifier_duration_days(duration, self.reference_date)

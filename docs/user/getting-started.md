@@ -112,9 +112,10 @@ That target runs the retained corpus and toolchain checks: parse/lint
 coverage, AKN XSD round-trip, runtime tests, Lean structural diff, and
 mechanisation where the Lean toolchain is installed.
 
-For direct `yuho verify` use, the dev install covers Z3. Alloy 6 is a
-separate jar install; see the README
-[Verification backends](../../README.md#verification-backends) section.
+For direct `yuho verify` use, the dev install covers Z3. Z3 rejects
+unsupported case-law and typed-burden constructs explicitly. Alloy 6 is a
+separate jar install and is a secondary bounded-shape smoke backend; see the
+README [Verification backends](../../README.md#verification-backends) section.
 
 ## 7. Shell completion
 

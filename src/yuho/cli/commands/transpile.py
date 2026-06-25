@@ -9,6 +9,7 @@ from typing import Optional, List
 
 import click
 
+from yuho.provenance import write_transpile_provenance_sidecar
 from yuho.transpile import TranspileTarget, get_transpiler
 from yuho.cli.error_formatter import Colors, colorize
 from yuho.services.analysis import analyze_file, analyze_source
@@ -37,6 +38,7 @@ def run_transpile(
     json_output: bool = False,
     verbose: bool = False,
     shape: str = "statute",
+    provenance: bool = False,
 ) -> None:
     """
     Transpile a Yuho file to another format.
@@ -50,6 +52,10 @@ def run_transpile(
         json_output: Output metadata as JSON
         verbose: Enable verbose output
     """
+    if provenance and not (output or output_dir or all_targets):
+        click.echo("error: --provenance requires --output, --dir, or --all", err=True)
+        sys.exit(2)
+
     stdin_mode = file == "-"
     if not stdin_mode:
         from yuho.parser.wrapper import validate_file_path
@@ -62,14 +68,18 @@ def run_transpile(
     else:
         file_path = Path("stdin.yh")
     source_label = "<stdin>" if stdin_mode else str(file_path)
+    source_text = ""
 
     if verbose:
         click.echo(f"Parsing {source_label}...")
 
     # Parse + AST via shared analysis service
     if stdin_mode:
-        analysis = analyze_source(sys.stdin.read(), file=source_label, run_semantic=False)
+        source_text = sys.stdin.read()
+        analysis = analyze_source(source_text, file=source_label, run_semantic=False)
     else:
+        if provenance:
+            source_text = file_path.read_text(encoding="utf-8")
         analysis = analyze_file(file_path, run_semantic=False)
 
     if analysis.parse_errors:
@@ -118,7 +128,17 @@ def run_transpile(
             )
             try:
                 pdf_path = generate_pdf(ast, pdf_out)
-                results.append({"target": "pdf", "output": pdf_path})
+                result_entry = {"target": "pdf", "output": pdf_path}
+                provenance_path = _write_provenance_sidecar(
+                    enabled=provenance,
+                    source_path=source_label,
+                    source_text=source_text,
+                    out_path=Path(pdf_path),
+                    target="pdf",
+                )
+                if provenance_path:
+                    result_entry["provenance"] = provenance_path
+                results.append(result_entry)
                 if not json_output:
                     click.echo(f"  -> {pdf_path}")
             except PDFGenerationError as e:
@@ -138,7 +158,17 @@ def run_transpile(
             try:
                 Path(docx_out).parent.mkdir(parents=True, exist_ok=True)
                 DOCXTranspiler().write_docx(ast, docx_out)
-                results.append({"target": "docx", "output": docx_out})
+                result_entry = {"target": "docx", "output": docx_out}
+                provenance_path = _write_provenance_sidecar(
+                    enabled=provenance,
+                    source_path=source_label,
+                    source_text=source_text,
+                    out_path=Path(docx_out),
+                    target="docx",
+                )
+                if provenance_path:
+                    result_entry["provenance"] = provenance_path
+                results.append(result_entry)
                 if not json_output:
                     click.echo(f"  -> {docx_out}")
             except Exception as e:
@@ -160,7 +190,17 @@ def run_transpile(
             )
             try:
                 render_mermaid(mermaid_text, render_out, output_format=tgt.lower())
-                results.append({"target": tgt, "output": render_out})
+                result_entry = {"target": tgt, "output": render_out}
+                provenance_path = _write_provenance_sidecar(
+                    enabled=provenance,
+                    source_path=source_label,
+                    source_text=source_text,
+                    out_path=Path(render_out),
+                    target=tgt,
+                )
+                if provenance_path:
+                    result_entry["provenance"] = provenance_path
+                results.append(result_entry)
                 if not json_output:
                     click.echo(f"  -> {render_out}")
             except RuntimeError as e:
@@ -203,6 +243,15 @@ def run_transpile(
             source_map_path = _write_source_map_sidecar(transpile_result, out_path)
             if source_map_path:
                 result_entry["source_map"] = source_map_path
+            provenance_path = _write_provenance_sidecar(
+                enabled=provenance,
+                source_path=source_label,
+                source_text=source_text,
+                out_path=out_path,
+                target=tgt,
+            )
+            if provenance_path:
+                result_entry["provenance"] = provenance_path
             results.append(result_entry)
 
             if not json_output:
@@ -222,6 +271,15 @@ def run_transpile(
             source_map_path = _write_source_map_sidecar(transpile_result, out_path)
             if source_map_path:
                 result_entry["source_map"] = source_map_path
+            provenance_path = _write_provenance_sidecar(
+                enabled=provenance,
+                source_path=source_label,
+                source_text=source_text,
+                out_path=out_path,
+                target=tgt,
+            )
+            if provenance_path:
+                result_entry["provenance"] = provenance_path
             results.append(result_entry)
 
             if not json_output:
@@ -259,3 +317,20 @@ def _write_source_map_sidecar(transpile_result, out_path: Path) -> str | None:
     sidecar_path = out_path.with_name(f"{out_path.name}.map")
     sidecar_path.write_text(json.dumps(source_map, indent=2), encoding="utf-8")
     return str(sidecar_path)
+
+
+def _write_provenance_sidecar(
+    enabled: bool,
+    source_path: str,
+    source_text: str,
+    out_path: Path,
+    target: str,
+) -> str | None:
+    if not enabled:
+        return None
+    return write_transpile_provenance_sidecar(
+        source_path=source_path,
+        source_text=source_text,
+        output_path=out_path,
+        target=target,
+    )

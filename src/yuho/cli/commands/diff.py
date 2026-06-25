@@ -764,6 +764,10 @@ def format_diff(changes: List[Change], color: bool = True) -> str:
 
 
 def _repo_root() -> Path:
+    candidates = [Path.cwd(), *Path(__file__).resolve().parents]
+    for candidate in candidates:
+        if (candidate / "library").is_dir():
+            return candidate
     return Path(__file__).resolve().parents[4]
 
 

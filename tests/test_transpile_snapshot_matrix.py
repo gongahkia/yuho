@@ -51,10 +51,11 @@ def _build_matrix() -> dict:
     statute_paths = sorted(LIBRARY.glob("*/statute.yh"))
     snapshots: dict[str, dict[str, dict[str, int | str]]] = {}
     for statute_path in statute_paths:
-        analysis = analyze_file(statute_path, run_semantic=False)
+        rel_path = statute_path.relative_to(REPO)
+        analysis = analyze_file(rel_path, run_semantic=False)
         if not analysis.is_valid or analysis.ast is None:
             raise AssertionError(f"invalid statute fixture: {statute_path}")
-        rel = statute_path.relative_to(REPO).as_posix()
+        rel = rel_path.as_posix()
         snapshots[rel] = {}
         for target, factory in TARGETS.items():
             output = factory().transpile(analysis.ast).output
