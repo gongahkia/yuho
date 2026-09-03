@@ -5,7 +5,7 @@ _Generated 2026-04-25T06:02:14Z._
 Per-section audit trail. For every encoded section the ledger records
 the canonical SSO anchor, a SHA-256 hash of the scraped text, the
 Yuho version and git commit at encoding time, the current L1 / L2 / L3
-coverage state, and any review flags. Use this file to cite a specific
+coverage state, and any review flags. Use this file to identify a specific
 version of the encoded library; cross-reference with the canonical
 SSO source for any decision that matters.
 

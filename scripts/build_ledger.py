@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the provenance & fidelity ledger.
 
-The ledger is the citable, auditable companion to the encoded library.
+The ledger is the traceable, auditable companion to the encoded library.
 For every section it records:
 
 * canonical SSO anchor + URL
@@ -20,8 +20,8 @@ Output:
 
 Both regenerate from the existing corpus + git metadata; no new sources
 of truth are introduced. The ledger surfaces what's already known across
-metadata.toml, coverage.json, _L3_FLAG.md, and provenance hashes — in
-one place a reader can cite.
+metadata.toml, coverage.json, _L3_FLAG.md, and provenance hashes in one
+place for inspection.
 """
 
 from __future__ import annotations
@@ -154,7 +154,7 @@ def render_markdown(entries: List[Dict[str, Any]]) -> str:
         "Per-section audit trail. For every encoded section the ledger records",
         "the canonical SSO anchor, a SHA-256 hash of the scraped text, the",
         "Yuho version and git commit at encoding time, the current L1 / L2 / L3",
-        "coverage state, and any review flags. Use this file to cite a specific",
+        "coverage state, and any review flags. Use this file to identify a specific",
         "version of the encoded library; cross-reference with the canonical",
         "SSO source for any decision that matters.",
         "",

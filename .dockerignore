@@ -16,13 +16,6 @@ __pycache__/
 .env.*
 
 # Build outputs that get regenerated
-paper/build/
-paper/main.pdf
-paper/main_smoke.pdf
-paper/main_smoke.log
-paper/methodology/methodology.tex
-paper/stats.tex
-paper/stats-extra.tex
 editors/explorer-site/build/
 library/penal_code/_corpus/
 

@@ -149,5 +149,4 @@ mechanisation/lake-packages/
 mechanisation/lake-manifest.json
 mechanisation/build/
 
-# Reproducibility-target log directory (emitted by `make paper-reproduce`)
 logs/
