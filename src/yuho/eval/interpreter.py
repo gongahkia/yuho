@@ -8,6 +8,8 @@ from typing import Any, Dict, List, Optional, Tuple
 from yuho.ast import nodes
 from yuho.ast.visitor import Visitor
 
+_SCOPE_DEPENDENCY_TRACE_BINDING = "__yuho_dependency_trace"
+
 
 # ---------------------------------------------------------------------------
 # Control flow / error signals
@@ -178,6 +180,15 @@ class StructInstance:
     def __repr__(self) -> str:
         flds = ", ".join(f"{k}={v!r}" for k, v in self.fields.items())
         return f"{self.type_name}{{{flds}}}"
+
+
+@dataclass(frozen=True)
+class ScopeCallResult:
+    """One runtime section-composition call observed by a parent guard."""
+
+    predicate: str
+    target_section: str
+    result: Any
 
 
 # ---------------------------------------------------------------------------
@@ -727,6 +738,42 @@ class Interpreter(Visitor):
             return default
         return depth_value.raw
 
+    def _record_scope_call(
+        self,
+        predicate: str,
+        target_section: str,
+        result: Any,
+    ) -> None:
+        """Append an observable call record when a guard requested one."""
+        trace_value = self.env.get(_SCOPE_DEPENDENCY_TRACE_BINDING)
+        if trace_value is None or not isinstance(trace_value.raw, list):
+            return
+        trace_value.raw.append(
+            ScopeCallResult(
+                predicate=predicate,
+                target_section=target_section,
+                result=result,
+            )
+        )
+
+    def _scope_result_value(
+        self,
+        predicate: str,
+        target_section: str,
+        result: Any,
+        node: nodes.ASTNode,
+    ) -> Value:
+        """Return a determinate scope result or surface its diagnostic."""
+        self._record_scope_call(predicate, target_section, result)
+        if not result.is_determinate:
+            detail = result.dependency_diagnostics[0] if result.dependency_diagnostics else None
+            suffix = f" ({detail.code}: {detail.message})" if detail is not None else ""
+            raise InterpreterError(
+                f"{predicate}(s{target_section}) has an unresolved dependency{suffix}",
+                node,
+            )
+        return Value(raw=bool(result.overall_satisfied), type_tag="bool")
+
     @staticmethod
     def _copy_struct(instance: StructInstance) -> StructInstance:
         return StructInstance(
@@ -777,7 +824,7 @@ class Interpreter(Visitor):
                 _DEFAULT_SCOPE_MAX_DEPTH,
             ),
         )
-        return Value(raw=bool(result.overall_satisfied), type_tag="bool")
+        return self._scope_result_value("is_infringed", node.section_ref, result, node)
 
     def visit_apply_scope(self, node: nodes.ApplyScopeNode) -> "Value":
         """Evaluate `apply_scope(sX, facts_arg, …)` and return the inner
@@ -815,7 +862,7 @@ class Interpreter(Visitor):
                 _DEFAULT_SCOPE_MAX_DEPTH,
             ),
         )
-        return Value(raw=bool(result.overall_satisfied), type_tag="bool")
+        return self._scope_result_value("apply_scope", node.section_ref, result, node)
 
     def visit_function_call(self, node: nodes.FunctionCallNode) -> Value:
         # resolve callee name

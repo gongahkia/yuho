@@ -39,6 +39,7 @@ BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
             "conditional and multiple penalty-block selection (explicitly rejected pending equivalent Z3 lowering)",
             "case-law semantics (explicitly rejected by consistency checking)",
             "typed fact burden/proof-standard metadata (explicitly rejected by consistency checking)",
+            "cross-section exception dependencies with missing targets, cycles, or apply_scope fact overrides (explicitly rejected by consistency checking)",
             "rich evidential fact provenance",
             "precise calendar-duration verifier parity without a reference date",
             "full precedent and burden-shifting doctrine",

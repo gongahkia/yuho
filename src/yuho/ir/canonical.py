@@ -24,7 +24,7 @@ from typing import Any, Iterable, Mapping, Optional, Union
 from yuho.ast import nodes
 
 CANONICAL_IR_SCHEMA = "yuho.canonical-ir"
-CANONICAL_IR_VERSION = "1.0"
+CANONICAL_IR_VERSION = "1.1"
 
 JSONScalar = Union[str, int, float, bool, None]
 CanonicalValue = Union[JSONScalar, "CanonicalNode", tuple["CanonicalValue", ...]]
@@ -86,6 +86,32 @@ CanonicalRequirement = Union[CanonicalElement, CanonicalElementGroup, CanonicalN
 
 
 @dataclass(frozen=True)
+class CanonicalDependency:
+    """A statically resolved cross-section reference from an executable rule.
+
+    The edge records syntax that names a section explicitly.  It does not
+    infer a legal relationship from prose or a section number in a string.
+    Runtime consumers must still resolve the target in the active statute
+    registry and evaluate it against the active fact context.
+    """
+
+    citation_path: tuple[str, ...]
+    source_kind: str
+    declaration_index: int
+    reference_kind: str
+    target_section: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "citation_path": list(self.citation_path),
+            "source_kind": self.source_kind,
+            "declaration_index": self.declaration_index,
+            "reference_kind": self.reference_kind,
+            "target_section": self.target_section,
+        }
+
+
+@dataclass(frozen=True)
 class CanonicalProvision:
     """One scoped provision.  A child inherits its ancestor requirement path."""
 
@@ -94,6 +120,7 @@ class CanonicalProvision:
     elements: tuple[CanonicalRequirement, ...]
     penalties: tuple[CanonicalNode, ...]
     exceptions: tuple[CanonicalNode, ...]
+    dependencies: tuple[CanonicalDependency, ...]
     children: tuple["CanonicalProvision", ...]
     metadata: tuple[tuple[str, CanonicalValue], ...] = ()
 
@@ -113,6 +140,7 @@ class CanonicalProvision:
             "elements": [element.to_dict() for element in self.elements],
             "penalties": [penalty.to_dict() for penalty in self.penalties],
             "exceptions": [exception.to_dict() for exception in self.exceptions],
+            "dependencies": [dependency.to_dict() for dependency in self.dependencies],
             "children": [child.to_dict() for child in self.children],
             "metadata": {name: _value_to_data(value) for name, value in self.metadata},
         }
@@ -169,6 +197,7 @@ class CanonicalRuleBranch:
     requirements: tuple[CanonicalRequirement, ...]
     penalties: tuple[CanonicalSourceNode, ...]
     exceptions: tuple[CanonicalSourceNode, ...]
+    dependencies: tuple[CanonicalDependency, ...]
 
     @property
     def citation(self) -> str:
@@ -181,6 +210,7 @@ class CanonicalRuleBranch:
             "requirements": [requirement.to_dict() for requirement in self.requirements],
             "penalties": [penalty.to_dict() for penalty in self.penalties],
             "exceptions": [exception.to_dict() for exception in self.exceptions],
+            "dependencies": [dependency.to_dict() for dependency in self.dependencies],
         }
 
 
@@ -285,6 +315,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.MODELED,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
+        "cross_section_dependency": CapabilityStatus.MODELED,
         "penalty": CapabilityStatus.AST_ADAPTER,
         "civil_primitive": CapabilityStatus.AST_ADAPTER,
     },
@@ -293,6 +324,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.MODELED,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
+        "cross_section_dependency": CapabilityStatus.MODELED,
         "penalty": CapabilityStatus.AST_ADAPTER,
         "civil_primitive": CapabilityStatus.UNSUPPORTED,
     },
@@ -301,6 +333,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.UNSUPPORTED,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
+        "cross_section_dependency": CapabilityStatus.MODELED,
         "penalty": CapabilityStatus.AST_ADAPTER,
         "civil_primitive": CapabilityStatus.UNSUPPORTED,
     },
@@ -309,6 +342,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.UNSUPPORTED,
         "expression": CapabilityStatus.UNSUPPORTED,
         "exception": CapabilityStatus.UNSUPPORTED,
+        "cross_section_dependency": CapabilityStatus.UNSUPPORTED,
         "penalty": CapabilityStatus.UNSUPPORTED,
         "civil_primitive": CapabilityStatus.UNSUPPORTED,
     },
@@ -319,6 +353,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.UNSUPPORTED,
         "expression": CapabilityStatus.UNSUPPORTED,
         "exception": CapabilityStatus.UNSUPPORTED,
+        "cross_section_dependency": CapabilityStatus.UNSUPPORTED,
         "penalty": CapabilityStatus.UNSUPPORTED,
         "civil_primitive": CapabilityStatus.UNSUPPORTED,
     },
@@ -327,6 +362,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.AST_ADAPTER,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
+        "cross_section_dependency": CapabilityStatus.AST_ADAPTER,
         "penalty": CapabilityStatus.AST_ADAPTER,
         "civil_primitive": CapabilityStatus.AST_ADAPTER,
     },
@@ -334,7 +370,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
 
 
 def lower_module(ast: nodes.ModuleNode, *, source: Optional[str] = None) -> CanonicalIR:
-    """Lower an immutable AST module into canonical IR version ``1.0``."""
+    """Lower an immutable AST module into canonical IR version ``1.1``."""
     source_hash = None
     if source is not None:
         source_hash = sha256(source.encode("utf-8")).hexdigest()
@@ -402,6 +438,7 @@ def rule_branches(statute: CanonicalStatute) -> tuple[CanonicalRuleBranch, ...]:
         inherited_requirements: tuple[CanonicalRequirement, ...],
         inherited_penalties: tuple[CanonicalSourceNode, ...],
         inherited_exceptions: tuple[CanonicalSourceNode, ...],
+        inherited_dependencies: tuple[CanonicalDependency, ...],
     ) -> None:
         requirements = inherited_requirements + provision.elements
         penalties = inherited_penalties + tuple(
@@ -412,12 +449,13 @@ def rule_branches(statute: CanonicalStatute) -> tuple[CanonicalRuleBranch, ...]:
             CanonicalSourceNode(provision.citation_path, index, exception)
             for index, exception in enumerate(provision.exceptions)
         )
+        dependencies = inherited_dependencies + provision.dependencies
         executable_children = tuple(
             child for child in provision.children if has_executable_descendant(child)
         )
         if executable_children:
             for child in executable_children:
-                walk(child, requirements, penalties, exceptions)
+                walk(child, requirements, penalties, exceptions, dependencies)
             return
         if requirements:
             branches.append(
@@ -426,10 +464,11 @@ def rule_branches(statute: CanonicalStatute) -> tuple[CanonicalRuleBranch, ...]:
                     requirements=requirements,
                     penalties=penalties,
                     exceptions=exceptions,
+                    dependencies=dependencies,
                 )
             )
 
-    walk(statute.root, (), (), ())
+    walk(statute.root, (), (), (), ())
     return tuple(branches)
 
 
@@ -492,6 +531,8 @@ def _diagnose_provision(
         features.append("penalty")
     if provision.exceptions:
         features.append("exception")
+    if provision.dependencies:
+        features.append("cross_section_dependency")
     if any(isinstance(element, CanonicalNode) for element in provision.elements):
         features.append("civil_primitive")
     if _provision_uses_expression(provision):
@@ -545,6 +586,17 @@ def _lower_provision(
     penalties = tuple(_lower_node(penalty) for penalty in _penalties(node))
     definitions = tuple(_lower_node(definition) for definition in node.definitions)
     exceptions = tuple(_lower_node(exception) for exception in node.exceptions)
+    dependencies = tuple(
+        CanonicalDependency(
+            citation_path=citation_path,
+            source_kind="exception",
+            declaration_index=index,
+            reference_kind=reference_kind,
+            target_section=target_section,
+        )
+        for index, exception in enumerate(node.exceptions)
+        for reference_kind, target_section in _guard_dependencies(exception.guard)
+    )
     children = tuple(
         _lower_provision(subsection, citation_path + (subsection.number,))
         for subsection in node.subsections
@@ -555,6 +607,7 @@ def _lower_provision(
         elements=tuple(_lower_requirement(member, citation_path) for member in node.elements),
         penalties=penalties,
         exceptions=exceptions,
+        dependencies=dependencies,
         children=children,
         metadata=_metadata(
             node,
@@ -568,6 +621,31 @@ def _lower_provision(
             },
         ),
     )
+
+
+def _guard_dependencies(
+    guard: Optional[nodes.ASTNode],
+) -> tuple[tuple[str, str], ...]:
+    """Return explicit section references occurring in one exception guard.
+
+    ``IsInfringedNode`` and ``ApplyScopeNode`` are produced only for grammar
+    forms whose first argument is a statically known section reference.  This
+    deliberately excludes prose and ordinary function calls from the rule
+    graph.
+    """
+    if guard is None:
+        return ()
+
+    references: list[tuple[str, str]] = []
+    stack: list[nodes.ASTNode] = [guard]
+    while stack:
+        current = stack.pop()
+        if isinstance(current, nodes.IsInfringedNode):
+            references.append(("is_infringed", current.section_ref))
+        elif isinstance(current, nodes.ApplyScopeNode):
+            references.append(("apply_scope", current.section_ref))
+        stack.extend(child for child in current.children() if isinstance(child, nodes.ASTNode))
+    return tuple(references)
 
 
 def _penalties(node: Union[nodes.StatuteNode, nodes.SubsectionNode]) -> Iterable[nodes.PenaltyNode]:

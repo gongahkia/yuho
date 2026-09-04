@@ -6,11 +6,13 @@ from datetime import date
 from typing import Dict, List, Mapping, Optional, Tuple, Union
 from yuho.ast import nodes
 from yuho.caselaw import is_adopting_treatment, is_inactive_treatment
+from yuho.eval.dependencies import DependencyDiagnostic, DependencyResult
 from yuho.eval.facts import TypedFact
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, StructInstance, Value
 from yuho.ir import (
     CANONICAL_IR_VERSION,
     CapabilityDiagnostic,
+    CanonicalDependency,
     CanonicalRuleBranch,
     CanonicalStatute,
     canonical_hash,
@@ -58,15 +60,21 @@ class BranchResult:
 
     citation_path: Tuple[str, ...]
     element_results: List[ElementResult]
-    satisfied: bool
+    satisfied: Optional[bool]
     reasoning: List[str] = field(default_factory=list)
     penalty_paths: Tuple[Tuple[str, ...], ...] = ()
     exception_paths: Tuple[Tuple[str, ...], ...] = ()
+    dependency_results: Tuple[DependencyResult, ...] = ()
+    dependency_diagnostics: Tuple[DependencyDiagnostic, ...] = ()
 
     @property
     def citation(self) -> str:
         section, *subsections = self.citation_path
         return f"s{section}{''.join(subsections)}"
+
+    @property
+    def is_determinate(self) -> bool:
+        return self.satisfied is not None
 
 
 @dataclass(frozen=True)
@@ -107,15 +115,22 @@ class EvaluationResult:
     statute_section: str
     statute_title: str
     element_results: List[ElementResult]
-    overall_satisfied: bool
+    overall_satisfied: Optional[bool]
     applicable_penalties: Tuple[ApplicablePenalty, ...] = ()
     penalty_diagnostics: Tuple[PenaltyDiagnostic, ...] = ()
+    dependency_results: Tuple[DependencyResult, ...] = ()
+    dependency_diagnostics: Tuple[DependencyDiagnostic, ...] = ()
     reasoning: List[str] = field(default_factory=list)
     canonical_ir_version: str = CANONICAL_IR_VERSION
     canonical_ir_hash: Optional[str] = None
     diagnostics: Tuple[CapabilityDiagnostic, ...] = ()
     branch_results: List[BranchResult] = field(default_factory=list)
     provision_kind: str = "executable"
+
+    @property
+    def is_determinate(self) -> bool:
+        """Whether unresolved cross-section dependencies leave no verdict gap."""
+        return self.overall_satisfied is not None
 
     def bindings(self) -> Dict[str, bool]:
         """Return ``{element_name: satisfied}`` for every element evaluated.
@@ -130,7 +145,11 @@ class EvaluationResult:
     def summary(self) -> str:
         """Human-readable summary of the evaluation."""
         lines: List[str] = []
-        status = "SATISFIED" if self.overall_satisfied else "NOT SATISFIED"
+        status = (
+            "SATISFIED"
+            if self.overall_satisfied is True
+            else "NOT SATISFIED" if self.overall_satisfied is False else "UNRESOLVED"
+        )
         lines.append(f"Section {self.statute_section} ({self.statute_title}): {status}")
         for er in self.element_results:
             mark = "[x]" if er.satisfied else "[ ]"
@@ -156,6 +175,19 @@ class EvaluationResult:
             lines.append("  Penalty diagnostics:")
             for penalty_diagnostic in self.penalty_diagnostics:
                 lines.append(f"    - {penalty_diagnostic.code}: {penalty_diagnostic.message}")
+        if self.dependency_results:
+            lines.append("  Dependencies:")
+            for dependency in self.dependency_results:
+                edge = dependency.edge
+                lines.append(
+                    f"    - {edge.reference_kind}(s{edge.target_section}) from "
+                    f"s{edge.citation_path[0]}{''.join(edge.citation_path[1:])}: "
+                    f"{dependency.status}"
+                )
+        if self.dependency_diagnostics:
+            lines.append("  Dependency diagnostics:")
+            for dependency_diagnostic in self.dependency_diagnostics:
+                lines.append(f"    - {dependency_diagnostic.code}: {dependency_diagnostic.message}")
         if self.reasoning:
             lines.append("  Reasoning:")
             for r in self.reasoning:
@@ -265,6 +297,8 @@ class StatuteEvaluator:
         all_element_results: List[ElementResult] = []
         branch_results: List[BranchResult] = []
         evaluated_branches: List[Tuple[CanonicalRuleBranch, BranchResult]] = []
+        dependency_results: List[DependencyResult] = []
+        dependency_diagnostics: List[DependencyDiagnostic] = []
         reasoning: List[str] = []
         case_effects = self.active_case_law_effects(
             statute.case_law,
@@ -282,11 +316,24 @@ class StatuteEvaluator:
             branch_results.append(branch_result)
             evaluated_branches.append((branch, branch_result))
             all_element_results.extend(branch_result.element_results)
+            dependency_results.extend(branch_result.dependency_results)
+            dependency_diagnostics.extend(branch_result.dependency_diagnostics)
+            dependency_diagnostics.extend(
+                dependency.diagnostic
+                for dependency in branch_result.dependency_results
+                if dependency.diagnostic is not None
+            )
             reasoning.extend(branch_result.reasoning)
 
         # Canonical sibling branches are alternatives.  Their individual
         # element groups retain their own all_of/any_of composition.
-        overall = any(branch.satisfied for branch in branch_results)
+        overall: Optional[bool]
+        if any(branch.satisfied is True for branch in branch_results):
+            overall = True
+        elif any(branch.satisfied is None for branch in branch_results):
+            overall = None
+        else:
+            overall = False
         applicable_penalties, penalty_diagnostics = self._select_penalties(
             evaluated_branches,
             statute,
@@ -302,6 +349,8 @@ class StatuteEvaluator:
             overall_satisfied=overall,
             applicable_penalties=applicable_penalties,
             penalty_diagnostics=penalty_diagnostics,
+            dependency_results=tuple(dependency_results),
+            dependency_diagnostics=tuple(dict.fromkeys(dependency_diagnostics)),
             reasoning=reasoning,
             canonical_ir_hash=canonical_ir_hash,
             diagnostics=diagnostics,
@@ -325,7 +374,7 @@ class StatuteEvaluator:
         )
         element_results: List[ElementResult] = []
         reasoning: List[str] = []
-        satisfied = True
+        satisfied: Optional[bool] = True
 
         for provision, path in zip(provisions, self._citation_prefixes(branch.citation_path)):
             results, provision_satisfied = self._evaluate_requirement_members(
@@ -345,8 +394,10 @@ class StatuteEvaluator:
                 satisfied = False
                 reasoning.append(f"Requirements at s{path[0]}{''.join(path[1:])} not satisfied")
 
-        if satisfied:
-            satisfied = self._apply_branch_exceptions(
+        dependency_results: Tuple[DependencyResult, ...] = ()
+        dependency_diagnostics: Tuple[DependencyDiagnostic, ...] = ()
+        if satisfied is True:
+            satisfied, dependency_results, dependency_diagnostics = self._apply_branch_exceptions(
                 branch,
                 statute,
                 facts,
@@ -356,7 +407,8 @@ class StatuteEvaluator:
 
         reasoning.insert(
             0,
-            f"Branch {branch.citation} {'satisfied' if satisfied else 'not satisfied'}",
+            f"Branch {branch.citation} "
+            f"{'satisfied' if satisfied is True else 'not satisfied' if satisfied is False else 'unresolved'}",
         )
         return BranchResult(
             citation_path=branch.citation_path,
@@ -365,6 +417,8 @@ class StatuteEvaluator:
             reasoning=reasoning,
             penalty_paths=tuple(source.citation_path for source in branch.penalties),
             exception_paths=tuple(source.citation_path for source in branch.exceptions),
+            dependency_results=dependency_results,
+            dependency_diagnostics=dependency_diagnostics,
         )
 
     def _select_penalties(
@@ -388,7 +442,7 @@ class StatuteEvaluator:
         ] = {}
 
         for branch, branch_result in evaluated_branches:
-            if not branch_result.satisfied:
+            if branch_result.satisfied is not True:
                 continue
             for source in branch.penalties:
                 provision = provisions.get(source.citation_path)
@@ -549,23 +603,44 @@ class StatuteEvaluator:
         facts: StructInstance,
         env: Environment,
         reasoning: List[str],
-    ) -> bool:
-        """Apply only the ancestor and leaf exceptions that govern a branch."""
+    ) -> Tuple[
+        Optional[bool],
+        Tuple[DependencyResult, ...],
+        Tuple[DependencyDiagnostic, ...],
+    ]:
+        """Apply governing exceptions and retain cross-section dependency trace."""
         from yuho.eval.defeasible import DefeasibleReasoner
 
         provisions = {path: provision for path, provision in self._all_adapter_provisions(statute)}
         facts_dict = {key: value.raw for key, value in facts.fields.items()}
         reasoner = DefeasibleReasoner()
+        dependency_results: List[DependencyResult] = []
+        dependency_diagnostics: List[DependencyDiagnostic] = []
         for source in branch.exceptions:
             provision = provisions[source.citation_path]
             exception = provision.exceptions[source.declaration_index]
-            app = reasoner._evaluate_exception(exception, facts_dict, env)
-            if app.guard_satisfied:
+            edges = tuple(
+                dependency
+                for dependency in branch.dependencies
+                if dependency.source_kind == "exception"
+                and dependency.citation_path == source.citation_path
+                and dependency.declaration_index == source.declaration_index
+            )
+            app = reasoner._evaluate_exception(exception, facts_dict, env, edges)
+            dependency_results.extend(app.dependency_results)
+            dependency_diagnostics.extend(app.dependency_diagnostics)
+            if app.dependency_diagnostics:
+                reasoning.extend(
+                    f"{diagnostic.code}: {diagnostic.message}"
+                    for diagnostic in app.dependency_diagnostics
+                )
+                return None, tuple(dependency_results), tuple(dependency_diagnostics)
+            if app.guard_satisfied is True:
                 reasoning.append(
                     f"Exception '{app.label}' at s{source.citation_path[0]}"
                     f"{''.join(source.citation_path[1:])} defeated branch: {app.effect}"
                 )
-                return False
+                return False, tuple(dependency_results), tuple(dependency_diagnostics)
             exception_key = self._exception_key(exception)
             if exception_key is not None and exception_key in facts.fields:
                 if facts.fields[exception_key].is_truthy():
@@ -573,8 +648,8 @@ class StatuteEvaluator:
                         f"Exception '{exception_key}' at s{source.citation_path[0]}"
                         f"{''.join(source.citation_path[1:])} applies"
                     )
-                    return False
-        return True
+                    return False, tuple(dependency_results), tuple(dependency_diagnostics)
+        return True, tuple(dependency_results), tuple(dependency_diagnostics)
 
     @staticmethod
     def _citation_prefixes(citation_path: Tuple[str, ...]) -> Tuple[Tuple[str, ...], ...]:

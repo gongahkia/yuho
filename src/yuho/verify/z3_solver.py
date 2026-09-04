@@ -1021,7 +1021,14 @@ class Z3Generator:
     @staticmethod
     def unsupported_features(ast: "ModuleNode") -> Tuple[str, ...]:
         """Return constructs the Z3 consistency checker must reject explicitly."""
-        from yuho.ast.nodes import CivilPrimitiveNode, ElementGroupNode, ElementNode
+        from yuho.ast.nodes import (
+            ApplyScopeNode,
+            CivilPrimitiveNode,
+            ElementGroupNode,
+            ElementNode,
+            IdentifierNode,
+            IsInfringedNode,
+        )
 
         unsupported: List[str] = []
 
@@ -1059,16 +1066,73 @@ class Z3Generator:
                 if penalty.condition:
                     add(f"{where}: conditional penalty guard '{penalty.condition}'")
 
-        def visit_provision(provision: Any, where: str) -> None:
+        registry = {statute.section_number: statute for statute in getattr(ast, "statutes", ())}
+        dependency_edges: Dict[str, List[str]] = {section: [] for section in registry}
+
+        def guard_references(guard: Any) -> Tuple[Tuple[str, str, Any], ...]:
+            if guard is None:
+                return ()
+            references: List[Tuple[str, str, Any]] = []
+            stack = [guard]
+            while stack:
+                current = stack.pop()
+                if isinstance(current, IsInfringedNode):
+                    references.append(("is_infringed", current.section_ref, current))
+                elif isinstance(current, ApplyScopeNode):
+                    references.append(("apply_scope", current.section_ref, current))
+                stack.extend(child for child in current.children() if hasattr(child, "children"))
+            return tuple(references)
+
+        def visit_exception_dependencies(provision: Any, where: str, owner: str) -> None:
+            for exception in tuple(getattr(provision, "exceptions", ()) or ()):
+                for reference_kind, target, reference in guard_references(exception.guard):
+                    dependency_edges[owner].append(target)
+                    if target not in registry:
+                        add(f"{where}: exception dependency references unregistered s{target}")
+                    if isinstance(reference, ApplyScopeNode) and any(
+                        not (isinstance(argument, IdentifierNode) and argument.name == "facts")
+                        for argument in reference.args
+                    ):
+                        add(f"{where}: {reference_kind}(s{target}) fact overrides are unsupported")
+
+        def visit_provision(provision: Any, where: str, owner: str) -> None:
             visit_elements(tuple(getattr(provision, "elements", ()) or ()), where)
             visit_penalties(provision, where)
-            visit_subsections(tuple(getattr(provision, "subsections", ()) or ()), where)
+            visit_exception_dependencies(provision, where, owner)
+            for subsection in tuple(getattr(provision, "subsections", ()) or ()):
+                visit_provision(subsection, f"{where}{subsection.number}", owner)
 
         for statute in getattr(ast, "statutes", ()):
             where = f"s{statute.section_number}"
-            visit_provision(statute, where)
+            visit_provision(statute, where, statute.section_number)
             if statute.case_law:
                 add(f"{where}: case-law semantics")
+
+        visit_state: Dict[str, int] = {}
+        trace: List[str] = []
+
+        def visit_dependency(section: str) -> None:
+            visit_state[section] = 1
+            trace.append(section)
+            for target in dependency_edges[section]:
+                if target not in registry:
+                    continue
+                if visit_state.get(target) == 1:
+                    cycle_start = trace.index(target)
+                    cycle = trace[cycle_start:] + [target]
+                    add(
+                        "cross-section exception dependency cycle: "
+                        + " -> ".join(f"s{item}" for item in cycle)
+                    )
+                    continue
+                if visit_state.get(target) != 2:
+                    visit_dependency(target)
+            trace.pop()
+            visit_state[section] = 2
+
+        for section in registry:
+            if visit_state.get(section) is None:
+                visit_dependency(section)
 
         return tuple(unsupported)
 

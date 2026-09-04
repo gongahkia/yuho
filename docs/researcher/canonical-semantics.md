@@ -3,7 +3,7 @@
 This page defines the contract between Yuho syntax, AST construction, type
 checking, runtime evaluation, verifiers, and transpilers.
 
-Yuho lowers a parsed module to `yuho.canonical-ir` version `1.0` before
+Yuho lowers a parsed module to `yuho.canonical-ir` version `1.1` before
 semantic analysis, runtime evaluation, and verifier lowering. The artifact has
 a deterministic semantic serialization/hash and a separate optional
 normalized source-text hash. It is not a proof of legal correctness or of equivalence
@@ -24,7 +24,7 @@ unsupported combinations produce a structured `YIR…` diagnostic.
 
 1. Parse `.yh` source with `src/tree-sitter-yuho/grammar.js`.
 2. Build immutable AST nodes from `src/yuho/ast/nodes.py`.
-3. Lower them with `src/yuho/ir/canonical.py` into Canonical IR v1.0.
+3. Lower them with `src/yuho/ir/canonical.py` into Canonical IR v1.1.
 4. Run canonical capability checks and AST-adapter type/lint analysis.
 5. Evaluate the covered runtime fragment through `evaluate_canonical`.
 6. Lower through a named adapter to verifiers and exports, or reject the
@@ -79,6 +79,12 @@ Runtime:
   element burden metadata. The public AST entry point lowers immediately and
   records the semantic IR hash in `EvaluationResult`.
 - Expression execution and exception handling still use a required AST adapter.
+- A guard-level `is_infringed(sN)` or `apply_scope(sN, facts)` becomes a
+  canonical dependency edge with its source provision, declaration index, and
+  target section. The runtime resolves that edge only through the active
+  statute registry and fact context, and records the target sub-result. A
+  missing target, cycle, or unsupported guard leaves the result `UNRESOLVED`
+  with a `YRDG…` diagnostic; it is not treated as a false defence.
 - Subsection branches are modeled as described below. The runtime selects all
   penalty blocks governed by a satisfied branch and retains each parsed
   penalty shape, guard, source path, and branch path. Unguarded and same-guard
@@ -98,6 +104,9 @@ Z3:
   its legacy penalty adapter only verifies the retained single-block fragment.
 - Its current statute/expression/penalty adapter is not a parity claim for
   unmigrated semantics.
+- Registered, acyclic guard-level cross-section dependencies using the same
+  facts are encoded through the target conviction Boolean. Missing targets,
+  cycles, and `apply_scope` fact overrides are rejected explicitly.
 - Conformance-tested for retained criminal-statute verification fixtures.
 - Penalty duration bounds use exact runtime month-end clamping when a
   verifier reference date is supplied; otherwise calendar units use explicitly
@@ -139,9 +148,10 @@ Canonical IR v1 resolves structural subsections as follows:
    structurally satisfied when at least one branch is satisfied.
 4. Exceptions declared on an ancestor or the selected leaf govern that branch
    only. The trace names the exception's provision path.
-5. Ancestor and leaf penalty blocks are retained as branch penalty sources,
-   but are not selected or combined by this runtime version. The result carries
-   their citation paths and emits the penalty capability diagnostic.
+5. Ancestor and leaf penalty blocks are selected only when their governing
+   branch is satisfied. The result preserves each selected source block,
+   guard, citation path, and branch path; overlapping distinct guards produce
+   `YRTP001` rather than an arbitrary declaration-order choice.
 6. A provision with no executable element-bearing branch is `definition_only`.
    It evaluates as not satisfied rather than using vacuous truth.
 

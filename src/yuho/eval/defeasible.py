@@ -7,8 +7,17 @@ exceptions with satisfied guards override conviction.
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, List, Optional, Tuple
 from yuho.ast import nodes
+from yuho.eval.dependencies import (
+    DependencyDiagnostic,
+    DependencyResult,
+    DependencySubresult,
+)
+from yuho.ir import CanonicalDependency
+
+if TYPE_CHECKING:
+    from yuho.eval.interpreter import ScopeCallResult
 
 
 @dataclass
@@ -26,8 +35,19 @@ class ExceptionApplication:
 
     label: str
     condition: str
-    guard_satisfied: bool
+    guard_satisfied: Optional[bool]
     effect: str = ""
+    dependency_results: Tuple[DependencyResult, ...] = ()
+    dependency_diagnostics: Tuple[DependencyDiagnostic, ...] = ()
+
+
+@dataclass(frozen=True)
+class _GuardEvaluation:
+    """The value and observable section calls from one exception guard."""
+
+    satisfied: Optional[bool]
+    calls: Tuple["ScopeCallResult", ...] = ()
+    diagnostic: Optional[DependencyDiagnostic] = None
 
 
 @dataclass
@@ -38,7 +58,7 @@ class DefeasibleResult:
     statute_title: str
     base_satisfied: bool  # whether base elements are all satisfied
     exceptions_applied: List[ExceptionApplication]
-    final_verdict: str  # "convicted", "exception_applied", "not_satisfied"
+    final_verdict: str  # "convicted", "exception_applied", "not_satisfied", "unresolved_dependency"
     reasoning_chain: List[ReasoningStep]
 
     @property
@@ -115,19 +135,30 @@ class DefeasibleReasoner:
         # step 2: if base satisfied, check exceptions
         exceptions_applied: List[ExceptionApplication] = []
         if base_satisfied and statute.exceptions:
+            from yuho.ir import lower_statute, rule_branches
+
+            branches = rule_branches(lower_statute(statute))
+            dependencies = branches[0].dependencies if len(branches) == 1 else ()
             reasoning.append(
                 ReasoningStep(
                     description=f"Checking {len(statute.exceptions)} exception(s)",
                     result=True,
                 )
             )
-            for exc in statute.exceptions:
-                app = self._evaluate_exception(exc, facts, env)
+            for index, exc in enumerate(statute.exceptions):
+                edges = tuple(
+                    dependency
+                    for dependency in dependencies
+                    if dependency.source_kind == "exception"
+                    and dependency.citation_path == (statute.section_number,)
+                    and dependency.declaration_index == index
+                )
+                app = self._evaluate_exception(exc, facts, env, edges)
                 exceptions_applied.append(app)
                 reasoning.append(
                     ReasoningStep(
                         description=f"Exception '{app.label}': guard {'satisfied' if app.guard_satisfied else 'not satisfied'}",
-                        result=app.guard_satisfied,
+                        result=app.guard_satisfied is True,
                         details=app.effect if app.guard_satisfied else "",
                     )
                 )
@@ -135,6 +166,8 @@ class DefeasibleReasoner:
         # step 3: determine final verdict
         if not base_satisfied:
             final_verdict = "not_satisfied"
+        elif any(e.dependency_diagnostics for e in exceptions_applied):
+            final_verdict = "unresolved_dependency"
         elif any(e.guard_satisfied for e in exceptions_applied):
             final_verdict = "exception_applied"
         else:
@@ -248,16 +281,25 @@ class DefeasibleReasoner:
         exc: nodes.ExceptionNode,
         facts: dict,
         env,
+        dependency_edges: Tuple[CanonicalDependency, ...] = (),
     ) -> ExceptionApplication:
         """Evaluate a single exception against facts."""
         label = exc.label or "unnamed"
         condition = exc.condition.value if exc.condition else ""
         effect = exc.effect.value if exc.effect else ""
 
-        guard_satisfied = False
+        guard_satisfied: Optional[bool] = False
+        dependency_results: Tuple[DependencyResult, ...] = ()
+        dependency_diagnostics: Tuple[DependencyDiagnostic, ...] = ()
         if exc.guard is not None:
-            # evaluate the guard expression against facts
-            guard_satisfied = self._evaluate_guard(exc.guard, facts, env)
+            guard_evaluation = self._evaluate_guard(exc.guard, facts, env, dependency_edges)
+            guard_satisfied = guard_evaluation.satisfied
+            dependency_results = self._dependency_results(
+                dependency_edges,
+                guard_evaluation,
+            )
+            if guard_evaluation.diagnostic is not None:
+                dependency_diagnostics = (guard_evaluation.diagnostic,)
         else:
             # no guard - check if facts have a matching exception field
             if "exception" in facts:
@@ -268,14 +310,32 @@ class DefeasibleReasoner:
             condition=condition,
             guard_satisfied=guard_satisfied,
             effect=effect,
+            dependency_results=dependency_results,
+            dependency_diagnostics=dependency_diagnostics,
         )
 
-    def _evaluate_guard(self, guard: nodes.ASTNode, facts: dict, env) -> bool:
-        """Evaluate a guard expression against facts."""
-        from yuho.eval.interpreter import Interpreter, Environment, Value, StructInstance
+    def _evaluate_guard(
+        self,
+        guard: nodes.ASTNode,
+        facts: dict,
+        env,
+        dependency_edges: Tuple[CanonicalDependency, ...],
+    ) -> _GuardEvaluation:
+        """Evaluate a guard with the active registry, facts, and call trace."""
+        from yuho.eval.interpreter import (
+            Interpreter,
+            InterpreterError,
+            Environment,
+            ScopeCallResult,
+            StructInstance,
+            Value,
+            _SCOPE_DEPENDENCY_TRACE_BINDING,
+        )
 
-        # create an environment with facts bound
-        eval_env = Environment()
+        # A child preserves the caller's statute registry, scope trace, and
+        # other bindings. Facts are deliberately rebound in the child so they
+        # are the exact fact pattern supplied to the charging-rule evaluation.
+        eval_env = env.child() if env is not None else Environment()
         facts_instance = StructInstance(
             type_name="Facts",
             fields={k: Value(raw=v, type_tag=_infer_tag(v)) for k, v in facts.items()},
@@ -286,16 +346,122 @@ class DefeasibleReasoner:
         for k, v in facts.items():
             eval_env.set(k, Value(raw=v, type_tag=_infer_tag(v)))
 
+        calls: List[ScopeCallResult] = []
+        eval_env.set(
+            _SCOPE_DEPENDENCY_TRACE_BINDING,
+            Value(raw=calls, type_tag="list"),
+        )
+
         interp = Interpreter(env=eval_env)
         try:
             result = interp.visit(guard)
             if isinstance(result, Value):
-                return result.is_truthy()
+                return _GuardEvaluation(result.is_truthy(), tuple(calls))
             if isinstance(result, bool):
-                return result
-            return bool(result) if result is not None else False
-        except Exception:
-            return False
+                return _GuardEvaluation(result, tuple(calls))
+            return _GuardEvaluation(bool(result) if result is not None else False, tuple(calls))
+        except RecursionError as exc:
+            return _GuardEvaluation(
+                None,
+                tuple(calls),
+                self._guard_diagnostic("YRDG002", str(exc), dependency_edges),
+            )
+        except InterpreterError as exc:
+            message = str(exc)
+            code = (
+                "YRDG001"
+                if "unresolved section reference" in message
+                else "YRDG002" if "YRDG002" in message else "YRDG003"
+            )
+            return _GuardEvaluation(
+                None,
+                tuple(calls),
+                self._guard_diagnostic(code, message, dependency_edges),
+            )
+        except (KeyError, NotImplementedError, TypeError, ValueError) as exc:
+            return _GuardEvaluation(
+                None,
+                tuple(calls),
+                self._guard_diagnostic("YRDG003", str(exc), dependency_edges),
+            )
+
+    @staticmethod
+    def _guard_diagnostic(
+        code: str,
+        error: str,
+        dependency_edges: Tuple[CanonicalDependency, ...],
+    ) -> DependencyDiagnostic:
+        edge = dependency_edges[0] if dependency_edges else None
+        target = f"s{edge.target_section}" if edge is not None else "the guard expression"
+        citation_path = edge.citation_path if edge is not None else ()
+        return DependencyDiagnostic(
+            code=code,
+            message=f"Unable to resolve {target} in exception guard: {error}",
+            citation_path=citation_path,
+            target_section=edge.target_section if edge is not None else None,
+        )
+
+    @staticmethod
+    def _dependency_results(
+        dependency_edges: Tuple[CanonicalDependency, ...],
+        guard_evaluation: _GuardEvaluation,
+    ) -> Tuple[DependencyResult, ...]:
+        """Match observed calls to their immutable canonical dependency edges."""
+        from yuho.eval.interpreter import ScopeCallResult
+
+        results: List[DependencyResult] = []
+        unmatched_calls = list(guard_evaluation.calls)
+        for edge in dependency_edges:
+            call_index = next(
+                (
+                    index
+                    for index, call in enumerate(unmatched_calls)
+                    if isinstance(call, ScopeCallResult)
+                    and call.predicate == edge.reference_kind
+                    and call.target_section == edge.target_section
+                ),
+                None,
+            )
+            if call_index is None:
+                if guard_evaluation.diagnostic is not None:
+                    results.append(
+                        DependencyResult(
+                            edge=edge,
+                            status="unresolved",
+                            diagnostic=guard_evaluation.diagnostic,
+                        )
+                    )
+                else:
+                    results.append(DependencyResult(edge=edge, status="not_evaluated"))
+                continue
+
+            call = unmatched_calls.pop(call_index)
+            result = call.result
+            subresult = DependencySubresult(
+                statute_section=result.statute_section,
+                statute_title=result.statute_title,
+                overall_satisfied=result.overall_satisfied,
+                is_determinate=result.is_determinate,
+                branch_paths=tuple(branch.citation_path for branch in result.branch_results),
+            )
+            if not result.is_determinate:
+                results.append(
+                    DependencyResult(
+                        edge=edge,
+                        status="unresolved",
+                        subresult=subresult,
+                        diagnostic=guard_evaluation.diagnostic,
+                    )
+                )
+            else:
+                results.append(
+                    DependencyResult(
+                        edge=edge,
+                        status="satisfied" if result.overall_satisfied else "not_satisfied",
+                        subresult=subresult,
+                    )
+                )
+        return tuple(results)
 
 
 def _infer_tag(val) -> str:

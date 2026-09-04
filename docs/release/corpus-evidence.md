@@ -12,7 +12,7 @@ are retained as historical evidence and must not be upgraded to a stronger
 review state without the required records.
 
 Canonical IR now has a deterministic semantic artifact at
-`yuho.canonical-ir` v1.0. Its semantic digest deliberately excludes the
+`yuho.canonical-ir` v1.1. Its semantic digest deliberately excludes the
 optional normalized source-text digest, so formatting/source retrieval provenance cannot
 be mistaken for a semantic equivalence claim. This does not materialize the
 source snapshots, source spans, or review records required below; that work

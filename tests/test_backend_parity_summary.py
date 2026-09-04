@@ -18,15 +18,25 @@ def test_backend_parity_summary_lists_evidence_and_boundaries() -> None:
     assert "nested_all_of_any_of: runtime-z3=covered" in summary
     assert "subsection_rule_branches: runtime=modeled+traceable; z3=explicit-unsupported" in summary
     assert "conditional_penalty_selection: runtime=modeled+traceable+conflict-diagnostic" in summary
+    assert "exception_guard_dependencies: runtime-z3=registered+acyclic" in summary
     assert "is_infringed_apply_scope: runtime-z3=covered" in summary
-    assert "penalties_money_duration: runtime-z3=imprisonment/fine/caning/death-model-verdict" in summary
+    assert (
+        "penalties_money_duration: runtime-z3=imprisonment/fine/caning/death-model-verdict"
+        in summary
+    )
     assert "z3-lean=penalty-footprint-bridge" in summary
-    assert "lean_expected_verdicts: runtime-z3-lean=smoke+full-corpus-mixed+bounded-arity-verdicts" in summary
+    assert (
+        "lean_expected_verdicts: runtime-z3-lean=smoke+full-corpus-mixed+bounded-arity-verdicts"
+        in summary
+    )
     assert "optional_values: runtime-z3=covered" in summary
     assert "case_law_doctrine: runtime=active-effects/positive-treatment-adoption" in summary
     assert "z3=explicit-unsupported; lean=typed-fact-burden+effect-surface-alias" in summary
     assert "vertical-stare-decisis-binding+binding-effect-gate" in summary
-    assert "typed_fact_burdens: runtime=element+case-law metadata guards; z3=explicit-unsupported" in summary
+    assert (
+        "typed_fact_burdens: runtime=element+case-law metadata guards; z3=explicit-unsupported"
+        in summary
+    )
     assert "Unsupported feature boundaries:" in summary
     assert "alloy (secondary-explicit-unsupported)" in summary
     assert "precise calendar-duration verifier parity" in summary

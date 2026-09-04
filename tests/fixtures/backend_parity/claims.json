@@ -56,6 +56,10 @@
       "status": "runtime-z3=covered; z3-lean=smoke; alloy=explicit-unsupported-for-guards-priority-defeats"
     },
     {
+      "feature": "exception_guard_dependencies",
+      "status": "runtime-z3=registered+acyclic; runtime=target-subresult+unresolved-diagnostic; z3=rejects-missing-cycle-override; alloy=explicit-unsupported"
+    },
+    {
       "feature": "is_infringed_apply_scope",
       "status": "runtime-z3=covered; z3-lean=structural-link; alloy=explicit-unsupported-boundary"
     },

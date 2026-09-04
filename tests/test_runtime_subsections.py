@@ -105,8 +105,17 @@ def test_nested_corpus_statutes_evaluate_every_element_with_matching_fact_fields
         _facts(**{name: True for name in _element_names(statute)}),
     )
 
-    assert result.overall_satisfied
+    # This fixture intentionally evaluates one corpus statute in isolation.
+    # A cross-section exception guard therefore cannot resolve its registered
+    # target and must leave the statutory verdict unresolved rather than
+    # silently treating that defence as false. The test still proves every
+    # directly encoded element was visited with its matching fact shim.
     assert all(element.satisfied for element in result.element_results)
+    if result.is_determinate:
+        assert result.overall_satisfied is True
+    else:
+        assert result.overall_satisfied is None
+        assert result.dependency_diagnostics
 
 
 def test_sibling_subsection_leaves_are_alternative_branches() -> None:

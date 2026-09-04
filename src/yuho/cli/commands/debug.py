@@ -99,8 +99,14 @@ def _emit_text(result: Any, hits: list[ElementBreakpointHit]) -> None:
             click.echo(f"  fact: {hit.element_name}={hit.fact_value.raw!r}")
         if hit.description:
             click.echo(f"  rule: {hit.description}")
-    overall = "satisfied" if result.overall_satisfied else "not satisfied"
+    overall = (
+        "satisfied"
+        if result.overall_satisfied is True
+        else "not satisfied" if result.overall_satisfied is False else "unresolved"
+    )
     click.echo(f"overall: {overall}")
+    for diagnostic in result.dependency_diagnostics:
+        click.echo(f"dependency diagnostic {diagnostic.code}: {diagnostic.message}")
 
 
 def _json_payload(result: Any, hits: list[ElementBreakpointHit]) -> dict[str, Any]:
@@ -109,6 +115,47 @@ def _json_payload(result: Any, hits: list[ElementBreakpointHit]) -> dict[str, An
             "section": result.statute_section,
             "title": result.statute_title,
             "overall_satisfied": result.overall_satisfied,
+            "is_determinate": result.is_determinate,
+            "dependencies": [
+                {
+                    "source_path": list(dependency.edge.citation_path),
+                    "source_kind": dependency.edge.source_kind,
+                    "declaration_index": dependency.edge.declaration_index,
+                    "reference_kind": dependency.edge.reference_kind,
+                    "target_section": dependency.edge.target_section,
+                    "status": dependency.status,
+                    "subresult": (
+                        {
+                            "section": dependency.subresult.statute_section,
+                            "overall_satisfied": dependency.subresult.overall_satisfied,
+                            "is_determinate": dependency.subresult.is_determinate,
+                            "branch_paths": [
+                                list(path) for path in dependency.subresult.branch_paths
+                            ],
+                        }
+                        if dependency.subresult is not None
+                        else None
+                    ),
+                    "diagnostic": (
+                        {
+                            "code": dependency.diagnostic.code,
+                            "message": dependency.diagnostic.message,
+                        }
+                        if dependency.diagnostic is not None
+                        else None
+                    ),
+                }
+                for dependency in result.dependency_results
+            ],
+            "dependency_diagnostics": [
+                {
+                    "code": diagnostic.code,
+                    "message": diagnostic.message,
+                    "source_path": list(diagnostic.citation_path),
+                    "target_section": diagnostic.target_section,
+                }
+                for diagnostic in result.dependency_diagnostics
+            ],
         },
         "break_on": "element",
         "hits": [

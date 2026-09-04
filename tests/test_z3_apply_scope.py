@@ -17,7 +17,7 @@ import pytest
 
 from yuho.ast import ASTBuilder
 from yuho.parser import get_parser
-from yuho.verify.z3_solver import Z3Generator, Z3_AVAILABLE
+from yuho.verify.z3_solver import Z3Generator, Z3UnsupportedFeature, Z3_AVAILABLE
 
 
 def _parse(source: str):
@@ -29,7 +29,7 @@ def _parse(source: str):
 @pytest.mark.skipif(not Z3_AVAILABLE, reason="z3-solver not installed")
 def test_conviction_bool_declared_for_every_statute():
     """Per-statute conviction Bool lands in `_consts` after generate."""
-    ast = _parse('''
+    ast = _parse("""
         statute 299 "Culpable homicide" {
           elements { all_of {
             actus_reus death := "Causes death";
@@ -43,7 +43,7 @@ def test_conviction_bool_declared_for_every_statute():
             mens_rea murder_intent := "With intent to kill";
           } }
         }
-    ''')
+    """)
     gen = Z3Generator()
     gen.generate(ast)
     assert "299_conviction" in gen._consts
@@ -53,11 +53,11 @@ def test_conviction_bool_declared_for_every_statute():
 @pytest.mark.skipif(not Z3_AVAILABLE, reason="z3-solver not installed")
 def test_apply_scope_resolves_to_target_conviction():
     """Repeated `_conviction_bool('299')` returns the same Z3 atom each call."""
-    ast = _parse('''
+    ast = _parse("""
         statute 299 "Culpable homicide" {
           elements { all_of { actus_reus death := "Causes death"; } }
         }
-    ''')
+    """)
     gen = Z3Generator()
     gen.generate(ast)
     a = gen._conviction_bool("299")
@@ -74,7 +74,8 @@ def test_apply_scope_in_exception_guard_links_into_z3():
     """When an apply_scope appears inside an exception guard, the Z3
     encoding references the target's conviction Bool, not a free atom."""
     import z3
-    ast = _parse('''
+
+    ast = _parse("""
         statute 299 "Culpable homicide" {
           elements { all_of {
             actus_reus death := "Causes death";
@@ -91,7 +92,7 @@ def test_apply_scope_in_exception_guard_links_into_z3():
             when !apply_scope(s299, facts)
           }
         }
-    ''')
+    """)
     gen = Z3Generator()
     gen.generate(ast)
     # Both convictions exist as the canonical Bool atoms
@@ -109,3 +110,67 @@ def test_apply_scope_in_exception_guard_links_into_z3():
     # s304 either way (the exception guard may or may not fire
     # depending on other vars).
     assert solver.check() == z3.sat
+
+
+@pytest.mark.skipif(not Z3_AVAILABLE, reason="z3-solver not installed")
+def test_is_infringed_exception_guard_uses_the_registered_target_conviction():
+    """A valid guard edge constrains the charge through its target section."""
+    import z3
+
+    ast = _parse("""
+        statute 84 "Defence" {
+          elements { circumstance defence_applies := "defence applies"; }
+        }
+        statute 299 "Charge" {
+          elements { actus_reus charged_act := "charged act"; }
+          exception defence {
+            "defence"
+            "defeat"
+            when is_infringed(s84)
+          }
+        }
+    """)
+    generator = Z3Generator()
+    generator.generate(ast)
+
+    solver = z3.Solver()
+    solver.add(*generator._assertions)
+    solver.add(generator._consts["299_charged_act_satisfied"])
+    solver.add(generator._consts["84_defence_applies_satisfied"])
+    solver.add(generator._consts["299_conviction"])
+    assert solver.check() == z3.unsat
+
+
+@pytest.mark.skipif(not Z3_AVAILABLE, reason="z3-solver not installed")
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        (
+            """
+            statute 299 "Charge" {
+              elements { actus_reus charged_act := "charged act"; }
+              exception unavailable { "x" "x" when is_infringed(s999) }
+            }
+            """,
+            "s299: exception dependency references unregistered s999",
+        ),
+        (
+            """
+            statute 299 "Charge" {
+              elements { actus_reus charged_act := "charged act"; }
+              exception loop { "x" "x" when is_infringed(s84) }
+            }
+            statute 84 "Defence" {
+              elements { circumstance defence_applies := "defence applies"; }
+              exception loop { "x" "x" when is_infringed(s299) }
+            }
+            """,
+            "cross-section exception dependency cycle: s299 -> s84 -> s299",
+        ),
+    ],
+)
+def test_z3_rejects_unresolved_or_cyclic_exception_dependencies(source, expected):
+    with pytest.raises(Z3UnsupportedFeature) as exc:
+        Z3Generator().generate(_parse(source))
+
+    assert expected in exc.value.features

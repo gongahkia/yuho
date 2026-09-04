@@ -87,7 +87,7 @@ export. A missing capability is an unsupported combination and must fail with
 a diagnostic rather than silently approximate meaning.
 
 The checked-in implementation lowers every parsed module to canonical-IR
-schema `yuho.canonical-ir` version `1.0`. Its deterministic semantic digest is
+schema `yuho.canonical-ir` version `1.1`. Its deterministic semantic digest is
 distinct from its optional normalized source-text digest. Version 1 gives statutes,
 scoped provisions, recursive rule branches, element groups, element burden
 metadata, and sibling penalty blocks dedicated IR shapes; it retains a full
@@ -111,7 +111,7 @@ tree-sitter parse -> CST
 ASTBuilder.build() -> ModuleNode
     |
     v
-lower_module() -> CanonicalIR v1.0 (deterministic semantic hash)
+lower_module() -> CanonicalIR v1.1 (deterministic semantic hash)
     |
     +-> canonical capability checks + AST-adapter semantic analysis
     +-> canonical runtime entry point + explicit AST expression adapter
