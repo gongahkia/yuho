@@ -41,7 +41,7 @@ jobs:
 
       - name: Install locked grammar tooling
         working-directory: src/tree-sitter-yuho
-        run: npm ci --ignore-scripts
+        run: npm ci
 
       - name: Set up pinned Lean toolchain
         uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9 # v1.5.0

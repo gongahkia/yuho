@@ -37,6 +37,8 @@ module.exports = grammar({
     [$.struct_literal, $.assignment_statement],
     // refinement type vs struct literal vs expression statement
     [$.struct_literal, $.refinement_type, $.expression_statement],
+    // a brace after an identifier can begin a refinement type or statement
+    [$.refinement_type, $.expression_statement],
     // type alias target vs refinement type
     [$.type_alias, $.refinement_type],
     // duration literal with multiple parts
@@ -250,7 +252,7 @@ module.exports = grammar({
         '{',
         repeat($.field_assignment),
         '}'
-      )),
+      ),
       seq(
         '{',
         repeat($.field_assignment),

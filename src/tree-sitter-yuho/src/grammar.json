@@ -774,36 +774,32 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "PREC",
-          "value": 1,
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "FIELD",
-                "name": "type_name",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "identifier"
-                }
-              },
-              {
-                "type": "STRING",
-                "value": "{"
-              },
-              {
-                "type": "REPEAT",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "field_assignment"
-                }
-              },
-              {
-                "type": "STRING",
-                "value": "}"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "type_name",
+              "content": {
+                "type": "SYMBOL",
+                "name": "typed_struct_literal_type_name"
               }
-            ]
-          }
+            },
+            {
+              "type": "STRING",
+              "value": "{"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "field_assignment"
+              }
+            },
+            {
+              "type": "STRING",
+              "value": "}"
+            }
+          ]
         },
         {
           "type": "SEQ",
@@ -5191,6 +5187,10 @@
       "expression_statement"
     ],
     [
+      "refinement_type",
+      "expression_statement"
+    ],
+    [
       "type_alias",
       "refinement_type"
     ],
@@ -5219,6 +5219,10 @@
     {
       "type": "SYMBOL",
       "name": "_error_sentinel"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "typed_struct_literal_type_name"
     }
   ],
   "inline": [

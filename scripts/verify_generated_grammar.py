@@ -28,7 +28,7 @@ def main() -> None:
     if not cli.is_file():
         raise SystemExit(
             "missing repository-local Tree-sitter CLI; run "
-            "`npm ci --ignore-scripts` in src/tree-sitter-yuho first"
+            "`npm ci` in src/tree-sitter-yuho first"
         )
 
     with tempfile.TemporaryDirectory(prefix="yuho-grammar-") as temp:
@@ -47,7 +47,7 @@ def main() -> None:
                 changed.append(relative.as_posix())
         if changed:
             raise SystemExit(
-                "generated Tree-sitter artifacts are stale; run `npm ci --ignore-scripts && "
+                "generated Tree-sitter artifacts are stale; run `npm ci && "
                 "npx --no-install tree-sitter generate` in src/tree-sitter-yuho: "
                 + ", ".join(changed)
             )
