@@ -1041,13 +1041,32 @@ class Z3Generator:
 
         def visit_subsections(subsections: Tuple[Any, ...], where: str) -> None:
             for subsection in subsections:
-                visit_elements(tuple(getattr(subsection, "elements", ()) or ()), where)
-                visit_subsections(tuple(getattr(subsection, "subsections", ()) or ()), where)
+                subsection_where = f"{where}{subsection.number}"
+                visit_provision(subsection, subsection_where)
+
+        def visit_penalties(provision: Any, where: str) -> None:
+            penalties = tuple(
+                penalty
+                for penalty in (
+                    getattr(provision, "penalty", None),
+                    *tuple(getattr(provision, "additional_penalties", ()) or ()),
+                )
+                if penalty is not None
+            )
+            if len(penalties) > 1:
+                add(f"{where}: multiple penalty blocks")
+            for penalty in penalties:
+                if penalty.condition:
+                    add(f"{where}: conditional penalty guard '{penalty.condition}'")
+
+        def visit_provision(provision: Any, where: str) -> None:
+            visit_elements(tuple(getattr(provision, "elements", ()) or ()), where)
+            visit_penalties(provision, where)
+            visit_subsections(tuple(getattr(provision, "subsections", ()) or ()), where)
 
         for statute in getattr(ast, "statutes", ()):
             where = f"s{statute.section_number}"
-            visit_elements(tuple(statute.elements), where)
-            visit_subsections(tuple(getattr(statute, "subsections", ()) or ()), where)
+            visit_provision(statute, where)
             if statute.case_law:
                 add(f"{where}: case-law semantics")
 
@@ -1079,6 +1098,9 @@ class Z3Generator:
         diagnostics = diagnose_capabilities(ir, "z3")
         if diagnostics:
             raise Z3UnsupportedFeature(tuple(diagnostic.message for diagnostic in diagnostics))
+        unsupported = self.unsupported_features(ast_adapter)
+        if unsupported:
+            raise Z3UnsupportedFeature(unsupported)
         ir_sections = tuple(statute.section_number for statute in ir.module.statutes)
         ast_sections = tuple(statute.section_number for statute in ast_adapter.statutes)
         if ir_sections != ast_sections:

@@ -293,7 +293,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.MODELED,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
-        "penalty": CapabilityStatus.UNSUPPORTED,
+        "penalty": CapabilityStatus.AST_ADAPTER,
         "civil_primitive": CapabilityStatus.UNSUPPORTED,
     },
     "z3": {

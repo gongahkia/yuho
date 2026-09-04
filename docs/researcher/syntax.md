@@ -486,6 +486,16 @@ A statute can carry **multiple** `penalty` blocks (the G12 multi-penalty
 pattern); the AST preserves the primary block as `statute.penalty` and
 sibling blocks as `statute.additional_penalties`.
 
+At runtime, a `penalty when <identifier>` block is selected only when that
+identifier is satisfied in the liability branch (or, when it is not an
+element, is truthy in the supplied facts or environment). Unguarded blocks
+and blocks sharing the same guard are cumulative source consequences. If
+distinct guarded siblings are simultaneously true, the result retains every
+candidate and emits `YRTP001`; it does not select the first declaration. The
+result keeps the parsed penalty structure, so a combinator, caning, death,
+fine, imprisonment, and supplementary disposition text are not flattened to
+a numeric range.
+
 ### Exception priority + `defeats`
 
 Exceptions support a `priority` field and a `defeats` clause that names

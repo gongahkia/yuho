@@ -69,6 +69,37 @@ class BranchResult:
         return f"s{section}{''.join(subsections)}"
 
 
+@dataclass(frozen=True)
+class ApplicablePenalty:
+    """A penalty block selected from a satisfied liability branch.
+
+    ``penalty`` preserves the parsed disposition structure rather than
+    coercing imprisonment, fines, caning, death, or supplementary terms into
+    a numeric range. ``branch_paths`` records every satisfied branch that
+    selected this one source block.
+    """
+
+    penalty: nodes.PenaltyNode
+    citation_path: Tuple[str, ...]
+    declaration_index: int
+    guard: Optional[str]
+    branch_paths: Tuple[Tuple[str, ...], ...]
+
+    @property
+    def citation(self) -> str:
+        section, *subsections = self.citation_path
+        return f"s{section}{''.join(subsections)}"
+
+
+@dataclass(frozen=True)
+class PenaltyDiagnostic:
+    """A deterministic warning about selected penalty source blocks."""
+
+    code: str
+    message: str
+    citation_paths: Tuple[Tuple[str, ...], ...]
+
+
 @dataclass
 class EvaluationResult:
     """Result of evaluating a statute against facts."""
@@ -77,7 +108,8 @@ class EvaluationResult:
     statute_title: str
     element_results: List[ElementResult]
     overall_satisfied: bool
-    applicable_penalties: Optional[nodes.PenaltyNode] = None
+    applicable_penalties: Tuple[ApplicablePenalty, ...] = ()
+    penalty_diagnostics: Tuple[PenaltyDiagnostic, ...] = ()
     reasoning: List[str] = field(default_factory=list)
     canonical_ir_version: str = CANONICAL_IR_VERSION
     canonical_ir_hash: Optional[str] = None
@@ -115,6 +147,15 @@ class EvaluationResult:
             for branch in self.branch_results:
                 mark = "[x]" if branch.satisfied else "[ ]"
                 lines.append(f"    {mark} {branch.citation}")
+        if self.applicable_penalties:
+            lines.append("  Penalties:")
+            for selected in self.applicable_penalties:
+                guard = f" when {selected.guard}" if selected.guard else ""
+                lines.append(f"    - {selected.citation}{guard}")
+        if self.penalty_diagnostics:
+            lines.append("  Penalty diagnostics:")
+            for penalty_diagnostic in self.penalty_diagnostics:
+                lines.append(f"    - {penalty_diagnostic.code}: {penalty_diagnostic.message}")
         if self.reasoning:
             lines.append("  Reasoning:")
             for r in self.reasoning:
@@ -223,6 +264,7 @@ class StatuteEvaluator:
 
         all_element_results: List[ElementResult] = []
         branch_results: List[BranchResult] = []
+        evaluated_branches: List[Tuple[CanonicalRuleBranch, BranchResult]] = []
         reasoning: List[str] = []
         case_effects = self.active_case_law_effects(
             statute.case_law,
@@ -238,20 +280,28 @@ class StatuteEvaluator:
                 case_effects,
             )
             branch_results.append(branch_result)
+            evaluated_branches.append((branch, branch_result))
             all_element_results.extend(branch_result.element_results)
             reasoning.extend(branch_result.reasoning)
 
         # Canonical sibling branches are alternatives.  Their individual
         # element groups retain their own all_of/any_of composition.
         overall = any(branch.satisfied for branch in branch_results)
-        penalty = statute.penalty if overall and statute.penalty is not None else None
+        applicable_penalties, penalty_diagnostics = self._select_penalties(
+            evaluated_branches,
+            statute,
+            facts,
+            env,
+        )
+        reasoning.extend(diagnostic.message for diagnostic in penalty_diagnostics)
 
         return EvaluationResult(
             statute_section=statute.section_number,
             statute_title=title,
             element_results=all_element_results,
             overall_satisfied=overall,
-            applicable_penalties=penalty,
+            applicable_penalties=applicable_penalties,
+            penalty_diagnostics=penalty_diagnostics,
             reasoning=reasoning,
             canonical_ir_hash=canonical_ir_hash,
             diagnostics=diagnostics,
@@ -316,6 +366,124 @@ class StatuteEvaluator:
             penalty_paths=tuple(source.citation_path for source in branch.penalties),
             exception_paths=tuple(source.citation_path for source in branch.exceptions),
         )
+
+    def _select_penalties(
+        self,
+        evaluated_branches: List[Tuple[CanonicalRuleBranch, BranchResult]],
+        statute: nodes.StatuteNode,
+        facts: StructInstance,
+        env: Environment,
+    ) -> Tuple[Tuple[ApplicablePenalty, ...], Tuple[PenaltyDiagnostic, ...]]:
+        """Select each penalty source governed by a satisfied rule branch.
+
+        Unguarded blocks and multiple blocks with the same guard are
+        cumulative source consequences. Distinct guards on sibling blocks in
+        one provision are mutually exclusive candidates. If case facts make
+        more than one such candidate applicable, preserve every candidate and
+        emit ``YRTP001`` rather than choosing declaration order.
+        """
+        provisions = {path: provision for path, provision in self._all_adapter_provisions(statute)}
+        selected: Dict[
+            Tuple[Tuple[str, ...], int], Tuple[nodes.PenaltyNode, set[Tuple[str, ...]]]
+        ] = {}
+
+        for branch, branch_result in evaluated_branches:
+            if not branch_result.satisfied:
+                continue
+            for source in branch.penalties:
+                provision = provisions.get(source.citation_path)
+                if provision is None:
+                    raise ValueError(
+                        "canonical penalty source does not match its AST adapter at "
+                        f"s{source.citation_path[0]}{''.join(source.citation_path[1:])}"
+                    )
+                penalties = (provision.penalty, *provision.additional_penalties)
+                if source.declaration_index >= len(penalties):
+                    raise ValueError(
+                        "canonical penalty declaration does not match its AST adapter at "
+                        f"s{source.citation_path[0]}{''.join(source.citation_path[1:])}"
+                    )
+                penalty = penalties[source.declaration_index]
+                if penalty is None:
+                    raise ValueError("canonical penalty source resolved to no AST penalty")
+                if not self._penalty_guard_satisfied(penalty.condition, branch_result, facts, env):
+                    continue
+                key = (source.citation_path, source.declaration_index)
+                if key not in selected:
+                    selected[key] = (penalty, set())
+                selected[key][1].add(branch_result.citation_path)
+
+        applicable = tuple(
+            ApplicablePenalty(
+                penalty=penalty,
+                citation_path=citation_path,
+                declaration_index=declaration_index,
+                guard=penalty.condition,
+                branch_paths=tuple(sorted(branch_paths)),
+            )
+            for (citation_path, declaration_index), (penalty, branch_paths) in sorted(
+                selected.items(), key=lambda item: (item[0][0], item[0][1])
+            )
+        )
+        return applicable, self._penalty_selection_diagnostics(applicable)
+
+    def _penalty_guard_satisfied(
+        self,
+        guard: Optional[str],
+        branch_result: BranchResult,
+        facts: StructInstance,
+        env: Environment,
+    ) -> bool:
+        """Resolve a ``penalty when <identifier>`` guard for one branch."""
+        if guard is None:
+            return True
+
+        matching_elements = [
+            result.satisfied
+            for result in branch_result.element_results
+            if self._normalise(result.element_name) == self._normalise(guard)
+        ]
+        if matching_elements:
+            return any(matching_elements)
+
+        fact_value = self._matching_fact_value(facts, guard)
+        if fact_value is not None:
+            return fact_value.is_truthy()
+        env_value = env.get(guard)
+        return env_value.is_truthy() if env_value is not None else False
+
+    @staticmethod
+    def _penalty_selection_diagnostics(
+        applicable: Tuple[ApplicablePenalty, ...],
+    ) -> Tuple[PenaltyDiagnostic, ...]:
+        """Report overlapping guarded siblings without discarding either one."""
+        by_provision: Dict[Tuple[str, ...], List[ApplicablePenalty]] = {}
+        for selected in applicable:
+            if selected.guard is not None:
+                by_provision.setdefault(selected.citation_path, []).append(selected)
+
+        diagnostics: List[PenaltyDiagnostic] = []
+        for citation_path, candidates in sorted(by_provision.items()):
+            guards = {candidate.guard for candidate in candidates}
+            if len(guards) < 2:
+                continue
+            ordered = sorted(candidates, key=lambda candidate: candidate.declaration_index)
+            labels = ", ".join(
+                f"penalty #{candidate.declaration_index + 1} when {candidate.guard}"
+                for candidate in ordered
+            )
+            citation = f"s{citation_path[0]}{''.join(citation_path[1:])}"
+            diagnostics.append(
+                PenaltyDiagnostic(
+                    code="YRTP001",
+                    message=(
+                        f"Conflicting guarded sibling penalty candidates at {citation}: {labels}; "
+                        "all candidates are retained for review"
+                    ),
+                    citation_paths=(citation_path,),
+                )
+            )
+        return tuple(diagnostics)
 
     def _evaluate_requirement_members(
         self,

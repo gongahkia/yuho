@@ -79,9 +79,11 @@ Runtime:
   element burden metadata. The public AST entry point lowers immediately and
   records the semantic IR hash in `EvaluationResult`.
 - Expression execution and exception handling still use a required AST adapter.
-- Subsection branches are modeled as described below. Guarded/sibling penalty
-  selection remains an explicit runtime capability diagnostic until its
-  dedicated branch selector is complete.
+- Subsection branches are modeled as described below. The runtime selects all
+  penalty blocks governed by a satisfied branch and retains each parsed
+  penalty shape, guard, source path, and branch path. Unguarded and same-guard
+  blocks are cumulative; distinct simultaneously-satisfied sibling guards are
+  reported as `YRTP001` candidates rather than resolved by declaration order.
 - Calendar durations with years/months require a reference date for exact
   ordering.
 - Money arithmetic is Decimal-based, currency-aware, and rejects implicit
@@ -92,6 +94,8 @@ Z3:
 - Enters through a canonical-IR adapter and records the IR hash used for the
   lowering. It explicitly rejects subsection branch semantics pending the
   equivalent Z3 lowering; it does not flatten them.
+- It also explicitly rejects conditional or multiple penalty-block selection;
+  its legacy penalty adapter only verifies the retained single-block fragment.
 - Its current statute/expression/penalty adapter is not a parity claim for
   unmigrated semantics.
 - Conformance-tested for retained criminal-statute verification fixtures.

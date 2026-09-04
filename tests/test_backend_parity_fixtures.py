@@ -51,6 +51,10 @@ def test_backend_parity_fixture_tracks_backend_metadata_boundaries() -> None:
         for feature in BACKEND_METADATA["z3"]["unsupported_features"]
     )
     assert any(
+        "penalty-block selection" in feature
+        for feature in BACKEND_METADATA["z3"]["unsupported_features"]
+    )
+    assert any(
         "typed fact burden/proof-standard metadata" in feature
         for feature in BACKEND_METADATA["z3"]["unsupported_features"]
     )

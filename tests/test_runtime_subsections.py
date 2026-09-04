@@ -199,7 +199,7 @@ def test_subsection_exceptions_apply_only_to_the_selected_branch() -> None:
     assert available.overall_satisfied
 
 
-def test_branch_traces_inherit_penalty_sources_without_selecting_them() -> None:
+def test_branch_traces_inherit_and_select_penalty_sources() -> None:
     source = """
         statute 6 "Penalty sources" {
             penalty { fine := unlimited; }
@@ -214,7 +214,8 @@ def test_branch_traces_inherit_penalty_sources_without_selecting_them() -> None:
 
     assert result.overall_satisfied
     assert result.branch_results[0].penalty_paths == (("6",), ("6", "(1)"))
-    assert any(diagnostic.feature == "penalty" for diagnostic in result.diagnostics)
+    assert [penalty.citation for penalty in result.applicable_penalties] == ["s6", "s6(1)"]
+    assert result.penalty_diagnostics == ()
 
 
 def test_legacy_defeasible_facade_fails_closed_for_subsection_statutes() -> None:
