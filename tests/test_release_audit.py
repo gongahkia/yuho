@@ -15,6 +15,7 @@ def test_release_audit_quick_plan_contains_release_gates() -> None:
     assert "uv sync --locked --all-extras" in joined
     assert "scripts/verify_action_pins.py" in joined
     assert "scripts/verify_corpus_provenance.py" in joined
+    assert "scripts/verify_capability_claims.py" in joined
     assert "scripts/verify_reproducible_build.py" in joined
     assert "scripts/verify_dsl_spec.py" in joined
     assert "pip-audit --strict" in joined

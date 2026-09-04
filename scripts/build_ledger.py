@@ -27,6 +27,7 @@ place for inspection.
 from __future__ import annotations
 
 import datetime as _dt
+import hashlib
 import json
 import subprocess
 import sys
@@ -87,6 +88,12 @@ def _git_log_for(path: Path) -> Dict[str, Any]:
         return {}
 
 
+def _sha256_file(path: Path) -> str | None:
+    if not path.is_file():
+        return None
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 # ---------------------------------------------------------------------------
 # Ledger entry shape
 # ---------------------------------------------------------------------------
@@ -112,6 +119,7 @@ def build_entry(rec: Dict[str, Any]) -> Dict[str, Any]:
         },
         "encoding": {
             "yh_path": yh_path,
+            "sha256": _sha256_file(REPO / yh_path) if yh_path else None,
             "first_commit": git_meta.get("first_commit"),
             "last_commit": git_meta.get("last_commit"),
         },

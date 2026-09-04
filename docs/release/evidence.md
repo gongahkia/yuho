@@ -3,6 +3,12 @@
 This ledger maps public claims to local evidence. Treat unlisted claims as
 unsupported.
 
+The machine-readable [capability-claim registry](capability-claims.json) is
+the authoritative boundary for the covered parser, runtime/Z3, Lean, corpus,
+and review claims. It distinguishes automated triage, explicitly labelled
+human review, and unattributed team records; it is not evidence of legal
+correctness or universal human certification.
+
 | Claim | Evidence | Gate |
 | --- | --- | --- |
 | Yuho parses the checked-in Singapore Penal Code corpus. | `make verify-coverage` reports `524/524 sections pass yuho check`. | `make verify-core` |
@@ -17,6 +23,7 @@ unsupported.
 | Lean penalty footprints match Python Z3 constraints. | `scripts/verify_lean_penalty_footprints.py` reports `MISMATCH=0`. | `make verify-lean-penalty-footprints` |
 | Release workflows use immutable action SHAs. | `scripts/verify_action_pins.py`. | `make verify-action-pins` |
 | Corpus provenance is complete for the SG Penal Code ledger. | `scripts/verify_corpus_provenance.py`. | `make verify-corpus-provenance` |
+| Published capability and corpus-review boundaries are internally consistent. | `docs/release/capability-claims.json` plus `scripts/verify_capability_claims.py`. | `make verify-capability-claims` |
 | Python release artifacts are reproducible under fixed build inputs. | `scripts/verify_reproducible_build.py`. | `make verify-reproducible-build` |
 
 Non-claims:

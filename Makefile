@@ -45,8 +45,8 @@ LOGS = logs
         verify-penalty-verdicts verify-lean-verdicts verify-lean-penalty-footprints \
         verify-source-maps verify-backend-parity verify-mermaid-verbose \
         verify-literate-alignment verify-dsl-spec verify-action-pins \
-        verify-corpus-provenance verify-reproducible-build verify-release-hardening \
-        verify-control-plane verify-grammar-generated \
+		verify-corpus-provenance verify-reproducible-build verify-release-hardening \
+		verify-control-plane verify-grammar-generated verify-capability-claims \
         release-audit \
         clean-reproduce
 
@@ -79,6 +79,7 @@ verify-core: $(LOGS)
 	$(MAKE) verify-dsl-spec
 	$(MAKE) verify-action-pins
 	$(MAKE) verify-corpus-provenance
+	$(MAKE) verify-capability-claims
 	$(MAKE) verify-literate-alignment
 	$(MAKE) verify-backend-parity
 	$(MAKE) verify-structural-diff
@@ -213,11 +214,15 @@ verify-corpus-provenance: $(LOGS)
 	@echo ">>> verifying corpus provenance ledger completeness…"
 	$(PYTHON) scripts/verify_corpus_provenance.py 2>&1 | tee $(LOGS)/corpus-provenance.log
 
+verify-capability-claims: $(LOGS)
+	@echo ">>> verifying public capability and corpus-review claim boundaries…"
+	$(PYTHON) scripts/verify_capability_claims.py 2>&1 | tee $(LOGS)/capability-claims.log
+
 verify-reproducible-build: $(LOGS)
 	@echo ">>> verifying reproducible Python artifacts…"
 	$(PYTHON) scripts/verify_reproducible_build.py 2>&1 | tee $(LOGS)/reproducible-build.log
 
-verify-release-hardening: verify-action-pins verify-corpus-provenance verify-reproducible-build
+verify-release-hardening: verify-action-pins verify-corpus-provenance verify-capability-claims verify-reproducible-build
 
 verify-control-plane:
 	@echo ">>> verifying failure propagation and release-gate wiring…"

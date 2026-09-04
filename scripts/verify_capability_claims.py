@@ -13,6 +13,13 @@ ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = ROOT / "docs" / "release" / "capability-claims.json"
 COVERAGE = ROOT / "library" / "penal_code" / "_coverage" / "coverage.json"
 EVIDENCE = ROOT / "docs" / "release" / "evidence.md"
+STATUS_MATRIX = ROOT / "docs" / "positioning" / "status-matrix.md"
+RETROSPECTIVE = ROOT / "docs" / "retrospective.md"
+REQUIRED_SOURCES = {
+    "docs/positioning/status-matrix.md",
+    "library/penal_code/_coverage/coverage.json",
+    "tests/fixtures/backend_parity/claims.json",
+}
 
 
 def review_kind(value: object) -> str:
@@ -38,6 +45,9 @@ def validate_capability_claims(
 
     if registry.get("schema_version") != "yuho.capability-claims/v1":
         failures.append("unsupported capability-claim schema version")
+    generated_from = registry.get("generated_from")
+    if not isinstance(generated_from, list) or not REQUIRED_SOURCES.issubset(generated_from):
+        failures.append("registry must identify all required evidence sources")
 
     claims = registry.get("claims")
     if not isinstance(claims, list) or not claims:
@@ -85,6 +95,15 @@ def validate_capability_claims(
             failures.append("release evidence does not link the capability registry")
         if "human-verified" in evidence.casefold():
             failures.append("release evidence uses an unsupported blanket human-review claim")
+
+    for label, path in (("status matrix", STATUS_MATRIX), ("retrospective", RETROSPECTIVE)):
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError as error:
+            failures.append(f"cannot read {label}: {error}")
+            continue
+        if "capability-claims.json" not in text:
+            failures.append(f"{label} does not link the capability registry")
 
     return failures
 

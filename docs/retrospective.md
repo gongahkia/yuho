@@ -1,7 +1,12 @@
 # Yuho — retrospective
 
 Consolidated lessons from Phases A through D of the encoding effort.
-Written after L3 reached 524/524 sections at human-verified tier.
+Written after the L3 ledger reached 524/524 stamped sections. A stamp is not
+itself a human-review certification: the retained records identify 377
+automated-triage entries, 123 explicitly labelled human-review entries, and
+24 unattributed team records. See the
+[capability-claim registry](release/capability-claims.json) for the current
+evidence boundary.
 
 This is an honest retrospective: what worked, what didn't, what we'd do
 differently. Audience: future contributors and anyone considering
@@ -16,7 +21,7 @@ encoding a different statute family under Yuho.
 | A — Ingestion | Playwright scrape of SSO; structured `_raw/act.json` per Act. | 500 SG Acts indexed; Penal Code 1871 fully scraped (524 sections). |
 | B — Coverage harness | L1 / L2 / L3 dashboard; per-section `metadata.toml` for L3 stamps. | Mechanical L1+L2 reporting in CI. |
 | C — Expressiveness probe | Mass-encode all 524 sections; surface grammar gaps. | 524/524 L1+L2; 14 gap entries (G1–G14) catalogued. |
-| D — Grammar refactor + L3 sweep | Close grammar gaps; agent-driven re-encoding; L3 review dispatcher. | 524/524 L3-stamped at human-verified tier. |
+| D — Grammar refactor + L3 sweep | Close grammar gaps; agent-driven re-encoding; L3 triage dispatcher. | 524/524 L3-stamped; not a uniform human-review tier. |
 
 For per-section provenance see [`/library/penal_code/_ledger/LEDGER.md`](../library/penal_code/_ledger/LEDGER.md).
 For per-gap detail see [`researcher/archive/phase-c-gaps.md`](researcher/archive/phase-c-gaps.md).
@@ -43,16 +48,19 @@ grammar needs an extension" leads to grammar bloat with no
 corresponding gain in fidelity. The catalogue forced a second look
 before any extension landed.
 
-### 2. Three-tier coverage with a real human pass
+### 2. Three-tier coverage exposed its review-evidence limit
 
 L1 (parses) and L2 (lints + fidelity diagnostics) are mechanical and
-correctly automatable. The honest add was L3: a structured 11-point
-human checklist that covers what mechanical checks cannot
-(illustration completeness, marginal-note matching, no fabrication of
-penalty facts, faithful disjunctive/conjunctive English, sane
-amendment lineage). Without the L3 tier, the project would have
-shipped 524 L2-passing encodings with high fabrication rates and no
-auditable claim of fidelity.
+correctly automatable. L3 applied a structured 11-point checklist covering
+illustration completeness, marginal-note matching, no fabrication of penalty
+facts, faithful disjunctive/conjunctive English, and amendment lineage.
+
+The historical metadata does not support calling all L3 stamps human review.
+Of 524 records, 377 name automated triage, 123 explicitly name manual or
+human review, and 24 are unattributed team records. The last category cannot
+be upgraded to human review without records that identify the reviewer and
+approval. L3 triage remains useful evidence for prioritising work; it is not
+an auditable certification of statutory fidelity or legal correctness.
 
 ### 3. Agent-driven encoding + dispatcher
 
@@ -61,12 +69,13 @@ prompt per section and invokes an agentic coder
 (`gpt-5.4` `high`) on each. Three flavours:
 
 - **Re-encoder** (`docs/researcher/archive/phase-d-reencoding-prompt.md`) — given a section, produce a clean encoding from the canonical text + the gap-aware grammar.
-- **L3 reviewer** (`scripts/l3_audit.py`) — given a section's encoding, run the 11-point checklist and STAMP or FLAG.
+- **L3 triage reviewer** (`scripts/l3_audit.py`) — given a section's encoding, run the 11-point checklist and record automated triage or a flag.
 - **Flag-fixer** (`scripts/apply_flag_fix.py`) — given a `_L3_FLAG.md`, apply the minimum edit that addresses the flag.
 
 This let the project move from 122 L3-stamped sections at the start of
-the dispatcher era to 524 with about four hours of compute. The same
-work by hand would have taken weeks.
+the dispatcher era to 524 with about four hours of compute. It did not
+replace the named human and independent approvals needed for a legal-review
+claim.
 
 ### 4. Per-section progress logs with `--resume`
 
@@ -121,7 +130,7 @@ silent", encoders will fill the silence with invention.
 The Criminal Law Reform Act 2019 (Act 15 of 2019) commenced on either
 2019-12-31 or 2020-01-01 depending on which provision and which
 authoritative source you read. Early Phase D encodings used
-2019-12-31 across the board; the L3 reviewer pushed back on this with
+2019-12-31 across the board; automated L3 triage flagged the conflict with
 "repo-local precedent treats Act 15 of 2019 commencement as
 2020-01-01". The fix was a sweep over the affected sections plus a
 note in the encoding conventions that all `[15/2019]` provisions use
@@ -137,7 +146,7 @@ Many sections shipped Phase C with `subsection (N) { }` blocks that
 were structurally present but textually empty when the canonical
 statute had substantive content under that subsection number. L1 and
 L2 happily passed these because the encoding parsed and lint had no
-way to know subsection (N) should have content. Only L3 caught them.
+way to know subsection (N) should have content. The L3 process flagged them.
 
 Lesson: structural-presence checks are not the same as
 content-faithfulness checks. We added an "empty subsection"
@@ -211,7 +220,7 @@ under prompt vN" annotation would have been more rigorous.
 We held off on building the JSON corpus until after L3 was largely done.
 With hindsight, the corpus would have been useful earlier as a debug
 surface (per-section side-by-side of canonical / `.yh` / English) that
-human reviewers could have used to triage flagged sections faster.
+reviewers could have used to triage flagged sections faster.
 
 ---
 
@@ -221,7 +230,7 @@ human reviewers could have used to triage flagged sections faster.
 |---|---:|
 | Sections in scope (Penal Code 1871) | 524 |
 | L1 + L2 final | 524 / 524 |
-| L3 stamped final | 524 / 524 |
+| L3 stamped final | 524 / 524 (377 automated triage; 123 explicitly human-reviewed; 24 unattributed team records) |
 | Grammar gaps catalogued | 14 |
 |   resolved in parser | 10 |
 |   not-a-gap (parser already worked) | 2 |
@@ -252,4 +261,4 @@ The non-negotiable conventions, distilled:
 - Disjunctive English (",  or") → `any_of`. Conjunctive English (",  and") → `all_of`. Don't paraphrase the connective.
 - Empty subsection blocks are wrong. Either fill them or remove them.
 - Effective dates are the amendment commencement dates, not the original 1872 date, when the section was introduced or rewritten by an amendment.
-- The L3 stamp is a human-verified claim of fidelity. Don't issue it for an encoding you haven't read end-to-end against the canonical text.
+- An L3 stamp records its actual review kind. Automated triage and unattributed team records must not be presented as human review; a human-review claim requires a named approval recorded against the canonical source.

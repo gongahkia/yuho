@@ -92,6 +92,7 @@ def audit_commands(root: Path, full: bool, uv: str = "uv") -> list[list[str]]:
         ],
         [*locked, "python", "scripts/verify_action_pins.py"],
         [*locked, "python", "scripts/verify_corpus_provenance.py"],
+        [*locked, "python", "scripts/verify_capability_claims.py"],
         [*locked, "python", "scripts/verify_dsl_spec.py"],
         [*locked, "python", "scripts/verify_backend_parity.py"],
         [*locked, "python", "scripts/verify_reproducible_build.py"],
