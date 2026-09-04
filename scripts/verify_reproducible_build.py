@@ -34,6 +34,17 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def source_tree_digest(root: Path) -> str:
+    """Hash the exact source files copied into an isolated build tree."""
+    digest = hashlib.sha256()
+    for relative in project_files(root):
+        digest.update(relative.as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(sha256(root / relative).encode("ascii"))
+        digest.update(b"\n")
+    return digest.hexdigest()
+
+
 def project_files(root: Path) -> list[Path]:
     """Return source files without build products or local virtualenv state."""
     result = subprocess.run(
@@ -93,6 +104,9 @@ def build_once(source: Path, out_dir: Path, uv: str) -> tuple[dict[str, str], di
         ),
         "uv": command_version([uv, "--version"], source),
         "source_date_epoch": SOURCE_DATE_EPOCH,
+        "pyproject_sha256": sha256(source / "pyproject.toml"),
+        "uv_lock_sha256": sha256(source / "uv.lock"),
+        "source_tree_sha256": source_tree_digest(source),
     }
     return artifacts, inputs
 

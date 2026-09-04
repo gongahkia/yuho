@@ -1,5 +1,11 @@
 # L3 flag manual review
 
+> Historical automated advisory. This snapshot predates the current evidence
+> model and is not human-review evidence, legal certification, or a current
+> remediation procedure. Do not use its `STAMP_OVERRIDE` label, metadata
+> edits, or flag-deletion instructions. Current work must follow
+> `docs/release/corpus-evidence-schema.json`.
+
 Generated review of all 126 flagged sections.
 
 ## Summary by verdict

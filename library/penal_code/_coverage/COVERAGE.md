@@ -12,11 +12,13 @@ _Valid date: n/a_
 | encoded (.yh present) | 524 | 100.0% |
 | **L1** — parses | **524** | **100.0%** |
 | **L2** — typechecks | **524** | **100.0%** |
-| **L3** — verified | **524** | **100.0%** |
+| **L3** — legacy stamp | **524** | **100.0%** |
+
+An L3 stamp is historical metadata, not human-review or legal-certification evidence.
 
 ## Encoded sections
 
-| § | Marginal note | L1 | L2 | L3 | Verified | Path |
+| § | Marginal note | L1 | L2 | L3 | Recorded attribution | Path |
 |---|---|:-:|:-:|:-:|---|---|
 | s1 | Short title | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s1_short_title/statute.yh` |
 | s2 | Punishment of offences committed within Singapore | ✓ | ✓ | ✓ | 2026-04-24 gpt-5.4 high (automated L3 reviewer) | `library/penal_code/s2_punishment_offences_committed_within/statute.yh` |

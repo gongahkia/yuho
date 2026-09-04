@@ -137,7 +137,7 @@ def validate_corpus_provenance(
 def main() -> None:
     failures = validate_corpus_provenance()
     if not failures:
-        print("corpus provenance: 524/524 entries complete")
+        print("legacy corpus provenance: 524/524 ledger entries hash-verified")
         return
     for failure in failures:
         print(f"FAIL: {failure}")

@@ -31,8 +31,9 @@ on it as a promotion boundary. Tag releases run the same gate again from the
 tagged checkout.
 
 The reproducibility gate builds two clean source copies with separately
-synchronized locked environments and records the compiler, Python, uv, and
-`SOURCE_DATE_EPOCH` inputs in its report. The Docker image uses pinned Python
+synchronized locked environments and records the compiler, Python, uv,
+`SOURCE_DATE_EPOCH`, lockfile, project manifest, and complete copied-source
+tree digests in its report. The Docker image uses pinned Python
 and uv image digests and records its installed OS/compiler inputs at
 `/usr/share/yuho/build-inputs.txt`; release provenance identifies the published
 image digest. These controls establish build-input traceability, not legal

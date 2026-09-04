@@ -6,7 +6,10 @@ dashboard:
 
     L1 (parse)     : `yuho check --syntax-only` passes
     L2 (typecheck) : `yuho check` passes (parse + ast + semantic + lint)
-    L3 (verified)  : metadata.toml has [verification].last_verified set
+    L3 (legacy stamp): metadata.toml has [verification].last_verified set
+
+An L3 stamp is historical metadata. It is not evidence of human review, legal
+correctness, or certification; see docs/release/corpus-evidence.md.
 
 outputs:
     <act_dir>/_coverage/coverage.json
@@ -34,7 +37,7 @@ class Row:
     sso_url: Optional[str] = None
     L1: bool = False                                    # parse ok
     L2: bool = False                                    # full check ok
-    L3: bool = False                                    # human-verified
+    L3: bool = False                                    # legacy metadata stamp
     L3_verified_by: Optional[str] = None
     L3_verified_on: Optional[str] = None
     errors: list[str] = field(default_factory=list)
@@ -132,7 +135,11 @@ def build(act_dir: Path, yuho_bin: str) -> tuple[list[Row], Totals, dict]:
 
 def emit_json(path: Path, rows: list[Row], totals: Totals, meta: dict) -> None:
     payload = {
-        "generated_at": _dt.datetime.now(_dt.UTC).isoformat(timespec="seconds"),
+        "generated_at": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
+        "l3_semantics": (
+            "L3 is a legacy metadata stamp, not human-review, legal-correctness, "
+            "or certification evidence."
+        ),
         "act": meta,
         "totals": {**asdict(totals),
                    "L1_pct": round(totals.L1_pct, 1),
@@ -148,7 +155,7 @@ def emit_md(path: Path, rows: list[Row], totals: Totals, meta: dict) -> None:
     lines = [
         f"# Coverage — {meta['title']} ({meta['act_code']})",
         "",
-        f"_Generated: {_dt.datetime.now(_dt.UTC).isoformat(timespec='seconds')}_  ",
+        f"_Generated: {_dt.datetime.now(_dt.timezone.utc).isoformat(timespec='seconds')}_  ",
         f"_Scraped: {meta.get('scraped_at') or 'n/a'}_  ",
         f"_Valid date: {meta.get('valid_date') or 'n/a'}_",
         "",
@@ -160,11 +167,13 @@ def emit_md(path: Path, rows: list[Row], totals: Totals, meta: dict) -> None:
         f"| encoded (.yh present) | {totals.encoded} | {100*totals.encoded/max(totals.raw_sections,1):.1f}% |",
         f"| **L1** — parses | **{totals.L1_pass}** | **{totals.L1_pct:.1f}%** |",
         f"| **L2** — typechecks | **{totals.L2_pass}** | **{totals.L2_pct:.1f}%** |",
-        f"| **L3** — verified | **{totals.L3_pass}** | **{totals.L3_pct:.1f}%** |",
+        f"| **L3** — legacy stamp | **{totals.L3_pass}** | **{totals.L3_pct:.1f}%** |",
+        "",
+        "An L3 stamp is historical metadata, not human-review or legal-certification evidence.",
         "",
         "## Encoded sections",
         "",
-        "| § | Marginal note | L1 | L2 | L3 | Verified | Path |",
+        "| § | Marginal note | L1 | L2 | L3 | Recorded attribution | Path |",
         "|---|---|:-:|:-:|:-:|---|---|",
     ]
     for r in rows:

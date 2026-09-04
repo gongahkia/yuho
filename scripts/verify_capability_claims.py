@@ -20,7 +20,11 @@ REQUIRED_SOURCES = {
     "library/penal_code/_coverage/coverage.json",
     "tests/fixtures/backend_parity/claims.json",
 }
-PUBLIC_BOUNDARY_DOCUMENTS = (EVIDENCE, STATUS_MATRIX, RETROSPECTIVE, ROOT / "docs" / "user")
+# README is intentionally excluded because it is subject to the separate
+# no-edit constraint. Every other checked-in Markdown document is in scope:
+# an archived or contributor-facing page can still be quoted as an assurance
+# claim outside its original context.
+PUBLIC_BOUNDARY_DOCUMENTS = (ROOT / "docs",)
 
 
 def review_kind(value: object) -> str:

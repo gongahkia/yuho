@@ -1,5 +1,10 @@
 # L3 flag manual review — 126 sections
 
+> Historical planning snapshot. It does not establish that a human reviewed
+> any entry and is not a current procedure for clearing flags or creating L3
+> stamps. Current review evidence must follow
+> `docs/release/corpus-evidence-schema.json`.
+
 Per-section thorough review of every flagged encoding, with categorised
 recommendations. Generated after reading every `_L3_FLAG.md` reason +
 suggested fix and cross-referencing against the canonical SSO text in

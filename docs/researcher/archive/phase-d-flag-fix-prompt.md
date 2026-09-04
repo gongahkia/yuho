@@ -1,5 +1,11 @@
 # Phase D — Flag Fix Prompt
 
+> Historical record — this prompt drove automated source edits and flag
+> deletion during Phase D. It is not an approved current workflow and cannot
+> establish human review, legal correctness, or certification. Use the
+> non-certifying proposal output from `scripts/apply_flag_fix.py` and record
+> reviewed evidence under `docs/release/corpus-evidence-schema.json` instead.
+
 Copy the block below, replace `{N}` with the PC section number, and
 dispatch to Codex gpt-5.4 high. Agent reads the section's existing
 `_L3_FLAG.md`, the canonical text, and the current encoding, then makes

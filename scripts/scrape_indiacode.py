@@ -10,10 +10,9 @@ Two source backends, both server-rendered HTML (no Playwright needed):
 The scraper uses ``urllib.request`` from stdlib so it adds no new
 install deps beyond ``beautifulsoup4 + lxml`` (already required by
 ``scrape_sso.py``). Output JSON matches the shape of the SSO
-scraper's ``Act`` / ``Section`` / ``SubItem`` records, so the
-agent-dispatched encoder pipeline (``apply_flag_fix.py``,
-``l3_audit.py``) can iterate the IPC corpus the same way it
-iterates the SG PC corpus.
+scraper's ``Act`` / ``Section`` / ``SubItem`` records, so the same
+read-only corpus-triage tooling can inspect the IPC corpus as it
+does the SG PC corpus.
 
 Respects the same 6-second crawl-delay convention as the SSO
 scraper (India Code's robots.txt does not specify a delay; we

@@ -65,6 +65,8 @@ Audience: reviewers, researchers, and contributors tracing the design.
 
 - [Release verification](release/verification.md)
 - [Release evidence ledger](release/evidence.md)
+- [Capability-claim registry](release/capability-claims.json)
+- [Corpus evidence model](release/corpus-evidence.md)
 
 ## See Also
 

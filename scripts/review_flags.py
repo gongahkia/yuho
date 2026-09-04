@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Manual L3 flag review helper.
+"""Automated advisory generator for flagged L3 sections.
 
 For every flagged section under ``library/penal_code/s*/_L3_FLAG.md``,
 produces a structured review record with:
@@ -7,13 +7,14 @@ produces a structured review record with:
 * the flag's failed-check number, reason, and suggested fix
 * the canonical SSO text (truncated)
 * the encoded .yh source (truncated)
-* a heuristic VERDICT recommendation:
-    - STAMP_OVERRIDE   = flag is likely spurious; encoding looks faithful
-    - FIX_NEEDED       = flag is likely correct; an automated fix is plausible
-    - INVESTIGATE      = flag needs a human read
+* a heuristic recommendation:
+    - REVIEW_REQUIRED  = flag may be spurious, but a qualified reviewer must decide
+    - FIX_NEEDED       = flag may be correct; a potential repair is identified
+    - INVESTIGATE      = source comparison needs a qualified reviewer
 
 Output is written to ``library/penal_code/_L3_review/`` as Markdown grouped
-by failed-check number, plus a top-level summary.
+by failed-check number, plus a top-level summary. It is not human-review
+evidence, cannot clear a flag, and cannot create a certification.
 
 Usage:
     python3 scripts/review_flags.py
@@ -45,7 +46,7 @@ OUT_DIR = LIBRARY / "_L3_review"
 def verdict_for(check: int, reason: str, fix: str, raw_text: str, yh: str) -> Tuple[str, str]:
     """Return (label, rationale) for a flag.
 
-    Conservative: only call STAMP_OVERRIDE when the encoded content
+    Conservative: only call REVIEW_REQUIRED when the encoded content
     visibly addresses the flag's concern. Otherwise FIX_NEEDED if there's
     a clear mechanical fix; INVESTIGATE if not.
     """
@@ -65,7 +66,7 @@ def verdict_for(check: int, reason: str, fix: str, raw_text: str, yh: str) -> Tu
                     f"raw text mentions amendments {amend_match}; encoding has only {eff}. "
                     f"Add amendment effective dates.")
         if amend_match and len(eff) > 1:
-            return ("STAMP_OVERRIDE",
+            return ("REVIEW_REQUIRED",
                     f"encoding already carries multiple effective dates {eff}; flag may be spurious.")
         return ("INVESTIGATE", "no amendment markers detected; flag reasoning unclear")
 
@@ -108,7 +109,7 @@ def verdict_for(check: int, reason: str, fix: str, raw_text: str, yh: str) -> Tu
             return ("FIX_NEEDED", "raw has numbered subsections; encoding has none. "
                                   "Add `subsection (N) {}` blocks.")
         if not canonical_subsections and encoded_subsections:
-            return ("STAMP_OVERRIDE",
+            return ("REVIEW_REQUIRED",
                     "encoding has subsections that the raw text doesn't structurally have, "
                     "but the encoding is more granular — likely defensible.")
         return ("INVESTIGATE", "subsection structure needs comparison")
@@ -214,9 +215,11 @@ def render_summary(by_check: Dict[int, List[Dict[str, Any]]],
                    by_verdict: Dict[str, List[Dict[str, Any]]]) -> str:
     total = sum(len(v) for v in by_check.values())
     lines = [
-        "# L3 flag manual review",
+        "# L3 flag automated advisory",
         "",
-        f"Generated review of all {total} flagged sections.",
+        f"Generated advisory for all {total} flagged sections.",
+        "",
+        "This output is automated triage, not human-review evidence or legal certification.",
         "",
         "## Summary by verdict",
         "",
@@ -224,11 +227,11 @@ def render_summary(by_check: Dict[int, List[Dict[str, Any]]],
         "|---|--:|---|",
     ]
     meanings = {
-        "STAMP_OVERRIDE": "Flag is likely spurious. Encoding addresses the concern; safe to override and stamp.",
-        "FIX_NEEDED": "Flag is correct; mechanical fix is plausible.",
-        "INVESTIGATE": "Needs a human read — the heuristic can't decide.",
+        "REVIEW_REQUIRED": "Flag may be spurious; a qualified reviewer must decide.",
+        "FIX_NEEDED": "A potential repair is identified; it still needs review.",
+        "INVESTIGATE": "Source comparison needs a qualified reviewer.",
     }
-    for v in ("STAMP_OVERRIDE", "FIX_NEEDED", "INVESTIGATE"):
+    for v in ("REVIEW_REQUIRED", "FIX_NEEDED", "INVESTIGATE"):
         lines.append(f"| `{v}` | {len(by_verdict.get(v, []))} | {meanings[v]} |")
 
     lines.append("")
@@ -260,13 +263,11 @@ def render_summary(by_check: Dict[int, List[Dict[str, Any]]],
     lines.append("")
     lines.append("## How to use this review")
     lines.append("")
-    lines.append("1. For each `check<N>.md` file, scan the verdicts at the top of each block.")
-    lines.append("2. Group by verdict and act:")
-    lines.append("   - `STAMP_OVERRIDE` — manually stamp via metadata.toml (`last_verified = \"YYYY-MM-DD\"`).")
-    lines.append("   - `FIX_NEEDED` — apply the suggested fix to `statute.yh`, re-run `yuho check`, then stamp.")
-    lines.append("   - `INVESTIGATE` — open the section dir, read `_L3_FLAG.md` and the canonical SSO text together.")
-    lines.append("3. After resolving a flag, delete `_L3_FLAG.md` and add a `last_verified` line to `metadata.toml`.")
-    lines.append("4. Rebuild the corpus + ledger to reflect changes.")
+    lines.append("1. Treat every verdict as a lead, not a decision.")
+    lines.append("2. A qualified reviewer compares the raw source, encoding, and any proposed repair.")
+    lines.append("3. Record the review and any independent approval using `docs/release/corpus-evidence-schema.json`.")
+    lines.append("4. Do not change `metadata.toml` or remove `_L3_FLAG.md` based on this advisory alone.")
+    lines.append("5. After an approved, reviewed change, rebuild the corpus and ledger.")
     return "\n".join(lines) + "\n"
 
 

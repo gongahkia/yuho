@@ -70,7 +70,9 @@ prompt per section and invokes an agentic coder
 
 - **Re-encoder** (`docs/researcher/archive/phase-d-reencoding-prompt.md`) — given a section, produce a clean encoding from the canonical text + the gap-aware grammar.
 - **L3 triage reviewer** (`scripts/l3_audit.py`) — given a section's encoding, run the 11-point checklist and record automated triage or a flag.
-- **Flag-fixer** (`scripts/apply_flag_fix.py`) — given a `_L3_FLAG.md`, apply the minimum edit that addresses the flag.
+- **Flag-fixer** (`scripts/apply_flag_fix.py`) — historically applied a
+  minimum edit for a `_L3_FLAG.md`; it is now proposal-only because automated
+  edits and flag deletion cannot establish review evidence.
 
 This let the project move from 122 L3-stamped sections at the start of
 the dispatcher era to 524 with about four hours of compute. It did not
