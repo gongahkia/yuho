@@ -15,6 +15,7 @@ Status labels:
 |---|---|---|---|
 | Parser | partial | `tests/test_*grammar*.py`, `make verify-coverage` | tree-sitter grammar parses the checked-in SG Penal Code corpus, but a comment-before-typed-struct-literal ambiguity remains a release-blocking semantic defect until its generated parser and regression suite are proven current. |
 | AST builder | stable | `tests/test_core_units.py`, `tests/test_new_constructs.py` | Produces Python AST nodes used by analysis, transpilers, and verifiers. |
+| Canonical IR | partial | `tests/test_canonical_ir.py` | Versioned `yuho.canonical-ir` v1.0 has deterministic statute/provision/element representation and consumer capability diagnostics; named AST adapters remain for unmigrated semantics. |
 | Type checker | partial | `tests/test_semantics.py`, `tests/test_civil_feature_grammar.py` | Nominal checking exists; generics and some numeric/legal abstractions are limited. |
 | Lint | stable | `tests/test_lint_command.py`, `make verify-coverage` | Includes statute-core and fidelity diagnostics. |
 | Formatter | partial | `tests/test_fmt_cli.py` | Useful for supported statute shapes; not a canonical pretty-printer for every grammar construct yet. |

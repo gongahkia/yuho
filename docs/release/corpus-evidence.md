@@ -11,6 +11,13 @@ New corpus work must use the versioned
 are retained as historical evidence and must not be upgraded to a stronger
 review state without the required records.
 
+Canonical IR now has a deterministic semantic artifact at
+`yuho.canonical-ir` v1.0. Its semantic digest deliberately excludes the
+optional normalized source-text digest, so formatting/source retrieval provenance cannot
+be mistaken for a semantic equivalence claim. This does not materialize the
+source snapshots, source spans, or review records required below; that work
+remains subject to the evidence schema.
+
 ## Required record chain
 
 1. Fetch authoritative source bytes and store an immutable raw snapshot at a
@@ -20,9 +27,9 @@ review state without the required records.
    and normalized hashes; changing either creates a new evidence record rather
    than rewriting the prior one.
 3. Link each source span, by byte offsets in the normalized snapshot, to the
-   canonical-IR node or nodes it supports. The record must carry the
-   canonical-IR serialization hash, `.yh` byte hash, grammar version, and
-   compiler version used to create it.
+   canonical-IR node or nodes it supports. The record must carry the v1
+   canonical semantic hash, `.yh` byte hash, grammar version, and compiler
+   version used to create it.
 4. Record automated triage as automated assistance, including model, prompt,
    and tool versions. It may prioritise work or flag defects, but cannot
    certify legal fidelity.

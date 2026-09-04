@@ -99,7 +99,7 @@ class Z3Diagnostic:
         return diag
 
 
-@dataclass(frozen=True)
+@dataclass
 class Z3UnsupportedFeature(Exception):
     """Raised when Z3 consistency checking would silently drop semantics."""
 
@@ -1016,6 +1016,7 @@ class Z3Generator:
         self._sorts: Dict[str, Any] = {}  # Custom Z3 sorts
         self._consts: Dict[str, Any] = {}  # Declared constants
         self._assertions: List[Any] = []  # Collected assertions
+        self.canonical_ir_hash: Optional[str] = None
 
     @staticmethod
     def unsupported_features(ast: "ModuleNode") -> Tuple[str, ...]:
@@ -1056,14 +1057,45 @@ class Z3Generator:
         return _verifier_duration_days(duration, self.reference_date)
 
     def generate(self, ast: "ModuleNode") -> Tuple[Any, List[Any]]:
+        """Lower an AST at the canonical boundary before Z3 generation."""
+        from yuho.ir import lower_module
+
+        return self.generate_canonical(lower_module(ast), ast_adapter=ast)
+
+    def generate_canonical(
+        self,
+        ir,
+        *,
+        ast_adapter: "ModuleNode",
+    ) -> Tuple[Any, List[Any]]:
+        """Generate through the explicit canonical-IR-to-Z3 adapter.
+
+        The first IR schema keeps Z3's retained AST lowering as an explicit
+        adapter.  Unsupported canonical features are rejected here rather
+        than being silently absent from the resulting solver.
         """
-        Generate Z3 solver and constraints from a module AST.
+        from yuho.ir import diagnose_capabilities
 
-        Args:
-            ast: ModuleNode from Yuho AST
+        diagnostics = diagnose_capabilities(ir, "z3")
+        if diagnostics:
+            raise Z3UnsupportedFeature(tuple(diagnostic.message for diagnostic in diagnostics))
+        ir_sections = tuple(statute.section_number for statute in ir.module.statutes)
+        ast_sections = tuple(statute.section_number for statute in ast_adapter.statutes)
+        if ir_sections != ast_sections:
+            raise ValueError(
+                "canonical module and Z3 AST adapter contain different statute sections: "
+                f"{ir_sections!r} != {ast_sections!r}"
+            )
+        self.canonical_ir_hash = ir.digest
+        return self._generate_from_ast(ast_adapter)
 
-        Returns:
-            Tuple of (Z3 Solver with constraints, list of named assertions)
+    def _generate_from_ast(self, ast: "ModuleNode") -> Tuple[Any, List[Any]]:
+        """
+        Generate Z3 solver and constraints from the legacy AST adapter.
+
+        This method is deliberately private: callers enter through
+        :meth:`generate` or :meth:`generate_canonical` so that capability
+        checks and canonical provenance cannot be skipped.
         """
         if not Z3_AVAILABLE:
             return None, []

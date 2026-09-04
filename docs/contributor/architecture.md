@@ -13,6 +13,9 @@ graph TD
 
     Services --> Parser[parser/wrapper.py]
     Services --> ASTBuilder[ast/builder.py]
+    ASTBuilder --> CanonicalIR[ir/canonical.py]
+    CanonicalIR --> Lint
+    CanonicalIR --> Runtime[eval/statute_evaluator.py]
     Services --> Lint[ast/statute_lint.py]
     Services --> Scope[ast/scope_analysis.py]
     Services --> TypeCheck[ast/type_check.py]
@@ -24,6 +27,9 @@ graph TD
     Scope --> Resolver[resolver/module_resolver.py]
     TypeCheck --> TypeInference[ast/type_inference.py]
     Lint --> Refs
+
+    CanonicalIR --> Z3
+    CanonicalIR --> AlloyV
 
     Transpile --> JSON[json_transpiler.py]
     Transpile --> English[english_transpiler.py]
@@ -46,6 +52,7 @@ src/yuho/
 ├── ast/                 # AST nodes, builder, visitors, type/lint passes
 ├── cli/                 # Click CLI and command implementations
 ├── eval/                # Interpreter and defeasible evaluation helpers
+├── ir/                  # Versioned canonical semantic representation
 ├── library/             # Reference graph, semantic graph, graph lint
 ├── output/              # SARIF/JUnit output helpers
 ├── parser/              # tree-sitter parser wrapper
@@ -79,11 +86,18 @@ canonical IR, semantic analysis, runtime, every invoked backend, and each
 export. A missing capability is an unsupported combination and must fail with
 a diagnostic rather than silently approximate meaning.
 
-The checked-in implementation is still in transition: the Python AST is the
-current executable boundary and there is not yet a versioned canonical-IR
-artifact. Therefore current runtime and backend claims are limited to the
-retained tests and capability registry; this document describes the required
-boundary for new work, not an end-to-end refinement proof.
+The checked-in implementation lowers every parsed module to canonical-IR
+schema `yuho.canonical-ir` version `1.0`. Its deterministic semantic digest is
+distinct from its optional normalized source-text digest. Version 1 gives statutes,
+scoped provisions, element groups, element burden metadata, and sibling
+penalty blocks dedicated IR shapes; it retains a full immutable module
+snapshot for constructs that have not migrated yet.
+
+The AST remains an explicit transition adapter for expression execution, some
+semantic checks, and most export/back-end lowerings. Those adapters are named
+in the capability matrix in `src/yuho/ir/canonical.py`; unsupported
+consumer/feature pairs must produce a `YIR…` diagnostic rather than silently
+degrade. This is a compiler boundary, not an end-to-end refinement proof.
 
 ## Current Data Flow
 
@@ -96,21 +110,24 @@ tree-sitter parse -> CST
     v
 ASTBuilder.build() -> ModuleNode
     |
-    +-> lint/type/scope analysis
-    +-> reference graph and semantic graph
-    +-> transpilers
-    +-> verifiers and exporters
+    v
+lower_module() -> CanonicalIR v1.0 (deterministic semantic hash)
+    |
+    +-> canonical capability checks + AST-adapter semantic analysis
+    +-> canonical runtime entry point + explicit AST expression adapter
+    +-> Z3 / Alloy canonical adapter or unsupported diagnostic
+    +-> AST-adapter exports until their IR migrations land
 ```
 
 ## Canonical-IR Migration Rule
 
-New semantic behavior must first define its canonical-IR representation and
-versioning/migration rule, then implement semantic checks and runtime behavior
-against that representation before adding a lowering or export. Existing AST
-consumers should move behind that boundary incrementally with differential
-tests. Until a construct has made that transition, backend and export support
-must be described as partial or unsupported rather than implied by parser
-acceptance.
+New semantic behavior must define its canonical-IR representation and
+versioning/migration rule before adding a lowering or export. A migration may
+use a named AST adapter temporarily, but must test that adapter against the IR
+and declare it as `ast_adapter`, not `modeled`. Persisted IR never retains a
+Python AST reference. Until a construct has made that transition, backend and
+export support must be described as partial or unsupported rather than implied
+by parser acceptance.
 
 ## Adding a New Transpiler
 

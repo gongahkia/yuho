@@ -19,7 +19,7 @@ from yuho.ast import ArrayType, BuiltinType, GenericType, NamedType, OptionalTyp
 logger = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True)
+@dataclass
 class AlloyUnsupportedFeature(Exception):
     """Raised when the verifier-side Alloy backend would emit a partial model."""
 
@@ -64,17 +64,41 @@ class AlloyGenerator:
             scope: Default scope for bounded model checking (max instances)
         """
         self.scope = scope
+        self.canonical_ir_hash: Optional[str] = None
 
     def generate(self, ast) -> str:
-        """
-        Generate Alloy model from a module AST.
+        """Lower an AST at the canonical boundary before Alloy generation."""
+        from yuho.ir import lower_module
 
-        Args:
-            ast: ModuleNode from Yuho AST
+        return self.generate_canonical(lower_module(ast), ast_adapter=ast)
 
-        Returns:
-            Alloy model as string
+    def generate_canonical(self, ir, *, ast_adapter) -> str:
         """
+        Generate Alloy model through the explicit canonical-IR adapter.
+
+        Alloy is intentionally a secondary bounded-shape backend.  Its
+        unsupported canonical semantics are rejected before model emission.
+        """
+        from yuho.ir import diagnose_capabilities
+
+        diagnostics = diagnose_capabilities(ir, "alloy")
+        # The legacy validator below retains detailed diagnostics for its
+        # established unsupported surfaces.  Subsection semantics have no
+        # faithful Alloy lowering at all, so stop at the canonical boundary.
+        blocking = tuple(
+            diagnostic.message for diagnostic in diagnostics if diagnostic.feature == "subsection"
+        )
+        if blocking:
+            raise AlloyUnsupportedFeature(blocking)
+        ir_sections = tuple(statute.section_number for statute in ir.module.statutes)
+        ast_sections = tuple(statute.section_number for statute in ast_adapter.statutes)
+        if ir_sections != ast_sections:
+            raise ValueError(
+                "canonical module and Alloy AST adapter contain different statute sections: "
+                f"{ir_sections!r} != {ast_sections!r}"
+            )
+        self.canonical_ir_hash = ir.digest
+        ast = ast_adapter
         self._validate_supported(ast)
         lines = [
             "// Generated Alloy model from Yuho statute",

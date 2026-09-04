@@ -3,11 +3,11 @@
 This page defines the contract between Yuho syntax, AST construction, type
 checking, runtime evaluation, verifiers, and transpilers.
 
-Yuho's current executable boundary is the Python AST plus semantic checker and
-runtime evaluator for the covered fragment. It is not yet a versioned
-canonical-IR artifact. Z3, Alloy, Lean, and export formats are projections from
-that current model unless a backend document explicitly states a narrower
-fragment.
+Yuho lowers a parsed module to `yuho.canonical-ir` version `1.0` before
+semantic analysis, runtime evaluation, and verifier lowering. The artifact has
+a deterministic semantic serialization/hash and a separate optional
+normalized source-text hash. It is not a proof of legal correctness or of equivalence
+between every backend.
 
 The required durable boundary is:
 
@@ -16,24 +16,23 @@ grammar/CST -> versioned canonical IR -> semantic analysis -> runtime
             -> backend lowerings -> exports
 ```
 
-Until that IR exists, parser acceptance must not be presented as a semantic or
-backend guarantee. New work must define the IR representation, version, and
-migration behavior before it can claim support beyond the current retained
-tests.
+Parser acceptance is not a semantic or backend guarantee. A consumer must be
+classified as `modeled`, `ast_adapter`, or `unsupported` for each IR feature;
+unsupported combinations produce a structured `YIR…` diagnostic.
 
 ## Semantic Order
 
 1. Parse `.yh` source with `src/tree-sitter-yuho/grammar.js`.
-2. Build immutable AST nodes from `src/yuho/ast/nodes.py`; this is the
-   transitional input to the future canonical IR.
-3. Run type inference/checking and statute lint.
-4. Evaluate executable statute elements against facts with the runtime
-   evaluator.
-5. Project the checked AST to verifiers and transpilers.
+2. Build immutable AST nodes from `src/yuho/ast/nodes.py`.
+3. Lower them with `src/yuho/ir/canonical.py` into Canonical IR v1.0.
+4. Run canonical capability checks and AST-adapter type/lint analysis.
+5. Evaluate the covered runtime fragment through `evaluate_canonical`.
+6. Lower through a named adapter to verifiers and exports, or reject the
+   unsupported feature/backend pair.
 
 Backend output is not canonical by itself. The trust boundary is the lowering
-from checked canonical semantics into that backend. Before the canonical-IR
-migration is complete, that lowering is only a retained-test boundary.
+from checked canonical semantics into that backend. The v1 adapters are only a
+retained-test boundary; they are not an equivalence proof.
 
 ## Construct Matrix
 
@@ -69,13 +68,20 @@ Use these status meanings consistently:
 - `experimental`: emitted with known gaps and not part of canonical semantics.
 - `not directly modeled`: consumed through a parent construct or irrelevant to
   that backend.
+- `ast_adapter`: deliberately consumes canonical IR but delegates the named
+  transition surface to an AST implementation; it is not a modeled claim.
 
 ## Current Canonical Boundaries
 
 Runtime:
 
-- Canonical for core expressions, literals, struct values, function calls,
-  basic statute element satisfaction, and fixed-unit duration comparison.
+- Canonical IR v1 models statutes, provision paths, requirement trees, and
+  element burden metadata. The public AST entry point lowers immediately and
+  records the semantic IR hash in `EvaluationResult`.
+- Expression execution and exception handling still use a required AST adapter.
+- Subsection branch execution and guarded/sibling penalty selection currently
+  fail closed with a runtime capability diagnostic until their dedicated IR
+  evaluators are complete.
 - Calendar durations with years/months require a reference date for exact
   ordering.
 - Money arithmetic is Decimal-based, currency-aware, and rejects implicit
@@ -83,6 +89,9 @@ Runtime:
 
 Z3:
 
+- Enters through a canonical-IR adapter and records the IR hash used for the
+  lowering. Its current statute/expression/penalty adapter is not a parity
+  claim for unmigrated semantics.
 - Conformance-tested for retained criminal-statute verification fixtures.
 - Penalty duration bounds use exact runtime month-end clamping when a
   verifier reference date is supplied; otherwise calendar units use explicitly
@@ -92,15 +101,18 @@ Z3:
 
 Alloy:
 
-- Secondary bounded-shape smoke backend. Unsupported verifier features fail
-  explicitly; Alloy is not a parity trust boundary for penalties, case-law,
-  typed burden metadata, cross-section reasoning, or exception priority/defeat
-  semantics.
+- Secondary bounded-shape backend. It rejects canonical subsection semantics
+  at the boundary and rejects its other unsupported verifier features with its
+  detailed diagnostics. It is not a parity trust boundary for penalties,
+  case-law, typed burden metadata, cross-section reasoning, or exception
+  priority/defeat semantics.
 
 Lean:
 
 - Proof-bearing for the mechanised fragment documented in
   `../../mechanisation/README.md`.
+- Does not consume production canonical IR v1; its entire v1 capability
+  surface is explicitly unsupported pending the bounded refinement work.
 - Not a proof of full Yuho source semantics.
 
 Transpilers:
@@ -114,8 +126,9 @@ Transpilers:
 When adding a grammar construct, update this chain in the same change:
 
 1. parser grammar and CST shape
-2. canonical-IR representation and version/migration rule
-3. AST adapter while the migration remains incomplete
+2. canonical-IR representation, version, deterministic serialization, and
+   capability status
+3. named AST adapter while the migration remains incomplete
 4. type or lint behavior
 5. runtime/verifier status
 6. transpiler status

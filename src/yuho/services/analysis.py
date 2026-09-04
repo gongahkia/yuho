@@ -21,6 +21,8 @@ from yuho.parser import get_parser
 from yuho.parser.source_location import SourceLocation
 from yuho.parser.wrapper import ParseError, MAX_FILE_SIZE, MAX_SOURCE_LENGTH
 from yuho.ast.statute_lint import LintWarning, lint_module
+from yuho.ir import CapabilityDiagnostic, CanonicalIR, diagnose_capabilities, lower_module
+from yuho.ir import canonical as canonical_ir_nodes
 from yuho.services.errors import (
     ASTBoundaryError,
     ParserBoundaryError,
@@ -32,7 +34,6 @@ from yuho.services.safe_cache import encode as encode_cache
 from yuho.services.safe_cache import read_json as read_cache_json
 from yuho.services.safe_cache import type_key
 from yuho.services.safe_cache import write_json as write_cache_json
-
 
 ANALYSIS_ERROR_CODES: dict[str, str] = {
     "file_not_found": "Y0001",
@@ -48,6 +49,7 @@ ANALYSIS_ERROR_CODES: dict[str, str] = {
     "parse_known_grammar_ambiguity": "Y0103",
     "parser_failed": "Y0199",
     "ast_build_failed": "Y0200",
+    "ir_lowering_failed": "Y0250",
     "lint_analysis_failed": "Y0300",
     "semantic_issue": "Y0400",
     "semantic_analysis_failed": "Y0499",
@@ -234,6 +236,8 @@ class AnalysisResult:
     source: str
     tree: Optional[Any] = None
     ast: Optional[ModuleNode] = None
+    canonical_ir: Optional[CanonicalIR] = None
+    canonical_diagnostics: tuple[CapabilityDiagnostic, ...] = ()
     parse_errors: list[ParseError] = field(default_factory=list)
     errors: list[AnalysisError] = field(default_factory=list)
     ast_summary: Optional[ASTSummary] = None
@@ -447,6 +451,14 @@ class AnalysisResult:
         }
         if include_stats and self.ast_summary is not None:
             payload["stats"] = self.ast_summary.to_dict()
+        if self.canonical_ir is not None:
+            payload["canonical_ir"] = {
+                "schema": self.canonical_ir.schema,
+                "version": self.canonical_ir.version,
+                "hash": self.canonical_ir.digest,
+                "source_hash": self.canonical_ir.source_hash,
+                "unsupported": [diagnostic.to_dict() for diagnostic in self.canonical_diagnostics],
+            }
         if include_metrics:
             payload["code_scale"] = self.code_scale.to_dict() if self.code_scale else None
             payload["clock_load_scale"] = (
@@ -503,8 +515,15 @@ def _cache_type_allowlist() -> dict[str, type[Any]]:
         LintWarning,
         ParseError,
         SourceLocation,
+        CanonicalIR,
+        CapabilityDiagnostic,
     }
     for candidate in vars(ast_nodes).values():
+        if not inspect.isclass(candidate):
+            continue
+        if is_dataclass(candidate) or issubclass(candidate, Enum):
+            classes.add(candidate)
+    for candidate in vars(canonical_ir_nodes).values():
         if not inspect.isclass(candidate):
             continue
         if is_dataclass(candidate) or issubclass(candidate, Enum):
@@ -757,6 +776,21 @@ def analyze_source(
         return result
     result.ast_duration_ms = (perf_counter() - start_ast) * 1000.0
 
+    try:
+        result.canonical_ir = lower_module(result.ast, source=source)
+        result.canonical_diagnostics = diagnose_capabilities(result.canonical_ir, "semantic")
+    except (TypeError, ValueError) as exc:
+        result.errors.append(
+            AnalysisError(
+                stage="ir",
+                message=f"Canonical-IR lowering failed: {exc}",
+                error_code=_code("ir_lowering_failed"),
+            )
+        )
+        result.total_duration_ms = (perf_counter() - start_total) * 1000.0
+        result.clock_load_scale = _build_clock_load_scale(result)
+        return result
+
     result.ast_summary = ASTSummary.from_module(result.ast)
     result.code_scale = CodeScale(
         source_loc=_count_source_loc(source),
@@ -781,7 +815,11 @@ def analyze_source(
         result.semantic_checked = True
         start_semantic = perf_counter()
         try:
-            result.semantic_summary = _run_semantic_checks(result.ast, file=file)
+            result.semantic_summary = _run_semantic_checks(
+                result.ast,
+                result.canonical_ir,
+                file=file,
+            )
         except (TypeError, ValueError, AttributeError, RuntimeError) as exc:
             result.errors.append(
                 AnalysisError(
@@ -850,6 +888,7 @@ def _parse_errors_to_analysis_errors(parse_errors: list[ParseError]) -> list[Ana
 
 def _run_semantic_checks(
     ast: ModuleNode,
+    canonical_ir: CanonicalIR,
     file: str = "<string>",
 ) -> SemanticSummary:
     """Run scope analysis, type inference, and type checking."""
@@ -887,6 +926,17 @@ def _run_semantic_checks(
     issues: list[SemanticIssue] = []
     error_count = 0
     warning_count = 0
+
+    for diagnostic in diagnose_capabilities(canonical_ir, "semantic"):
+        warning_count += 1
+        issues.append(
+            SemanticIssue(
+                severity="warning",
+                message=diagnostic.message,
+                line=0,
+                column=0,
+            )
+        )
 
     for item in _check_jurisdiction_references(ast, resolver, source_path):
         if item.severity == "warning":
@@ -1036,11 +1086,7 @@ def _check_jurisdiction_references(
 
 
 def _module_jurisdictions(ast: ModuleNode) -> set[str]:
-    return {
-        statute.jurisdiction
-        for statute in ast.statutes
-        if statute.jurisdiction
-    }
+    return {statute.jurisdiction for statute in ast.statutes if statute.jurisdiction}
 
 
 def _node_line_col(node: ASTNode) -> tuple[int, int]:

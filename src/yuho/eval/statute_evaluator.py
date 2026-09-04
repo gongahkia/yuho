@@ -8,6 +8,14 @@ from yuho.ast import nodes
 from yuho.caselaw import is_adopting_treatment, is_inactive_treatment
 from yuho.eval.facts import TypedFact
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, StructInstance, Value
+from yuho.ir import (
+    CANONICAL_IR_VERSION,
+    CapabilityDiagnostic,
+    CanonicalStatute,
+    canonical_hash,
+    diagnose_statute_capabilities,
+    lower_statute,
+)
 
 _DEFAULT_SCOPE_MAX_DEPTH = 32
 _SCOPE_MAX_DEPTH_BINDING = "__yuho_scope_max_depth"
@@ -51,6 +59,9 @@ class EvaluationResult:
     overall_satisfied: bool
     applicable_penalties: Optional[nodes.PenaltyNode] = None
     reasoning: List[str] = field(default_factory=list)
+    canonical_ir_version: str = CANONICAL_IR_VERSION
+    canonical_ir_hash: Optional[str] = None
+    diagnostics: Tuple[CapabilityDiagnostic, ...] = ()
 
     def bindings(self) -> Dict[str, bool]:
         """Return ``{element_name: satisfied}`` for every element evaluated.
@@ -76,6 +87,10 @@ class EvaluationResult:
             lines.append("  Reasoning:")
             for r in self.reasoning:
                 lines.append(f"    - {r}")
+        if self.diagnostics:
+            lines.append("  Diagnostics:")
+            for diagnostic in self.diagnostics:
+                lines.append(f"    - {diagnostic.code}: {diagnostic.message}")
         return "\n".join(lines)
 
 
@@ -96,11 +111,60 @@ class StatuteEvaluator:
         facts: StructInstance,
         env: Optional[Environment] = None,
     ) -> EvaluationResult:
-        """Evaluate a statute against given facts.
+        """Evaluate a statute against given facts through canonical IR.
 
-        Each top-level element/group in the statute is checked against
-        matching fields in *facts*.  A field is considered to satisfy an
-        element when it exists and its value is truthy.
+        The public AST entry point is transitional.  It immediately lowers to
+        a :class:`~yuho.ir.CanonicalStatute`, then invokes the named AST
+        adapter for expression execution while that evaluator is migrated.
+        ``evaluate_canonical`` is the canonical consumer boundary.
+        """
+        canonical_statute = lower_statute(statute)
+        return self.evaluate_canonical(
+            canonical_statute,
+            facts,
+            ast_adapter=statute,
+            env=env,
+        )
+
+    def evaluate_canonical(
+        self,
+        statute: CanonicalStatute,
+        facts: StructInstance,
+        *,
+        ast_adapter: nodes.StatuteNode,
+        env: Optional[Environment] = None,
+    ) -> EvaluationResult:
+        """Evaluate canonical statute IR using the explicit legacy adapter.
+
+        The adapter is deliberately required rather than retained implicitly
+        on the IR object.  That keeps persisted canonical IR free of Python
+        AST nodes and exposes the remaining migration work in capability
+        diagnostics.
+        """
+        if statute.section_number != ast_adapter.section_number:
+            raise ValueError(
+                "canonical statute and AST adapter refer to different sections: "
+                f"s{statute.section_number} and s{ast_adapter.section_number}"
+            )
+        diagnostics = diagnose_statute_capabilities(statute, "runtime")
+        return self._evaluate_ast(
+            ast_adapter,
+            facts,
+            env,
+            canonical_ir_hash=canonical_hash(statute),
+            diagnostics=diagnostics,
+        )
+
+    def _evaluate_ast(
+        self,
+        statute: nodes.StatuteNode,
+        facts: StructInstance,
+        env: Optional[Environment],
+        *,
+        canonical_ir_hash: str,
+        diagnostics: Tuple[CapabilityDiagnostic, ...],
+    ) -> EvaluationResult:
+        """Evaluate the transition adapter for the canonical runtime boundary.
 
         For ElementGroupNode:
           - all_of -> every member must be satisfied
@@ -149,6 +213,14 @@ class StatuteEvaluator:
                     overall = False
                     reasoning.append(f"Element group ({member.combinator}) not satisfied")
 
+        # A subsection is not represented by the legacy top-level evaluator.
+        # Report it as unsupported and never let an empty top-level list turn
+        # that unsupported provision into an affirmative result.  #48 replaces
+        # this temporary fail-closed rule with recursive IR branch evaluation.
+        if any(diagnostic.feature == "subsection" for diagnostic in diagnostics):
+            overall = False
+            reasoning.extend(diagnostic.message for diagnostic in diagnostics)
+
         penalty = statute.penalty if overall else None
 
         # check exceptions via defeasible reasoning
@@ -179,6 +251,8 @@ class StatuteEvaluator:
             overall_satisfied=overall,
             applicable_penalties=penalty,
             reasoning=reasoning,
+            canonical_ir_hash=canonical_ir_hash,
+            diagnostics=diagnostics,
         )
 
     # -- internal helpers ---------------------------------------------------
@@ -577,8 +651,7 @@ class StatuteEvaluator:
         selected: List[tuple[int, nodes.CaseLawNode]] = []
         for bucket in buckets.values():
             effects = {
-                StatuteEvaluator._normalise_effect(case.interpretive_effect)
-                for _, case in bucket
+                StatuteEvaluator._normalise_effect(case.interpretive_effect) for _, case in bucket
             }
             if len(effects) <= 1:
                 selected.extend(bucket)
