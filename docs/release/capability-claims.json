@@ -1,0 +1,51 @@
+{
+  "schema_version": "yuho.capability-claims/v1",
+  "generated_from": [
+    "docs/positioning/status-matrix.md",
+    "library/penal_code/_coverage/coverage.json",
+    "tests/fixtures/backend_parity/claims.json"
+  ],
+  "claims": [
+    {
+      "id": "parser-covered-corpus",
+      "status": "partial",
+      "public_wording": "Yuho parses the checked-in Singapore Penal Code corpus and the covered DSL fragment.",
+      "evidence": ["make verify-coverage"],
+      "limits": ["Parsing success does not establish legal or semantic fidelity.", "Known grammar regressions are release-blocking defects."]
+    },
+    {
+      "id": "runtime-z3-retained-fixtures",
+      "status": "partial",
+      "public_wording": "Yuho checks runtime/Z3 agreement on retained fixtures for the documented subset.",
+      "evidence": ["make verify-runtime-tests", "make verify-penalty-verdicts"],
+      "limits": ["This is not a proof of every Yuho program, every backend, or legal correctness."]
+    },
+    {
+      "id": "lean-covered-fragment",
+      "status": "partial",
+      "public_wording": "Yuho has mechanised checks for documented Lean fixtures and structural obligations.",
+      "evidence": ["make verify-mechanisation", "make verify-structural-diff"],
+      "limits": ["There is no end-to-end refinement proof from the production runtime to a formal semantics for the full DSL or corpus."]
+    },
+    {
+      "id": "corpus-provenance",
+      "status": "partial",
+      "public_wording": "Each checked-in Penal Code encoding is linked to a repository raw-source snapshot and machine-verifiable file hashes.",
+      "evidence": ["make verify-corpus-provenance"],
+      "limits": ["A checked-in snapshot is not independent confirmation of the current official statute text or legal interpretation."]
+    }
+  ],
+  "corpus_review": {
+    "total_sections": 524,
+    "automated_triage": 377,
+    "human_reviewed": 123,
+    "unattributed_team_review": 24,
+    "certification_rule": "Only a record explicitly labelled human review counts as human-reviewed. Automated and unattributed records are not legal certification."
+  },
+  "prohibited_public_claims": [
+    "Yuho is formally verified without naming the exact covered semantics and proof boundary.",
+    "All 524 Penal Code sections are human-verified.",
+    "A successful Yuho analysis proves legal correctness or provides legal advice.",
+    "An export backend is semantically equivalent unless the matching evidence is named."
+  ]
+}
