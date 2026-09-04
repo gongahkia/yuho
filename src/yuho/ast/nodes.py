@@ -1118,6 +1118,27 @@ class UndercutsRelation(ASTNode):
 
 
 @dataclass(frozen=True)
+class OutcomeNode(ASTNode):
+    """A typed criminal consequence declared by a provision or exception.
+
+    ``kind`` is one of ``acquit``, ``reduce_to``, or ``disposition``.  A
+    reduction names an offence section (for example ``s304``), while a
+    disposition names a procedural reference (for example ``CPC_252``).
+    Neither target is inferred from the surrounding prose.
+    """
+
+    kind: str
+    target: Optional[str] = None
+    guard: Optional[ASTNode] = None
+
+    def accept(self, visitor: "Visitor"):
+        return visitor.visit_outcome(self)
+
+    def children(self) -> List[ASTNode]:
+        return [self.guard] if self.guard else []
+
+
+@dataclass(frozen=True)
 class ExceptionNode(ASTNode):
     """
     Exception/proviso/defence within a statute.
@@ -1129,6 +1150,7 @@ class ExceptionNode(ASTNode):
     label: Optional[str]
     condition: StringLit
     effect: Optional[StringLit] = None
+    outcome: Optional[OutcomeNode] = None
     guard: Optional[ASTNode] = None
     priority: Optional[int] = None
     defeats: Optional[str] = None
@@ -1147,6 +1169,8 @@ class ExceptionNode(ASTNode):
         result: List[ASTNode] = [self.condition]
         if self.effect:
             result.append(self.effect)
+        if self.outcome:
+            result.append(self.outcome)
         if self.guard:
             result.append(self.guard)
         if self.defeat_relation:
@@ -1323,7 +1347,7 @@ class FactEventNode(ASTNode):
 class SubsectionNode(ASTNode):
     """
     G5: a numbered subsection inside a statute. Carries its own members
-    (definitions / elements / penalty / illustrations / exceptions / nested
+    (definitions / elements / penalty / illustrations / exceptions / outcomes / nested
     subsections), matching the real structure of sections like s377BO (7
     subsections) and s511 (3). Effective/repealed dates are inherited from
     the parent statute unless overridden later.
@@ -1335,6 +1359,7 @@ class SubsectionNode(ASTNode):
     penalty: Optional[PenaltyNode] = None
     illustrations: Tuple[IllustrationNode, ...] = ()
     exceptions: Tuple[ExceptionNode, ...] = ()
+    outcomes: Tuple[OutcomeNode, ...] = ()
     additional_penalties: Tuple[PenaltyNode, ...] = ()
     subsections: Tuple["SubsectionNode", ...] = ()  # nested subsections
     doc_comment: Optional[str] = None
@@ -1350,6 +1375,7 @@ class SubsectionNode(ASTNode):
             result.append(self.penalty)
         result.extend(self.illustrations)
         result.extend(self.exceptions)
+        result.extend(self.outcomes)
         result.extend(self.subsections)
         return result
 
@@ -1360,7 +1386,7 @@ class StatuteNode(ASTNode):
     Statute block representing a legal provision.
 
     Contains section number, title, definitions, elements, penalties,
-    illustrations, exceptions, and case law references.
+    illustrations, exceptions, typed outcomes, and case law references.
     """
 
     section_number: str
@@ -1370,6 +1396,7 @@ class StatuteNode(ASTNode):
     penalty: Optional[PenaltyNode]
     illustrations: Tuple[IllustrationNode, ...]
     exceptions: Tuple[ExceptionNode, ...] = ()
+    outcomes: Tuple[OutcomeNode, ...] = ()
     case_law: Tuple[CaseLawNode, ...] = ()
     subsections: Tuple[SubsectionNode, ...] = ()  # G5
     # Sibling penalty blocks beyond the first. The G12 multi-penalty pattern
@@ -1427,6 +1454,7 @@ class StatuteNode(ASTNode):
             result.append(self.penalty)
         result.extend(self.illustrations)
         result.extend(self.exceptions)
+        result.extend(self.outcomes)
         result.extend(self.case_law)
         result.extend(self.subsections)
         return result

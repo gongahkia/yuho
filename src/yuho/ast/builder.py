@@ -1226,6 +1226,7 @@ class ASTBuilder:
         additional_penalties: List[nodes.PenaltyNode] = []
         illustrations: List[nodes.IllustrationNode] = []
         exceptions: List[nodes.ExceptionNode] = []
+        outcomes: List[nodes.OutcomeNode] = []
         case_law: List[nodes.CaseLawNode] = []
         parties: List[nodes.PartyNode] = []
         subsections: List[nodes.SubsectionNode] = []  # G5
@@ -1249,6 +1250,8 @@ class ASTBuilder:
                 illustrations.append(self._build_illustration(child))
             elif child.type == "exception_block":
                 exceptions.append(self._build_exception(child))
+            elif child.type == "outcome_block":
+                outcomes.append(self._build_outcome(child))
             elif child.type == "caselaw_block":
                 case_law.append(self._build_caselaw(child))
             elif child.type == "parties_block":
@@ -1297,6 +1300,7 @@ class ASTBuilder:
             output_type=output_type,
             illustrations=tuple(illustrations),
             exceptions=tuple(exceptions),
+            outcomes=tuple(outcomes),
             case_law=tuple(case_law),
             subsections=tuple(subsections),  # G5
             doc_comment=doc,
@@ -1331,6 +1335,7 @@ class ASTBuilder:
         additional_penalties: List[nodes.PenaltyNode] = []
         illustrations: List[nodes.IllustrationNode] = []
         exceptions: List[nodes.ExceptionNode] = []
+        outcomes: List[nodes.OutcomeNode] = []
         subsections: List[nodes.SubsectionNode] = []
 
         for child in node.children:
@@ -1349,6 +1354,8 @@ class ASTBuilder:
                 illustrations.append(self._build_illustration(child))
             elif child.type == "exception_block":
                 exceptions.append(self._build_exception(child))
+            elif child.type == "outcome_block":
+                outcomes.append(self._build_outcome(child))
             elif child.type == "subsection_block":
                 subsections.append(self._build_subsection(child))
 
@@ -1361,6 +1368,7 @@ class ASTBuilder:
             additional_penalties=tuple(additional_penalties),
             illustrations=tuple(illustrations),
             exceptions=tuple(exceptions),
+            outcomes=tuple(outcomes),
             subsections=tuple(subsections),
             doc_comment=doc,
             source_location=self._loc(node),
@@ -1707,6 +1715,7 @@ class ASTBuilder:
         label_node = self._child_by_field(node, "label")
         condition_node = self._child_by_field(node, "condition")
         effect_node = self._child_by_field(node, "effect")
+        outcome_node = self._child_by_field(node, "outcome")
         guard_node = self._child_by_field(node, "guard")
         priority_node = self._child_by_field(node, "priority")
         defeat_relation_node = self._child_by_field(node, "defeat_relation")
@@ -1717,6 +1726,7 @@ class ASTBuilder:
             self._build_string_lit(condition_node) if condition_node else nodes.StringLit(value="")
         )
         effect = self._build_string_lit(effect_node) if effect_node else None
+        outcome = self._build_outcome(outcome_node) if outcome_node else None
         guard = self._build_expression(guard_node) if guard_node else None
         priority = int(self._text(priority_node)) if priority_node else None
         defeats = self._text(defeats_node) if defeats_node else None
@@ -1726,10 +1736,23 @@ class ASTBuilder:
             label=label,
             condition=condition,
             effect=effect,
+            outcome=outcome,
             guard=guard,
             priority=priority,
             defeats=defeats,
             defeat_relation=defeat_relation,
+            source_location=self._loc(node),
+        )
+
+    def _build_outcome(self, node) -> nodes.OutcomeNode:
+        """Build a typed outcome from an ``outcome_block``."""
+        kind_node = self._child_by_field(node, "kind")
+        target_node = self._child_by_field(node, "target")
+        guard_node = self._child_by_field(node, "guard")
+        return nodes.OutcomeNode(
+            kind=self._text(kind_node) if kind_node else "",
+            target=self._text(target_node) if target_node else None,
+            guard=self._build_expression(guard_node) if guard_node else None,
             source_location=self._loc(node),
         )
 

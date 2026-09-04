@@ -9,10 +9,19 @@ from yuho.caselaw import is_adopting_treatment, is_inactive_treatment
 from yuho.eval.dependencies import DependencyDiagnostic, DependencyResult
 from yuho.eval.facts import TypedFact
 from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, StructInstance, Value
+from yuho.eval.outcomes import (
+    CriminalOutcome,
+    CriminalOutcomeKind,
+    OutcomeDiagnostic,
+    OutcomeSource,
+    OutcomeTarget,
+    SpecialDisposition,
+)
 from yuho.ir import (
     CANONICAL_IR_VERSION,
     CapabilityDiagnostic,
     CanonicalDependency,
+    CanonicalOutcomeTransition,
     CanonicalRuleBranch,
     CanonicalStatute,
     canonical_hash,
@@ -64,6 +73,7 @@ class BranchResult:
     reasoning: List[str] = field(default_factory=list)
     penalty_paths: Tuple[Tuple[str, ...], ...] = ()
     exception_paths: Tuple[Tuple[str, ...], ...] = ()
+    outcome_transition: Optional[CanonicalOutcomeTransition] = None
     dependency_results: Tuple[DependencyResult, ...] = ()
     dependency_diagnostics: Tuple[DependencyDiagnostic, ...] = ()
 
@@ -116,6 +126,12 @@ class EvaluationResult:
     statute_title: str
     element_results: List[ElementResult]
     overall_satisfied: Optional[bool]
+    outcome: CriminalOutcome = field(
+        default_factory=lambda: CriminalOutcome(
+            kind=CriminalOutcomeKind.NOT_PROVED,
+            underlying_act_found=False,
+        )
+    )
     applicable_penalties: Tuple[ApplicablePenalty, ...] = ()
     penalty_diagnostics: Tuple[PenaltyDiagnostic, ...] = ()
     dependency_results: Tuple[DependencyResult, ...] = ()
@@ -151,6 +167,17 @@ class EvaluationResult:
             else "NOT SATISFIED" if self.overall_satisfied is False else "UNRESOLVED"
         )
         lines.append(f"Section {self.statute_section} ({self.statute_title}): {status}")
+        outcome = self.outcome
+        source = f" from {outcome.source.citation}" if outcome.source is not None else ""
+        lines.append(f"  Outcome: {outcome.kind.value}{source}")
+        if outcome.target is not None:
+            lines.append(
+                f"    Target: s{outcome.target.section} ({outcome.target.outcome_kind.value})"
+            )
+        if outcome.disposition is not None:
+            lines.append(f"    Disposition: {outcome.disposition.reference}")
+        for outcome_diagnostic in outcome.diagnostics:
+            lines.append(f"    - {outcome_diagnostic.code}: {outcome_diagnostic.message}")
         for er in self.element_results:
             mark = "[x]" if er.satisfied else "[ ]"
             path = (
@@ -341,12 +368,24 @@ class StatuteEvaluator:
             env,
         )
         reasoning.extend(diagnostic.message for diagnostic in penalty_diagnostics)
+        outcome, outcome_overall, outcome_penalties = self._resolve_criminal_outcome(
+            statute,
+            facts,
+            env,
+            evaluated_branches,
+            overall,
+            applicable_penalties,
+        )
+        overall = outcome_overall
+        applicable_penalties = outcome_penalties
+        reasoning.extend(diagnostic.message for diagnostic in outcome.diagnostics)
 
         return EvaluationResult(
             statute_section=statute.section_number,
             statute_title=title,
             element_results=all_element_results,
             overall_satisfied=overall,
+            outcome=outcome,
             applicable_penalties=applicable_penalties,
             penalty_diagnostics=penalty_diagnostics,
             dependency_results=tuple(dependency_results),
@@ -396,14 +435,14 @@ class StatuteEvaluator:
 
         dependency_results: Tuple[DependencyResult, ...] = ()
         dependency_diagnostics: Tuple[DependencyDiagnostic, ...] = ()
+        outcome_transition: Optional[CanonicalOutcomeTransition] = None
         if satisfied is True:
-            satisfied, dependency_results, dependency_diagnostics = self._apply_branch_exceptions(
-                branch,
-                statute,
-                facts,
-                env,
-                reasoning,
-            )
+            (
+                satisfied,
+                dependency_results,
+                dependency_diagnostics,
+                outcome_transition,
+            ) = self._apply_branch_exceptions(branch, statute, facts, env, reasoning)
 
         reasoning.insert(
             0,
@@ -417,9 +456,373 @@ class StatuteEvaluator:
             reasoning=reasoning,
             penalty_paths=tuple(source.citation_path for source in branch.penalties),
             exception_paths=tuple(source.citation_path for source in branch.exceptions),
+            outcome_transition=outcome_transition,
             dependency_results=dependency_results,
             dependency_diagnostics=dependency_diagnostics,
         )
+
+    def _resolve_criminal_outcome(
+        self,
+        statute: nodes.StatuteNode,
+        facts: StructInstance,
+        env: Environment,
+        evaluated_branches: List[Tuple[CanonicalRuleBranch, BranchResult]],
+        overall: Optional[bool],
+        convicted_penalties: Tuple[ApplicablePenalty, ...],
+    ) -> Tuple[CriminalOutcome, Optional[bool], Tuple[ApplicablePenalty, ...]]:
+        """Turn the structural liability result into a typed legal outcome.
+
+        ``overall_satisfied`` remains a compatibility projection. Consumers
+        requiring a legal consequence must use ``EvaluationResult.outcome``.
+        An exception's former prose effect is never used for routing.
+        """
+        if overall is True:
+            return (
+                CriminalOutcome(
+                    kind=CriminalOutcomeKind.CONVICTED,
+                    underlying_act_found=True,
+                    facts_used=tuple(sorted(facts.fields)),
+                ),
+                True,
+                convicted_penalties,
+            )
+
+        exceptional = next(
+            (
+                (branch, result)
+                for branch, result in evaluated_branches
+                if result.outcome_transition is not None
+            ),
+            None,
+        )
+        if exceptional is None:
+            if overall is None:
+                return (
+                    CriminalOutcome(
+                        kind=CriminalOutcomeKind.UNRESOLVED,
+                        underlying_act_found=False,
+                        facts_used=tuple(sorted(facts.fields)),
+                    ),
+                    None,
+                    (),
+                )
+            return (
+                CriminalOutcome(
+                    kind=CriminalOutcomeKind.NOT_PROVED,
+                    underlying_act_found=False,
+                    facts_used=tuple(sorted(facts.fields)),
+                ),
+                False,
+                (),
+            )
+
+        branch, branch_result = exceptional
+        transition = branch_result.outcome_transition
+        assert transition is not None
+        source = self._outcome_source(statute, transition)
+        if transition.outcome_kind in {"acquit", "legacy_acquit"}:
+            outcome = CriminalOutcome(
+                kind=CriminalOutcomeKind.ACQUITTED,
+                underlying_act_found=True,
+                source=source,
+                transition_sources=(source,),
+                facts_used=tuple(sorted(facts.fields)),
+                acquitted=True,
+            )
+            return self._apply_special_disposition(
+                statute,
+                facts,
+                env,
+                branch,
+                outcome,
+            )
+        if transition.outcome_kind == "reduce_to":
+            return self._resolve_reduction(statute, facts, env, transition, source)
+
+        diagnostic = OutcomeDiagnostic(
+            code="YROD002",
+            message=(
+                f"Unsupported exception outcome '{transition.outcome_kind}' at {source.citation}; "
+                "the result is unresolved"
+            ),
+            source=source,
+        )
+        return (
+            CriminalOutcome(
+                kind=CriminalOutcomeKind.UNRESOLVED,
+                underlying_act_found=True,
+                source=source,
+                transition_sources=(source,),
+                facts_used=tuple(sorted(facts.fields)),
+                diagnostics=(diagnostic,),
+            ),
+            None,
+            (),
+        )
+
+    def _resolve_reduction(
+        self,
+        statute: nodes.StatuteNode,
+        facts: StructInstance,
+        env: Environment,
+        transition: CanonicalOutcomeTransition,
+        source: OutcomeSource,
+    ) -> Tuple[CriminalOutcome, Optional[bool], Tuple[ApplicablePenalty, ...]]:
+        """Resolve a lesser-offence transition through the active registry."""
+        target = self._outcome_target_section(transition.target)
+        if target is None:
+            diagnostic = OutcomeDiagnostic(
+                code="YROD002",
+                message=f"Invalid reduce_to target {transition.target!r} at {source.citation}",
+                source=source,
+            )
+            return (
+                CriminalOutcome(
+                    kind=CriminalOutcomeKind.UNRESOLVED,
+                    underlying_act_found=True,
+                    source=source,
+                    transition_sources=(source,),
+                    facts_used=tuple(sorted(facts.fields)),
+                    diagnostics=(diagnostic,),
+                ),
+                None,
+                (),
+            )
+
+        stack = self._outcome_resolution_stack(env)
+        if target == statute.section_number or target in stack:
+            diagnostic = OutcomeDiagnostic(
+                code="YROD002",
+                message=(
+                    f"Cyclic reduce_to target s{target} at {source.citation}: "
+                    + " -> ".join(f"s{item}" for item in (*stack, statute.section_number, target))
+                ),
+                source=source,
+            )
+            return (
+                CriminalOutcome(
+                    kind=CriminalOutcomeKind.UNRESOLVED,
+                    underlying_act_found=True,
+                    source=source,
+                    transition_sources=(source,),
+                    facts_used=tuple(sorted(facts.fields)),
+                    diagnostics=(diagnostic,),
+                ),
+                None,
+                (),
+            )
+
+        target_statute = env.get_statute(target)
+        if target_statute is None:
+            diagnostic = OutcomeDiagnostic(
+                code="YROD001",
+                message=(
+                    f"reduce_to target s{target} at {source.citation} is not registered "
+                    "in the active statute environment"
+                ),
+                source=source,
+            )
+            return (
+                CriminalOutcome(
+                    kind=CriminalOutcomeKind.UNRESOLVED,
+                    underlying_act_found=True,
+                    source=source,
+                    transition_sources=(source,),
+                    facts_used=tuple(sorted(facts.fields)),
+                    diagnostics=(diagnostic,),
+                ),
+                None,
+                (),
+            )
+
+        target_env = env.child()
+        target_env.set(
+            "__yuho_outcome_resolution_stack",
+            Value(raw=[*stack, statute.section_number], type_tag="list"),
+        )
+        target_result = self.evaluate(target_statute, facts, target_env)
+        target_summary = OutcomeTarget(
+            section=target,
+            title=target_result.statute_title,
+            outcome_kind=target_result.outcome.kind,
+            overall_satisfied=target_result.overall_satisfied,
+        )
+        if not target_result.outcome.is_determinate:
+            diagnostic = OutcomeDiagnostic(
+                code="YROD003",
+                message=(
+                    f"reduce_to target s{target} at {source.citation} has an unresolved outcome"
+                ),
+                source=source,
+            )
+            return (
+                CriminalOutcome(
+                    kind=CriminalOutcomeKind.UNRESOLVED,
+                    underlying_act_found=True,
+                    source=source,
+                    transition_sources=(source,),
+                    target=target_summary,
+                    facts_used=tuple(sorted(facts.fields)),
+                    diagnostics=(diagnostic,),
+                ),
+                None,
+                (),
+            )
+
+        return (
+            CriminalOutcome(
+                kind=CriminalOutcomeKind.REDUCED_TO,
+                underlying_act_found=True,
+                source=source,
+                transition_sources=(source,),
+                target=target_summary,
+                facts_used=tuple(sorted(facts.fields)),
+            ),
+            target_result.overall_satisfied,
+            target_result.applicable_penalties if target_result.overall_satisfied is True else (),
+        )
+
+    def _apply_special_disposition(
+        self,
+        statute: nodes.StatuteNode,
+        facts: StructInstance,
+        env: Environment,
+        branch: CanonicalRuleBranch,
+        outcome: CriminalOutcome,
+    ) -> Tuple[CriminalOutcome, Optional[bool], Tuple[ApplicablePenalty, ...]]:
+        """Apply a provision's guarded procedural outcome after acquittal."""
+        for transition in branch.outcomes:
+            if transition.source_kind != "outcome" or transition.outcome_kind != "disposition":
+                continue
+            source = self._outcome_source(statute, transition)
+            outcome_node = self._outcome_adapter_node(statute, transition)
+            if outcome_node is None:
+                diagnostic = OutcomeDiagnostic(
+                    code="YROD003",
+                    message=f"Outcome source {source.citation} has no AST adapter node",
+                    source=source,
+                )
+                return (
+                    CriminalOutcome(
+                        kind=CriminalOutcomeKind.UNRESOLVED,
+                        underlying_act_found=True,
+                        source=source,
+                        transition_sources=(*outcome.transition_sources, source),
+                        facts_used=outcome.facts_used,
+                        diagnostics=(diagnostic,),
+                        acquitted=True,
+                    ),
+                    None,
+                    (),
+                )
+            if outcome_node.guard is not None:
+                from yuho.eval.defeasible import DefeasibleReasoner
+
+                raw_facts = {key: value.raw for key, value in facts.fields.items()}
+                guard = DefeasibleReasoner()._evaluate_guard(outcome_node.guard, raw_facts, env, ())
+                if guard.diagnostic is not None:
+                    diagnostic = OutcomeDiagnostic(
+                        code="YROD003",
+                        message=(
+                            f"Unable to evaluate disposition {transition.target!r} at "
+                            f"{source.citation}: {guard.diagnostic.message}"
+                        ),
+                        source=source,
+                    )
+                    return (
+                        CriminalOutcome(
+                            kind=CriminalOutcomeKind.UNRESOLVED,
+                            underlying_act_found=True,
+                            source=source,
+                            transition_sources=(*outcome.transition_sources, source),
+                            facts_used=outcome.facts_used,
+                            diagnostics=(diagnostic,),
+                            acquitted=True,
+                        ),
+                        None,
+                        (),
+                    )
+                if guard.satisfied is not True:
+                    continue
+            if not transition.target:
+                diagnostic = OutcomeDiagnostic(
+                    code="YROD002",
+                    message=f"Disposition outcome at {source.citation} has no reference target",
+                    source=source,
+                )
+                return (
+                    CriminalOutcome(
+                        kind=CriminalOutcomeKind.UNRESOLVED,
+                        underlying_act_found=True,
+                        source=source,
+                        transition_sources=(*outcome.transition_sources, source),
+                        facts_used=outcome.facts_used,
+                        diagnostics=(diagnostic,),
+                        acquitted=True,
+                    ),
+                    None,
+                    (),
+                )
+            return (
+                CriminalOutcome(
+                    kind=CriminalOutcomeKind.SPECIAL_DISPOSITION,
+                    underlying_act_found=True,
+                    source=source,
+                    transition_sources=(*outcome.transition_sources, source),
+                    disposition=SpecialDisposition(reference=transition.target, source=source),
+                    facts_used=outcome.facts_used,
+                    acquitted=True,
+                ),
+                False,
+                (),
+            )
+        return outcome, False, ()
+
+    @staticmethod
+    def _outcome_target_section(target: Optional[str]) -> Optional[str]:
+        """Normalize a grammar-level ``s304`` reference to a registry key."""
+        if target is None or not target.startswith("s") or len(target) == 1:
+            return None
+        section = target[1:]
+        return section if section[0].isdigit() else None
+
+    @staticmethod
+    def _outcome_resolution_stack(env: Environment) -> Tuple[str, ...]:
+        binding = env.get("__yuho_outcome_resolution_stack")
+        if binding is None or not isinstance(binding.raw, list):
+            return ()
+        return tuple(item for item in binding.raw if isinstance(item, str))
+
+    def _outcome_source(
+        self,
+        statute: nodes.StatuteNode,
+        transition: CanonicalOutcomeTransition,
+    ) -> OutcomeSource:
+        return OutcomeSource(
+            citation_path=transition.citation_path,
+            source_kind=transition.source_kind,
+            declaration_index=transition.declaration_index,
+            outcome_kind=transition.outcome_kind,
+            target=transition.target,
+            source_version=tuple(statute.effective_dates),
+        )
+
+    def _outcome_adapter_node(
+        self,
+        statute: nodes.StatuteNode,
+        transition: CanonicalOutcomeTransition,
+    ) -> Optional[nodes.OutcomeNode]:
+        provisions = {path: provision for path, provision in self._all_adapter_provisions(statute)}
+        provision = provisions.get(transition.citation_path)
+        if provision is None:
+            return None
+        if transition.source_kind == "exception":
+            if transition.declaration_index >= len(provision.exceptions):
+                return None
+            return provision.exceptions[transition.declaration_index].outcome
+        if transition.declaration_index >= len(provision.outcomes):
+            return None
+        return provision.outcomes[transition.declaration_index]
 
     def _select_penalties(
         self,
@@ -607,6 +1010,7 @@ class StatuteEvaluator:
         Optional[bool],
         Tuple[DependencyResult, ...],
         Tuple[DependencyDiagnostic, ...],
+        Optional[CanonicalOutcomeTransition],
     ]:
         """Apply governing exceptions and retain cross-section dependency trace."""
         from yuho.eval.defeasible import DefeasibleReasoner
@@ -634,13 +1038,18 @@ class StatuteEvaluator:
                     f"{diagnostic.code}: {diagnostic.message}"
                     for diagnostic in app.dependency_diagnostics
                 )
-                return None, tuple(dependency_results), tuple(dependency_diagnostics)
+                return None, tuple(dependency_results), tuple(dependency_diagnostics), None
             if app.guard_satisfied is True:
                 reasoning.append(
                     f"Exception '{app.label}' at s{source.citation_path[0]}"
                     f"{''.join(source.citation_path[1:])} defeated branch: {app.effect}"
                 )
-                return False, tuple(dependency_results), tuple(dependency_diagnostics)
+                return (
+                    False,
+                    tuple(dependency_results),
+                    tuple(dependency_diagnostics),
+                    self._exception_outcome_transition(branch, source),
+                )
             exception_key = self._exception_key(exception)
             if exception_key is not None and exception_key in facts.fields:
                 if facts.fields[exception_key].is_truthy():
@@ -648,8 +1057,44 @@ class StatuteEvaluator:
                         f"Exception '{exception_key}' at s{source.citation_path[0]}"
                         f"{''.join(source.citation_path[1:])} applies"
                     )
-                    return False, tuple(dependency_results), tuple(dependency_diagnostics)
-        return True, tuple(dependency_results), tuple(dependency_diagnostics)
+                    return (
+                        False,
+                        tuple(dependency_results),
+                        tuple(dependency_diagnostics),
+                        self._exception_outcome_transition(branch, source),
+                    )
+        return True, tuple(dependency_results), tuple(dependency_diagnostics), None
+
+    @staticmethod
+    def _exception_outcome_transition(
+        branch: CanonicalRuleBranch,
+        source,
+    ) -> CanonicalOutcomeTransition:
+        """Find a typed exception transition or preserve legacy acquittal semantics.
+
+        Legacy effects remain descriptive only. The pre-outcome evaluator's
+        established behaviour was that a fired exception defeated conviction;
+        represent that compatibility rule explicitly rather than reading its
+        free-text effect as a legal route.
+        """
+        typed = next(
+            (
+                outcome
+                for outcome in branch.outcomes
+                if outcome.source_kind == "exception"
+                and outcome.citation_path == source.citation_path
+                and outcome.declaration_index == source.declaration_index
+            ),
+            None,
+        )
+        if typed is not None:
+            return typed
+        return CanonicalOutcomeTransition(
+            citation_path=source.citation_path,
+            source_kind="exception",
+            declaration_index=source.declaration_index,
+            outcome_kind="legacy_acquit",
+        )
 
     @staticmethod
     def _citation_prefixes(citation_path: Tuple[str, ...]) -> Tuple[Tuple[str, ...], ...]:

@@ -407,6 +407,7 @@ module.exports = grammar({
       $.penalty_block,
       $.illustration_block,
       $.exception_block,
+      $.outcome_block,
       $.caselaw_block,
       $.parties_block,
       $.subsection_block,                                  // G5
@@ -660,12 +661,39 @@ module.exports = grammar({
       field('condition', $.string_literal),
       optional(field('effect', $.string_literal)),
       optional(seq('when', field('guard', $._expression))),
+      optional(field('outcome', $.outcome_block)),
       optional(seq('priority', field('priority', $.integer_literal))),
       optional(seq(field('defeat_relation', $.defeat_relation), field('defeats', $.identifier))),
       '}'
     ),
 
     defeat_relation: $ => choice('defeats', 'rebuts', 'undercuts'),
+
+    // An outcome is an executable legal consequence, rather than prose in an
+    // exception's optional effect string.  An `acquit` or `reduce_to` form is
+    // attached to an exception; a `disposition` form is a provision-level
+    // procedural consequence which may be guarded.
+    outcome_block: $ => choice(
+      seq('outcome', field('kind', 'acquit')),
+      seq(
+        'outcome',
+        field('kind', 'reduce_to'),
+        field('target', $.outcome_section_reference),
+      ),
+      seq(
+        'outcome',
+        field('kind', 'disposition'),
+        field('target', $.identifier),
+        optional(seq('when', field('guard', $._expression))),
+      ),
+    ),
+
+    outcome_section_reference: $ => token(seq(
+      's',
+      /[0-9]+/,
+      optional(seq('.', /[0-9]+/)),
+      optional(/[A-Za-z]+/),
+    )),
 
     caselaw_block: $ => seq(
       'caselaw',

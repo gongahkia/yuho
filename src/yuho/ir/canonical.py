@@ -24,7 +24,7 @@ from typing import Any, Iterable, Mapping, Optional, Union
 from yuho.ast import nodes
 
 CANONICAL_IR_SCHEMA = "yuho.canonical-ir"
-CANONICAL_IR_VERSION = "1.1"
+CANONICAL_IR_VERSION = "1.2"
 
 JSONScalar = Union[str, int, float, bool, None]
 CanonicalValue = Union[JSONScalar, "CanonicalNode", tuple["CanonicalValue", ...]]
@@ -112,6 +112,30 @@ class CanonicalDependency:
 
 
 @dataclass(frozen=True)
+class CanonicalOutcomeTransition:
+    """A source-local, typed criminal-outcome transition.
+
+    The target is supplied by syntax, never inferred from an exception's
+    prose effect. Runtime resolution is still required for an offence target.
+    """
+
+    citation_path: tuple[str, ...]
+    source_kind: str
+    declaration_index: int
+    outcome_kind: str
+    target: Optional[str] = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "citation_path": list(self.citation_path),
+            "source_kind": self.source_kind,
+            "declaration_index": self.declaration_index,
+            "outcome_kind": self.outcome_kind,
+            "target": self.target,
+        }
+
+
+@dataclass(frozen=True)
 class CanonicalProvision:
     """One scoped provision.  A child inherits its ancestor requirement path."""
 
@@ -120,6 +144,7 @@ class CanonicalProvision:
     elements: tuple[CanonicalRequirement, ...]
     penalties: tuple[CanonicalNode, ...]
     exceptions: tuple[CanonicalNode, ...]
+    outcomes: tuple[CanonicalOutcomeTransition, ...]
     dependencies: tuple[CanonicalDependency, ...]
     children: tuple["CanonicalProvision", ...]
     metadata: tuple[tuple[str, CanonicalValue], ...] = ()
@@ -140,6 +165,7 @@ class CanonicalProvision:
             "elements": [element.to_dict() for element in self.elements],
             "penalties": [penalty.to_dict() for penalty in self.penalties],
             "exceptions": [exception.to_dict() for exception in self.exceptions],
+            "outcomes": [outcome.to_dict() for outcome in self.outcomes],
             "dependencies": [dependency.to_dict() for dependency in self.dependencies],
             "children": [child.to_dict() for child in self.children],
             "metadata": {name: _value_to_data(value) for name, value in self.metadata},
@@ -197,6 +223,7 @@ class CanonicalRuleBranch:
     requirements: tuple[CanonicalRequirement, ...]
     penalties: tuple[CanonicalSourceNode, ...]
     exceptions: tuple[CanonicalSourceNode, ...]
+    outcomes: tuple[CanonicalOutcomeTransition, ...]
     dependencies: tuple[CanonicalDependency, ...]
 
     @property
@@ -210,6 +237,7 @@ class CanonicalRuleBranch:
             "requirements": [requirement.to_dict() for requirement in self.requirements],
             "penalties": [penalty.to_dict() for penalty in self.penalties],
             "exceptions": [exception.to_dict() for exception in self.exceptions],
+            "outcomes": [outcome.to_dict() for outcome in self.outcomes],
             "dependencies": [dependency.to_dict() for dependency in self.dependencies],
         }
 
@@ -315,6 +343,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.MODELED,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
+        "criminal_outcome": CapabilityStatus.MODELED,
         "cross_section_dependency": CapabilityStatus.MODELED,
         "penalty": CapabilityStatus.AST_ADAPTER,
         "civil_primitive": CapabilityStatus.AST_ADAPTER,
@@ -324,6 +353,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.MODELED,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
+        "criminal_outcome": CapabilityStatus.MODELED,
         "cross_section_dependency": CapabilityStatus.MODELED,
         "penalty": CapabilityStatus.AST_ADAPTER,
         "civil_primitive": CapabilityStatus.UNSUPPORTED,
@@ -333,6 +363,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.UNSUPPORTED,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
+        "criminal_outcome": CapabilityStatus.UNSUPPORTED,
         "cross_section_dependency": CapabilityStatus.MODELED,
         "penalty": CapabilityStatus.AST_ADAPTER,
         "civil_primitive": CapabilityStatus.UNSUPPORTED,
@@ -342,6 +373,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.UNSUPPORTED,
         "expression": CapabilityStatus.UNSUPPORTED,
         "exception": CapabilityStatus.UNSUPPORTED,
+        "criminal_outcome": CapabilityStatus.UNSUPPORTED,
         "cross_section_dependency": CapabilityStatus.UNSUPPORTED,
         "penalty": CapabilityStatus.UNSUPPORTED,
         "civil_primitive": CapabilityStatus.UNSUPPORTED,
@@ -353,6 +385,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.UNSUPPORTED,
         "expression": CapabilityStatus.UNSUPPORTED,
         "exception": CapabilityStatus.UNSUPPORTED,
+        "criminal_outcome": CapabilityStatus.UNSUPPORTED,
         "cross_section_dependency": CapabilityStatus.UNSUPPORTED,
         "penalty": CapabilityStatus.UNSUPPORTED,
         "civil_primitive": CapabilityStatus.UNSUPPORTED,
@@ -362,6 +395,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
         "subsection": CapabilityStatus.AST_ADAPTER,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
+        "criminal_outcome": CapabilityStatus.AST_ADAPTER,
         "cross_section_dependency": CapabilityStatus.AST_ADAPTER,
         "penalty": CapabilityStatus.AST_ADAPTER,
         "civil_primitive": CapabilityStatus.AST_ADAPTER,
@@ -370,7 +404,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
 
 
 def lower_module(ast: nodes.ModuleNode, *, source: Optional[str] = None) -> CanonicalIR:
-    """Lower an immutable AST module into canonical IR version ``1.1``."""
+    """Lower an immutable AST module into canonical IR version ``1.2``."""
     source_hash = None
     if source is not None:
         source_hash = sha256(source.encode("utf-8")).hexdigest()
@@ -418,7 +452,7 @@ def lower_statute(statute: nodes.StatuteNode) -> CanonicalStatute:
 def rule_branches(statute: CanonicalStatute) -> tuple[CanonicalRuleBranch, ...]:
     """Return the statute's executable structural rule branches.
 
-    A child inherits every ancestor requirement, exception, and penalty source.
+    A child inherits every ancestor requirement, exception, outcome, and penalty source.
     Element-bearing sibling leaves are alternatives.  Element-free provisions
     add definitions or other metadata but do not create a satisfiable branch.
     A provision with executable descendants is not itself a leaf; its elements
@@ -438,6 +472,7 @@ def rule_branches(statute: CanonicalStatute) -> tuple[CanonicalRuleBranch, ...]:
         inherited_requirements: tuple[CanonicalRequirement, ...],
         inherited_penalties: tuple[CanonicalSourceNode, ...],
         inherited_exceptions: tuple[CanonicalSourceNode, ...],
+        inherited_outcomes: tuple[CanonicalOutcomeTransition, ...],
         inherited_dependencies: tuple[CanonicalDependency, ...],
     ) -> None:
         requirements = inherited_requirements + provision.elements
@@ -449,13 +484,14 @@ def rule_branches(statute: CanonicalStatute) -> tuple[CanonicalRuleBranch, ...]:
             CanonicalSourceNode(provision.citation_path, index, exception)
             for index, exception in enumerate(provision.exceptions)
         )
+        outcomes = inherited_outcomes + provision.outcomes
         dependencies = inherited_dependencies + provision.dependencies
         executable_children = tuple(
             child for child in provision.children if has_executable_descendant(child)
         )
         if executable_children:
             for child in executable_children:
-                walk(child, requirements, penalties, exceptions, dependencies)
+                walk(child, requirements, penalties, exceptions, outcomes, dependencies)
             return
         if requirements:
             branches.append(
@@ -464,11 +500,12 @@ def rule_branches(statute: CanonicalStatute) -> tuple[CanonicalRuleBranch, ...]:
                     requirements=requirements,
                     penalties=penalties,
                     exceptions=exceptions,
+                    outcomes=outcomes,
                     dependencies=dependencies,
                 )
             )
 
-    walk(statute.root, (), (), (), ())
+    walk(statute.root, (), (), (), (), ())
     return tuple(branches)
 
 
@@ -531,6 +568,8 @@ def _diagnose_provision(
         features.append("penalty")
     if provision.exceptions:
         features.append("exception")
+    if provision.outcomes:
+        features.append("criminal_outcome")
     if provision.dependencies:
         features.append("cross_section_dependency")
     if any(isinstance(element, CanonicalNode) for element in provision.elements):
@@ -586,6 +625,26 @@ def _lower_provision(
     penalties = tuple(_lower_node(penalty) for penalty in _penalties(node))
     definitions = tuple(_lower_node(definition) for definition in node.definitions)
     exceptions = tuple(_lower_node(exception) for exception in node.exceptions)
+    outcomes = tuple(
+        CanonicalOutcomeTransition(
+            citation_path=citation_path,
+            source_kind="exception",
+            declaration_index=index,
+            outcome_kind=exception.outcome.kind,
+            target=exception.outcome.target,
+        )
+        for index, exception in enumerate(node.exceptions)
+        if exception.outcome is not None
+    ) + tuple(
+        CanonicalOutcomeTransition(
+            citation_path=citation_path,
+            source_kind="outcome",
+            declaration_index=index,
+            outcome_kind=outcome.kind,
+            target=outcome.target,
+        )
+        for index, outcome in enumerate(node.outcomes)
+    )
     dependencies = tuple(
         CanonicalDependency(
             citation_path=citation_path,
@@ -607,6 +666,7 @@ def _lower_provision(
         elements=tuple(_lower_requirement(member, citation_path) for member in node.elements),
         penalties=penalties,
         exceptions=exceptions,
+        outcomes=outcomes,
         dependencies=dependencies,
         children=children,
         metadata=_metadata(
@@ -617,6 +677,7 @@ def _lower_provision(
                 "penalty",
                 "additional_penalties",
                 "exceptions",
+                "outcomes",
                 "subsections",
             },
         ),
