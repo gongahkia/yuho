@@ -60,7 +60,32 @@ The tree-sitter grammar and generated parser live under
 `src/tree-sitter-yuho/`; the packaged Python binding shim is
 `src/tree_sitter_yuho/`.
 
-## Data Flow
+## Semantic Boundary
+
+The required semantic architecture is:
+
+```text
+grammar / CST
+    -> versioned canonical IR
+    -> semantic analysis
+    -> runtime evaluation
+    -> backend lowerings
+    -> exports
+```
+
+No backend or exporter may treat a parser node as its semantic contract.
+Each public construct needs an explicit capability record across parsing,
+canonical IR, semantic analysis, runtime, every invoked backend, and each
+export. A missing capability is an unsupported combination and must fail with
+a diagnostic rather than silently approximate meaning.
+
+The checked-in implementation is still in transition: the Python AST is the
+current executable boundary and there is not yet a versioned canonical-IR
+artifact. Therefore current runtime and backend claims are limited to the
+retained tests and capability registry; this document describes the required
+boundary for new work, not an end-to-end refinement proof.
+
+## Current Data Flow
 
 ```text
 .yh source
@@ -74,8 +99,18 @@ ASTBuilder.build() -> ModuleNode
     +-> lint/type/scope analysis
     +-> reference graph and semantic graph
     +-> transpilers
-    +-> verifiers
+    +-> verifiers and exporters
 ```
+
+## Canonical-IR Migration Rule
+
+New semantic behavior must first define its canonical-IR representation and
+versioning/migration rule, then implement semantic checks and runtime behavior
+against that representation before adding a lowering or export. Existing AST
+consumers should move behind that boundary incrementally with differential
+tests. Until a construct has made that transition, backend and export support
+must be described as partial or unsupported rather than implied by parser
+acceptance.
 
 ## Adding a New Transpiler
 

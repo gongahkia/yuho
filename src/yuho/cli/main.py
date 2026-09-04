@@ -13,7 +13,6 @@ import click
 from yuho import __version__
 from yuho.caselaw import TREATMENT_EDGE_KINDS
 
-
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
@@ -495,7 +494,7 @@ def verify(
     capabilities_only: bool,
     json_output: bool,
 ) -> None:
-    """Run retained formal verification backends."""
+    """Run retained verification backends."""
     from yuho.cli.commands.verify import run_verify
 
     run_verify(

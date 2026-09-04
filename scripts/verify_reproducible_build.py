@@ -88,7 +88,9 @@ def build_once(source: Path, out_dir: Path, uv: str) -> tuple[dict[str, str], di
     }
     inputs = {
         "cc": command_version(["cc", "--version"], source).splitlines()[0],
-        "python": command_version([uv, "run", "--locked", "--no-sync", "python", "--version"], source),
+        "python": command_version(
+            [uv, "run", "--locked", "--no-sync", "python", "--version"], source
+        ),
         "uv": command_version([uv, "--version"], source),
         "source_date_epoch": SOURCE_DATE_EPOCH,
     }

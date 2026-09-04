@@ -1,6 +1,4 @@
-"""
-Verify command - formal verification via Alloy and/or Z3.
-"""
+"""Run bounded verification backends via Alloy and/or Z3."""
 
 from __future__ import annotations
 
@@ -92,7 +90,7 @@ def run_verify(
     json_output: bool = False,
     verbose: bool = False,
 ) -> None:
-    """Run formal verification on a Yuho file, or report backend capabilities."""
+    """Run bounded verification on a Yuho file, or report backend capabilities."""
     reference = _parse_reference_date(reference_date, json_output=json_output)
     alloy_analyzer = AlloyAnalyzer(alloy_jar=alloy_jar, timeout=alloy_timeout)
     z3_solver = Z3Solver(timeout_ms=z3_timeout_ms, reference_date=reference)

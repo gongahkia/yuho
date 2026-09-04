@@ -11,16 +11,19 @@ Python 3.10 or later. See `pyproject.toml` for the supported versions.
 ## How do I install Yuho?
 
 ```bash
-pip install yuho
+uv tool install 'yuho==5.1.0'
 ```
 
 For repository work:
 
 ```bash
-uv venv --python 3.13 .venv
-source .venv/bin/activate
-uv pip install -e '.[dev]'
+git clone https://github.com/gongahkia/yuho
+cd yuho
+./install.sh --dev
 ```
+
+The checkout installer requires uv 0.11.14 and synchronizes the committed
+`uv.lock`; choose an exact published version when installing the package.
 
 ## What file extension does Yuho use?
 

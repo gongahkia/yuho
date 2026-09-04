@@ -7,12 +7,12 @@
 The command is exposed by `[project.scripts]` in `pyproject.toml`:
 
 ```bash
-uv pip install -e '.[lsp]'
+./install.sh --dev
 yuho-lsp
 ```
 
 The `lsp` extra installs `pygls`. The dev install also includes it:
-`uv pip install -e '.[dev]'`.
+`./install.sh --dev`.
 
 ## Capabilities
 

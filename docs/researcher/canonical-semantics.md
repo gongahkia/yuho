@@ -3,22 +3,37 @@
 This page defines the contract between Yuho syntax, AST construction, type
 checking, runtime evaluation, verifiers, and transpilers.
 
-Yuho's canonical executable semantics are the Python AST plus semantic checker
-plus runtime evaluator for the covered fragment. Z3, Alloy, Lean, and export
-formats are projections from that model unless a backend document explicitly
-states a narrower fragment.
+Yuho's current executable boundary is the Python AST plus semantic checker and
+runtime evaluator for the covered fragment. It is not yet a versioned
+canonical-IR artifact. Z3, Alloy, Lean, and export formats are projections from
+that current model unless a backend document explicitly states a narrower
+fragment.
+
+The required durable boundary is:
+
+```text
+grammar/CST -> versioned canonical IR -> semantic analysis -> runtime
+            -> backend lowerings -> exports
+```
+
+Until that IR exists, parser acceptance must not be presented as a semantic or
+backend guarantee. New work must define the IR representation, version, and
+migration behavior before it can claim support beyond the current retained
+tests.
 
 ## Semantic Order
 
 1. Parse `.yh` source with `src/tree-sitter-yuho/grammar.js`.
-2. Build immutable AST nodes from `src/yuho/ast/nodes.py`.
+2. Build immutable AST nodes from `src/yuho/ast/nodes.py`; this is the
+   transitional input to the future canonical IR.
 3. Run type inference/checking and statute lint.
 4. Evaluate executable statute elements against facts with the runtime
    evaluator.
 5. Project the checked AST to verifiers and transpilers.
 
-Backend output is not canonical by itself. The trust boundary is the encoder
-from the checked AST into that backend.
+Backend output is not canonical by itself. The trust boundary is the lowering
+from checked canonical semantics into that backend. Before the canonical-IR
+migration is complete, that lowering is only a retained-test boundary.
 
 ## Construct Matrix
 
@@ -98,10 +113,11 @@ Transpilers:
 
 When adding a grammar construct, update this chain in the same change:
 
-1. parser grammar
-2. AST builder/node
-3. type or lint behavior
-4. runtime/verifier status
-5. transpiler status
-6. `tests/fixtures/conformance/constructs.json`
-7. focused tests for the highest-risk implemented layer
+1. parser grammar and CST shape
+2. canonical-IR representation and version/migration rule
+3. AST adapter while the migration remains incomplete
+4. type or lint behavior
+5. runtime/verifier status
+6. transpiler status
+7. `tests/fixtures/conformance/constructs.json`
+8. focused tests for the highest-risk implemented layer

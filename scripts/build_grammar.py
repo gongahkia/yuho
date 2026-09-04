@@ -2,84 +2,27 @@
 """
 Build the tree-sitter-yuho grammar.
 
-This script can be run standalone or called during pip install.
+This script uses only the lockfile-pinned local Node CLI. It never installs a
+global or unpinned Tree-sitter toolchain.
 """
 
 import subprocess
-import shutil
 import sys
 from pathlib import Path
 
 
-def find_tree_sitter_cli():
-    """Find the tree-sitter CLI executable."""
-    # Check if it's in PATH
-    ts_path = shutil.which("tree-sitter")
-    if ts_path:
-        return ts_path
-
-    # Check common npm global locations
-    npm_paths = [
-        Path.home() / ".npm-global" / "bin" / "tree-sitter",
-        Path.home() / "node_modules" / ".bin" / "tree-sitter",
-        Path("/usr/local/bin/tree-sitter"),
-    ]
-    for p in npm_paths:
-        if p.exists():
-            return str(p)
-
-    return None
+def find_tree_sitter_cli(grammar_dir: Path) -> Path | None:
+    """Return the lockfile-pinned repository-local Tree-sitter CLI."""
+    candidate = grammar_dir / "node_modules" / ".bin" / "tree-sitter"
+    return candidate if candidate.is_file() else None
 
 
-def install_tree_sitter_cli():
-    """Attempt to install tree-sitter CLI."""
-    print("tree-sitter CLI not found. Attempting to install...")
-
-    # Try npm
-    if shutil.which("npm"):
-        try:
-            subprocess.run(
-                ["npm", "install", "-g", "tree-sitter-cli"],
-                check=True,
-                capture_output=True,
-            )
-            if find_tree_sitter_cli():
-                print("Installed tree-sitter CLI via npm")
-                return find_tree_sitter_cli()
-        except subprocess.CalledProcessError:
-            pass
-
-    # Try pip (tree-sitter-cli package exists)
-    try:
-        subprocess.run(
-            [sys.executable, "-m", "pip", "install", "tree-sitter-cli"],
-            check=True,
-            capture_output=True,
-        )
-        if find_tree_sitter_cli():
-            print("Installed tree-sitter CLI via pip")
-            return find_tree_sitter_cli()
-    except subprocess.CalledProcessError:
-        pass
-
-    return None
-
-
-def build_grammar(grammar_dir: Path, output_dir: Path = None):
+def build_grammar(grammar_dir: Path, output_dir: Path | None = None) -> bool:
     """Build the tree-sitter grammar."""
-    ts_cli = find_tree_sitter_cli()
-
+    ts_cli = find_tree_sitter_cli(grammar_dir)
     if not ts_cli:
-        ts_cli = install_tree_sitter_cli()
-
-    if not ts_cli:
-        print("ERROR: Could not find or install tree-sitter CLI")
-        print("\nPlease install manually:")
-        print("  npm install -g tree-sitter-cli")
-        print("  # or")
-        print("  brew install tree-sitter")
-        print("  # or")
-        print("  cargo install tree-sitter-cli")
+        print("ERROR: Missing repository-local Tree-sitter CLI")
+        print(f"Run `npm ci` in {grammar_dir} and retry.")
         return False
 
     print(f"Using tree-sitter CLI: {ts_cli}")
@@ -87,7 +30,7 @@ def build_grammar(grammar_dir: Path, output_dir: Path = None):
     # Generate parser
     print("Generating parser from grammar.js...")
     result = subprocess.run(
-        [ts_cli, "generate"],
+        [str(ts_cli), "generate"],
         cwd=grammar_dir,
         capture_output=True,
         text=True,
@@ -99,7 +42,7 @@ def build_grammar(grammar_dir: Path, output_dir: Path = None):
     # Build shared library
     print("Building shared library...")
     result = subprocess.run(
-        [ts_cli, "build"],
+        [str(ts_cli), "build"],
         cwd=grammar_dir,
         capture_output=True,
         text=True,

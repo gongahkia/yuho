@@ -25,6 +25,11 @@ Before creating a tag, run:
 python scripts/release_audit.py --full
 ```
 
+`Clean Release Gate` runs this same command on pull requests and `main`; add
+that check to the repository's ruleset or branch-protection rule before relying
+on it as a promotion boundary. Tag releases run the same gate again from the
+tagged checkout.
+
 The reproducibility gate builds two clean source copies with separately
 synchronized locked environments and records the compiler, Python, uv, and
 `SOURCE_DATE_EPOCH` inputs in its report. The Docker image uses pinned Python

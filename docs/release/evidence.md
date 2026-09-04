@@ -22,7 +22,7 @@ correctness or universal human certification.
 | Lean expected verdict fixtures match Python runtime. | `scripts/verify_lean_expected_verdicts.py` reports `MISMATCH=0`. | `make verify-lean-verdicts` |
 | Lean penalty footprints match Python Z3 constraints. | `scripts/verify_lean_penalty_footprints.py` reports `MISMATCH=0`. | `make verify-lean-penalty-footprints` |
 | Release workflows use immutable action SHAs. | `scripts/verify_action_pins.py`. | `make verify-action-pins` |
-| Corpus provenance is complete for the SG Penal Code ledger. | `scripts/verify_corpus_provenance.py`. | `make verify-corpus-provenance` |
+| The SG Penal Code ledger's checked-in raw-section and `.yh` hashes match their recorded values. | `scripts/verify_corpus_provenance.py`. | `make verify-corpus-provenance` |
 | Published capability and corpus-review boundaries are internally consistent. | `docs/release/capability-claims.json` plus `scripts/verify_capability_claims.py`. | `make verify-capability-claims` |
 | Python release artifacts are reproducible under fixed build inputs. | `scripts/verify_reproducible_build.py`. | `make verify-reproducible-build` |
 

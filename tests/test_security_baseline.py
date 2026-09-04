@@ -19,13 +19,13 @@ def test_security_policy_and_project_governance_files_exist() -> None:
         assert path.exists(), path
 
 
-def test_security_workflow_runs_codeql_scorecard_and_pip_audit() -> None:
+def test_security_workflow_runs_codeql_scorecard_and_locked_pip_audit() -> None:
     workflow = Path(".github/workflows/security.yml").read_text(encoding="utf-8")
 
     assert "github/codeql-action/init@" in workflow
     assert "github/codeql-action/analyze@" in workflow
     assert "ossf/scorecard-action@" in workflow
-    assert "python -m pip_audit --strict" in workflow
+    assert "uv run --locked pip-audit --strict" in workflow
     assert "security-events: write" in workflow
     assert "id-token: write" in workflow
 

@@ -30,9 +30,9 @@
     {
       "id": "corpus-provenance",
       "status": "partial",
-      "public_wording": "Each checked-in Penal Code encoding is linked to a repository raw-source snapshot and machine-verifiable file hashes.",
+      "public_wording": "Each checked-in Penal Code encoding is linked to a repository raw-source snapshot and machine-verifiable raw-section and .yh file hashes.",
       "evidence": ["make verify-corpus-provenance"],
-      "limits": ["A checked-in snapshot is not independent confirmation of the current official statute text or legal interpretation."]
+      "limits": ["A checked-in snapshot is not independent confirmation of the current official statute text or legal interpretation.", "The legacy ledger does not yet contain the immutable raw-byte snapshots, source spans, canonical-IR hashes, or independent approvals required by the target corpus-evidence schema."]
     }
   ],
   "corpus_review": {
@@ -43,9 +43,9 @@
     "certification_rule": "Only a record explicitly labelled human review counts as human-reviewed. Automated and unattributed records are not legal certification."
   },
   "prohibited_public_claims": [
-    "Yuho is formally verified without naming the exact covered semantics and proof boundary.",
-    "All 524 Penal Code sections are human-verified.",
-    "A successful Yuho analysis proves legal correctness or provides legal advice.",
-    "An export backend is semantically equivalent unless the matching evidence is named."
+    "A broad formal-methods claim without naming its covered semantics and proof boundary.",
+    "A claim that every Penal Code section has human review.",
+    "A claim that successful analysis proves legal correctness or provides legal advice.",
+    "A semantic-equivalence claim for an export backend without matching evidence."
   ]
 }

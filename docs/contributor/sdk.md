@@ -6,14 +6,18 @@ transpilation, verification, and corpus graph checks.
 ## Installation
 
 ```bash
-pip install yuho
+uv tool install 'yuho==5.1.0'
 ```
 
 For repository work:
 
 ```bash
-uv pip install -e '.[dev]'
+./install.sh --dev
 ```
+
+The checkout installer requires uv 0.11.14 and synchronizes the committed
+lockfile. The published package command installs the named release rather than
+the checkout's dependency graph.
 
 ## Quick Start
 

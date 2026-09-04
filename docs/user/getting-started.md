@@ -21,23 +21,19 @@ cd yuho
 ./install.sh --dev
 ```
 
-Manual local install:
-
-```bash
-uv venv --python 3.13 .venv
-source .venv/bin/activate
-uv pip install -e '.[dev]'
-yuho doctor
-```
-
-If this checkout's venv predates 2026-06-22, rerun
-`uv pip install -e '.[dev]'` to pick up `z3-solver`.
+`install.sh` requires uv 0.11.14, checks the committed lockfile, and uses
+`uv sync --locked`. It is the supported path for a reproducible checkout
+environment; do not substitute `uv pip install -e` when you need the locked
+toolchain.
 
 For package use:
 
 ```bash
-pip install yuho
+uv tool install 'yuho==5.1.0'
 ```
+
+This installs the named published release, not the checkout's dependency lock.
+Choose the exact release version required by your project.
 
 If a shell resolves `yuho` outside the project venv, prefer
 `uv run yuho ...` or reactivate `.venv`.
@@ -115,7 +111,8 @@ mechanisation where the Lean toolchain is installed.
 For direct `yuho verify` use, the dev install covers Z3. Z3 rejects
 unsupported case-law and typed-burden constructs explicitly. Alloy 6 is a
 separate jar install and is a secondary bounded-shape smoke backend; see the
-README [Verification backends](../../README.md#verification-backends) section.
+release [capability-claim registry](../release/capability-claims.json) for
+the retained evidence and limits.
 
 ## 7. Shell completion
 

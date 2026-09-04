@@ -9,7 +9,9 @@ By the end of this guide, you will be able to:
 3. **Generate** plain English explanations and visual diagrams from your model
 4. **Test** hypothetical fact patterns against your statute model
 
-> No programming experience is required. If you can read a statute and spot its elements, you can use Yuho.
+> Yuho is a developer and researcher tool. Basic command-line and structured
+> modeling familiarity is useful; its checks do not establish that a model is
+> legally complete or correct.
 
 ## Introduction
 
@@ -31,7 +33,7 @@ Yuho is founded on the following beliefs.
 
 Law students already break statutes into elements in handwritten or typed notes. Yuho adds three concrete advantages over free-form notes:
 
-1. **Machine validation** -- Yuho checks your model is structurally complete. Forgot to specify mens rea? The linter catches it.
+1. **Machine validation** -- Yuho runs supported structural and fidelity diagnostics. They can flag missing or inconsistent modeled elements, but do not prove legal completeness.
 2. **Automatic diagramming** -- Your notes become visual flowcharts and mindmaps with a single command. No manual drawing.
 3. **Reusability** -- Import definitions across statutes. The definition of "dishonestly" (s24) is used by both s378 Theft and s415 Cheating. Define it once, reference it everywhere.
 
@@ -343,7 +345,7 @@ yuho refs --scc --json
 Edges are typed as `subsumes`, `amends`, or `implicit`. The graph is also
 available programmatically through `yuho.library.reference_graph`.
 
-## Formal verification (advanced)
+## Verification backends (advanced)
 
 Yuho can transpile to [Alloy](https://alloytools.org/) for bounded
 shape-smoke checks. Alloy is secondary and explicitly unsupported for
@@ -356,12 +358,12 @@ yuho transpile library/penal_code/s300_murder/statute.yh -t alloy > murder.als
 # open murder.als in Alloy Analyzer to run checks
 ```
 
-This is entirely optional and targeted at advanced users interested in formal methods.
+This is entirely optional and targeted at advanced users interested in formal methods. See the release [capability-claim registry](../release/capability-claims.json) for the evidence and unsupported-boundary details.
 
 ## Where to go next?
 
 * Learn Yuho's syntax at [`SYNTAX.md`](../researcher/syntax.md)
 * See statute examples in the [`library/`](../../library/) directory
-* Install and try Yuho: clone the repo, `pip install -e '.[dev]'`, then run `yuho --help`
+* Install a checkout with `./install.sh --dev`, then run `yuho --help`
 * Explore the CLI commands: `yuho check`, `yuho transpile`, `yuho explain`, `yuho refs --scc`
 * Want to contribute? See [`CONTRIBUTING.md`](../../.github/CONTRIBUTING.md)

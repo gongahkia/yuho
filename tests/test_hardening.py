@@ -123,6 +123,34 @@ class TestParserHardening:
         result = parser.parse(src, "<test>")
         assert result is not None
 
+    def test_comment_before_typed_struct_literal_is_rejected(self):
+        """Do not silently accept the stale parser's split CST shape."""
+        from yuho.parser import get_parser
+        from yuho.services.analysis import analyze_source
+
+        source = """struct Foo { bool a, bool b }
+
+fn check(bool x, bool y) : bool {
+    match { case _ := consequence FALSE; }
+}
+
+// this comment triggers the stale generated parser ambiguity
+Foo p := Foo { a := TRUE, b := FALSE }
+assert check(p.a, p.b) == TRUE
+"""
+
+        result = get_parser().parse(source, "<test>")
+
+        assert not result.is_valid
+        assert len(result.errors) == 1
+        assert result.errors[0].node_type == "KNOWN_TYPED_STRUCT_LITERAL_AMBIGUITY"
+        assert result.errors[0].location.line == 8
+
+        analysis = analyze_source(source, file="<test>")
+        assert not analysis.is_valid
+        assert analysis.ast is None
+        assert analysis.parse_errors[0].node_type == "KNOWN_TYPED_STRUCT_LITERAL_AMBIGUITY"
+
     def test_parse_file_nonexistent(self):
         from yuho.parser import get_parser
 

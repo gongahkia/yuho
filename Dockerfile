@@ -26,7 +26,7 @@ RUN apt-get update \
         ca-certificates \
         libxml2-utils \
     && mkdir -p /usr/share/yuho \
-    && {
+    && { \
         printf 'source_date_epoch=%s\n' "${SOURCE_DATE_EPOCH}"; \
         uv --version; \
         cc --version | head -n 1; \

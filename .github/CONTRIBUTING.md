@@ -83,8 +83,9 @@ Set up a local development environment in under 5 minutes.
 
 ### Prerequisites
 
-- Python 3.11+
-- Node.js 18+ (for tree-sitter grammar regeneration)
+- Python 3.10+
+- uv 0.11.14
+- Node.js 20+ (for Tree-sitter grammar regeneration)
 - Git
 
 ### Setup
@@ -92,8 +93,8 @@ Set up a local development environment in under 5 minutes.
 ```bash
 git clone https://github.com/gongahkia/yuho.git
 cd yuho
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
+./install.sh --dev
+source .venv/bin/activate
 ```
 
 ### Project Layout
@@ -108,7 +109,7 @@ src/
     services/          # analysis pipeline (parse -> AST -> semantic checks)
     resolver.py        # cross-file module resolution
 library/               # example statutes (.yh files)
-doc/                   # user-facing documentation
+docs/                  # user-facing and contributor documentation
 ```
 
 ### Common Tasks
@@ -119,7 +120,7 @@ doc/                   # user-facing documentation
 | Parse + check a file | `yuho check library/penal_code/s415_cheating/statute.yh` |
 | Transpile to English | `yuho transpile <file> -t english` |
 | Run tests | `yuho test library/penal_code/s415_cheating/test_statute.yh` |
-| Regenerate parser | `cd src/tree-sitter-yuho && npx tree-sitter generate` |
+| Regenerate parser | `cd src/tree-sitter-yuho && npm ci && npx --no-install tree-sitter generate` |
 | Lint | `yuho lint <file>` |
 
 ### Adding a Transpiler
@@ -129,7 +130,8 @@ doc/                   # user-facing documentation
 3. Register in `registry.py` `_register_builtins()`
 4. Add to `__init__.py` exports and CLI choice lists
 
-See `doc/ARCHITECTURE.md` for the full module dependency diagram.
+See [`docs/contributor/architecture.md`](../docs/contributor/architecture.md)
+for the full module dependency diagram and semantic-boundary contract.
 
 ### Adding a CLI Command
 
@@ -139,7 +141,7 @@ See `doc/ARCHITECTURE.md` for the full module dependency diagram.
 ### Modifying the Grammar
 
 1. Edit `src/tree-sitter-yuho/grammar.js`
-2. Run `cd src/tree-sitter-yuho && npx tree-sitter generate`
+2. Run `cd src/tree-sitter-yuho && npm ci && npx --no-install tree-sitter generate`
 3. Update `src/yuho/ast/builder.py` to handle new CST node types
 4. Verify: `yuho check <file>` on a sample
 

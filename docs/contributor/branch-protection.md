@@ -20,10 +20,13 @@ Required checks:
 - `Test (Python 3.12)`
 - `Test (Python 3.13)`
 - `Akoma Ntoso XSD round-trip`
+- `Clean Release Gate`
 - `Build Package`
 - `CodeQL`
 - `OpenSSF Scorecard`
 - `pip-audit`
 
-Release tags should be created only after `python scripts/release_audit.py
---full` passes locally or in an equivalent clean CI environment.
+Configure these checks in the repository ruleset or branch-protection rule;
+the `Clean Release Gate` runs the same locked `scripts/release_audit.py --full`
+plan on pull requests, `main`, and release tags. A release tag should be
+created only after that check has passed for the exact commit being tagged.

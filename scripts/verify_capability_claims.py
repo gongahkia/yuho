@@ -4,10 +4,10 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter
 from pathlib import Path
 from typing import Any
-
 
 ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = ROOT / "docs" / "release" / "capability-claims.json"
@@ -20,6 +20,7 @@ REQUIRED_SOURCES = {
     "library/penal_code/_coverage/coverage.json",
     "tests/fixtures/backend_parity/claims.json",
 }
+PUBLIC_BOUNDARY_DOCUMENTS = (EVIDENCE, STATUS_MATRIX, RETROSPECTIVE, ROOT / "docs" / "user")
 
 
 def review_kind(value: object) -> str:
@@ -54,7 +55,9 @@ def validate_capability_claims(
         failures.append("registry has no claims")
     else:
         identifiers = [claim.get("id") for claim in claims if isinstance(claim, dict)]
-        if len(identifiers) != len(set(identifiers)) or any(not identifier for identifier in identifiers):
+        if len(identifiers) != len(set(identifiers)) or any(
+            not identifier for identifier in identifiers
+        ):
             failures.append("claim identifiers must be non-empty and unique")
         for claim in claims:
             if not isinstance(claim, dict):
@@ -62,7 +65,10 @@ def validate_capability_claims(
                 continue
             if claim.get("status") not in {"stable", "partial", "experimental", "unsupported"}:
                 failures.append(f"{claim.get('id', '<unknown>')}: invalid status")
-            if not isinstance(claim.get("public_wording"), str) or not claim["public_wording"].strip():
+            if (
+                not isinstance(claim.get("public_wording"), str)
+                or not claim["public_wording"].strip()
+            ):
                 failures.append(f"{claim.get('id', '<unknown>')}: missing public wording")
             if not claim.get("evidence") or not claim.get("limits"):
                 failures.append(f"{claim.get('id', '<unknown>')}: evidence and limits are required")
@@ -82,7 +88,9 @@ def validate_capability_claims(
         )
     for key in ("automated_triage", "human_reviewed", "unattributed_team_review"):
         if expected.get(key) != counts[key]:
-            failures.append(f"corpus_review.{key}={expected.get(key)} but coverage has {counts[key]}")
+            failures.append(
+                f"corpus_review.{key}={expected.get(key)} but coverage has {counts[key]}"
+            )
     if sum(counts.values()) != len(sections):
         failures.append("review classes do not cover all sections")
 
@@ -104,6 +112,20 @@ def validate_capability_claims(
             continue
         if "capability-claims.json" not in text:
             failures.append(f"{label} does not link the capability registry")
+
+    documents: list[Path] = []
+    for path in PUBLIC_BOUNDARY_DOCUMENTS:
+        documents.extend(path.rglob("*.md") if path.is_dir() else [path])
+    for path in documents:
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError as error:
+            failures.append(f"cannot read public boundary document {path}: {error}")
+            continue
+        if "formally verified" in text.casefold():
+            failures.append(f"{path.relative_to(ROOT)} uses a blanket formal-verification claim")
+        if re.search(r"(?:all\s+)?524(?:/524)?[^\n]{0,80}human[- ]verif", text, re.IGNORECASE):
+            failures.append(f"{path.relative_to(ROOT)} uses a blanket human-review claim")
 
     return failures
 

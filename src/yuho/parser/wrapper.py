@@ -227,6 +227,73 @@ def _normalize_grammar_pragma(
     return parser_source, version, errors
 
 
+def _typed_struct_literal_ambiguity_errors(tree, source: str, file: str) -> Iterator[ParseError]:
+    """Reject the known stale-parser split of a typed struct literal.
+
+    The checked-in generated parser can split ``Foo value := Foo { ... }``
+    into a declaration whose value is ``Foo`` and a following anonymous struct
+    literal after a non-doc comment. That tree is syntactically valid but has
+    different meaning, so it must not cross the parser boundary until the
+    generated parser artifacts are proven to contain the grammar fix.
+    """
+    source_bytes = source.encode("utf-8")
+    seen_non_doc_comment = False
+    children = tree.root_node.named_children
+
+    for index, node in enumerate(children):
+        if node.type in {"comment", "multiline_comment"}:
+            seen_non_doc_comment = True
+            continue
+
+        if not seen_non_doc_comment or node.type != "variable_declaration":
+            continue
+
+        type_node = node.child_by_field_name("type")
+        value_node = node.child_by_field_name("value")
+        if (
+            type_node is None
+            or value_node is None
+            or type_node.type != "identifier"
+            or value_node.type != "identifier"
+            or index + 1 >= len(children)
+        ):
+            continue
+
+        type_name = source_bytes[type_node.start_byte : type_node.end_byte]
+        value_name = source_bytes[value_node.start_byte : value_node.end_byte]
+        if type_name != value_name:
+            continue
+
+        expression_statement = children[index + 1]
+        if expression_statement.type != "expression_statement":
+            continue
+        struct_literal = next(
+            (
+                child
+                for child in expression_statement.named_children
+                if child.type == "struct_literal"
+            ),
+            None,
+        )
+        if (
+            struct_literal is None
+            or struct_literal.child_by_field_name("type_name") is not None
+            or source_bytes[value_node.end_byte : struct_literal.start_byte].strip()
+        ):
+            continue
+
+        yield ParseError(
+            message=(
+                "known parser ambiguity: a typed struct literal after a non-doc "
+                "comment is rejected because the current generated parser would "
+                "split it into two statements; remove or relocate the comment "
+                "until regenerated parser artifacts are verified"
+            ),
+            location=SourceLocation.from_tree_sitter_node(node, file),
+            node_type="KNOWN_TYPED_STRUCT_LITERAL_AMBIGUITY",
+        )
+
+
 class Parser:
     """
     Parser for Yuho source files using tree-sitter.
@@ -333,6 +400,7 @@ class Parser:
         errors = list(pragma_errors)
         errors.extend(self._collect_errors(tree.root_node, source, file))
         errors.extend(self._collect_feature_errors(tree.root_node, source, file, enabled_features))
+        errors.extend(_typed_struct_literal_ambiguity_errors(tree, source, file))
 
         return ParseResult(
             tree=tree,
