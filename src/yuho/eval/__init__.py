@@ -8,6 +8,7 @@ from yuho.eval.statute_evaluator import (
     StatuteEvaluator,
 )
 from yuho.eval.defeasible import DefeasibleReasoner, DefeasibleResult
+from yuho.eval.dependencies import DependencyDiagnostic, DependencyResult, DependencySubresult
 
 __all__ = [
     "Interpreter",
@@ -20,4 +21,7 @@ __all__ = [
     "PenaltyDiagnostic",
     "DefeasibleReasoner",
     "DefeasibleResult",
+    "DependencyDiagnostic",
+    "DependencyResult",
+    "DependencySubresult",
 ]

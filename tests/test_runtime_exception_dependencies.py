@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from yuho.eval import DefeasibleReasoner, Interpreter, StatuteEvaluator, StructInstance, Value
-from yuho.ir import lower_module, rule_branches
+from yuho.ir import diagnose_capabilities, lower_module, rule_branches
 from yuho.services.analysis import analyze_source
 
 _COMPOSED_SOURCE = """
@@ -119,6 +121,28 @@ def test_canonical_ir_records_exception_dependency_edges() -> None:
     assert [dependency.target_section for dependency in branch.dependencies] == ["84", "85", "96"]
     assert all(dependency.source_kind == "exception" for dependency in branch.dependencies)
     assert branch.to_dict()["dependencies"][2]["reference_kind"] == "is_infringed"
+
+
+def test_checked_in_s299_corpus_records_its_general_exception_edges() -> None:
+    source = Path("library/penal_code/s299_culpable_homicide/statute.yh").read_text(
+        encoding="utf-8"
+    )
+    charge = lower_module(_module(source)).module.statutes[0]
+    targets = {
+        dependency.target_section
+        for branch in rule_branches(charge)
+        for dependency in branch.dependencies
+    }
+
+    assert {"84", "85", "96"}.issubset(targets)
+
+
+def test_non_runtime_canonical_consumers_reject_exception_dependency_edges() -> None:
+    ir = lower_module(_module(_COMPOSED_SOURCE))
+
+    for consumer in ("alloy", "lean"):
+        diagnostics = diagnose_capabilities(ir, consumer)
+        assert any(diagnostic.feature == "cross_section_dependency" for diagnostic in diagnostics)
 
 
 def test_missing_exception_dependency_is_unresolved_not_false() -> None:

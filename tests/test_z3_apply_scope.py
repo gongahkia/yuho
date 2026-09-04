@@ -167,6 +167,22 @@ def test_is_infringed_exception_guard_uses_the_registered_target_conviction():
             """,
             "cross-section exception dependency cycle: s299 -> s84 -> s299",
         ),
+        (
+            """
+            statute 84 "Defence" {
+              elements { circumstance defence_applies := "defence applies"; }
+            }
+            statute 299 "Charge" {
+              elements { actus_reus charged_act := "charged act"; }
+              exception defence {
+                "defence"
+                "defeat"
+                when apply_scope(s84, { defence_applies := TRUE })
+              }
+            }
+            """,
+            "s299: apply_scope(s84) fact overrides are unsupported",
+        ),
     ],
 )
 def test_z3_rejects_unresolved_or_cyclic_exception_dependencies(source, expected):

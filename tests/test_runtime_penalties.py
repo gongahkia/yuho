@@ -7,7 +7,8 @@ from pathlib import Path
 import pytest
 
 from yuho.ast import ASTBuilder
-from yuho.eval import StatuteEvaluator, StructInstance, Value
+from yuho.eval import Environment, StatuteEvaluator, StructInstance, Value
+from yuho.ir import lower_statute, rule_branches
 from yuho.parser import get_parser
 from yuho.verify.z3_solver import Z3_AVAILABLE, Z3Generator, Z3UnsupportedFeature
 
@@ -25,6 +26,21 @@ def _facts(**values: bool) -> StructInstance:
     )
 
 
+def _dependency_environment(statute):
+    """Register each explicit exception target as its checked-in provision."""
+    env = Environment()
+    targets = {
+        dependency.target_section
+        for dependency in rule_branches(lower_statute(statute))[0].dependencies
+    }
+    for target in targets:
+        matches = sorted(Path("library/penal_code").glob(f"s{target}_*/statute.yh"))
+        assert len(matches) == 1, target
+        target_statute = _module(matches[0].read_text(encoding="utf-8")).statutes[0]
+        env.statutes[target] = target_statute
+    return env
+
+
 def _s304a_result(*, rash_act: bool, negligent_act: bool):
     source = Path("library/penal_code/s304A_causing_death_rash_negligent_act/statute.yh").read_text(
         encoding="utf-8"
@@ -39,6 +55,7 @@ def _s304a_result(*, rash_act: bool, negligent_act: bool):
             negligent_act=negligent_act,
             not_culpable_homicide=True,
         ),
+        _dependency_environment(statute),
     )
 
 

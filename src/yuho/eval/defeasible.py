@@ -368,6 +368,8 @@ class DefeasibleReasoner:
             )
         except InterpreterError as exc:
             message = str(exc)
+            if not dependency_edges and not self._guard_uses_generic_function(guard):
+                return _GuardEvaluation(False, tuple(calls))
             code = (
                 "YRDG001"
                 if "unresolved section reference" in message
@@ -379,11 +381,24 @@ class DefeasibleReasoner:
                 self._guard_diagnostic(code, message, dependency_edges),
             )
         except (KeyError, NotImplementedError, TypeError, ValueError) as exc:
+            if not dependency_edges and not self._guard_uses_generic_function(guard):
+                return _GuardEvaluation(False, tuple(calls))
             return _GuardEvaluation(
                 None,
                 tuple(calls),
                 self._guard_diagnostic("YRDG003", str(exc), dependency_edges),
             )
+
+    @staticmethod
+    def _guard_uses_generic_function(guard: nodes.ASTNode) -> bool:
+        """Whether an unlifted call, rather than an absent fact, caused failure."""
+        stack = [guard]
+        while stack:
+            current = stack.pop()
+            if isinstance(current, nodes.FunctionCallNode):
+                return True
+            stack.extend(child for child in current.children() if isinstance(child, nodes.ASTNode))
+        return False
 
     @staticmethod
     def _guard_diagnostic(
