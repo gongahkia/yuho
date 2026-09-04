@@ -43,6 +43,7 @@ class Z3Summary:
     assertions: int
     failures: tuple[Z3Failure, ...]
     errors: tuple[tuple[str, str], ...]
+    unsupported: tuple[tuple[str, str], ...] = ()
 
 
 class UnsupportedZ3RuntimeExpr(Exception):
@@ -238,7 +239,7 @@ def _z3_assertion_truth(ast, assertion):
 
 
 def run_z3_differential(rich: list[Path]) -> Z3Summary | None:
-    from yuho.verify.z3_solver import Z3Generator, Z3_AVAILABLE
+    from yuho.verify.z3_solver import Z3Generator, Z3UnsupportedFeature, Z3_AVAILABLE
 
     if not Z3_AVAILABLE:
         return None
@@ -247,6 +248,7 @@ def run_z3_differential(rich: list[Path]) -> Z3Summary | None:
 
     failures: list[Z3Failure] = []
     errors: list[tuple[str, str]] = []
+    unsupported: list[tuple[str, str]] = []
     assertions = 0
     for test_file in rich:
         try:
@@ -269,6 +271,8 @@ def run_z3_differential(rich: list[Path]) -> Z3Summary | None:
                             message=f"runtime={runtime_truth} z3={z3_truth}",
                         )
                     )
+        except Z3UnsupportedFeature as exc:
+            unsupported.append((test_file.parent.name, str(exc)[:160]))
         except Exception as e:
             errors.append((test_file.parent.name, str(e)[:160]))
     return Z3Summary(
@@ -276,6 +280,7 @@ def run_z3_differential(rich: list[Path]) -> Z3Summary | None:
         assertions=assertions,
         failures=tuple(failures),
         errors=tuple(errors),
+        unsupported=tuple(unsupported),
     )
 
 
@@ -320,7 +325,8 @@ def main() -> int:
         print(
             "z3 differential: "
             f"CHECKED={z3_summary.checked} ASSERT={z3_summary.assertions} "
-            f"DISAGREE={len(z3_summary.failures)} ERR={len(z3_summary.errors)}"
+            f"DISAGREE={len(z3_summary.failures)} ERR={len(z3_summary.errors)} "
+            f"UNSUPPORTED={len(z3_summary.unsupported)}"
         )
     if failed:
         print("Assertion failures:", file=sys.stderr)
@@ -341,6 +347,10 @@ def main() -> int:
         print("Z3 errors:", file=sys.stderr)
         for name, msg in z3_summary.errors:
             print(f"  {name}: {msg}", file=sys.stderr)
+    if z3_summary is not None and z3_summary.unsupported:
+        print("Z3 unsupported boundaries:")
+        for name, msg in z3_summary.unsupported:
+            print(f"  {name}: {msg}")
 
     z3_failed = z3_summary is not None and (z3_summary.failures or z3_summary.errors)
     return 0 if not (failed or errored or z3_failed) else 1

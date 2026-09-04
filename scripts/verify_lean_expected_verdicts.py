@@ -23,7 +23,7 @@ from scripts.verify_structural_diff import (
 from yuho.ast import nodes
 from yuho.eval.interpreter import StructInstance, Value
 from yuho.eval.statute_evaluator import StatuteEvaluator
-from yuho.verify.z3_solver import Z3Generator, Z3_AVAILABLE
+from yuho.verify.z3_solver import Z3Generator, Z3UnsupportedFeature, Z3_AVAILABLE
 
 
 @dataclass(frozen=True)
@@ -88,28 +88,12 @@ def _verdict_statutes() -> dict[str, nodes.StatuteNode]:
     statutes = fixtures_from_corpus()
     statutes.update(smoke_python_fixtures())
     for name, statute in statutes.items():
-        statute = _hoist_subsection_elements(statute)
         exceptions = tuple(
-            replace(exc, guard=nodes.IdentifierNode(f"exc_{exc.label}"))
-            if exc.label else exc
+            replace(exc, guard=nodes.IdentifierNode(f"exc_{exc.label}")) if exc.label else exc
             for exc in statute.exceptions
         )
         out[name] = replace(statute, exceptions=exceptions)
     return out
-
-
-def _hoist_subsection_elements(statute: nodes.StatuteNode) -> nodes.StatuteNode:
-    if statute.elements:
-        return statute
-    elements: list[nodes.ASTNode] = []
-
-    def walk(subsections: Any) -> None:
-        for subsection in subsections or ():
-            elements.extend(getattr(subsection, "elements", ()) or ())
-            walk(getattr(subsection, "subsections", ()) or ())
-
-    walk(getattr(statute, "subsections", ()) or ())
-    return replace(statute, elements=tuple(elements))
 
 
 def _module_for(statute: nodes.StatuteNode) -> nodes.ModuleNode:
@@ -122,7 +106,9 @@ def _module_for(statute: nodes.StatuteNode) -> nodes.ModuleNode:
     )
 
 
-def _add_fact_bindings(solver: Any, gen: Z3Generator, statute: nodes.StatuteNode, facts: dict[str, Any]) -> None:
+def _add_fact_bindings(
+    solver: Any, gen: Z3Generator, statute: nodes.StatuteNode, facts: dict[str, Any]
+) -> None:
     import z3
 
     statute_id = statute.section_number.replace(".", "_")
@@ -142,13 +128,19 @@ def _add_fact_bindings(solver: Any, gen: Z3Generator, statute: nodes.StatuteNode
             solver.add(const == z3.BoolVal(bool(facts.get(name, False))))
 
 
-def _z3_verdict(statute: nodes.StatuteNode, facts: dict[str, Any]) -> bool | None:
+def _z3_verdict(
+    statute: nodes.StatuteNode,
+    facts: dict[str, Any],
+) -> tuple[bool | None, str | None]:
     if not Z3_AVAILABLE:
-        return None
+        return None, None
     import z3
 
     gen = Z3Generator()
-    solver, _ = gen.generate(_module_for(statute))
+    try:
+        solver, _ = gen.generate(_module_for(statute))
+    except Z3UnsupportedFeature as exc:
+        return None, str(exc)
     if solver is None:
         raise RuntimeError("Z3 generator returned no solver")
     _add_fact_bindings(solver, gen, statute, facts)
@@ -158,10 +150,15 @@ def _z3_verdict(statute: nodes.StatuteNode, facts: dict[str, Any]) -> bool | Non
     conviction = gen._consts.get(f"{statute_id}_conviction")
     if conviction is None:
         raise RuntimeError(f"missing Z3 conviction atom for s{statute.section_number}")
-    return z3.is_true(solver.model().eval(conviction, model_completion=True))
+    return z3.is_true(solver.model().eval(conviction, model_completion=True)), None
 
 
-def compare_verdicts(rows: list[dict[str, Any]]) -> list[VerdictMismatch]:
+def compare_verdicts(
+    rows: list[dict[str, Any]],
+    *,
+    z3_unsupported: list[tuple[str, str]] | None = None,
+    lean_unsupported: list[tuple[str, str]] | None = None,
+) -> list[VerdictMismatch]:
     statutes = _verdict_statutes()
     evaluator = StatuteEvaluator()
     mismatches: list[VerdictMismatch] = []
@@ -178,11 +175,27 @@ def compare_verdicts(rows: list[dict[str, Any]]) -> list[VerdictMismatch]:
         if not isinstance(facts, dict):
             raise RuntimeError(f"verdict row {name} has no factValues object")
         statute = statutes[statute_name]
+        if statute.subsections:
+            if lean_unsupported is None:
+                raise RuntimeError(
+                    "canonical-IR subsection branches require an explicit Lean unsupported collector"
+                )
+            lean_unsupported.append(
+                (
+                    name,
+                    "Lean expected-verdict fixture does not model canonical-IR subsection branches",
+                )
+            )
+            continue
         runtime_actual = evaluator.evaluate(statute, _facts_struct(facts)).overall_satisfied
-        z3_actual = _z3_verdict(statute, facts)
-        if runtime_actual != expected or (
-            z3_actual is not None and z3_actual != expected
-        ):
+        z3_actual, unsupported_message = _z3_verdict(statute, facts)
+        if unsupported_message is not None:
+            if z3_unsupported is None:
+                raise RuntimeError(
+                    "Z3 unsupported verdict requires an explicit unsupported collector"
+                )
+            z3_unsupported.append((name, unsupported_message))
+        if runtime_actual != expected or (z3_actual is not None and z3_actual != expected):
             mismatches.append(
                 VerdictMismatch(
                     name=name,
@@ -202,12 +215,29 @@ def main() -> int:
     except subprocess.CalledProcessError as exc:
         print("Lean verdict exporter failed:", exc.stderr or exc.stdout, file=sys.stderr)
         return 2
-    mismatches = compare_verdicts(rows)
+    z3_unsupported: list[tuple[str, str]] = []
+    lean_unsupported: list[tuple[str, str]] = []
+    mismatches = compare_verdicts(
+        rows,
+        z3_unsupported=z3_unsupported,
+        lean_unsupported=lean_unsupported,
+    )
+    runtime_lean_checked = len(rows) - len(lean_unsupported)
     print(
         "lean expected verdicts: "
-        f"CHECKED={len(rows)} TRIPLE={len(rows) if Z3_AVAILABLE else 'SKIP'} "
+        f"CHECKED={len(rows)} RUNTIME_LEAN_CHECKED={runtime_lean_checked} "
+        f"Z3_CHECKED={runtime_lean_checked - len(z3_unsupported) if Z3_AVAILABLE else 'SKIP'} "
+        f"Z3_UNSUPPORTED={len(z3_unsupported)} LEAN_UNSUPPORTED={len(lean_unsupported)} "
         f"MISMATCH={len(mismatches)}"
     )
+    if lean_unsupported:
+        print("Lean unsupported boundaries:")
+        for name, message in lean_unsupported:
+            print(f"  {name}: {message}")
+    if z3_unsupported:
+        print("Z3 unsupported boundaries:")
+        for name, message in z3_unsupported:
+            print(f"  {name}: {message}")
     if mismatches:
         for mismatch in mismatches:
             print(

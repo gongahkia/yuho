@@ -62,4 +62,12 @@ def test_lean_expected_verdict_comparison_handles_structural_atom_name_collision
         }
     ]
 
-    assert compare_verdicts(rows) == []
+    lean_unsupported: list[tuple[str, str]] = []
+
+    assert compare_verdicts(rows, lean_unsupported=lean_unsupported) == []
+    assert lean_unsupported == [
+        (
+            "s74A_conviction_leaf_only",
+            "Lean expected-verdict fixture does not model canonical-IR subsection branches",
+        )
+    ]

@@ -11,10 +11,12 @@ from yuho.eval.interpreter import Environment, Interpreter, InterpreterError, St
 from yuho.ir import (
     CANONICAL_IR_VERSION,
     CapabilityDiagnostic,
+    CanonicalRuleBranch,
     CanonicalStatute,
     canonical_hash,
     diagnose_statute_capabilities,
     lower_statute,
+    rule_branches,
 )
 
 _DEFAULT_SCOPE_MAX_DEPTH = 32
@@ -47,6 +49,24 @@ class ElementResult:
     satisfied: bool
     description: str = ""
     reasoning: List[str] = field(default_factory=list)
+    citation_path: Tuple[str, ...] = ()
+
+
+@dataclass
+class BranchResult:
+    """The result of one canonically scoped executable provision branch."""
+
+    citation_path: Tuple[str, ...]
+    element_results: List[ElementResult]
+    satisfied: bool
+    reasoning: List[str] = field(default_factory=list)
+    penalty_paths: Tuple[Tuple[str, ...], ...] = ()
+    exception_paths: Tuple[Tuple[str, ...], ...] = ()
+
+    @property
+    def citation(self) -> str:
+        section, *subsections = self.citation_path
+        return f"s{section}{''.join(subsections)}"
 
 
 @dataclass
@@ -62,6 +82,8 @@ class EvaluationResult:
     canonical_ir_version: str = CANONICAL_IR_VERSION
     canonical_ir_hash: Optional[str] = None
     diagnostics: Tuple[CapabilityDiagnostic, ...] = ()
+    branch_results: List[BranchResult] = field(default_factory=list)
+    provision_kind: str = "executable"
 
     def bindings(self) -> Dict[str, bool]:
         """Return ``{element_name: satisfied}`` for every element evaluated.
@@ -80,9 +102,19 @@ class EvaluationResult:
         lines.append(f"Section {self.statute_section} ({self.statute_title}): {status}")
         for er in self.element_results:
             mark = "[x]" if er.satisfied else "[ ]"
-            lines.append(f"  {mark} {er.element_type}: {er.element_name}")
+            path = (
+                f" at s{er.citation_path[0]}{''.join(er.citation_path[1:])}"
+                if er.citation_path
+                else ""
+            )
+            lines.append(f"  {mark} {er.element_type}: {er.element_name}{path}")
             if er.description:
                 lines.append(f"      {er.description}")
+        if self.branch_results:
+            lines.append("  Branches:")
+            for branch in self.branch_results:
+                mark = "[x]" if branch.satisfied else "[ ]"
+                lines.append(f"    {mark} {branch.citation}")
         if self.reasoning:
             lines.append("  Reasoning:")
             for r in self.reasoning:
@@ -151,6 +183,7 @@ class StatuteEvaluator:
             ast_adapter,
             facts,
             env,
+            canonical_statute=statute,
             canonical_ir_hash=canonical_hash(statute),
             diagnostics=diagnostics,
         )
@@ -161,6 +194,7 @@ class StatuteEvaluator:
         facts: StructInstance,
         env: Optional[Environment],
         *,
+        canonical_statute: CanonicalStatute,
         canonical_ir_hash: str,
         diagnostics: Tuple[CapabilityDiagnostic, ...],
     ) -> EvaluationResult:
@@ -172,77 +206,45 @@ class StatuteEvaluator:
         """
         env = env or self.interpreter.env
         title = statute.title.value if statute.title else "(untitled)"
+        branches = rule_branches(canonical_statute)
+        if not branches:
+            return EvaluationResult(
+                statute_section=statute.section_number,
+                statute_title=title,
+                element_results=[],
+                overall_satisfied=False,
+                reasoning=[
+                    f"Section s{statute.section_number} has no executable element-bearing provision"
+                ],
+                canonical_ir_hash=canonical_ir_hash,
+                diagnostics=diagnostics,
+                provision_kind="definition_only",
+            )
+
         all_element_results: List[ElementResult] = []
+        branch_results: List[BranchResult] = []
         reasoning: List[str] = []
-        overall = True
         case_effects = self.active_case_law_effects(
             statute.case_law,
             statute_jurisdiction=statute.jurisdiction,
         )
 
-        for member in statute.elements:
-            if isinstance(member, nodes.ElementNode):
-                er = self._evaluate_element(
-                    member,
-                    facts,
-                    env,
-                    statute.definitions,
-                    case_effects,
-                    statute.jurisdiction,
-                )
-                all_element_results.append(er)
-                reasoning.extend(er.reasoning)
-                if not er.satisfied:
-                    overall = False
-                    reasoning.append(
-                        f"Element '{er.element_name}' ({er.element_type}) not satisfied"
-                    )
-            elif isinstance(member, nodes.ElementGroupNode):
-                group_results, group_ok = self._evaluate_group(
-                    member,
-                    facts,
-                    env,
-                    statute.definitions,
-                    case_effects,
-                    statute.jurisdiction,
-                )
-                all_element_results.extend(group_results)
-                for er in group_results:
-                    reasoning.extend(er.reasoning)
-                if not group_ok:
-                    overall = False
-                    reasoning.append(f"Element group ({member.combinator}) not satisfied")
+        for branch in branches:
+            branch_result = self._evaluate_branch(
+                branch,
+                statute,
+                facts,
+                env,
+                case_effects,
+            )
+            branch_results.append(branch_result)
+            all_element_results.extend(branch_result.element_results)
+            reasoning.extend(branch_result.reasoning)
 
-        # A subsection is not represented by the legacy top-level evaluator.
-        # Report it as unsupported and never let an empty top-level list turn
-        # that unsupported provision into an affirmative result.  #48 replaces
-        # this temporary fail-closed rule with recursive IR branch evaluation.
-        if any(diagnostic.feature == "subsection" for diagnostic in diagnostics):
-            overall = False
-            reasoning.extend(diagnostic.message for diagnostic in diagnostics)
-
-        penalty = statute.penalty if overall else None
-
-        # check exceptions via defeasible reasoning
-        if overall and statute.exceptions:
-            from yuho.eval.defeasible import DefeasibleReasoner
-
-            reasoner = DefeasibleReasoner()
-            facts_dict = {k: v.raw for k, v in facts.fields.items()}
-            for exc in statute.exceptions:
-                app = reasoner._evaluate_exception(exc, facts_dict, env)
-                if app.guard_satisfied:
-                    overall = False
-                    reasoning.append(f"Exception '{app.label}' defeated conviction: {app.effect}")
-                    break
-                else:
-                    exception_key = self._exception_key(exc)
-                    if exception_key is None or exception_key not in facts.fields:
-                        continue
-                    if facts.fields[exception_key].is_truthy():
-                        overall = False
-                        reasoning.append(f"Exception '{exception_key}' applies")
-                        break
+        # Canonical sibling branches are alternatives.  Their individual
+        # element groups retain their own all_of/any_of composition.
+        overall = any(branch.satisfied for branch in branch_results)
+        penalty = statute.penalty if overall and statute.penalty is not None else None
 
         return EvaluationResult(
             statute_section=statute.section_number,
@@ -253,9 +255,204 @@ class StatuteEvaluator:
             reasoning=reasoning,
             canonical_ir_hash=canonical_ir_hash,
             diagnostics=diagnostics,
+            branch_results=branch_results,
         )
 
     # -- internal helpers ---------------------------------------------------
+
+    def _evaluate_branch(
+        self,
+        branch: CanonicalRuleBranch,
+        statute: nodes.StatuteNode,
+        facts: StructInstance,
+        env: Environment,
+        case_effects: Mapping[str, Tuple[nodes.CaseLawNode, ...]],
+    ) -> BranchResult:
+        """Evaluate one canonical rule branch with its ancestor context."""
+        provisions = self._branch_adapter_provisions(statute, branch.citation_path)
+        definitions = tuple(
+            definition for provision in provisions for definition in provision.definitions
+        )
+        element_results: List[ElementResult] = []
+        reasoning: List[str] = []
+        satisfied = True
+
+        for provision, path in zip(provisions, self._citation_prefixes(branch.citation_path)):
+            results, provision_satisfied = self._evaluate_requirement_members(
+                provision.elements,
+                facts,
+                env,
+                definitions,
+                case_effects,
+                statute.jurisdiction,
+                path,
+            )
+            element_results.extend(results)
+            reasoning.extend(
+                result_reason for result in results for result_reason in result.reasoning
+            )
+            if not provision_satisfied:
+                satisfied = False
+                reasoning.append(f"Requirements at s{path[0]}{''.join(path[1:])} not satisfied")
+
+        if satisfied:
+            satisfied = self._apply_branch_exceptions(
+                branch,
+                statute,
+                facts,
+                env,
+                reasoning,
+            )
+
+        reasoning.insert(
+            0,
+            f"Branch {branch.citation} {'satisfied' if satisfied else 'not satisfied'}",
+        )
+        return BranchResult(
+            citation_path=branch.citation_path,
+            element_results=element_results,
+            satisfied=satisfied,
+            reasoning=reasoning,
+            penalty_paths=tuple(source.citation_path for source in branch.penalties),
+            exception_paths=tuple(source.citation_path for source in branch.exceptions),
+        )
+
+    def _evaluate_requirement_members(
+        self,
+        members: Tuple[
+            Union[nodes.ElementNode, nodes.CivilPrimitiveNode, nodes.ElementGroupNode], ...
+        ],
+        facts: StructInstance,
+        env: Environment,
+        definitions: Tuple[nodes.DefinitionEntry, ...],
+        case_effects: Mapping[str, Tuple[nodes.CaseLawNode, ...]],
+        statute_jurisdiction: Optional[str],
+        citation_path: Tuple[str, ...],
+    ) -> Tuple[List[ElementResult], bool]:
+        """Evaluate direct requirements in one provision conjunctively."""
+        results: List[ElementResult] = []
+        statuses: List[bool] = []
+        for member in members:
+            if isinstance(member, nodes.ElementNode):
+                result = self._evaluate_element(
+                    member,
+                    facts,
+                    env,
+                    definitions,
+                    case_effects,
+                    statute_jurisdiction,
+                    citation_path,
+                )
+                results.append(result)
+                statuses.append(result.satisfied)
+            elif isinstance(member, nodes.ElementGroupNode):
+                group_results, group_satisfied = self._evaluate_group(
+                    member,
+                    facts,
+                    env,
+                    definitions,
+                    case_effects,
+                    statute_jurisdiction,
+                    citation_path,
+                )
+                results.extend(group_results)
+                statuses.append(group_satisfied)
+            else:
+                results.append(
+                    ElementResult(
+                        element_name=type(member).__name__,
+                        element_type="unsupported",
+                        satisfied=False,
+                        description="civil primitive element has no runtime lowering",
+                        reasoning=[
+                            f"Unsupported runtime requirement at "
+                            f"s{citation_path[0]}{''.join(citation_path[1:])}"
+                        ],
+                        citation_path=citation_path,
+                    )
+                )
+                statuses.append(False)
+        return results, all(statuses)
+
+    def _apply_branch_exceptions(
+        self,
+        branch: CanonicalRuleBranch,
+        statute: nodes.StatuteNode,
+        facts: StructInstance,
+        env: Environment,
+        reasoning: List[str],
+    ) -> bool:
+        """Apply only the ancestor and leaf exceptions that govern a branch."""
+        from yuho.eval.defeasible import DefeasibleReasoner
+
+        provisions = {path: provision for path, provision in self._all_adapter_provisions(statute)}
+        facts_dict = {key: value.raw for key, value in facts.fields.items()}
+        reasoner = DefeasibleReasoner()
+        for source in branch.exceptions:
+            provision = provisions[source.citation_path]
+            exception = provision.exceptions[source.declaration_index]
+            app = reasoner._evaluate_exception(exception, facts_dict, env)
+            if app.guard_satisfied:
+                reasoning.append(
+                    f"Exception '{app.label}' at s{source.citation_path[0]}"
+                    f"{''.join(source.citation_path[1:])} defeated branch: {app.effect}"
+                )
+                return False
+            exception_key = self._exception_key(exception)
+            if exception_key is not None and exception_key in facts.fields:
+                if facts.fields[exception_key].is_truthy():
+                    reasoning.append(
+                        f"Exception '{exception_key}' at s{source.citation_path[0]}"
+                        f"{''.join(source.citation_path[1:])} applies"
+                    )
+                    return False
+        return True
+
+    @staticmethod
+    def _citation_prefixes(citation_path: Tuple[str, ...]) -> Tuple[Tuple[str, ...], ...]:
+        return tuple(citation_path[:index] for index in range(1, len(citation_path) + 1))
+
+    def _branch_adapter_provisions(
+        self,
+        statute: nodes.StatuteNode,
+        citation_path: Tuple[str, ...],
+    ) -> Tuple[Union[nodes.StatuteNode, nodes.SubsectionNode], ...]:
+        provisions: List[Union[nodes.StatuteNode, nodes.SubsectionNode]] = [statute]
+        current: Union[nodes.StatuteNode, nodes.SubsectionNode] = statute
+        for subsection_number in citation_path[1:]:
+            next_provision = next(
+                (
+                    subsection
+                    for subsection in current.subsections
+                    if subsection.number == subsection_number
+                ),
+                None,
+            )
+            if next_provision is None:
+                raise ValueError(
+                    "canonical branch does not match its AST adapter at "
+                    f"s{citation_path[0]}{''.join(citation_path[1:])}"
+                )
+            provisions.append(next_provision)
+            current = next_provision
+        return tuple(provisions)
+
+    def _all_adapter_provisions(
+        self,
+        statute: nodes.StatuteNode,
+    ) -> Tuple[Tuple[Tuple[str, ...], Union[nodes.StatuteNode, nodes.SubsectionNode]], ...]:
+        items: List[Tuple[Tuple[str, ...], Union[nodes.StatuteNode, nodes.SubsectionNode]]] = []
+
+        def walk(
+            provision: Union[nodes.StatuteNode, nodes.SubsectionNode],
+            path: Tuple[str, ...],
+        ) -> None:
+            items.append((path, provision))
+            for subsection in provision.subsections:
+                walk(subsection, path + (subsection.number,))
+
+        walk(statute, (statute.section_number,))
+        return tuple(items)
 
     def _evaluate_element(
         self,
@@ -265,6 +462,7 @@ class StatuteEvaluator:
         definitions: Tuple[nodes.DefinitionEntry, ...] = (),
         case_effects: Optional[Mapping[str, Tuple[nodes.CaseLawNode, ...]]] = None,
         statute_jurisdiction: Optional[str] = None,
+        citation_path: Tuple[str, ...] = (),
     ) -> ElementResult:
         """Check if a single element is satisfied by the facts."""
         name = element.name
@@ -279,16 +477,19 @@ class StatuteEvaluator:
             satisfied = self._evaluate_predicate_description(
                 element.description, facts, env, definitions
             )
-            return self._apply_case_law_effects(
-                ElementResult(
-                    element_name=name,
-                    element_type=etype,
-                    satisfied=satisfied,
-                    description=type(element.description).__name__,
+            return self._with_citation_path(
+                self._apply_case_law_effects(
+                    ElementResult(
+                        element_name=name,
+                        element_type=etype,
+                        satisfied=satisfied,
+                        description=type(element.description).__name__,
+                    ),
+                    facts,
+                    case_effects.get(name, ()),
+                    statute_jurisdiction,
                 ),
-                facts,
-                case_effects.get(name, ()),
-                statute_jurisdiction,
+                citation_path,
             )
 
         fact_value = self._matching_fact_value(facts, name)
@@ -311,7 +512,7 @@ class StatuteEvaluator:
             result.satisfied,
         )
         if not burden_reason and final_satisfied == result.satisfied:
-            return result
+            return self._with_citation_path(result, citation_path)
         reasoning = list(result.reasoning)
         if burden_reason:
             reasoning.append(burden_reason)
@@ -321,7 +522,17 @@ class StatuteEvaluator:
             satisfied=final_satisfied,
             description=result.description,
             reasoning=reasoning,
+            citation_path=citation_path,
         )
+
+    @staticmethod
+    def _with_citation_path(
+        result: ElementResult,
+        citation_path: Tuple[str, ...],
+    ) -> ElementResult:
+        if result.citation_path == citation_path:
+            return result
+        return replace(result, citation_path=citation_path)
 
     def _evaluate_predicate_description(
         self,
@@ -364,6 +575,7 @@ class StatuteEvaluator:
         definitions: Tuple[nodes.DefinitionEntry, ...] = (),
         case_effects: Optional[Mapping[str, Tuple[nodes.CaseLawNode, ...]]] = None,
         statute_jurisdiction: Optional[str] = None,
+        citation_path: Tuple[str, ...] = (),
     ) -> Tuple[List[ElementResult], bool]:
         """Evaluate element group with combinator logic.
 
@@ -382,6 +594,7 @@ class StatuteEvaluator:
                     definitions,
                     case_effects,
                     statute_jurisdiction,
+                    citation_path,
                 )
                 results.append(er)
                 member_statuses.append(er.satisfied)
@@ -393,6 +606,7 @@ class StatuteEvaluator:
                     definitions,
                     case_effects,
                     statute_jurisdiction,
+                    citation_path,
                 )
                 results.extend(sub_results)
                 member_statuses.append(sub_ok)

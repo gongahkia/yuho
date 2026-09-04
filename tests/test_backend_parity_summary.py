@@ -16,6 +16,7 @@ def test_backend_parity_summary_lists_evidence_and_boundaries() -> None:
     assert "alloy=explicit-unsupported" in summary
     assert "Feature coverage:" in summary
     assert "nested_all_of_any_of: runtime-z3=covered" in summary
+    assert "subsection_rule_branches: runtime=modeled+traceable; z3=explicit-unsupported" in summary
     assert "is_infringed_apply_scope: runtime-z3=covered" in summary
     assert "penalties_money_duration: runtime-z3=imprisonment/fine/caning/death-model-verdict" in summary
     assert "z3-lean=penalty-footprint-bridge" in summary

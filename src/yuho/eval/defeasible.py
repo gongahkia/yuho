@@ -80,6 +80,28 @@ class DefeasibleReasoner:
         title = statute.title.value if statute.title else ""
         reasoning: List[ReasoningStep] = []
 
+        # This legacy facade has no branch result type.  Do not reintroduce
+        # the former empty-top-level-elements success for subsection statutes;
+        # callers that need their executable result must use StatuteEvaluator.
+        if statute.subsections:
+            reasoning.append(
+                ReasoningStep(
+                    description=(
+                        "Subsection rule branches require StatuteEvaluator; "
+                        "DefeasibleReasoner does not flatten them"
+                    ),
+                    result=False,
+                )
+            )
+            return DefeasibleResult(
+                statute_section=section,
+                statute_title=title,
+                base_satisfied=False,
+                exceptions_applied=[],
+                final_verdict="not_satisfied",
+                reasoning_chain=reasoning,
+            )
+
         # step 1: evaluate base elements
         base_satisfied, element_steps = self._evaluate_base_elements(statute.elements, facts, env)
         reasoning.extend(element_steps)

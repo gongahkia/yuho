@@ -110,7 +110,7 @@ def test_runtime_uses_canonical_statute_adapter_and_records_provenance() -> None
     assert result.diagnostics == ()
 
 
-def test_nested_runtime_is_fail_closed_until_its_ir_branch_semantics_exist() -> None:
+def test_nested_runtime_uses_its_canonical_ir_branch_semantics() -> None:
     source = """
         statute 84 "Scoped" {
             subsection (1) {
@@ -123,9 +123,9 @@ def test_nested_runtime_is_fail_closed_until_its_ir_branch_semantics_exist() -> 
 
     result = StatuteEvaluator().evaluate(statute, facts)
 
-    assert not result.overall_satisfied
-    assert any(diagnostic.feature == "subsection" for diagnostic in result.diagnostics)
-    assert any("does not support canonical-IR subsection" in line for line in result.reasoning)
+    assert result.overall_satisfied
+    assert result.branch_results[0].citation == "s84(1)"
+    assert not any(diagnostic.feature == "subsection" for diagnostic in result.diagnostics)
 
 
 def test_backend_capability_diagnostics_are_explicit() -> None:

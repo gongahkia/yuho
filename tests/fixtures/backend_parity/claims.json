@@ -44,6 +44,10 @@
       "status": "runtime-z3=covered; z3-lean=smoke; alloy=secondary-smoke-only"
     },
     {
+      "feature": "subsection_rule_branches",
+      "status": "runtime=modeled+traceable; z3=explicit-unsupported; alloy=explicit-unsupported; lean=not-a-production-canonical-IR-consumer"
+    },
+    {
       "feature": "exceptions_defeats",
       "status": "runtime-z3=covered; z3-lean=smoke; alloy=explicit-unsupported-for-guards-priority-defeats"
     },

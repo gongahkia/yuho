@@ -10,12 +10,15 @@ from yuho.ir.canonical import (
     CanonicalIR,
     CanonicalModule,
     CanonicalProvision,
+    CanonicalRuleBranch,
+    CanonicalSourceNode,
     CanonicalStatute,
     canonical_hash,
     diagnose_capabilities,
     diagnose_statute_capabilities,
     lower_module,
     lower_statute,
+    rule_branches,
 )
 
 __all__ = [
@@ -28,10 +31,13 @@ __all__ = [
     "CanonicalIR",
     "CanonicalModule",
     "CanonicalProvision",
+    "CanonicalRuleBranch",
+    "CanonicalSourceNode",
     "CanonicalStatute",
     "canonical_hash",
     "diagnose_capabilities",
     "diagnose_statute_capabilities",
     "lower_module",
     "lower_statute",
+    "rule_branches",
 ]

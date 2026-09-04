@@ -89,9 +89,9 @@ a diagnostic rather than silently approximate meaning.
 The checked-in implementation lowers every parsed module to canonical-IR
 schema `yuho.canonical-ir` version `1.0`. Its deterministic semantic digest is
 distinct from its optional normalized source-text digest. Version 1 gives statutes,
-scoped provisions, element groups, element burden metadata, and sibling
-penalty blocks dedicated IR shapes; it retains a full immutable module
-snapshot for constructs that have not migrated yet.
+scoped provisions, recursive rule branches, element groups, element burden
+metadata, and sibling penalty blocks dedicated IR shapes; it retains a full
+immutable module snapshot for constructs that have not migrated yet.
 
 The AST remains an explicit transition adapter for expression execution, some
 semantic checks, and most export/back-end lowerings. Those adapters are named

@@ -4,6 +4,7 @@ from datetime import date
 
 import pytest
 from yuho.verify.alloy import AlloyUnsupportedFeature
+from yuho.verify.z3_solver import Z3UnsupportedFeature
 from yuho.ast.nodes import (
     StatuteNode,
     StringLit,
@@ -52,7 +53,10 @@ class TestVerifyPipeline:
         if not Z3_AVAILABLE:
             pytest.skip("z3-solver package not installed")
         gen = Z3Generator()
-        solver, assertions = gen.generate(ast)
+        try:
+            solver, assertions = gen.generate(ast)
+        except Z3UnsupportedFeature as exc:
+            pytest.skip(f"Z3Generator explicitly rejects this corpus boundary: {exc}")
         assert solver is not None
 
     def test_alloy_generates_model(self, statute_dir, parse_file):

@@ -35,6 +35,7 @@ BACKEND_METADATA: Dict[str, Dict[str, Any]] = {
         "status": "conformance-tested",
         "role": "smt-checker",
         "unsupported_features": [
+            "canonical-IR subsection branch semantics (explicitly rejected pending equivalent Z3 lowering)",
             "case-law semantics (explicitly rejected by consistency checking)",
             "typed fact burden/proof-standard metadata (explicitly rejected by consistency checking)",
             "rich evidential fact provenance",

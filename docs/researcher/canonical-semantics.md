@@ -79,9 +79,9 @@ Runtime:
   element burden metadata. The public AST entry point lowers immediately and
   records the semantic IR hash in `EvaluationResult`.
 - Expression execution and exception handling still use a required AST adapter.
-- Subsection branch execution and guarded/sibling penalty selection currently
-  fail closed with a runtime capability diagnostic until their dedicated IR
-  evaluators are complete.
+- Subsection branches are modeled as described below. Guarded/sibling penalty
+  selection remains an explicit runtime capability diagnostic until its
+  dedicated branch selector is complete.
 - Calendar durations with years/months require a reference date for exact
   ordering.
 - Money arithmetic is Decimal-based, currency-aware, and rejects implicit
@@ -90,8 +90,10 @@ Runtime:
 Z3:
 
 - Enters through a canonical-IR adapter and records the IR hash used for the
-  lowering. Its current statute/expression/penalty adapter is not a parity
-  claim for unmigrated semantics.
+  lowering. It explicitly rejects subsection branch semantics pending the
+  equivalent Z3 lowering; it does not flatten them.
+- Its current statute/expression/penalty adapter is not a parity claim for
+  unmigrated semantics.
 - Conformance-tested for retained criminal-statute verification fixtures.
 - Penalty duration bounds use exact runtime month-end clamping when a
   verifier reference date is supplied; otherwise calendar units use explicitly
@@ -120,6 +122,29 @@ Transpilers:
 - JSON should preserve AST structure or make loss explicit.
 - Legal-facing exports should retain source traceability and avoid inventing
   executable meaning from opaque text.
+
+## Subsection Branch Semantics
+
+Canonical IR v1 resolves structural subsections as follows:
+
+1. A provision with elements and no descendant provision with elements is an
+   executable rule branch.
+2. A nested branch inherits every ancestor's requirements conjunctively.
+   `all_of` and `any_of` retain their local requirement-tree meanings.
+3. Executable sibling leaves are alternative branches: the statute is
+   structurally satisfied when at least one branch is satisfied.
+4. Exceptions declared on an ancestor or the selected leaf govern that branch
+   only. The trace names the exception's provision path.
+5. Ancestor and leaf penalty blocks are retained as branch penalty sources,
+   but are not selected or combined by this runtime version. The result carries
+   their citation paths and emits the penalty capability diagnostic.
+6. A provision with no executable element-bearing branch is `definition_only`.
+   It evaluates as not satisfied rather than using vacuous truth.
+
+These are deliberately structural rules. A prose cross-reference that is
+intended to qualify another subsection must be represented as a nested
+requirement or a supported reference relation; this runtime does not infer
+that legal relationship from text or numbering alone.
 
 ## Change Rule
 

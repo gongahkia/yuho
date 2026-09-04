@@ -141,6 +141,50 @@ class CanonicalStatute:
 
 
 @dataclass(frozen=True)
+class CanonicalSourceNode:
+    """A canonical node bound to the provision path that supplies it."""
+
+    citation_path: tuple[str, ...]
+    declaration_index: int
+    node: CanonicalNode
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "citation_path": list(self.citation_path),
+            "declaration_index": self.declaration_index,
+            "node": self.node.to_dict(),
+        }
+
+
+@dataclass(frozen=True)
+class CanonicalRuleBranch:
+    """An executable subsection leaf and its inherited requirements.
+
+    A rule branch is selected if every inherited requirement evaluates true.
+    Sibling branches are alternatives.  This is a structural composition rule,
+    not an inference about prose-only cross references between provisions.
+    """
+
+    citation_path: tuple[str, ...]
+    requirements: tuple[CanonicalRequirement, ...]
+    penalties: tuple[CanonicalSourceNode, ...]
+    exceptions: tuple[CanonicalSourceNode, ...]
+
+    @property
+    def citation(self) -> str:
+        section, *subsections = self.citation_path
+        return f"s{section}{''.join(subsections)}"
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "citation_path": list(self.citation_path),
+            "requirements": [requirement.to_dict() for requirement in self.requirements],
+            "penalties": [penalty.to_dict() for penalty in self.penalties],
+            "exceptions": [exception.to_dict() for exception in self.exceptions],
+        }
+
+
+@dataclass(frozen=True)
 class CanonicalModule:
     """Canonical semantic data for the module's currently covered fragment."""
 
@@ -246,7 +290,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
     },
     "runtime": {
         "statute": CapabilityStatus.MODELED,
-        "subsection": CapabilityStatus.UNSUPPORTED,
+        "subsection": CapabilityStatus.MODELED,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
         "penalty": CapabilityStatus.UNSUPPORTED,
@@ -254,7 +298,7 @@ _CAPABILITY_MATRIX: Mapping[str, Mapping[str, CapabilityStatus]] = {
     },
     "z3": {
         "statute": CapabilityStatus.AST_ADAPTER,
-        "subsection": CapabilityStatus.AST_ADAPTER,
+        "subsection": CapabilityStatus.UNSUPPORTED,
         "expression": CapabilityStatus.AST_ADAPTER,
         "exception": CapabilityStatus.AST_ADAPTER,
         "penalty": CapabilityStatus.AST_ADAPTER,
@@ -333,6 +377,60 @@ def lower_statute(statute: nodes.StatuteNode) -> CanonicalStatute:
         root=root,
         metadata=metadata,
     )
+
+
+def rule_branches(statute: CanonicalStatute) -> tuple[CanonicalRuleBranch, ...]:
+    """Return the statute's executable structural rule branches.
+
+    A child inherits every ancestor requirement, exception, and penalty source.
+    Element-bearing sibling leaves are alternatives.  Element-free provisions
+    add definitions or other metadata but do not create a satisfiable branch.
+    A provision with executable descendants is not itself a leaf; its elements
+    instead constrain each executable child.  The empty result classifies the
+    statute as ``definition_only`` at runtime.
+    """
+
+    branches: list[CanonicalRuleBranch] = []
+
+    def has_executable_descendant(provision: CanonicalProvision) -> bool:
+        return bool(provision.elements) or any(
+            has_executable_descendant(child) for child in provision.children
+        )
+
+    def walk(
+        provision: CanonicalProvision,
+        inherited_requirements: tuple[CanonicalRequirement, ...],
+        inherited_penalties: tuple[CanonicalSourceNode, ...],
+        inherited_exceptions: tuple[CanonicalSourceNode, ...],
+    ) -> None:
+        requirements = inherited_requirements + provision.elements
+        penalties = inherited_penalties + tuple(
+            CanonicalSourceNode(provision.citation_path, index, penalty)
+            for index, penalty in enumerate(provision.penalties)
+        )
+        exceptions = inherited_exceptions + tuple(
+            CanonicalSourceNode(provision.citation_path, index, exception)
+            for index, exception in enumerate(provision.exceptions)
+        )
+        executable_children = tuple(
+            child for child in provision.children if has_executable_descendant(child)
+        )
+        if executable_children:
+            for child in executable_children:
+                walk(child, requirements, penalties, exceptions)
+            return
+        if requirements:
+            branches.append(
+                CanonicalRuleBranch(
+                    citation_path=provision.citation_path,
+                    requirements=requirements,
+                    penalties=penalties,
+                    exceptions=exceptions,
+                )
+            )
+
+    walk(statute.root, (), (), ())
+    return tuple(branches)
 
 
 def canonical_hash(value: Union[CanonicalIR, CanonicalModule, CanonicalStatute]) -> str:
