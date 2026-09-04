@@ -101,9 +101,17 @@ def validate_corpus_provenance(
             if candidate is not None and not candidate.is_file():
                 failures.append(f"{prefix}: missing encoded source path")
             expected_yh_sha = encoding.get("sha256")
-            if not expected_yh_sha or not isinstance(expected_yh_sha, str) or not SHA256_RE.match(expected_yh_sha):
+            if (
+                not expected_yh_sha
+                or not isinstance(expected_yh_sha, str)
+                or not SHA256_RE.match(expected_yh_sha)
+            ):
                 failures.append(f"{prefix}: invalid encoded source sha256")
-            elif candidate is not None and candidate.is_file() and expected_yh_sha != sha256_bytes(candidate.read_bytes()):
+            elif (
+                candidate is not None
+                and candidate.is_file()
+                and expected_yh_sha != sha256_bytes(candidate.read_bytes())
+            ):
                 failures.append(f"{prefix}: encoded source hash does not match {yh_path}")
         if not encoding.get("first_commit"):
             failures.append(f"{prefix}: missing first_commit")
@@ -120,7 +128,9 @@ def validate_corpus_provenance(
                 failures.append(f"{prefix}: missing provenance.{key}")
     missing_ledger_entries = set(raw_by_section) - sections
     if missing_ledger_entries:
-        failures.append(f"raw sections missing from ledger: {', '.join(sorted(missing_ledger_entries))}")
+        failures.append(
+            f"raw sections missing from ledger: {', '.join(sorted(missing_ledger_entries))}"
+        )
     return failures
 
 

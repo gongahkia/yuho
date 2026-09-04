@@ -1,4 +1,9 @@
-# Phase D — L3 Auto-Review Prompt
+# Phase D — L3 Auto-Review Prompt (historical)
+
+> Historical record only. This prompt instructed an automated agent to stamp
+> metadata, which is not human review or legal certification. Do not use it
+> for new work; use [`../l3-triage-prompt.md`](../l3-triage-prompt.md) with
+> the read-only `scripts/l3_audit.py` workflow instead.
 
 Copy the block below, replace `{N}` with a PC section number, and
 dispatch to a reasoning-capable agent (Codex `gpt-5.4` at `high`, or

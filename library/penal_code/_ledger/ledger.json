@@ -16,6 +16,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s1_short_title/statute.yh",
+        "sha256": "84fbac32653facca13499cb73a29aba4546609ddebbe63b4a82bc3c23073cba6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -62,6 +63,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s10_man_woman/statute.yh",
+        "sha256": "d6b7ce4e4963576c576e74d6a35b6f601aa2cc99328da9769ecf6b5c6520aa12",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -108,6 +110,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s100_right_private_defence_against_deadly_assault/statute.yh",
+        "sha256": "efa0e180b8cbaf9788d465ebe55d611c353ea993b413dd8e2660cb726902f1df",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -154,6 +157,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s101_start_continuance_right_private_defence_body/statute.yh",
+        "sha256": "53f0a4c290ff9744ba0d22bfa8b1e6b7d1072f2e9bbbd1ef341e35d7a0dd542c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -200,6 +204,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s102_when_right_private_defence_body_extends/statute.yh",
+        "sha256": "3ec973e1055693928f10819dcdfa05f491f7608c1be695baead5f625d8709ed5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -246,6 +251,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s103_when_such_right_extends_causing_harm_other/statute.yh",
+        "sha256": "16871025d31cd8f1ff15eb9c245fd0443e93473e7a8af4ad6504653d92e080fa",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -292,6 +298,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s104_commencement_continuance_right_private/statute.yh",
+        "sha256": "834fd39f77e3bcd86f66e891a80eb2d36bd14137eafda0769fc1083ba5022c2b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -338,6 +345,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s105_when_right_private_defence_property_extends/statute.yh",
+        "sha256": "aea66c21337de17b2e0780ac2e83c8b077ed54195588051fb2f82ca33b77367f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -384,6 +392,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s106_when_such_right_extends_causing_harm_other/statute.yh",
+        "sha256": "d6fe40110191f51def3e735b32dd98b8b7f6ce4f7025f7035e109279156623d7",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -430,6 +439,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s106A_acts_against_which_there_no_right_private/statute.yh",
+        "sha256": "87643aea2a0a74b1f6cd370d939a4b951ed1942ac0616b77985392af4647b340",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -476,6 +486,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s107_abetment_doing_thing/statute.yh",
+        "sha256": "8f1cd9a2d3db9bff59dd219255e705fa5a584a2575e74597ea0d4693ecdd2f93",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -522,6 +533,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s108_abettor/statute.yh",
+        "sha256": "a340e68784c7ff40e9e7fcd5af5da46d03a564c5d408ea16eaa7df6b7719f6f7",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -568,6 +580,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s108A_abetment_singapore_offence_outside_singapore/statute.yh",
+        "sha256": "455055abb2ce89248f5fe438363914261f033b4e55ab8cf4b60c583c616e1494",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -614,6 +627,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s108B_abetment_outside_singapore_offence_singapore/statute.yh",
+        "sha256": "153320a80984f58e72b0798c02f04cadbbfe8b6c81029ed9168e2e6aafdf089b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -660,6 +674,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s109_punishment_abetment_if_act_abetted_committed/statute.yh",
+        "sha256": "c70fca29dc8226fe34587bf3da4d469ef2f31e758015a4465d5bc2291a7c3110",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -706,6 +721,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s11_person/statute.yh",
+        "sha256": "8cbe350e7c02f33d4d919479a18739c012ebbe7864b6c95f31e2ccc19dc0b635",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -752,6 +768,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s110_punishment_abetment_if_person_abetted_does/statute.yh",
+        "sha256": "0366ac3b4df15d37da588604d835f410eb14d134e9493c670b1893705015c83f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -798,6 +815,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s111_liability_abettor_when_one_act_abetted/statute.yh",
+        "sha256": "edf970b182db64b665090d8444c56a21cbd319bce57c9449162b48bec109ceba",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -844,6 +862,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s112_abettor_when_liable_cumulative_punishment/statute.yh",
+        "sha256": "777030d81122adf2ebbd7575c33fa9510b65ae082a69f6b401d2a61c64c8d298",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -890,6 +909,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s113_liability_abettor_offence_caused_act_abetted/statute.yh",
+        "sha256": "bfb54b4154eab6b5befd4144325f93c8bab6720cce547b08bce39e36ed979015",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -936,6 +956,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s114_abettor_present_when_offence_committed/statute.yh",
+        "sha256": "285a8864f7eb8f4d026ad4ab88a1cf8b6ebf5254a6245de8eaf9f780839c2e59",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -982,6 +1003,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s115_abetment_offence_punishable_death/statute.yh",
+        "sha256": "1bd9542970292adde8e0b16b44468fc5ec03db9c3a84955ea3de0ad973bfd4f1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1028,6 +1050,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s116_abetment_offence_punishable_imprisonment/statute.yh",
+        "sha256": "d6927ddfd58d9177bdd1b83b4d661fb04a4c8e4478e9241870604dc2f03bd397",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1074,6 +1097,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s117_abetting_commission_offence_public_more_than/statute.yh",
+        "sha256": "b03d9e21f6b85c11230e2e11e8f83bc598456a61dbd59f8f98c0d4c57744cd31",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1120,6 +1144,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s118_concealing_design_commit_offence_punishable/statute.yh",
+        "sha256": "3767eb08a2eacb8672eb3a2eee03e05c497650c681642971c8f674910ad429a1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1166,6 +1191,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s119_public_servant_concealing_design_commit/statute.yh",
+        "sha256": "1171c07b7259692ed6c34a9363cd13316ace91873c0b23e967d0283d8f671787",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1212,6 +1238,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s12_public/statute.yh",
+        "sha256": "692ddfbc9eaad47451ca7427e85eae8dc3c5b451bf422c9c5f00ba67b009df65",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1258,6 +1285,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s120_concealing_design_commit_offence_punishable/statute.yh",
+        "sha256": "cf749b2b003dec11f30fa64bb06c382df91aaae1b9f308cf8b80ecf353f81911",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1304,6 +1332,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s120A_definition_criminal_conspiracy/statute.yh",
+        "sha256": "6532a54cc5ff75344b683de293e60111b7b6886d8c954a0ed4e04a00e6040846",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1350,6 +1379,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s120B_punishment_criminal_conspiracy/statute.yh",
+        "sha256": "e22387a7e5da68f4fe20a6a0627ae3436887bf606feb41a9454dc928f673c0d0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1396,6 +1426,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s121_waging_attempting_wage_war_abetting_waging/statute.yh",
+        "sha256": "580e2e90d9502dd68b4f178699caad6f91b5d993b3412c8159b88d2741ed426c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1442,6 +1473,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s121A_offences_against_president_s_person/statute.yh",
+        "sha256": "0f8b67ec82d1ac8bd74cf335e71073f8f6c3aeb1501aba49acbd43aca70f10ed",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1488,6 +1520,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s121B_offences_against_authority/statute.yh",
+        "sha256": "5abf4f2783219c1c9103f64513de321828908774a904a5fb6954e8e716adcf0e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1534,6 +1567,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s121C_abetting_offences_under_section_121a_121b/statute.yh",
+        "sha256": "1691baab06d640b4d4cc316940bef2dcd8cc42614bed98191b770b04b9fa8108",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1580,6 +1614,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s121D_intentional_omission_give_information/statute.yh",
+        "sha256": "658338287f6c59978051f7106aa2962b67a3df7bd54c53401d1face9ed357c97",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1626,6 +1661,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s122_collecting_arms_etc_intention_waging_war/statute.yh",
+        "sha256": "12c718b712401f056b90dd32e33e8054d79946c912de898f013684efacf72fe5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1672,6 +1708,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s123_concealing_intent_facilitate_design_wage_war/statute.yh",
+        "sha256": "f29e67b2f6466d9753f419d9ee106e4432b4fb241f5aa0c64be81df08d669332",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1718,6 +1755,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s124_assaulting_president_etc_intent_compel/statute.yh",
+        "sha256": "6a2b9e8a0c3d3f0e8079a68cd7de8fc7a260aa76a1d1f2c4538170b2753e4295",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1764,6 +1802,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s125_waging_war_against_power_alliance_peace/statute.yh",
+        "sha256": "5efddb0c333df090a5794f01079b55c68f8d7b4966c227f61e828d085c5cedaa",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1810,6 +1849,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s126_committing_depredation_territories_power/statute.yh",
+        "sha256": "76686698a7810160b8d20e07badbc4ab04f8e8bb32fa2476b92231a84a17a82d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1856,6 +1896,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s127_receiving_property_taken_war_depredation/statute.yh",
+        "sha256": "1ff5bd9c69049e6e7903bec018af9f53c6aead9d73be60da2a653ecb5de94449",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1902,6 +1943,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s128_public_servant_voluntarily_allowing_prisoner/statute.yh",
+        "sha256": "6e10f136cfe8fe241b45d353d33644201710033a272e7cea426eaf7068a2d403",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1948,6 +1990,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s129_public_servant_negligently_suffering/statute.yh",
+        "sha256": "0f0bd4008e4a44f6d7568776f72a58a7f611a5faf3e1662dad1c582b5710cfcc",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -1994,6 +2037,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s130_aiding_escape_rescuing_harbouring_such/statute.yh",
+        "sha256": "e7486524c4dd3a54f04105906cdfde679029de0e6329d6fc43a54e31ff4412d8",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2040,6 +2084,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s130A_harbour/statute.yh",
+        "sha256": "22eaef9b8f5e0991730582a7cff45edaf71114be26170e099c14ae569a6bcff5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2086,6 +2131,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s130B_piracy_law_nations_cf_12_13_victoria_c_96/statute.yh",
+        "sha256": "4b7eef22ee1acd6cdac8e4de322c24dd0a4d77449a9d7c7062358fb7455a54df",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2132,6 +2178,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s130C_piratical_acts/statute.yh",
+        "sha256": "5f1bb97b7fc3a82b9b0ed83d5f80b88ae0c66b62562a70dd78bd0ad4de0966eb",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2178,6 +2225,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s130D_genocide/statute.yh",
+        "sha256": "7a90af3a10d10b7681805ae225bf734b5f12dbb72d888819323c5f5f66afaa9e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2224,6 +2272,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s130E_punishment_genocide/statute.yh",
+        "sha256": "b014d9fae13d5f7acbab0e442119ab59a5a17109999ff2752588698b4ae15f9b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2270,6 +2319,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s131_abetting_mutiny_attempting_seduce_officer/statute.yh",
+        "sha256": "4e02cb7dc3f77c83c0e5b5b4dfd8bb0a4de9fb1380fc8e64290e64d15a4bd089",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2316,6 +2366,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s132_abetment_mutiny_if_mutiny_committed/statute.yh",
+        "sha256": "255d253968e8cdf572db6ef52848f958fdeda1ce1a45e49f91f52cb5425645e1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2362,6 +2413,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s133_abetment_assault_officer_serviceman_his/statute.yh",
+        "sha256": "7ce300fcd73996a01e0c602c9b86e99a1931e1517da189175470fe1ed20894fa",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2408,6 +2460,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s134_abetment_such_assault_if_assault_committed/statute.yh",
+        "sha256": "d6e8a2b4eafea03fc2a44cb3631b3a1d99f98cd45ad8cb9828e6ffc75d9100a3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2454,6 +2507,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s135_abetment_desertion_officer_serviceman/statute.yh",
+        "sha256": "a1af898c06e1a92591209912aac60ea152a322ea151bfaebe5d1bddb3ade8f03",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2500,6 +2554,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s136_harbouring_deserter/statute.yh",
+        "sha256": "c5cda11d0bcaaaab58a2a9b182bde36113334ddfde6bc2b252584559b3fc376c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2546,6 +2601,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s137_deserter_concealed_board_merchant_vessel/statute.yh",
+        "sha256": "af189d4849392498e2b35ac8fcef6cbda1089bce508fe044eb62ea086e6fb505",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2592,6 +2648,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s138_abetment_act_insubordination_officer/statute.yh",
+        "sha256": "419587da3a5fc04c8da7461d9692c1b8ac8262d316b853aafa8c902460342805",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2638,6 +2695,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s139_saving/statute.yh",
+        "sha256": "a1561d8c16cd893807b48e18557bd21f0e7de08079279ebd668f9f3be6c109fe",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2684,6 +2742,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s140_wearing_dress_serviceman/statute.yh",
+        "sha256": "8c4b27557763a92e64390e710b2a3f0e18ccb97f2fa1bf276d642427a61f9915",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2730,6 +2789,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s140A_harbour/statute.yh",
+        "sha256": "28d018dbd848abb4645ce114fc5e4a4ffb50099aa8e582bf089dc2dc27dd10d4",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2776,6 +2836,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s140B_application_chapter_7_singapore_police_force/statute.yh",
+        "sha256": "e058ec6232f9fdf27048f34b08d626bce69b165119379aae4dc3c9cb31a15371",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2822,6 +2883,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s141_unlawful_assembly/statute.yh",
+        "sha256": "7b03833c521a70465c0f4524f25287a707be86329c62bec2568f02777db0d4af",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2868,6 +2930,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s142_being_member_unlawful_assembly/statute.yh",
+        "sha256": "c7d3e2ad8c824abb096d0277825840dd3973fcd784073bc9df4114245759fdbb",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2914,6 +2977,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s143_punishment/statute.yh",
+        "sha256": "32e5834966cba50209b3f997e6761b226604b0981588efb57f7ac5c90fc41936",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -2960,6 +3024,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s144_joining_unlawful_assembly_armed_deadly_weapon/statute.yh",
+        "sha256": "b324368abd80ed8c2f4ae7616cbbf80a6b0d5799dd358cc4ee734d35c490db8d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3006,6 +3071,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s145_joining_continuing_unlawful_assembly_knowing/statute.yh",
+        "sha256": "118dcbc3417ad56ade38fe15cdd2bddd99a811a54b9c4c7971ae0452a9453cda",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3052,6 +3118,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s146_force_used_one_member_prosecution_common/statute.yh",
+        "sha256": "3d8bba9501865a25654e709d86afd55450c33970dc59026b5b5ca4f24341aa36",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3098,6 +3165,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s147_punishment_rioting/statute.yh",
+        "sha256": "41e6f49e392f61df54fd4c458ca3ee730615e3caa098a5e6c4440d28553d7548",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3144,6 +3212,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s148_rioting_armed_deadly_weapon/statute.yh",
+        "sha256": "81ac94dd9b1776c9ab5df81df2aba31557d398b6a6abd9dc7d2daf67399b28d1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3190,6 +3259,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s149_every_member_unlawful_assembly_deemed_guilty/statute.yh",
+        "sha256": "0f8a9541fbc7fa412ed3fdfed2a2a167114e6d0adc68cd942139c59c86bde43b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3236,6 +3306,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s150_hiring_conniving_hiring_persons_join/statute.yh",
+        "sha256": "e34436e1687b2f5f0b2a09ae3e5e437e74a662c2bca4885523bf5c3eed7bec49",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3282,6 +3353,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s151_knowingly_joining_continuing_assembly_5_more/statute.yh",
+        "sha256": "f0416fd60f12d1d208f31d0895ea845b4229a7f1c52ba1c581783954b6ced597",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3328,6 +3400,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s152_assaulting_obstructing_public_servant_when/statute.yh",
+        "sha256": "bc5acad65ee59284ab1793e48b04b6845019f8ef95e2272c9c59d0881b09bec8",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3374,6 +3447,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s153_intentionally_rashly_giving_provocation/statute.yh",
+        "sha256": "aab4b772f8e071c55a2227a055414823be50eb87d476e9d759adad36c6bad1c7",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3420,6 +3494,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s154_owner_occupier_land_which_unlawful_assembly/statute.yh",
+        "sha256": "d40c9b3caa1b44e2ff2af9f5651bd16b6f2b91a31f7c1c0cba43dd2101ab386c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3466,6 +3541,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s155_liability_person_whose_benefit_riot_committed/statute.yh",
+        "sha256": "ee56fc7b1841b9cc63724d00c3b92f52d25d4a7f970d9c2d0d274f262a4d2d83",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3512,6 +3588,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s156_liability_agent_owner_occupier_whose_benefit/statute.yh",
+        "sha256": "c80d731b2e1176011add65f53eeb626f562402728a308925d60964dacb543631",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3558,6 +3635,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s157_harbouring_persons_hired_unlawful_assembly/statute.yh",
+        "sha256": "d4636c3050d92ead50988f433917f668a27cdfce0a37e8632db33f63afb339ba",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3604,6 +3682,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s158_being_hired_take_part_unlawful_assembly_riot/statute.yh",
+        "sha256": "3ad78f3afe505b90606f0bf2b27ca9e6dfa2ba4a21b48a991dfbff1f15471fe2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3650,6 +3729,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s161_public_servant_taking_gratification_other/statute.yh",
+        "sha256": "198ed3bfca5ba6b9b6fdd5f46683b524a6d31712aba9ba34af6f1ec8b5115a7a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3696,6 +3776,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s162_taking_gratification_order_corrupt_illegal/statute.yh",
+        "sha256": "e87c70188f33e27b08864821607279e288dc3f99e9df6d6165654bc767689518",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3742,6 +3823,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s163_taking_gratification_exercise_personal/statute.yh",
+        "sha256": "70e981faf23f99c206d91f47e3fd43796f4c6584f4da9278552f3f7ea317adb8",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3788,6 +3870,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s164_punishment_abetment_public_servant_offences/statute.yh",
+        "sha256": "7d5bb9e63d194485b3c6f023af5230cbfd8429d070a0eaf6c28d5360cb8f50f3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3834,6 +3917,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s165_public_servant_obtaining_valuable_thing/statute.yh",
+        "sha256": "8c36face6f9979fe9e8f238d008fd80d295f56d36bbf36d54063ad73ebbd667a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3880,6 +3964,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s166_public_servant_disobeying_direction_law/statute.yh",
+        "sha256": "a62b5f1d8bb3809aa72bc2acabd70ced5305a5b72b6f9c6f59b065086c520a3a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3926,6 +4011,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s167_public_servant_framing_incorrect_document/statute.yh",
+        "sha256": "647e65e357716a602c69fcd07f9470d66b715edf8713a56ff323de5ba8501d81",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -3972,6 +4058,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s168_public_servant_unlawfully_engaging_trade/statute.yh",
+        "sha256": "0a74dbdf1a490f3777656233842f48752edfcd931b22867fda665067ce06298f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4018,6 +4105,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s169_public_servant_unlawfully_buying_bidding/statute.yh",
+        "sha256": "353628ac0b640e5ba788a162a1463967ebd27cff5243d0e7cbc139df713b300e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4064,6 +4152,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s17_government/statute.yh",
+        "sha256": "4678595f40fb28b5cce526cfdf84c249c77c0c325e07733e418bafd554a8e7e4",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4110,6 +4199,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s170_personating_public_servant/statute.yh",
+        "sha256": "8b03b221dbc615f2757cc636006410b94d957070835355e6a8b07634e136db02",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4156,6 +4246,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s171_wearing_garb_carrying_token_used_public/statute.yh",
+        "sha256": "275bc996d86396dc9749adfb0b31c822ab68d8161197889d30627668e1bbbc0e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4202,6 +4293,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s172_absconding_avoid_arrest_warrant_service/statute.yh",
+        "sha256": "6d117089f2357917643ccb1c9569805fc62a8be4b53ac9761a45e013908eb0cb",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4248,6 +4340,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s173_preventing_service_summons_etc_preventing/statute.yh",
+        "sha256": "35a7133619d13de7c74c9069661a899296c9a74b96b235e7566a3116a1ce74fb",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4294,6 +4387,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s174_failure_attend_obedience_order_public_servant/statute.yh",
+        "sha256": "8ac65f1516f053e490da60cd8e7b6c4ff5f7a7d8a9ea9904d1181f7f3e4644e1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4340,6 +4434,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s175_omission_produce_document_electronic_record/statute.yh",
+        "sha256": "ec644d8f4a19e753aa73ed773586e236dae3d2ce954ab75fba2dab8ccaf75814",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4386,6 +4481,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s176_omission_give_notice_information_public/statute.yh",
+        "sha256": "aec75992a8fd63aa220f4a2a4ac72bae6f6f65c58b0d031774e31040864ecc2c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4432,6 +4528,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s177_furnishing_false_information/statute.yh",
+        "sha256": "57f614852a94511893952b1927f10316eda2cf3fe6fc8c261ba0f364282c0fde",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4478,6 +4575,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s178_refusing_oath_when_duly_required_take_oath/statute.yh",
+        "sha256": "818cfeb8fd27aaa4f4dd779532c567664f1050cb32b8780d67f2d6a7043afeb2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4524,6 +4622,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s179_refusing_answer_public_servant_authorised/statute.yh",
+        "sha256": "ecddb857f6823d4dc6128ceb2489370399ea54f4e544e98c6264649590be3705",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4570,6 +4669,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s180_refusing_sign_statement/statute.yh",
+        "sha256": "bf42c322f17117166ae9f2c56f152d413be080183f586f1d8ac0552a76a91b85",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4616,6 +4716,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s181_false_statement_oath_public_servant_person/statute.yh",
+        "sha256": "39d377262d33717a21ec6de2fe883e2a7177fcd1fa0193bff69800d84d870b95",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4662,6 +4763,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s182_false_information_intent_cause_public/statute.yh",
+        "sha256": "b3ee178b17ba52a239744d3805006f1dae3330cb297c05e3190679f1315b259c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4708,6 +4810,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s183_resistance_taking_property_lawful_authority/statute.yh",
+        "sha256": "3fc4f14b9cc3bc4a124178748c29bedad643d47f7eada9426c86bbf8237620d2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4754,6 +4857,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s184_obstructing_sale_property_offered_sale/statute.yh",
+        "sha256": "bdb658c3b91f8f0d3afd744f11bbdbda71d9c6ed83fd850b03478950858ac0b9",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4800,6 +4904,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s185_illegal_purchase_bid_property_offered_sale/statute.yh",
+        "sha256": "3c1a4b19d1c51c8e844f6d682b15d65afc6cdbe5be3e883e99c97ed48be5d571",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4846,6 +4951,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s186_obstructing_public_servant_discharge_his/statute.yh",
+        "sha256": "8358a940ee9e59d6d98a0130e257b16ddccee04f6cf13114730cce795426be0f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4892,6 +4998,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s187_omission_assist_public_servant_when_bound/statute.yh",
+        "sha256": "da7ca050bbc7cac4f0a78bde8a0c9e36e6bd5bae8bfc3d52579b81d1dab8375f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4938,6 +5045,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s188_disobedience_order_duly_promulgated_public/statute.yh",
+        "sha256": "a9232fb49dc4d0bea1077f71d5034c094079c3911f6179262eef66442fca223e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -4984,6 +5092,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s189_threat_injury_public_servant/statute.yh",
+        "sha256": "bc08c036934540aa086f1b70d7e948a41af864436704534454d30f14ba30a5b2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5030,6 +5139,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s19_judge/statute.yh",
+        "sha256": "7b371179d0035822f0da3d9552c6bda0719703fd26644c0ed6829cd3594d3637",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5076,6 +5186,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s190_threat_injury_induce_person_refrain_applying/statute.yh",
+        "sha256": "c463d1e746bc1a4e439cc7c2ca42bcd99b3551b4c79f0be9ccd02dc10d806163",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5122,6 +5233,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s191_giving_false_evidence/statute.yh",
+        "sha256": "2b84f5036b03ef05a90ebb6d752d4e1e6e97202849bb11c1ca889debd8f5f9c3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5168,6 +5280,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s192_fabricating_false_evidence/statute.yh",
+        "sha256": "93f2f40275f9883600d01bc1a22d6f96615f28e64c293a6e63298f5cffbefe1e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5214,6 +5327,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s193_punishment_false_evidence/statute.yh",
+        "sha256": "787a82aea936b2d35bd9c3361de8c6ceef5fa3043e48e082115246a2481b855a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5260,6 +5374,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s194_giving_fabricating_false_evidence_intent/statute.yh",
+        "sha256": "13a79bedc5135e9b35f3152485f81daf262634ca0af94ac7a73ba03c72611c45",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5306,6 +5421,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s195_giving_fabricating_false_evidence_intent/statute.yh",
+        "sha256": "fff95862ddeaf93a3c4b1e9d1c2102b867ef15a43f2a7ec167643d9660761f75",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5352,6 +5468,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s196_using_evidence_known_false/statute.yh",
+        "sha256": "ca5513315c840c5603b293416f03b6eeccb5b08fa50263f58c72f63e5b5642c5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5398,6 +5515,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s197_issuing_signing_false_certificate/statute.yh",
+        "sha256": "a1bd77d19ebcdb38dee1513f2d3d2fd376c5e39058bb4233d4dbca04bcb2974a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5444,6 +5562,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s198_using_true_certificate_one_known_false/statute.yh",
+        "sha256": "1c9bf24804fd0358ffee0e84db29ae543bafbae670925f1cc6b0b79922dc1632",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5490,6 +5609,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s199_false_statement_made_declaration_which_law/statute.yh",
+        "sha256": "24c5b0b8ad0354a295fae288eb17e4fbb8b1b69d7358325c81f91f47a0121e80",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5536,6 +5656,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s2_punishment_offences_committed_within/statute.yh",
+        "sha256": "f188a9fc88a94c7e3a82641a0746f9f31a0c934da925e26e8014a9f90fd089b5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5582,6 +5703,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s20_court_justice/statute.yh",
+        "sha256": "17f88b4bc1f6455f85ea0bd4a255349edcbbdd16b177db3c1c59e05bad950bc8",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5628,6 +5750,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s200_using_true_such_declaration_known_false/statute.yh",
+        "sha256": "4fe33515afbdeae2f1233c27cbba4877dd804c7450e0bc692222fd4b9e626581",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5674,6 +5797,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s201_causing_disappearance_evidence_offence/statute.yh",
+        "sha256": "12c4dbff32dc0e45e7751d4307c6fad8b9edfab7974903b5c792ecb23778778a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5720,6 +5844,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s202_intentional_omission_give_information/statute.yh",
+        "sha256": "71b330de240f8f5db8a7b24b1049b9dd0191c2b075157d46b4196505f4ceeacc",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5766,6 +5891,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s203_giving_false_information_respecting_offence/statute.yh",
+        "sha256": "c772b932ca1af13386361e14987e928ede2dfc591df327ded5793796413dad9a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5812,6 +5938,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s204_destruction_document_electronic_record/statute.yh",
+        "sha256": "c166c3147ccb96156c7e02067121188af069942334c73854ccd827bec3f88b66",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5858,6 +5985,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s204A_obstructing_preventing_perverting_defeating/statute.yh",
+        "sha256": "4b9eec8965d807002b1f1667873a4f5d9e1eb1a413566400733d51ffa314d5e5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5904,6 +6032,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s204B_bribery_witnesses/statute.yh",
+        "sha256": "2892dd16a2338e3fe851a6c6fad1dc0180bbe1494ba41476c37129c78181b88e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5950,6 +6079,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s205_false_personation_purpose_act_proceeding_suit/statute.yh",
+        "sha256": "406690612de65d5acd5d8da11c3fe55dd2eb5a596c90c39c4912c7174cd7a443",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -5996,6 +6126,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s206_fraudulent_removal_concealment_property/statute.yh",
+        "sha256": "2e8346742cd65c3ee67230b2a7a7d768923f628d624d6b316b1ae61a60e3861e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6042,6 +6173,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s207_fraudulent_claim_property_prevent_seizure/statute.yh",
+        "sha256": "f13907efb7177272e8910e2fda63c3cd0bd7d9a30fd476bcdc14b5c5f1f07629",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6088,6 +6220,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s208_fraudulently_suffering_decree_sum_not_due/statute.yh",
+        "sha256": "83087732be79adee2678b8397972b2f5bebce87e24c34180777401bd8a98d4c2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6134,6 +6267,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s21_public_servant/statute.yh",
+        "sha256": "4d112fe66b1703df3c90c9c6b9c41ec77182cc6a5de09a87f0cf8c1c0ee1fc10",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6180,6 +6314,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s210_fraudulently_obtaining_decree_sum_not_due/statute.yh",
+        "sha256": "93645eae6505cd7fee5ddcb24a3ff2bc24cf8f8f7e6cd1e0e3e8f7c74d5c1d3e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6226,6 +6361,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s211_false_charge_offence_made_intent_injure/statute.yh",
+        "sha256": "b6d2be9ee1ce934356a7ac5482944f6e0ebf81e01940039767a411a4bc034dd0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6272,6 +6408,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s212_harbouring_offender/statute.yh",
+        "sha256": "ffdbf80e8318b9bfb97c0f5f16cff67e69ea1f1dc0b45a347e10e8106982a47a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6318,6 +6455,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s213_taking_gifts_etc_screen_offender_punishment/statute.yh",
+        "sha256": "7353abd7103bac7c8f53336387f3363417c567b27f6f04fd3e260d52b7630440",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6364,6 +6502,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s214_offering_gift_restoration_property/statute.yh",
+        "sha256": "142344ae1a84b8e383c47fb485088249ce205368268559d6c6a5923e6004d05b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6410,6 +6549,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s215_taking_gift_help_recover_stolen_property_etc/statute.yh",
+        "sha256": "48e880c13a56656b1c4eb1ac720e92991c4bf0092a6a5f534d6da824f1000997",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6456,6 +6596,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s216_harbouring_offender_who_has_escaped_custody/statute.yh",
+        "sha256": "c97fe4258a0b95fe544722c1188a2bd275a95320e98503c8bfdb48708c83f235",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6502,6 +6643,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s216A_harbouring_robbers_gang_robbers_etc/statute.yh",
+        "sha256": "3249c90c5079d9be7549a9ab5189fad74eab12069771f2cb600b601962911bdb",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6548,6 +6690,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s216B_harbour/statute.yh",
+        "sha256": "71e869025d0e60882f33020036edb0be9b62f428202d520b25e9df8667c641e7",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6594,6 +6737,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s217_public_servant_disobeying_direction_law/statute.yh",
+        "sha256": "12d9754d1b7341ebffbb36ae7431463ce2f50203de2aad4b463f42a89b05942f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6640,6 +6784,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s218_public_servant_framing_incorrect_record/statute.yh",
+        "sha256": "9f165e017a2cfe523767144eda7bd59f3afc67d52454e13cb13e6345a35a1f8d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6686,6 +6831,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s219_public_servant_judicial_proceeding_making/statute.yh",
+        "sha256": "96f552089c291844a5ba547dd6c8c6c30c0bc84f943a82e9912890fdf84f25c9",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6732,6 +6878,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s22_property/statute.yh",
+        "sha256": "ee2b415eb194cb5fd2717e7af761f264d830782888b879fef4e2d8b1675458c6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6778,6 +6925,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s220_commitment_trial_confinement_person_having/statute.yh",
+        "sha256": "b81be2af934307f9e6e2ab94063556db652b895b3ef2e7b7521dca86c3b1cdfd",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6824,6 +6972,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s221_intentional_omission_apprehend_part_public/statute.yh",
+        "sha256": "74a95b6fd03a76b0464ff2cc0f3544835fbb13a266f62f39c52130d42bab6905",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6870,6 +7019,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s222_intentional_omission_apprehend_part_public/statute.yh",
+        "sha256": "a61093d19a5e1e3c3f2eee15a239b85a4d79c6a169eecd5011b18e6f8dd628de",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6916,6 +7066,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s223_escape_confinement_negligently_suffered/statute.yh",
+        "sha256": "99423272b64b4040b8af4a51da667e26dcaa6bfd0db3af96cff0e4bd578d1510",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -6962,6 +7113,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s224_resistance_obstruction_person_his_lawful/statute.yh",
+        "sha256": "6329471d1e746fa05007b9b58056be609951c4b590d56673b8d3350ccf6c27da",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7008,6 +7160,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s225_resistance_obstruction_lawful_apprehension/statute.yh",
+        "sha256": "808fc849103a702ac8a51956ce2522e5eaf8bbb5e03e02af55398ba52430463c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7054,6 +7207,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s225A_public_servant_omitting_apprehend_suffering/statute.yh",
+        "sha256": "bc9ab47a18ced8cf554a5254e7481162c33af60a081e3afbb6cd6ab819593b49",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7100,6 +7254,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s225B_resistance_obstruction_lawful_apprehension/statute.yh",
+        "sha256": "cf512b134be8a839f48c360d206439486228894c4efe9880efc8e3c0fcb9965f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7146,6 +7301,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s225C_offences_against_laws_singapore_where_no/statute.yh",
+        "sha256": "c10ad16e9c92efa510246f3739d3e532bffb339f1f6821b85215b3887ef3ee19",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7192,6 +7348,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s228_intentional_insult_interruption_public/statute.yh",
+        "sha256": "bbdc26232d247e1d369ac9570637318573321071b4ff78ad3e2c6ec16936b00e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7238,6 +7395,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s229_personation_assessor/statute.yh",
+        "sha256": "5fd7a3bd36323d2fd5d7880e7ba86be6314a9c801f45c453c8a4e15c295dffda",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7284,6 +7442,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s22A_fault_element_physical_element/statute.yh",
+        "sha256": "ba7cdd9bb6b19f03e4964950c619660328d0902677e4374c00f8a4a04ba3257d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7330,6 +7489,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s23_wrongful_gain_wrongful_loss/statute.yh",
+        "sha256": "2beb156565a355d2b2c09a23cbfe87d6229bba0cf089202f58e4ddd40645adbc",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7376,6 +7536,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s24_dishonestly/statute.yh",
+        "sha256": "4e6ebd6e8d5aec4b7a9b447421e8daa03f23dab53613de05407e5bd561d8c1a9",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7422,6 +7583,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s25_fraudulently/statute.yh",
+        "sha256": "ad910ecb198065a078286c93c9f0e10fffbce40af3e126c6d86c70fcd128f9f3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7468,6 +7630,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s255_counterfeiting_government_stamp/statute.yh",
+        "sha256": "109a047e72bb4b1d808d1a00b6bafff4d8415f79e80ca998c9f46eab44c36856",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7514,6 +7677,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s256_having_possession_instrument_material/statute.yh",
+        "sha256": "1d98ead5236117eca29a90392dc1d6af751106bc2541030337fb7953011ad1e1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7560,6 +7724,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s257_making_selling_instrument_purpose/statute.yh",
+        "sha256": "56fdd3b8e866c193798031edd59ef590809fcb06963840c1202cd78193646424",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7606,6 +7771,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s258_sale_counterfeit_government_stamp/statute.yh",
+        "sha256": "947f27dd4384e18887fc9fc129d843ca3373963d9dc54307067c5cec576cdc07",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7652,6 +7818,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s259_having_possession_counterfeit_government/statute.yh",
+        "sha256": "391c7a94d922d872de68c3f06345bc42e0cf5d28f0ff3302833f5ebcb9804514",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7698,6 +7865,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s26_reason_believe/statute.yh",
+        "sha256": "e664d148a86b17058d2d6c6fc33f62d9691bc80564e48c2f883a3a92ed119c8f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7744,6 +7912,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s260_using_genuine_government_stamp_known/statute.yh",
+        "sha256": "fe0731006b0267497ec6ebb876e2faa91d18d9cb907e7fcbebb2e4160bda198c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7790,6 +7959,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s261_effacing_writing_substance_bearing/statute.yh",
+        "sha256": "0ea57793d43d2a5df67f42b15833753ac6ef1345b81fe2d3559273f725981d8e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7836,6 +8006,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s262_using_government_stamp_known_have_been/statute.yh",
+        "sha256": "7fd384aae80c5b69f2ba8a1f54b460368419244bc444c0635a573eb4f5317e71",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7882,6 +8053,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s263_erasure_mark_denoting_that_stamp_has_been/statute.yh",
+        "sha256": "d0057a897a1371680cf103adadf0e0712c223a7f87c7f7ff9e0040c5bb042687",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7928,6 +8100,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s267A_affray/statute.yh",
+        "sha256": "08d318a79e758a9a5ca6de5c9ee1b71ea76eb3d0fed415cb590b08641e0e311b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -7974,6 +8147,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s267B_punishment_committing_affray/statute.yh",
+        "sha256": "f492751d08bddc150d8d468604bc429a8589c64bfec3e068df34761708912678",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8020,6 +8194,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s267C_uttering_words_making_document_etc/statute.yh",
+        "sha256": "5fbc744eb23010169523e822a78bce55d72d0666e4109b889aea7ddc2240009d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8066,6 +8241,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s268_public_nuisance/statute.yh",
+        "sha256": "f9e1c652cefb860110d5c44396cf9e901c8bedc6b232332eafc4ced480a0635d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8112,6 +8288,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s268A_communicating_false_information_harmful_thing/statute.yh",
+        "sha256": "e7969efc75f7a821965380c875502afd377ffcbdf13550c53c33a09dff900f99",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8158,6 +8335,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s268B_placing_sending_thing_intent_cause_fear_harm/statute.yh",
+        "sha256": "c6831dbbc1d4286db5309e49f3eae4be5553fdad7251136ad05c68406ee98c4c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8204,6 +8382,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s268C_placing_sending_thing_causing_fear_harm/statute.yh",
+        "sha256": "53a203c34243e0b045908a25c3ecf3c922aceaef2475ac0fc5710efa664ccbc7",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8250,6 +8429,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s269_negligent_act_likely_spread_infection/statute.yh",
+        "sha256": "0950415c34e9e8ac2f7f4f551f971f8d8a78abb3a79cbb5421622bc2062e8967",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8296,6 +8476,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s26A_voluntarily/statute.yh",
+        "sha256": "e8abbf66755157f9c19ee5ea4cd6d2a2198598003af8790d0afc046705331f75",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8342,6 +8523,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s26B_good_faith/statute.yh",
+        "sha256": "20ee421e2b1b585c1afaa49ec577b37cba1742480561eb27a5f3838a7e7ff873",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8388,6 +8570,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s26C_intentionally/statute.yh",
+        "sha256": "f8a61143f78497fdd05f54d37e0bb588b110b0e0a4cae7f9681ec23a0ecb7bfe",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8434,6 +8617,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s26D_knowingly/statute.yh",
+        "sha256": "b30f8ae29cbc74ffab1a8f8e1f9d63fafe23f66b99daf9379831b53d304c32a9",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8480,6 +8664,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s26E_rashly/statute.yh",
+        "sha256": "c4cdfa0a24302895b4cba4f6ad23f71287d7ee42601b6720b0ca922f01b5ee7d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8526,6 +8711,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s26F_negligently/statute.yh",
+        "sha256": "4d6c8496ace5ca789508a769f1ecb3459a1f0cca242cb332ccf66f1f9e18bbaa",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8572,6 +8758,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s26G_transferred_fault/statute.yh",
+        "sha256": "3ff25ab2f970532598f98efdeff7018a0f09ea5c1425155523b0ff951ddad481",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8618,6 +8805,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s26H_strict_liability/statute.yh",
+        "sha256": "a67de81db8190dd12f670ef6f0abbebb9f4f069bf954916c9f1bf67703fe89c0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8664,6 +8852,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s27_property_possession_spouse_clerk_servant/statute.yh",
+        "sha256": "606db0d8c46bcf9e7ea7fe2f93e7c1055c31f0f1ce087eade21fbde9fc0dd304",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8710,6 +8899,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s270_intentional_rash_act_likely_spread_infection/statute.yh",
+        "sha256": "a5a40b20a016998210d1aeb38371f9eb82ea0b433eff60e233f16bce32975a7c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8756,6 +8946,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s271_disobedience_quarantine_rule/statute.yh",
+        "sha256": "4db162176c67d7755a4cadc9f0962f4be54f156bd6de9e043d3b923c25ddea53",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8802,6 +8993,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s272_adulteration_food_drink_which_intended_sale/statute.yh",
+        "sha256": "7153fab9e8a587f02532e23c052d0ddda40b11b7dda16ade810971d465ce65c4",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8848,6 +9040,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s273_sale_noxious_food_drink/statute.yh",
+        "sha256": "5f5f7f03b5dcf2c073a1f97d543e3dd149f1a3ddaa1488868df29ee84b2b0a99",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8894,6 +9087,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s274_adulteration_drugs/statute.yh",
+        "sha256": "3d4996a39d2f2eb5eada15d505d5eaa0e769ec58d842e14968b9251c4583dd4d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8940,6 +9134,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s275_sale_adulterated_drugs/statute.yh",
+        "sha256": "f6e392495ac171585acf4c60d5eccb3203e6fc3cc91923636e509ac542bb0fa2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -8986,6 +9181,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s276_sale_drug_different_drug_preparation/statute.yh",
+        "sha256": "da80a416b2206bc0048b8e4403d1095fb3874dbb95bc54e2afaa2695c1d4df5f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9032,6 +9228,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s277_fouling_water_public_spring_reservoir/statute.yh",
+        "sha256": "147d74a8f448f3fef0291a8b97f262a556e3854d1d22a6cb0d9f1b0bc8598f3f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9078,6 +9275,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s278_making_atmosphere_noxious_health/statute.yh",
+        "sha256": "0763fdb6f276a23fdbd2a44f5fbba332cd5fabe2c071b59717e9f56028b471a2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9124,6 +9322,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s279_rash_driving_riding_public_way/statute.yh",
+        "sha256": "044ae766e1921259fa0927f64799900bf2ee8deb0caff95b1499b7dafef4dd9d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9170,6 +9369,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s28_counterfeit/statute.yh",
+        "sha256": "ced24ac1884e536ec1fcf5905e9d361047d6eb6d209a0409c1e1a0dd97717d2b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9216,6 +9416,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s280_rash_navigation_vessel/statute.yh",
+        "sha256": "6675a1150dedd089354f1c3d1b5107f483cbd59fdef1e096a8d6c9a2dd685fc9",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9262,6 +9463,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s281_exhibition_false_light_mark_buoy/statute.yh",
+        "sha256": "cb868b2e6b1f1cb2668ad91db166ffb64bd6c129ed2a402139dd8207555c63e1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9308,6 +9510,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s282_conveying_person_water_hire_vessel/statute.yh",
+        "sha256": "18d2ccd8adf9fdfdb04b433d085a762aa6ca4a71821b10eefa28e1f01261e2f6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9354,6 +9557,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s283_danger_obstruction_public_way_navigation/statute.yh",
+        "sha256": "0bd6f27d05b96cec0dc61c41385916a0e9f6581b94032cbf1e09dcad6e9e5665",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9400,6 +9604,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s284_rash_negligent_conduct_respect_dangerous/statute.yh",
+        "sha256": "0dc205797ffa1f60275072007f1b5f67dde0bedb99f1b4510f712fc6ac7340c2",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9446,6 +9651,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s285_causing_contributing_risk_dangerous_fire/statute.yh",
+        "sha256": "d1d13017cebbf7b1eaf0eb0c5b2299405567380a5603df71a4f5d0f703f86713",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9492,6 +9698,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s286_presumption_cause_fire/statute.yh",
+        "sha256": "e206a27376786c88841ed9846724bb7df7ad452e874a9e8c5c63e9f2dddd41b9",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9538,6 +9745,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s287_rash_negligent_conduct_respect_machinery/statute.yh",
+        "sha256": "b21a7c8b378ee5ba0a5b159c7b61768fa59cc07d3d62d0b36478a8408507d16a",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9584,6 +9792,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s288_negligence_pulling_down_repairing_buildings/statute.yh",
+        "sha256": "4a923370352efd68677c5063a74d79fff0cfebaf2c1494e07b1a5c89847426a1",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9630,6 +9839,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s289_negligence_respect_animal/statute.yh",
+        "sha256": "e129f2482ce078e6c4c7b6b8406677f3228c3f54bef431dd2fe3dbd7980f4fba",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9676,6 +9886,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s29_document/statute.yh",
+        "sha256": "b91d4c716fb0fb3738b11df6c4f5e495c1a167680156f0d43b03ddeed98349b1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -9722,6 +9933,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s290_punishment_public_nuisance/statute.yh",
+        "sha256": "41447fa1963368846f403f8c60d9d8cddf6ef4b93258c96f2046344f947e7d6b",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9768,6 +9980,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s291_continuance_nuisance_after_injunction/statute.yh",
+        "sha256": "19cfe54c2fc6060047c8f634d75eb2dbac18189bcc9e92db9c70304a743a0f7c",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9814,6 +10027,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s292_sale_obscene_books_etc/statute.yh",
+        "sha256": "8cdfc4df56da9ff3475ac07df7bef90fd3efb9d25604388f4d698471a592f511",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9860,6 +10074,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s292A_possession_distribution_etc_child_sex_doll/statute.yh",
+        "sha256": "b66a62a378cc8b1ed9631386447c86e3e4cdbf5e3d81f03ecdea90600b75d608",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9906,6 +10121,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s293_sale_etc_obscene_objects_young_person/statute.yh",
+        "sha256": "e871f6d5e7bfdb1a6b5bc9e8f623a33fcefd027cb42171d96d3ba82a35f15b3e",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9952,6 +10168,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s294_obscene_acts/statute.yh",
+        "sha256": "d3cf9a61dce82d388eeb9ed7ff3bafd04505e6b67a86449b373ec472ddf788df",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -9998,6 +10215,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s298_uttering_words_etc_deliberate_intent_wound/statute.yh",
+        "sha256": "f1247603f0d32c5bbf1957fc40f8c8d87bf808834f4781db46c6f950c6e5fb75",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10044,6 +10262,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s298A_promoting_enmity_between_different_groups/statute.yh",
+        "sha256": "292a2510445f2a8a952d66d73fc6b050296cb467aa56aed570ea5b0ebc669a5b",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10090,6 +10309,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s299_culpable_homicide/statute.yh",
+        "sha256": "5f832f1f9ac3505e636fad0d995df77239776f397ea4500ba9d881394a549bbb",
         "first_commit": {
           "sha": "7dbcbfcad8d5285efec3967eb9bf56c3ffad98dd",
           "date": "2026-02-01T23:30:44+08:00",
@@ -10137,6 +10357,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s29A_writing/statute.yh",
+        "sha256": "860d9ac9ae6272554a354063a87ffff9b706b2c5c3597f789dd7f4e12b583f1d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -10183,6 +10404,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s29B_electronic_record/statute.yh",
+        "sha256": "469149e0d3264de1b26fca07fca4bbd6c87c77107bdf2998eadc4875d7592ad7",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -10229,6 +10451,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s3_punishment_offences_committed_beyond_but/statute.yh",
+        "sha256": "cd3b97c518a201616c6318015deb8515952b300b77810e6b3b5829df7aae3567",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -10275,6 +10498,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s30_valuable_security/statute.yh",
+        "sha256": "f97af75dddbf9d607da2baec10307cfa45ef79a7d78dc07e69ed289212669783",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -10321,6 +10545,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s300_murder/statute.yh",
+        "sha256": "9c9e32e89e296addecc6053b987cdc73b8aa954e188c1c4cf2218462fe445c64",
         "first_commit": {
           "sha": "c005a1f1d479e6d532fbdb0d0b4de8e2b0bb33ec",
           "date": "2026-02-01T23:32:11+08:00",
@@ -10368,6 +10593,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s301_culpable_homicide_causing_death_person_other/statute.yh",
+        "sha256": "4186f714e7e573dcd0bf3e600aad5772aff3b892d98324ed35863e131539a1e2",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10414,6 +10640,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s302_punishment_for_murder/statute.yh",
+        "sha256": "bc5c8ec2d5fb67390354d25ef8ba014a2b140e71af76ec47747c192ab8f446a6",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -10461,6 +10688,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s304_culpable_homicide_not_amounting_to_murder/statute.yh",
+        "sha256": "06b07afed3e020b0ddb90599dac23be5d6b99cd17bd2a437ab3a8949e93d5927",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -10508,6 +10736,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s304A_causing_death_rash_negligent_act/statute.yh",
+        "sha256": "bdd3f198d31926d65ced04e362d0e2f963de39dac25bc6fd95998b3bf91e21c1",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10554,6 +10783,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s304B_causing_death_child_below_14_years_age/statute.yh",
+        "sha256": "e60950c50287ff2b109f2d8ca1b87751671521a2c8714d3fe3027eba04553bd0",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10600,6 +10830,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s304C_causing_allowing_death_child_below_14_years/statute.yh",
+        "sha256": "be98a76644f62d65bcbe21f17b9bd849154f58702eb1c11a99c16fca94e4a507",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10646,6 +10877,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s305_abetment_suicide_attempted_suicide_minor/statute.yh",
+        "sha256": "9b9ad2139d19a70941a0d295852a9d8dc1da9dbbb11555e04e565f2d17eb01d9",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10692,6 +10924,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s306_abetment_suicide_attempted_suicide/statute.yh",
+        "sha256": "c8918a882ed72812d9815aad4aa2341948baca0f3c063942d5875c31c705659f",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10738,6 +10971,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s307_attempt_murder/statute.yh",
+        "sha256": "89e5e7f38858e71d9c09e8dcdc9e305f0249b5b1e51e03b37cae508d05496385",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10784,6 +11018,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s308_attempt_commit_culpable_homicide/statute.yh",
+        "sha256": "da98da19dadf8afc605e2ed41e60e848e5b66b864ce92b18370909422bf50bc7",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10830,6 +11065,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s308A_causing_death_furtherance_group_s_object/statute.yh",
+        "sha256": "9afb54eb56979a5459439cefe891d2abe4387b55b10c7a0ede58e4d8e919154d",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10876,6 +11112,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s308B_concealment_desecration_disposal_corpse_that/statute.yh",
+        "sha256": "8b327712d9a5bdaf7454df9f8211956babc67d141634a0bbb879a3f2183e2f3e",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -10922,6 +11159,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s31_will/statute.yh",
+        "sha256": "f0a27dd9bb0b7f25d8369870a4ff0b135cb3660083708919e9207304878cea5e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -10968,6 +11206,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s310_infanticide/statute.yh",
+        "sha256": "f44ebb979b5e4398085be3a74cd2286676b026b8a38d335b2d199e763a7b6c7a",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -11014,6 +11253,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s311_punishment_infanticide/statute.yh",
+        "sha256": "ff584e8247db89a500fd1926339066390e1aa55b257a6dd49e40b3e5586684e0",
         "first_commit": {
           "sha": "7be00990fbc2667ffe3c6d863acdef4b4615aa6e",
           "date": "2026-04-24T13:22:45+08:00",
@@ -11060,6 +11300,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s312_causing_miscarriage/statute.yh",
+        "sha256": "d2c5648eb97e41281e5a95ca2a090ffc60bbf245448be65b4f5abd2cff673992",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11106,6 +11347,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s313_causing_miscarriage_without_woman_s_consent/statute.yh",
+        "sha256": "620f8cf3d8bd7096924a7fca5a34db0e6ca207badab92131da04a0eaab44f834",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11152,6 +11394,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s314_death_caused_act_done_intent_cause/statute.yh",
+        "sha256": "92c8db536b590ebfdda949811880d30050dab5c6d55369d08a6b89e076bebe77",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11198,6 +11441,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s315_child_destruction_before_immediately_after/statute.yh",
+        "sha256": "a4d28655a1a934a7a2365402c8234740374759b9a140b7e6c191fb2ef9807bc6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11244,6 +11488,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s316_causing_death_quick_unborn_child_act/statute.yh",
+        "sha256": "0aa733e7a9f3c3322743f233ea18c14acdaea43bed905de3c067637f57ee64b4",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11290,6 +11535,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s317_exposure_abandonment_child_below_12_years/statute.yh",
+        "sha256": "df687e975fe8a349734c2cbfbbb41e734ec4ceeb3d9c41747746db715a982e61",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11336,6 +11582,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s318_concealment_birth_secret_disposal_dead_body/statute.yh",
+        "sha256": "2842e7e0ef082fd29f1a6c7a1c18ddf4daa96c4e1770877998b0b0bfcd39bf9f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11382,6 +11629,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s319_hurt/statute.yh",
+        "sha256": "2ddcce4f98747e5d7bee6d6e92798f63a275a9adbce754828b97128871f77959",
         "first_commit": {
           "sha": "23e249c616d17d8d135a7a05a3c66bf0576f509e",
           "date": "2026-02-01T23:33:21+08:00",
@@ -11429,6 +11677,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s31A_die_instrument/statute.yh",
+        "sha256": "f079fbca12494fac0efe397c6455d0ae52306768784cc383e55ec94a03315992",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11475,6 +11724,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s32_words_referring_acts_include_illegal_omissions/statute.yh",
+        "sha256": "221668fde3ffd52e1d65f0ea786b8b729bfd0bac7ab30293d41c6a67d48af562",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11521,6 +11771,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s320_grievous_hurt/statute.yh",
+        "sha256": "a6e7d3d75eac716fe5f51594ffdb1c06f20eda8014ac6736a4c13f4461d202aa",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11567,6 +11818,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s321_voluntarily_causing_hurt/statute.yh",
+        "sha256": "12c0b86898f0a9e38e1f45d03d8c40a41753033a1ba0ad73dec5b616c1dd2d29",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -11614,6 +11866,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s322_voluntarily_causing_grievous_hurt/statute.yh",
+        "sha256": "8833dca78339737117b1d7e044442acf2cc4d0588f582bd43629b1c211791edf",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11660,6 +11913,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s323_punishment_for_voluntarily_causing_hurt/statute.yh",
+        "sha256": "038a36c2a4e0572406f49f529c41e11004a3f5a794d6a487a6846c3d5e6a2267",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -11707,6 +11961,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s323A_punishment_voluntarily_causing_hurt_which/statute.yh",
+        "sha256": "b1e3ac701d34318b8234ffae334b3482331da110840350c84885ab8f4c67fdad",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11753,6 +12008,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s324_voluntarily_causing_hurt_dangerous_weapons/statute.yh",
+        "sha256": "ccb034eb2e4b7ef329ea82ffc7a7971a81c6d4806e3131edc6c7f7ff7b55465d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11799,6 +12055,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s325_voluntarily_causing_grievous_hurt/statute.yh",
+        "sha256": "ec8a0246d37f4fa329fc8a46faa715b2c00ac5dec715e147b5d7e85eb1ff05f3",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -11846,6 +12103,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s326_voluntarily_causing_grievous_hurt_dangerous/statute.yh",
+        "sha256": "cda8afef8917beacb5cf2238c2298e87c00cce7772a38cd2a71810141b44ecf6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11892,6 +12150,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s327_voluntarily_causing_hurt_extort_property/statute.yh",
+        "sha256": "a125772086c1fba9dea3222f624bce260437cb8846cd1189dc9302509e54939f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11938,6 +12197,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s328_causing_hurt_means_poison_etc_intent_commit/statute.yh",
+        "sha256": "2fba55618881aa828bbb7ea6e085086a9c0336b560741d0063d7748502418dbd",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -11984,6 +12244,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s329_voluntarily_causing_grievous_hurt_extort/statute.yh",
+        "sha256": "65ff55eac988afd8359a9af93308955ed178b47e1936a2a3361a11cfdb01bd72",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12030,6 +12291,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s33_act_omission/statute.yh",
+        "sha256": "6ecd8315ab46979a0b5911f9c0249536c735d3115728ee2f5fdbfab2c78f110b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12076,6 +12338,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s330_voluntarily_causing_hurt_extort_confession/statute.yh",
+        "sha256": "3b89b7cce40f1169ac8a5a6e992e95e156baa6a9adac9f83b64d117784044aa1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12122,6 +12385,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s331_voluntarily_causing_grievous_hurt_extort/statute.yh",
+        "sha256": "d73df811751104057685083b00e1ecaeb50bf9d1797b4ac88d21733d8a83436a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12168,6 +12432,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s332_voluntarily_causing_hurt_deter_public/statute.yh",
+        "sha256": "81920618913f5d4867dcbd8b8e97be210ef6e626cb702175aec6303529dc07f6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12214,6 +12479,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s333_voluntarily_causing_grievous_hurt_deter/statute.yh",
+        "sha256": "669acca6689d1adce859dff8c27985668402f9b23486f40e996d23646e21e0ba",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12260,6 +12526,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s334_voluntarily_causing_hurt_provocation/statute.yh",
+        "sha256": "e647bda02601807a2749aaf9572158725f7e3629dac3259695473a9200fccab2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12306,6 +12573,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s334A_punishment_voluntarily_causing_hurt/statute.yh",
+        "sha256": "90434ad3d8d402b5efeb5ce7e41d59d171a04c2b84c78136c1b0e8a7c3e88b20",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12352,6 +12620,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s335_causing_grievous_hurt_provocation/statute.yh",
+        "sha256": "e7b869db2c11194ab94cfbf969b76d8c52014c3e3c2fd709d7c4a36193d8872b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12398,6 +12667,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s335A_allowing_neglect_physical_sexual_abuse/statute.yh",
+        "sha256": "db9d8420f6ce06e4a794d8627d7ff1f091b341433b29ab03b5205c33e35f4b6c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12444,6 +12714,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s335B_punishment_act_which_endangers_life_personal/statute.yh",
+        "sha256": "d7d6aac22038c5407885c1037110206131fb4e53c5eeddbcbdb07f262525c834",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12490,6 +12761,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s336_punishment_act_which_endangers_life_personal/statute.yh",
+        "sha256": "2dc22a58f252c2d1500f2a4da976bd8ea7143fdc9f222797631449a244bb6f0f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12536,6 +12808,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s337_causing_hurt_act_which_endangers_life/statute.yh",
+        "sha256": "b3ef801000ac072dd529de586971c4254160e3aa3e39b4487cefc548e1664aa1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12582,6 +12855,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s338_causing_grievous_hurt_act_which_endangers/statute.yh",
+        "sha256": "7f506f72ca92a03ff7c089b954c814eb45549ba6c11b31100664a1381dbfe090",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12628,6 +12902,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s339_wrongful_restraint/statute.yh",
+        "sha256": "ff8d73fe91e7f06bfea09def18e416b4574a8b99921900e53b9b1edb4a0a81ba",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12674,6 +12949,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s34_each_several_persons_liable_act_done_all_like/statute.yh",
+        "sha256": "798fa2d96fb7baf18e222c2a4f538fb532527b41cd01ea19f001bf429f79d071",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12720,6 +12996,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s340_wrongful_confinement/statute.yh",
+        "sha256": "c418f92449c44e1cdcb060b7fe2d1dc921f3c80554d633091dc90765b6b1fc08",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12766,6 +13043,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s341_punishment_wrongful_restraint/statute.yh",
+        "sha256": "5b40319469dddaedc4d12d644eb95cd35c604c3b94dbac2e33ee865192c03366",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12812,6 +13090,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s342_punishment_wrongful_confinement/statute.yh",
+        "sha256": "316aa9dfe5ed3d4375f1738658803b28f03ceda9cc280d014d9a8c8cbef2b020",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12858,6 +13137,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s345_wrongful_confinement_person_whose_liberation/statute.yh",
+        "sha256": "9049e50f63a60b3afb6b14adc53098d3bc270239e5ffe5373f85f04d3155c207",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12904,6 +13184,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s346_wrongful_confinement_secret/statute.yh",
+        "sha256": "39893af825682816b662f1292ae7adb680aeedc09298acbbe4d33dd30070c54a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12950,6 +13231,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s347_wrongful_confinement_purpose_extorting/statute.yh",
+        "sha256": "c4ce6bdbc6598f3b5c067594617fcae8027f3464fb2712703d44717f725f0ad9",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -12996,6 +13278,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s348_wrongful_confinement_purpose_extorting_confess/statute.yh",
+        "sha256": "b9de380c8dcc6f73d5edf5875bcff553441f567127164dac2bfa1b5531fb1fe8",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13042,6 +13325,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s349_force/statute.yh",
+        "sha256": "d2ed5961e87957f145a362c82cd414efa794dda06f35204342363288d245c069",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13088,6 +13372,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s35_when_such_act_is_criminal_reason_its_being/statute.yh",
+        "sha256": "e339d128717ba8f39603a806d355919cfa0fe6454782eef44b8e2ba05ef4b5a2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13134,6 +13419,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s350_criminal_force/statute.yh",
+        "sha256": "0354b0be19b7cf0148e332574e8f7c81c46743189b0c9e7a8450f90819ef5cfa",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13180,6 +13466,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s351_assault/statute.yh",
+        "sha256": "326c34e8af0cf9b6ce6d7bce224a3f857ec90f7422baeb4b6374d345b4ad3721",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13226,6 +13513,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s352_punishment_using_criminal_force_otherwise/statute.yh",
+        "sha256": "15e0cd05267311c1f5e8205bd3693f76a0da14b083ca6bfca55585b54ee8566d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13272,6 +13560,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s353_using_criminal_force_deter_public_servant/statute.yh",
+        "sha256": "ae40d380c7f087f08c5a42e2f26203c0eeacc8dfe637eff8b477975f57282156",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13318,6 +13607,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s354_assault_or_criminal_force_to_outrage_modesty/statute.yh",
+        "sha256": "ada8903f2056f2f34eb6b7f9c0daa46fa9ed3e7cd8a3c58ebd8e28aab265c640",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -13365,6 +13655,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s354A_outraging_modesty_certain_circumstances/statute.yh",
+        "sha256": "14ebbff094fad75bbb4d87e2d55fab6d3b3c7936598f1c3702929b3109320754",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13411,6 +13702,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s355_assault_criminal_force_intent_dishonour/statute.yh",
+        "sha256": "4044037b25c2ca471fcde52783ba2e2d32e53969f6435efa0c2e538745676e4f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13457,6 +13749,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s356_assault_criminal_force_committing_attempting/statute.yh",
+        "sha256": "e66bddbf79c64da072124f5914260726d68a95fd14ba52a01fad26b58a28aee0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13503,6 +13796,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s357_assault_criminal_force_attempting_wrongfully/statute.yh",
+        "sha256": "3111b265fa9121cecb53ba4a5d4995bc7991041d29e49e83916bcfda9f2b4d0a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13549,6 +13843,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s358_assaulting_using_criminal_force_grave_sudden/statute.yh",
+        "sha256": "b73903052914cfcf52ffdaf4952fcd55f5f622b172f9c785fbcf0beb74481b14",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13595,6 +13890,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s359_kidnapping/statute.yh",
+        "sha256": "3580544ddcee870a7e40a6c93893a8ad408e86f9270d59470fc95d03db2fc256",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13641,6 +13937,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s36_effect_caused_partly_act_partly_omission/statute.yh",
+        "sha256": "effaef263585cfe65d498e09e3424f910a9f848c8566efce9f9ea16aeafef398",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13687,6 +13984,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s360_kidnapping_singapore/statute.yh",
+        "sha256": "a1ac4e8ece35896795b8792e913f7a7c82c3909043f292b4630141747a709057",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13733,6 +14031,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s361_kidnapping_lawful_guardianship/statute.yh",
+        "sha256": "8058f68ddbcff3eb0f0c144550b2477f689086e6b94af546c607e46097688725",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13779,6 +14078,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s362_abduction/statute.yh",
+        "sha256": "2a4c3d77f5daf2ae8e6d59b83eb24df4501317d7ad500e0ef4cd39c209174d2e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13825,6 +14125,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s363_kidnapping/statute.yh",
+        "sha256": "c86f59b56a81d7d9906d1a3e58e1cf0ed052b2b9b463a1107d61de57c28a0f2b",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -13872,6 +14173,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s363A_punishment_abduction/statute.yh",
+        "sha256": "d1ca627d29d117aee854e5e2ca74375a6bcee0954550406e4581e0c8fee65c6b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13918,6 +14220,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s364_kidnapping_abducting_order_murder/statute.yh",
+        "sha256": "70ab156d5e31e1adde4026fdd5aac02c78468ede8bb84d9cdea0297962d34177",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -13964,6 +14267,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s365_kidnapping_abducting_intent_secretly/statute.yh",
+        "sha256": "5e0c4012c39fb3ce901d095297188eef03f3c08216b7b70c7e64dbc8c12242d0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14010,6 +14314,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s366_kidnapping_abducting_woman_compel_her/statute.yh",
+        "sha256": "42eebd9eecbba64a1fa690ae6a6ad4123fd2c4eabb4ffdcdfa076b7594729f0e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14056,6 +14361,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s367_kidnapping_abducting_order_subject_person/statute.yh",
+        "sha256": "83532f22c47cedb7e9c0fb6ec35c5bb6943f962b2b63d4b940aa6c08bc81c39b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14102,6 +14408,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s368_wrongfully_concealing_keeping_confinement/statute.yh",
+        "sha256": "189c0aa99df2059eb1cf79e95c0e512164c3629b407f734ab3195976dcfd98c2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14148,6 +14455,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s37_cooperation_doing_one_several_acts/statute.yh",
+        "sha256": "823378e76cfd34db04ae36edce969e3808ad64222b300e9f478df1fc57e9a3e6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14194,6 +14502,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s370_buying_disposing_person_slave/statute.yh",
+        "sha256": "bc0ed837b767129f717b89066a920aebb8b2e174117faa1d21ee910637c50d89",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14240,6 +14549,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s371_habitual_dealing_slaves/statute.yh",
+        "sha256": "c78bbcfe55663d848db557b5af07ffac0c03e0d6102bf227b46230da74da404d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14286,6 +14596,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s372_selling_minor_purposes_prostitution_etc/statute.yh",
+        "sha256": "b1c8b042591cc0bae67012235616af9b9fdd51dad34dc6064882cf2d2238cf0f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14332,6 +14643,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s373_buying_minor_purposes_prostitution_etc/statute.yh",
+        "sha256": "a5e6627db27332c039ed72875b408713171f96fa1cfc7184095dc29b47fa4dba",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14378,6 +14690,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s373A_importing_woman_purposes_prostitution_etc/statute.yh",
+        "sha256": "952a3a473511f07c8a2cac70ae4525cc69aa4e402c5a234d6d097467701ed92a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14424,6 +14737,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s374_unlawful_compulsory_labour/statute.yh",
+        "sha256": "1463c4d80db6c8cbe3318ad39e66680b16f81717defd73dfc2f3e052f11b7348",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14470,6 +14784,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s375_rape/statute.yh",
+        "sha256": "4b1f6e4ee26186d6c5763ad395064ba5f1608073929b765172e166805924f885",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14516,6 +14831,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376_sexual_assault_involving_penetration/statute.yh",
+        "sha256": "0f04302dbf35988fb17a405502f9855ace25dd69700e48e4703dda46efc9bb56",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14562,6 +14878,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376A_sexual_penetration_minor_below_16_years_age/statute.yh",
+        "sha256": "96830b9d084f9db211fb6488eaa74ca0b4971956dbea89620f8dafa866504577",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14608,6 +14925,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376AA_exploitative_sexual_penetration_minor_above/statute.yh",
+        "sha256": "cea9f117e7acd6cbd3c8e3afb328bb54df1273300575271e19669b6f6a12267e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14654,6 +14972,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376B_commercial_sex_minor_below_18_years_age/statute.yh",
+        "sha256": "8a876464a3f7bc3632e208a10f6a9433470ddb9b8c4d3ea85d6fbdba7a27450c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14700,6 +15019,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376C_commercial_sex_minor_below_18_years_age/statute.yh",
+        "sha256": "26627c9a4153e27054f33a0c963af2b794ef53a0d2f05581ff5d93d498cd0c13",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14746,6 +15066,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376D_tour_outside_singapore_commercial_sex_minor/statute.yh",
+        "sha256": "79f7a333d59f1e5dc080ec662153dacf27c52ee64f47e576936d898dc7cdb882",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14792,6 +15113,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376E_sexual_grooming_minor_below_16_years_age/statute.yh",
+        "sha256": "452ba0034e22a4e369a5fc42885354078084946f61227e3b6f1d67d78b852adb",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14838,6 +15160,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376EA_exploitative_sexual_grooming_minor_above_16/statute.yh",
+        "sha256": "23a313d6b79cd4f7430e25ed617eba3ab0d996810153001324acef9fd1ff786c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14884,6 +15207,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376EB_sexual_communication_minor_below_16_years_age/statute.yh",
+        "sha256": "01d065064986a426a3c1474548adc5e9e2f47711cb4c937c81b31355fcc664ec",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14930,6 +15254,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376EC_exploitative_sexual_communication_minor/statute.yh",
+        "sha256": "703432d58c7083ee3529ad24fb5e798cf198a3ee1b615806b99018141116001c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -14976,6 +15301,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376ED_sexual_activity_image_presence_minor_below/statute.yh",
+        "sha256": "8e03cd921df8a5e0dc5aae0b1f9431554f81dbe32169823f1fdbbf002bef66f3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15022,6 +15348,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376EE_exploitative_sexual_activity_image_presence/statute.yh",
+        "sha256": "336d18adf0fcd88879d3c3c14f26b39347bb7d58eed8df048794ebd694ba041c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15068,6 +15395,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376F_procurement_sexual_activity_person_mental/statute.yh",
+        "sha256": "0f6c69a008aeb17a4ba2bcc91579269ef753faff49c61a35e3338fa59e6a6f07",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15114,6 +15442,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376G_incest/statute.yh",
+        "sha256": "9912efd3ce8af1c9e2d4b5a77540c34931bec2084a086769342e572783948ac5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15160,6 +15489,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s376H_procurement_sexual_activity_deception_false/statute.yh",
+        "sha256": "1382c04bbbd5c997e4fa056d83d30867599c2d025bab3d49a357af1cdcc77753",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15206,6 +15536,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377_sexual_penetration_etc_corpse/statute.yh",
+        "sha256": "5d6f40827d284a10d1550a51b84cb922b6fa5c815e5d3b0bdddd57c92101dcfc",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15252,6 +15583,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377B_sexual_penetration_living_animal/statute.yh",
+        "sha256": "b90116f06bc154e617426d21013c7f07b9ca03ea288e87c8951fd7d1bd983f49",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15298,6 +15630,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BA_word_gesture_intended_insult_modesty_person/statute.yh",
+        "sha256": "998c9bb69a3cce9ec2b9027f169c43d97fe710418edfa7ee0acdaa66e771dd5b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15344,6 +15677,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BB_voyeurism/statute.yh",
+        "sha256": "4d7bd72ce99d5a15bd06978263b319668b8973adfff2b9977b3c5d0801d0c5e2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15390,6 +15724,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BC_distribution_voyeuristic_image_recording/statute.yh",
+        "sha256": "6885f58ac38d31f80b4504160e032469d3cdd2ddc2288863e65d53fe4c62f031",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15436,6 +15771,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BD_possession_gaining_access_voyeuristic/statute.yh",
+        "sha256": "84bdcb3a602d31f89de252dee02abc7fd601c4b9d6c1feac68e0edcb2853145e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15482,6 +15818,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BE_distributing_threatening_distribute_intimate/statute.yh",
+        "sha256": "ed3f4745dbb103c7812c91f6eb7f5ba46431a8beeb3b61bbe0ff46ed530e1dcf",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15528,6 +15865,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BF_sexual_exposure/statute.yh",
+        "sha256": "d4b4738789d3f95110ca67457b05f6e2963b1c410776aa00e9883a9f44128476",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15574,6 +15912,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BG_using_involving_child_production_child_abuse/statute.yh",
+        "sha256": "99dad592e4f41ef8f28b996701c029faf54d673185d6fb3d40b8c50d91a96934",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15620,6 +15959,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BH_producing_child_abuse_material/statute.yh",
+        "sha256": "28f4eb1f7d7f61eb610e2534aaf5a47482a05a0b011a58ed39ce7fa1bc6bf26c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15666,6 +16006,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BI_distributing_selling_child_abuse_material/statute.yh",
+        "sha256": "21a395bbf9ba1968feb4d8b90e8eb8aac2b63363aa449c1474c9173a3b5ad879",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15712,6 +16053,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BJ_advertising_seeking_child_abuse_material/statute.yh",
+        "sha256": "ba0374a0e6708e4622335244d9e5c36a3c70161e3d681c6a7951e831bb5f1582",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15758,6 +16100,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BK_possession_gaining_access_child_abuse/statute.yh",
+        "sha256": "f1d992818f033b728f0092416719b16ca39e48501f68687ef6e4768c2322ccee",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15804,6 +16147,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BL_exploitation_abusive_material_minor_above_16/statute.yh",
+        "sha256": "2da4338181bb0b3e21122e1e02882b8dc37a27b96e2d24f2c2364aea8f72fd95",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15850,6 +16194,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BM_defences_offences_relating_intimate_image/statute.yh",
+        "sha256": "ccbbcfbd39b10bcac1590058bcdff21c8b4beab9ee32877bf93fdf7182786c46",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15896,6 +16241,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BN_defences_child_abuse_material_offences/statute.yh",
+        "sha256": "4499cd45f7c399547760ef6847f1d67952f9ac21eda4418de3b159902015dab8",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15942,6 +16288,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377BO_child_abuse_material_offences_outside/statute.yh",
+        "sha256": "fe97150ccd21096a781110568b967678dd91f57131c991926ab5cf5b06cb5774",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -15988,6 +16335,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377C_interpretation_sections_375_377bo_sexual/statute.yh",
+        "sha256": "004f289bd63a13b84a27bd6dec4ef25ced3227396573bd6d0f46dc377c3da7b6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16034,6 +16382,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377CA_meaning_exploitative_relationship/statute.yh",
+        "sha256": "e5e6c45bc74bd060b38396806472f1097ba50d08440409fb84549f8c64692f73",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16080,6 +16429,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377CB_consent_given_under_misconception_sexual/statute.yh",
+        "sha256": "62aeda1bc801695d6f260fd033ab46dc0806899317a0c733be432ecf33fc902e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16126,6 +16476,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s377D_mistake_age_sexual_offences/statute.yh",
+        "sha256": "bc20faee6c0aa99bf0fd09ab9557453ff3d81b52a4f681f9f158642e0c0b4657",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16172,6 +16523,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s378_theft/statute.yh",
+        "sha256": "9459cd7e0a94bc96279e095a99e59b24fb4bc612479a0773273d8e0bbc3f3d42",
         "first_commit": {
           "sha": "abcd41c92393b4316793d1a6854f2a5fd49f4dbb",
           "date": "2026-02-01T23:34:31+08:00",
@@ -16219,6 +16571,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s379_punishment_for_theft/statute.yh",
+        "sha256": "53951c77943fb664e8d5916be49fddd8f3ee490dc10a045f1d5a9919b4420b37",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -16266,6 +16619,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s379A_punishment_theft_motor_vehicle/statute.yh",
+        "sha256": "2fbbee5071658635fbd4300c3836791b5e4ac1f6d4885dc71000998bbf3577a5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16312,6 +16666,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s38_several_persons_engaged_commission_criminal/statute.yh",
+        "sha256": "c565719364bc0b1a4fe93240736bb701af917726bcadb8e89b0c405be9f6990b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16358,6 +16713,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s380_theft_dwelling_house_etc/statute.yh",
+        "sha256": "45e5ba88e8297dccbcc8b500935d8e24dcee725b04a013798536e6d2ccf783de",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16404,6 +16760,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s381_theft_clerk_servant_property_possession/statute.yh",
+        "sha256": "5446233a4e2662c7964d6a87f2992c64f0b5f7967c10302f45c01d20c13c1029",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16450,6 +16807,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s382_theft_after_preparation_made_causing_death/statute.yh",
+        "sha256": "85cc5ebbc924eb5cf15d80c9799bfefc95a6929234dba608844d8109578837bd",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16496,6 +16854,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s383_extortion/statute.yh",
+        "sha256": "abefc1e404efd39ffdb45bc4d47096bf2ec13210b8d190658d983415565b53ce",
         "first_commit": {
           "sha": "690520971f51084903a42e5b0d38311132682399",
           "date": "2026-02-01T23:35:50+08:00",
@@ -16543,6 +16902,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s384_punishment_extortion/statute.yh",
+        "sha256": "dbe3930668e22bdfeb6f8ae504d9937eed397f72572670a6dafc8fba9985da28",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16589,6 +16949,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s385_putting_person_fear_harm_order_commit/statute.yh",
+        "sha256": "f63d64d3ca160dea0c3e3c0462f7623e0cdd2844c04a32c2b5747c5c4362770f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16635,6 +16996,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s386_extortion_putting_person_fear_death_grievous/statute.yh",
+        "sha256": "f8971598f8fccb9f21bac588402e92957d3483d63f7ab27607a9618be5eca38f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16681,6 +17043,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s387_putting_person_fear_death_grievous_hurt/statute.yh",
+        "sha256": "ea76555f49636a9cc2d029766556ff3909f397a35804bde1c8b76eb9a2f4ea5a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16727,6 +17090,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s388_extortion_threat_accusation_offence/statute.yh",
+        "sha256": "3c7f2815fee5a70702057ba78d417635bfdffe402b43dd53581775a885e902ba",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16773,6 +17137,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s389_putting_person_fear_accusation_offence_order/statute.yh",
+        "sha256": "a830b94055af650fe8149f48f93323e6707e860201bc67bfd739d27ac698ad80",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16819,6 +17184,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s390_robbery/statute.yh",
+        "sha256": "111e441c05e0ce11d0e6e82c147e575591e425a08489028f613fc250afda097e",
         "first_commit": {
           "sha": "9b63f3fa71c38e20de7c7ae13ef2db93558bf684",
           "date": "2026-02-01T23:37:13+08:00",
@@ -16866,6 +17232,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s391_gang_robbery/statute.yh",
+        "sha256": "a629ae9bfe849a384210bcf7490474f97a4ed3612d7ffefd622417d5ef219e5d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -16912,6 +17279,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s392_punishment_for_robbery/statute.yh",
+        "sha256": "ef34b082c6b3c9418e54d5bfcf50bb3c1511c01aebe61e3a8dcd3f7560737bf0",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -16959,6 +17327,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s393_attempt_commit_robbery/statute.yh",
+        "sha256": "cffe36e440d51b4ec03478683747e6aef133cac981d8e4af7e426bde151c30a1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17005,6 +17374,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s394_voluntarily_causing_hurt_committing_robbery/statute.yh",
+        "sha256": "a41b37c0e4e586581799515259dec3d1be33c21f2123765cf30f774b5ce08e91",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17051,6 +17421,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s395_dacoity/statute.yh",
+        "sha256": "29bc2bdd41c2fdafcb86270f25c4e58c3e05b0d8562a7e5ad074f19e6cadbe5e",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -17098,6 +17469,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s396_gang_robbery_murder/statute.yh",
+        "sha256": "ce4ea30ea34fff8ad0087301b4f1c5c908436e5c086de7604ebb8a3c4ccff69d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17144,6 +17516,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s397_robbery_when_armed_attempt_cause_death/statute.yh",
+        "sha256": "164771b57c5477bc3cb3e71cd2740817d6ebe5ed77e13d935cf7cbb0c69818b4",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17190,6 +17563,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s399_making_preparation_commit_gang_robbery/statute.yh",
+        "sha256": "fde5139b008d652fe1b40a6635031db51183c9e07a5733f3232cb234d798c606",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17236,6 +17610,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s4_jurisdiction_over_public_servants_offences/statute.yh",
+        "sha256": "7814be1db270544d2adff621f574f02a13a47a3cffb4e4f3f0c3e298dff2e59e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17282,6 +17657,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s40_offence/statute.yh",
+        "sha256": "b02626570619dfe434dd2be48dd23abbec3549a680c0d969f95c33fdfacd0c60",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17328,6 +17704,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s400_punishment_belonging_gang_robbers/statute.yh",
+        "sha256": "152a7a237267b3cec8b3c6d37e02a98bd3bc1c2821a1c8178e1f97e72981be41",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17374,6 +17751,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s401_punishment_belonging_gang_thieves/statute.yh",
+        "sha256": "874d0fd9e2cc9ea52e9c6441c62bd1245061a63020dda7b5e74b110359eea43e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17420,6 +17798,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s402_assembling_purpose_committing_gang_robbery/statute.yh",
+        "sha256": "dacf18633ceed2ae04fbfabf897f32d75d6d3c16a623ca8671ef094be1b9ab58",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17466,6 +17845,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s403_dishonest_misappropriation/statute.yh",
+        "sha256": "0853ba2a3afccee6d0cbeceeb14ce09d9ee1cc7d04427effab071b7ef30e5cd4",
         "first_commit": {
           "sha": "e6dac89ecbf2e8a03a1cd681797903bd883927b9",
           "date": "2026-02-01T23:38:28+08:00",
@@ -17513,6 +17893,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s404_dishonest_misappropriation_property/statute.yh",
+        "sha256": "accb92f78389a7c14dd8b3ce8468dceb092bc0cb5a6cfa0276c6d02fd6b0c353",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17559,6 +17940,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s405_criminal_breach_trust/statute.yh",
+        "sha256": "100e8a2aebc891695713f52dae90df4eb29cff5611e74efefdc6b0467fe4a97c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17605,6 +17987,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s406_punishment_for_criminal_breach_of_trust/statute.yh",
+        "sha256": "1094ed4ac8a675a271025a027158b2435456b59fa2641cc6e6a28e94e25f40fc",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -17652,6 +18035,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s407_criminal_breach_trust_property_entrusted/statute.yh",
+        "sha256": "2eeed34a2bc909450b7de5de028775b28ff01dff09aa636a2d4e0ab56c0a3a49",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17698,6 +18082,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s408_criminal_breach_trust_employees/statute.yh",
+        "sha256": "3b48a74e01b3422deeba54602929547eb1c144878e2869aed55e617b3ad7aad3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17744,6 +18129,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s409_criminal_breach_trust_public_servant_banker/statute.yh",
+        "sha256": "69017b4a4e60633a4f9e658462e5e6b85c1e10213f78663ceb8753db5e308463",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17790,6 +18176,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s41_offence_specified_term_imprisonment/statute.yh",
+        "sha256": "e57d1712f6142a8c1daa41d8dd206d4842443cb0aa394fdb30ea1f537f4f19c9",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17836,6 +18223,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s410_stolen_property/statute.yh",
+        "sha256": "9d8c28214c58a92efb5a84e4b25f7bc79b97e5b8454bb276876c096a15e40ee0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17882,6 +18270,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s411_dishonestly_receiving_stolen_property/statute.yh",
+        "sha256": "0cda05439a4c6b253a3abed3b48d049e0cce75af9ce1e66ed0868992d47894a4",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -17929,6 +18318,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s412_receiving_property_stolen_commission_gang/statute.yh",
+        "sha256": "363f96c8c4470c6c09cacc4b6651e42de848e5f5f7e4254c7601c5967bf5778c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -17975,6 +18365,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s413_habitually_dealing_stolen_property/statute.yh",
+        "sha256": "d5ea2df7f48ed852be52e05b76971d1de02143dc5913f004922b2039a04de784",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18021,6 +18412,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s414_assisting_concealment_disposal_stolen/statute.yh",
+        "sha256": "358b49e011560e05a46df3f7ff32f4295e26a4e9f7dba819df11d0681c8d509d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18067,6 +18459,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s415_cheating/statute.yh",
+        "sha256": "b7e47b5e063da0e664c43d24fc41997562f95a9d637238cbfeedbcb8d5267475",
         "first_commit": {
           "sha": "472db3cc83bdffab2641500bec0defb0481d9db2",
           "date": "2026-02-01T23:39:39+08:00",
@@ -18114,6 +18507,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s416_cheating_personation/statute.yh",
+        "sha256": "9529824552b94da757afa745d9df015e726f0f9df5d0f8336aaa9cb51b308bf2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18160,6 +18554,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s416A_illegally_obtained_personal_information/statute.yh",
+        "sha256": "405b392a5358fd8b66374307027636c2a4c5ec41e90b4432e324d12d82e77216",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18206,6 +18601,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s416B_cheating_remote_communication/statute.yh",
+        "sha256": "ea79efee4eb7d9e1978b79da9db4478913f88b4573b78771f2874a674f8c992c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18252,6 +18648,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s417_punishment_cheating/statute.yh",
+        "sha256": "c57c88ebff4ce4a6be1ca1e3d3538c84bca011b8b64e15ff7c2fe84e2556c5f5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18298,6 +18695,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s418_cheating_knowledge_that_wrongful_loss_may/statute.yh",
+        "sha256": "d953a557430ca66419818047683c6cc4bc4f022bbdd6e9b0fb55595de180c3dd",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18344,6 +18742,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s419_punishment_cheating_personation/statute.yh",
+        "sha256": "5ef12ca263b81b9158baf6dd57fdb51f5e8c08f905d78a84c5a6b93b09eaa48a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18390,6 +18789,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s42_obscene/statute.yh",
+        "sha256": "031d660433e711264241a78a045dc4cfa08fd79658f46bb8528b8a3ad64b83d5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18436,6 +18836,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s420_cheating_inducing_delivery/statute.yh",
+        "sha256": "b5d9e0da42d814060fdd353872d08b013b7dc0d9ddf5d83115a9df3694e5399d",
         "first_commit": {
           "sha": "0df06700db834f4c3b05dc89070708a393bd2e3a",
           "date": "2026-02-01T23:41:03+08:00",
@@ -18482,6 +18883,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s420A_obtaining_services_dishonestly_fraudulently/statute.yh",
+        "sha256": "c9cbb29488a25ecfec110e2c2fa8ea5f31085bcacce9c5832f6a6b88c7a9236c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18528,6 +18930,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s421_dishonest_fraudulent_removal_concealment/statute.yh",
+        "sha256": "6f6f1a257f70c5f4ce16f0aaafc096e411cb774af6115739fe8778bd316d5c92",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18574,6 +18977,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s422_dishonestly_fraudulently_preventing_debt/statute.yh",
+        "sha256": "7f0b04038b12acb003720100c239e2afbbc120be6afded6b43ac6058518116d4",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18620,6 +19024,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s423_dishonest_fraudulent_execution_deed_transfer/statute.yh",
+        "sha256": "4386dc0668dcd35341f4b90e86eeebec53b79a3c0ed9b282ac44eb4bc02583ed",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18666,6 +19071,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s424_dishonest_fraudulent_removal_concealment/statute.yh",
+        "sha256": "8fa834ffeced2e08327f444035715d712d61174ae4227d60e224e1f360510eb0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18712,6 +19118,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s424A_fraud_false_representation_non_disclosure/statute.yh",
+        "sha256": "2a27a517156ec0b5b29c23dc03fba60ccd2c568f3fd424d312cb41f2b89fe2fe",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18758,6 +19165,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s424B_fraud_false_representation_non_disclosure/statute.yh",
+        "sha256": "5a46e02cfeeb9d1c1f7d2d034b3027068d16fb7f1db0e7f6767048f455504c2e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18804,6 +19212,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s425_mischief/statute.yh",
+        "sha256": "ba67f9b4fdbbbaa2338fcb543c6f634a418cf03d1fe20337fb77a6ed7ac56509",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18850,6 +19259,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s426_punishment_committing_mischief/statute.yh",
+        "sha256": "0cc4d2ada097b7f3e4740c045a69eeb44c9bf7431f18d01a16e53c13c1dca70d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18896,6 +19306,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s427_punishment_committing_mischief_causing/statute.yh",
+        "sha256": "83b2264fb0507d32a249bec30908d7be39fa237257d99fe78bbfcd606e2a9a03",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18942,6 +19353,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s428_mischief_killing_maiming_animal/statute.yh",
+        "sha256": "41d8dbc543443da62a5e5d68a92a1b1ba8160f4b7a93cf1a5d3cc003f9bedf11",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -18988,6 +19400,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s43_illegal_unlawful_legally_bound_do/statute.yh",
+        "sha256": "c8a946813682fe5266fe8cd5ca7aaf4bf7eb52c1377a31c39f2e0a1a9bfe2ce6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19034,6 +19447,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s435_mischief_fire_explosive_substance_intent/statute.yh",
+        "sha256": "01e409e7ffd105c873baa968eed5b2eced2e1f5482766a0e19874a74ed60720f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19080,6 +19494,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s436_mischief_fire_explosive_substance_intent/statute.yh",
+        "sha256": "92779ee34a5a8c6cc38fecf761aaaeb72971563687db83e96516e43ddc89505b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19126,6 +19541,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s437_mischief_intent_destroy_make_unsafe_decked/statute.yh",
+        "sha256": "6f5d06eef701784929ff1ddd655d7ccb80a08a626d3a20cdc57438ee03e08859",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19172,6 +19588,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s438_punishment_mischief_described_section_437/statute.yh",
+        "sha256": "1c6d941dba5464baf42c803ad86ccd225bd2535298a16d9552342c6ffe921079",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19218,6 +19635,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s439_punishment_intentionally_running_vessel/statute.yh",
+        "sha256": "a0fcba91a47800c4c78870ebc5fa2e0716532c9db7fae298bbfeb18612d3cb53",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19264,6 +19682,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s44_injury/statute.yh",
+        "sha256": "b537dd7d267f2914acd11a6d931c505984934b5a625cb3626c131ac8b465eeab",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19310,6 +19729,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s440_mischief_committed_after_preparation_made/statute.yh",
+        "sha256": "5ac3c15384ef0b25b54ea074a5a7295a7675fb6c56e50d7568d2cc65b43ab9b7",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19356,6 +19776,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s441_criminal_trespass/statute.yh",
+        "sha256": "11cb9637ab6a7d9de3f0e733252c1d51708b7aed8c74c2511afcbcd6a5c66a33",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19402,6 +19823,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s442_house_breaking/statute.yh",
+        "sha256": "380fd4cfa4aafede1b9e076cb11d6cc7ddadc44c1b4f0ec1b806516862366901",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19448,6 +19870,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s447_punishment_criminal_trespass/statute.yh",
+        "sha256": "31925e5f621126d7244668c93d1775e38a895abcdd6a4cf37e2ebd7f788b6529",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19494,6 +19917,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s448_punishment_house_breaking/statute.yh",
+        "sha256": "b796bbcb363185148738f28d2b2d336f222d625ce080b78777ae428821d097d3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19540,6 +19964,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s449_house_breaking_order_commit_offence/statute.yh",
+        "sha256": "8a8f19d3327bdf073252bef714e8cd9d35811e9212ae84f5d219bda06020dbe7",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19586,6 +20011,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s44A_bodily_injury/statute.yh",
+        "sha256": "8261e164830ca44c4a2d5cef0ac7b5cff889961c40e835d073f217caf2672eb6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19632,6 +20058,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s45_life/statute.yh",
+        "sha256": "d36f83a19feb16066974c11d433097a2b8dffbf39eb41714325a3fdcbaa0fa23",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19678,6 +20105,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s450_house_breaking_order_commit_offence/statute.yh",
+        "sha256": "8d569fec1a688d71b1daf55f711c1b54e096b02eb68f2135c25b72dd1c7e7ab5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19724,6 +20152,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s451_house_breaking_order_commit_offence/statute.yh",
+        "sha256": "010e451b518b8038aad6f586d7307ed193055b3e28554042875cac7c12ffa922",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19770,6 +20199,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s452_house_breaking_after_preparation_made/statute.yh",
+        "sha256": "6fcb836f10f3651a43c94bdadc33e19b2207b7e6f21a9af939fe07984633399e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19816,6 +20246,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s453_possession_house_breaking_implements/statute.yh",
+        "sha256": "f537d083ff9e6d6b38293459a246f6da3c341e948b6506e4edc5bb9409154b87",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19862,6 +20293,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s458A_punishment_subsequent_offence_under_section/statute.yh",
+        "sha256": "d4ae226ded8ed95a53a11c082fd51e7814e35ea2ad8ef23425049dbd697a91a8",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19908,6 +20340,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s459_grievous_hurt_caused_while_committing_house/statute.yh",
+        "sha256": "6ac9309a2fd4d91df8a6b6b81888c91997572698e10f877a74b023f6efa59986",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -19954,6 +20387,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s46_death/statute.yh",
+        "sha256": "516e9402186db819f82add4e1124eda79ce4ce0362e658b03ef1fa50efd530b5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20000,6 +20434,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s460_house_breaking_when_death_grievous_hurt/statute.yh",
+        "sha256": "84baf232f682e03de312ec777bb4427f0eee8236600ec3fc0e20e07c5ff5480f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20046,6 +20481,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s461_dishonestly_breaking_open_closed_receptacle/statute.yh",
+        "sha256": "20ab5984b1c84fd1e3662d00283781b01ad9b77204e55439c61ac52173b2b69c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20092,6 +20528,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s462_punishment_same_offence_when_committed/statute.yh",
+        "sha256": "1613e9fac4a1e8870b8baae5f916795040b540d84a85eb14ee072133c54cf5ae",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20138,6 +20575,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s463_forgery/statute.yh",
+        "sha256": "f831a9288608560569c5151178d566656af0ecfd3fecdcb58aeb886faed8f06f",
         "first_commit": {
           "sha": "6a87b0acc636d5de1a2b7db7608425524c532103",
           "date": "2026-02-02T08:54:59+08:00",
@@ -20185,6 +20623,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s464_making_false_document_false_electronic_record/statute.yh",
+        "sha256": "58c777611414a27c9951dcfc30261c0c5303a8016041e6a369b87f97c8ef55a5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20231,6 +20670,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s465_punishment_for_forgery/statute.yh",
+        "sha256": "31fcf953d6f7393c7e8d45dda754c0b9342f3166c17f6c7f3f115392ad77b300",
         "first_commit": {
           "sha": "9ebbc70f9b55b053bf74728fae08531d289138ad",
           "date": "2026-03-11T00:18:28+08:00",
@@ -20278,6 +20718,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s466_forgery_record_court_justice_public_register/statute.yh",
+        "sha256": "f2236983b49fde1ca90a20ba658590f5d9de48f0c7caaf4353bcf138ce737f5c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20324,6 +20765,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s467_forgery_valuable_security_will/statute.yh",
+        "sha256": "b039155d15869691604faa8d8b4deb5a25fa29957b0ddb0d7b8d104120251be8",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20370,6 +20812,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s468_forgery_purpose_cheating/statute.yh",
+        "sha256": "9b233e97912cc8d020307b3cc5a44315af6d71364038d6df140da86485931ff3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20416,6 +20859,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s469_forgery_purpose_harming_reputation_person/statute.yh",
+        "sha256": "b6b2f22576eb81e9f0103a8ee99acf9412dcc1b727a132791f1a8dddc4f934ee",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20462,6 +20906,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s47_animal/statute.yh",
+        "sha256": "2cb8046e7caea5591fde7497474fa0caf9fe17d86aab60669640e4bbd3f980ab",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20508,6 +20953,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s470_forged_document_forged_electronic_record/statute.yh",
+        "sha256": "886d95bedc0c6b1945e8689276f52bfeea935a07777a0946576c4cab5d2b728b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20554,6 +21000,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s471_using_genuine_forged_document_forged/statute.yh",
+        "sha256": "0d043576390798dce3cdc63596048acec754c07750e42f7ff627c424f6b135d2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20600,6 +21047,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s472_making_possessing_counterfeit_seal_plate_etc/statute.yh",
+        "sha256": "3a5c2269c21ab26a0350f4edbbd56e1740196a3df99f3550b088fa59f98f881e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20646,6 +21094,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s473_making_possessing_counterfeit_seal_plate_etc/statute.yh",
+        "sha256": "c8a39f0dc8863e81207c1c4bbf3a05e022880ca4c98be10b31a27ce945759c97",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20692,6 +21141,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s473A_making_possessing_equipment_making_false/statute.yh",
+        "sha256": "f558b4f27b56005a41cc3c15851b34e6e4b792007603edbc75cbe77a5af233b4",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20738,6 +21188,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s473B_making_possessing_equipment_making_false/statute.yh",
+        "sha256": "c84ef82ab94d91dcca680d879da1f692900c986263903ce74e4cb69a390d0376",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20784,6 +21235,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s473C_meaning_prejudice_induce/statute.yh",
+        "sha256": "9f7dc65510e50ea41b6b8cc0337a557b8e867777944175b2ea7b0cf0cddff336",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20830,6 +21282,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s474_having_possession_certain_document/statute.yh",
+        "sha256": "fcfcd44237fb89d579270beac7463283e3ffa0c3c54449d324e44c4cc9567c62",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20876,6 +21329,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s475_counterfeiting_device_mark_used/statute.yh",
+        "sha256": "efe1766b107c2c45edfad5900e7d55b0bc50d592dbcbf4cef0942b8721466edc",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20922,6 +21376,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s476_counterfeiting_device_mark_used/statute.yh",
+        "sha256": "f5727b2f71c4264e395a4c87c2d4a73034d50ed22da915858d6269e65e4c909d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -20968,6 +21423,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s477_fraudulent_cancellation_destruction_etc_will/statute.yh",
+        "sha256": "f8702a375b70a2744a869eee0b4df49c8d1e03a3978bd5589055ed22bd1ef649",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21014,6 +21470,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s477A_falsification_accounts/statute.yh",
+        "sha256": "e1bf173b7a7bb40a228741071685c281ef317cb07e63e6f67cc8a31bb25f9f63",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21060,6 +21517,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s48_vessel/statute.yh",
+        "sha256": "779c9fc18c3ac5c5b70ea0e378fcffa1eaeaa22943a746d283ac1ea6f40d9870",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21106,6 +21564,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s489A_forging_counterfeiting_currency_bank_notes/statute.yh",
+        "sha256": "a3b4309258ffa8bab38d89bc90f6595079f5e5e4ac5992884d9a7be5ff2c1f0a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21152,6 +21611,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s489B_using_genuine_forged_counterfeit_currency/statute.yh",
+        "sha256": "5e875477dd864e179b0723c9e5216258684cb8d8f0d02757b1899692a08f66ed",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21198,6 +21658,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s489C_possession_forged_counterfeit_currency_bank/statute.yh",
+        "sha256": "e78997d84c7e80c15387f787fc0223cfde170aea3a5940190f960de9a09f1311",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21244,6 +21705,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s489D_making_possessing_instruments_materials/statute.yh",
+        "sha256": "15852a13fbf014737289f213c1282ef4eccef81214b560f575e1955624bd9fb3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21290,6 +21752,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s489E_abetting_singapore_counterfeiting_currency/statute.yh",
+        "sha256": "8fd33bc0d3c2eb6f78a0251effa9907f1b0a17caf9aae3eb45e2c4a0ca12c6a3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21336,6 +21799,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s489F_fraudulently_dishonestly_diminishing_weight/statute.yh",
+        "sha256": "d93b326586763b16cef1453f75cada4abc0bcc51222b0f8490c28fd787596bb2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21382,6 +21846,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s489G_altering_appearance_currency_intent_that_it/statute.yh",
+        "sha256": "d84e219495e3f7b92d6635ea289f3438968c31302199f3f7dfaa7cb7d51cd7a6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21428,6 +21893,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s489H_delivery_another_altered_currency/statute.yh",
+        "sha256": "a6d2465872145b8012ab7ae9373c472ab4658cdf437d5fa1fecf0701cecaf89e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21474,6 +21940,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s489I_possession_altered_currency/statute.yh",
+        "sha256": "c4f58211f8d371e6b30d1636b3b83e394471a89d31242941b916bc893f332e9f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21520,6 +21987,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s49_year_month/statute.yh",
+        "sha256": "690e94b84af68fc615b86f44094f08c5a6a215c1cd6cd1e5b0edd1f1523e1598",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21566,6 +22034,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s499_defamation/statute.yh",
+        "sha256": "8d9660bd9d5b0b03b8c027cc601a26e0c5cd460a5b11e3f05ca3cc01ef1894eb",
         "first_commit": {
           "sha": "e05686c19a2bf530934300e31b13629df6d629b3",
           "date": "2026-02-02T08:56:10+08:00",
@@ -21613,6 +22082,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s4A_offences_against_state_genocide_committed/statute.yh",
+        "sha256": "39445072164600645e4f71436da505ee4a07852d9f0cb17916994b77004483d3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21659,6 +22129,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s4B_punishment_specified_offences_elements/statute.yh",
+        "sha256": "e2aac5d55e0ce11fdc77828046951bf8737c09d721eea06a2746fbf6a9553d9e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21705,6 +22176,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s5_certain_laws_not_affected_this_code/statute.yh",
+        "sha256": "25b9c783da5f1af23801618f25406b7e1bb7ee1ca3dad675d644b382c5bfe787",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21751,6 +22223,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s50_section/statute.yh",
+        "sha256": "0f474bac79f6c8b3905cc7f89c9e2d4f8ed1f429f361b8b96e88803dbee00e62",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21797,6 +22270,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s500_punishment_defamation/statute.yh",
+        "sha256": "2b2b4a34f99f720d0a613ae4044cabf8ee341ed930d80046698df4ea4a75b3ec",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21843,6 +22317,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s501_printing_engraving_matter_known_defamatory/statute.yh",
+        "sha256": "ca60842c979a5b710851e66d6b16cea33d690f2df9ebb0421fabc539d1c96cd0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21889,6 +22364,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s502_sale_printed_engraved_substance_containing/statute.yh",
+        "sha256": "ff2d9e5256f11472774010f0c52ab18e62674960fdade370136711d4eac20449",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -21935,6 +22411,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s503_criminal_breach_of_trust/statute.yh",
+        "sha256": "7dee516464d3164383c53355cc048016528a4d6c1cce645e0b748fb144be9565",
         "first_commit": {
           "sha": "9bb0df5501e6bc597f514201d2110a48e9972df8",
           "date": "2026-02-02T08:57:52+08:00",
@@ -21982,6 +22459,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s504_intentional_insult_intent_provoke_breach/statute.yh",
+        "sha256": "33cf8652c6a7861de0152a077b0d7c878ade9992297e880292a64dac3d372dfd",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22028,6 +22506,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s505_statements_conducing_public_mischief/statute.yh",
+        "sha256": "79125d4d0d6c359895c79b54a9a44136650d458dd698b0a7d34cafa1786c7040",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22074,6 +22553,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s506_punishment_criminal_intimidation/statute.yh",
+        "sha256": "9ca7bbf64efb31ee62a6f0f875ce8e843a81aca487d8ab03ebe93c708cf9d15b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22120,6 +22600,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s507_criminal_intimidation_anonymous_communication/statute.yh",
+        "sha256": "b3181b55d77ee4712767321ebee00a696ad5e5c6636e4dfa30b30f5856cc6a4a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22166,6 +22647,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s51_oath/statute.yh",
+        "sha256": "7398984dc1e061451ec3daf8f21a27b445ba89b35078474b4076add00a112f13",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22212,6 +22694,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s511_attempt_commit_offence/statute.yh",
+        "sha256": "be7e64893aa2a72cfae295f5c9c1d10f1d4c8c81d626b32568332fdbbe51da82",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22258,6 +22741,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s512_punishment_attempting_commit_offences/statute.yh",
+        "sha256": "ca25d3dabeca5ca5dc85d28e125ea83aa843c2c7173aa9759e9930ce8d24846d",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22304,6 +22788,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s53_punishments/statute.yh",
+        "sha256": "8e1f1442d0372a532d947007dbd7d1a25c8aa01bedcefc4d4a4f934f284dfb3e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22350,6 +22835,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s54_imprisonment_life/statute.yh",
+        "sha256": "54bad381288f8678e4e1fb21bc9c8dc84519025f015214755cf1b12d2b109a7f",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22396,6 +22882,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s6_definitions_this_code_understood_subject/statute.yh",
+        "sha256": "21c98de00b0b61142923b48e1be3a4a7d87f85d86a726f5668f143c30b8bd9a2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22442,6 +22929,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s6A_definitions_apply_this_code_other_written_law/statute.yh",
+        "sha256": "6ac5a441aee6ccab20399d353f337ba95182e27cef95124255514509c0043dea",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22488,6 +22976,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s7_expression_once_explained_used_same_sense/statute.yh",
+        "sha256": "6cd41483d2317625db65f9dab8d3e8107b23c77af44084e17e1d0dc3abcb2fd6",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22534,6 +23023,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s72_punishment_person_found_guilty_one_several/statute.yh",
+        "sha256": "ae69a4515d16371c4888b7035c5f498c75e9b12213eab6588f99afa3fa0febf9",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22580,6 +23070,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s73_enhanced_penalties_offences_against_domestic/statute.yh",
+        "sha256": "2886118387b360c81a75105a0aa8408cf8ae32263d90297a98444b0182580635",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22626,6 +23117,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s74_enhanced_penalties_racially_religiously/statute.yh",
+        "sha256": "3bf53056fbf4bd5082a7119ec140c21aa17e71787c3286d2cfa03731efba7e65",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22672,6 +23164,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s74A_enhanced_penalties_offences_against/statute.yh",
+        "sha256": "c1795739a298a8805adfecd18abd700e556a4d9b9be60d990d4b060a058e013c",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22718,6 +23211,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s74B_enhanced_penalties_offences_against_person/statute.yh",
+        "sha256": "04f5b58443752f71efd28abd0ee9d4512f83b356782908d0e26d0e6419604455",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22764,6 +23258,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s74C_enhanced_penalties_offences_against_victims/statute.yh",
+        "sha256": "d60015f645e6e9fa36f4a8c3f6c7c7b0a903abee0c8d731d0db779cee7299f06",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22810,6 +23305,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s74D_enhanced_penalties_offences_against_victims/statute.yh",
+        "sha256": "fceb88bcca450b7c5dced6772c4c8b9fb95b05024937ae9690d82d3ac7845138",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22856,6 +23352,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s74E_application_enhanced_penalties/statute.yh",
+        "sha256": "cda995caa790de1a65aa675b212f8d6b25d92be7462b013539e8a306ce7b0d62",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22902,6 +23399,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s76_act_done_person_bound_justified_law/statute.yh",
+        "sha256": "d159cda089be89398fd0c1ab8d463f00d215eb8a78496268434bb7bbd10c4800",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22948,6 +23446,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s77_act_judge_when_acting_judicially/statute.yh",
+        "sha256": "7d728ede2aa33516f330c06d8d655bc51415ed10e40190d51ed256d4337faa29",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -22994,6 +23493,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s78_act_done_pursuant_judgment_order_court/statute.yh",
+        "sha256": "02c08589cd99328eba68188bf92972ec719cb30bc4ac9afa4e678fe3f132f45b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23040,6 +23540,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s79_act_done_person_mistake_fact_believing/statute.yh",
+        "sha256": "a8961dbaa8a5ecbab02a8a7ccd82b684db1385204f4e12f8c2ba5d1f17078a52",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23086,6 +23587,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s79A_mistake_law_ignorance_law_not_defence/statute.yh",
+        "sha256": "11a95f9091ce642670029ff88f84b9ca98f6c928771078a240f844926feae81e",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23132,6 +23634,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s8_gender/statute.yh",
+        "sha256": "639020ddded4e1b70e5ee86726bd3a077fef99a27b52d5e4f337a10ebc4686f5",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23178,6 +23681,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s80_accident_doing_lawful_act/statute.yh",
+        "sha256": "145601e5e6264bc595ee79ebb659785444f3f0b00903159f28f286a59d5487e3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23224,6 +23728,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s81_act_likely_cause_harm_but_done_prevent_other/statute.yh",
+        "sha256": "59a6cf87a9c3f7ad3117ddaa1845b4929ca513fed12a05a6ca06f31f06eee8fd",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23270,6 +23775,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s82_act_child_below_10_years_age/statute.yh",
+        "sha256": "bf1afff38874d508930d12e880e76d3a5177d93f24c23c484bd95618d10210d0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23316,6 +23822,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s83_act_child_above_10_below_12_years_age_who/statute.yh",
+        "sha256": "d0595d50bc574fb4044b281d19d4214be1e0c094d35c995a0a6eb9cd196bfcae",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23362,6 +23869,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s84_act_person_unsound_mind/statute.yh",
+        "sha256": "6787c2287695572614553e8d90489bd6f88fc5760ca280434e549e53be1ec7e0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23408,6 +23916,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s85_intoxication_when_defence/statute.yh",
+        "sha256": "bdf53470f6edffebbbdf22cdd78caf40ce21849420e246fbc845a07db2a02b23",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23454,6 +23963,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s86_effect_defence_intoxication_when_established/statute.yh",
+        "sha256": "b9e2750b2b7d42ab65ae71298c6db97b050640c6b42620c264c0717e75b0d1d3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23500,6 +24010,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s87_act_not_intended_not_known_likely_cause/statute.yh",
+        "sha256": "fafa70847a74a7433b875350abdf37a9b0738b68fab0a22cf0c4c77de0597184",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23546,6 +24057,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s88_act_not_intended_cause_death_done_consent/statute.yh",
+        "sha256": "31623d33887648aa45b8be57b3ffc6dc97d3501f7d0aa383f8086f77f858c698",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23592,6 +24104,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s89_act_done_good_faith_benefit_child_person/statute.yh",
+        "sha256": "23b6438de4d80a042f9c5c748dbc74efeb619386cd345a167993b8d2fb11604a",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23638,6 +24151,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s9_number/statute.yh",
+        "sha256": "b4aa36ad3e33589d477e3b2c327cb01a5248a91a6e486104d448362623aaba74",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23684,6 +24198,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s90_consent_given_under_fear_misconception/statute.yh",
+        "sha256": "4a90af8ef5f23bb163ff3672e18d5a4b896d77836d9e2b28e1c4f92cf92e0552",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23730,6 +24245,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s91_acts_which_are_offences_independently_harm/statute.yh",
+        "sha256": "488cadde5026b0be2e7c924c8de348a46a9658a6eb4557010603ecbccd55a00b",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23776,6 +24292,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s92_act_done_good_faith_benefit_person_without/statute.yh",
+        "sha256": "a96be9ec8efd297f1e6c643c86f340717118cd449b96c2eeb8cc58b2521c7b80",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23822,6 +24339,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s93_communication_made_good_faith/statute.yh",
+        "sha256": "c237063851affd287b233f3f1539ef24721da6d939f0ea81ebd5df826f57fbc0",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23868,6 +24386,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s94_act_which_person_compelled_threats/statute.yh",
+        "sha256": "6dfb18d1efe78ac667e228e1aab2d8f0c6081510561b168914377cf224a13e13",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23914,6 +24433,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s95_act_causing_slight_harm/statute.yh",
+        "sha256": "d9c55b3e8d8221077faf60ade16491537f11859aed1cbbe86825be9873acbcd2",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -23960,6 +24480,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s96_nothing_done_private_defence_offence/statute.yh",
+        "sha256": "05cedb448eb1de717b5330b104f39eb270c8fd73db5d12930c47cee4dab29434",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -24006,6 +24527,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s97_right_private_defence_body_property/statute.yh",
+        "sha256": "00ea95626e60c8e4a62983a8eb1ea1775fda2de89ff2b2a739e152bd713c2ae3",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -24052,6 +24574,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s98_extent_which_right_may_exercised/statute.yh",
+        "sha256": "472c63293ecde6571cb443432af6f70d55682f1d21a7967fff1336e5a3060dc1",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",
@@ -24098,6 +24621,7 @@
       },
       "encoding": {
         "yh_path": "library/penal_code/s99_right_private_defence_against_act_person/statute.yh",
+        "sha256": "bf871db8d249591e56134ed3e651b39c9d90f9e6cde5103a58cf7c247db90fcb",
         "first_commit": {
           "sha": "6c5d4936374631099feffd728645e06683ab6238",
           "date": "2026-04-24T13:06:32+08:00",

@@ -68,11 +68,17 @@ def _git_log_for(path: Path) -> Dict[str, Any]:
     try:
         first = subprocess.run(
             ["git", "log", "--diff-filter=A", "--format=%H|%aI|%an", "--", str(rel)],
-            capture_output=True, text=True, cwd=REPO, timeout=10,
+            capture_output=True,
+            text=True,
+            cwd=REPO,
+            timeout=10,
         )
         last = subprocess.run(
             ["git", "log", "-1", "--format=%H|%aI|%an", "--", str(rel)],
-            capture_output=True, text=True, cwd=REPO, timeout=10,
+            capture_output=True,
+            text=True,
+            cwd=REPO,
+            timeout=10,
         )
         first_line = (first.stdout.strip().splitlines() or [""])[-1]
         last_line = last.stdout.strip().splitlines()[0] if last.stdout.strip() else ""
@@ -182,7 +188,9 @@ def render_markdown(entries: List[Dict[str, Any]]) -> str:
         stamp = cov.get("L3_stamp_date") or ""
         title = (e.get("section_title") or "").replace("|", "\\|")[:80]
         anchor = e.get("sso_anchor") or ""
-        section_link = f"[s{e['section_number']}](https://sso.agc.gov.sg/Act/PC1871?ProvIds={anchor}#{anchor})"
+        section_link = (
+            f"[s{e['section_number']}](https://sso.agc.gov.sg/Act/PC1871?ProvIds={anchor}#{anchor})"
+        )
         lines.append(f"| {section_link} | {title} | {l1} | {l2} | {l3} | {stamp} | `{sha}` |")
 
     # Flag detail.
@@ -233,7 +241,9 @@ def main() -> int:
         "act": "Penal Code 1871",
         "jurisdiction": "SG",
         "n_sections": len(entries),
-        "generated_at": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "generated_at": _dt.datetime.now(_dt.timezone.utc)
+        .isoformat(timespec="seconds")
+        .replace("+00:00", "Z"),
         "entries": entries,
     }
     json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False))
