@@ -33,7 +33,6 @@ module.exports = grammar({
     // struct literal vs various statement boundaries
     [$.struct_literal, $.assert_statement],
     [$.struct_literal, $.return_statement],
-    [$.struct_literal, $.variable_declaration],
     [$.struct_literal, $.assignment_statement],
     // refinement type vs struct literal vs expression statement
     [$.struct_literal, $.refinement_type, $.expression_statement],
@@ -240,11 +239,20 @@ module.exports = grammar({
       seq('patient', field('patient', $.identifier)),
     ),
 
-    struct_literal: $ => seq(
-      optional(field('type_name', $.identifier)),
-      '{',
-      repeat($.field_assignment),
-      '}'
+    // Keep typed and anonymous forms distinct so a leading type identifier is
+    // consumed together with its opening brace.
+    struct_literal: $ => choice(
+      prec(1, seq(
+        field('type_name', $.identifier),
+        '{',
+        repeat($.field_assignment),
+        '}'
+      )),
+      seq(
+        '{',
+        repeat($.field_assignment),
+        '}'
+      )
     ),
 
     field_assignment: $ => seq(
@@ -797,13 +805,26 @@ module.exports = grammar({
       optional(';'),
     ),
 
-    variable_declaration: $ => seq(
-      optional(field('qualifier', choice('fact', 'conclusion', 'presumed'))),
-      field('type', $._type),
-      field('name', $.identifier),
-      optional(seq(':=', field('value', $._expression))),
-      optional(seq('unless', field('rebuttal', $._expression))),
-      optional(';'),
+    // Do not make the initializer optional in a single production.  Keeping
+    // initialized declarations distinct means `:= Foo { ... }` has one
+    // unambiguous parse, including when comments precede the declaration.
+    variable_declaration: $ => choice(
+      seq(
+        optional(field('qualifier', choice('fact', 'conclusion', 'presumed'))),
+        field('type', $._type),
+        field('name', $.identifier),
+        ':=',
+        field('value', $._expression),
+        optional(seq('unless', field('rebuttal', $._expression))),
+        optional(';'),
+      ),
+      seq(
+        optional(field('qualifier', choice('fact', 'conclusion', 'presumed'))),
+        field('type', $._type),
+        field('name', $.identifier),
+        optional(seq('unless', field('rebuttal', $._expression))),
+        optional(';'),
+      ),
     ),
 
     assignment_statement: $ => seq(

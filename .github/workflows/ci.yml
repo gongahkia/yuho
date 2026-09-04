@@ -14,6 +14,10 @@ concurrency:
 permissions:
   contents: read
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
 jobs:
   lint:
     name: Lint & Type Check
@@ -30,28 +34,22 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Set up Node.js (for tree-sitter CLI)
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
-          node-version: "20"
+          version: "0.11.14"
 
-      - name: Install tree-sitter CLI
-        run: npm install -g tree-sitter-cli
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install black mypy
-          pip install --no-cache-dir .[dev] 2>&1 | tee logs/install-yuho.log
+      - name: Synchronize locked dependencies
+        run: uv sync --locked --all-extras 2>&1 | tee logs/install-yuho.log
 
       - name: Check formatting with Black
-        run: black --check --diff --config pyproject.toml src/yuho tests 2>&1 | tee logs/black.log
+        run: uv run --locked black --check --diff --config pyproject.toml src/yuho tests 2>&1 | tee logs/black.log
 
       - name: Type check with mypy
-        run: mypy src/yuho --ignore-missing-imports 2>&1 | tee logs/mypy.log
+        run: uv run --locked mypy src/yuho --ignore-missing-imports 2>&1 | tee logs/mypy.log
 
       - name: Verify CLI reference is up-to-date
-        run: python3 scripts/gen_cli_reference.py --check 2>&1 | tee logs/cli-reference.log
+        run: uv run --locked python scripts/gen_cli_reference.py --check 2>&1 | tee logs/cli-reference.log
 
       - name: Upload lint logs
         if: always()
@@ -81,26 +79,22 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Set up Node.js (for tree-sitter CLI)
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
-          node-version: "20"
+          version: "0.11.14"
 
-      - name: Install tree-sitter CLI
-        run: npm install -g tree-sitter-cli
-
-      - name: Install dependencies
+      - name: Synchronize locked dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install --no-cache-dir .[dev] 2>&1 | tee logs/install-yuho.log
-          pip list 2>&1 | tee logs/pip-list.log
+          uv sync --locked --all-extras 2>&1 | tee logs/install-yuho.log
+          uv pip list 2>&1 | tee logs/pip-list.log
 
       - name: Smoke test parser CLI
-        run: yuho check examples/simple_statute.yh 2>&1 | tee logs/smoke-check.log
+        run: uv run --locked yuho check examples/simple_statute.yh 2>&1 | tee logs/smoke-check.log
 
       - name: Run tests
         run: |
-          pytest tests/ -v --tb=long 2>&1 | tee logs/pytest.log
+          uv run --locked pytest tests/ -v --tb=long 2>&1 | tee logs/pytest.log
 
       - name: Upload test logs
         if: always()
@@ -122,28 +116,20 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Set up Node.js (for tree-sitter CLI)
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
-          node-version: "20"
-
-      - name: Install tree-sitter CLI
-        run: npm install -g tree-sitter-cli
+          version: "0.11.14"
 
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
-      - name: Install Yuho deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install --no-cache-dir .[dev]
+      - name: Synchronize locked dependencies
+        run: uv sync --locked --all-extras
 
       - name: Round-trip every section through AKN + xmllint --schema
         run: |
-          python scripts/akn_roundtrip.py --xsd | tee akn-xsd.log
-          # Hard-fail when any section fails XSD validation; the script
-          # already exits non-zero, but pin it explicitly here so the
-          # CI job surfaces the failure even if `tee` masks the rc.
+          uv run --locked python scripts/akn_roundtrip.py --xsd | tee akn-xsd.log
           grep -q "524/524 validate clean" akn-xsd.log
 
       - name: Upload AKN XSD log
@@ -154,11 +140,30 @@ jobs:
           path: akn-xsd.log
           retention-days: 7
 
+  grammar:
+    name: Generated Tree-sitter Grammar
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "20"
+
+      - name: Install locked grammar tooling
+        working-directory: src/tree-sitter-yuho
+        run: npm ci --ignore-scripts
+
+      - name: Verify generated parser is current
+        run: python3 scripts/verify_generated_grammar.py
+
   build:
     name: Build Package
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [lint, test]
+    needs: [lint, test, akn-xsd, grammar]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
@@ -167,11 +172,13 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install build tools
-        run: python -m pip install --upgrade pip build
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.11.14"
 
       - name: Build package
-        run: python -m build .
+        run: uv build --out-dir dist --clear
 
       - name: Upload artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

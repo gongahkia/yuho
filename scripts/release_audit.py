@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Run release gates from a temporary clean working-tree copy."""
+"""Run release gates from a temporary clean working-tree copy.
+
+The audit deliberately uses the project's locked uv environment. Installing
+fresh, unconstrained build and audit tools in the audit itself would make a
+passing release result depend on inputs that are absent from ``uv.lock``.
+"""
 
 from __future__ import annotations
 
@@ -7,7 +12,6 @@ import argparse
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 from pathlib import Path
 
@@ -21,6 +25,7 @@ EXCLUDE_PARTS = {
     ".hypothesis",
     "dist",
     "build",
+    "node_modules",
 }
 
 
@@ -64,55 +69,51 @@ def copy_worktree(dest: Path) -> None:
         shutil.copy2(REPO / rel, target)
 
 
-def venv_bin(root: Path, name: str) -> Path:
-    return root / ".release-audit-venv" / ("Scripts" if os.name == "nt" else "bin") / name
-
-
 def run(cmd: list[str], cwd: Path, env: dict[str, str] | None = None) -> None:
     print("+ " + " ".join(cmd), flush=True)
     subprocess.run(cmd, cwd=cwd, env=env, check=True)
 
 
-def audit_commands(root: Path, full: bool) -> list[list[str]]:
-    py = str(venv_bin(root, "python"))
-    yuho = str(venv_bin(root, "yuho"))
+def audit_commands(root: Path, full: bool, uv: str = "uv") -> list[list[str]]:
+    """Return the exact commands used to audit a clean copy."""
+    locked = [uv, "run", "--locked"]
     commands = [
-        [py, "-m", "pip", "install", "--upgrade", "pip", "build", "twine", "pip-audit"],
-        [py, "-m", "pip", "install", "--no-cache-dir", ".[dev]"],
-        [py, "-m", "pytest", "tests/test_security_baseline.py", "tests/test_release_audit.py"],
+        [uv, "lock", "--check"],
+        [uv, "sync", "--locked", "--all-extras"],
+        [*locked, "pytest", "tests/test_security_baseline.py", "tests/test_release_audit.py"],
         [
-            py,
+            *locked,
+            "python",
             "-c",
             "import pathlib, tree_sitter_yuho; "
             "p=pathlib.Path(tree_sitter_yuho.__file__).parent; "
             "print('parser package:', p); "
             "print('parser language:', tree_sitter_yuho.language())",
         ],
-        [py, "scripts/verify_action_pins.py"],
-        [py, "scripts/verify_corpus_provenance.py"],
-        [py, "scripts/verify_dsl_spec.py"],
-        [py, "scripts/verify_backend_parity.py"],
-        [py, "scripts/verify_reproducible_build.py"],
-        [py, "-m", "pip_audit", "--strict"],
+        [*locked, "python", "scripts/verify_action_pins.py"],
+        [*locked, "python", "scripts/verify_corpus_provenance.py"],
+        [*locked, "python", "scripts/verify_dsl_spec.py"],
+        [*locked, "python", "scripts/verify_backend_parity.py"],
+        [*locked, "python", "scripts/verify_reproducible_build.py"],
+        [*locked, "pip-audit", "--strict"],
     ]
     if full:
         commands.extend(
             [
-                [py, "-m", "pytest"],
-                ["make", "verify-core", f"PYTHON={py}", f"YUHO={yuho}"],
+                [*locked, "pytest"],
+                [*locked, "make", "verify-grammar-generated"],
+                [*locked, "make", "verify-core"],
             ]
         )
     return commands
 
 
-def run_release_audit(full: bool, python: str) -> None:
+def run_release_audit(full: bool, uv: str) -> None:
     with tempfile.TemporaryDirectory(prefix="yuho-release-audit-") as tmp:
         root = Path(tmp) / "yuho"
         root.mkdir()
         copy_worktree(root)
-        run([python, "-m", "venv", str(root / ".release-audit-venv")], cwd=root)
-        py = str(venv_bin(root, "python"))
-        for cmd in audit_commands(root, full=full):
+        for cmd in audit_commands(root, full=full, uv=uv):
             run(cmd, cwd=root)
     print("release audit: PASS")
 
@@ -120,9 +121,13 @@ def run_release_audit(full: bool, python: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--full", action="store_true", help="Run full pytest and verify-core")
-    parser.add_argument("--python", default=sys.executable, help="Interpreter used to launch audit")
+    parser.add_argument(
+        "--uv",
+        default=os.environ.get("YUHO_UV", "uv"),
+        help="locked uv executable used for the audit (default: %(default)s)",
+    )
     args = parser.parse_args()
-    run_release_audit(full=args.full, python=args.python)
+    run_release_audit(full=args.full, uv=args.uv)
 
 
 if __name__ == "__main__":

@@ -22,6 +22,16 @@
 # image). Override on hosts where `python3` is broken (e.g. Homebrew
 # Python 3.14 with a stale pyexpat ABI):
 #   make verify-all PYTHON=.venv-test/bin/python
+#
+# Verification output is intentionally piped to ``tee`` in a few targets so
+# release evidence is retained.  Keep Bash's pipeline failure semantics for
+# every recipe: a failing verifier must fail its Make target even when logging
+# succeeds.  ``SHELL`` is deliberately resolved from PATH for Linux, macOS,
+# and container environments.
+SHELL := bash
+.SHELLFLAGS := -euo pipefail -c
+.DELETE_ON_ERROR:
+
 PYTHON ?= python3
 AUDIT_PYTHON ?= python3
 # `yuho` console-script lives on PATH after `pip install -e .[dev]`;
@@ -36,6 +46,7 @@ LOGS = logs
         verify-source-maps verify-backend-parity verify-mermaid-verbose \
         verify-literate-alignment verify-dsl-spec verify-action-pins \
         verify-corpus-provenance verify-reproducible-build verify-release-hardening \
+        verify-control-plane verify-grammar-generated \
         release-audit \
         clean-reproduce
 
@@ -59,6 +70,7 @@ verify-all: verify-core
 verify-core: $(LOGS)
 	@echo "=== Yuho verification ==="
 	@echo ""
+	$(MAKE) verify-control-plane
 	$(MAKE) verify-coverage
 	$(MAKE) verify-akn-xsd
 	$(MAKE) verify-runtime-tests
@@ -122,7 +134,8 @@ verify-coverage: $(LOGS)
 		fi; \
 	done; \
 	echo "$${ok}/$${n} sections pass yuho check (failures: $${fail})" \
-		| tee $(LOGS)/coverage.log
+		| tee $(LOGS)/coverage.log; \
+	test "$$fail" -eq 0
 
 verify-akn-xsd: $(LOGS)
 	@echo ">>> verifying AKN OASIS-XSD round-trip (524/524)…"
@@ -205,6 +218,14 @@ verify-reproducible-build: $(LOGS)
 	$(PYTHON) scripts/verify_reproducible_build.py 2>&1 | tee $(LOGS)/reproducible-build.log
 
 verify-release-hardening: verify-action-pins verify-corpus-provenance verify-reproducible-build
+
+verify-control-plane:
+	@echo ">>> verifying failure propagation and release-gate wiring…"
+	$(PYTHON) scripts/verify_control_plane.py
+
+verify-grammar-generated:
+	@echo ">>> verifying generated tree-sitter parser is current…"
+	$(PYTHON) scripts/verify_generated_grammar.py
 
 release-audit:
 	$(AUDIT_PYTHON) scripts/release_audit.py --full --python $(AUDIT_PYTHON)

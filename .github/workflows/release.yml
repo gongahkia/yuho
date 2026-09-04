@@ -12,15 +12,65 @@ concurrency:
 permissions:
   contents: read
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
 jobs:
+  release-gate:
+    name: Clean Release Gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.11.14"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "20"
+
+      - name: Install locked grammar tooling
+        working-directory: src/tree-sitter-yuho
+        run: npm ci --ignore-scripts
+
+      - name: Set up pinned Lean toolchain
+        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9 # v1.5.0
+        with:
+          lake-package-directory: mechanisation
+          build: true
+          test: false
+          lint: false
+          use-github-cache: false
+
+      - name: Install XML validation tool
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libxml2-utils
+
+      - name: Verify the lockfile is current
+        run: uv lock --check
+
+      - name: Run the clean release audit
+        run: uv run --locked python scripts/release_audit.py --full
+
   integration:
     name: Integration Tests
+    needs: [release-gate]
     uses: ./.github/workflows/integration.yml
 
   build:
     name: Build Package
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
+    needs: [release-gate]
     permissions:
       contents: read
       id-token: write
@@ -32,6 +82,11 @@ jobs:
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.11.14"
 
       - name: Validate tag version
         run: |
@@ -49,14 +104,14 @@ jobs:
             exit 1
           fi
 
-      - name: Install build tools
-        run: python -m pip install --upgrade pip build twine
+      - name: Synchronize locked build dependencies
+        run: uv sync --locked --all-extras
 
       - name: Build package
-        run: python -m build .
+        run: uv build --out-dir dist --clear
 
       - name: Check package metadata
-        run: twine check dist/*.whl dist/*.tar.gz
+        run: uv run --locked twine check dist/*.whl dist/*.tar.gz
 
       - name: Generate SPDX SBOM
         uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
@@ -91,9 +146,9 @@ jobs:
 
   docker:
     name: Build & Push Docker Image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
-    needs: [integration]
+    needs: [release-gate, integration]
     permissions:
       packages: write
       contents: read
@@ -140,9 +195,9 @@ jobs:
 
   publish:
     name: Publish to PyPI
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
-    needs: [integration, build]
+    needs: [release-gate, integration, build]
     environment:
       name: pypi
       url: https://pypi.org/project/yuho/

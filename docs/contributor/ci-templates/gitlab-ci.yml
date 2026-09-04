@@ -1,13 +1,15 @@
 yuho-validate:
   image: python:3.12-slim
   stage: test
+  variables:
+    YUHO_VERSION: "5.1.0"
   before_script:
-    - pip install yuho
+    - python -m pip install --disable-pip-version-check --no-input "yuho==${YUHO_VERSION}"
   script:
     - yuho ci-report . --format json -o report.json
   artifacts:
-    reports:
-      junit: report.json
+    paths:
+      - report.json
     when: always
   rules:
     - changes:

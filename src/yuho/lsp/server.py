@@ -219,7 +219,7 @@ class YuhoLanguageServer(LanguageServer):
         key = str(resolved)
         graph = self.reference_graphs.get(key)
         if graph is None:
-            graph = build_reference_graph(resolved)
+            graph = build_reference_graph(resolved, strict=False)
             self.reference_graphs[key] = graph
         return graph
 

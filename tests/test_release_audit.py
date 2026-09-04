@@ -11,18 +11,21 @@ def test_release_audit_quick_plan_contains_release_gates() -> None:
     commands = [" ".join(cmd) for cmd in audit_commands(Path("/tmp/yuho"), full=False)]
     joined = "\n".join(commands)
 
+    assert "uv lock --check" in joined
+    assert "uv sync --locked --all-extras" in joined
     assert "scripts/verify_action_pins.py" in joined
     assert "scripts/verify_corpus_provenance.py" in joined
     assert "scripts/verify_reproducible_build.py" in joined
     assert "scripts/verify_dsl_spec.py" in joined
-    assert "pip_audit --strict" in joined
+    assert "pip-audit --strict" in joined
 
 
 def test_release_audit_full_plan_runs_pytest_and_verify_core() -> None:
     commands = [" ".join(cmd) for cmd in audit_commands(Path("/tmp/yuho"), full=True)]
     joined = "\n".join(commands)
 
-    assert "-m pytest" in joined
+    assert "uv run --locked pytest" in joined
+    assert "make verify-grammar-generated" in joined
     assert "make verify-core" in joined
 
 

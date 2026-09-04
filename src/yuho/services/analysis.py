@@ -5,16 +5,17 @@ Shared analysis service for parser, AST, and semantic summaries.
 from __future__ import annotations
 
 import hashlib
+import inspect
 import os
-import pickle
 import re
-from copy import copy
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, is_dataclass, replace
+from enum import Enum
 from pathlib import Path
 from time import perf_counter
 from typing import Any, Optional
 
 from yuho.ast import ASTBuilder
+from yuho.ast import nodes as ast_nodes
 from yuho.ast.nodes import ASTNode, ModuleNode
 from yuho.parser import get_parser
 from yuho.parser.source_location import SourceLocation
@@ -26,6 +27,11 @@ from yuho.services.errors import (
     run_ast_boundary,
     run_parser_boundary,
 )
+from yuho.services.safe_cache import decode as decode_cache
+from yuho.services.safe_cache import encode as encode_cache
+from yuho.services.safe_cache import read_json as read_cache_json
+from yuho.services.safe_cache import type_key
+from yuho.services.safe_cache import write_json as write_cache_json
 
 
 ANALYSIS_ERROR_CODES: dict[str, str] = {
@@ -45,7 +51,7 @@ ANALYSIS_ERROR_CODES: dict[str, str] = {
     "semantic_issue": "Y0400",
     "semantic_analysis_failed": "Y0499",
 }
-CACHE_VERSION = "yuho-analysis-cache-v1"
+CACHE_VERSION = "yuho-analysis-cache-v2"
 CACHE_ENV = "YUHO_ANALYSIS_CACHE"
 CACHE_DIR_ENV = "YUHO_CACHE_DIR"
 
@@ -465,6 +471,8 @@ def _analysis_stage(*, run_semantic: bool, features: Optional[set[str]]) -> str:
 def _cache_root() -> Optional[Path]:
     if os.environ.get(CACHE_ENV, "1") in {"0", "false", "False", "no"}:
         return None
+    if os.environ.get("CI", "").lower() in {"1", "true", "yes"}:
+        return None
     if CACHE_DIR_ENV in os.environ:
         return Path(os.environ[CACHE_DIR_ENV]).expanduser() / "analysis"
     xdg = os.environ.get("XDG_CACHE_HOME")
@@ -478,7 +486,29 @@ def _cache_path(file_hash: str, stage: str) -> Optional[Path]:
     if root is None:
         return None
     safe_stage = re.sub(r"[^A-Za-z0-9_.=-]+", "_", stage)
-    return root / file_hash / f"{safe_stage}.pickle"
+    return root / file_hash / f"{safe_stage}.json"
+
+
+def _cache_type_allowlist() -> dict[str, type[Any]]:
+    """Return the fixed set of data classes permitted in cache payloads."""
+    classes: set[type[Any]] = {
+        AnalysisError,
+        ASTSummary,
+        SemanticIssue,
+        SemanticSummary,
+        CodeScale,
+        ClockLoadScale,
+        AnalysisResult,
+        LintWarning,
+        ParseError,
+        SourceLocation,
+    }
+    for candidate in vars(ast_nodes).values():
+        if not inspect.isclass(candidate):
+            continue
+        if is_dataclass(candidate) or issubclass(candidate, Enum):
+            classes.add(candidate)
+    return {type_key(candidate): candidate for candidate in classes}
 
 
 def _load_cached_analysis(
@@ -488,12 +518,10 @@ def _load_cached_analysis(
     stage: str,
 ) -> Optional[AnalysisResult]:
     path = _cache_path(file_hash, stage)
-    if path is None or not path.exists():
+    if path is None:
         return None
-    try:
-        with path.open("rb") as fh:
-            payload = pickle.load(fh)
-    except Exception:
+    payload = read_cache_json(path)
+    if payload is None:
         return None
     if not isinstance(payload, dict):
         return None
@@ -503,7 +531,10 @@ def _load_cached_analysis(
         return None
     if payload.get("file") != file:
         return None
-    result = payload.get("result")
+    try:
+        result = decode_cache(payload.get("result"), _cache_type_allowlist())
+    except (TypeError, ValueError, KeyError):
+        return None
     if not isinstance(result, AnalysisResult):
         return None
     result.file = file
@@ -517,23 +548,17 @@ def _store_cached_analysis(result: AnalysisResult, file_hash: str, stage: str) -
     path = _cache_path(file_hash, stage)
     if path is None:
         return
-    cached = copy(result)
-    cached.tree = None
-    cached.cache_hit = False
+    cached = replace(result, source="", tree=None, cache_hit=False)
     payload = {
         "version": CACHE_VERSION,
         "file": result.file,
         "file_hash": file_hash,
         "stage": stage,
-        "result": cached,
+        "result": encode_cache(cached, _cache_type_allowlist()),
     }
     try:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        tmp_path = path.with_suffix(".tmp")
-        with tmp_path.open("wb") as fh:
-            pickle.dump(payload, fh, protocol=pickle.HIGHEST_PROTOCOL)
-        tmp_path.replace(path)
-    except Exception:
+        write_cache_json(path, payload)
+    except (OSError, TypeError, ValueError):
         return
 
 

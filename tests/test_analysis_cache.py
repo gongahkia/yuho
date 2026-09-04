@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import stat
 from pathlib import Path
 
 from yuho.services import analysis
@@ -51,3 +53,31 @@ def test_analysis_cache_is_keyed_by_stage_options(tmp_path: Path, monkeypatch):
     assert semantic.cache_hit is False
     assert semantic_again.cache_hit is True
     assert semantic_again.semantic_checked is True
+
+
+def test_analysis_cache_is_json_data_with_owner_only_permissions(tmp_path: Path, monkeypatch):
+    monkeypatch.setenv("YUHO_CACHE_DIR", str(tmp_path / "cache"))
+    statute = tmp_path / "statute.yh"
+    statute.write_text(SOURCE, encoding="utf-8")
+
+    result = analysis.analyze_file(statute, run_semantic=False)
+    assert result.is_valid
+
+    cache_files = list((tmp_path / "cache").rglob("*.json"))
+    assert len(cache_files) == 1
+    assert not list((tmp_path / "cache").rglob("*.pickle"))
+    payload = json.loads(cache_files[0].read_text(encoding="utf-8"))
+    assert payload["version"] == "yuho-analysis-cache-v2"
+    assert stat.S_IMODE(cache_files[0].stat().st_mode) == 0o600
+
+
+def test_analysis_cache_is_disabled_in_ci(tmp_path: Path, monkeypatch):
+    monkeypatch.setenv("YUHO_CACHE_DIR", str(tmp_path / "cache"))
+    monkeypatch.setenv("CI", "true")
+    statute = tmp_path / "statute.yh"
+    statute.write_text(SOURCE, encoding="utf-8")
+
+    result = analysis.analyze_file(statute, run_semantic=False)
+
+    assert result.is_valid
+    assert not (tmp_path / "cache").exists()

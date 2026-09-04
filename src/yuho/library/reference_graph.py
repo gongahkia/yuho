@@ -463,18 +463,91 @@ def can_apply_scope(graph: ReferenceGraph, section_ref: str) -> bool:
     return _normalise_section(section_ref) in graph.nodes
 
 
-def build_reference_graph(library_dir: Path) -> ReferenceGraph:
-    """Build a reference graph by parsing every ``statute.yh`` under ``library_dir``."""
+@dataclass(frozen=True)
+class ReferenceGraphDiagnostic:
+    """A statute skipped while constructing a cross-section graph."""
+
+    path: str
+    stage: str
+    message: str
+
+
+@dataclass(frozen=True)
+class ReferenceGraphBuildResult:
+    """Reference graph plus an explicit account of its construction coverage."""
+
+    graph: ReferenceGraph
+    scanned: int
+    succeeded: int
+    diagnostics: tuple[ReferenceGraphDiagnostic, ...] = ()
+
+    @property
+    def skipped(self) -> int:
+        return len(self.diagnostics)
+
+    @property
+    def complete(self) -> bool:
+        return self.scanned == self.succeeded and self.skipped == 0
+
+
+class ReferenceGraphBuildError(RuntimeError):
+    """Raised when strict graph construction would omit source material."""
+
+    def __init__(self, result: ReferenceGraphBuildResult) -> None:
+        examples = "; ".join(
+            f"{item.path}: {item.message}" for item in result.diagnostics[:3]
+        )
+        suffix = f" ({examples})" if examples else ""
+        super().__init__(
+            f"reference graph is incomplete: {result.succeeded}/{result.scanned} statutes parsed, "
+            f"{result.skipped} skipped{suffix}"
+        )
+        self.result = result
+
+
+def build_reference_graph_result(library_dir: Path) -> ReferenceGraphBuildResult:
+    """Build a graph while retaining every parse/analysis omission as data."""
     from yuho.services.analysis import analyze_file
 
     graph = ReferenceGraph()
-    for yh_file in sorted(library_dir.glob("*/statute.yh")):
+    diagnostics: list[ReferenceGraphDiagnostic] = []
+    succeeded = 0
+    files = sorted(library_dir.glob("*/statute.yh"))
+    for yh_file in files:
+        rel = yh_file.relative_to(library_dir.parent) if library_dir.parent in yh_file.parents else yh_file
         try:
             analysis = analyze_file(yh_file, run_semantic=False)
-        except Exception:
+        except Exception as exc:
+            diagnostics.append(
+                ReferenceGraphDiagnostic(
+                    path=str(rel), stage="analysis", message=f"unexpected {exc.__class__.__name__}"
+                )
+            )
             continue
         if analysis.parse_errors or analysis.ast is None:
+            messages = [error.message for error in analysis.parse_errors]
+            messages.extend(error.message for error in analysis.errors)
+            diagnostics.append(
+                ReferenceGraphDiagnostic(
+                    path=str(rel),
+                    stage="parse" if analysis.parse_errors else "ast",
+                    message="; ".join(messages[:3]) or "analysis did not produce an AST",
+                )
+            )
             continue
-        rel = yh_file.relative_to(library_dir.parent) if library_dir.parent in yh_file.parents else yh_file
         add_edges_from_module(graph, analysis.ast, source_path=str(rel))
-    return graph
+        succeeded += 1
+    return ReferenceGraphBuildResult(
+        graph=graph,
+        scanned=len(files),
+        succeeded=succeeded,
+        diagnostics=tuple(diagnostics),
+    )
+
+
+def build_reference_graph(library_dir: Path, *, strict: bool = True) -> ReferenceGraph:
+    """Build a graph, rejecting incomplete input unless best-effort is explicit."""
+    result = build_reference_graph_result(library_dir)
+    if strict and not result.complete:
+        raise ReferenceGraphBuildError(result)
+    return result.graph

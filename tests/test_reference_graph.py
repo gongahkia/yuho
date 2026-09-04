@@ -6,10 +6,12 @@ import pytest
 
 from yuho.library.reference_graph import (
     ReferenceEdge,
+    ReferenceGraphBuildError,
     ReferenceGraph,
     _normalise_section,
     _scan_implicit_refs,
     build_reference_graph,
+    build_reference_graph_result,
 )
 
 
@@ -217,6 +219,28 @@ class TestSCC:
 
 
 class TestBuildTreatments:
+    def test_build_result_retains_skipped_statutes_and_strict_mode_fails(self, tmp_path):
+        library = tmp_path / "library"
+        valid_dir = library / "s1_valid"
+        invalid_dir = library / "s2_invalid"
+        valid_dir.mkdir(parents=True)
+        invalid_dir.mkdir()
+        (valid_dir / "statute.yh").write_text(
+            'statute 1 "Valid" { elements { actus_reus act := "x"; } }', encoding="utf-8"
+        )
+        (invalid_dir / "statute.yh").write_text("statute", encoding="utf-8")
+
+        result = build_reference_graph_result(library)
+
+        assert result.scanned == 2
+        assert result.succeeded == 1
+        assert result.skipped == 1
+        assert result.complete is False
+        assert result.diagnostics[0].path == "library/s2_invalid/statute.yh"
+        with pytest.raises(ReferenceGraphBuildError):
+            build_reference_graph(library)
+        assert build_reference_graph(library, strict=False).nodes == result.graph.nodes
+
     def test_build_reference_graph_emits_case_treatment_edges(self, tmp_path):
         library = tmp_path / "library"
         section_dir = library / "s1_demo"

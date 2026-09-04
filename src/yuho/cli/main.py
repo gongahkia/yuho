@@ -152,6 +152,40 @@ def check(
     )
 
 
+@cli.command(name="ci-report")
+@click.argument("directory", type=click.Path(path_type=Path))
+@click.option(
+    "--format",
+    "output_format",
+    type=click.Choice(["json", "sarif"]),
+    default="sarif",
+    show_default=True,
+    help="Machine-readable report format",
+)
+@click.option("-o", "--output", type=click.Path(path_type=Path), required=True, help="Report path")
+@click.option("--syntax-only", is_flag=True, help="Skip semantic analysis")
+def ci_report(directory: Path, output_format: str, output: Path, syntax_only: bool) -> None:
+    """Validate every .yh file below DIRECTORY and write one CI report."""
+    from yuho.cli.commands.ci_report import build_report, render_report
+
+    try:
+        report = build_report(directory.resolve(), syntax_only=syntax_only)
+    except ValueError as exc:
+        raise click.BadParameter(str(exc), param_hint="DIRECTORY") from exc
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(render_report(report, output_format), encoding="utf-8")
+    summary = report["summary"]
+    click.echo(
+        "ci-report: "
+        f"{summary['files']} files, {summary['errors']} errors, {summary['warnings']} warnings "
+        f"→ {output}",
+        err=True,
+    )
+    if not report["ok"]:
+        raise click.exceptions.Exit(1)
+
+
 @cli.command()
 @click.argument("file", type=str)
 @click.option("-i", "--in-place", is_flag=True, help="Rewrite FILE in place")
