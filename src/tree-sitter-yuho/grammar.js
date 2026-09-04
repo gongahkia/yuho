@@ -12,6 +12,7 @@ module.exports = grammar({
     $.interpolation_start,
     $.interpolation_end,
     $._error_sentinel,
+    $.typed_struct_literal_type_name,
   ],
 
   extras: $ => [
@@ -239,11 +240,13 @@ module.exports = grammar({
       seq('patient', field('patient', $.identifier)),
     ),
 
-    // Keep typed and anonymous forms distinct so a leading type identifier is
-    // consumed together with its opening brace.
+    // The typed form has a dedicated external token.  At an expression start,
+    // `Foo` is otherwise a valid identifier expression, so the LR parser can
+    // reduce it before seeing the following `{`.  The scanner emits this token
+    // only when the identifier is immediately followed by a struct opener.
     struct_literal: $ => choice(
-      prec(1, seq(
-        field('type_name', $.identifier),
+      seq(
+        field('type_name', $.typed_struct_literal_type_name),
         '{',
         repeat($.field_assignment),
         '}'

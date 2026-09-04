@@ -13,6 +13,7 @@ enum TokenType {
     INTERPOLATION_START,
     INTERPOLATION_END,
     ERROR_SENTINEL,
+    TYPED_STRUCT_LITERAL_TYPE_NAME,
 };
 
 typedef struct {
@@ -61,6 +62,41 @@ static void advance(TSLexer *lexer) {
 
 static void skip(TSLexer *lexer) {
     lexer->advance(lexer, true);
+}
+
+static bool is_identifier_start(int32_t c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+}
+
+static bool is_identifier_continue(int32_t c) {
+    return is_identifier_start(c) || (c >= '0' && c <= '9');
+}
+
+/*
+ * Return an identifier token only when the next non-trivia token is `{`.
+ * `mark_end` keeps the token itself limited to the identifier; the regular
+ * extras rules still own whitespace and comments before the brace.
+ */
+static bool scan_typed_struct_literal_type_name(TSLexer *lexer) {
+    if (!is_identifier_start(lexer->lookahead)) {
+        return false;
+    }
+
+    do {
+        advance(lexer);
+    } while (is_identifier_continue(lexer->lookahead));
+    lexer->mark_end(lexer);
+
+    while (iswspace(lexer->lookahead)) {
+        advance(lexer);
+    }
+
+    if (lexer->lookahead == '{') {
+        lexer->result_symbol = TYPED_STRUCT_LITERAL_TYPE_NAME;
+        return true;
+    }
+
+    return false;
 }
 
 /**
@@ -164,6 +200,10 @@ bool tree_sitter_yuho_external_scanner_scan(
     // Check for string content
     if (valid_symbols[STRING_CONTENT] && scanner->in_string) {
         return scan_string_content(lexer, scanner);
+    }
+
+    if (valid_symbols[TYPED_STRUCT_LITERAL_TYPE_NAME]) {
+        return scan_typed_struct_literal_type_name(lexer);
     }
 
     return false;

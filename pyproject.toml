@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling==1.32.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -40,6 +40,8 @@ dev = [
     "pygls>=2.0,<3.0",
     "watchdog>=4.0,<7.0",
     "z3-solver>=4.12,<5.0",
+    "pip-audit==2.10.1",
+    "twine==7.0.0",
 ]
 lsp = [
     "pygls>=2.0,<3.0",
