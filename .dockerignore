@@ -19,8 +19,9 @@ __pycache__/
 editors/explorer-site/build/
 library/penal_code/_corpus/
 
-# Phase-D agent dispatch logs (jsonl)
-library/penal_code/_coverage/phase_d_*_progress.jsonl
+# Agent triage and dispatch logs (jsonl)
+library/penal_code/_coverage/*progress.jsonl
+library/penal_code/_coverage/automated-triage.jsonl
 
 # Browser/word add-in build caches
 editors/browser-yuho/data/
@@ -35,7 +36,7 @@ editors/word-yuho/data/
 .vscode/
 .DS_Store
 
-# Node modules (we install tree-sitter CLI globally)
+# Node modules (CI installs the locked grammar CLI when needed)
 node_modules/
 
 # Lean / Lake build outputs — keep the .lean source, drop the cache.

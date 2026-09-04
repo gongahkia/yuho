@@ -25,5 +25,14 @@ Before creating a tag, run:
 python scripts/release_audit.py --full
 ```
 
+The reproducibility gate builds two clean source copies with separately
+synchronized locked environments and records the compiler, Python, uv, and
+`SOURCE_DATE_EPOCH` inputs in its report. The Docker image uses pinned Python
+and uv image digests and records its installed OS/compiler inputs at
+`/usr/share/yuho/build-inputs.txt`; release provenance identifies the published
+image digest. These controls establish build-input traceability, not legal
+correctness.
+
 The release is not a legal-correctness certification. Public claims must map to
-`docs/release/evidence.md`.
+`docs/release/evidence.md` and the machine-readable
+`docs/release/capability-claims.json` boundary.

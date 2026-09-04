@@ -114,8 +114,9 @@ def run_release_audit(full: bool, uv: str) -> None:
         root = Path(tmp) / "yuho"
         root.mkdir()
         copy_worktree(root)
+        environment = {**os.environ, "YUHO_UV": uv}
         for cmd in audit_commands(root, full=full, uv=uv):
-            run(cmd, cwd=root)
+            run(cmd, cwd=root, env=environment)
     print("release audit: PASS")
 
 
