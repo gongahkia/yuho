@@ -45,6 +45,7 @@ ANALYSIS_ERROR_CODES: dict[str, str] = {
     "parse_error": "Y0100",
     "parse_missing_node": "Y0101",
     "parse_unexpected_syntax": "Y0102",
+    "parse_known_grammar_ambiguity": "Y0103",
     "parser_failed": "Y0199",
     "ast_build_failed": "Y0200",
     "lint_analysis_failed": "Y0300",
@@ -824,6 +825,8 @@ def _build_clock_load_scale(result: AnalysisResult) -> ClockLoadScale:
 def _parse_error_code(error: ParseError) -> str:
     if error.node_type and error.node_type.startswith("MISSING:"):
         return _code("parse_missing_node")
+    if error.node_type == "KNOWN_TYPED_STRUCT_LITERAL_AMBIGUITY":
+        return _code("parse_known_grammar_ambiguity")
     if "Unexpected syntax" in error.message:
         return _code("parse_unexpected_syntax")
     return _code("parse_error")

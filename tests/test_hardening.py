@@ -150,6 +150,19 @@ assert check(p.a, p.b) == TRUE
         assert not analysis.is_valid
         assert analysis.ast is None
         assert analysis.parse_errors[0].node_type == "KNOWN_TYPED_STRUCT_LITERAL_AMBIGUITY"
+        assert analysis.errors[0].error_code == "Y0103"
+
+    def test_leading_comment_does_not_trigger_struct_literal_safeguard(self):
+        from yuho.parser import get_parser
+
+        source = """// module header
+struct Foo { bool a, bool b }
+Foo p := Foo { a := TRUE, b := FALSE }
+"""
+
+        result = get_parser().parse(source, "<test>")
+
+        assert result.is_valid
 
     def test_parse_file_nonexistent(self):
         from yuho.parser import get_parser
