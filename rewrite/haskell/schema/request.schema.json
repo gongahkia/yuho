@@ -1,0 +1,572 @@
+{
+  "$defs": {
+    "diagnostic": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ]
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stage": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "stage",
+        "severity",
+        "path",
+        "span",
+        "parameters"
+      ],
+      "type": "object"
+    },
+    "exception": {
+      "additionalProperties": false,
+      "properties": {
+        "branch_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "effect": {
+          "const": "defeat"
+        },
+        "guard": {
+          "$ref": "#/$defs/guard"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "id",
+        "branch_id",
+        "source_id",
+        "span",
+        "guard",
+        "effect"
+      ],
+      "type": "object"
+    },
+    "group": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "all",
+            "any"
+          ]
+        },
+        "members": {
+          "items": {
+            "$ref": "#/$defs/requirement"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "path",
+        "span",
+        "members"
+      ],
+      "type": "object"
+    },
+    "guard": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "is_infringed"
+        },
+        "target": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "target"
+      ],
+      "type": "object"
+    },
+    "leaf": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "leaf"
+        },
+        "path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "path",
+        "span"
+      ],
+      "type": "object"
+    },
+    "named_source": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^[^/][^\\\\]*$",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "text",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "policy": {
+      "additionalProperties": false,
+      "properties": {
+        "max_nodes": {
+          "maximum": 1024,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "reference_date": {
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reference_date",
+        "max_nodes"
+      ],
+      "type": "object"
+    },
+    "provision": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "definitions": {
+                "const": true
+              }
+            },
+            "required": [
+              "definitions"
+            ]
+          },
+          "then": {
+            "properties": {
+              "children": {
+                "maxItems": 0
+              },
+              "requirements": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "children": {
+          "items": {
+            "$ref": "#/$defs/provision"
+          },
+          "type": "array"
+        },
+        "definitions": {
+          "type": "boolean"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "path": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "requirements": {
+          "items": {
+            "$ref": "#/$defs/requirement"
+          },
+          "type": "array"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "span",
+        "definitions",
+        "requirements",
+        "children"
+      ],
+      "type": "object"
+    },
+    "requirement": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/leaf"
+        },
+        {
+          "$ref": "#/$defs/group"
+        }
+      ]
+    },
+    "rule": {
+      "additionalProperties": false,
+      "properties": {
+        "exceptions": {
+          "items": {
+            "$ref": "#/$defs/exception"
+          },
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "program": {
+          "$ref": "#/$defs/provision"
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "program",
+        "exceptions"
+      ],
+      "type": "object"
+    },
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "pattern": "^[^/][^\\\\]*$",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "text",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "span": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "end_col": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "end_line": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "start": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "start_col": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "start_line": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "start_line",
+        "start_col",
+        "end_line",
+        "end_col"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://yuho-lang.github.io/schemas/kernel-input-v1-production.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "operation": {
+                "const": "evaluate"
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "required": [
+                "parser_result"
+              ]
+            },
+            "required": [
+              "program",
+              "facts"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operation": {
+                "const": "validate"
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "program"
+                  ]
+                },
+                {
+                  "required": [
+                    "facts"
+                  ]
+                }
+              ]
+            },
+            "required": [
+              "parser_result"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "facts": {
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "type": "object"
+        },
+        "fragment": {
+          "const": "ClosedBooleanBranches-v1"
+        },
+        "input_schema": {
+          "const": "yuho.kernel-input/v1"
+        },
+        "operation": {
+          "enum": [
+            "evaluate",
+            "validate"
+          ]
+        },
+        "parser_result": {
+          "additionalProperties": false,
+          "properties": {
+            "accepted": {
+              "type": "boolean"
+            },
+            "diagnostics": {
+              "items": {
+                "$ref": "#/$defs/diagnostic"
+              },
+              "type": "array"
+            },
+            "source_version": {
+              "const": "yuho-5.1"
+            }
+          },
+          "required": [
+            "accepted",
+            "diagnostics",
+            "source_version"
+          ],
+          "type": "object"
+        },
+        "policy": {
+          "$ref": "#/$defs/policy"
+        },
+        "program": {
+          "$ref": "#/$defs/provision"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "request_id": {
+          "pattern": "^[A-Z][0-9]{2}$",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "operation",
+        "input_schema",
+        "fragment",
+        "source",
+        "policy"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "facts": {
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "type": "object"
+        },
+        "fragment": {
+          "const": "AcyclicGuardedExceptions-v1"
+        },
+        "input_schema": {
+          "const": "yuho.kernel-input/v1"
+        },
+        "operation": {
+          "const": "evaluate"
+        },
+        "policy": {
+          "$ref": "#/$defs/policy"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "registry": {
+          "items": {
+            "$ref": "#/$defs/rule"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "request_id": {
+          "pattern": "^[A-Z][0-9]{2}$",
+          "type": "string"
+        },
+        "root_rule": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/named_source"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "operation",
+        "input_schema",
+        "fragment",
+        "sources",
+        "policy",
+        "registry",
+        "root_rule",
+        "facts"
+      ],
+      "type": "object"
+    }
+  ]
+}

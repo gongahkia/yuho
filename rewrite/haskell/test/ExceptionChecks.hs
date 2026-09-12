@@ -12,12 +12,15 @@ import System.FilePath ((</>))
 import Test.QuickCheck
   ( Property, Testable, arbitrary, forAll, isSuccess, maxSuccess
   , quickCheckWithResult, stdArgs, vectorOf, chooseInt )
-import Yuho.Core.Types (Diagnostic(..), Trace(..))
+import Yuho.Core.Types (Diagnostic(..), Trace(..), provisionId)
 import Yuho.Exception.Decode (decodeExceptionRequest)
 import Yuho.Exception.Evaluate
   ( aggregateBranches, aggregateGuards, evaluateGraph, evaluateGraphReference )
 import Yuho.Exception.Types
-import Yuho.Exception.Validate (ValidatedGraph, sharedFacts, validateGraph)
+import Yuho.Exception.Validate
+  ( ValidatedGraph, exceptionTarget, orderedKeys, ruleExceptionsFor, ruleFor
+  , ruleProgram, sharedFacts, sharedDate, sharedMaxNodes, validateGraph )
+import qualified Yuho.Kernel.Evaluate as Kernel
 import Yuho.Kernel.Run (runLine)
 import Yuho.Protocol.Json (J(..), decodeJson, encodeJson, lookupField, textValue)
 
@@ -259,9 +262,23 @@ acyclicProperty request = forAll arbitrary $ \(a, b, c, d) ->
   let facts = [("f:root", a), ("f:left", b), ("f:right", c), ("f:leaf", d)]
   in case decoded (setFacts request facts) of
     Nothing -> False
-    Just (parsed, graph) -> case evaluateGraph parsed graph of
+    Just (parsed, graph) -> graphAcyclic graph && case evaluateGraph parsed graph of
       Right _ -> True
       Left _ -> False
+
+graphAcyclic :: ValidatedGraph -> Bool
+graphAcyclic graph = all (walk Set.empty) (orderedKeys graph)
+  where
+    walk visited key
+      | Set.member key visited = False
+      | otherwise = case ruleFor graph key of
+          Nothing -> False
+          Just rule ->
+            let next = Set.insert key visited
+                targets = [exceptionTarget ex
+                  | (branch, _) <- Kernel.branches (ruleProgram rule) []
+                  , ex <- ruleExceptionsFor rule (provisionId branch)]
+            in all (walk next) targets
 
 factsProperty :: J -> Property
 factsProperty request = forAll arbitrary $ \targetFact ->
@@ -271,6 +288,8 @@ factsProperty request = forAll arbitrary $ \targetFact ->
     Just (parsed, graph) -> case evaluateGraph parsed graph of
       Left _ -> False
       Right result -> sharedFacts graph == Map.fromList facts
+        && sharedDate graph == rawDate (exceptionRawGraph parsed)
+        && sharedMaxNodes graph == rawMaxNodes (exceptionRawGraph parsed)
         && case [traceValue edge | rule <- exceptionResultRules result,
                    ruleResultId rule == "r:target", edge <- ruleResultTrace rule,
                    traceId edge == "f:target"] of

@@ -99,11 +99,11 @@ decodeException sources rulePointer index value = do
     Left (diagnostic "KCAP001" "capability" (pointer <> "/effect")
       (Just sourceSpan) [("kind", effect)])
   guardValue <- required (\_ -> Right) pointer "guard" value
-  closed (pointer <> "/guard") ["kind", "target"] guardValue
   kind <- required asText (pointer <> "/guard") "kind" guardValue
   if kind == "is_infringed" then pure () else
     Left (diagnostic "KCAP001" "capability" (pointer <> "/guard/kind")
       (Just sourceSpan) [("kind", kind)])
+  closed (pointer <> "/guard") ["kind", "target"] guardValue
   target <- required asText (pointer <> "/guard") "target" guardValue
   pure (RawException identifier branchId sourceId sourceSpan target pointer)
 

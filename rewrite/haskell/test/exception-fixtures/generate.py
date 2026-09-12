@@ -88,15 +88,56 @@ def vector(name: str, value: dict | None, expected: dict) -> dict:
         {"rule": item["id"], "branch": ex["branch_id"], "exception": ex["id"],
          "target": ex["guard"].get("target", ""), "source_id": ex["source_id"]}
         for item in value["registry"] for ex in item["exceptions"]]
+    root_paths = []
+    observations = []
+    if value is not None:
+        for item in value["registry"]:
+            if item["id"] not in expected["rules"]:
+                continue
+            provision_by_id = {}
+
+            def register_provision(node: dict) -> None:
+                provision_by_id[node["id"]] = node
+                for child in node["children"]:
+                    register_provision(child)
+
+            register_provision(item["program"])
+            if item["id"] == value["root_rule"]:
+                root_paths = [branch["path"] for branch in provision_by_id.values()
+                              if branch["requirements"]]
+            for ex in item["exceptions"]:
+                branch = provision_by_id.get(ex["branch_id"])
+                if branch is None or not all(value["facts"].get(identifier, False)
+                                             for identifier in all_leaves(branch)):
+                    continue
+                target = ex["guard"].get("target")
+                target_status = expected["rules"].get(target)
+                if target_status is not None:
+                    observations.append({"rule": item["id"], "branch": ex["branch_id"],
+                                         "branch_path": branch["path"], "exception": ex["id"],
+                                         "source_id": ex["source_id"], "target": target,
+                                         "target_status": target_status,
+                                         "guard_status": target_status,
+                                         "applicable": target_status == "true"})
+    diagnostic_class = ("none" if not expected["code"] else
+                        "capability" if expected["code"].startswith("KCAP") else
+                        "decode" if expected["code"].startswith("KDEC") else
+                        "invariant")
     return {"case": name, "fragment": FRAGMENT, "classification":
-            "model_or_capability_rejection" if expected["code"] else "synthetic_semantic",
+            "rejection" if expected["code"] else "synthetic_semantic",
             "root_rule": None if value is None else value["root_rule"],
             "facts": {} if value is None else value["facts"],
             "reference_date": None if value is None else value["policy"]["reference_date"],
             "dependency_edges": edges, "expected_status": expected["status"],
+            "expected_root_branch_paths": root_paths,
             "expected_branch_statuses": expected["branches"],
             "expected_fired_exception_ids": expected["fired"],
             "expected_rule_statuses": expected["rules"],
+            "expected_guard_observations": observations,
+            "expected_trace_order": {rule_id: [entry["exception"] for entry in observations
+                                                if entry["rule"] == rule_id]
+                                     for rule_id in expected["rules"]},
+            "expected_diagnostic_class": diagnostic_class,
             "expected_diagnostic_code": expected["code"]}
 
 
@@ -195,6 +236,8 @@ x = request("E37", [rule("root", ["a", "b"]), rule("a"), rule("b")]); x["registr
 add("E37", "duplicate exception ID", x, "rejected", code="KINV002", stage="validate")
 x = request("E38", [rule("root", ["target"]), rule("target")]); x["registry"][0]["exceptions"][0]["guard"]["target"] = "target"
 add("E38", "unqualified target", x, "rejected", code="KINV004", stage="validate")
+x = request("E39", [rule("root", ["target"]), rule("target")]); x["registry"][0]["exceptions"][0]["guard"].update({"kind": "arbitrary_call", "arguments": []})
+add("E39", "unsupported guard with arguments", x, "rejected", code="KCAP001", stage="capability")
 
 base = REQUESTS.joinpath("E01.json").read_bytes()
 REQUESTS.joinpath("E32.txt").write_bytes(b'{"\\u0070rotocol":"x",' + base[1:])
@@ -217,3 +260,9 @@ HERE.joinpath("CASES.json").write_text(json.dumps(CASES, sort_keys=True, indent=
 HERE.joinpath("PROOF-VECTORS.json").write_text(
     json.dumps(sorted(VECTORS, key=lambda item: item["case"]), sort_keys=True,
                ensure_ascii=False, indent=2) + "\n")
+files = [HERE / "CASES.json", HERE / "PROOF-VECTORS.json", *sorted(REQUESTS.iterdir())]
+HERE.joinpath("MANIFEST.json").write_text(json.dumps({
+    "schema": "yuho.exception-fixture-manifest/v1",
+    "files": {str(path.relative_to(HERE)): hashlib.sha256(path.read_bytes()).hexdigest()
+              for path in files},
+}, sort_keys=True, indent=2) + "\n")

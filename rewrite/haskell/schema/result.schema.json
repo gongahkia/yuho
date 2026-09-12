@@ -1,0 +1,526 @@
+{
+  "$defs": {
+    "branch": {
+      "additionalProperties": false,
+      "properties": {
+        "applicable_exceptions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "exceptions": {
+          "items": {
+            "$ref": "#/$defs/exception_trace"
+          },
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "reason": {
+          "enum": [
+            "satisfied",
+            "requirements_failed",
+            "defeated",
+            "guard_unresolved"
+          ]
+        },
+        "status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved"
+          ]
+        },
+        "trace_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "status",
+        "reason",
+        "trace_ids",
+        "exceptions",
+        "applicable_exceptions"
+      ],
+      "type": "object"
+    },
+    "diagnostic": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ]
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stage": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "stage",
+        "severity",
+        "path",
+        "span",
+        "parameters"
+      ],
+      "type": "object"
+    },
+    "exception_trace": {
+      "additionalProperties": false,
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "guard_status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved"
+          ]
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "target_rule": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "target_status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "span",
+        "target_rule",
+        "target_status",
+        "guard_status",
+        "applicable"
+      ],
+      "type": "object"
+    },
+    "rule_result": {
+      "additionalProperties": false,
+      "properties": {
+        "branches": {
+          "items": {
+            "$ref": "#/$defs/branch"
+          },
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "provision_kind": {
+          "enum": [
+            "executable",
+            "definition_only"
+          ]
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved"
+          ]
+        },
+        "trace": {
+          "items": {
+            "$ref": "#/$defs/trace"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "status",
+        "provision_kind",
+        "branches",
+        "trace"
+      ],
+      "type": "object"
+    },
+    "span": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "end_col": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "end_line": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "start": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "start_col": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "start_line": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "start_line",
+        "start_col",
+        "end_line",
+        "end_col"
+      ],
+      "type": "object"
+    },
+    "trace": {
+      "additionalProperties": false,
+      "properties": {
+        "branch": {
+          "type": "string"
+        },
+        "children": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "leaf",
+            "all",
+            "any"
+          ]
+        },
+        "path": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "value": {
+          "enum": [
+            "true",
+            "false"
+          ]
+        }
+      },
+      "required": [
+        "branch",
+        "id",
+        "kind",
+        "path",
+        "span",
+        "value",
+        "children"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://yuho-lang.github.io/schemas/kernel-result-v1-production.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "branches": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "path": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "status": {
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              },
+              "trace_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "id",
+              "path",
+              "status",
+              "trace_ids"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "diagnostics": {
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "type": "array"
+        },
+        "fragment": {
+          "const": "ClosedBooleanBranches-v1"
+        },
+        "input_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "provision_kind": {
+          "enum": [
+            "executable",
+            "definition_only",
+            "none"
+          ]
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "result_schema": {
+          "const": "yuho.kernel-result/v1"
+        },
+        "status": {
+          "enum": [
+            "true",
+            "false",
+            "rejected"
+          ]
+        },
+        "trace": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "branch": {
+                "type": "string"
+              },
+              "children": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "leaf",
+                  "all",
+                  "any"
+                ]
+              },
+              "path": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "span": {
+                "$ref": "#/$defs/span"
+              },
+              "value": {
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            },
+            "required": [
+              "branch",
+              "id",
+              "kind",
+              "path",
+              "span",
+              "value",
+              "children"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "result_schema",
+        "fragment",
+        "input_digest",
+        "status",
+        "provision_kind",
+        "branches",
+        "trace",
+        "diagnostics"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "diagnostics": {
+                "maxItems": 0
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "rejected"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "diagnostics": {
+                "minItems": 1
+              },
+              "rules": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "diagnostics": {
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "type": "array"
+        },
+        "fragment": {
+          "const": "AcyclicGuardedExceptions-v1"
+        },
+        "input_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "result_schema": {
+          "const": "yuho.kernel-result/v1"
+        },
+        "root_rule": {
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/rule_result"
+          },
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved",
+            "rejected"
+          ]
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "result_schema",
+        "fragment",
+        "input_digest",
+        "root_rule",
+        "status",
+        "rules",
+        "diagnostics"
+      ],
+      "type": "object"
+    }
+  ]
+}

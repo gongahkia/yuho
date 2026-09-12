@@ -6,12 +6,22 @@
     "expected_branch_statuses": [
       "true"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
+    ],
     "expected_rule_statuses": {
       "r:root": "true"
     },
     "expected_status": "true",
+    "expected_trace_order": {
+      "r:root": []
+    },
     "facts": {
       "f:root": true
     },
@@ -34,15 +44,42 @@
     "expected_branch_statuses": [
       "false"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [
       "x:root:1"
+    ],
+    "expected_guard_observations": [
+      {
+        "applicable": true,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target",
+        "target_status": "true"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
     ],
     "expected_rule_statuses": {
       "r:root": "false",
       "r:target": "true"
     },
     "expected_status": "false",
+    "expected_trace_order": {
+      "r:root": [
+        "x:root:1"
+      ],
+      "r:target": []
+    },
     "facts": {
       "f:root": true,
       "f:target": true
@@ -66,13 +103,40 @@
     "expected_branch_statuses": [
       "true"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [
+      {
+        "applicable": false,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "false",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target",
+        "target_status": "false"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
+    ],
     "expected_rule_statuses": {
       "r:root": "true",
       "r:target": "false"
     },
     "expected_status": "true",
+    "expected_trace_order": {
+      "r:root": [
+        "x:root:1"
+      ],
+      "r:target": []
+    },
     "facts": {
       "f:root": true,
       "f:target": false
@@ -103,10 +167,44 @@
     "expected_branch_statuses": [
       "false"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [
       "x:root:1",
       "x:root:2"
+    ],
+    "expected_guard_observations": [
+      {
+        "applicable": true,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:a",
+        "target_status": "true"
+      },
+      {
+        "applicable": true,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:2",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:b",
+        "target_status": "true"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
     ],
     "expected_rule_statuses": {
       "r:a": "true",
@@ -114,6 +212,14 @@
       "r:root": "false"
     },
     "expected_status": "false",
+    "expected_trace_order": {
+      "r:a": [],
+      "r:b": [],
+      "r:root": [
+        "x:root:1",
+        "x:root:2"
+      ]
+    },
     "facts": {
       "f:a": true,
       "f:b": true,
@@ -145,14 +251,57 @@
     "expected_branch_statuses": [
       "true"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [
+      {
+        "applicable": false,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "false",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:mid",
+        "target_status": "false"
+      },
+      {
+        "applicable": true,
+        "branch": "p:mid",
+        "branch_path": [
+          "mid"
+        ],
+        "exception": "x:mid:1",
+        "guard_status": "true",
+        "rule": "r:mid",
+        "source_id": "src:main",
+        "target": "r:leaf",
+        "target_status": "true"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
+    ],
     "expected_rule_statuses": {
       "r:leaf": "true",
       "r:mid": "false",
       "r:root": "true"
     },
     "expected_status": "true",
+    "expected_trace_order": {
+      "r:leaf": [],
+      "r:mid": [
+        "x:mid:1"
+      ],
+      "r:root": [
+        "x:root:1"
+      ]
+    },
     "facts": {
       "f:leaf": true,
       "f:mid": true,
@@ -198,8 +347,68 @@
     "expected_branch_statuses": [
       "true"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [
+      {
+        "applicable": false,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "false",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:left",
+        "target_status": "false"
+      },
+      {
+        "applicable": false,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:2",
+        "guard_status": "false",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:right",
+        "target_status": "false"
+      },
+      {
+        "applicable": true,
+        "branch": "p:left",
+        "branch_path": [
+          "left"
+        ],
+        "exception": "x:left:1",
+        "guard_status": "true",
+        "rule": "r:left",
+        "source_id": "src:main",
+        "target": "r:leaf",
+        "target_status": "true"
+      },
+      {
+        "applicable": true,
+        "branch": "p:right",
+        "branch_path": [
+          "right"
+        ],
+        "exception": "x:right:1",
+        "guard_status": "true",
+        "rule": "r:right",
+        "source_id": "src:main",
+        "target": "r:leaf",
+        "target_status": "true"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
+    ],
     "expected_rule_statuses": {
       "r:leaf": "true",
       "r:left": "false",
@@ -207,6 +416,19 @@
       "r:root": "true"
     },
     "expected_status": "true",
+    "expected_trace_order": {
+      "r:leaf": [],
+      "r:left": [
+        "x:left:1"
+      ],
+      "r:right": [
+        "x:right:1"
+      ],
+      "r:root": [
+        "x:root:1",
+        "x:root:2"
+      ]
+    },
     "facts": {
       "f:leaf": true,
       "f:left": true,
@@ -232,13 +454,40 @@
     "expected_branch_statuses": [
       "true"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [
+      {
+        "applicable": false,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "false",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target",
+        "target_status": "false"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
+    ],
     "expected_rule_statuses": {
       "r:root": "true",
       "r:target": "false"
     },
     "expected_status": "true",
+    "expected_trace_order": {
+      "r:root": [
+        "x:root:1"
+      ],
+      "r:target": []
+    },
     "facts": {
       "f:root": true,
       "f:target": false
@@ -249,7 +498,7 @@
   },
   {
     "case": "E08",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -260,10 +509,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV004",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -274,7 +527,7 @@
   },
   {
     "case": "E09",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -285,10 +538,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV005",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true
     },
@@ -298,7 +555,7 @@
   },
   {
     "case": "E10",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -309,10 +566,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV006",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true
     },
@@ -322,7 +583,7 @@
   },
   {
     "case": "E11",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -347,10 +608,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV006",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:a": true,
       "f:b": true,
@@ -362,7 +627,7 @@
   },
   {
     "case": "E12",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -373,10 +638,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "capability",
     "expected_diagnostic_code": "KCAP001",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -387,7 +656,7 @@
   },
   {
     "case": "E13",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -398,10 +667,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV004",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -425,12 +698,22 @@
     "expected_branch_statuses": [
       "false"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
+    ],
     "expected_rule_statuses": {
       "r:root": "false"
     },
     "expected_status": "false",
+    "expected_trace_order": {
+      "r:root": []
+    },
     "facts": {
       "f:root": false,
       "f:target": true
@@ -455,15 +738,45 @@
       "false",
       "true"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [
       "x:root:1"
+    ],
+    "expected_guard_observations": [
+      {
+        "applicable": true,
+        "branch": "p:first",
+        "branch_path": [
+          "first"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target",
+        "target_status": "true"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "first"
+      ],
+      [
+        "second"
+      ]
     ],
     "expected_rule_statuses": {
       "r:root": "true",
       "r:target": "true"
     },
     "expected_status": "true",
+    "expected_trace_order": {
+      "r:root": [
+        "x:root:1"
+      ],
+      "r:target": []
+    },
     "facts": {
       "f:first": true,
       "f:second": true,
@@ -496,16 +809,60 @@
       "false",
       "false"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [
       "x:root:1",
       "x:root:2"
+    ],
+    "expected_guard_observations": [
+      {
+        "applicable": true,
+        "branch": "p:first",
+        "branch_path": [
+          "first"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target",
+        "target_status": "true"
+      },
+      {
+        "applicable": true,
+        "branch": "p:second",
+        "branch_path": [
+          "second"
+        ],
+        "exception": "x:root:2",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target",
+        "target_status": "true"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "first"
+      ],
+      [
+        "second"
+      ]
     ],
     "expected_rule_statuses": {
       "r:root": "false",
       "r:target": "true"
     },
     "expected_status": "false",
+    "expected_trace_order": {
+      "r:root": [
+        "x:root:1",
+        "x:root:2"
+      ],
+      "r:target": []
+    },
     "facts": {
       "f:first": true,
       "f:second": true,
@@ -537,10 +894,44 @@
     "expected_branch_statuses": [
       "false"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [
       "x:root:1",
       "x:root:2"
+    ],
+    "expected_guard_observations": [
+      {
+        "applicable": true,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:a",
+        "target_status": "true"
+      },
+      {
+        "applicable": true,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:2",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:b",
+        "target_status": "true"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
     ],
     "expected_rule_statuses": {
       "r:a": "true",
@@ -548,6 +939,14 @@
       "r:root": "false"
     },
     "expected_status": "false",
+    "expected_trace_order": {
+      "r:a": [],
+      "r:b": [],
+      "r:root": [
+        "x:root:1",
+        "x:root:2"
+      ]
+    },
     "facts": {
       "f:a": true,
       "f:b": true,
@@ -579,10 +978,44 @@
     "expected_branch_statuses": [
       "false"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [
       "x:root:2",
       "x:root:1"
+    ],
+    "expected_guard_observations": [
+      {
+        "applicable": true,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:2",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:b",
+        "target_status": "true"
+      },
+      {
+        "applicable": true,
+        "branch": "p:root",
+        "branch_path": [
+          "root"
+        ],
+        "exception": "x:root:1",
+        "guard_status": "true",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:a",
+        "target_status": "true"
+      }
+    ],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
     ],
     "expected_rule_statuses": {
       "r:a": "true",
@@ -590,6 +1023,14 @@
       "r:root": "false"
     },
     "expected_status": "false",
+    "expected_trace_order": {
+      "r:a": [],
+      "r:b": [],
+      "r:root": [
+        "x:root:2",
+        "x:root:1"
+      ]
+    },
     "facts": {
       "f:a": true,
       "f:b": true,
@@ -601,7 +1042,7 @@
   },
   {
     "case": "E19",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -612,10 +1053,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV003",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -626,7 +1071,7 @@
   },
   {
     "case": "E20",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -637,10 +1082,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV004",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -651,13 +1100,17 @@
   },
   {
     "case": "E21",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV002",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -668,13 +1121,17 @@
   },
   {
     "case": "E22",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV002",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -685,7 +1142,7 @@
   },
   {
     "case": "E23",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:unreachable",
@@ -696,10 +1153,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV005",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:unreachable": true
@@ -710,7 +1171,7 @@
   },
   {
     "case": "E24",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:left",
@@ -728,10 +1189,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV006",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:left": true,
       "f:right": true,
@@ -743,7 +1208,7 @@
   },
   {
     "case": "E25",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -754,10 +1219,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "capability",
     "expected_diagnostic_code": "KCAP001",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -768,13 +1237,17 @@
   },
   {
     "case": "E26",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV004",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true
     },
@@ -784,13 +1257,17 @@
   },
   {
     "case": "E27",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV004",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true
     },
@@ -800,13 +1277,17 @@
   },
   {
     "case": "E28",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV002",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true
     },
@@ -816,7 +1297,7 @@
   },
   {
     "case": "E29",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -827,10 +1308,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV005",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -841,7 +1326,7 @@
   },
   {
     "case": "E30",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:missing",
@@ -852,10 +1337,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV005",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -866,7 +1355,7 @@
   },
   {
     "case": "E31",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -877,10 +1366,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV004",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
@@ -891,13 +1384,17 @@
   },
   {
     "case": "E32",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "decode",
     "expected_diagnostic_code": "KDEC001",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {},
     "fragment": "AcyclicGuardedExceptions-v1",
     "reference_date": null,
@@ -905,13 +1402,17 @@
   },
   {
     "case": "E33",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "decode",
     "expected_diagnostic_code": "KDEC001",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {},
     "fragment": "AcyclicGuardedExceptions-v1",
     "reference_date": null,
@@ -924,12 +1425,22 @@
     "expected_branch_statuses": [
       "true"
     ],
+    "expected_diagnostic_class": "none",
     "expected_diagnostic_code": "",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [
+      [
+        "root"
+      ]
+    ],
     "expected_rule_statuses": {
       "r:root": "true"
     },
     "expected_status": "true",
+    "expected_trace_order": {
+      "r:root": []
+    },
     "facts": {
       "f:root": true
     },
@@ -939,13 +1450,17 @@
   },
   {
     "case": "E35",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "decode",
     "expected_diagnostic_code": "KDEC002",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {},
     "fragment": "AcyclicGuardedExceptions-v1",
     "reference_date": null,
@@ -953,13 +1468,17 @@
   },
   {
     "case": "E36",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV004",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true
     },
@@ -969,7 +1488,7 @@
   },
   {
     "case": "E37",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -987,10 +1506,14 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV002",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:a": true,
       "f:b": true,
@@ -1002,7 +1525,7 @@
   },
   {
     "case": "E38",
-    "classification": "model_or_capability_rejection",
+    "classification": "rejection",
     "dependency_edges": [
       {
         "branch": "p:root",
@@ -1013,10 +1536,43 @@
       }
     ],
     "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
     "expected_diagnostic_code": "KINV004",
     "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
     "expected_rule_statuses": {},
     "expected_status": "rejected",
+    "expected_trace_order": {},
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E39",
+    "classification": "rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_class": "capability",
+    "expected_diagnostic_code": "KCAP001",
+    "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true

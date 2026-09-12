@@ -2,7 +2,8 @@
 module Yuho.Exception.Validate
   ( ValidatedGraph, RuleKey, ResolvedRule, ResolvedException
   , validateGraph, rootKey, ruleKeyText, orderedKeys, ruleFor, ruleProgram, ruleSource
-  , ruleExceptionsFor, exceptionDetails, exceptionTarget, sharedFacts
+  , ruleExceptionsFor, exceptionDetails, exceptionTarget, sharedFacts, sharedDate
+  , sharedMaxNodes
   ) where
 
 import Control.Monad (foldM)
@@ -12,6 +13,7 @@ import qualified Data.Set as Set
 import Data.Set (Set)
 import Data.Text (Text)
 import qualified Data.Text as Text
+import Data.Time.Calendar (Day)
 import Yuho.Core.Types
 import Yuho.Exception.Types
 import Yuho.Kernel.Evaluate (branches)
@@ -25,6 +27,7 @@ data ResolvedRule = ResolvedRule
 data ValidatedGraph = ValidatedGraph
   { graphRoot :: RuleKey, graphOrder :: [RuleKey]
   , graphRegistry :: Map RuleKey ResolvedRule, graphSharedFacts :: Map Text Bool
+  , graphDate :: Day, graphMaxNodes :: Int
   } deriving (Eq, Show)
 
 rootKey :: ValidatedGraph -> RuleKey
@@ -57,6 +60,12 @@ exceptionTarget (ResolvedException _ target) = target
 sharedFacts :: ValidatedGraph -> Map Text Bool
 sharedFacts = graphSharedFacts
 
+sharedDate :: ValidatedGraph -> Day
+sharedDate = graphDate
+
+sharedMaxNodes :: ValidatedGraph -> Int
+sharedMaxNodes = graphMaxNodes
+
 validateGraph :: RawGraph -> Either Diagnostic ValidatedGraph
 validateGraph raw = do
   let rules = rawRules raw
@@ -81,7 +90,7 @@ validateGraph raw = do
     [] -> pure ()
   let resolved = [(RuleKey (rawRuleId rule), resolveRule rule) | rule <- rules]
       graph = ValidatedGraph (RuleKey (rawRuleId root)) (map fst resolved)
-        (Map.fromList resolved) (rawFacts raw)
+        (Map.fromList resolved) (rawFacts raw) (rawDate raw) (rawMaxNodes raw)
   validateAcyclic graph
   pure graph
   where

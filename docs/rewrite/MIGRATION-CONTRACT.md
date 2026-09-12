@@ -10,12 +10,24 @@ The maintainer has chosen a freely redesigned new surface language. Current .yh 
 | Supported subset | Observable equivalence target | Evidence and boundary |
 |---|---|---|
 | Closed Boolean branches | Inherited ancestor requirements, recursive all_of/any_of, alternative sibling subsection leaves, ordered paths and definition-only failure. | [test_runtime_subsections.py](../../tests/test_runtime_subsections.py); first formal fragment ClosedBooleanBranches-v1 excludes arbitrary expressions, exceptions, outcomes and penalties. |
-| Registered acyclic exception guards | A satisfied branch evaluates a registered is_infringed target in the caller's fact context; branch-scoped defeat, missing target/cycle/unsupported guard diagnostics and unresolved aggregate remain explicit. | [test_runtime_exception_dependencies.py](../../tests/test_runtime_exception_dependencies.py); next fragment AcyclicGuardedExceptions-v1. Legacy first-firing order is observed but needs priority review before generalizing. |
+| Registered acyclic exception guards | A satisfied branch evaluates every registered `is_infringed` guard with the same complete facts, date and policy; every true guard defeats its own branch and is reported. Missing targets/cycles invalidate the model; unsupported guards reject as capability failures. The three-valued aggregation is explicit, though current valid wire requests are Boolean. | [AcyclicGuardedExceptions-v1 specification](ACYCLIC-GUARDED-EXCEPTIONS-V1.md), [synthetic E01–E39 fixtures](../../rewrite/haskell/test/exception-fixtures/CASES.json) and [legacy dependency probes](../../tests/test_runtime_exception_dependencies.py). The legacy first-firing and unresolved-dependency outputs are intentional divergences. |
 | Supported typed facts | Primitive and typed fact values are distinguished; supplied burden/standard metadata mismatches affect element results when both sides supply metadata. | [test_burden_runtime.py](../../tests/test_burden_runtime.py), [facts.py](../../src/yuho/eval/facts.py). This is not a full evidential proof-state algebra. |
 | Guarded penalties | Select penalty source IDs from satisfied branches, inherit ancestor blocks, keep unguarded blocks cumulative and report distinct simultaneously true sibling guards with YRTP001. | [test_runtime_penalties.py](../../tests/test_runtime_penalties.py); no general Z3 parity for these cases. |
 | Limited case effects | Preserve reviewed supported treatment/precedence/declaration-order cases as a later fragment, with explicit support status. | [test_case_law_effects.py](../../tests/test_case_law_effects.py); only three SG files contain case-law blocks, and no broad doctrine claim follows. |
 
 The target is semantic equivalence of status, essential trace edges, citation/source IDs and ordered diagnostics on reviewed fixtures, not universal agreement with Python truthiness, fact-key collision order or known corpus mistakes. Missing or unsupported evidence must not become false. Current overall_satisfied is an Optional[bool] compatibility projection, not a general proof-status semantics. Corrected behaviour gets an intentional-divergence record with old result, new result, reason and reviewer.
+
+The maintainer approved these deterministic divergences for the named exception fragment; they are not universal legal doctrine:
+
+| Legacy observation | Accepted rewrite behavior |
+|---|---|
+| First firing exception returns early | Every guard is evaluated and every true exception is reported. |
+| Declaration order can choose the controlling exception | Declaration order affects trace presentation only; there is no priority. |
+| Missing targets can become unresolved | Missing targets invalidate the complete model. |
+| Cycles can become unresolved | Self and multi-rule cycles invalidate the complete model. |
+| Unsupported guard calls can become unresolved | Unsupported guards receive capability rejection. |
+
+These technical choices are recorded in [the fragment specification](ACYCLIC-GUARDED-EXCEPTIONS-V1.md). Future doctrine-specific priority or defeat relations need a new versioned fragment and legal review. No acquittal, disposition, reduction or penalty follows from exception defeat here.
 
 ## 2. Temporary migration compatibility
 
