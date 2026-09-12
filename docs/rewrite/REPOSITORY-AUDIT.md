@@ -2,6 +2,8 @@
 
 Snapshot: 2026-09-12. This is a read-only architecture audit, not a migration implementation or a legal-fidelity assessment. Relative paths below are from the repository root. No build, regeneration, full test suite, Docker job, or Lean build was run locally because this workstation previously experienced memory pressure.
 
+**Later decision:** This audit's candidate comparison is historical. The maintainer selected Haskell after the [independent language-spike review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md), recorded in [accepted ADR-0001](ADR-0001-HASKELL.md). Its original snapshot claims below are retained as audit evidence.
+
 ## Executive summary
 
 **Repository change since the earlier handoff:** local HEAD is `8d0b8e6d71bb131f10cf20c6266282c20cdcc528` (`remotelykeepeverything`), one commit ahead of `origin/main`/the captured `b5f37d9e92ff11348836a273896c63185fc1b328`. `git diff --stat b5f37d9e..HEAD` shows only the addition of `YUHO_REPOSITORY_HANDOFF.md` (744 lines). No implementation, test, generated-parser, or CI configuration change occurred between those commits. The worktree was clean at the start of this audit.

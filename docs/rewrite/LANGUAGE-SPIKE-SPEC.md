@@ -1,7 +1,7 @@
 # Yuho OCaml-versus-Haskell language spike specification
 
-**Status:** Phase 1 technical spike completed; independent clarity reviews and language decision pending. [Evidence bundle](../../experiments/language-spike/results/SCORECARD.md).
-**Baseline:** [repository audit](REPOSITORY-AUDIT.md) and [provisional ADR](ADR-0001-PROVISIONAL-OCAML.md)  
+**Status:** Historical spike specification; technical gates passed and [Haskell ADR-0001](ADR-0001-HASKELL.md) accepted after [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md). [Evidence bundle](../../experiments/language-spike/results/SCORECARD.md).
+**Baseline:** [repository audit](REPOSITORY-AUDIT.md); the former provisional OCaml ADR was replaced by the accepted Haskell ADR.  
 **Time box when authorised:** Three focused working days per candidate, followed by one review day
 
 ## Question and fairness rule
@@ -93,6 +93,6 @@ Latency/RSS thresholds are **spike gates**, not claims about current Python perf
 
 Parity, determinism, diagnostics and packaging are mandatory. If both candidates pass, compare reviewed clarity and proof mapping, packaging, latency and RSS. A technical tie means both satisfy every mandatory gate and neither has a material advantage in any of those dimensions; **maintainer preference decides a genuine tie**. The maintainer currently leans toward Haskell, which is legitimate maintainability evidence but cannot change the fixtures, implementation effort, measurements or score reporting. If neither passes, extend the spike specification or reconsider the boundary; do not declare a winner. The two independent clarity reviews must precede a final decision.
 
-The scorecard must include raw JSON fixtures and hashes, expected/actual response diffs, command logs, 30-run latency/RSS samples, build/install transcript, LOC/rubric sheets, proof-mapping notes, rejected cases and a short signed decision. No language choice follows from this specification alone. The completed technical [scorecard](../../experiments/language-spike/results/SCORECARD.md) leaves both independent clarity reviews open.
+The scorecard must include raw JSON fixtures and hashes, expected/actual response diffs, command logs, 30-run latency/RSS samples, build/install transcript, LOC/rubric sheets, proof-mapping notes, rejected cases and a short signed decision. No language choice follows from this specification alone. The completed [scorecard](../../experiments/language-spike/results/SCORECARD.md) now records the independent review and maintainer's Haskell acceptance; this paragraph remains the historical selection rule.
 
 The local Draft 2020-12 schema initially used opaque relative `$id` values that made its cross-file `$ref` unresolvable. Stable absolute schema URIs were substituted after candidate implementation and both candidates were rerun through the same validator; no frozen request, response or source bytes changed. See the [reproducibility record](../../experiments/language-spike/results/REPRODUCIBILITY.md).

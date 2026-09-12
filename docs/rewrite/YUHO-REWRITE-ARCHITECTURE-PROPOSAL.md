@@ -1,8 +1,8 @@
 # Yuho rewrite architecture proposal
 
-**Status:** Repository-reconciled proposal; not approved for implementation  
+**Status:** Repository-reconciled proposal; only the bounded Haskell foundation is authorised  
 **Date:** 12 September 2026  
-**Production language:** undecided; the [technical spike](../../experiments/language-spike/results/SCORECARD.md) passed for both candidates, but independent clarity reviews and [ADR-0001](ADR-0001-PROVISIONAL-OCAML.md) remain open
+**Production language:** Haskell, selected in [accepted ADR-0001](ADR-0001-HASKELL.md) after the [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md)
 **Proof environment:** undecided; the existing Lean work remains evidence  
 **Repository baseline:** [REPOSITORY-AUDIT.md](REPOSITORY-AUDIT.md)
 
@@ -35,7 +35,7 @@ The result contains overall status (true, false or unresolved where the fragment
 
 Canonical JSON uses UTF-8, sorted mapping keys, fixed compact separators, stable list order where meaningful, ISO dates, explicit decimal strings/currency/precision and relative POSIX source paths. Inputs with different schema versions never share a digest comparison. KernelInput v1 needs its own golden-byte and hash tests. **Canonical IR v1.2 remains read/compare migration evidence with its current source, semantic and artifact hash rules untouched** ([canonical.py](../../src/yuho/ir/canonical.py), [test_canonical_ir.py](../../tests/test_canonical_ir.py)). Because v1.2 omits spans and uses opaque snapshots/AST adapters, it cannot be relabeled as the new wire schema.
 
-One JSON request and one JSON response travel as one UTF-8 line each on stdin/stdout. Stdout contains no logs; stderr is nonprotocol diagnostics only. The envelope names operation, protocol version, input schema/fragment, request ID, source hash, requested capabilities and explicit resource limit. Protocol errors are structured, distinguish decode/version/invariant/capability/evaluation failures and never masquerade as a negative legal result. The exact common spike contract is in [LANGUAGE-SPIKE-SPEC.md](LANGUAGE-SPIKE-SPEC.md); the spike must settle canonical byte examples before implementation promotion.
+One JSON request and one JSON response travel as one UTF-8 line each on stdin/stdout. Stdout contains no logs; stderr is nonprotocol diagnostics only. The envelope names operation, protocol version, input schema/fragment, request ID, source hash and explicit resource limit. Protocol errors are structured, distinguish decode/version/invariant/capability/evaluation failures and never masquerade as a negative legal result. The frozen [spike contract](LANGUAGE-SPIKE-SPEC.md) is historical evidence; the hardened production boundary is specified in [rewrite/haskell](../../rewrite/haskell/README.md). The first request has no free-form requested-capabilities field.
 
 ## 4. Semantic fragment sequence
 
@@ -60,7 +60,7 @@ Record assurance separately: (1) type/constructor validation, (2) property and P
 
 Keep Tree-sitter and the Python parser/AST builder initially behind a versioned parser/projector subprocess response with source identity, accepted/rejected status, AST projection, diagnostics and UTF-8 byte spans. The existing first-line #yuho v5.1/v5.1.0 pragma, BOM/NUL/10 MiB checks, doc comments, string interpolation, typed-struct-literal Y0103 mitigation, error/missing nodes and incremental editor behaviour must be recorded for migration. They do **not** constrain the new grammar. Current grammar.js/grammar.json include outcome rules absent from generated parser.c/node-types.json; do not base a new syntax promise on those stale artefacts.
 
-Menhir/Sedlex is a **candidate replacement if OCaml wins**, not an initial dependency. Its promotion gates are: a reviewed new-language grammar and source-span/comment policy; reproducible generated artefacts; equivalent accepted/rejected decisions for migration fixtures where promised; UTF-8 byte and displayed line/column tests; recovery diagnostics for incomplete and malformed input; incremental/full LSP equivalence; formatter reparse/source-map tests; editor feature tests; and an explicit resolution of generated-parser drift. A Haskell winner must meet identical gates with its parser choice. Keeping Tree-sitter for editor parsing while a batch parser is authoritative requires shared conformance cases and a documented ownership split.
+A future Haskell parser choice is **not** an initial dependency. Its promotion gates are: a reviewed new-language grammar and source-span/comment policy; reproducible generated artefacts; equivalent accepted/rejected decisions for migration fixtures where promised; UTF-8 byte and displayed line/column tests; recovery diagnostics for incomplete and malformed input; incremental/full LSP equivalence; formatter reparse/source-map tests; editor feature tests; and an explicit resolution of generated-parser drift. Keeping Tree-sitter for editor parsing while a batch parser is authoritative requires shared conformance cases and a documented ownership split.
 
 ## 7. Existing product contracts and owners
 
@@ -80,10 +80,10 @@ There is no discovered production .yuho project configuration schema. Relevant e
 ## 8. Migration sequence and retirement
 
 1. Freeze [the migration contract](MIGRATION-CONTRACT.md) and a reviewed oracle manifest. Mark fixtures semantic-preserve, review-and-correct, temporary-compatibility or experimental. Record source hash, status and rationale. Do not turn the entire corpus or opaque export hashes into normative verdicts.
-2. Run the identical OCaml/Haskell [language spike](LANGUAGE-SPIKE-SPEC.md) on a resource-safe host. Decide the language in the ADR from results, not tooling reputation. Keep parser subprocess common.
-3. Specify KernelInput/Result v1 and ClosedBooleanBranches-v1 well-formedness, evaluator rules, canonical bytes and trace relation. Implement and compare one process at a time; introduce the Lean reference over the same closed input.
+2. The identical OCaml/Haskell [language spike](LANGUAGE-SPIKE-SPEC.md) and [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md) are complete. Haskell was selected in [ADR-0001](ADR-0001-HASKELL.md); both spike implementations remain frozen evidence.
+3. Harden KernelInput/Result v1 in [rewrite/haskell](../../rewrite/haskell/README.md): closed object shapes, leaf/group arity, real dates, parser acceptance consistency, definitions/branch consistency, UTF-8 spans and bounded bytes/depth/nodes. Promote only ClosedBooleanBranches-v1, then evaluate a Lean reference over the same closed input in a separate proof phase.
 4. Add AcyclicGuardedExceptions-v1, then typed facts and guarded penalties with explicit capability rejection and regression fixtures. Broaden to representative corpus strata only after small cases pass.
-5. Design new syntax from validated semantics. Promote Menhir/Sedlex or a Haskell parser only through the parser gates above. Migrate CLI/LSP, exporters, verifier adapters and corpus tools behind their own contracts.
+5. Design new syntax from validated semantics. Promote a Haskell parser only through the parser gates above. Migrate CLI/LSP, exporters, verifier adapters and corpus tools behind their own contracts.
 6. Build the SG section 84/CPC product slice only after the CPC package, typed outcomes, authoritative text, versioned provenance, fact pattern and independent legal review exist. Then add other doctrine slices such as homicide and participation, avoiding blind parity with known s299/ss302/304 encoding concerns.
 7. Retire Python subsystem by subsystem after callers, tests, schemas, packaging and rollback paths are ready. Delete it only when no supported workflow invokes it.
 
@@ -95,4 +95,4 @@ The audit did not run heavy local verification, and its prior CI observations ar
 - Review the prospective per-command CLI exit contract and any consumer-specific machine-schema deprecations.
 - Decide semantic priority when multiple exceptions fire, and adjudicate known Python/corpus counterexamples before promoting fixtures.
 - Supply authoritative source versions and legal reviewers for SG doctrine and the eventual section 84/CPC slice.
-- Ratify the language only after the comparative scorecard; select proof tooling only after a named fragment and bridge are demonstrated.
+- Select proof tooling only after a named fragment and bridge are demonstrated. The production language is Haskell under accepted ADR-0001.

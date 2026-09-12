@@ -1,7 +1,7 @@
 # Yuho rewrite migration contract
 
 **Status:** Proposed inventory for maintainer review, 12 September 2026  
-**Authority:** [Repository audit](REPOSITORY-AUDIT.md) and cited executable paths; this is not a promise of permanent .yh syntax compatibility.
+**Authority:** [Repository audit](REPOSITORY-AUDIT.md), cited executable paths and the [accepted Haskell ADR](ADR-0001-HASKELL.md); this is not a promise of permanent .yh syntax compatibility.
 
 The maintainer has chosen a freely redesigned new surface language. Current .yh behaviour is evidence for migration and differential testing. The contract distinguishes *semantic behaviour to preserve*, *temporary migration compatibility* and *intentionally redesigned behaviour*. A fixture is normative only when its expected meaning and scope are reviewed. Existing Python outputs can be wrong, incomplete or ambiguous.
 

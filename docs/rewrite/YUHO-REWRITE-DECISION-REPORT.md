@@ -1,17 +1,17 @@
 # Yuho rewrite language decision
 
-**Status:** Provisional recommendation; implementation language undecided  
+**Status:** Haskell selected; [ADR-0001](ADR-0001-HASKELL.md) accepted by the maintainer  
 **Date:** 12 September 2026  
 **Decision owner:** Yuho maintainer  
-**Recommendation:** Compare OCaml and Haskell on the same Yuho fixtures and protocol; OCaml is a provisional engineering hypothesis, not an automatic tie-break.
+**Decision:** Haskell is the new production implementation language; proof tooling remains undecided.
 
-The Phase 1 technical [scorecard](../../experiments/language-spike/results/SCORECARD.md) is available. Both candidates passed the measured gates; two independent clarity reviews and the maintainer's language decision remain pending.
+Both candidates passed the mandatory Phase 1 gates. The [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md) scored Haskell 4.33/5 and OCaml 4.15/5 for clarity and recommended Haskell; the maintainer accepts that recommendation. The [scorecard](../../experiments/language-spike/results/SCORECARD.md) preserves OCaml's latency, RSS, build and shared-library advantages. The initial Haskell foundation lives in [rewrite/haskell](../../rewrite/haskell/README.md), separate from the frozen spike.
 
 ## Decision in context
 
 Yuho should migrate in stages from the Python 5.1.0 toolchain to a small, typed semantic kernel. The maintainer has authorised free redesign of the new surface language. Existing .yh syntax, parser quirks and exact export bytes are migration evidence, not permanent language obligations. Reviewed semantic behaviour needs equivalence or an explicit recorded correction. [MIGRATION-CONTRACT.md](MIGRATION-CONTRACT.md) makes this distinction concrete.
 
-OCaml remains the **provisional** production-language preference. Variants, modules, strict evaluation and compiler tooling appear suitable for the proposed small kernel. Haskell can express the same invariants and may prove clearer or easier to package. There is no measured Yuho OCaml-versus-Haskell result, nor evidence of maintainer proficiency in either. The earlier numerical ranking and 0.80 confidence were judgments, not measurements; they are withdrawn as decision evidence. [ADR-0001-PROVISIONAL-OCAML.md](ADR-0001-PROVISIONAL-OCAML.md) records the reversal criteria.
+The same closed fragment was implemented and measured in both languages. Haskell's reviewed clarity and the maintainer's maintainability preference decide the production language. OCaml's operational advantages are real but below the agreed absolute gates and remain a reversal benchmark. The earlier numerical ranking and 0.80 confidence were judgments, not measurements; they remain withdrawn as decision evidence. The [accepted ADR](ADR-0001-HASKELL.md) records the tradeoff and reversal conditions.
 
 ## Repository facts that constrain the choice
 
@@ -37,9 +37,9 @@ The current universal exit-code table is not implemented uniformly: check can re
 
 Both candidates must implement the **same yuho.kernel-protocol/v1** one-line UTF-8 JSON stdin/stdout request/response, consume the **same yuho.kernel-input/v1** fixtures, and emit the same canonical result schema and ordered diagnostics. The legacy Python parser/projector is the identical subprocess adapter for both. Candidate-native parsers are separate experiments and cannot bias semantic comparison. The exact fixtures, workloads, measurement method, thresholds and decision rubric are in [LANGUAGE-SPIKE-SPEC.md](LANGUAGE-SPIKE-SPEC.md).
 
-The spike measures implementation clarity, cold-start latency, peak RSS, deterministic serialization, parser diagnostic preservation, trace parity, packaging and proof-boundary ergonomics. Passing the small fragment does not imply whole-backend parity, legal correctness or whole-program proof. The language decision becomes final only after reviewed results and an ADR update.
+The spike measured implementation clarity, cold-start latency, peak RSS, deterministic serialization, parser diagnostic preservation, trace parity, packaging and proof-boundary ergonomics. Passing the small fragment does not imply whole-backend parity, legal correctness or whole-program proof. Both candidate implementations remain historical evidence, not production modules.
 
-If both candidates satisfy every mandatory gate and neither has a material clarity, proof-boundary, packaging, latency or memory advantage, the maintainer's preference decides the result. The maintainer currently leans toward Haskell; that is legitimate maintainability evidence and must not alter fixtures, effort, measurements or reporting. Two independent clarity reviews remain required before a final choice.
+The independent runtime review is one code review, and the maintainer's explicit Haskell selection is the maintainability decision. No numerical maintainer code-review score was invented. The language decision does not select a proof tool or waive native parser/LSP, packaging, semantic-scaling or proof-correspondence gates.
 
 ## Formal-methods decision
 
@@ -49,8 +49,8 @@ The first theorem target is a reference-level property for ClosedBooleanBranches
 
 ## Migration and retirement gates
 
-Retain Tree-sitter and the Python parser/AST builder initially behind the versioned subprocess protocol. Replace them with Menhir/Sedlex only after new-syntax grammar/diagnostics are specified, generated artefacts are reproducible, Unicode byte spans and doc-comment/source-map handling pass, malformed-input recovery and editor incremental tests pass, accepted/rejected migration fixtures have reviewed dispositions, and LSP/formatter consumers run against the replacement. A Haskell win permits its native parser under the same gates. Two authoritative parsers require a shared acceptance and recovery suite.
+Retain Tree-sitter and the Python parser/AST builder initially behind the versioned subprocess protocol. A future Haskell parser may replace them only after new-syntax grammar/diagnostics are specified, generated artefacts are reproducible, Unicode byte spans and doc-comment/source-map handling pass, malformed-input recovery and editor incremental tests pass, accepted/rejected migration fixtures have reviewed dispositions, and LSP/formatter consumers run against the replacement. Two authoritative parsers require a shared acceptance and recovery suite.
 
 The Python CLI, LSP, runtime, verifiers, exporters and corpus tools retire independently only after supported workflows and machine schemas have replacement owners, reviewed divergences, regression tests and packaging checks. The CLI inventory is doctor, init, check, ci-report, upgrade, lint, fmt, ast, transpile, diff, test, verify, debug, explain, irac, literate, refs, schema, completion; the second executable is yuho-lsp. New commands do not automatically replace these workflows.
 
-This document authorises no implementation scaffolding, grammar regeneration, corpus migration, v1.2 change or Python retirement.
+Only the bounded Haskell [production foundation](../../rewrite/haskell/README.md) is authorised now. The broader rewrite, grammar regeneration, corpus migration, v1.2 change and Python retirement remain out of scope.

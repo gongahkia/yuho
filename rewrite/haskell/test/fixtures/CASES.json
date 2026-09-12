@@ -1,0 +1,110 @@
+{
+  "H01": {
+    "code": "KINV004",
+    "label": "unknown top-level field",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H02": {
+    "code": "KINV004",
+    "label": "unknown source field",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H03": {
+    "code": "KINV004",
+    "label": "leaf contains members",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H04": {
+    "code": "KINV004",
+    "label": "empty All",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H05": {
+    "code": "KINV004",
+    "label": "empty Any",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H06": {
+    "code": "KDEC001",
+    "label": "impossible calendar date",
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "H07": {
+    "code": "KINV004",
+    "label": "parser accepted with error",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H08": {
+    "code": "KINV004",
+    "label": "zero branches without definition",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H09": {
+    "code": "KINV003",
+    "label": "span beyond source",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H10": {
+    "code": "KINV003",
+    "label": "byte/display position mismatch",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H11": {
+    "code": "KDEC001",
+    "label": "excessive JSON nesting",
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "H12": {
+    "code": "KDEC002",
+    "label": "excessive request and line size",
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "H13": {
+    "code": "KINV002",
+    "label": "duplicate semantic IDs",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H14": {
+    "code": "KCAP001",
+    "label": "unsupported constructor",
+    "stage": "capability",
+    "status": "rejected"
+  },
+  "H15": {
+    "code": "KDEC001",
+    "label": "duplicate escaped JSON key",
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "H16": {
+    "code": "",
+    "label": "valid non-BMP source and paired JSON surrogate",
+    "stage": "",
+    "status": "true"
+  },
+  "H17": {
+    "code": "KDEC001",
+    "label": "malformed surrogate escape",
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "H18": {
+    "code": "KINV004",
+    "label": "unknown requirement field",
+    "stage": "validate",
+    "status": "rejected"
+  }
+}
