@@ -1,0 +1,5 @@
+
+        statute 3 "Definition only" {
+            subsection (1) { definitions { meaning := "definition"; } }
+        }
+    

@@ -1,0 +1,21 @@
+{
+  "status": "initial candidate frozen before OCaml implementation",
+  "repository_head_at_fixture_freeze": "6f95b1d450b44777c5aa27b16fa61db2c525f824",
+  "fixture_manifest_sha256": "fc5c932a370b0efc88be23dbc84c5024211f8fdebbe8c4ec800483e289e3c715",
+  "compiler": "GHC 9.8.4",
+  "build": "cabal v2-build --offline --jobs=1",
+  "initial_exact_bytes": "15/15",
+  "source_sha256": {
+    "Json.hs": "9562c1bbe3dc2f2b1c2dd1e1221fb7bbda7106956f6b1950bd84fd4521e968de",
+    "Kernel.hs": "148ee8990cd003d37e1abc0d7b51e458a78f1d9855b2e0d3632f3cb21137e8bb",
+    "Main.hs": "b1b3f0d31c15a857c3e9d298c1eb32611fe743d908e25c843d902c2716ba5a3e",
+    "Sha256.hs": "c32858febf14ade78e79065b21e53385477e2eaf5de2c4a6bde2c7f27ff729b2"
+  },
+  "binary_sha256": "7f8cf46d0e39c8c5ecb104fb6e7f1458fa678dae637be3a4473193d97de60458",
+  "corrections_before_initial_freeze": [
+    "Added pinned array-0.5.8.0 after Cabal reported it hidden.",
+    "Resolved GHC -Wall/-Werror shadowing and deprecated ByteString hGetLine warnings.",
+    "Preserved diagnostic severity rather than re-emitting every transported diagnostic as error."
+  ],
+  "post_both_candidate_correction_pass": "not yet used"
+}

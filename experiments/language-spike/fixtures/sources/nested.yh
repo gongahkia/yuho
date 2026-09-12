@@ -1,0 +1,9 @@
+
+        statute 2 "Nested" {
+            elements { actus_reus common := "common"; }
+            subsection (1) { elements { any_of {
+                circumstance first := "first";
+                circumstance second := "second";
+            } } }
+        }
+    

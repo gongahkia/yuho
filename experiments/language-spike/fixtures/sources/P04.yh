@@ -1,0 +1,9 @@
+struct Foo { bool a, bool b }
+
+fn check(bool x, bool y) : bool {
+    match { case _ := consequence FALSE; }
+}
+
+// this comment triggers the stale generated parser ambiguity
+Foo p := Foo { a := TRUE, b := FALSE }
+assert check(p.a, p.b) == TRUE

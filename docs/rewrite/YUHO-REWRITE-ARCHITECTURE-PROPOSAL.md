@@ -1,0 +1,98 @@
+# Yuho rewrite architecture proposal
+
+**Status:** Repository-reconciled proposal; not approved for implementation  
+**Date:** 12 September 2026  
+**Production language:** OCaml provisionally, conditional on [the comparative spike](LANGUAGE-SPIKE-SPEC.md) and [ADR-0001](ADR-0001-PROVISIONAL-OCAML.md)  
+**Proof environment:** undecided; the existing Lean work remains evidence  
+**Repository baseline:** [REPOSITORY-AUDIT.md](REPOSITORY-AUDIT.md)
+
+## 1. Product thesis and current limits
+
+Yuho's target is an inspectable criminal-law DSL toolchain: source and provenance, encoded rule, facts, semantic judgment, proof status, outcome and derivation trace should have explicit relationships. A small jurisdiction-neutral kernel plus versioned doctrine packages is a design direction. Singapore criminal law should test it deeply, but legal review must precede claims of doctrinal fidelity. The new surface language may be redesigned freely; current .yh acceptance is a migration oracle, not a syntax promise.
+
+The present repository is a Python 5.1.0 package with a Tree-sitter C grammar, CLI and stdio LSP, 524 Singapore Penal Code .yh sections, Canonical IR v1.2, a runtime, limited Z3/Alloy paths, eight text-export snapshot targets and bounded Lean models. These components are not interchangeable assurance claims. The corpus is not a reviewed semantic benchmark in full, and the current Lean model does not consume production IR. Typed outcomes and cross-Act dispositions are incomplete. Do not infer a hosted service from the unimplemented OpenAPI document or claim whole-compiler verification.
+
+## 2. Boundary and dependency direction
+
+The first executable replacement is a pure semantic kernel, reached through a **yuho.kernel-protocol/v1** subprocess. The existing Python parser, AST builder, analysis, CLI, LSP and exporters remain callers initially. The input is a separately versioned **yuho.kernel-input/v1** closed, validated subset, not Canonical IR v1.2. The new executable revalidates invariants and returns a versioned **yuho.kernel-result/v1** or structured rejection. Python may project legacy AST to KernelInput, but must not silently evaluate a request rejected by the new kernel.
+
+~~~text
+legacy .yh -> Tree-sitter/Python parser -> AST/analysis -> explicit projection
+                                                   |-> Canonical IR v1.2 (unchanged)
+                                                   |-> KernelInput v1
+                                                       -> subprocess kernel
+                                                       -> KernelResult v1 + trace
+CLI / LSP / exporters / verifier adapters consume the versioned result
+~~~
+
+This process boundary isolates crashes and resource use and supplies record/replay fixtures. A C ABI or Python embedding can be reconsidered only after measured latency demands it. Z3 currently uses in-process Python bindings; Alloy already invokes Java; Lean uses Lake subprocesses. A future SMT-LIB subprocess is a proposal requiring model/unsat-core translation tests, not a current implementation fact. No SQLite runtime migration is needed: the present analysis cache is bounded JSON files.
+
+## 3. KernelInput v1 and deterministic protocol
+
+KernelInput v1 contains a protocol/schema version, source identity and UTF-8 source hash, a finite closed registry of unique rule/provision/element IDs, ordered provision paths, recursive named Boolean All/Any requirements, normalized explicit facts, source IDs and UTF-8 byte spans, a reference date and deterministic policy. In the first fragment, the fact map is **total** over referenced elements and values are Boolean. Unknown names, duplicate IDs, empty invalid groups, invalid spans, cycles, unregistered targets and unsupported constructors fail validation with typed diagnostics. No opaque AST node, callable guard, implicit environment or current clock crosses the boundary.
+
+The result contains overall status (true, false or unresolved where the fragment permits), branch statuses in source order, element results, inherited citation paths, essential trace edges, source references, ordered diagnostics and capability/fragment version. Later schema revisions add exception dependency results, selected penalty source IDs and typed outcomes only after semantics are specified. Status values and proof status are separate; unresolved may never normalize to false. Diagnostic equality prioritizes code, stage, severity and span over human wording.
+
+Canonical JSON uses UTF-8, sorted mapping keys, fixed compact separators, stable list order where meaningful, ISO dates, explicit decimal strings/currency/precision and relative POSIX source paths. Inputs with different schema versions never share a digest comparison. KernelInput v1 needs its own golden-byte and hash tests. **Canonical IR v1.2 remains read/compare migration evidence with its current source, semantic and artifact hash rules untouched** ([canonical.py](../../src/yuho/ir/canonical.py), [test_canonical_ir.py](../../tests/test_canonical_ir.py)). Because v1.2 omits spans and uses opaque snapshots/AST adapters, it cannot be relabeled as the new wire schema.
+
+One JSON request and one JSON response travel as one UTF-8 line each on stdin/stdout. Stdout contains no logs; stderr is nonprotocol diagnostics only. The envelope names operation, protocol version, input schema/fragment, request ID, source hash, requested capabilities and explicit resource limit. Protocol errors are structured, distinguish decode/version/invariant/capability/evaluation failures and never masquerade as a negative legal result. The exact common spike contract is in [LANGUAGE-SPIKE-SPEC.md](LANGUAGE-SPIKE-SPEC.md); the spike must settle canonical byte examples before implementation promotion.
+
+## 4. Semantic fragment sequence
+
+| Order | Fragment | Production and proof claim boundary | Repository oracle |
+|---|---|---|---|
+| 1 | **ClosedBooleanBranches-v1** | Finite closed named Boolean elements, recursive All/Any, inherited ancestor requirements, alternative executable leaves, total facts and definition-only failure. No arbitrary expressions, exceptions, penalties, outcomes or external calls. | [test_runtime_subsections.py](../../tests/test_runtime_subsections.py) synthetic sibling/inheritance/definition-only cases; [test_canonical_ir.py](../../tests/test_canonical_ir.py) lowering and serialization. Corpus s84/s511 empty-fact cases are smoke evidence only. |
+| 2 | **AcyclicGuardedExceptions-v1** | Registered same-fact is_infringed edges over a finite acyclic graph; explicit target resolution, ordered guards, branch-scoped defeat, missing target/cycle/unsupported-guard diagnostics and unresolved aggregation. Reject out-of-fragment guards. | [test_runtime_exception_dependencies.py](../../tests/test_runtime_exception_dependencies.py) synthetic registered target, missing target, cycle and unsupported guard. |
+| 3 | Typed facts and guarded penalties | Preserve supported burden/standard metadata mismatch, branch penalty inheritance, guarded sibling selection and YRTP001 overlap, with canonical source IDs. This is a separate extension, not part of either first proof claim. | [test_burden_runtime.py](../../tests/test_burden_runtime.py), [test_runtime_penalties.py](../../tests/test_runtime_penalties.py); s304A rash/negligent fixtures are migration evidence, not reviewed doctrine. |
+| Later | Product-discriminating SG package slice | Section 84 plus a **specified** CPC disposition, cross-Act resolution, proof status, typed outcome, authority and effective-date provenance. | Requires authoritative hash-bound source and named legal review; #63/#66 cross-Act/CPC and #51 outcomes remain open. Current s84 Boolean tests are insufficient. |
+
+Conduct, fault, causation, participation, presumptions, temporal qualification, general case law and sentencing are longer-term product goals. Current AST fields or grammar productions do not confer executable or proven semantics. Each addition needs a capability declaration, prose rules, reviewed counterexamples and explicit unsupported results.
+
+For Boolean branches, an executable child inherits ancestor requirements; sibling element-bearing leaves are alternatives; a definition-only provision has no vacuous satisfied leaf. Preserve ordered trace paths. For guarded exceptions, evaluate only satisfied branches in the caller's fact context; missing/cyclic/unsupported dependencies yield unresolved with typed diagnostics. Legacy exception declaration order matters because the runtime returns after the first firing exception; whether to retain that priority in all future syntax is a semantic design decision requiring reviewed fixtures. For penalties, simultaneously true distinct sibling guards retain candidates and emit YRTP001 rather than choosing silently. These rules are the audit's observed subset, not blanket legal correctness.
+
+## 5. Proof correspondence
+
+Build a Lean reference evaluator for **exactly ClosedBooleanBranches-v1**, including subsection paths and essential trace edges. Do not reuse the current corpus fixture generator as a semantic bridge: it flattens subsections and replaces guards with placeholder atoms ([generate_fixtures.py](../../mechanisation/scripts/generate_fixtures.py)). The existing Lean modules are handwritten bounded models; none consumes Canonical IR v1.2. A language-neutral fixture can drive the Python projector, the candidate kernel and the Lean reference, but agreement on examples is testing, not proof of implementation refinement.
+
+Record assurance separately: (1) type/constructor validation, (2) property and Python/new-kernel differential tests, (3) Z3 agreement only on its declared common subset, and (4) kernel-checked theorem with named assumptions and model version. The first formal theorem should cover determinism or evaluator/reference branch equivalence on a well-formed closed input. Claim production correspondence only after a verified implementation bridge or a precisely bounded conformance argument exists. **AcyclicGuardedExceptions-v1** is the next formal fragment after guard order, resolution and unresolved semantics are frozen. Lean, Rocq and F* remain proof-tool candidates; production language does not decide that choice.
+
+## 6. Parser and source migration
+
+Keep Tree-sitter and the Python parser/AST builder initially behind a versioned parser/projector subprocess response with source identity, accepted/rejected status, AST projection, diagnostics and UTF-8 byte spans. The existing first-line #yuho v5.1/v5.1.0 pragma, BOM/NUL/10 MiB checks, doc comments, string interpolation, typed-struct-literal Y0103 mitigation, error/missing nodes and incremental editor behaviour must be recorded for migration. They do **not** constrain the new grammar. Current grammar.js/grammar.json include outcome rules absent from generated parser.c/node-types.json; do not base a new syntax promise on those stale artefacts.
+
+Menhir/Sedlex is a **candidate replacement if OCaml wins**, not an initial dependency. Its promotion gates are: a reviewed new-language grammar and source-span/comment policy; reproducible generated artefacts; equivalent accepted/rejected decisions for migration fixtures where promised; UTF-8 byte and displayed line/column tests; recovery diagnostics for incomplete and malformed input; incremental/full LSP equivalence; formatter reparse/source-map tests; editor feature tests; and an explicit resolution of generated-parser drift. A Haskell winner must meet identical gates with its parser choice. Keeping Tree-sitter for editor parsing while a batch parser is authoritative requires shared conformance cases and a documented ownership split.
+
+## 7. Existing product contracts and owners
+
+The migration contract inventories the actual surfaces in detail. The table below names their initial owner and retirement gate; it does not promise all current bytes forever.
+
+| Surface | Current repository contract | Migration gate |
+|---|---|---|
+| CLI | [main.py](../../src/yuho/cli/main.py): doctor, init, check, ci-report, upgrade, lint, fmt, ast, transpile, diff, test, verify, debug, explain, irac, literate, refs, schema, completion; pyproject entry point yuho. Flags/aliases and stdin are command-specific. | Inventory command/option/stdin/output/exit fixtures; publish corrected per-command exit semantics before native cutover. Current documented 0/1/2/130 rule is not uniformly implemented. |
+| LSP | [server.py](../../src/yuho/lsp/server.py): stdio pygls; didOpen/change/save/close diagnostics, hover, definition/references, completion, semantic tokens and yuho.check code action; VS Code client under editors/vscode-yuho. | Replay JSON-RPC fixtures, UTF-8 spans, incremental/reparse behavior and cancellation/stale-version handling before replacing yuho-lsp. |
+| Diagnostics | [analysis.py](../../src/yuho/services/analysis.py): Y0001–Y0007, Y0100–Y0103, Y0199, Y0200, Y0250, Y0300, Y0400, Y0499; YIR&lt;CONSUMER&gt;001; YRTP001; YROD001–003; YRDG001–003. | Preserve code/stage/severity/path semantics for migration consumers; new-language codes may be versioned separately. Human wording can change after review. |
+| Machine schemas | AnalysisResult.validation_payload phase validity/errors/warnings/lint/semantic/IR summary; AnalysisError.to_dict; ci-report yuho-ci-report-v1; SARIF 2.1.0 and 1-based spans; JUnit test XML; facts JSON primitive shorthand and typed metadata; AST JSON 1.0.0. | Schema-validated producer/consumer fixtures, stable required fields, version negotiation and explicit deprecation. |
+| Exports | [base.py](../../src/yuho/transpile/base.py): JSON, English, LaTeX, Mermaid flow/mindmap, Alloy, DOCX, Akoma Ntoso XML, LegalRuleML plus aliases/extensions. PDF and SVG/PNG are derived external renderings. Source maps v3; provenance sidecars v1.0.0 include a timestamp. | Reviewed target-specific goldens, source-map and XSD checks; report lossy mappings. Snapshot matrix's 4,192 fingerprints do not imply semantic parity or byte stability for every target. |
+| Packaging | [pyproject.toml](../../pyproject.toml), uv.lock, install.sh (uv 0.11.14, Python 3.13 default), Hatch C build, wheel/sdist; CI Ubuntu Python 3.10–3.13; Docker linux/amd64 and linux/arm64. | Install/launch parser and both executables on declared targets, reproducible artefacts and release checks. macOS/Windows support is not established by the audit. |
+
+There is no discovered production .yuho project configuration schema. Relevant environment controls include analysis/cache and color settings, Alloy JAR location and Click completion; test/release toggles are not language semantics. Preserve supported workflows or deprecate them explicitly.
+
+## 8. Migration sequence and retirement
+
+1. Freeze [the migration contract](MIGRATION-CONTRACT.md) and a reviewed oracle manifest. Mark fixtures semantic-preserve, review-and-correct, temporary-compatibility or experimental. Record source hash, status and rationale. Do not turn the entire corpus or opaque export hashes into normative verdicts.
+2. Run the identical OCaml/Haskell [language spike](LANGUAGE-SPIKE-SPEC.md) on a resource-safe host. Decide the language in the ADR from results, not tooling reputation. Keep parser subprocess common.
+3. Specify KernelInput/Result v1 and ClosedBooleanBranches-v1 well-formedness, evaluator rules, canonical bytes and trace relation. Implement and compare one process at a time; introduce the Lean reference over the same closed input.
+4. Add AcyclicGuardedExceptions-v1, then typed facts and guarded penalties with explicit capability rejection and regression fixtures. Broaden to representative corpus strata only after small cases pass.
+5. Design new syntax from validated semantics. Promote Menhir/Sedlex or a Haskell parser only through the parser gates above. Migrate CLI/LSP, exporters, verifier adapters and corpus tools behind their own contracts.
+6. Build the SG section 84/CPC product slice only after the CPC package, typed outcomes, authoritative text, versioned provenance, fact pattern and independent legal review exist. Then add other doctrine slices such as homicide and participation, avoiding blind parity with known s299/ss302/304 encoding concerns.
+7. Retire Python subsystem by subsystem after callers, tests, schemas, packaging and rollback paths are ready. Delete it only when no supported workflow invokes it.
+
+The audit did not run heavy local verification, and its prior CI observations are historical. Before implementation, check current CI and resource availability separately. On this workstation avoid full pytest, full corpus export, grammar regeneration, Lake builds and Docker unless a resource-safe plan is approved.
+
+## 9. Open maintainer decisions
+
+- Approve the new source-language design and which old syntax constructs receive migration tooling, without treating legacy acceptance as permanent.
+- Review the prospective per-command CLI exit contract and any consumer-specific machine-schema deprecations.
+- Decide semantic priority when multiple exceptions fire, and adjudicate known Python/corpus counterexamples before promoting fixtures.
+- Supply authoritative source versions and legal reviewers for SG doctrine and the eventual section 84/CPC slice.
+- Ratify the language only after the comparative scorecard; select proof tooling only after a named fragment and bridge are demonstrated.

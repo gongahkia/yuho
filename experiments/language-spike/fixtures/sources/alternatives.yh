@@ -1,0 +1,6 @@
+
+        statute 1 "Alternatives" {
+            subsection (a) { elements { actus_reus first := "first"; } }
+            subsection (b) { elements { actus_reus second := "second"; } }
+        }
+    
