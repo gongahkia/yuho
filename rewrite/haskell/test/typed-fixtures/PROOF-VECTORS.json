@@ -1,0 +1,2139 @@
+[
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T01",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": false
+    },
+    "case": "T02",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "false"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "false"
+    },
+    "expected_status": "false",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": false
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true,
+      "f:second": false,
+      "f:third": true
+    },
+    "case": "T03",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root",
+        "f:second",
+        "f:third"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      },
+      "f:second": {
+        "type": "bool",
+        "value": false
+      },
+      "f:third": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {},
+      "f:second": {},
+      "f:third": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:first": true,
+      "f:second": true,
+      "f:target": true
+    },
+    "case": "T04",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:first",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "target": "r:target"
+      }
+    ],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:first",
+        "f:second"
+      ],
+      "r:target": [
+        "f:target"
+      ]
+    },
+    "expected_fired_exception_ids": {
+      "r:root": [
+        "x:root:1"
+      ]
+    },
+    "expected_guard_trace_order": {
+      "r:root": [
+        [
+          "x:root:1",
+          "true"
+        ]
+      ]
+    },
+    "expected_root_branch_statuses": [
+      "false",
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "first"
+        ],
+        [
+          "second"
+        ]
+      ],
+      "r:target": [
+        [
+          "target"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true",
+      "r:target": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:first": {
+        "type": "bool",
+        "value": true
+      },
+      "f:second": {
+        "type": "bool",
+        "value": true
+      },
+      "f:target": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:first": {},
+      "f:second": {},
+      "f:target": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {},
+    "case": "T05",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": []
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [],
+    "expected_rule_branch_paths": {
+      "r:root": []
+    },
+    "expected_rule_statuses": {
+      "r:root": "false"
+    },
+    "expected_status": "false",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {},
+    "leaf_declarations": {},
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T06",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {
+      "f:root": [
+        "matched",
+        "not_declared"
+      ]
+    },
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        }
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T07",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {
+      "f:root": [
+        "not_declared",
+        "matched"
+      ]
+    },
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "standard_of_proof": "beyond_reasonable_doubt",
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "standard_of_proof": "beyond_reasonable_doubt"
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T08",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {
+      "f:root": [
+        "matched",
+        "matched"
+      ]
+    },
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        },
+        "standard_of_proof": "beyond_reasonable_doubt",
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        },
+        "standard_of_proof": "beyond_reasonable_doubt"
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T09",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        },
+        "standard_of_proof": "beyond_reasonable_doubt",
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T10",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T11",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "source_label": "descriptive witness label"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T12",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "recorded_date": "2024-02-29"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T13",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "jurisdiction": "SG",
+          "source_label": "another label"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T14",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "jurisdiction": "SG",
+          "recorded_date": "2026-09-12"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true,
+      "f:target": true
+    },
+    "case": "T15",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "target": "r:target"
+      }
+    ],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ],
+      "r:target": [
+        "f:target"
+      ]
+    },
+    "expected_fired_exception_ids": {
+      "r:root": [
+        "x:root:1"
+      ]
+    },
+    "expected_guard_trace_order": {
+      "r:root": [
+        [
+          "x:root:1",
+          "true"
+        ]
+      ]
+    },
+    "expected_root_branch_statuses": [
+      "false"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ],
+      "r:target": [
+        [
+          "target"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "false",
+      "r:target": "true"
+    },
+    "expected_status": "false",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      },
+      "f:target": {
+        "provenance": {
+          "source_label": "shared"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {},
+      "f:target": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:leaf": true,
+      "f:left": true,
+      "f:right": true,
+      "f:root": true
+    },
+    "case": "T16",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "target": "r:left"
+      },
+      {
+        "branch": "p:root",
+        "exception": "x:root:2",
+        "rule": "r:root",
+        "target": "r:right"
+      },
+      {
+        "branch": "p:left",
+        "exception": "x:left:1",
+        "rule": "r:left",
+        "target": "r:leaf"
+      },
+      {
+        "branch": "p:right",
+        "exception": "x:right:1",
+        "rule": "r:right",
+        "target": "r:leaf"
+      }
+    ],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:leaf": [
+        "f:leaf"
+      ],
+      "r:left": [
+        "f:left"
+      ],
+      "r:right": [
+        "f:right"
+      ],
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {
+      "r:left": [
+        "x:left:1"
+      ],
+      "r:right": [
+        "x:right:1"
+      ]
+    },
+    "expected_guard_trace_order": {
+      "r:left": [
+        [
+          "x:left:1",
+          "true"
+        ]
+      ],
+      "r:right": [
+        [
+          "x:right:1",
+          "true"
+        ]
+      ],
+      "r:root": [
+        [
+          "x:root:1",
+          "false"
+        ],
+        [
+          "x:root:2",
+          "false"
+        ]
+      ]
+    },
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:leaf": [
+        [
+          "leaf"
+        ]
+      ],
+      "r:left": [
+        [
+          "left"
+        ]
+      ],
+      "r:right": [
+        [
+          "right"
+        ]
+      ],
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:leaf": "true",
+      "r:left": "false",
+      "r:right": "false",
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:leaf": {
+        "type": "bool",
+        "value": true
+      },
+      "f:left": {
+        "type": "bool",
+        "value": true
+      },
+      "f:right": {
+        "type": "bool",
+        "value": true
+      },
+      "f:root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:leaf": {},
+      "f:left": {},
+      "f:right": {},
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true,
+      "f:target": true
+    },
+    "case": "T17",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "target": "r:target"
+      }
+    ],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ],
+      "r:target": [
+        "f:target"
+      ]
+    },
+    "expected_fired_exception_ids": {
+      "r:root": [
+        "x:root:1"
+      ]
+    },
+    "expected_guard_trace_order": {
+      "r:root": [
+        [
+          "x:root:1",
+          "true"
+        ]
+      ]
+    },
+    "expected_root_branch_statuses": [
+      "false"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ],
+      "r:target": [
+        [
+          "target"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "false",
+      "r:target": "true"
+    },
+    "expected_status": "false",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      },
+      "f:target": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {},
+      "f:target": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true,
+      "f:target": false
+    },
+    "case": "T18",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "target": "r:target"
+      }
+    ],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ],
+      "r:target": [
+        "f:target"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {
+      "r:root": [
+        [
+          "x:root:1",
+          "false"
+        ]
+      ]
+    },
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ],
+      "r:target": [
+        [
+          "target"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true",
+      "r:target": "false"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      },
+      "f:target": {
+        "type": "bool",
+        "value": false
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {},
+      "f:target": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {},
+    "case": "T19",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KINV001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {},
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:extra": true,
+      "f:root": true
+    },
+    "case": "T20",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KINV004",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:extra": {
+        "type": "bool",
+        "value": true
+      },
+      "f:root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {},
+    "case": "T21",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KDEC001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": true
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {},
+    "case": "T22",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KDEC001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": "true"
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T23",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KCAP001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "int",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T24",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KINV004",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "unknown": true,
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {},
+    "case": "T25",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_diagnostic_code": "KDEC001",
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {},
+    "leaf_declarations": {}
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T26",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KDEC001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T27",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KDEC001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {},
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T28",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KDEC001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "recorded_date": "2025-02-29"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T29",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_binding_error": {
+      "expected": "prosecution:legal",
+      "field": "burden",
+      "leaf": "f:root",
+      "rule": "r:root",
+      "source_path": "synthetic/exception.yh",
+      "supplied": "absent"
+    },
+    "expected_diagnostic_code": "KINV007",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        }
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T30",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_binding_error": {
+      "expected": "prosecution:legal",
+      "field": "burden",
+      "leaf": "f:root",
+      "rule": "r:root",
+      "source_path": "synthetic/exception.yh",
+      "supplied": "defence:legal"
+    },
+    "expected_diagnostic_code": "KINV007",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "defence",
+          "kind": "legal"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        }
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T31",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_binding_error": {
+      "expected": "prosecution:legal",
+      "field": "burden",
+      "leaf": "f:root",
+      "rule": "r:root",
+      "source_path": "synthetic/exception.yh",
+      "supplied": "prosecution:evidential"
+    },
+    "expected_diagnostic_code": "KINV007",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "evidential"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        }
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T32",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_binding_error": {
+      "expected": "beyond_reasonable_doubt",
+      "field": "standard_of_proof",
+      "leaf": "f:root",
+      "rule": "r:root",
+      "source_path": "synthetic/exception.yh",
+      "supplied": "absent"
+    },
+    "expected_diagnostic_code": "KINV007",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "standard_of_proof": "beyond_reasonable_doubt"
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T33",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_binding_error": {
+      "expected": "beyond_reasonable_doubt",
+      "field": "standard_of_proof",
+      "leaf": "f:root",
+      "rule": "r:root",
+      "source_path": "synthetic/exception.yh",
+      "supplied": "balance_of_probabilities"
+    },
+    "expected_diagnostic_code": "KINV007",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "standard_of_proof": "balance_of_probabilities",
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "standard_of_proof": "beyond_reasonable_doubt"
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T34",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KCAP001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "standard_of_proof": "prima_facie",
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T35",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KINV004",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "confidence": 1,
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T36",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KINV004",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "evidential_status": "admitted",
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T37",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KCAP001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "proof_status",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f-root": false,
+      "f_root": true
+    },
+    "case": "T38",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KINV001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f-root": {
+        "type": "bool",
+        "value": false
+      },
+      "f_root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T39",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KINV004",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        },
+        "unknown": 1
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": false
+    },
+    "case": "T40",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_binding_error": {
+      "expected": "prosecution:legal",
+      "field": "burden",
+      "leaf": "f:root",
+      "rule": "r:root",
+      "source_path": "synthetic/exception.yh",
+      "supplied": "defence:legal"
+    },
+    "expected_diagnostic_code": "KINV007",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "defence",
+          "kind": "legal"
+        },
+        "type": "bool",
+        "value": false
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        }
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true,
+      "f:unreachable": true
+    },
+    "case": "T41",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_binding_error": {
+      "expected": "prosecution:legal",
+      "field": "burden",
+      "leaf": "f:unreachable",
+      "rule": "r:unreachable",
+      "source_path": "synthetic/exception.yh",
+      "supplied": "absent"
+    },
+    "expected_diagnostic_code": "KINV007",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      },
+      "f:unreachable": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {},
+      "f:unreachable": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        }
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:first": false,
+      "f:second": true,
+      "f:target": true
+    },
+    "case": "T42",
+    "classification": "rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:first",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "target": "r:target"
+      }
+    ],
+    "expected_binding_checks": {},
+    "expected_binding_error": {
+      "expected": "prosecution:legal",
+      "field": "burden",
+      "leaf": "f:first",
+      "rule": "r:root",
+      "source_path": "synthetic/exception.yh",
+      "supplied": "absent"
+    },
+    "expected_diagnostic_code": "KINV007",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:first": {
+        "type": "bool",
+        "value": false
+      },
+      "f:second": {
+        "type": "bool",
+        "value": true
+      },
+      "f:target": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:first": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        }
+      },
+      "f:second": {},
+      "f:target": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T43",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KINV004",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "authority": true,
+          "source_label": "label"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T44",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "source_label": "\ud841\udf0e witness"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T45",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KDEC001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "source_label": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T46",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KDEC001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T47",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f:root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "true"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "jurisdiction": "MY",
+          "recorded_date": "2026-09-12"
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {},
+    "case": "T48",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_diagnostic_code": "KDEC001",
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {},
+    "leaf_declarations": {}
+  },
+  {
+    "boolean_projection": {},
+    "case": "T49",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_diagnostic_code": "KDEC002",
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {},
+    "leaf_declarations": {}
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T50",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KDEC001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "burden": {},
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T51",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KDEC001",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "provenance": {
+          "source_label": ""
+        },
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f:root": true
+    },
+    "case": "T52",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "KINV004",
+    "expected_root_branch_statuses": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f:root": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "leaf_declarations": {
+      "f:root": {
+        "burden": {
+          "extra": true,
+          "holder": "prosecution",
+          "kind": "legal"
+        }
+      }
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "boolean_projection": {
+      "f-root": true,
+      "f_root": false
+    },
+    "case": "T53",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_binding_checks": {},
+    "expected_diagnostic_code": "",
+    "expected_fact_observation_order": {
+      "r:root": [
+        "f-root",
+        "f_root"
+      ]
+    },
+    "expected_fired_exception_ids": {},
+    "expected_guard_trace_order": {},
+    "expected_root_branch_statuses": [
+      "false"
+    ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
+    "expected_rule_statuses": {
+      "r:root": "false"
+    },
+    "expected_status": "false",
+    "fragment": "TypedBooleanFacts-v1",
+    "leaf_bindings": {
+      "f-root": {
+        "type": "bool",
+        "value": true
+      },
+      "f_root": {
+        "type": "bool",
+        "value": false
+      }
+    },
+    "leaf_declarations": {
+      "f-root": {},
+      "f_root": {}
+    },
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  }
+]

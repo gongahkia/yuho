@@ -1,0 +1,25 @@
+{
+  "burden_holder_mismatch": {
+    "legacy_test": "tests/test_burden_runtime.py::test_burden_metadata_mismatch_defeats_element_truth",
+    "legacy_result": "false element with prose reason",
+    "typed_disposition": "KINV007 whole-request rejection after explicit burden-kind classification"
+  },
+  "burden_standard_mismatch": {
+    "legacy_test": "tests/test_burden_runtime.py::test_burden_standard_metadata_mismatch_defeats_element_truth",
+    "legacy_result": "false element with prose reason",
+    "typed_disposition": "KINV007 whole-request rejection"
+  },
+  "primitive_boolean": {
+    "legacy_test": "tests/test_burden_runtime.py::test_legacy_facts_do_not_require_burden_metadata",
+    "legacy_result": "true despite missing burden metadata",
+    "typed_disposition": "adapter emits an explicit primitive-projection notice; declared metadata still requires a matching annotation"
+  },
+  "string_truthiness": {
+    "legacy_case": "a nonempty string can satisfy a primitive leaf",
+    "typed_disposition": "migration adapter rejects non-Boolean truthiness"
+  },
+  "normalized_name_collision": {
+    "legacy_case": "first insertion-ordered normalized name may win after exact lookup fails",
+    "typed_disposition": "adapter requires explicit leaf-ID mapping and rejects unmapped or duplicate bindings"
+  }
+}

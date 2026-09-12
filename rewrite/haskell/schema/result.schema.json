@@ -288,6 +288,126 @@
         "children"
       ],
       "type": "object"
+    },
+    "typed_fact_observation": {
+      "additionalProperties": false,
+      "properties": {
+        "branch_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "burden_check": {
+          "enum": [
+            "matched",
+            "not_declared"
+          ]
+        },
+        "leaf_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "provenance": {
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "jurisdiction": {
+              "maxLength": 64,
+              "minLength": 1,
+              "type": "string"
+            },
+            "recorded_date": {
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+              "type": "string"
+            },
+            "source_label": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "rule_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "standard_check": {
+          "enum": [
+            "matched",
+            "not_declared"
+          ]
+        },
+        "type": {
+          "const": "bool"
+        },
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rule_id",
+        "branch_id",
+        "leaf_id",
+        "type",
+        "value",
+        "burden_check",
+        "standard_check"
+      ],
+      "type": "object"
+    },
+    "typed_rule_result": {
+      "additionalProperties": false,
+      "properties": {
+        "branches": {
+          "items": {
+            "$ref": "#/$defs/branch"
+          },
+          "type": "array"
+        },
+        "fact_observations": {
+          "items": {
+            "$ref": "#/$defs/typed_fact_observation"
+          },
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "provision_kind": {
+          "enum": [
+            "executable",
+            "definition_only"
+          ]
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved"
+          ]
+        },
+        "trace": {
+          "items": {
+            "$ref": "#/$defs/trace"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "status",
+        "provision_kind",
+        "branches",
+        "trace",
+        "fact_observations"
+      ],
+      "type": "object"
     }
   },
   "$id": "https://yuho-lang.github.io/schemas/kernel-result-v1-production.json",
@@ -497,6 +617,93 @@
         "rules": {
           "items": {
             "$ref": "#/$defs/rule_result"
+          },
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved",
+            "rejected"
+          ]
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "result_schema",
+        "fragment",
+        "input_digest",
+        "root_rule",
+        "status",
+        "rules",
+        "diagnostics"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "diagnostics": {
+                "maxItems": 0
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "rejected"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "diagnostics": {
+                "minItems": 1
+              },
+              "rules": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "diagnostics": {
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "type": "array"
+        },
+        "fragment": {
+          "const": "TypedBooleanFacts-v1"
+        },
+        "input_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "result_schema": {
+          "const": "yuho.kernel-result/v1"
+        },
+        "root_rule": {
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/typed_rule_result"
           },
           "type": "array"
         },

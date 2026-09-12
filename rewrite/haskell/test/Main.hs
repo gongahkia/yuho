@@ -14,6 +14,7 @@ import System.Exit (exitFailure)
 import System.FilePath ((</>), takeDirectory)
 import Test.QuickCheck (Property, Testable, arbitrary, forAll, isSuccess, quickCheckWithResult, stdArgs, maxSuccess)
 import ExceptionChecks (runExceptionChecks)
+import TypedFactsChecks (runTypedChecks)
 import Yuho.Core.Source (validateSpan)
 import Yuho.Core.Types (Source(..), Span(..))
 import Yuho.Kernel.Run (runLine)
@@ -27,6 +28,7 @@ main = do
   golden frozen
   hardeningCases hardening
   runExceptionChecks (root </> "rewrite/haskell/test/exception-fixtures")
+  runTypedChecks (root </> "rewrite/haskell/test/typed-fixtures")
   b06 <- readJson (frozen </> "requests/B06.json")
   b01 <- readJson (frozen </> "requests/B01.json")
   b03 <- readJson (frozen </> "requests/B03.json")

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.Exception.Encode (encodeExceptionResult) where
+module Yuho.Exception.Encode (encodeExceptionResult, exceptionResultJson, ruleJson) where
 
 import qualified Data.ByteString as BS
 import Data.Text (Text)
@@ -9,7 +9,10 @@ import Yuho.Protocol.Encode (diagnosticJson, spanJson, traceJson)
 import Yuho.Protocol.Json (J(..), encodeJson)
 
 encodeExceptionResult :: ExceptionResult -> BS.ByteString
-encodeExceptionResult result = encodeJson (JObj
+encodeExceptionResult result = encodeJson (exceptionResultJson result) <> BS.singleton 10
+
+exceptionResultJson :: ExceptionResult -> J
+exceptionResultJson result = JObj
   [ ("protocol", JStr "yuho.kernel-protocol/v1")
   , ("request_id", JStr (exceptionResultRequestId result))
   , ("result_schema", JStr "yuho.kernel-result/v1")
@@ -20,7 +23,7 @@ encodeExceptionResult result = encodeJson (JObj
       Rejected -> "rejected"; Judgment value -> truthText value))
   , ("rules", JArr (map ruleJson (exceptionResultRules result)))
   , ("diagnostics", JArr (map diagnosticJson (exceptionResultDiagnostics result)))
-  ]) <> BS.singleton 10
+  ]
 
 ruleJson :: RuleResult -> J
 ruleJson result = JObj

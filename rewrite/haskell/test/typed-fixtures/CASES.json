@@ -1,0 +1,637 @@
+{
+  "T01": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "typed true",
+    "request_file": "requests/T01.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T02": {
+    "branches": [
+      "false"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "typed false",
+    "request_file": "requests/T02.json",
+    "rules": {
+      "r:root": "false"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "T03": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "recursive all any",
+    "request_file": "requests/T03.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T04": {
+    "branches": [
+      "false",
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "alternative branch with defeat",
+    "request_file": "requests/T04.json",
+    "rules": {
+      "r:root": "true",
+      "r:target": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T05": {
+    "branches": [],
+    "checks": {},
+    "code": "",
+    "label": "definition only",
+    "request_file": "requests/T05.json",
+    "rules": {
+      "r:root": "false"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "T06": {
+    "branches": [
+      "true"
+    ],
+    "checks": {
+      "f:root": [
+        "matched",
+        "not_declared"
+      ]
+    },
+    "code": "",
+    "label": "matching burden",
+    "request_file": "requests/T06.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T07": {
+    "branches": [
+      "true"
+    ],
+    "checks": {
+      "f:root": [
+        "not_declared",
+        "matched"
+      ]
+    },
+    "code": "",
+    "label": "matching standard",
+    "request_file": "requests/T07.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T08": {
+    "branches": [
+      "true"
+    ],
+    "checks": {
+      "f:root": [
+        "matched",
+        "matched"
+      ]
+    },
+    "code": "",
+    "label": "both matching",
+    "request_file": "requests/T08.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T09": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "supplied metadata without declaration",
+    "request_file": "requests/T09.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T10": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "neither side has metadata",
+    "request_file": "requests/T10.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T11": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "descriptive source label",
+    "request_file": "requests/T11.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T12": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "valid leap day",
+    "request_file": "requests/T12.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T13": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "provenance invariant verdict",
+    "request_file": "requests/T13.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T14": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "ordinary valid date",
+    "request_file": "requests/T14.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T15": {
+    "branches": [
+      "false"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "typed target context",
+    "request_file": "requests/T15.json",
+    "rules": {
+      "r:root": "false",
+      "r:target": "true"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "T16": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "diamond dependency",
+    "request_file": "requests/T16.json",
+    "rules": {
+      "r:leaf": "true",
+      "r:left": "false",
+      "r:right": "false",
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T17": {
+    "branches": [
+      "false"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "true target defeats",
+    "request_file": "requests/T17.json",
+    "rules": {
+      "r:root": "false",
+      "r:target": "true"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "T18": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "false target preserves",
+    "request_file": "requests/T18.json",
+    "rules": {
+      "r:root": "true",
+      "r:target": "false"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T19": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV001",
+    "label": "missing leaf binding",
+    "request_file": "requests/T19.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T20": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV004",
+    "label": "extra leaf binding",
+    "request_file": "requests/T20.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T21": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "primitive shorthand",
+    "request_file": "requests/T21.json",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T22": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "string is not Boolean",
+    "request_file": "requests/T22.json",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T23": {
+    "branches": [],
+    "checks": {},
+    "code": "KCAP001",
+    "label": "unsupported typed value",
+    "request_file": "requests/T23.json",
+    "rules": {},
+    "stage": "capability",
+    "status": "rejected"
+  },
+  "T24": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV004",
+    "label": "unknown fact field",
+    "request_file": "requests/T24.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T25": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "duplicate escaped field",
+    "request_file": "requests/T25.txt",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T26": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "empty declaration",
+    "request_file": "requests/T26.json",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T27": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "empty provenance",
+    "request_file": "requests/T27.json",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T28": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "impossible calendar date",
+    "request_file": "requests/T28.json",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T29": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV007",
+    "label": "missing declared burden",
+    "request_file": "requests/T29.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T30": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV007",
+    "label": "mismatched burden holder",
+    "request_file": "requests/T30.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T31": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV007",
+    "label": "mismatched burden kind",
+    "request_file": "requests/T31.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T32": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV007",
+    "label": "missing declared standard",
+    "request_file": "requests/T32.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T33": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV007",
+    "label": "mismatched standard",
+    "request_file": "requests/T33.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T34": {
+    "branches": [],
+    "checks": {},
+    "code": "KCAP001",
+    "label": "unsupported prima facie label",
+    "request_file": "requests/T34.json",
+    "rules": {},
+    "stage": "capability",
+    "status": "rejected"
+  },
+  "T35": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV004",
+    "label": "confidence unsupported",
+    "request_file": "requests/T35.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T36": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV004",
+    "label": "proof status unsupported",
+    "request_file": "requests/T36.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T37": {
+    "branches": [],
+    "checks": {},
+    "code": "KCAP001",
+    "label": "proof-state constructor unsupported",
+    "request_file": "requests/T37.json",
+    "rules": {},
+    "stage": "capability",
+    "status": "rejected"
+  },
+  "T38": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV001",
+    "label": "normalized-name collision cannot bind",
+    "request_file": "requests/T38.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T39": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV004",
+    "label": "unknown declaration field",
+    "request_file": "requests/T39.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T40": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV007",
+    "label": "false binding still rejects mismatch",
+    "request_file": "requests/T40.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T41": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV007",
+    "label": "unreachable rule mismatch",
+    "request_file": "requests/T41.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T42": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV007",
+    "label": "unevaluated branch mismatch",
+    "request_file": "requests/T42.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T43": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV004",
+    "label": "unknown provenance field",
+    "request_file": "requests/T43.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T44": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "non-BMP descriptive label",
+    "request_file": "requests/T44.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T45": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "overlong label",
+    "request_file": "requests/T45.json",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T46": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "incomplete burden",
+    "request_file": "requests/T46.json",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T47": {
+    "branches": [
+      "true"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "jurisdiction annotation inert",
+    "request_file": "requests/T47.json",
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "T48": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "malformed surrogate",
+    "request_file": "requests/T48.txt",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T49": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC002",
+    "label": "request-byte resource limit",
+    "request_file": "requests/T49.txt",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T50": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "empty burden object",
+    "request_file": "requests/T50.json",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T51": {
+    "branches": [],
+    "checks": {},
+    "code": "KDEC001",
+    "label": "empty source label",
+    "request_file": "requests/T51.json",
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "T52": {
+    "branches": [],
+    "checks": {},
+    "code": "KINV004",
+    "label": "unknown nested burden field",
+    "request_file": "requests/T52.json",
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "T53": {
+    "branches": [
+      "false"
+    ],
+    "checks": {},
+    "code": "",
+    "label": "distinct similar leaf IDs retain independent bindings",
+    "request_file": "requests/T53.json",
+    "rules": {
+      "r:root": "false"
+    },
+    "stage": "",
+    "status": "false"
+  }
+}

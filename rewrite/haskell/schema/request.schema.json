@@ -380,6 +380,274 @@
         "end_col"
       ],
       "type": "object"
+    },
+    "typed_burden": {
+      "additionalProperties": false,
+      "properties": {
+        "holder": {
+          "enum": [
+            "prosecution",
+            "defence"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "unspecified",
+            "legal",
+            "evidential"
+          ]
+        }
+      },
+      "required": [
+        "holder",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "typed_fact": {
+      "additionalProperties": false,
+      "properties": {
+        "burden": {
+          "$ref": "#/$defs/typed_burden"
+        },
+        "provenance": {
+          "$ref": "#/$defs/typed_provenance"
+        },
+        "standard_of_proof": {
+          "enum": [
+            "beyond_reasonable_doubt",
+            "balance_of_probabilities"
+          ]
+        },
+        "type": {
+          "const": "bool"
+        },
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
+    "typed_group": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "all",
+            "any"
+          ]
+        },
+        "members": {
+          "items": {
+            "$ref": "#/$defs/typed_requirement"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "path",
+        "span",
+        "members"
+      ],
+      "type": "object"
+    },
+    "typed_leaf": {
+      "additionalProperties": false,
+      "properties": {
+        "declared_metadata": {
+          "$ref": "#/$defs/typed_metadata"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "leaf"
+        },
+        "path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "path",
+        "span"
+      ],
+      "type": "object"
+    },
+    "typed_metadata": {
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "burden": {
+          "$ref": "#/$defs/typed_burden"
+        },
+        "standard_of_proof": {
+          "enum": [
+            "beyond_reasonable_doubt",
+            "balance_of_probabilities"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "typed_provenance": {
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "jurisdiction": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "recorded_date": {
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "type": "string"
+        },
+        "source_label": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "typed_provision": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "definitions": {
+                "const": true
+              }
+            },
+            "required": [
+              "definitions"
+            ]
+          },
+          "then": {
+            "properties": {
+              "children": {
+                "maxItems": 0
+              },
+              "requirements": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "children": {
+          "items": {
+            "$ref": "#/$defs/typed_provision"
+          },
+          "type": "array"
+        },
+        "definitions": {
+          "type": "boolean"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "path": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "requirements": {
+          "items": {
+            "$ref": "#/$defs/typed_requirement"
+          },
+          "type": "array"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "span",
+        "definitions",
+        "requirements",
+        "children"
+      ],
+      "type": "object"
+    },
+    "typed_requirement": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/typed_leaf"
+        },
+        {
+          "$ref": "#/$defs/typed_group"
+        }
+      ]
+    },
+    "typed_rule": {
+      "additionalProperties": false,
+      "properties": {
+        "exceptions": {
+          "items": {
+            "$ref": "#/$defs/exception"
+          },
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "program": {
+          "$ref": "#/$defs/typed_provision"
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "program",
+        "exceptions"
+      ],
+      "type": "object"
     }
   },
   "$id": "https://yuho-lang.github.io/schemas/kernel-input-v1-production.json",
@@ -534,6 +802,67 @@
         "registry": {
           "items": {
             "$ref": "#/$defs/rule"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "request_id": {
+          "pattern": "^[A-Z][0-9]{2}$",
+          "type": "string"
+        },
+        "root_rule": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/named_source"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "operation",
+        "input_schema",
+        "fragment",
+        "sources",
+        "policy",
+        "registry",
+        "root_rule",
+        "facts"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "facts": {
+          "additionalProperties": {
+            "$ref": "#/$defs/typed_fact"
+          },
+          "type": "object"
+        },
+        "fragment": {
+          "const": "TypedBooleanFacts-v1"
+        },
+        "input_schema": {
+          "const": "yuho.kernel-input/v1"
+        },
+        "operation": {
+          "const": "evaluate"
+        },
+        "policy": {
+          "$ref": "#/$defs/policy"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "registry": {
+          "items": {
+            "$ref": "#/$defs/typed_rule"
           },
           "minItems": 1,
           "type": "array"

@@ -1,0 +1,44 @@
+"""Serial clean-directory build/install replay using only the pinned Cabal cache."""
+
+from __future__ import annotations
+
+import json
+import shutil
+import subprocess
+import tempfile
+from pathlib import Path
+
+WORKSPACE = Path(__file__).resolve().parents[1]
+
+
+def main() -> None:
+    with tempfile.TemporaryDirectory(prefix="yuho-typed-replay-") as temporary:
+        clean = Path(temporary)
+        for name in ("cabal.project", "cabal.project.freeze", "yuho-foundation.cabal"):
+            shutil.copy2(WORKSPACE / name, clean / name)
+        for name in ("src", "app", "test"):
+            shutil.copytree(WORKSPACE / name, clean / name)
+        binary_dir = clean / "bin"
+        binary_dir.mkdir()
+        subprocess.run(["cabal", "v2-build", "exe:yuho-kernel", "--offline", "--jobs=1"],
+                       cwd=clean, check=True)
+        subprocess.run(["cabal", "v2-install", "exe:yuho-kernel", "--offline",
+                        "--jobs=1", f"--installdir={binary_dir}",
+                        "--overwrite-policy=always"], cwd=clean, check=True)
+        binary = binary_dir / "yuho-kernel"
+        fixtures = WORKSPACE / "test/typed-fixtures/requests"
+        for name, status, code in (("T17.json", "false", ""),
+                                   ("T49.txt", "rejected", "KDEC002")):
+            completed = subprocess.run([str(binary)], input=(fixtures / name).read_bytes(),
+                                       capture_output=True, check=True, timeout=30)
+            assert not completed.stderr, completed.stderr
+            result = json.loads(completed.stdout)
+            assert result["status"] == status, name
+            assert (result["diagnostics"][0]["code"] if result["diagnostics"] else "") == code
+            if name == "T17.json":
+                assert result["rules"][0]["branches"][0]["reason"] == "defeated"
+    print("clean offline build/install and T17/T49 installed launches passed")
+
+
+if __name__ == "__main__":
+    main()
