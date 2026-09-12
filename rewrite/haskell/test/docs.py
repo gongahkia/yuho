@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTS = [
     ROOT / "docs/rewrite/TYPED-BOOLEAN-FACTS-V1.md",
     ROOT / "docs/rewrite/GUARDED-PENALTY-SELECTION-V1.md",
+    ROOT / "docs/rewrite/PENALTY-TERMS-V1.md",
     ROOT / "docs/rewrite/YUHO-REWRITE-ARCHITECTURE-PROPOSAL.md",
     ROOT / "docs/rewrite/YUHO-REWRITE-DECISION-REPORT.md",
     ROOT / "docs/rewrite/MIGRATION-CONTRACT.md",

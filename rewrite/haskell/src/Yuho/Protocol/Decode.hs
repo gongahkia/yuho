@@ -27,7 +27,7 @@ inputDigest root =
         Just "validate" -> ["input_schema", "fragment", "source", "parser_result", "policy"]
         _ | (lookupField "fragment" root >>= textValue) `elem`
               [Just "AcyclicGuardedExceptions-v1", Just "TypedBooleanFacts-v1"
-              , Just "GuardedPenaltySelection-v1"] ->
+              , Just "GuardedPenaltySelection-v1", Just "PenaltyTerms-v1"] ->
           ["input_schema", "fragment", "sources", "registry", "root_rule", "facts", "policy"]
         _ -> ["input_schema", "fragment", "source", "program", "facts", "policy"]
       fields = traverse (\key -> (,) key <$> lookupField key root) keys

@@ -673,6 +673,403 @@
         "penalty_ids",
         "guard_leaf_ids"
       ]
+    },
+    "selected_term_penalty": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "penalty_id": {
+          "type": "string",
+          "pattern": "^pen:[^:]+(?::[^:]+)*$"
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[^:]+:[^:]+$"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "declaring_provision_path": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "declaration_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "guard": {
+          "$ref": "#/$defs/penalty_result_guard"
+        },
+        "supporting_branches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/penalty_support"
+          }
+        },
+        "term": {
+          "$ref": "#/$defs/penalty_term"
+        }
+      },
+      "required": [
+        "penalty_id",
+        "source_id",
+        "span",
+        "declaring_provision_path",
+        "declaration_index",
+        "guard",
+        "supporting_branches",
+        "term"
+      ]
+    },
+    "term_integer_endpoint": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "not_stated"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "specified"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ]
+        }
+      ]
+    },
+    "term_fine_minimum": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "not_stated"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "specified"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(?:0|[1-9][0-9]{0,17})(?:\\.[0-9]{1,2})?$"
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ]
+        }
+      ]
+    },
+    "term_fine_maximum": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "not_stated"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "specified"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(?:0|[1-9][0-9]{0,17})(?:\\.[0-9]{1,2})?$"
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "unbounded"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        }
+      ]
+    },
+    "penalty_term": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "term_id": {
+              "type": "string",
+              "pattern": "^term:[^:]+(?::[^:]+)*$"
+            },
+            "span": {
+              "$ref": "#/$defs/span"
+            },
+            "kind": {
+              "const": "all_of"
+            },
+            "terms": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/penalty_term"
+              }
+            }
+          },
+          "required": [
+            "term_id",
+            "span",
+            "kind",
+            "terms"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "term_id": {
+              "type": "string",
+              "pattern": "^term:[^:]+(?::[^:]+)*$"
+            },
+            "span": {
+              "$ref": "#/$defs/span"
+            },
+            "kind": {
+              "const": "exactly_one_of"
+            },
+            "terms": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/penalty_term"
+              }
+            }
+          },
+          "required": [
+            "term_id",
+            "span",
+            "kind",
+            "terms"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "term_id": {
+              "type": "string",
+              "pattern": "^term:[^:]+(?::[^:]+)*$"
+            },
+            "span": {
+              "$ref": "#/$defs/span"
+            },
+            "kind": {
+              "const": "one_or_more_of"
+            },
+            "terms": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/penalty_term"
+              }
+            }
+          },
+          "required": [
+            "term_id",
+            "span",
+            "kind",
+            "terms"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "term_id": {
+              "type": "string",
+              "pattern": "^term:[^:]+(?::[^:]+)*$"
+            },
+            "span": {
+              "$ref": "#/$defs/span"
+            },
+            "kind": {
+              "const": "term_imprisonment"
+            },
+            "unit": {
+              "enum": [
+                "days",
+                "weeks",
+                "months",
+                "years"
+              ]
+            },
+            "minimum": {
+              "$ref": "#/$defs/term_integer_endpoint"
+            },
+            "maximum": {
+              "$ref": "#/$defs/term_integer_endpoint"
+            }
+          },
+          "required": [
+            "term_id",
+            "span",
+            "kind",
+            "unit",
+            "minimum",
+            "maximum"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "term_id": {
+              "type": "string",
+              "pattern": "^term:[^:]+(?::[^:]+)*$"
+            },
+            "span": {
+              "$ref": "#/$defs/span"
+            },
+            "kind": {
+              "const": "life_imprisonment"
+            }
+          },
+          "required": [
+            "term_id",
+            "span",
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "term_id": {
+              "type": "string",
+              "pattern": "^term:[^:]+(?::[^:]+)*$"
+            },
+            "span": {
+              "$ref": "#/$defs/span"
+            },
+            "kind": {
+              "const": "death"
+            }
+          },
+          "required": [
+            "term_id",
+            "span",
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "term_id": {
+              "type": "string",
+              "pattern": "^term:[^:]+(?::[^:]+)*$"
+            },
+            "span": {
+              "$ref": "#/$defs/span"
+            },
+            "kind": {
+              "const": "fine"
+            },
+            "currency": {
+              "const": "SGD"
+            },
+            "minimum": {
+              "$ref": "#/$defs/term_fine_minimum"
+            },
+            "maximum": {
+              "$ref": "#/$defs/term_fine_maximum"
+            }
+          },
+          "required": [
+            "term_id",
+            "span",
+            "kind",
+            "currency",
+            "minimum",
+            "maximum"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "term_id": {
+              "type": "string",
+              "pattern": "^term:[^:]+(?::[^:]+)*$"
+            },
+            "span": {
+              "$ref": "#/$defs/span"
+            },
+            "kind": {
+              "const": "caning"
+            },
+            "minimum": {
+              "$ref": "#/$defs/term_integer_endpoint"
+            },
+            "maximum": {
+              "$ref": "#/$defs/term_integer_endpoint"
+            }
+          },
+          "required": [
+            "term_id",
+            "span",
+            "kind",
+            "minimum",
+            "maximum"
+          ]
+        }
+      ]
     }
   },
   "$id": "https://yuho-lang.github.io/schemas/kernel-result-v1-production.json",
@@ -1080,6 +1477,123 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/selected_penalty"
+          }
+        },
+        "penalty_selection_trace": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/penalty_selection_trace"
+          }
+        },
+        "selection_warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selection_warning"
+          }
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "result_schema",
+        "fragment",
+        "input_digest",
+        "root_rule",
+        "status",
+        "rules",
+        "diagnostics",
+        "selected_penalties",
+        "penalty_selection_trace",
+        "selection_warnings"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "diagnostics": {
+                "maxItems": 0
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "rejected"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "diagnostics": {
+                "minItems": 1
+              },
+              "rules": {
+                "maxItems": 0
+              },
+              "selected_penalties": {
+                "maxItems": 0
+              },
+              "penalty_selection_trace": {
+                "maxItems": 0
+              },
+              "selection_warnings": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "diagnostics": {
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "type": "array"
+        },
+        "fragment": {
+          "const": "PenaltyTerms-v1"
+        },
+        "input_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "result_schema": {
+          "const": "yuho.kernel-result/v1"
+        },
+        "root_rule": {
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/typed_rule_result"
+          },
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved",
+            "rejected"
+          ]
+        },
+        "selected_penalties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selected_term_penalty"
           }
         },
         "penalty_selection_trace": {

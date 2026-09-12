@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.PenaltySelection.Encode (encodeSelection, encodeSelectionReject) where
+module Yuho.PenaltySelection.Encode
+  ( encodeSelection, encodeSelectionReject, selectionResultJson, selectionRejectJson ) where
 
 import qualified Data.ByteString as BS
 import Data.Text (Text)
@@ -14,20 +15,27 @@ import Yuho.TypedFacts.Types (TypedRequest)
 
 encodeSelection :: TypedRequest -> ExceptionResult -> Selection
   -> Either Diagnostic BS.ByteString
-encodeSelection typed result selection = do
+encodeSelection typed result selection = line <$> selectionResultJson typed result selection
+
+selectionResultJson :: TypedRequest -> ExceptionResult -> Selection
+  -> Either Diagnostic J
+selectionResultJson typed result selection = do
   base <- typedResultJson typed result
-  pure (line (setFields base
+  pure (setFields base
     [("fragment", JStr "GuardedPenaltySelection-v1")
     , ("selected_penalties", JArr (map selectedJson (selectedPenalties selection)))
     , ("penalty_selection_trace", JArr (map occurrenceJson (selectionTrace selection)))
-    , ("selection_warnings", JArr (map warningJson (selectionWarnings selection)))]))
+    , ("selection_warnings", JArr (map warningJson (selectionWarnings selection)))])
 
 encodeSelectionReject :: ExceptionResult -> BS.ByteString
-encodeSelectionReject result = line (setFields (exceptionResultJson result)
+encodeSelectionReject = line . selectionRejectJson
+
+selectionRejectJson :: ExceptionResult -> J
+selectionRejectJson result = setFields (exceptionResultJson result)
   [("fragment", JStr "GuardedPenaltySelection-v1")
   , ("selected_penalties", JArr [])
   , ("penalty_selection_trace", JArr [])
-  , ("selection_warnings", JArr [])])
+  , ("selection_warnings", JArr [])]
 
 selectedJson :: SelectedPenalty -> J
 selectedJson (SelectedPenalty declaration supports) = JObj

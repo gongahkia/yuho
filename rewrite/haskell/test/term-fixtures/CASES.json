@@ -1,0 +1,595 @@
+{
+  "PT01": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "term imprisonment maximum",
+    "request_file": "requests/PT01.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT02": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "life imprisonment",
+    "request_file": "requests/PT02.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT03": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "fine decimal canonicalization",
+    "request_file": "requests/PT03.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT04": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "caning",
+    "request_file": "requests/PT04.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT05": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "death",
+    "request_file": "requests/PT05.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT06": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "imprisonment minimum only",
+    "request_file": "requests/PT06.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT07": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "imprisonment maximum only",
+    "request_file": "requests/PT07.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT08": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "fixed equal bounds",
+    "request_file": "requests/PT08.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT09": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "both bounds not stated",
+    "request_file": "requests/PT09.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT10": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "explicitly unbounded fine maximum",
+    "request_file": "requests/PT10.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT11": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "all_of source tree",
+    "request_file": "requests/PT11.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT12": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "exactly_one_of source tree",
+    "request_file": "requests/PT12.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT13": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "one_or_more_of source tree",
+    "request_file": "requests/PT13.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT14": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "nested combinations",
+    "request_file": "requests/PT14.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT15": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "authored child order",
+    "request_file": "requests/PT15.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT16": {
+    "base_case": "GP02",
+    "code": "",
+    "label": "unselected false branch still validates terms",
+    "request_file": "requests/PT16.json",
+    "selected": [],
+    "status": "false"
+  },
+  "PT17": {
+    "base_case": "GP07",
+    "code": "",
+    "label": "inherited selected term with two supports",
+    "request_file": "requests/PT17.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT18": {
+    "base_case": "GP04",
+    "code": "",
+    "label": "exception defeated branch omits term",
+    "request_file": "requests/PT18.json",
+    "selected": [],
+    "status": "false"
+  },
+  "PT19": {
+    "base_case": "GP13",
+    "code": "",
+    "label": "overlap warning unchanged",
+    "request_file": "requests/PT19.json",
+    "selected": [
+      "pen:one",
+      "pen:two"
+    ],
+    "status": "true"
+  },
+  "PT20": {
+    "base_case": "GP18",
+    "code": "",
+    "label": "dependency target term validated, not selected",
+    "request_file": "requests/PT20.json",
+    "selected": [],
+    "status": "true"
+  },
+  "PT21": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "zero imprisonment bound",
+    "request_file": "requests/PT21.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT22": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "negative caning bound",
+    "request_file": "requests/PT22.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT23": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "reversed imprisonment bounds",
+    "request_file": "requests/PT23.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT24": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "excessive integer magnitude",
+    "request_file": "requests/PT24.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT25": {
+    "base_case": "GP01",
+    "code": "KCAP001",
+    "label": "unsupported duration unit",
+    "request_file": "requests/PT25.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT26": {
+    "base_case": "GP01",
+    "code": "KCAP001",
+    "label": "mixed duration components",
+    "request_file": "requests/PT26.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT27": {
+    "base_case": "GP01",
+    "code": "KDEC001",
+    "label": "malformed fine decimal",
+    "request_file": "requests/PT27.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT28": {
+    "base_case": "GP01",
+    "code": "KDEC001",
+    "label": "excess fine precision",
+    "request_file": "requests/PT28.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT29": {
+    "base_case": "GP01",
+    "code": "KDEC001",
+    "label": "fine exponent rejected",
+    "request_file": "requests/PT29.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT30": {
+    "base_case": "GP01",
+    "code": "KDEC001",
+    "label": "fine leading zero rejected",
+    "request_file": "requests/PT30.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT31": {
+    "base_case": "GP01",
+    "code": "KCAP001",
+    "label": "non-SGD currency",
+    "request_file": "requests/PT31.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT32": {
+    "base_case": "GP01",
+    "code": "KINV004",
+    "label": "life with numeric field",
+    "request_file": "requests/PT32.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT33": {
+    "base_case": "GP01",
+    "code": "KINV004",
+    "label": "death with numerical field",
+    "request_file": "requests/PT33.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT34": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "empty combinator",
+    "request_file": "requests/PT34.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT35": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "singleton combinator",
+    "request_file": "requests/PT35.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT36": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "duplicate child term IDs",
+    "request_file": "requests/PT36.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT37": {
+    "base_case": "GP13",
+    "code": "KINV009",
+    "label": "duplicate term IDs across declarations",
+    "request_file": "requests/PT37.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT38": {
+    "base_case": "GP01",
+    "code": "KINV003",
+    "label": "invalid source span",
+    "request_file": "requests/PT38.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT39": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "term outside declaration span",
+    "request_file": "requests/PT39.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT40": {
+    "base_case": "GP01",
+    "code": "KCAP001",
+    "label": "unsupported punishment atom",
+    "request_file": "requests/PT40.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT41": {
+    "base_case": "GP01",
+    "code": "KCAP001",
+    "label": "unsupported sentencing metadata",
+    "request_file": "requests/PT41.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT42": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "depth 16 boundary",
+    "request_file": "requests/PT42.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT43": {
+    "base_case": "GP01",
+    "code": "KDEC002",
+    "label": "depth 17 overflow",
+    "request_file": "requests/PT43.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT44": {
+    "base_case": "GP01",
+    "code": "KINV004",
+    "label": "semantic node budget rejects terms",
+    "request_file": "requests/PT44.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT45": {
+    "base_case": "GP01",
+    "code": "KDEC001",
+    "label": "missing required term",
+    "request_file": "requests/PT45.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT46": {
+    "base_case": "GP01",
+    "code": "KINV004",
+    "label": "unknown term field",
+    "request_file": "requests/PT46.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT47": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "fine zero rejected",
+    "request_file": "requests/PT47.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT48": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "reversed fine bounds",
+    "request_file": "requests/PT48.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT49": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "unbounded fine minimum rejected",
+    "request_file": "requests/PT49.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT50": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "unbounded imprisonment maximum rejected",
+    "request_file": "requests/PT50.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT51": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "fine 18 integer digits",
+    "request_file": "requests/PT51.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT52": {
+    "base_case": "GP01",
+    "code": "KDEC001",
+    "label": "fine 19 integer digits rejected",
+    "request_file": "requests/PT52.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT53": {
+    "base_case": "GP14",
+    "code": "",
+    "label": "source order permutation leaves selection unchanged",
+    "request_file": "requests/PT53.json",
+    "selected": [
+      "pen:two",
+      "pen:one"
+    ],
+    "status": "true"
+  },
+  "PT54": {
+    "base_case": "GP16",
+    "code": "",
+    "label": "definition-only term valid but inert",
+    "request_file": "requests/PT54.json",
+    "selected": [],
+    "status": "false"
+  },
+  "PT55": {
+    "base_case": "GP30",
+    "code": "",
+    "label": "migration probe: rash s304A imprisonment/fine shape, not doctrine",
+    "request_file": "requests/PT55.json",
+    "selected": [
+      "pen:rash"
+    ],
+    "status": "true"
+  },
+  "PT56": {
+    "base_case": "GP31",
+    "code": "",
+    "label": "migration probe: negligent s304A imprisonment/fine shape, not doctrine",
+    "request_file": "requests/PT56.json",
+    "selected": [
+      "pen:negligent"
+    ],
+    "status": "true"
+  },
+  "PT57": {
+    "base_case": "GP32",
+    "code": "",
+    "label": "migration probe: both s304A imprisonment/fine shapes, not doctrine",
+    "request_file": "requests/PT57.json",
+    "selected": [
+      "pen:rash",
+      "pen:negligent"
+    ],
+    "status": "true"
+  },
+  "PT58": {
+    "base_case": "GP33",
+    "code": "",
+    "label": "migration probe: neither s304A imprisonment/fine shape, not doctrine",
+    "request_file": "requests/PT58.json",
+    "selected": [],
+    "status": "true"
+  },
+  "PT59": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "valid non-BMP descriptive provenance",
+    "request_file": "requests/PT59.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT60": {
+    "base_case": "GP18",
+    "code": "KINV009",
+    "label": "invalid dependency-target term rejects whole registry",
+    "request_file": "requests/PT60.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT61": {
+    "base_case": "GP01",
+    "code": "KINV009",
+    "label": "invalid empty term ID segment",
+    "request_file": "requests/PT61.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT62": {
+    "base_case": "GP01",
+    "code": "KCAP001",
+    "label": "recognized legacy punishment payload rejects as capability",
+    "request_file": "requests/PT62.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT63": {
+    "base_case": "GP01",
+    "code": "KINV004",
+    "label": "unknown penalty declaration field",
+    "request_file": "requests/PT63.json",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT64": {
+    "base_case": "GP01",
+    "code": "",
+    "label": "canonical fine with two fractional digits",
+    "request_file": "requests/PT64.json",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "true"
+  },
+  "PT65": {
+    "code": "KDEC001",
+    "label": "duplicate JSON key in term",
+    "request_file": "requests/PT65.txt",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT66": {
+    "code": "KDEC002",
+    "label": "line and request byte limit",
+    "request_file": "requests/PT66.txt",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT67": {
+    "code": "KDEC001",
+    "label": "malformed surrogate escape",
+    "request_file": "requests/PT67.txt",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PT68": {
+    "code": "KDEC001",
+    "label": "duplicate JSON key in endpoint",
+    "request_file": "requests/PT68.txt",
+    "selected": [],
+    "status": "rejected"
+  }
+}

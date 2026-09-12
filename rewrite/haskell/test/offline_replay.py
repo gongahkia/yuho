@@ -50,7 +50,19 @@ def main() -> None:
                 assert [item["penalty_id"] for item in result["selected_penalties"]] == [
                     "pen:one", "pen:two"]
                 assert [item["code"] for item in result["selection_warnings"]] == ["KSEL001"]
-    print("clean offline build/install and T17/T49/GP13/GP39 installed launches passed")
+        fixtures = WORKSPACE / "test/term-fixtures/requests"
+        for name, status, code in (("PT03.json", "true", ""),
+                                   ("PT66.txt", "rejected", "KDEC002")):
+            completed = subprocess.run([str(binary)], input=(fixtures / name).read_bytes(),
+                                       capture_output=True, check=True, timeout=30)
+            assert not completed.stderr, completed.stderr
+            result = json.loads(completed.stdout)
+            assert result["status"] == status, name
+            assert (result["diagnostics"][0]["code"] if result["diagnostics"] else "") == code
+            if name == "PT03.json":
+                assert result["selected_penalties"][0]["term"]["minimum"] == {
+                    "kind": "specified", "value": "1.20"}
+    print("clean offline build/install and T17/T49/GP13/GP39/PT03/PT66 installed launches passed")
 
 
 if __name__ == "__main__":

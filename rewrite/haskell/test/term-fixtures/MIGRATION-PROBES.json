@@ -1,0 +1,8 @@
+{
+  "fine_without_amount": "PT09 retains two not_stated endpoints",
+  "life_and_death": "PT02 and PT05 use categorical atoms, no numeric proxy",
+  "mandatory_minimum": "the adapter must report any legal interpretation or lossy mapping",
+  "or_both": "PT13 encodes source order without choosing a child",
+  "s304A": "PT55-PT58 use synthetic imprisonment/fine shapes and an arbitrary five-year bound; no term or verdict is a doctrinal claim",
+  "zero_minimum": "legacy zero is ambiguous; PT21 rejects specified zero"
+}

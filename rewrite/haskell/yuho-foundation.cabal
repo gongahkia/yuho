@@ -44,6 +44,11 @@ library
       Yuho.PenaltySelection.Select
       Yuho.PenaltySelection.Encode
       Yuho.PenaltySelection.Run
+      Yuho.PenaltyTerms.Types
+      Yuho.PenaltyTerms.Decode
+      Yuho.PenaltyTerms.Validate
+      Yuho.PenaltyTerms.Encode
+      Yuho.PenaltyTerms.Run
 
 executable yuho-kernel
   import: foundation
@@ -55,7 +60,7 @@ test-suite foundation-test
   import: foundation
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks
+  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks
   hs-source-dirs: test
   build-depends:
       yuho-foundation ==0.1.0.0
