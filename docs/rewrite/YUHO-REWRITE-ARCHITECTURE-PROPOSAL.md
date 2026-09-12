@@ -1,6 +1,6 @@
 # Yuho rewrite architecture proposal
 
-**Status:** Repository-reconciled proposal; two bounded Haskell kernel fragments are authorised  
+**Status:** Repository-reconciled proposal; two bounded Haskell kernel fragments are authorised
 **Date:** 12 September 2026  
 **Production language:** Haskell, selected in [accepted ADR-0001](ADR-0001-HASKELL.md) after the [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md)
 

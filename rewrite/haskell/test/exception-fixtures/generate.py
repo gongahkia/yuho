@@ -255,7 +255,7 @@ CASES["E33"] = {"label": "malformed surrogate", "status": "rejected",
                 "code": "KDEC001", "stage": "decode", "branches": [], "reasons": [],
                 "fired": [], "rules": {}}
 VECTORS.append(vector("E33", None, CASES["E33"]))
-REQUESTS.joinpath("E35.txt").write_bytes(b" " * 1048577 + b"\n")
+REQUESTS.joinpath("E35.txt").write_bytes(b"x" * 1048577 + b"\n")
 CASES["E35"] = {"label": "overlong line", "status": "rejected",
                 "code": "KDEC002", "stage": "decode", "branches": [], "reasons": [],
                 "fired": [], "rules": {}}
