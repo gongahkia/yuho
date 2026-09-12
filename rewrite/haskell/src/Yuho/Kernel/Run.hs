@@ -5,6 +5,7 @@ import qualified Data.ByteString as BS
 import Data.Text (Text)
 import Yuho.Core.Types
 import Yuho.Exception.Run (runExceptionLine)
+import Yuho.PenaltySelection.Run (runPenaltyLine)
 import Yuho.TypedFacts.Run (runTypedLine)
 import Yuho.Kernel.Evaluate (evaluate)
 import Yuho.Kernel.Validate (validateInput)
@@ -20,7 +21,9 @@ runLine bytes = case decodeJson bytes of
     let requestIdentifier = maybe "?" id (lookupField "request_id" value >>= textValue)
         digest = inputDigest value
         rejected issue = encodeResult (reject requestIdentifier digest issue)
-    in if (lookupField "fragment" value >>= textValue) == Just "TypedBooleanFacts-v1"
+    in if (lookupField "fragment" value >>= textValue) == Just "GuardedPenaltySelection-v1"
+       then runPenaltyLine value
+       else if (lookupField "fragment" value >>= textValue) == Just "TypedBooleanFacts-v1"
        then runTypedLine value
        else if (lookupField "fragment" value >>= textValue) == Just "AcyclicGuardedExceptions-v1"
        then runExceptionLine value else case decodeRequest value of

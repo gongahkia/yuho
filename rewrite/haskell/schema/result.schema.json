@@ -408,6 +408,271 @@
         "fact_observations"
       ],
       "type": "object"
+    },
+    "penalty_support": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "branch_id": {
+          "type": "string",
+          "pattern": "^[^:]+:[^:]+$"
+        },
+        "path": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "origin": {
+          "enum": [
+            "direct",
+            "inherited"
+          ]
+        },
+        "guard_result": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "branch_id",
+        "path",
+        "origin",
+        "guard_result"
+      ]
+    },
+    "selected_penalty": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "penalty_id": {
+          "type": "string",
+          "pattern": "^pen:[^:]+(?::[^:]+)*$"
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[^:]+:[^:]+$"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "declaring_provision_path": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "declaration_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "guard": {
+          "$ref": "#/$defs/penalty_result_guard"
+        },
+        "supporting_branches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/penalty_support"
+          }
+        }
+      },
+      "required": [
+        "penalty_id",
+        "source_id",
+        "span",
+        "declaring_provision_path",
+        "declaration_index",
+        "guard",
+        "supporting_branches"
+      ]
+    },
+    "penalty_result_guard": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "unguarded"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "leaf_true"
+            },
+            "leaf_id": {
+              "type": "string",
+              "pattern": "^[^:]+:[^:]+$"
+            }
+          },
+          "required": [
+            "kind",
+            "leaf_id"
+          ]
+        }
+      ]
+    },
+    "penalty_selection_trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "penalty_id": {
+          "type": "string",
+          "pattern": "^pen:[^:]+(?::[^:]+)*$"
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[^:]+:[^:]+$"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "branch_id": {
+          "type": "string",
+          "pattern": "^[^:]+:[^:]+$"
+        },
+        "branch_path": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "origin": {
+          "enum": [
+            "direct",
+            "inherited"
+          ]
+        },
+        "branch_status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved"
+          ]
+        },
+        "branch_reason": {
+          "enum": [
+            "satisfied",
+            "requirements_failed",
+            "defeated",
+            "guard_unresolved"
+          ]
+        },
+        "guard_result": {
+          "enum": [
+            "true",
+            "false",
+            "not_evaluated"
+          ]
+        },
+        "result": {
+          "enum": [
+            "selected",
+            "branch_requirements_false",
+            "branch_exception_defeated",
+            "branch_unresolved",
+            "guard_false"
+          ]
+        }
+      },
+      "required": [
+        "penalty_id",
+        "source_id",
+        "span",
+        "branch_id",
+        "branch_path",
+        "origin",
+        "branch_status",
+        "branch_reason",
+        "guard_result",
+        "result"
+      ]
+    },
+    "selection_warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "const": "KSEL001"
+        },
+        "stage": {
+          "const": "select_penalties"
+        },
+        "severity": {
+          "const": "warning"
+        },
+        "rule_id": {
+          "type": "string",
+          "pattern": "^[^:]+:[^:]+$"
+        },
+        "declaring_provision_id": {
+          "type": "string",
+          "pattern": "^[^:]+:[^:]+$"
+        },
+        "declaring_provision_path": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "overlapping_branch_paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "penalty_ids": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "pattern": "^pen:[^:]+(?::[^:]+)*$"
+          }
+        },
+        "guard_leaf_ids": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "pattern": "^[^:]+:[^:]+$"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "stage",
+        "severity",
+        "rule_id",
+        "declaring_provision_id",
+        "declaring_provision_path",
+        "overlapping_branch_paths",
+        "penalty_ids",
+        "guard_leaf_ids"
+      ]
     }
   },
   "$id": "https://yuho-lang.github.io/schemas/kernel-result-v1-production.json",
@@ -726,6 +991,123 @@
         "status",
         "rules",
         "diagnostics"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "diagnostics": {
+                "maxItems": 0
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "rejected"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "diagnostics": {
+                "minItems": 1
+              },
+              "rules": {
+                "maxItems": 0
+              },
+              "selected_penalties": {
+                "maxItems": 0
+              },
+              "penalty_selection_trace": {
+                "maxItems": 0
+              },
+              "selection_warnings": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "diagnostics": {
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "type": "array"
+        },
+        "fragment": {
+          "const": "GuardedPenaltySelection-v1"
+        },
+        "input_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "result_schema": {
+          "const": "yuho.kernel-result/v1"
+        },
+        "root_rule": {
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/typed_rule_result"
+          },
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "true",
+            "false",
+            "unresolved",
+            "rejected"
+          ]
+        },
+        "selected_penalties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selected_penalty"
+          }
+        },
+        "penalty_selection_trace": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/penalty_selection_trace"
+          }
+        },
+        "selection_warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selection_warning"
+          }
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "result_schema",
+        "fragment",
+        "input_digest",
+        "root_rule",
+        "status",
+        "rules",
+        "diagnostics",
+        "selected_penalties",
+        "penalty_selection_trace",
+        "selection_warnings"
       ],
       "type": "object"
     }

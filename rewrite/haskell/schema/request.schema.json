@@ -648,6 +648,168 @@
         "exceptions"
       ],
       "type": "object"
+    },
+    "penalty_guard": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "unguarded"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "leaf_true"
+            },
+            "leaf_id": {
+              "type": "string",
+              "pattern": "^[^:]+:[^:]+$"
+            }
+          },
+          "required": [
+            "kind",
+            "leaf_id"
+          ]
+        }
+      ]
+    },
+    "penalty_declaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "penalty_id": {
+          "type": "string",
+          "pattern": "^pen:[^:]+(?::[^:]+)*$"
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[^:]+:[^:]+$"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "guard": {
+          "$ref": "#/$defs/penalty_guard"
+        }
+      },
+      "required": [
+        "penalty_id",
+        "source_id",
+        "span",
+        "guard"
+      ]
+    },
+    "penalty_provision": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "definitions": {
+                "const": true
+              }
+            },
+            "required": [
+              "definitions"
+            ]
+          },
+          "then": {
+            "properties": {
+              "children": {
+                "maxItems": 0
+              },
+              "requirements": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "children": {
+          "items": {
+            "$ref": "#/$defs/penalty_provision"
+          },
+          "type": "array"
+        },
+        "definitions": {
+          "type": "boolean"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "path": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "requirements": {
+          "items": {
+            "$ref": "#/$defs/typed_requirement"
+          },
+          "type": "array"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "penalties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/penalty_declaration"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "span",
+        "definitions",
+        "requirements",
+        "children",
+        "penalties"
+      ],
+      "type": "object"
+    },
+    "penalty_rule": {
+      "additionalProperties": false,
+      "properties": {
+        "exceptions": {
+          "items": {
+            "$ref": "#/$defs/exception"
+          },
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "program": {
+          "$ref": "#/$defs/penalty_provision"
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "program",
+        "exceptions"
+      ],
+      "type": "object"
     }
   },
   "$id": "https://yuho-lang.github.io/schemas/kernel-input-v1-production.json",
@@ -863,6 +1025,67 @@
         "registry": {
           "items": {
             "$ref": "#/$defs/typed_rule"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "request_id": {
+          "pattern": "^[A-Z][0-9]{2}$",
+          "type": "string"
+        },
+        "root_rule": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/named_source"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "operation",
+        "input_schema",
+        "fragment",
+        "sources",
+        "policy",
+        "registry",
+        "root_rule",
+        "facts"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "facts": {
+          "additionalProperties": {
+            "$ref": "#/$defs/typed_fact"
+          },
+          "type": "object"
+        },
+        "fragment": {
+          "const": "GuardedPenaltySelection-v1"
+        },
+        "input_schema": {
+          "const": "yuho.kernel-input/v1"
+        },
+        "operation": {
+          "const": "evaluate"
+        },
+        "policy": {
+          "$ref": "#/$defs/policy"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "registry": {
+          "items": {
+            "$ref": "#/$defs/penalty_rule"
           },
           "minItems": 1,
           "type": "array"

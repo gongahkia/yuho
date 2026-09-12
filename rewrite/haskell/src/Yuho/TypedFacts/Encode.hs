@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.TypedFacts.Encode (encodeTypedResult, encodeTypedReject) where
+module Yuho.TypedFacts.Encode (encodeTypedResult, encodeTypedReject, typedResultJson) where
 
 import qualified Data.ByteString as BS
 import qualified Data.Map.Strict as Map
@@ -11,10 +11,14 @@ import Yuho.Protocol.Json (J(..), encodeJson)
 import Yuho.TypedFacts.Types
 
 encodeTypedResult :: TypedRequest -> ExceptionResult -> Either Diagnostic BS.ByteString
-encodeTypedResult request result = do
+encodeTypedResult request result =
+  (<> BS.singleton 10) . encodeJson <$> typedResultJson request result
+
+typedResultJson :: TypedRequest -> ExceptionResult -> Either Diagnostic J
+typedResultJson request result = do
   rules <- traverse (observedRule request) (exceptionResultRules result)
-  pure (encodeJson (setFields (exceptionResultJson result)
-    [("fragment", JStr "TypedBooleanFacts-v1"), ("rules", JArr rules)]) <> BS.singleton 10)
+  pure (setFields (exceptionResultJson result)
+    [("fragment", JStr "TypedBooleanFacts-v1"), ("rules", JArr rules)])
 
 encodeTypedReject :: ExceptionResult -> BS.ByteString
 encodeTypedReject result = encodeJson (setFields (exceptionResultJson result)

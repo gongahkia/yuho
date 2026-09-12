@@ -1,4 +1,4 @@
-"""Check links and basic structure in active typed-fragment documentation."""
+"""Check links and basic structure in active kernel-fragment documentation."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTS = [
     ROOT / "docs/rewrite/TYPED-BOOLEAN-FACTS-V1.md",
+    ROOT / "docs/rewrite/GUARDED-PENALTY-SELECTION-V1.md",
     ROOT / "docs/rewrite/YUHO-REWRITE-ARCHITECTURE-PROPOSAL.md",
     ROOT / "docs/rewrite/YUHO-REWRITE-DECISION-REPORT.md",
     ROOT / "docs/rewrite/MIGRATION-CONTRACT.md",
@@ -29,7 +30,7 @@ def main() -> None:
             path = target.split("#", 1)[0].split("?", 1)[0]
             assert (document.parent / path).exists(), (document, target)
             count += 1
-    print(f"typed documentation: {len(DOCUMENTS)} structured files, "
+    print(f"kernel documentation: {len(DOCUMENTS)} structured files, "
           f"{count} relative links resolve")
 
 

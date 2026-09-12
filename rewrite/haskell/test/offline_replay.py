@@ -12,7 +12,7 @@ WORKSPACE = Path(__file__).resolve().parents[1]
 
 
 def main() -> None:
-    with tempfile.TemporaryDirectory(prefix="yuho-typed-replay-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="yuho-kernel-replay-") as temporary:
         clean = Path(temporary)
         for name in ("cabal.project", "cabal.project.freeze", "yuho-foundation.cabal"):
             shutil.copy2(WORKSPACE / name, clean / name)
@@ -37,7 +37,20 @@ def main() -> None:
             assert (result["diagnostics"][0]["code"] if result["diagnostics"] else "") == code
             if name == "T17.json":
                 assert result["rules"][0]["branches"][0]["reason"] == "defeated"
-    print("clean offline build/install and T17/T49 installed launches passed")
+        fixtures = WORKSPACE / "test/penalty-fixtures/requests"
+        for name, status, code in (("GP13.json", "true", ""),
+                                   ("GP39.json", "rejected", "KDEC002")):
+            completed = subprocess.run([str(binary)], input=(fixtures / name).read_bytes(),
+                                       capture_output=True, check=True, timeout=30)
+            assert not completed.stderr, completed.stderr
+            result = json.loads(completed.stdout)
+            assert result["status"] == status, name
+            assert (result["diagnostics"][0]["code"] if result["diagnostics"] else "") == code
+            if name == "GP13.json":
+                assert [item["penalty_id"] for item in result["selected_penalties"]] == [
+                    "pen:one", "pen:two"]
+                assert [item["code"] for item in result["selection_warnings"]] == ["KSEL001"]
+    print("clean offline build/install and T17/T49/GP13/GP39 installed launches passed")
 
 
 if __name__ == "__main__":
