@@ -2,6 +2,8 @@
 
 The scored request and result schemas are request.schema.json and result.schema.json. Every request and response is one compact, sorted-key UTF-8 JSON object followed by LF. Haskell and OCaml both decode into explicit algebraic values, validate independently and encode objects with explicit key sorting. Arrays retain source/declaration order.
 
+The Draft 2020-12 schemas use stable absolute `$id` and cross-file `$ref` URIs for offline resolution. The first local schema draft used opaque relative IDs, which did not resolve in a standard validator; this was corrected after candidate implementation without changing any frozen fixture byte. The common harness registers the request schema locally, so validation makes no network request.
+
 The input_digest is lowercase SHA-256 of the compact canonical JSON **without LF** of the inner KernelInput fields. Evaluate uses input_schema, fragment, source, program, facts and policy. Validate uses input_schema, fragment, source, parser_result and policy. Outer protocol, operation and request_id are excluded. The original source text and its separate source.sha256 are included. This digest has no relationship to Canonical IR v1.2 hashes.
 
 The program tree keeps ordered requirements and children. Each node has an ID, provision path and UTF-8 byte/display span. A leaf reads a Boolean fact by its ID. Group all/any evaluates every member for a complete trace, then reduces Boolean values. A branch is an executable leaf provision with inherited ancestor requirements. A provision with no executable descendant and no own/inherited requirements produces no branch; the root result is definition_only/false. If any branch is true, overall status is true.

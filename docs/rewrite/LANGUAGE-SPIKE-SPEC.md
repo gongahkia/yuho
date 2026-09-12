@@ -1,6 +1,6 @@
 # Yuho OCaml-versus-Haskell language spike specification
 
-**Status:** Specification only; no prototype authorised by this document  
+**Status:** Phase 1 technical spike completed; independent clarity reviews and language decision pending. [Evidence bundle](../../experiments/language-spike/results/SCORECARD.md).
 **Baseline:** [repository audit](REPOSITORY-AUDIT.md) and [provisional ADR](ADR-0001-PROVISIONAL-OCAML.md)  
 **Time box when authorised:** Three focused working days per candidate, followed by one review day
 
@@ -34,7 +34,7 @@ Parser adapter operation uses the same envelope with operation=validate and a pa
 
 ## Frozen scored fixtures
 
-Construct B01–B05 as language-neutral KernelInput JSON from the named synthetic source cases, retaining source IDs and spans from the **same** Python projection. Construct B06–B07 from the literal closed graph below. Freeze JSON and expected response bytes in the future spike branch before candidate work starts. The table states the exact scenario and expected essential status/trace; no corpus legal conclusion is inferred.
+Construct B01–B05 as language-neutral KernelInput JSON from the named synthetic source cases, retaining source IDs and spans from the **same** Python projection. Construct B06–B07 from the literal closed graph below. The 15 request and expected-response byte files were frozen before either candidate in [fixtures](../../experiments/language-spike/fixtures/) at repository HEAD `6f95b1d450b44777c5aa27b16fa61db2c525f824`; [MANIFEST.json](../../experiments/language-spike/fixtures/MANIFEST.json) records their hashes. The table states the exact scenario and expected essential status/trace; no corpus legal conclusion is inferred.
 
 | ID | Source and facts | Expected essential result |
 |---|---|---|
@@ -93,4 +93,6 @@ Latency/RSS thresholds are **spike gates**, not claims about current Python perf
 
 Parity, determinism, diagnostics and packaging are mandatory. If both candidates pass, compare reviewed clarity and proof mapping, packaging, latency and RSS. A technical tie means both satisfy every mandatory gate and neither has a material advantage in any of those dimensions; **maintainer preference decides a genuine tie**. The maintainer currently leans toward Haskell, which is legitimate maintainability evidence but cannot change the fixtures, implementation effort, measurements or score reporting. If neither passes, extend the spike specification or reconsider the boundary; do not declare a winner. The two independent clarity reviews must precede a final decision.
 
-The scorecard must include raw JSON fixtures and hashes, expected/actual response diffs, command logs, 30-run latency/RSS samples, build/install transcript, LOC/rubric sheets, proof-mapping notes, rejected cases and a short signed decision. No language choice follows from this specification alone.
+The scorecard must include raw JSON fixtures and hashes, expected/actual response diffs, command logs, 30-run latency/RSS samples, build/install transcript, LOC/rubric sheets, proof-mapping notes, rejected cases and a short signed decision. No language choice follows from this specification alone. The completed technical [scorecard](../../experiments/language-spike/results/SCORECARD.md) leaves both independent clarity reviews open.
+
+The local Draft 2020-12 schema initially used opaque relative `$id` values that made its cross-file `$ref` unresolvable. Stable absolute schema URIs were substituted after candidate implementation and both candidates were rerun through the same validator; no frozen request, response or source bytes changed. See the [reproducibility record](../../experiments/language-spike/results/REPRODUCIBILITY.md).

@@ -1,9 +1,11 @@
 # ADR-0001: Provisional OCaml preference for the Yuho rewrite
 
-**Status:** Provisional; comparative spike pending  
+**Status:** Provisional; technical spike complete, independent clarity reviews and decision pending
 **Date:** 12 September 2026  
 **Owner:** Yuho maintainer  
 **Supersedes:** No accepted ADR
+
+The measured [Phase 1 scorecard](../../experiments/language-spike/results/SCORECARD.md) is evidence for review, not acceptance of this ADR. Both candidates passed the technical gates; maintainability and proof-boundary reviews are outstanding.
 
 ## Context
 

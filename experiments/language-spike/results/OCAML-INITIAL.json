@@ -1,0 +1,30 @@
+{
+  "status": "final candidate frozen after one bounded correction pass",
+  "repository_head_at_fixture_freeze": "6f95b1d450b44777c5aa27b16fa61db2c525f824",
+  "fixture_manifest_sha256": "fc5c932a370b0efc88be23dbc84c5024211f8fdebbe8c4ec800483e289e3c715",
+  "compiler": "OCaml 5.3.0",
+  "build": "make all using ocamlopt -O3",
+  "initial_exact_bytes": "15/15",
+  "source_sha256": {
+    "json.ml": "8b7ff9b0a07935bf46e398006b773c3455d60feb2d89ea41fed7d6ec0f948f1d",
+    "kernel.ml": "efe7182ee7d37bec8a599ec81bb211dba8291e6024cbf4aab9c7ab39d6b5caca",
+    "main.ml": "1ba77de9c88b2d9a0632a424b00780fb607ce3b7cd714f0c00ec3576271245b4",
+    "sha256.ml": "95ba970fba28c452f2f6af72ff2de6b57afaf51abf8e8fc67fb8f40615ae41d5"
+  },
+  "binary_sha256": "7df5664c4fd98f70a53cfd687bfad0e11e4dce8777412f74b026f074e74739f3",
+  "corrections_before_initial_freeze": [
+    "Added explicit requirement, branch and trace type annotations to disambiguate shared record labels.",
+    "Disabled OCaml warnings 4, 42 and 70 while retaining all other warnings as errors; the suppression is documented in the review packet."
+  ],
+  "post_both_candidate_correction_pass": [
+    "Reject invalid raw UTF-8 before JSON parsing with a typed decode result."
+  ],
+  "final_source_sha256": {
+    "json.ml": "8b7ff9b0a07935bf46e398006b773c3455d60feb2d89ea41fed7d6ec0f948f1d",
+    "kernel.ml": "efe7182ee7d37bec8a599ec81bb211dba8291e6024cbf4aab9c7ab39d6b5caca",
+    "main.ml": "b7f6fca6f971cd969152b75debbf36cd81acd85575595a1af3f65b5701b03a0e",
+    "sha256.ml": "95ba970fba28c452f2f6af72ff2de6b57afaf51abf8e8fc67fb8f40615ae41d5"
+  },
+  "final_binary_sha256": "0e4dfc62795d7f8e023e52a241be79258d2585152fd4defbfada5ed8f0c147db",
+  "final_exact_bytes": "15/15"
+}

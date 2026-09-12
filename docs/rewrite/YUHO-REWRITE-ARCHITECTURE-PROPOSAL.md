@@ -2,7 +2,7 @@
 
 **Status:** Repository-reconciled proposal; not approved for implementation  
 **Date:** 12 September 2026  
-**Production language:** OCaml provisionally, conditional on [the comparative spike](LANGUAGE-SPIKE-SPEC.md) and [ADR-0001](ADR-0001-PROVISIONAL-OCAML.md)  
+**Production language:** undecided; the [technical spike](../../experiments/language-spike/results/SCORECARD.md) passed for both candidates, but independent clarity reviews and [ADR-0001](ADR-0001-PROVISIONAL-OCAML.md) remain open
 **Proof environment:** undecided; the existing Lean work remains evidence  
 **Repository baseline:** [REPOSITORY-AUDIT.md](REPOSITORY-AUDIT.md)
 

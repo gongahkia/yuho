@@ -1,0 +1,50 @@
+{
+  "haskell": {
+    "artifact_bytes": 2998272,
+    "artifact_sha256": "4370a4ee7778b38f986598488a7073996084f8fc4f58ec97c7368c6283b6e49d",
+    "build_command": [
+      "cabal",
+      "v2-build",
+      "--offline",
+      "--jobs=1"
+    ],
+    "build_ms": 3000.89010100055,
+    "clean_install_directory": true,
+    "clean_source_copy": true,
+    "offline": true,
+    "replay": {
+      "B01": true,
+      "P02": true
+    },
+    "shared_libraries": [
+      "\tlinux-vdso.so.1 (0x00007f1bf1b08000)",
+      "\tlibm.so.6 => /lib64/libm.so.6 (0x00007f1bf19ed000)",
+      "\tlibgmp.so.10 => /lib64/libgmp.so.10 (0x00007f1bf1946000)",
+      "\tlibc.so.6 => /lib64/libc.so.6 (0x00007f1bf1754000)",
+      "\tlibffi.so.8 => /lib64/libffi.so.8 (0x00007f1bf1744000)",
+      "\t/lib64/ld-linux-x86-64.so.2 (0x00007f1bf1b0a000)"
+    ]
+  },
+  "ocaml": {
+    "artifact_bytes": 3094112,
+    "artifact_sha256": "8a94f96afcbb5363844e20a1d1934937b683e9565cf755ff782e08967a932fd6",
+    "build_command": [
+      "make",
+      "all"
+    ],
+    "build_ms": 436.2000340006489,
+    "clean_install_directory": true,
+    "clean_source_copy": true,
+    "offline": true,
+    "replay": {
+      "B01": true,
+      "P02": true
+    },
+    "shared_libraries": [
+      "\tlinux-vdso.so.1 (0x00007f0ec448d000)",
+      "\tlibm.so.6 => /lib64/libm.so.6 (0x00007f0ec4234000)",
+      "\tlibc.so.6 => /lib64/libc.so.6 (0x00007f0ec4042000)",
+      "\t/lib64/ld-linux-x86-64.so.2 (0x00007f0ec448f000)"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+haskell/dist-newstyle/
+ocaml/yuho-kernel-ocaml
+ocaml/src/*.cmi
+ocaml/src/*.cmx
+ocaml/src/*.o
+__pycache__/

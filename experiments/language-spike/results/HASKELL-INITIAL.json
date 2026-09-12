@@ -1,5 +1,5 @@
 {
-  "status": "initial candidate frozen before OCaml implementation",
+  "status": "final candidate frozen after one bounded correction pass",
   "repository_head_at_fixture_freeze": "6f95b1d450b44777c5aa27b16fa61db2c525f824",
   "fixture_manifest_sha256": "fc5c932a370b0efc88be23dbc84c5024211f8fdebbe8c4ec800483e289e3c715",
   "compiler": "GHC 9.8.4",
@@ -17,5 +17,15 @@
     "Resolved GHC -Wall/-Werror shadowing and deprecated ByteString hGetLine warnings.",
     "Preserved diagnostic severity rather than re-emitting every transported diagnostic as error."
   ],
-  "post_both_candidate_correction_pass": "not yet used"
+  "post_both_candidate_correction_pass": [
+    "Added stdout flush per response for interactive one-line protocol."
+  ],
+  "final_source_sha256": {
+    "Json.hs": "9562c1bbe3dc2f2b1c2dd1e1221fb7bbda7106956f6b1950bd84fd4521e968de",
+    "Kernel.hs": "148ee8990cd003d37e1abc0d7b51e458a78f1d9855b2e0d3632f3cb21137e8bb",
+    "Main.hs": "639bea18029c3ec6cec4c211de9aec06dca9b9e10e0f6a683b367f2f85a80848",
+    "Sha256.hs": "c32858febf14ade78e79065b21e53385477e2eaf5de2c4a6bde2c7f27ff729b2"
+  },
+  "final_binary_sha256": "8036b018724d64e3554ba29a5a13f25d934a347f9368cb7d6fe74fb603816d70",
+  "final_exact_bytes": "15/15"
 }

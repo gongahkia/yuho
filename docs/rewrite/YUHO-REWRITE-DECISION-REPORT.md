@@ -5,6 +5,8 @@
 **Decision owner:** Yuho maintainer  
 **Recommendation:** Compare OCaml and Haskell on the same Yuho fixtures and protocol; OCaml is a provisional engineering hypothesis, not an automatic tie-break.
 
+The Phase 1 technical [scorecard](../../experiments/language-spike/results/SCORECARD.md) is available. Both candidates passed the measured gates; two independent clarity reviews and the maintainer's language decision remain pending.
+
 ## Decision in context
 
 Yuho should migrate in stages from the Python 5.1.0 toolchain to a small, typed semantic kernel. The maintainer has authorised free redesign of the new surface language. Existing .yh syntax, parser quirks and exact export bytes are migration evidence, not permanent language obligations. Reviewed semantic behaviour needs equivalence or an explicit recorded correction. [MIGRATION-CONTRACT.md](MIGRATION-CONTRACT.md) makes this distinction concrete.

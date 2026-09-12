@@ -6,7 +6,7 @@ import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Encoding
 import Json (encodeJson, parseJson)
 import Kernel (decodeFailure, run)
-import System.IO (hIsEOF, stdin, stdout)
+import System.IO (hFlush, hIsEOF, stdin, stdout)
 
 main :: IO ()
 main = loop
@@ -22,4 +22,5 @@ loop = do
             Left message -> decodeFailure message
             Right value -> run value
     BS.hPut stdout (Encoding.encodeUtf8 (Text.pack (encodeJson response ++ "\n")))
+    hFlush stdout
     loop

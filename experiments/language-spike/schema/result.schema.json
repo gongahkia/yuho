@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "yuho.kernel-result/v1",
+  "$id": "https://yuho-lang.github.io/schemas/kernel-result-v1.json",
   "type": "object",
   "additionalProperties": false,
   "required": ["protocol", "request_id", "result_schema", "fragment", "input_digest", "status", "provision_kind", "branches", "trace", "diagnostics"],
@@ -37,7 +37,7 @@
           "id": {"type": "string"},
           "kind": {"enum": ["leaf", "all", "any"]},
           "path": {"type": "array", "items": {"type": "string"}},
-          "span": {"$ref": "request.schema.json#/$defs/span"},
+          "span": {"$ref": "https://yuho-lang.github.io/schemas/kernel-request-v1.json#/$defs/span"},
           "value": {"enum": ["true", "false"]},
           "children": {"type": "array", "items": {"type": "string"}}
         }
@@ -45,7 +45,7 @@
     },
     "diagnostics": {
       "type": "array",
-      "items": {"$ref": "request.schema.json#/$defs/diagnostic"}
+      "items": {"$ref": "https://yuho-lang.github.io/schemas/kernel-request-v1.json#/$defs/diagnostic"}
     }
   }
 }
