@@ -55,4 +55,4 @@ Retain Tree-sitter and the Python parser/AST builder initially behind the versio
 
 The Python CLI, LSP, runtime, verifiers, exporters and corpus tools retire independently only after supported workflows and machine schemas have replacement owners, reviewed divergences, regression tests and packaging checks. The CLI inventory is doctor, init, check, ci-report, upgrade, lint, fmt, ast, transpile, diff, test, verify, debug, explain, irac, literate, refs, schema, completion; the second executable is yuho-lsp. New commands do not automatically replace these workflows.
 
-Only the bounded Haskell [production foundation](../../rewrite/haskell/README.md) is authorised now. The broader rewrite, grammar regeneration, corpus migration, v1.2 change and Python retirement remain out of scope.
+Only the bounded Haskell [production foundation and its two named fragments](../../rewrite/haskell/README.md) are authorised now. The broader rewrite, grammar regeneration, corpus migration, v1.2 change and Python retirement remain out of scope.

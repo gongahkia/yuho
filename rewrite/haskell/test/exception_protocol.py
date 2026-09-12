@@ -75,6 +75,12 @@ def verify_vector(vector: dict, result: dict) -> None:
                     "target_status"], vector["case"]
     assert observations == vector["expected_guard_observations"], vector["case"]
     assert order == vector["expected_trace_order"], vector["case"]
+    declared_edges = {(edge["rule"], edge["branch"], edge["exception"],
+                       edge["target"], edge["source_id"])
+                      for edge in vector["dependency_edges"]}
+    assert all((item["rule"], item["branch"], item["exception"],
+                item["target"], item["source_id"]) in declared_edges
+               for item in observations), vector["case"]
 
 
 def main() -> None:

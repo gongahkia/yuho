@@ -1,7 +1,7 @@
 {
   "files": {
-    "CASES.json": "0746fe4ed40d2f3184856a537ee99b703bfaafe4eb4a335825aca9e93f362c5e",
-    "PROOF-VECTORS.json": "4e744c52182a44b6f6b5ece54950a7b5dcc16e59957c7a62827618d8a26dc167",
+    "CASES.json": "a077f79b9a932e165c0ba71b1311f8079e8508643b959ab2374dd9d79c9b7e10",
+    "PROOF-VECTORS.json": "d3567b61c65497700734935b02b997084b275f717ceb7b2376f3599c53b14291",
     "requests/E01.json": "a0966227824e8e02b66827b61464b8e19b2d9bf0c83957abbfb1c944d73a5560",
     "requests/E02.json": "a2a1728eaff2ffa99216f0aab663e686f1e9c66c1d2f105eb7790c6154baba10",
     "requests/E03.json": "b5bd7a94d64c1df5092764ad163921bd6dcabd66251c60d770fd634686c4d8e6",
@@ -40,7 +40,8 @@
     "requests/E36.json": "b6348b4ea26aed20de73e3eaa496e5618d1c789e934773d9fd4905fa71ed15c6",
     "requests/E37.json": "47cc1fc9d8cf6eabc98135458ca7a1d0efafb4d8fe796c68ec332e7065305720",
     "requests/E38.json": "06094ced3c096b3bc53dedf54307a6eaf34e1417b39c7777d22be48b07b7073f",
-    "requests/E39.json": "9efcaa9e15bb43eabc03e99f2add6c094cf76c52256d664596faabb8cb47b4f6"
+    "requests/E39.json": "9efcaa9e15bb43eabc03e99f2add6c094cf76c52256d664596faabb8cb47b4f6",
+    "requests/E40.json": "ea9b6c3a5cc3e5392ae0363bb7dabd3076610642ea2c45da2bd0a5ed311e8097"
   },
   "schema": "yuho.exception-fixture-manifest/v1"
 }

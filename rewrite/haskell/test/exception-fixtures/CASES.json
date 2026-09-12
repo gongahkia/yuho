@@ -502,5 +502,15 @@
     "rules": {},
     "stage": "capability",
     "status": "rejected"
+  },
+  "E40": {
+    "branches": [],
+    "code": "KINV002",
+    "fired": [],
+    "label": "duplicate executable branch provision ID",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
   }
 }

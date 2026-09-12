@@ -15,6 +15,13 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:root": "true"
     },
@@ -69,6 +76,18 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ],
+      "r:target": [
+        [
+          "target"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:root": "false",
       "r:target": "true"
@@ -126,6 +145,18 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ],
+      "r:target": [
+        [
+          "target"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:root": "true",
       "r:target": "false"
@@ -206,6 +237,23 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:a": [
+        [
+          "a"
+        ]
+      ],
+      "r:b": [
+        [
+          "b"
+        ]
+      ],
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:a": "true",
       "r:b": "true",
@@ -287,6 +335,23 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:leaf": [
+        [
+          "leaf"
+        ]
+      ],
+      "r:mid": [
+        [
+          "mid"
+        ]
+      ],
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:leaf": "true",
       "r:mid": "false",
@@ -409,6 +474,28 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:leaf": [
+        [
+          "leaf"
+        ]
+      ],
+      "r:left": [
+        [
+          "left"
+        ]
+      ],
+      "r:right": [
+        [
+          "right"
+        ]
+      ],
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:leaf": "true",
       "r:left": "false",
@@ -477,6 +564,18 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ],
+      "r:target": [
+        [
+          "target"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:root": "true",
       "r:target": "false"
@@ -514,6 +613,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -543,6 +643,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -571,6 +672,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -613,6 +715,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -643,6 +746,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -672,6 +776,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -707,6 +812,13 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:root": "false"
     },
@@ -766,6 +878,21 @@
         "second"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "first"
+        ],
+        [
+          "second"
+        ]
+      ],
+      "r:target": [
+        [
+          "target"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:root": "true",
       "r:target": "true"
@@ -851,6 +978,21 @@
         "second"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "first"
+        ],
+        [
+          "second"
+        ]
+      ],
+      "r:target": [
+        [
+          "target"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:root": "false",
       "r:target": "true"
@@ -933,6 +1075,23 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:a": [
+        [
+          "a"
+        ]
+      ],
+      "r:b": [
+        [
+          "b"
+        ]
+      ],
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:a": "true",
       "r:b": "true",
@@ -1017,6 +1176,23 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:a": [
+        [
+          "a"
+        ]
+      ],
+      "r:b": [
+        [
+          "b"
+        ]
+      ],
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:a": "true",
       "r:b": "true",
@@ -1058,6 +1234,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1087,6 +1264,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1108,6 +1286,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1129,6 +1308,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1158,6 +1338,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1194,6 +1375,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1224,6 +1406,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1245,6 +1428,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1265,6 +1449,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1285,6 +1470,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1313,6 +1499,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1342,6 +1529,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1371,6 +1559,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1392,6 +1581,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1410,6 +1600,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1434,6 +1625,13 @@
         "root"
       ]
     ],
+    "expected_rule_branch_paths": {
+      "r:root": [
+        [
+          "root"
+        ]
+      ]
+    },
     "expected_rule_statuses": {
       "r:root": "true"
     },
@@ -1458,6 +1656,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1476,6 +1675,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1511,6 +1711,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1541,6 +1742,7 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
@@ -1570,12 +1772,35 @@
     "expected_fired_exception_ids": [],
     "expected_guard_observations": [],
     "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
     "expected_rule_statuses": {},
     "expected_status": "rejected",
     "expected_trace_order": {},
     "facts": {
       "f:root": true,
       "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E40",
+    "classification": "rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_class": "invariant",
+    "expected_diagnostic_code": "KINV002",
+    "expected_fired_exception_ids": [],
+    "expected_guard_observations": [],
+    "expected_root_branch_paths": [],
+    "expected_rule_branch_paths": {},
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "expected_trace_order": {},
+    "facts": {
+      "f:first": true,
+      "f:second": true
     },
     "fragment": "AcyclicGuardedExceptions-v1",
     "reference_date": "2026-09-12",

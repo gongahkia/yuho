@@ -241,6 +241,8 @@ x = request("E38", [rule("root", ["target"]), rule("target")]); x["registry"][0]
 add("E38", "unqualified target", x, "rejected", code="KINV004", stage="validate")
 x = request("E39", [rule("root", ["target"]), rule("target")]); x["registry"][0]["exceptions"][0]["guard"].update({"kind": "arbitrary_call", "arguments": []})
 add("E39", "unsupported guard with arguments", x, "rejected", code="KCAP001", stage="capability")
+x = request("E40", [rule("root", alternatives=["first", "second"])]); x["registry"][0]["program"]["children"][1]["id"] = "p:first"
+add("E40", "duplicate executable branch provision ID", x, "rejected", code="KINV002", stage="validate")
 
 base = REQUESTS.joinpath("E01.json").read_bytes()
 REQUESTS.joinpath("E32.txt").write_bytes(b'{"\\u0070rotocol":"x",' + base[1:])
