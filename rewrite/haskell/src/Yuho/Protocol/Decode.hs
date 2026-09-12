@@ -1,5 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.Protocol.Decode (decodeRequest, inputDigest, sha256Text) where
+module Yuho.Protocol.Decode
+  ( decodeRequest, inputDigest, sha256Text, countIds, decodeSource, decodePolicy
+  , decodeFacts, decodeProvision, decodeSpan, closed, required, asText, asArray
+  , invalid
+  ) where
 
 import Crypto.Hash (Digest, SHA256(..), hashWith)
 import Data.Char (ord)
@@ -21,6 +25,8 @@ inputDigest :: J -> Text
 inputDigest root =
   let keys = case lookupField "operation" root >>= textValue of
         Just "validate" -> ["input_schema", "fragment", "source", "parser_result", "policy"]
+        _ | (lookupField "fragment" root >>= textValue) == Just "AcyclicGuardedExceptions-v1" ->
+          ["input_schema", "fragment", "sources", "registry", "root_rule", "facts", "policy"]
         _ -> ["input_schema", "fragment", "source", "program", "facts", "policy"]
       fields = traverse (\key -> (,) key <$> lookupField key root) keys
   in maybe (sha256Text BS.empty) (sha256Text . encodeJson . JObj) fields

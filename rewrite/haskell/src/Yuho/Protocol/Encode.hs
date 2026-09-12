@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.Protocol.Encode (encodeResult) where
+module Yuho.Protocol.Encode (encodeResult, diagnosticJson, spanJson, traceJson) where
 
 import qualified Data.ByteString as BS
 import Data.Text (Text)

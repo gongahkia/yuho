@@ -27,6 +27,12 @@ library
       Yuho.Kernel.Validate
       Yuho.Kernel.Evaluate
       Yuho.Kernel.Run
+      Yuho.Exception.Types
+      Yuho.Exception.Decode
+      Yuho.Exception.Validate
+      Yuho.Exception.Evaluate
+      Yuho.Exception.Encode
+      Yuho.Exception.Run
 
 executable yuho-kernel
   import: foundation
@@ -38,6 +44,7 @@ test-suite foundation-test
   import: foundation
   type: exitcode-stdio-1.0
   main-is: Main.hs
+  other-modules: ExceptionChecks
   hs-source-dirs: test
   build-depends:
       yuho-foundation ==0.1.0.0

@@ -1,0 +1,496 @@
+{
+  "E01": {
+    "branches": [
+      "true"
+    ],
+    "code": "",
+    "fired": [],
+    "label": "satisfied without exceptions",
+    "reasons": [
+      "satisfied"
+    ],
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "E02": {
+    "branches": [
+      "false"
+    ],
+    "code": "",
+    "fired": [
+      "x:root:1"
+    ],
+    "label": "true target defeats",
+    "reasons": [
+      "defeated"
+    ],
+    "rules": {
+      "r:root": "false",
+      "r:target": "true"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "E03": {
+    "branches": [
+      "true"
+    ],
+    "code": "",
+    "fired": [],
+    "label": "false target preserves",
+    "reasons": [
+      "satisfied"
+    ],
+    "rules": {
+      "r:root": "true",
+      "r:target": "false"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "E04": {
+    "branches": [
+      "false"
+    ],
+    "code": "",
+    "fired": [
+      "x:root:1",
+      "x:root:2"
+    ],
+    "label": "two true guards both fire",
+    "reasons": [
+      "defeated"
+    ],
+    "rules": {
+      "r:a": "true",
+      "r:b": "true",
+      "r:root": "false"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "E05": {
+    "branches": [
+      "true"
+    ],
+    "code": "",
+    "fired": [],
+    "label": "multi-level chain",
+    "reasons": [
+      "satisfied"
+    ],
+    "rules": {
+      "r:leaf": "true",
+      "r:mid": "false",
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "E06": {
+    "branches": [
+      "true"
+    ],
+    "code": "",
+    "fired": [],
+    "label": "diamond graph",
+    "reasons": [
+      "satisfied"
+    ],
+    "rules": {
+      "r:leaf": "true",
+      "r:left": "false",
+      "r:right": "false",
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "E07": {
+    "branches": [
+      "true"
+    ],
+    "code": "",
+    "fired": [],
+    "label": "same total facts for caller and target",
+    "reasons": [
+      "satisfied"
+    ],
+    "rules": {
+      "r:root": "true",
+      "r:target": "false"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "E08": {
+    "branches": [],
+    "code": "KINV004",
+    "fired": [],
+    "label": "guard-local fact override",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E09": {
+    "branches": [],
+    "code": "KINV005",
+    "fired": [],
+    "label": "missing target",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E10": {
+    "branches": [],
+    "code": "KINV006",
+    "fired": [],
+    "label": "self cycle",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E11": {
+    "branches": [],
+    "code": "KINV006",
+    "fired": [],
+    "label": "multi-rule cycle",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E12": {
+    "branches": [],
+    "code": "KCAP001",
+    "fired": [],
+    "label": "unsupported guard",
+    "reasons": [],
+    "rules": {},
+    "stage": "capability",
+    "status": "rejected"
+  },
+  "E13": {
+    "branches": [],
+    "code": "KINV004",
+    "fired": [],
+    "label": "priority field",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E14": {
+    "branches": [
+      "false"
+    ],
+    "code": "",
+    "fired": [],
+    "label": "unsatisfied branch skips guards",
+    "reasons": [
+      "requirements_failed"
+    ],
+    "rules": {
+      "r:root": "false"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "E15": {
+    "branches": [
+      "false",
+      "true"
+    ],
+    "code": "",
+    "fired": [
+      "x:root:1"
+    ],
+    "label": "defeated alternative plus satisfied alternative",
+    "reasons": [
+      "defeated",
+      "satisfied"
+    ],
+    "rules": {
+      "r:root": "true",
+      "r:target": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "E16": {
+    "branches": [
+      "false",
+      "false"
+    ],
+    "code": "",
+    "fired": [
+      "x:root:1",
+      "x:root:2"
+    ],
+    "label": "all alternatives defeated",
+    "reasons": [
+      "defeated",
+      "defeated"
+    ],
+    "rules": {
+      "r:root": "false",
+      "r:target": "true"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "E17": {
+    "branches": [
+      "false"
+    ],
+    "code": "",
+    "fired": [
+      "x:root:1",
+      "x:root:2"
+    ],
+    "label": "source-order exception trace",
+    "reasons": [
+      "defeated"
+    ],
+    "rules": {
+      "r:a": "true",
+      "r:b": "true",
+      "r:root": "false"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "E18": {
+    "branches": [
+      "false"
+    ],
+    "code": "",
+    "fired": [
+      "x:root:2",
+      "x:root:1"
+    ],
+    "label": "reordered trace without priority",
+    "reasons": [
+      "defeated"
+    ],
+    "rules": {
+      "r:a": "true",
+      "r:b": "true",
+      "r:root": "false"
+    },
+    "stage": "",
+    "status": "false"
+  },
+  "E19": {
+    "branches": [],
+    "code": "KINV003",
+    "fired": [],
+    "label": "exception span beyond source",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E20": {
+    "branches": [],
+    "code": "KINV004",
+    "fired": [],
+    "label": "semantic node limit",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E21": {
+    "branches": [],
+    "code": "KINV002",
+    "fired": [],
+    "label": "duplicate rule ID",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E22": {
+    "branches": [],
+    "code": "KINV002",
+    "fired": [],
+    "label": "duplicate element ID",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E23": {
+    "branches": [],
+    "code": "KINV005",
+    "fired": [],
+    "label": "unreachable missing target still rejects",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E24": {
+    "branches": [],
+    "code": "KINV006",
+    "fired": [],
+    "label": "unreachable cycle still rejects",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E25": {
+    "branches": [],
+    "code": "KCAP001",
+    "fired": [],
+    "label": "unsupported exception effect",
+    "reasons": [],
+    "rules": {},
+    "stage": "capability",
+    "status": "rejected"
+  },
+  "E26": {
+    "branches": [],
+    "code": "KINV004",
+    "fired": [],
+    "label": "unknown top-level field",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E27": {
+    "branches": [],
+    "code": "KINV004",
+    "fired": [],
+    "label": "unknown rule field",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E28": {
+    "branches": [],
+    "code": "KINV002",
+    "fired": [],
+    "label": "duplicate source ID",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E29": {
+    "branches": [],
+    "code": "KINV005",
+    "fired": [],
+    "label": "missing exception source",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E30": {
+    "branches": [],
+    "code": "KINV005",
+    "fired": [],
+    "label": "missing branch",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E31": {
+    "branches": [],
+    "code": "KINV004",
+    "fired": [],
+    "label": "target-specific fact map",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E32": {
+    "branches": [],
+    "code": "KDEC001",
+    "fired": [],
+    "label": "duplicate escaped JSON key",
+    "reasons": [],
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "E33": {
+    "branches": [],
+    "code": "KDEC001",
+    "fired": [],
+    "label": "malformed surrogate",
+    "reasons": [],
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "E34": {
+    "branches": [
+      "true"
+    ],
+    "code": "",
+    "fired": [],
+    "label": "valid non-BMP source",
+    "reasons": [
+      "satisfied"
+    ],
+    "rules": {
+      "r:root": "true"
+    },
+    "stage": "",
+    "status": "true"
+  },
+  "E35": {
+    "branches": [],
+    "code": "KDEC002",
+    "fired": [],
+    "label": "overlong line",
+    "reasons": [],
+    "rules": {},
+    "stage": "decode",
+    "status": "rejected"
+  },
+  "E36": {
+    "branches": [],
+    "code": "KINV004",
+    "fired": [],
+    "label": "mixed fragment fields",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E37": {
+    "branches": [],
+    "code": "KINV002",
+    "fired": [],
+    "label": "duplicate exception ID",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "E38": {
+    "branches": [],
+    "code": "KINV004",
+    "fired": [],
+    "label": "unqualified target",
+    "reasons": [],
+    "rules": {},
+    "stage": "validate",
+    "status": "rejected"
+  }
+}

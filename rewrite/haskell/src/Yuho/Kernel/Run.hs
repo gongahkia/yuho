@@ -4,6 +4,7 @@ module Yuho.Kernel.Run (runLine, rejectResource) where
 import qualified Data.ByteString as BS
 import Data.Text (Text)
 import Yuho.Core.Types
+import Yuho.Exception.Run (runExceptionLine)
 import Yuho.Kernel.Evaluate (evaluate)
 import Yuho.Kernel.Validate (validateInput)
 import Yuho.Protocol.Decode (decodeRequest, inputDigest, sha256Text)
@@ -18,7 +19,8 @@ runLine bytes = case decodeJson bytes of
     let requestIdentifier = maybe "?" id (lookupField "request_id" value >>= textValue)
         digest = inputDigest value
         rejected issue = encodeResult (reject requestIdentifier digest issue)
-    in case decodeRequest value of
+    in if (lookupField "fragment" value >>= textValue) == Just "AcyclicGuardedExceptions-v1"
+       then runExceptionLine value else case decodeRequest value of
       Left issue -> rejected issue
       Right request -> case validateInput (requestInput request) of
         Left issue -> rejected issue

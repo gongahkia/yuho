@@ -1,0 +1,1028 @@
+[
+  {
+    "case": "E01",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_branch_statuses": [
+      "true"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "facts": {
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E02",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [
+      "false"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [
+      "x:root:1"
+    ],
+    "expected_rule_statuses": {
+      "r:root": "false",
+      "r:target": "true"
+    },
+    "expected_status": "false",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E03",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [
+      "true"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {
+      "r:root": "true",
+      "r:target": "false"
+    },
+    "expected_status": "true",
+    "facts": {
+      "f:root": true,
+      "f:target": false
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E04",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:a"
+      },
+      {
+        "branch": "p:root",
+        "exception": "x:root:2",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:b"
+      }
+    ],
+    "expected_branch_statuses": [
+      "false"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [
+      "x:root:1",
+      "x:root:2"
+    ],
+    "expected_rule_statuses": {
+      "r:a": "true",
+      "r:b": "true",
+      "r:root": "false"
+    },
+    "expected_status": "false",
+    "facts": {
+      "f:a": true,
+      "f:b": true,
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E05",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:mid"
+      },
+      {
+        "branch": "p:mid",
+        "exception": "x:mid:1",
+        "rule": "r:mid",
+        "source_id": "src:main",
+        "target": "r:leaf"
+      }
+    ],
+    "expected_branch_statuses": [
+      "true"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {
+      "r:leaf": "true",
+      "r:mid": "false",
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "facts": {
+      "f:leaf": true,
+      "f:mid": true,
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E06",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:left"
+      },
+      {
+        "branch": "p:root",
+        "exception": "x:root:2",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:right"
+      },
+      {
+        "branch": "p:left",
+        "exception": "x:left:1",
+        "rule": "r:left",
+        "source_id": "src:main",
+        "target": "r:leaf"
+      },
+      {
+        "branch": "p:right",
+        "exception": "x:right:1",
+        "rule": "r:right",
+        "source_id": "src:main",
+        "target": "r:leaf"
+      }
+    ],
+    "expected_branch_statuses": [
+      "true"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {
+      "r:leaf": "true",
+      "r:left": "false",
+      "r:right": "false",
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "facts": {
+      "f:leaf": true,
+      "f:left": true,
+      "f:right": true,
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E07",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [
+      "true"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {
+      "r:root": "true",
+      "r:target": "false"
+    },
+    "expected_status": "true",
+    "facts": {
+      "f:root": true,
+      "f:target": false
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E08",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV004",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E09",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:missing"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV005",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E10",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:root"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV006",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E11",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:a"
+      },
+      {
+        "branch": "p:a",
+        "exception": "x:a:1",
+        "rule": "r:a",
+        "source_id": "src:main",
+        "target": "r:b"
+      },
+      {
+        "branch": "p:b",
+        "exception": "x:b:1",
+        "rule": "r:b",
+        "source_id": "src:main",
+        "target": "r:root"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV006",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:a": true,
+      "f:b": true,
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E12",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KCAP001",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E13",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV004",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E14",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [
+      "false"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {
+      "r:root": "false"
+    },
+    "expected_status": "false",
+    "facts": {
+      "f:root": false,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E15",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:first",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [
+      "false",
+      "true"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [
+      "x:root:1"
+    ],
+    "expected_rule_statuses": {
+      "r:root": "true",
+      "r:target": "true"
+    },
+    "expected_status": "true",
+    "facts": {
+      "f:first": true,
+      "f:second": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E16",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:first",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      },
+      {
+        "branch": "p:second",
+        "exception": "x:root:2",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [
+      "false",
+      "false"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [
+      "x:root:1",
+      "x:root:2"
+    ],
+    "expected_rule_statuses": {
+      "r:root": "false",
+      "r:target": "true"
+    },
+    "expected_status": "false",
+    "facts": {
+      "f:first": true,
+      "f:second": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E17",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:a"
+      },
+      {
+        "branch": "p:root",
+        "exception": "x:root:2",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:b"
+      }
+    ],
+    "expected_branch_statuses": [
+      "false"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [
+      "x:root:1",
+      "x:root:2"
+    ],
+    "expected_rule_statuses": {
+      "r:a": "true",
+      "r:b": "true",
+      "r:root": "false"
+    },
+    "expected_status": "false",
+    "facts": {
+      "f:a": true,
+      "f:b": true,
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E18",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:2",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:b"
+      },
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:a"
+      }
+    ],
+    "expected_branch_statuses": [
+      "false"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [
+      "x:root:2",
+      "x:root:1"
+    ],
+    "expected_rule_statuses": {
+      "r:a": "true",
+      "r:b": "true",
+      "r:root": "false"
+    },
+    "expected_status": "false",
+    "facts": {
+      "f:a": true,
+      "f:b": true,
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E19",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV003",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E20",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV004",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E21",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV002",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E22",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV002",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E23",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:unreachable",
+        "exception": "x:unreachable:1",
+        "rule": "r:unreachable",
+        "source_id": "src:main",
+        "target": "r:missing"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV005",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:unreachable": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E24",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:left",
+        "exception": "x:left:1",
+        "rule": "r:left",
+        "source_id": "src:main",
+        "target": "r:right"
+      },
+      {
+        "branch": "p:right",
+        "exception": "x:right:1",
+        "rule": "r:right",
+        "source_id": "src:main",
+        "target": "r:left"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV006",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:left": true,
+      "f:right": true,
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E25",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KCAP001",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E26",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV004",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E27",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV004",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E28",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV002",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E29",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:missing",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV005",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E30",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:missing",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV005",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E31",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV004",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E32",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KDEC001",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {},
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": null,
+    "root_rule": null
+  },
+  {
+    "case": "E33",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KDEC001",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {},
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": null,
+    "root_rule": null
+  },
+  {
+    "case": "E34",
+    "classification": "synthetic_semantic",
+    "dependency_edges": [],
+    "expected_branch_statuses": [
+      "true"
+    ],
+    "expected_diagnostic_code": "",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {
+      "r:root": "true"
+    },
+    "expected_status": "true",
+    "facts": {
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E35",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KDEC002",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {},
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": null,
+    "root_rule": null
+  },
+  {
+    "case": "E36",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV004",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E37",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:a"
+      },
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "r:b"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV002",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:a": true,
+      "f:b": true,
+      "f:root": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  },
+  {
+    "case": "E38",
+    "classification": "model_or_capability_rejection",
+    "dependency_edges": [
+      {
+        "branch": "p:root",
+        "exception": "x:root:1",
+        "rule": "r:root",
+        "source_id": "src:main",
+        "target": "target"
+      }
+    ],
+    "expected_branch_statuses": [],
+    "expected_diagnostic_code": "KINV004",
+    "expected_fired_exception_ids": [],
+    "expected_rule_statuses": {},
+    "expected_status": "rejected",
+    "facts": {
+      "f:root": true,
+      "f:target": true
+    },
+    "fragment": "AcyclicGuardedExceptions-v1",
+    "reference_date": "2026-09-12",
+    "root_rule": "r:root"
+  }
+]

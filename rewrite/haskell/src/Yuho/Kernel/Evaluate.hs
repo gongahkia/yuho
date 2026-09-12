@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.Kernel.Evaluate (evaluate, branches) where
+module Yuho.Kernel.Evaluate (evaluate, branches, evaluateBranch) where
 
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
