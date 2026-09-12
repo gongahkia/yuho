@@ -63,6 +63,8 @@ x = base(); x["program"]["requirements"][0]["members"][0]["unknown"] = True
 add("H18", "unknown requirement field", x)
 x = base(); x["policy"]["max_nodes"] = 1
 add("H20", "node limit before domain decoding", x)
+x = base(); x["program"]["definitions"] = True
+add("H21", "definitions marker with executable branch", x)
 
 OUT.joinpath("H11.txt").write_bytes(b"[" * 65 + b"0" + b"]" * 65 + b"\n")
 cases["H11"] = {"label": "excessive JSON nesting", "status": "rejected", "code": "KDEC001", "stage": "decode"}

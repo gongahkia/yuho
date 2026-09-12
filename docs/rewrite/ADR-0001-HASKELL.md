@@ -18,7 +18,7 @@ OCaml's measured advantages remain evidence: cold median **2.060 versus 4.713 ms
 
 Use ordinary ADTs, newtypes, explicit modules and `Either`/validation results first. Keep module exports small, effects at the subprocess boundary, and `Text` versus UTF-8 `ByteString` ownership explicit. Treat strictness as a measured choice. Strong warnings are errors. Avoid partial semantic functions and advanced type/effect frameworks unless a concrete invariant and review justify them. Use maintained JSON and SHA-256 libraries, explicit canonical encoding, duplicate-key rejection, bounded parsing, and in-process closed-shape/invariant checks. A rejected or unsupported request must never become a negative legal result. The [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md) identifies the shared protocol gaps that the production foundation must close.
 
-Haskell's type system does **not** make Yuho automatically pure, correct, legally faithful, or formally verified. Proof-tool choice is independent: existing Lean work is a bounded baseline, not a production correspondence proof, and Lean, Rocq or F* require a named reference relation and an explicit implementation bridge before such a claim. No Z3 or proof-tool work is authorised by this ADR.
+Haskell's type system does **not** make Yuho automatically pure, correct or legally faithful, nor does it supply a formal verification result. Proof-tool choice is independent: existing Lean work is a bounded baseline, not a production correspondence proof, and Lean, Rocq or F* require a named reference relation and an explicit implementation bridge before such a claim. No Z3 or proof-tool work is authorised by this ADR.
 
 ## Reversal conditions
 

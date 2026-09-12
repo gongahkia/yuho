@@ -118,5 +118,11 @@
     "label": "node limit before domain decoding",
     "stage": "validate",
     "status": "rejected"
+  },
+  "H21": {
+    "code": "KINV004",
+    "label": "definitions marker with executable branch",
+    "stage": "validate",
+    "status": "rejected"
   }
 }
