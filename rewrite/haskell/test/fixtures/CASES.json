@@ -106,5 +106,17 @@
     "label": "unknown requirement field",
     "stage": "validate",
     "status": "rejected"
+  },
+  "H19": {
+    "code": "KINV003",
+    "label": "span ends inside a UTF-8 code point",
+    "stage": "validate",
+    "status": "rejected"
+  },
+  "H20": {
+    "code": "KINV004",
+    "label": "node limit before domain decoding",
+    "stage": "validate",
+    "status": "rejected"
   }
 }

@@ -10,13 +10,13 @@ evaluate :: Request -> Either Diagnostic KernelResult
 evaluate request = case requestInput request of
   Validate _ accepted diagnostics _ ->
     Right (KernelResult (requestId request) (requestDigest request)
-      (if accepted then "true" else "rejected") "none" [] [] diagnostics)
+      (if accepted then ResultTrue else ResultRejected) NoProvision [] [] diagnostics)
   Evaluate _ root facts _ _ -> do
     evaluated <- traverse (evaluateBranch facts) (branches root [])
     let branchResults = map fst evaluated
         traces = concatMap snd evaluated
-        kind = if null branchResults then "definition_only" else "executable"
-        status = if any branchValue branchResults then "true" else "false"
+        kind = if null branchResults then DefinitionOnly else Executable
+        status = if any branchValue branchResults then ResultTrue else ResultFalse
     pure (KernelResult (requestId request) (requestDigest request)
          status kind branchResults traces [])
 

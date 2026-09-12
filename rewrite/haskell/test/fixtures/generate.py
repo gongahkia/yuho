@@ -57,8 +57,12 @@ add("H14", "unsupported constructor", x, code="KCAP001", stage="capability")
 x = base(); x["source"]["path"] = "fixtures/😀.yh"; x["source"]["text"] += "😀"
 x["source"]["sha256"] = hashlib.sha256(x["source"]["text"].encode()).hexdigest()
 add("H16", "valid non-BMP source and paired JSON surrogate", x, status="true", code="", stage="")
+x["program"]["span"].update(end=7, end_line=4, end_col=2)
+add("H19", "span ends inside a UTF-8 code point", x, code="KINV003")
 x = base(); x["program"]["requirements"][0]["members"][0]["unknown"] = True
 add("H18", "unknown requirement field", x)
+x = base(); x["policy"]["max_nodes"] = 1
+add("H20", "node limit before domain decoding", x)
 
 OUT.joinpath("H11.txt").write_bytes(b"[" * 65 + b"0" + b"]" * 65 + b"\n")
 cases["H11"] = {"label": "excessive JSON nesting", "status": "rejected", "code": "KDEC001", "stage": "decode"}

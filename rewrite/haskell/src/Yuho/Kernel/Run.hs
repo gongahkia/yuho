@@ -30,4 +30,4 @@ rejectResource = encodeResult (reject "?" (sha256Text BS.empty)
     [("reason", "request exceeds 1048576 bytes")]))
 
 reject :: Text -> Text -> Diagnostic -> KernelResult
-reject identifier digest issue = KernelResult identifier digest "rejected" "none" [] [] [issue]
+reject identifier digest issue = KernelResult identifier digest ResultRejected NoProvision [] [] [issue]

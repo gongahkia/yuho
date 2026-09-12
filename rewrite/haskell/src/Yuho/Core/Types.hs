@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.Core.Types
   ( Span(..), Diagnostic(..), Source(..), RequirementKind(..), Requirement(..)
-  , Provision(..), KernelInput(..), Request(..), Trace(..), Branch(..), KernelResult(..)
+  , Provision(..), KernelInput(..), Request(..), Trace(..), Branch(..)
+  , ResultStatus(..), ProvisionKind(..), KernelResult(..)
   , diagnostic
   ) where
 
@@ -63,8 +64,11 @@ data Branch = Branch
   , branchTraceIds :: [Text]
   } deriving (Eq, Show)
 
+data ResultStatus = ResultTrue | ResultFalse | ResultRejected deriving (Eq, Show)
+data ProvisionKind = NoProvision | Executable | DefinitionOnly deriving (Eq, Show)
+
 data KernelResult = KernelResult
-  { resultRequestId :: Text, resultDigest :: Text, resultStatus :: Text
-  , resultProvisionKind :: Text, resultBranches :: [Branch]
+  { resultRequestId :: Text, resultDigest :: Text, resultStatus :: ResultStatus
+  , resultProvisionKind :: ProvisionKind, resultBranches :: [Branch]
   , resultTrace :: [Trace], resultDiagnostics :: [Diagnostic]
   } deriving (Eq, Show)

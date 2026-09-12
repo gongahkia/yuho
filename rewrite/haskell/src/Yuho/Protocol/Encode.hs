@@ -13,8 +13,8 @@ encodeResult result = encodeJson (JObj
   , ("result_schema", JStr "yuho.kernel-result/v1")
   , ("fragment", JStr "ClosedBooleanBranches-v1")
   , ("input_digest", JStr (resultDigest result))
-  , ("status", JStr (resultStatus result))
-  , ("provision_kind", JStr (resultProvisionKind result))
+  , ("status", JStr (statusText (resultStatus result)))
+  , ("provision_kind", JStr (kindText (resultProvisionKind result)))
   , ("branches", JArr (map branchJson (resultBranches result)))
   , ("trace", JArr (map traceJson (resultTrace result)))
   , ("diagnostics", JArr (map diagnosticJson (resultDiagnostics result)))
@@ -62,6 +62,16 @@ spanJson spanValue = JObj
 boolText :: Bool -> Text
 boolText True = "true"
 boolText False = "false"
+
+statusText :: ResultStatus -> Text
+statusText ResultTrue = "true"
+statusText ResultFalse = "false"
+statusText ResultRejected = "rejected"
+
+kindText :: ProvisionKind -> Text
+kindText NoProvision = "none"
+kindText Executable = "executable"
+kindText DefinitionOnly = "definition_only"
 
 strings :: [Text] -> J
 strings = JArr . map JStr

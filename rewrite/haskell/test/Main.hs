@@ -28,9 +28,14 @@ main = do
   b06 <- readJson (frozen </> "requests/B06.json")
   b01 <- readJson (frozen </> "requests/B01.json")
   b03 <- readJson (frozen </> "requests/B03.json")
+  b05 <- readJson (frozen </> "requests/B05.json")
+  check "definition-only remains false" (let result = runLine (encodeJson b05)
+    in statusOf result == Just "false" && fieldText "provision_kind" result == Just "definition_only")
   property "recursive All/Any and complete ordered trace" (booleanProperty b06)
   property "alternative sibling branches" (alternativesProperty b01)
   property "inherited ancestor conjunction" (inheritanceProperty b03)
+  property "missing facts reject rather than evaluate false" (totalFactsProperty b06)
+  property "fact insertion order cannot change declaration trace" (factOrderProperty b06)
   property "canonical bytes independent of input object-key order" (canonicalProperty b06)
   property "out-of-source spans reject" sourceSpanProperty
   putStrLn "foundation: golden, hardening, and semantic properties passed"
@@ -94,21 +99,33 @@ property name statement = do
 
 booleanProperty :: J -> Property
 booleanProperty request = forAll arbitrary $ \(a, b, c) ->
-  let response = applyFacts request [("a", a), ("b", b), ("c", c)]
+  let response = runLine (encodeJson (applyFacts request [("a", a), ("b", b), ("c", c)]))
   in statusOf response == Just (if a && (b || c) then "true" else "false")
      && traceIds response == Just ["group:all", "a", "group:any", "b", "c"]
 
 alternativesProperty :: J -> Property
 alternativesProperty request = forAll arbitrary $ \(first, second) ->
-  let response = applyFacts request [("first", first), ("second", second)]
+  let response = runLine (encodeJson (applyFacts request [("first", first), ("second", second)]))
   in statusOf response == Just (if first || second then "true" else "false")
      && branchStatuses response == Just [first, second]
 
 inheritanceProperty :: J -> Property
 inheritanceProperty request = forAll arbitrary $ \(common, first, second) ->
-  let response = applyFacts request [("common", common), ("first", first), ("second", second)]
+  let response = runLine (encodeJson (applyFacts request [("common", common), ("first", first), ("second", second)]))
   in statusOf response == Just (if common && (first || second) then "true" else "false")
      && (length <$> traceIds response) == Just 4
+
+totalFactsProperty :: J -> Property
+totalFactsProperty request = forAll arbitrary $ \(a, c) ->
+  let response = runLine (encodeJson (applyFacts request [("a", a), ("c", c)]))
+  in statusOf response == Just "rejected" && firstCode response == Just "KINV001"
+
+factOrderProperty :: J -> Property
+factOrderProperty request = forAll arbitrary $ \(a, b, c) ->
+  let facts = [("a", a), ("b", b), ("c", c)]
+      forward = runLine (encodeJson (applyFacts request facts))
+      backward = runLine (encodeJson (applyFacts request (reverse facts)))
+  in forward == backward && traceIds forward == Just ["group:all", "a", "group:any", "b", "c"]
 
 canonicalProperty :: J -> Property
 canonicalProperty request = forAll arbitrary $ \seed ->
@@ -138,7 +155,16 @@ reorder seed value = case value of
     score = Text.foldl' (\acc character -> acc * 33 + ord character) seed
 
 statusOf :: BS.ByteString -> Maybe Text
-statusOf response = either (const Nothing) (\value -> lookupField "status" value >>= textValue) (decodeJson response)
+statusOf = fieldText "status"
+
+fieldText :: Text -> BS.ByteString -> Maybe Text
+fieldText key response = either (const Nothing) (\value -> lookupField key value >>= textValue) (decodeJson response)
+
+firstCode :: BS.ByteString -> Maybe Text
+firstCode response = do
+  result <- either (const Nothing) Just (decodeJson response)
+  JArr (first:_) <- lookupField "diagnostics" result
+  lookupField "code" first >>= textValue
 
 traceIds :: BS.ByteString -> Maybe [Text]
 traceIds response = do
