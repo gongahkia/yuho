@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.PenaltySelection.Encode
-  ( encodeSelection, encodeSelectionReject, selectionResultJson, selectionRejectJson ) where
+  ( encodeSelection, encodeSelectionReject, selectionResultJson, selectionRejectJson
+  , guardJson, warningJson ) where
 
 import qualified Data.ByteString as BS
 import Data.Text (Text)

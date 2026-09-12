@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.PenaltySelection.Validate (validatePenalties) where
+module Yuho.PenaltySelection.Validate (validatePenalties, validatePenaltyStructure) where
 
 import Control.Monad (foldM)
 import qualified Data.Map.Strict as Map
@@ -23,10 +23,16 @@ validatePenalties :: PenaltyRequest -> Either Diagnostic ValidatedPenalties
 validatePenalties request = do
   let typed = penaltyTypedRequest request
       raw = exceptionRawGraph (typedExceptionRequest typed)
-      originalIds = Set.fromList (allSemanticIds raw)
   validated <- validateTyped typed
-  _ <- foldM unique originalIds (penaltyRawDeclarations request)
-  declarations <- traverse (validateDeclaration raw) (penaltyRawDeclarations request)
+  (declarations, rootUses, indexed) <- validatePenaltyStructure raw
+    (penaltyRawDeclarations request)
+  pure (ValidatedPenalties validated declarations rootUses indexed)
+
+validatePenaltyStructure :: RawGraph a -> [RawPenalty]
+  -> Either Diagnostic ([PenaltyDeclaration], [BranchUse], Map Text [BranchUse])
+validatePenaltyStructure raw rawDeclarations = do
+  _ <- foldM unique (Set.fromList (allSemanticIds raw)) rawDeclarations
+  declarations <- traverse (validateDeclaration raw) rawDeclarations
   let byProvision = Map.fromListWith (flip (++))
         [(penaltyProvision item, [item]) | item <- declarations]
   occurrenceCount <- sum <$> traverse (countOccurrences byProvision) (rawRules raw)
@@ -38,7 +44,7 @@ validatePenalties request = do
   let indexed = Map.fromList allUses
   mapM_ (validateScope indexed) declarations
   let rootUses = Map.findWithDefault [] (rawRoot raw) indexed
-  pure (ValidatedPenalties validated declarations rootUses indexed)
+  pure (declarations, rootUses, indexed)
 
 countOccurrences :: Map Text [PenaltyDeclaration] -> RawRule -> Either Diagnostic Int
 countOccurrences declarations rule = sum <$> traverse countBranch
@@ -61,7 +67,7 @@ unique seen item
         Nothing [("id", rawPenaltyId item)])
   | otherwise = Right (Set.insert (rawPenaltyId item) seen)
 
-validateDeclaration :: RawGraph -> RawPenalty -> Either Diagnostic PenaltyDeclaration
+validateDeclaration :: RawGraph a -> RawPenalty -> Either Diagnostic PenaltyDeclaration
 validateDeclaration raw item = do
   (rule, provision) <- case [(rule, provision)
     | rule <- rawRules raw, provision <- allProvisions (rawRuleProgram rule)
@@ -136,7 +142,7 @@ pathTo wanted current
 allProvisions :: Provision -> [Provision]
 allProvisions current = current : concatMap allProvisions (provisionChildren current)
 
-allSemanticIds :: RawGraph -> [Text]
+allSemanticIds :: RawGraph a -> [Text]
 allSemanticIds raw = map fst (rawSources raw) ++ concatMap ruleIds (rawRules raw)
   where
     ruleIds rule = rawRuleId rule : map rawExceptionId (rawRuleExceptions rule)

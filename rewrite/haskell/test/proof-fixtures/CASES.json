@@ -1,0 +1,534 @@
+{
+  "PS01": {
+    "code": "",
+    "file": "requests/PS01.json",
+    "label": "proved classification",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS02": {
+    "code": "",
+    "file": "requests/PS02.json",
+    "label": "not proved is technical non-satisfaction",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS03": {
+    "code": "",
+    "file": "requests/PS03.json",
+    "label": "unresolved not determined",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS04": {
+    "code": "",
+    "file": "requests/PS04.json",
+    "label": "unresolved external decision pending",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS05": {
+    "code": "",
+    "file": "requests/PS05.json",
+    "label": "all pair proved / proved",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS06": {
+    "code": "",
+    "file": "requests/PS06.json",
+    "label": "all pair proved / not_proved",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS07": {
+    "code": "",
+    "file": "requests/PS07.json",
+    "label": "all pair proved / unresolved",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS08": {
+    "code": "",
+    "file": "requests/PS08.json",
+    "label": "all pair not_proved / proved",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS09": {
+    "code": "",
+    "file": "requests/PS09.json",
+    "label": "all pair not_proved / not_proved",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS10": {
+    "code": "",
+    "file": "requests/PS10.json",
+    "label": "all pair not_proved / unresolved",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS11": {
+    "code": "",
+    "file": "requests/PS11.json",
+    "label": "all pair unresolved / proved",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS12": {
+    "code": "",
+    "file": "requests/PS12.json",
+    "label": "all pair unresolved / not_proved",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS13": {
+    "code": "",
+    "file": "requests/PS13.json",
+    "label": "all pair unresolved / unresolved",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS14": {
+    "code": "",
+    "file": "requests/PS14.json",
+    "label": "any pair proved / proved",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS15": {
+    "code": "",
+    "file": "requests/PS15.json",
+    "label": "any pair proved / not_proved",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS16": {
+    "code": "",
+    "file": "requests/PS16.json",
+    "label": "any pair proved / unresolved",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS17": {
+    "code": "",
+    "file": "requests/PS17.json",
+    "label": "any pair not_proved / proved",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS18": {
+    "code": "",
+    "file": "requests/PS18.json",
+    "label": "any pair not_proved / not_proved",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS19": {
+    "code": "",
+    "file": "requests/PS19.json",
+    "label": "any pair not_proved / unresolved",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS20": {
+    "code": "",
+    "file": "requests/PS20.json",
+    "label": "any pair unresolved / proved",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS21": {
+    "code": "",
+    "file": "requests/PS21.json",
+    "label": "any pair unresolved / not_proved",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS22": {
+    "code": "",
+    "file": "requests/PS22.json",
+    "label": "any pair unresolved / unresolved",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS23": {
+    "code": "",
+    "file": "requests/PS23.json",
+    "label": "nested All/Any and full leaf traces",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS24": {
+    "code": "",
+    "file": "requests/PS24.json",
+    "label": "alternative branch retains satisfied inherited support",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS25": {
+    "code": "",
+    "file": "requests/PS25.json",
+    "label": "decisive All failure retains unresolved child",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS26": {
+    "code": "",
+    "file": "requests/PS26.json",
+    "label": "decisive Any success retains unresolved child",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS27": {
+    "code": "",
+    "file": "requests/PS27.json",
+    "label": "definition-only is not vacuously satisfied",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS28": {
+    "code": "",
+    "file": "requests/PS28.json",
+    "label": "satisfied exception target defeats",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS29": {
+    "code": "",
+    "file": "requests/PS29.json",
+    "label": "not-proved target does not defeat",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS30": {
+    "code": "",
+    "file": "requests/PS30.json",
+    "label": "unresolved exception target propagates",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS31": {
+    "code": "",
+    "file": "requests/PS31.json",
+    "label": "satisfied plus unresolved exceptions: all inspected",
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "PS32": {
+    "code": "",
+    "file": "requests/PS32.json",
+    "label": "unresolved ordinary requirements skip exceptions",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS33": {
+    "code": "",
+    "file": "requests/PS33.json",
+    "label": "Any satisfied while penalty guard unresolved",
+    "selected": [],
+    "status": "satisfied"
+  },
+  "PS34": {
+    "code": "",
+    "file": "requests/PS34.json",
+    "label": "Any satisfied while penalty guard not proved",
+    "selected": [],
+    "status": "satisfied"
+  },
+  "PS35": {
+    "code": "",
+    "file": "requests/PS35.json",
+    "label": "Any satisfied and penalty guard proved",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS36": {
+    "code": "",
+    "file": "requests/PS36.json",
+    "label": "matching burden and standard",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS37": {
+    "code": "KINV007",
+    "file": "requests/PS37.json",
+    "label": "mismatched burden holder",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS38": {
+    "code": "KINV007",
+    "file": "requests/PS38.json",
+    "label": "mismatched standard",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS39": {
+    "code": "KINV007",
+    "file": "requests/PS39.json",
+    "label": "missing declared burden on unresolved status",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS40": {
+    "code": "KINV007",
+    "file": "requests/PS40.json",
+    "label": "unreachable rule assignment metadata is checked",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS41": {
+    "code": "KINV001",
+    "file": "requests/PS41.json",
+    "label": "missing leaf binding",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS42": {
+    "code": "KINV004",
+    "file": "requests/PS42.json",
+    "label": "extra leaf binding",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS43": {
+    "code": "KINV001",
+    "file": "requests/PS43.json",
+    "label": "normalized names do not match exact leaf IDs",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS44": {
+    "code": "KINV010",
+    "file": "requests/PS44.json",
+    "label": "duplicate assignment IDs",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS45": {
+    "code": "KINV010",
+    "file": "requests/PS45.json",
+    "label": "status source reference missing",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS46": {
+    "code": "KINV010",
+    "file": "requests/PS46.json",
+    "label": "status source span invalid",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS47": {
+    "code": "KDEC001",
+    "file": "requests/PS47.json",
+    "label": "status source missing issuer",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS48": {
+    "code": "KDEC001",
+    "file": "requests/PS48.json",
+    "label": "status source unknown origin",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS49": {
+    "code": "KCAP001",
+    "file": "requests/PS49.json",
+    "label": "presumed is deferred capability",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS50": {
+    "code": "KCAP001",
+    "file": "requests/PS50.json",
+    "label": "rebutted is deferred capability",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS51": {
+    "code": "KDEC001",
+    "file": "requests/PS51.json",
+    "label": "unknown proof constructor",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS52": {
+    "code": "KDEC001",
+    "file": "requests/PS52.json",
+    "label": "bare status string rejected",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS53": {
+    "code": "KINV004",
+    "file": "requests/PS53.json",
+    "label": "Boolean value excluded",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS54": {
+    "code": "KINV004",
+    "file": "requests/PS54.json",
+    "label": "Boolean type excluded",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS55": {
+    "code": "KINV004",
+    "file": "requests/PS55.json",
+    "label": "confidence excluded",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS56": {
+    "code": "KINV004",
+    "file": "requests/PS56.json",
+    "label": "unknown request field",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS57": {
+    "code": "",
+    "file": "requests/PS57.json",
+    "label": "non-BMP descriptive issuer and provenance",
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "PS58": {
+    "code": "KINV009",
+    "file": "requests/PS58.json",
+    "label": "invalid term in dependency target rejects before evaluation",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS59": {
+    "code": "KINV005",
+    "file": "requests/PS59.json",
+    "label": "missing exception target remains invariant rejection",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS60": {
+    "code": "KINV006",
+    "file": "requests/PS60.json",
+    "label": "cycle remains invariant rejection",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS61": {
+    "code": "KDEC001",
+    "file": "requests/PS61.json",
+    "label": "rejected malformed status reason",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS62": {
+    "code": "",
+    "file": "requests/PS62.json",
+    "label": "unresolved provenance and metadata do not change projection",
+    "selected": [],
+    "status": "unresolved"
+  },
+  "PS63": {
+    "code": "KDEC001",
+    "file": "requests/PS63.txt",
+    "label": "duplicate JSON key in status",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS64": {
+    "code": "KDEC001",
+    "file": "requests/PS64.txt",
+    "label": "malformed JSON",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS65": {
+    "code": "KDEC002",
+    "file": "requests/PS65.txt",
+    "label": "request byte limit",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS66": {
+    "code": "KDEC001",
+    "file": "requests/PS66.txt",
+    "label": "malformed surrogate",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS67": {
+    "code": "KDEC001",
+    "file": "requests/PS67.json",
+    "label": "missing required proof status",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS68": {
+    "code": "KINV010",
+    "file": "requests/PS68.json",
+    "label": "assignment ID collides with leaf identity",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS69": {
+    "code": "KDEC001",
+    "file": "requests/PS69.json",
+    "label": "empty descriptive issuer",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS70": {
+    "code": "KINV004",
+    "file": "requests/PS70.json",
+    "label": "legacy evidential status excluded",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS71": {
+    "code": "KINV004",
+    "file": "requests/PS71.json",
+    "label": "unknown status-source field",
+    "selected": [],
+    "status": "rejected"
+  },
+  "PS72": {
+    "code": "KINV010",
+    "file": "requests/PS72.json",
+    "label": "inconsistent assignment byte and display positions",
+    "selected": [],
+    "status": "rejected"
+  }
+}

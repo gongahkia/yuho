@@ -24,22 +24,22 @@ data ResolvedException = ResolvedException RawException RuleKey deriving (Eq, Sh
 data ResolvedRule = ResolvedRule
   { resolvedRaw :: RawRule, resolvedBranches :: Map Text [ResolvedException]
   } deriving (Eq, Show)
-data ValidatedGraph = ValidatedGraph
+data ValidatedGraph a = ValidatedGraph
   { graphRoot :: RuleKey, graphOrder :: [RuleKey]
-  , graphRegistry :: Map RuleKey ResolvedRule, graphSharedFacts :: Map Text Bool
+  , graphRegistry :: Map RuleKey ResolvedRule, graphSharedFacts :: Map Text a
   , graphDate :: Day, graphMaxNodes :: Int
   } deriving (Eq, Show)
 
-rootKey :: ValidatedGraph -> RuleKey
+rootKey :: ValidatedGraph a -> RuleKey
 rootKey = graphRoot
 
 ruleKeyText :: RuleKey -> Text
 ruleKeyText (RuleKey value) = value
 
-orderedKeys :: ValidatedGraph -> [RuleKey]
+orderedKeys :: ValidatedGraph a -> [RuleKey]
 orderedKeys = graphOrder
 
-ruleFor :: ValidatedGraph -> RuleKey -> Maybe ResolvedRule
+ruleFor :: ValidatedGraph a -> RuleKey -> Maybe ResolvedRule
 ruleFor graph key = Map.lookup key (graphRegistry graph)
 
 ruleProgram :: ResolvedRule -> Provision
@@ -57,16 +57,16 @@ exceptionDetails (ResolvedException details _) = details
 exceptionTarget :: ResolvedException -> RuleKey
 exceptionTarget (ResolvedException _ target) = target
 
-sharedFacts :: ValidatedGraph -> Map Text Bool
+sharedFacts :: ValidatedGraph a -> Map Text a
 sharedFacts = graphSharedFacts
 
-sharedDate :: ValidatedGraph -> Day
+sharedDate :: ValidatedGraph a -> Day
 sharedDate = graphDate
 
-sharedMaxNodes :: ValidatedGraph -> Int
+sharedMaxNodes :: ValidatedGraph a -> Int
 sharedMaxNodes = graphMaxNodes
 
-validateGraph :: RawGraph -> Either Diagnostic ValidatedGraph
+validateGraph :: RawGraph a -> Either Diagnostic (ValidatedGraph a)
 validateGraph raw = do
   let rules = rawRules raw
       identifiers = [(identifier, "/sources/id", Nothing) | (identifier, _) <- rawSources raw]
@@ -146,7 +146,7 @@ requireRule rules pointer identifier
       [rule] -> Right rule
       _ -> Left (diagnostic "KINV005" "validate" pointer Nothing [("target", identifier)])
 
-validateRule :: RawGraph -> RawRule -> Either Diagnostic ()
+validateRule :: RawGraph a -> RawRule -> Either Diagnostic ()
 validateRule graph rule = do
   let executable = branches (rawRuleProgram rule) []
       branchIds = map (provisionId . fst) executable
@@ -158,7 +158,7 @@ validateRule graph rule = do
     hasDefinition provision = provisionDefinitions provision ||
       any hasDefinition (provisionChildren provision)
 
-validateException :: RawGraph -> RawRule -> [Text] -> [(Provision, [Requirement])]
+validateException :: RawGraph a -> RawRule -> [Text] -> [(Provision, [Requirement])]
   -> RawException -> Either Diagnostic ()
 validateException graph rule branchIds executable ex = do
   let pointer = rawExceptionPointer ex
@@ -176,7 +176,7 @@ validateException graph rule branchIds executable ex = do
   _ <- requireRule (rawRules graph) (pointer <> "/guard/target") (rawExceptionTarget ex)
   pure ()
 
-validateAcyclic :: ValidatedGraph -> Either Diagnostic ()
+validateAcyclic :: ValidatedGraph a -> Either Diagnostic ()
 validateAcyclic graph = do
   _ <- foldM (visit Set.empty) Set.empty (graphOrder graph)
   pure ()

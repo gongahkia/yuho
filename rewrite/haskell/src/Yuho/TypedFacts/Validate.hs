@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.TypedFacts.Validate (ValidatedTyped, validateTyped, typedGraph, typedRequest) where
+module Yuho.TypedFacts.Validate (ValidatedTyped, validateTyped, typedGraph, typedRequest
+  , validateBindingMetadata) where
 
 import qualified Data.Map.Strict as Map
 import Data.Text (Text)
@@ -8,9 +9,9 @@ import Yuho.Exception.Types
 import Yuho.Exception.Validate (ValidatedGraph, validateGraph)
 import Yuho.TypedFacts.Types
 
-data ValidatedTyped = ValidatedTyped TypedRequest ValidatedGraph
+data ValidatedTyped = ValidatedTyped TypedRequest (ValidatedGraph Bool)
 
-typedGraph :: ValidatedTyped -> ValidatedGraph
+typedGraph :: ValidatedTyped -> ValidatedGraph Bool
 typedGraph (ValidatedTyped _ graph) = graph
 
 typedRequest :: ValidatedTyped -> TypedRequest
@@ -20,26 +21,30 @@ validateTyped :: TypedRequest -> Either Diagnostic ValidatedTyped
 validateTyped request = do
   let raw = exceptionRawGraph (typedExceptionRequest request)
   graph <- validateGraph raw
-  mapM_ (validateRule request raw) (rawRules raw)
+  validateBindingMetadata raw (typedDeclarations request)
+    (typedBindings request) bindingMetadata
   pure (ValidatedTyped request graph)
 
-validateRule :: TypedRequest -> RawGraph -> RawRule -> Either Diagnostic ()
-validateRule request raw rule = mapM_ check (leaves (rawRuleProgram rule))
+validateBindingMetadata :: RawGraph a -> Map.Map Text Metadata -> Map.Map Text b
+  -> (b -> Metadata) -> Either Diagnostic ()
+validateBindingMetadata raw declarations bindings metadataOf =
+  mapM_ validateRule (rawRules raw)
   where
-    check leaf = case Map.lookup (requirementId leaf) (typedBindings request) of
+    validateRule rule = mapM_ (check rule) (leaves (rawRuleProgram rule))
+    check rule leaf = case Map.lookup (requirementId leaf) bindings of
       Nothing -> Left (diagnostic "KINV001" "validate"
         ("/facts/" <> requirementId leaf) (Just (requirementSpan leaf)) [])
-      Just binding -> case Map.lookup (requirementId leaf) (typedDeclarations request) of
+      Just binding -> case Map.lookup (requirementId leaf) declarations of
         Nothing -> Right ()
         Just declaration -> do
           compareField "burden" burdenText (metadataBurden declaration)
-            (metadataBurden (bindingMetadata binding)) leaf
+            (metadataBurden (metadataOf binding)) leaf rule
           compareField "standard_of_proof" standardText (metadataStandard declaration)
-            (metadataStandard (bindingMetadata binding)) leaf
+            (metadataStandard (metadataOf binding)) leaf rule
     compareField :: Eq a => Text -> (a -> Text) -> Maybe a -> Maybe a
-      -> Requirement -> Either Diagnostic ()
-    compareField _ _ Nothing _ _ = Right ()
-    compareField field showValue (Just expected) supplied leaf
+      -> Requirement -> RawRule -> Either Diagnostic ()
+    compareField _ _ Nothing _ _ _ = Right ()
+    compareField field showValue (Just expected) supplied leaf rule
       | supplied == Just expected = Right ()
       | otherwise = Left (diagnostic "KINV007" "validate"
           (requirementPointer leaf <> "/declared_metadata/" <> field)

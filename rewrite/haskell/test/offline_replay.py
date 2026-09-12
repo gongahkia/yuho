@@ -62,7 +62,20 @@ def main() -> None:
             if name == "PT03.json":
                 assert result["selected_penalties"][0]["term"]["minimum"] == {
                     "kind": "specified", "value": "1.20"}
-    print("clean offline build/install and T17/T49/GP13/GP39/PT03/PT66 installed launches passed")
+        fixtures = WORKSPACE / "test/proof-fixtures/requests"
+        for name, status, code in (("PS31.json", "not_satisfied", ""),
+                                   ("PS33.json", "satisfied", ""),
+                                   ("PS45.json", "rejected", "KINV010"),
+                                   ("PS65.txt", "rejected", "KDEC002")):
+            completed = subprocess.run([str(binary)], input=(fixtures / name).read_bytes(),
+                                       capture_output=True, check=True, timeout=30)
+            assert not completed.stderr, completed.stderr
+            result = json.loads(completed.stdout)
+            assert result["status"] == status, name
+            assert (result["diagnostics"][0]["code"] if result["diagnostics"] else "") == code
+            if name == "PS33.json":
+                assert result["penalty_selection_trace"][0]["result"] == "guard_unresolved"
+    print("clean offline build/install and T17/T49/GP13/GP39/PT03/PT66/PS31/PS33/PS45/PS65 installed launches passed")
 
 
 if __name__ == "__main__":

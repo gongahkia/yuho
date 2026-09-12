@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.Exception.Decode (decodeExceptionRequest) where
+module Yuho.Exception.Decode (decodeExceptionRequest, decodeGraphWith) where
 
 import qualified Data.Map.Strict as Map
+import Data.Map.Strict (Map)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Yuho.Core.Types (Diagnostic, Source, diagnostic)
@@ -14,6 +15,12 @@ import Yuho.Protocol.Json (J(..))
 
 decodeExceptionRequest :: J -> Either Diagnostic ExceptionRequest
 decodeExceptionRequest root = do
+  (requestId, factsGraph) <- decodeGraphWith (\_ -> decodeFacts) root
+  pure (ExceptionRequest requestId (inputDigest root) factsGraph)
+
+decodeGraphWith :: ([(Text, Source)] -> J -> Either Diagnostic (Map Text a)) -> J
+  -> Either Diagnostic (Text, RawGraph a)
+decodeGraphWith decodeBindings root = do
   protocol <- required asText "" "protocol" root
   if protocol == "yuho.kernel-protocol/v1" then pure () else
     Left (diagnostic "KPROT001" "protocol" "/protocol" Nothing [("received", protocol)])
@@ -39,9 +46,8 @@ decodeExceptionRequest root = do
     Left (diagnostic "KINV004" "validate" "/registry" Nothing []) else pure ()
   rules <- traverse (uncurry (decodeRule sources)) (zip [0 :: Int ..] registry)
   rootId <- required asText "" "root_rule" root
-  facts <- required (\_ -> decodeFacts) "" "facts" root
-  pure (ExceptionRequest requestId (inputDigest root)
-    (RawGraph rootId sources rules facts date maxNodes))
+  facts <- required (\_ -> decodeBindings sources) "" "facts" root
+  pure (requestId, RawGraph rootId sources rules facts date maxNodes)
 
 validRequestId :: Text -> Bool
 validRequestId value = case Text.uncons value of

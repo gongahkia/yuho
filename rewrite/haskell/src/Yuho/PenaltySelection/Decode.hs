@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.PenaltySelection.Decode (decodePenaltyRequest) where
+module Yuho.PenaltySelection.Decode (decodePenaltyRequest, extractPenalties) where
 
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -21,16 +21,20 @@ decodePenaltyRequest root = do
     then Left (diagnostic "KINV004" "validate" "/registry" Nothing
       [("reason", "semantic node limit exceeded")])
     else pure ()
-  values <- required asArray "" "registry" root
-  (transformedRules, declarations) <- unzip <$> traverse transformRule
-    (zip [0 :: Int ..] values)
-  let allDeclarations = concat declarations
-  transformed <- replace root
-    [("fragment", JStr "TypedBooleanFacts-v1"), ("registry", JArr transformedRules)]
-  typed <- decodeTypedRequest transformed
+  (transformed, allDeclarations) <- extractPenalties root
+  typedRoot <- replace transformed [("fragment", JStr "TypedBooleanFacts-v1")]
+  typed <- decodeTypedRequest typedRoot
   let original = typedExceptionRequest typed
       withDigest = original {exceptionRequestDigest = inputDigest root}
   pure (PenaltyRequest typed {typedExceptionRequest = withDigest} allDeclarations)
+
+extractPenalties :: J -> Either Diagnostic (J, [RawPenalty])
+extractPenalties root = do
+  values <- required asArray "" "registry" root
+  (transformedRules, declarations) <- unzip <$> traverse transformRule
+    (zip [0 :: Int ..] values)
+  transformed <- replace root [("registry", JArr transformedRules)]
+  pure (transformed, concat declarations)
 
 countPenaltyIds :: J -> Int
 countPenaltyIds value = case value of

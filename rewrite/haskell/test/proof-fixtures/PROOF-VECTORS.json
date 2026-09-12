@@ -1,0 +1,4557 @@
+{
+  "PS01": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:1:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_selection_trace": [
+      [
+        "pen:root:1",
+        "p:root",
+        "selected"
+      ]
+    ],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS02": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:2:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "not_satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS03": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:3:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS04": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "external_decision_pending"
+        },
+        "status_source": {
+          "assignment_id": "assignment:4:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS05": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:5:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:5:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS06": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:6:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:6:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "not_satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS07": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:7:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:7:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "unresolved"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS08": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:8:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:8:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "not_satisfied",
+      "f:second": "satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS09": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:9:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:9:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "not_satisfied",
+      "f:second": "not_satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS10": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:10:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:10:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "not_satisfied",
+      "f:second": "unresolved"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS11": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:11:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:11:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved",
+      "f:second": "satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS12": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:12:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:12:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved",
+      "f:second": "not_satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS13": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:13:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:13:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved",
+      "f:second": "unresolved"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS14": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:14:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:14:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS15": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:15:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:15:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "not_satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS16": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:16:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:16:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "unresolved"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS17": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:17:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:17:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "not_satisfied",
+      "f:second": "satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS18": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:18:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:18:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "not_satisfied",
+      "f:second": "not_satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS19": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:19:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:19:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "not_satisfied",
+      "f:second": "unresolved"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS20": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:20:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:20:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved",
+      "f:second": "satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS21": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:21:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:21:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved",
+      "f:second": "not_satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS22": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:22:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:22:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved",
+      "f:second": "unresolved"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS23": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:23:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:23:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:third": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:23:10",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:all",
+          "group:any",
+          "f:root",
+          "f:second",
+          "f:third"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "unresolved",
+      "f:third": "satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:all",
+        "group:any",
+        0
+      ],
+      [
+        "group:all",
+        "f:third",
+        1
+      ],
+      [
+        "group:any",
+        "f:root",
+        0
+      ],
+      [
+        "group:any",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS24": {
+    "bindings": {
+      "f:first": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:24:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:24:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:24:2",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_branch_statuses": [
+      [
+        "p:first",
+        "satisfied"
+      ],
+      [
+        "p:second",
+        "unresolved"
+      ]
+    ],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:first": [
+          "f:first"
+        ],
+        "p:second": [
+          "f:second"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:first": "satisfied",
+      "f:second": "unresolved",
+      "f:target": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:root:1"
+    ]
+  },
+  "PS25": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:25:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:25:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "not_satisfied",
+      "f:second": "unresolved"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS26": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:26:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:26:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "unresolved"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS27": {
+    "bindings": {},
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {}
+    },
+    "invalid_classification": "",
+    "projection": {},
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS28": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:28:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:28:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [
+      [
+        "r:root",
+        "r:target",
+        "x:root:1"
+      ]
+    ],
+    "expected_exception_statuses": [
+      "satisfied"
+    ],
+    "expected_selection_trace": [
+      [
+        "pen:root:1",
+        "p:root",
+        "branch_exception_defeated"
+      ]
+    ],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:target": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:root:1"
+    ]
+  },
+  "PS29": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:29:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:29:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [
+      [
+        "r:root",
+        "r:target",
+        "x:root:1"
+      ]
+    ],
+    "expected_exception_statuses": [
+      "not_satisfied"
+    ],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:target": "not_satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:root:1"
+    ]
+  },
+  "PS30": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:30:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:30:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [
+      [
+        "r:root",
+        "r:target",
+        "x:root:1"
+      ]
+    ],
+    "expected_exception_statuses": [
+      "unresolved"
+    ],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:target": "unresolved"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:root:1"
+    ]
+  },
+  "PS31": {
+    "bindings": {
+      "f:pending": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:31:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:31:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:31:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [
+      [
+        "r:root",
+        "r:target",
+        "x:root:1"
+      ],
+      [
+        "r:root",
+        "r:pending",
+        "x:root:2"
+      ]
+    ],
+    "expected_exception_statuses": [
+      "satisfied",
+      "unresolved"
+    ],
+    "expected_status": "not_satisfied",
+    "expected_trace_order": {
+      "r:pending": {
+        "p:pending": [
+          "f:pending"
+        ]
+      },
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:pending": "unresolved",
+      "f:root": "satisfied",
+      "f:target": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:root:1"
+    ]
+  },
+  "PS32": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:32:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:32:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [
+      [
+        "r:root",
+        "r:target",
+        "x:root:1"
+      ]
+    ],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved",
+      "f:target": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:root:1"
+    ]
+  },
+  "PS33": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:33:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "status_source": {
+          "assignment_id": "assignment:33:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_selection_trace": [
+      [
+        "pen:root:1",
+        "p:root",
+        "guard_unresolved"
+      ]
+    ],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "unresolved"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS34": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:34:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:34:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "not_satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS35": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:35:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:35:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS36": {
+    "bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        },
+        "proof_status": {
+          "kind": "proved"
+        },
+        "standard_of_proof": "beyond_reasonable_doubt",
+        "status_source": {
+          "assignment_id": "assignment:36:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS37": {
+    "bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "defence",
+          "kind": "legal"
+        },
+        "proof_status": {
+          "kind": "proved"
+        },
+        "standard_of_proof": "beyond_reasonable_doubt",
+        "status_source": {
+          "assignment_id": "assignment:37:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV007",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS38": {
+    "bindings": {
+      "f:root": {
+        "burden": {
+          "holder": "prosecution",
+          "kind": "legal"
+        },
+        "proof_status": {
+          "kind": "proved"
+        },
+        "standard_of_proof": "balance_of_probabilities",
+        "status_source": {
+          "assignment_id": "assignment:38:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV007",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS39": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "standard_of_proof": "beyond_reasonable_doubt",
+        "status_source": {
+          "assignment_id": "assignment:39:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV007",
+    "projection": {
+      "f:root": "unresolved"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS40": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:40:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "standard_of_proof": "balance_of_probabilities",
+        "status_source": {
+          "assignment_id": "assignment:40:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:target"
+    ],
+    "dependency_edges": [
+      [
+        "r:root",
+        "r:target",
+        "x:root:1"
+      ]
+    ],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "KINV007",
+    "projection": {
+      "f:root": "satisfied",
+      "f:target": "not_satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:target"
+    ]
+  },
+  "PS41": {
+    "bindings": {},
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV001",
+    "projection": {},
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS42": {
+    "bindings": {
+      "f:extra": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:42:9",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:42:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV004",
+    "projection": {
+      "f:extra": "satisfied",
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS43": {
+    "bindings": {
+      "f_root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:43:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV001",
+    "projection": {
+      "f_root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS44": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:44:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:second": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:44:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "group:pair",
+          "f:root",
+          "f:second"
+        ]
+      }
+    },
+    "invalid_classification": "KINV010",
+    "projection": {
+      "f:root": "satisfied",
+      "f:second": "satisfied"
+    },
+    "requirement_edges": [
+      [
+        "group:pair",
+        "f:root",
+        0
+      ],
+      [
+        "group:pair",
+        "f:second",
+        1
+      ]
+    ],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS45": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:45:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:missing",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV010",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS46": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:46:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 999,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV010",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS47": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:47:0",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KDEC001",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS48": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:48:0",
+          "issuer_label": "synthetic classification",
+          "origin": "court_verified",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KDEC001",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS49": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "presumed"
+        },
+        "status_source": {
+          "assignment_id": "assignment:49:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KCAP001",
+    "projection": {
+      "f:root": null
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS50": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "rebutted"
+        },
+        "status_source": {
+          "assignment_id": "assignment:50:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KCAP001",
+    "projection": {
+      "f:root": null
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS51": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unknown"
+        },
+        "status_source": {
+          "assignment_id": "assignment:51:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KDEC001",
+    "projection": {
+      "f:root": null
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS52": {
+    "bindings": {
+      "f:root": {
+        "proof_status": "proved",
+        "status_source": {
+          "assignment_id": "assignment:52:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KDEC001",
+    "projection": {},
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS53": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:53:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        },
+        "value": true
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV004",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS54": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:54:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        },
+        "type": "bool"
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV004",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS55": {
+    "bindings": {
+      "f:root": {
+        "confidence": "0.9",
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:55:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV004",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS56": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:56:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV004",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS57": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "provenance": {
+          "source_label": "label 📜"
+        },
+        "status_source": {
+          "assignment_id": "assignment:57:0",
+          "issuer_label": "synthetic 📜",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "satisfied",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [
+      "pen:root:1"
+    ],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS58": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:58:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "not_proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:58:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:target"
+    ],
+    "dependency_edges": [
+      [
+        "r:root",
+        "r:target",
+        "x:root:1"
+      ]
+    ],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "KINV009",
+    "projection": {
+      "f:root": "satisfied",
+      "f:target": "not_satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:target"
+    ]
+  },
+  "PS59": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:59:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:59:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [
+      [
+        "r:root",
+        "r:missing",
+        "x:root:1"
+      ]
+    ],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "KINV005",
+    "projection": {
+      "f:root": "satisfied",
+      "f:target": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:root:1"
+    ]
+  },
+  "PS60": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:60:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      },
+      "f:target": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:60:1",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [
+      [
+        "r:root",
+        "r:target",
+        "x:root:1"
+      ],
+      [
+        "r:target",
+        "r:root",
+        "x:target:1"
+      ]
+    ],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      },
+      "r:target": {
+        "p:target": [
+          "f:target"
+        ]
+      }
+    },
+    "invalid_classification": "KINV006",
+    "projection": {
+      "f:root": "satisfied",
+      "f:target": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:root:1"
+    ]
+  },
+  "PS61": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "missing_target"
+        },
+        "status_source": {
+          "assignment_id": "assignment:61:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KDEC001",
+    "projection": {
+      "f:root": "unresolved"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS62": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "unresolved",
+          "reason": "not_determined"
+        },
+        "provenance": {
+          "jurisdiction": "SG",
+          "recorded_date": "2024-02-29"
+        },
+        "status_source": {
+          "assignment_id": "assignment:62:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "unresolved",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "",
+    "projection": {
+      "f:root": "unresolved"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS63": {
+    "bindings": {},
+    "declaration_order": [],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {},
+    "invalid_classification": "KDEC001",
+    "projection": {},
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [],
+    "term_ids": []
+  },
+  "PS64": {
+    "bindings": {},
+    "declaration_order": [],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {},
+    "invalid_classification": "KDEC001",
+    "projection": {},
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [],
+    "term_ids": []
+  },
+  "PS65": {
+    "bindings": {},
+    "declaration_order": [],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {},
+    "invalid_classification": "KDEC002",
+    "projection": {},
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [],
+    "term_ids": []
+  },
+  "PS66": {
+    "bindings": {},
+    "declaration_order": [],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {},
+    "invalid_classification": "KDEC001",
+    "projection": {},
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [],
+    "term_ids": []
+  },
+  "PS67": {
+    "bindings": {
+      "f:root": {
+        "status_source": {
+          "assignment_id": "assignment:67:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KDEC001",
+    "projection": {},
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS68": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "f:root",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV010",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS69": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:69:0",
+          "issuer_label": "",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KDEC001",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS70": {
+    "bindings": {
+      "f:root": {
+        "evidential_status": "proved",
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:70:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV004",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS71": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:71:0",
+          "authority": "unverified",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 1,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 0,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV004",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  },
+  "PS72": {
+    "bindings": {
+      "f:root": {
+        "proof_status": {
+          "kind": "proved"
+        },
+        "status_source": {
+          "assignment_id": "assignment:72:0",
+          "issuer_label": "synthetic classification",
+          "origin": "synthetic_fixture",
+          "source_id": "src:main",
+          "span": {
+            "end": 2,
+            "end_col": 2,
+            "end_line": 1,
+            "start": 1,
+            "start_col": 1,
+            "start_line": 1
+          }
+        }
+      }
+    },
+    "declaration_order": [
+      "pen:root:1"
+    ],
+    "dependency_edges": [],
+    "expected_status": "rejected",
+    "expected_trace_order": {
+      "r:root": {
+        "p:root": [
+          "f:root"
+        ]
+      }
+    },
+    "invalid_classification": "KINV010",
+    "projection": {
+      "f:root": "satisfied"
+    },
+    "requirement_edges": [],
+    "selected_ids": [],
+    "source_order": [
+      "src:main"
+    ],
+    "term_ids": [
+      "term:fixture"
+    ]
+  }
+}

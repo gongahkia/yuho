@@ -22,13 +22,13 @@ aggregateBranches values
   | UnresolvedValue `elem` values = UnresolvedValue
   | otherwise = FalseValue
 
-evaluateGraph :: ExceptionRequest -> ValidatedGraph -> Either Diagnostic ExceptionResult
+evaluateGraph :: ExceptionRequest -> ValidatedGraph Bool -> Either Diagnostic ExceptionResult
 evaluateGraph = evaluateWithMemo True
 
-evaluateGraphReference :: ExceptionRequest -> ValidatedGraph -> Either Diagnostic ExceptionResult
+evaluateGraphReference :: ExceptionRequest -> ValidatedGraph Bool -> Either Diagnostic ExceptionResult
 evaluateGraphReference = evaluateWithMemo False
 
-evaluateWithMemo :: Bool -> ExceptionRequest -> ValidatedGraph
+evaluateWithMemo :: Bool -> ExceptionRequest -> ValidatedGraph Bool
   -> Either Diagnostic ExceptionResult
 evaluateWithMemo memoize request graph = do
   (rootResult, results) <- evaluateRule memoize graph (rootKey graph) Map.empty
@@ -36,7 +36,7 @@ evaluateWithMemo memoize request graph = do
   pure (ExceptionResult (exceptionRequestId request) (exceptionRequestDigest request)
     (ruleKeyText (rootKey graph)) (Judgment (ruleResultStatus rootResult)) ordered [])
 
-evaluateRule :: Bool -> ValidatedGraph -> RuleKey -> Map RuleKey RuleResult
+evaluateRule :: Bool -> ValidatedGraph Bool -> RuleKey -> Map RuleKey RuleResult
   -> Either Diagnostic (RuleResult, Map RuleKey RuleResult)
 evaluateRule memoize graph key prior =
   case if memoize then Map.lookup key prior else Nothing of
@@ -57,7 +57,7 @@ evaluateRule memoize graph key prior =
               status kind branchResults traces
         Right (result, Map.insert key result finalMemo)
 
-evaluateOne :: Bool -> ValidatedGraph -> ResolvedRule
+evaluateOne :: Bool -> ValidatedGraph Bool -> ResolvedRule
   -> ([(ExceptionBranch, [Trace])], Map RuleKey RuleResult)
   -> (Provision, [Requirement])
   -> Either Diagnostic ([(ExceptionBranch, [Trace])], Map RuleKey RuleResult)
@@ -77,7 +77,7 @@ evaluateOne memoize graph rule (reversed, prior) (provision, requirements) = do
           status reason (branchTraceIds ordinary) ordered fired
     Right ((branch, traces) : reversed, nextMemo)
 
-evaluateGuard :: Bool -> ValidatedGraph
+evaluateGuard :: Bool -> ValidatedGraph Bool
   -> ([ExceptionTrace], Map RuleKey RuleResult) -> ResolvedException
   -> Either Diagnostic ([ExceptionTrace], Map RuleKey RuleResult)
 evaluateGuard memoize graph (reversed, prior) resolved = do

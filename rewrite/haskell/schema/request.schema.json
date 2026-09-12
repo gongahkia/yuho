@@ -1288,6 +1288,118 @@
         "exceptions"
       ],
       "type": "object"
+    },
+    "status_binding": {
+      "additionalProperties": false,
+      "properties": {
+        "burden": {
+          "$ref": "#/$defs/typed_burden"
+        },
+        "proof_status": {
+          "$ref": "#/$defs/supplied_status"
+        },
+        "provenance": {
+          "$ref": "#/$defs/typed_provenance"
+        },
+        "standard_of_proof": {
+          "enum": [
+            "beyond_reasonable_doubt",
+            "balance_of_probabilities"
+          ]
+        },
+        "status_source": {
+          "$ref": "#/$defs/status_source"
+        }
+      },
+      "required": [
+        "proof_status",
+        "status_source"
+      ],
+      "type": "object"
+    },
+    "status_source": {
+      "additionalProperties": false,
+      "properties": {
+        "assignment_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "issuer_label": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "external_assertion",
+            "synthetic_fixture"
+          ]
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "assignment_id",
+        "source_id",
+        "span",
+        "origin",
+        "issuer_label"
+      ],
+      "type": "object"
+    },
+    "supplied_status": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "proved"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "not_proved"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "unresolved"
+            },
+            "reason": {
+              "enum": [
+                "not_determined",
+                "external_decision_pending"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "reason"
+          ],
+          "type": "object"
+        }
+      ]
     }
   },
   "$id": "https://yuho-lang.github.io/schemas/kernel-input-v1-production.json",
@@ -1609,6 +1721,67 @@
         },
         "fragment": {
           "const": "PenaltyTerms-v1"
+        },
+        "input_schema": {
+          "const": "yuho.kernel-input/v1"
+        },
+        "operation": {
+          "const": "evaluate"
+        },
+        "policy": {
+          "$ref": "#/$defs/policy"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "registry": {
+          "items": {
+            "$ref": "#/$defs/term_penalty_rule"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "request_id": {
+          "pattern": "^[A-Z][0-9]{2}$",
+          "type": "string"
+        },
+        "root_rule": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/named_source"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "operation",
+        "input_schema",
+        "fragment",
+        "sources",
+        "policy",
+        "registry",
+        "root_rule",
+        "facts"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "facts": {
+          "additionalProperties": {
+            "$ref": "#/$defs/status_binding"
+          },
+          "type": "object"
+        },
+        "fragment": {
+          "const": "SuppliedProofStatus-v1"
         },
         "input_schema": {
           "const": "yuho.kernel-input/v1"

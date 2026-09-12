@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.PenaltySelection.Select (selectPenalties, overlapPaths) where
+module Yuho.PenaltySelection.Select (selectPenalties, overlapPaths, makeWarnings) where
 
 import Data.List (nub)
 import Data.Maybe (mapMaybe)

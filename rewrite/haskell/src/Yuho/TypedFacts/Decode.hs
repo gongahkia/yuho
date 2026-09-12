@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.TypedFacts.Decode (decodeTypedRequest) where
+module Yuho.TypedFacts.Decode (decodeTypedRequest, decodeMetadataFields
+  , decodeProvenance, stripDeclarations) where
 
 import Data.Char (ord)
 import qualified Data.ByteString as BS
@@ -28,7 +29,7 @@ decodeTypedRequest root = do
     then Left (diagnostic "KINV004" "validate" "/registry" Nothing [])
     else pure ()
   bindings <- required (\_ -> decodeBindings) "" "facts" root
-  (registry, declarations) <- unzip <$> traverse transformRule (zip [0 :: Int ..] registryValues)
+  (registry, declarations) <- stripDeclarations registryValues
   transformed <- replaceFields root
     [("fragment", JStr "AcyclicGuardedExceptions-v1")
     ,("facts", JObj [(key, JBool (bindingValue binding)) | (key, binding) <- Map.toList bindings])
@@ -36,6 +37,10 @@ decodeTypedRequest root = do
   request <- decodeExceptionRequest transformed
   pure (TypedRequest request {exceptionRequestDigest = inputDigest root}
     bindings (Map.fromList (concat declarations)))
+
+stripDeclarations :: [J] -> Either Diagnostic ([J], [[(Text, Metadata)]])
+stripDeclarations registryValues = unzip <$> traverse transformRule
+  (zip [0 :: Int ..] registryValues)
 
 decodeBindings :: J -> Either Diagnostic (Map.Map Text Binding)
 decodeBindings value = do

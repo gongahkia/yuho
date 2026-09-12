@@ -1070,6 +1070,564 @@
           ]
         }
       ]
+    },
+    "proof_branch": {
+      "additionalProperties": false,
+      "properties": {
+        "applicable_exceptions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "exceptions": {
+          "items": {
+            "$ref": "#/$defs/proof_exception_trace"
+          },
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "reason": {
+          "enum": [
+            "satisfied",
+            "requirements_not_satisfied",
+            "requirements_unresolved",
+            "defeated",
+            "exception_unresolved"
+          ]
+        },
+        "status": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "trace_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "status",
+        "reason",
+        "trace_ids",
+        "exceptions",
+        "applicable_exceptions"
+      ],
+      "type": "object"
+    },
+    "proof_exception_trace": {
+      "additionalProperties": false,
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "guard_status": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "target_rule": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "target_status": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "span",
+        "target_rule",
+        "target_status",
+        "guard_status",
+        "applicable"
+      ],
+      "type": "object"
+    },
+    "proof_observation": {
+      "additionalProperties": false,
+      "properties": {
+        "branch_id": {
+          "type": "string"
+        },
+        "branch_path": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "burden_check": {
+          "enum": [
+            "matched",
+            "not_declared"
+          ]
+        },
+        "leaf_id": {
+          "type": "string"
+        },
+        "proof_status": {
+          "$ref": "#/$defs/supplied_status"
+        },
+        "provenance": {
+          "$ref": "#/$defs/typed_provenance"
+        },
+        "rule_id": {
+          "type": "string"
+        },
+        "satisfaction": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "standard_check": {
+          "enum": [
+            "matched",
+            "not_declared"
+          ]
+        },
+        "status_source": {
+          "$ref": "#/$defs/status_source"
+        }
+      },
+      "required": [
+        "rule_id",
+        "branch_id",
+        "branch_path",
+        "leaf_id",
+        "proof_status",
+        "satisfaction",
+        "status_source",
+        "burden_check",
+        "standard_check"
+      ],
+      "type": "object"
+    },
+    "proof_penalty_selection_trace": {
+      "additionalProperties": false,
+      "properties": {
+        "branch_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "branch_path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "branch_reason": {
+          "enum": [
+            "satisfied",
+            "requirements_not_satisfied",
+            "requirements_unresolved",
+            "defeated",
+            "exception_unresolved"
+          ]
+        },
+        "branch_status": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "guard_result": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved",
+            "not_evaluated"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "direct",
+            "inherited"
+          ]
+        },
+        "penalty_id": {
+          "pattern": "^pen:[^:]+(?::[^:]+)*$",
+          "type": "string"
+        },
+        "result": {
+          "enum": [
+            "selected",
+            "branch_requirements_not_satisfied",
+            "branch_requirements_unresolved",
+            "branch_exception_defeated",
+            "branch_exception_unresolved",
+            "guard_not_satisfied",
+            "guard_unresolved"
+          ]
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "penalty_id",
+        "source_id",
+        "span",
+        "branch_id",
+        "branch_path",
+        "origin",
+        "branch_status",
+        "branch_reason",
+        "guard_result",
+        "result"
+      ],
+      "type": "object"
+    },
+    "proof_penalty_support": {
+      "additionalProperties": false,
+      "properties": {
+        "branch_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "guard_result": {
+          "oneOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "origin": {
+          "enum": [
+            "direct",
+            "inherited"
+          ]
+        },
+        "path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "branch_id",
+        "path",
+        "origin",
+        "guard_result"
+      ],
+      "type": "object"
+    },
+    "proof_rule_result": {
+      "additionalProperties": false,
+      "properties": {
+        "branches": {
+          "items": {
+            "$ref": "#/$defs/proof_branch"
+          },
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "proof_observations": {
+          "items": {
+            "$ref": "#/$defs/proof_observation"
+          },
+          "type": "array"
+        },
+        "provision_kind": {
+          "enum": [
+            "executable",
+            "definition_only"
+          ]
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "trace": {
+          "items": {
+            "$ref": "#/$defs/proof_trace"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "status",
+        "provision_kind",
+        "branches",
+        "trace",
+        "proof_observations"
+      ],
+      "type": "object"
+    },
+    "proof_selected_term_penalty": {
+      "additionalProperties": false,
+      "properties": {
+        "declaration_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "declaring_provision_path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "guard": {
+          "$ref": "#/$defs/penalty_result_guard"
+        },
+        "penalty_id": {
+          "pattern": "^pen:[^:]+(?::[^:]+)*$",
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "supporting_branches": {
+          "items": {
+            "$ref": "#/$defs/proof_penalty_support"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "term": {
+          "$ref": "#/$defs/penalty_term"
+        }
+      },
+      "required": [
+        "penalty_id",
+        "source_id",
+        "span",
+        "declaring_provision_path",
+        "declaration_index",
+        "guard",
+        "supporting_branches",
+        "term"
+      ],
+      "type": "object"
+    },
+    "proof_trace": {
+      "additionalProperties": false,
+      "properties": {
+        "branch": {
+          "type": "string"
+        },
+        "children": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "leaf",
+            "all",
+            "any"
+          ]
+        },
+        "path": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "value": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        }
+      },
+      "required": [
+        "branch",
+        "id",
+        "kind",
+        "path",
+        "span",
+        "value",
+        "children"
+      ],
+      "type": "object"
+    },
+    "status_source": {
+      "additionalProperties": false,
+      "properties": {
+        "assignment_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "issuer_label": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "external_assertion",
+            "synthetic_fixture"
+          ]
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "assignment_id",
+        "source_id",
+        "span",
+        "origin",
+        "issuer_label"
+      ],
+      "type": "object"
+    },
+    "supplied_status": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "proved"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "not_proved"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "unresolved"
+            },
+            "reason": {
+              "enum": [
+                "not_determined",
+                "external_decision_pending"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "reason"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "typed_provenance": {
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "jurisdiction": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "recorded_date": {
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "type": "string"
+        },
+        "source_label": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "type": "object"
     }
   },
   "$id": "https://yuho-lang.github.io/schemas/kernel-result-v1-production.json",
@@ -1607,6 +2165,123 @@
           "items": {
             "$ref": "#/$defs/selection_warning"
           }
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "result_schema",
+        "fragment",
+        "input_digest",
+        "root_rule",
+        "status",
+        "rules",
+        "diagnostics",
+        "selected_penalties",
+        "penalty_selection_trace",
+        "selection_warnings"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "diagnostics": {
+                "maxItems": 0
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "rejected"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "diagnostics": {
+                "minItems": 1
+              },
+              "penalty_selection_trace": {
+                "maxItems": 0
+              },
+              "rules": {
+                "maxItems": 0
+              },
+              "selected_penalties": {
+                "maxItems": 0
+              },
+              "selection_warnings": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "diagnostics": {
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "type": "array"
+        },
+        "fragment": {
+          "const": "SuppliedProofStatus-v1"
+        },
+        "input_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "penalty_selection_trace": {
+          "items": {
+            "$ref": "#/$defs/proof_penalty_selection_trace"
+          },
+          "type": "array"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "result_schema": {
+          "const": "yuho.kernel-result/v1"
+        },
+        "root_rule": {
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/proof_rule_result"
+          },
+          "type": "array"
+        },
+        "selected_penalties": {
+          "items": {
+            "$ref": "#/$defs/proof_selected_term_penalty"
+          },
+          "type": "array"
+        },
+        "selection_warnings": {
+          "items": {
+            "$ref": "#/$defs/selection_warning"
+          },
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved",
+            "rejected"
+          ]
         }
       },
       "required": [

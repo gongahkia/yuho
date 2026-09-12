@@ -126,7 +126,7 @@ check label condition = unless condition (failCheck label)
 failCheck :: String -> IO a
 failCheck label = putStrLn ("FAIL " <> label) >> exitFailure
 
-decoded :: J -> Maybe (ExceptionRequest, ValidatedGraph)
+decoded :: J -> Maybe (ExceptionRequest, ValidatedGraph Bool)
 decoded request = do
   parsed <- either (const Nothing) Just (decodeExceptionRequest request)
   graph <- either (const Nothing) Just (validateGraph (exceptionRawGraph parsed))
@@ -266,7 +266,7 @@ acyclicProperty request = forAll arbitrary $ \(a, b, c, d) ->
       Right _ -> True
       Left _ -> False
 
-graphAcyclic :: ValidatedGraph -> Bool
+graphAcyclic :: ValidatedGraph Bool -> Bool
 graphAcyclic graph = all (walk Set.empty) (orderedKeys graph)
   where
     walk visited key

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.PenaltyTerms.Decode (decodeTermsRequest) where
+module Yuho.PenaltyTerms.Decode (decodeTermsRequest, extractTerms) where
 
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -20,16 +20,21 @@ decodeTermsRequest root = do
   if countIds root + countKeys "penalty_id" root + countKeys "term_id" root > maxNodes
     then Left (diagnostic "KINV004" "validate" "/registry" Nothing
       [("reason", "semantic node limit exceeded")]) else pure ()
-  rules <- required asArray "" "registry" root
-  (stripped, collected) <- unzip <$> traverse stripRule (zip [0 :: Int ..] rules)
-  transformed <- replace root [("fragment", JStr "GuardedPenaltySelection-v1")
-    , ("registry", JArr stripped)]
+  (strippedRoot, terms) <- extractTerms root
+  transformed <- replace strippedRoot [("fragment", JStr "GuardedPenaltySelection-v1")]
   request <- decodePenaltyRequest transformed
   let typed = penaltyTypedRequest request
       original = typedExceptionRequest typed
       restored = original {exceptionRequestDigest = inputDigest root}
   pure (TermsRequest request {penaltyTypedRequest = typed
-    {typedExceptionRequest = restored}} (concat collected))
+    {typedExceptionRequest = restored}} terms)
+
+extractTerms :: J -> Either Diagnostic (J, [RawTerm])
+extractTerms root = do
+  rules <- required asArray "" "registry" root
+  (stripped, collected) <- unzip <$> traverse stripRule (zip [0 :: Int ..] rules)
+  transformed <- replace root [("registry", JArr stripped)]
+  pure (transformed, concat collected)
 
 countKeys :: Text -> J -> Int
 countKeys wanted value = case value of

@@ -25,14 +25,14 @@ data RawRule = RawRule
   , rawRuleExceptions :: [RawException], rawRulePointer :: Text
   } deriving (Eq, Show)
 
-data RawGraph = RawGraph
+data RawGraph a = RawGraph
   { rawRoot :: Text, rawSources :: [(Text, Source)], rawRules :: [RawRule]
-  , rawFacts :: Map Text Bool, rawDate :: Day, rawMaxNodes :: Int
+  , rawFacts :: Map Text a, rawDate :: Day, rawMaxNodes :: Int
   } deriving (Eq, Show)
 
 data ExceptionRequest = ExceptionRequest
   { exceptionRequestId :: Text, exceptionRequestDigest :: Text
-  , exceptionRawGraph :: RawGraph
+  , exceptionRawGraph :: RawGraph Bool
   } deriving (Eq, Show)
 
 data ExceptionTrace = ExceptionTrace

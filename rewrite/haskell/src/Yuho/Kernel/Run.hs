@@ -7,6 +7,7 @@ import Yuho.Core.Types
 import Yuho.Exception.Run (runExceptionLine)
 import Yuho.PenaltySelection.Run (runPenaltyLine)
 import Yuho.PenaltyTerms.Run (runTermsLine)
+import Yuho.SuppliedProofStatus.Run (runProofLine)
 import Yuho.TypedFacts.Run (runTypedLine)
 import Yuho.Kernel.Evaluate (evaluate)
 import Yuho.Kernel.Validate (validateInput)
@@ -22,7 +23,9 @@ runLine bytes = case decodeJson bytes of
     let requestIdentifier = maybe "?" id (lookupField "request_id" value >>= textValue)
         digest = inputDigest value
         rejected issue = encodeResult (reject requestIdentifier digest issue)
-    in if (lookupField "fragment" value >>= textValue) == Just "PenaltyTerms-v1"
+    in if (lookupField "fragment" value >>= textValue) == Just "SuppliedProofStatus-v1"
+       then runProofLine value
+       else if (lookupField "fragment" value >>= textValue) == Just "PenaltyTerms-v1"
        then runTermsLine value
        else if (lookupField "fragment" value >>= textValue) == Just "GuardedPenaltySelection-v1"
        then runPenaltyLine value

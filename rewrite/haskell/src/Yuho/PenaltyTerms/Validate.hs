@@ -1,8 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.PenaltyTerms.Validate (validateTerms) where
+module Yuho.PenaltyTerms.Validate (validateTerms, validateTermStructure) where
 
 import Control.Monad (foldM)
 import qualified Data.Map.Strict as Map
+import Data.Map.Strict (Map)
 import qualified Data.Set as Set
 import Data.Set (Set)
 import Data.Char (ord)
@@ -22,14 +23,20 @@ validateTerms :: TermsRequest -> Either Diagnostic ValidatedTerms
 validateTerms (TermsRequest request rawTerms) = do
   validated <- validatePenalties request
   let raw = exceptionRawGraph (typedExceptionRequest (penaltyTypedRequest request))
-      reserved = Set.fromList (allIds raw ++ map penaltyId (validatedDeclarations validated))
-  (_, entries) <- foldM (validateOne raw validated) (reserved, []) rawTerms
-  pure (ValidatedTerms validated (Map.fromList (reverse entries)))
+  terms <- validateTermStructure raw (validatedDeclarations validated) rawTerms
+  pure (ValidatedTerms validated terms)
 
-validateOne :: RawGraph -> ValidatedPenalties -> (Set Text, [(Text, Term)])
+validateTermStructure :: RawGraph a -> [PenaltyDeclaration] -> [RawTerm]
+  -> Either Diagnostic (Map Text Term)
+validateTermStructure raw declarations rawTerms = do
+  let reserved = Set.fromList (allIds raw ++ map penaltyId declarations)
+  (_, entries) <- foldM (validateOne raw declarations) (reserved, []) rawTerms
+  pure (Map.fromList (reverse entries))
+
+validateOne :: RawGraph a -> [PenaltyDeclaration] -> (Set Text, [(Text, Term)])
   -> RawTerm -> Either Diagnostic (Set Text, [(Text, Term)])
-validateOne raw validated (seen, entries) item = do
-  declaration <- case [candidate | candidate <- validatedDeclarations validated
+validateOne raw declarations (seen, entries) item = do
+  declaration <- case [candidate | candidate <- declarations
       , penaltyId candidate == rawTermPenaltyId item] of
     [found] -> Right found
     _ -> Left (diagnostic "KERR001" "evaluate" (rawTermPointer item) Nothing
@@ -194,7 +201,7 @@ rejectUnsupported pointer value = case objectFields value of
       Nothing [("kind", key)])
     [] -> Right ()
 
-allIds :: RawGraph -> [Text]
+allIds :: RawGraph a -> [Text]
 allIds raw = map fst (rawSources raw) ++ concatMap ruleIds (rawRules raw)
   where
     ruleIds rule = rawRuleId rule : map rawExceptionId (rawRuleExceptions rule)
