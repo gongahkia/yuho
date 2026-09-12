@@ -11,6 +11,7 @@ DOCUMENTS = [
     ROOT / "docs/rewrite/GUARDED-PENALTY-SELECTION-V1.md",
     ROOT / "docs/rewrite/PENALTY-TERMS-V1.md",
     ROOT / "docs/rewrite/SUPPLIED-PROOF-STATUS-V1.md",
+    ROOT / "docs/rewrite/REGISTERED-PRESUMPTION-DERIVATIONS-V1.md",
     ROOT / "docs/rewrite/YUHO-REWRITE-ARCHITECTURE-PROPOSAL.md",
     ROOT / "docs/rewrite/YUHO-REWRITE-DECISION-REPORT.md",
     ROOT / "docs/rewrite/MIGRATION-CONTRACT.md",

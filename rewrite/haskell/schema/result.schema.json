@@ -1628,6 +1628,318 @@
         }
       },
       "type": "object"
+    },
+    "presumption_observation": {
+      "additionalProperties": false,
+      "properties": {
+        "branch_id": {
+          "type": "string"
+        },
+        "branch_path": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "burden_check": {
+          "enum": [
+            "matched",
+            "not_declared"
+          ]
+        },
+        "leaf_id": {
+          "type": "string"
+        },
+        "proof_status": {
+          "$ref": "#/$defs/supplied_status"
+        },
+        "provenance": {
+          "$ref": "#/$defs/typed_provenance"
+        },
+        "rule_id": {
+          "type": "string"
+        },
+        "satisfaction": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "standard_check": {
+          "enum": [
+            "matched",
+            "not_declared"
+          ]
+        },
+        "status_source": {
+          "$ref": "#/$defs/status_source"
+        },
+        "direct_satisfaction": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "effective_satisfaction": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "active_presumption_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "unresolved_presumption_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        }
+      },
+      "required": [
+        "rule_id",
+        "branch_id",
+        "branch_path",
+        "leaf_id",
+        "proof_status",
+        "satisfaction",
+        "status_source",
+        "burden_check",
+        "standard_check",
+        "direct_satisfaction",
+        "effective_satisfaction",
+        "active_presumption_ids",
+        "unresolved_presumption_ids"
+      ],
+      "type": "object"
+    },
+    "presumption_rule_result": {
+      "additionalProperties": false,
+      "properties": {
+        "branches": {
+          "items": {
+            "$ref": "#/$defs/proof_branch"
+          },
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "proof_observations": {
+          "items": {
+            "$ref": "#/$defs/presumption_observation"
+          },
+          "type": "array"
+        },
+        "provision_kind": {
+          "enum": [
+            "executable",
+            "definition_only"
+          ]
+        },
+        "source_id": {
+          "pattern": "^[^:]+:[^:]+$",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "trace": {
+          "items": {
+            "$ref": "#/$defs/proof_trace"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "status",
+        "provision_kind",
+        "branches",
+        "trace",
+        "proof_observations"
+      ],
+      "type": "object"
+    },
+    "presumption_condition_trace": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "leaf_effective",
+            "all_of",
+            "any_of"
+          ]
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "leaf_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/presumption_condition_trace"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "span",
+        "leaf_id",
+        "value",
+        "children"
+      ],
+      "type": "object",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "leaf_effective"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "leaf_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "children": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "leaf_id": {
+                "type": "null"
+              },
+              "children": {
+                "minItems": 2
+              }
+            }
+          }
+        }
+      ]
+    },
+    "presumption_derivation": {
+      "additionalProperties": false,
+      "properties": {
+        "presumption_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "target_leaf_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "trigger": {
+          "$ref": "#/$defs/presumption_condition_trace"
+        },
+        "rebuttal": {
+          "$ref": "#/$defs/presumption_condition_trace"
+        },
+        "trigger_value": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "rebuttal_value": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "state": {
+          "enum": [
+            "active",
+            "inactive",
+            "rebutted",
+            "unresolved"
+          ]
+        },
+        "target_direct_satisfaction": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "target_effective_satisfaction": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        }
+      },
+      "required": [
+        "presumption_id",
+        "target_leaf_id",
+        "source_id",
+        "span",
+        "trigger",
+        "rebuttal",
+        "trigger_value",
+        "rebuttal_value",
+        "state",
+        "target_direct_satisfaction",
+        "target_effective_satisfaction"
+      ],
+      "type": "object"
     }
   },
   "$id": "https://yuho-lang.github.io/schemas/kernel-result-v1-production.json",
@@ -2297,6 +2609,133 @@
         "selected_penalties",
         "penalty_selection_trace",
         "selection_warnings"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "diagnostics": {
+                "maxItems": 0
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "rejected"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "diagnostics": {
+                "minItems": 1
+              },
+              "penalty_selection_trace": {
+                "maxItems": 0
+              },
+              "rules": {
+                "maxItems": 0
+              },
+              "selected_penalties": {
+                "maxItems": 0
+              },
+              "selection_warnings": {
+                "maxItems": 0
+              },
+              "presumption_derivations": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "diagnostics": {
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "type": "array"
+        },
+        "fragment": {
+          "const": "RegisteredPresumptionDerivations-v1"
+        },
+        "input_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "penalty_selection_trace": {
+          "items": {
+            "$ref": "#/$defs/proof_penalty_selection_trace"
+          },
+          "type": "array"
+        },
+        "protocol": {
+          "const": "yuho.kernel-protocol/v1"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "result_schema": {
+          "const": "yuho.kernel-result/v1"
+        },
+        "root_rule": {
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/presumption_rule_result"
+          },
+          "type": "array"
+        },
+        "selected_penalties": {
+          "items": {
+            "$ref": "#/$defs/proof_selected_term_penalty"
+          },
+          "type": "array"
+        },
+        "selection_warnings": {
+          "items": {
+            "$ref": "#/$defs/selection_warning"
+          },
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved",
+            "rejected"
+          ]
+        },
+        "presumption_derivations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/presumption_derivation"
+          }
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "result_schema",
+        "fragment",
+        "input_digest",
+        "root_rule",
+        "status",
+        "rules",
+        "diagnostics",
+        "selected_penalties",
+        "penalty_selection_trace",
+        "selection_warnings",
+        "presumption_derivations"
       ],
       "type": "object"
     }

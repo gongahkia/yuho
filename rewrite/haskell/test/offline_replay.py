@@ -75,7 +75,23 @@ def main() -> None:
             assert (result["diagnostics"][0]["code"] if result["diagnostics"] else "") == code
             if name == "PS33.json":
                 assert result["penalty_selection_trace"][0]["result"] == "guard_unresolved"
-    print("clean offline build/install and T17/T49/GP13/GP39/PT03/PT66/PS31/PS33/PS45/PS65 installed launches passed")
+        fixtures = WORKSPACE / "test/presumption-fixtures/requests"
+        for name, status, code in (("RD01.json", "satisfied", ""),
+                                   ("RD08.json", "satisfied", ""),
+                                   ("RD36.json", "satisfied", ""),
+                                   ("RD46.json", "rejected", "KINV005"),
+                                   ("RD59.json", "rejected", "KINV006"),
+                                   ("RD73.txt", "rejected", "KDEC002")):
+            completed = subprocess.run([str(binary)], input=(fixtures / name).read_bytes(),
+                                       capture_output=True, check=True, timeout=30)
+            assert not completed.stderr, completed.stderr
+            result = json.loads(completed.stdout)
+            assert result["status"] == status, name
+            assert (result["diagnostics"][0]["code"] if result["diagnostics"] else "") == code
+            if name == "RD36.json":
+                assert [row["state"] for row in result["presumption_derivations"]] == [
+                    "active", "active", "active"]
+    print("clean offline build/install and T/GP/PT/PS plus RD01/RD08/RD36/RD46/RD59/RD73 launches passed")
 
 
 if __name__ == "__main__":

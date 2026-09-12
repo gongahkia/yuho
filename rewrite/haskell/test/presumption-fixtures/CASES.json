@@ -1,0 +1,765 @@
+{
+  "RD01": {
+    "code": "",
+    "file": "requests/RD01.json",
+    "label": "empty registry preserves supplied projection",
+    "route_states": [],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD02": {
+    "code": "",
+    "file": "requests/RD02.json",
+    "label": "table trigger not_satisfied rebuttal not_satisfied",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD03": {
+    "code": "",
+    "file": "requests/RD03.json",
+    "label": "table trigger not_satisfied rebuttal unresolved",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD04": {
+    "code": "",
+    "file": "requests/RD04.json",
+    "label": "table trigger not_satisfied rebuttal satisfied",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD05": {
+    "code": "",
+    "file": "requests/RD05.json",
+    "label": "table trigger unresolved rebuttal not_satisfied",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD06": {
+    "code": "",
+    "file": "requests/RD06.json",
+    "label": "table trigger unresolved rebuttal unresolved",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD07": {
+    "code": "",
+    "file": "requests/RD07.json",
+    "label": "table trigger unresolved rebuttal satisfied",
+    "route_states": [
+      "rebutted"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD08": {
+    "code": "",
+    "file": "requests/RD08.json",
+    "label": "table trigger satisfied rebuttal not_satisfied",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD09": {
+    "code": "",
+    "file": "requests/RD09.json",
+    "label": "table trigger satisfied rebuttal unresolved",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD10": {
+    "code": "",
+    "file": "requests/RD10.json",
+    "label": "table trigger satisfied rebuttal satisfied",
+    "route_states": [
+      "rebutted"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD11": {
+    "code": "",
+    "file": "requests/RD11.json",
+    "label": "all_of pair satisfied satisfied",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD12": {
+    "code": "",
+    "file": "requests/RD12.json",
+    "label": "all_of pair satisfied not_satisfied",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD13": {
+    "code": "",
+    "file": "requests/RD13.json",
+    "label": "all_of pair satisfied unresolved",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD14": {
+    "code": "",
+    "file": "requests/RD14.json",
+    "label": "all_of pair not_satisfied satisfied",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD15": {
+    "code": "",
+    "file": "requests/RD15.json",
+    "label": "all_of pair not_satisfied not_satisfied",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD16": {
+    "code": "",
+    "file": "requests/RD16.json",
+    "label": "all_of pair not_satisfied unresolved",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD17": {
+    "code": "",
+    "file": "requests/RD17.json",
+    "label": "all_of pair unresolved satisfied",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD18": {
+    "code": "",
+    "file": "requests/RD18.json",
+    "label": "all_of pair unresolved not_satisfied",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD19": {
+    "code": "",
+    "file": "requests/RD19.json",
+    "label": "all_of pair unresolved unresolved",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD20": {
+    "code": "",
+    "file": "requests/RD20.json",
+    "label": "any_of pair satisfied satisfied",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD21": {
+    "code": "",
+    "file": "requests/RD21.json",
+    "label": "any_of pair satisfied not_satisfied",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD22": {
+    "code": "",
+    "file": "requests/RD22.json",
+    "label": "any_of pair satisfied unresolved",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD23": {
+    "code": "",
+    "file": "requests/RD23.json",
+    "label": "any_of pair not_satisfied satisfied",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD24": {
+    "code": "",
+    "file": "requests/RD24.json",
+    "label": "any_of pair not_satisfied not_satisfied",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD25": {
+    "code": "",
+    "file": "requests/RD25.json",
+    "label": "any_of pair not_satisfied unresolved",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD26": {
+    "code": "",
+    "file": "requests/RD26.json",
+    "label": "any_of pair unresolved satisfied",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD27": {
+    "code": "",
+    "file": "requests/RD27.json",
+    "label": "any_of pair unresolved not_satisfied",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD28": {
+    "code": "",
+    "file": "requests/RD28.json",
+    "label": "any_of pair unresolved unresolved",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD29": {
+    "code": "",
+    "file": "requests/RD29.json",
+    "label": "direct satisfaction and active route coexist",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD30": {
+    "code": "",
+    "file": "requests/RD30.json",
+    "label": "direct unresolved with active route",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD31": {
+    "code": "",
+    "file": "requests/RD31.json",
+    "label": "direct unresolved without active route",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD32": {
+    "code": "",
+    "file": "requests/RD32.json",
+    "label": "multiple active routes remain separate",
+    "route_states": [
+      "active",
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD33": {
+    "code": "",
+    "file": "requests/RD33.json",
+    "label": "active dominates unresolved route",
+    "route_states": [
+      "active",
+      "unresolved"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD34": {
+    "code": "",
+    "file": "requests/RD34.json",
+    "label": "rebutted and inactive routes do not negate",
+    "route_states": [
+      "rebutted",
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD35": {
+    "code": "",
+    "file": "requests/RD35.json",
+    "label": "one-step chained support",
+    "route_states": [
+      "active",
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD36": {
+    "code": "",
+    "file": "requests/RD36.json",
+    "label": "multi-step acyclic chain in reverse declaration order",
+    "route_states": [
+      "active",
+      "active",
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD37": {
+    "code": "",
+    "file": "requests/RD37.json",
+    "label": "chain through rebuttal disables root route",
+    "route_states": [
+      "rebutted",
+      "active"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD38": {
+    "code": "",
+    "file": "requests/RD38.json",
+    "label": "identical registrations with different IDs are distinct modeling routes",
+    "route_states": [
+      "active",
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD39": {
+    "code": "",
+    "file": "requests/RD39.json",
+    "label": "effective target satisfies exception and defeats root",
+    "route_states": [
+      "active"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD40": {
+    "code": "",
+    "file": "requests/RD40.json",
+    "label": "effective guard selects penalty",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD41": {
+    "code": "",
+    "file": "requests/RD41.json",
+    "label": "unresolved effective guard skips penalty",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "satisfied"
+  },
+  "RD42": {
+    "code": "",
+    "file": "requests/RD42.json",
+    "label": "source order differs from dependency resolution",
+    "route_states": [
+      "active",
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD43": {
+    "code": "",
+    "file": "requests/RD43.json",
+    "label": "non-BMP descriptive issuer survives canonical encoding",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD44": {
+    "code": "",
+    "file": "requests/RD44.json",
+    "label": "unreachable target registration is evaluated",
+    "route_states": [
+      "active",
+      "rebutted"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD45": {
+    "code": "",
+    "file": "requests/RD45.json",
+    "label": "no short-circuit in decisive all and rebuttal",
+    "route_states": [
+      "inactive"
+    ],
+    "selected": [],
+    "status": "not_satisfied"
+  },
+  "RD46": {
+    "code": "KINV005",
+    "file": "requests/RD46.json",
+    "label": "missing target leaf",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD47": {
+    "code": "KINV005",
+    "file": "requests/RD47.json",
+    "label": "missing trigger leaf",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD48": {
+    "code": "KINV005",
+    "file": "requests/RD48.json",
+    "label": "missing rebuttal leaf",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD49": {
+    "code": "KDEC001",
+    "file": "requests/RD49.json",
+    "label": "missing rebuttal condition",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD50": {
+    "code": "KINV002",
+    "file": "requests/RD50.json",
+    "label": "duplicate presumption ID",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD51": {
+    "code": "KINV002",
+    "file": "requests/RD51.json",
+    "label": "presumption ID collides with leaf",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD52": {
+    "code": "KINV003",
+    "file": "requests/RD52.json",
+    "label": "invalid registration span",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD53": {
+    "code": "KINV003",
+    "file": "requests/RD53.json",
+    "label": "condition outside owning span",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD54": {
+    "code": "KINV004",
+    "file": "requests/RD54.json",
+    "label": "empty all group",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD55": {
+    "code": "KINV004",
+    "file": "requests/RD55.json",
+    "label": "singleton any group",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD56": {
+    "code": "KINV004",
+    "file": "requests/RD56.json",
+    "label": "condition depth 17",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD57": {
+    "code": "KINV004",
+    "file": "requests/RD57.json",
+    "label": "semantic node limit",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD58": {
+    "code": "KINV006",
+    "file": "requests/RD58.json",
+    "label": "self-cycle",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD59": {
+    "code": "KINV006",
+    "file": "requests/RD59.json",
+    "label": "two-target cycle",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD60": {
+    "code": "KINV006",
+    "file": "requests/RD60.json",
+    "label": "longer cycle",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD61": {
+    "code": "KINV006",
+    "file": "requests/RD61.json",
+    "label": "cycle through rebuttal",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD62": {
+    "code": "KINV004",
+    "file": "requests/RD62.json",
+    "label": "unknown registration field",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD63": {
+    "code": "KINV004",
+    "file": "requests/RD63.json",
+    "label": "unknown condition field",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD64": {
+    "code": "KCAP001",
+    "file": "requests/RD64.json",
+    "label": "irrebuttable is unsupported",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD65": {
+    "code": "KCAP001",
+    "file": "requests/RD65.json",
+    "label": "burden shift is unsupported",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD66": {
+    "code": "KCAP001",
+    "file": "requests/RD66.json",
+    "label": "negation is unsupported",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD67": {
+    "code": "KCAP001",
+    "file": "requests/RD67.json",
+    "label": "direct status predicate is unsupported",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD68": {
+    "code": "KINV005",
+    "file": "requests/RD68.json",
+    "label": "missing source reference",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD69": {
+    "code": "KINV004",
+    "file": "requests/RD69.json",
+    "label": "unknown top-level field",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD70": {
+    "code": "KDEC001",
+    "file": "requests/RD70.txt",
+    "label": "malformed JSON",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD71": {
+    "code": "KDEC001",
+    "file": "requests/RD71.txt",
+    "label": "duplicate JSON key",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD72": {
+    "code": "KDEC001",
+    "file": "requests/RD72.txt",
+    "label": "malformed surrogate escape",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD73": {
+    "code": "KDEC002",
+    "file": "requests/RD73.txt",
+    "label": "oversized request",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD74": {
+    "code": "",
+    "file": "requests/RD74.json",
+    "label": "condition nesting at depth 16",
+    "route_states": [
+      "active"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  },
+  "RD75": {
+    "code": "KCAP001",
+    "file": "requests/RD75.json",
+    "label": "recognized direct-status predicate without a span is a capability",
+    "route_states": [],
+    "selected": [],
+    "status": "rejected"
+  },
+  "RD76": {
+    "code": "",
+    "file": "requests/RD76.json",
+    "label": "direct unresolved plus unresolved route retains route without causal attribution",
+    "route_states": [
+      "unresolved"
+    ],
+    "selected": [],
+    "status": "unresolved"
+  },
+  "RD77": {
+    "code": "",
+    "file": "requests/RD77.json",
+    "label": "rebutting one route preserves another active route",
+    "route_states": [
+      "active",
+      "rebutted"
+    ],
+    "selected": [
+      "pen:root:1"
+    ],
+    "status": "satisfied"
+  }
+}

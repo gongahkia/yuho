@@ -56,6 +56,13 @@ library
       Yuho.SuppliedProofStatus.Select
       Yuho.SuppliedProofStatus.Encode
       Yuho.SuppliedProofStatus.Run
+      Yuho.Presumption.Types
+      Yuho.Presumption.Decode
+      Yuho.Presumption.Validate
+      Yuho.Presumption.Resolve
+      Yuho.Presumption.Evaluate
+      Yuho.Presumption.Encode
+      Yuho.Presumption.Run
 
 executable yuho-kernel
   import: foundation
@@ -67,7 +74,7 @@ test-suite foundation-test
   import: foundation
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks
+  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks
   hs-source-dirs: test
   build-depends:
       yuho-foundation ==0.1.0.0

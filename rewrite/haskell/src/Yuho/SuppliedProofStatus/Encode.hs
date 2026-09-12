@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.SuppliedProofStatus.Encode
-  ( encodeProofResult, encodeProofReject ) where
+  ( encodeProofResult, encodeProofReject, branchJson, traceJson
+  , observation, selectedJson, occurrenceJson, strings ) where
 
 import qualified Data.ByteString as BS
 import qualified Data.Map.Strict as Map

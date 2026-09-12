@@ -30,6 +30,10 @@ inputDigest root =
               , Just "GuardedPenaltySelection-v1", Just "PenaltyTerms-v1"
               , Just "SuppliedProofStatus-v1"] ->
           ["input_schema", "fragment", "sources", "registry", "root_rule", "facts", "policy"]
+        _ | (lookupField "fragment" root >>= textValue) ==
+              Just "RegisteredPresumptionDerivations-v1" ->
+          ["input_schema", "fragment", "sources", "registry", "root_rule"
+          , "facts", "policy", "presumptions"]
         _ -> ["input_schema", "fragment", "source", "program", "facts", "policy"]
       fields = traverse (\key -> (,) key <$> lookupField key root) keys
   in maybe (sha256Text BS.empty) (sha256Text . encodeJson . JObj) fields

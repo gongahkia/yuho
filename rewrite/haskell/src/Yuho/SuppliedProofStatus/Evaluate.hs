@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.SuppliedProofStatus.Evaluate
-  ( evaluateProof, evaluateProofReference, allStatus, anyStatus ) where
+  ( evaluateProof, evaluateProofReference, evaluateProofWith
+  , evaluateProofWithReference, allStatus, anyStatus ) where
 
 import Control.Monad (foldM)
 import qualified Data.Map.Strict as Map
@@ -32,27 +33,37 @@ anyStatus values
   | otherwise = FalseValue
 
 evaluateProof :: ValidatedProof -> Either Diagnostic ProofResult
-evaluateProof = evaluateWithMemo True
+evaluateProof validated = evaluateProofWith validated direct
+  where direct = Map.map (projection . suppliedStatus)
+          (sharedFacts (validatedProofGraph validated))
 
 evaluateProofReference :: ValidatedProof -> Either Diagnostic ProofResult
-evaluateProofReference = evaluateWithMemo False
+evaluateProofReference validated = evaluateProofWithReference validated direct
+  where direct = Map.map (projection . suppliedStatus)
+          (sharedFacts (validatedProofGraph validated))
 
-evaluateWithMemo :: Bool -> ValidatedProof -> Either Diagnostic ProofResult
-evaluateWithMemo memoize validated = do
+evaluateProofWith :: ValidatedProof -> Map Text Truth -> Either Diagnostic ProofResult
+evaluateProofWith = evaluateWithMemo True
+
+evaluateProofWithReference :: ValidatedProof -> Map Text Truth -> Either Diagnostic ProofResult
+evaluateProofWithReference = evaluateWithMemo False
+
+evaluateWithMemo :: Bool -> ValidatedProof -> Map Text Truth -> Either Diagnostic ProofResult
+evaluateWithMemo memoize validated values = do
   let graph = validatedProofGraph validated
-  (root, results) <- evaluateRule memoize graph (rootKey graph) Map.empty
+  (root, results) <- evaluateRule memoize values graph (rootKey graph) Map.empty
   let ordered = [result | key <- orderedKeys graph, Just result <- [Map.lookup key results]]
   pure (ProofResult (ruleKeyText (rootKey graph)) (proofRuleStatus root) ordered)
 
-evaluateRule :: Bool -> ValidatedGraph StatusBinding -> RuleKey
+evaluateRule :: Bool -> Map Text Truth -> ValidatedGraph StatusBinding -> RuleKey
   -> Map RuleKey ProofRule -> Either Diagnostic (ProofRule, Map RuleKey ProofRule)
-evaluateRule memoize graph key prior =
+evaluateRule memoize values graph key prior =
   case if memoize then Map.lookup key prior else Nothing of
     Just cached -> Right (cached, prior)
     Nothing -> case ruleFor graph key of
       Nothing -> internal "/registry" "validated target rule missing"
       Just rule -> do
-        (reversed, finalMemo) <- foldM (evaluateBranch memoize graph rule)
+        (reversed, finalMemo) <- foldM (evaluateBranch memoize values graph rule)
           ([], prior) (branches (ruleProgram rule) [])
         let pairs = reverse reversed
             branchResults = map fst pairs
@@ -63,12 +74,12 @@ evaluateRule memoize graph key prior =
               status kind branchResults traces
         pure (result, Map.insert key result finalMemo)
 
-evaluateBranch :: Bool -> ValidatedGraph StatusBinding -> ResolvedRule
+evaluateBranch :: Bool -> Map Text Truth -> ValidatedGraph StatusBinding -> ResolvedRule
   -> ([(ProofBranch, [ProofTrace])], Map RuleKey ProofRule)
   -> (Provision, [Requirement])
   -> Either Diagnostic ([(ProofBranch, [ProofTrace])], Map RuleKey ProofRule)
-evaluateBranch memoize graph rule (reversed, prior) (provision, requirements) = do
-  evaluated <- traverse (evaluateRequirement (sharedFacts graph) (provisionId provision))
+evaluateBranch memoize values graph rule (reversed, prior) (provision, requirements) = do
+  evaluated <- traverse (evaluateRequirement values (provisionId provision))
     requirements
   let ordinary = allStatus (map fst evaluated)
       traces = concatMap snd evaluated
@@ -80,7 +91,7 @@ evaluateBranch memoize graph rule (reversed, prior) (provision, requirements) = 
     FalseValue -> pure ((simple FalseValue ProofRequirementsNotSatisfied, traces) : reversed, prior)
     UnresolvedValue -> pure ((simple UnresolvedValue ProofRequirementsUnresolved, traces) : reversed, prior)
     TrueValue -> do
-      (guards, memo) <- foldM (evaluateGuard memoize graph) ([], prior)
+      (guards, memo) <- foldM (evaluateGuard memoize values graph) ([], prior)
         (ruleExceptionsFor rule branchId)
       let ordered = reverse guards
           statuses = map exceptionTraceGuardStatus ordered
@@ -92,11 +103,11 @@ evaluateBranch memoize graph rule (reversed, prior) (provision, requirements) = 
           branch = ProofBranch branchId path finalStatus reason traceIds ordered applicable
       pure ((branch, traces) : reversed, memo)
 
-evaluateGuard :: Bool -> ValidatedGraph StatusBinding
+evaluateGuard :: Bool -> Map Text Truth -> ValidatedGraph StatusBinding
   -> ([ExceptionTrace], Map RuleKey ProofRule) -> ResolvedException
   -> Either Diagnostic ([ExceptionTrace], Map RuleKey ProofRule)
-evaluateGuard memoize graph (reversed, prior) resolved = do
-  (target, memo) <- evaluateRule memoize graph (exceptionTarget resolved) prior
+evaluateGuard memoize values graph (reversed, prior) resolved = do
+  (target, memo) <- evaluateRule memoize values graph (exceptionTarget resolved) prior
   let details = exceptionDetails resolved
       status = proofRuleStatus target
       trace = ExceptionTrace (rawExceptionId details) (rawExceptionSource details)
@@ -104,14 +115,14 @@ evaluateGuard memoize graph (reversed, prior) resolved = do
         (status == TrueValue)
   pure (trace : reversed, memo)
 
-evaluateRequirement :: Map Text StatusBinding -> Text -> Requirement
+evaluateRequirement :: Map Text Truth -> Text -> Requirement
   -> Either Diagnostic (Truth, [ProofTrace])
 evaluateRequirement bindings branch requirement = do
   evaluated <- traverse (evaluateRequirement bindings branch)
     (requirementMembers requirement)
   status <- case requirementKind requirement of
     Leaf -> case Map.lookup (requirementId requirement) bindings of
-      Just binding -> pure (projection (suppliedStatus binding))
+      Just value -> pure value
       Nothing -> internal ("/facts/" <> requirementId requirement)
         "validated leaf status binding missing"
     All -> pure (allStatus (map fst evaluated))

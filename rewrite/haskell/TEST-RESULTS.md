@@ -1,5 +1,22 @@
 # Haskell foundation targeted verification
 
+## RegisteredPresumptionDerivations-v1 completion
+
+On 13 September 2026 the seventh closed fragment was checked with pinned GHC 9.8.4/Cabal, serial offline builds and the existing `-Wall -Werror -O1` policy. No Haskell dependency, compiler extension or warning suppression was added. The [RD cases](test/presumption-fixtures/CASES.json) and [proof-neutral vectors](test/presumption-fixtures/PROOF-VECTORS.json) are synthetic technical evidence, not Singapore doctrine or a formal correspondence proof.
+
+| Check | Result |
+|---|---|
+| `cabal v2-build all --offline --jobs=1` | Pass under `-Wall -Werror -O1`. |
+| `cabal v2-test test:foundation-test --offline --jobs=1 --test-show-details=never` | Pass: 15 frozen Boolean exact-byte goldens; H01–H21, E01–E40, T01–T53, GP01–GP49, PT01–PT68, PS01–PS72; 77 RD cases (one overlong stream case is checked by the protocol harness); all earlier bounded properties plus 14 new RD properties. |
+| `python test/{protocol,exception_protocol,typed_protocol,penalty_protocol,terms_protocol,proof_protocol,presumption_protocol}.py "$(cabal list-bin exe:yuho-kernel)"` (run serially as individual scripts) | Pass: previous persistent suites and 77 RD fixtures in 112 persistent requests; accepted request and all result schemas, proof-neutral vectors, ordered complete traces, canonical bytes, manifest SHA-256, isolated byte-identical regeneration, duplicate-key/Unicode/malformed-input cases and rejection recovery. |
+| `python test/prior_bytes.py` | Pass: a temporary `git archive 9dd40b6` offline baseline executable and current executable produce **318 identical prior response byte strings** across 15 frozen, 21 H, 40 E, 53 T, 49 GP, 68 PT and 72 PS cases, including all accepted earlier requests. The serial archive build was removed afterward. |
+| `python test/offline_replay.py` | Pass: clean temporary-directory pinned offline Cabal build and local install, then representative prior launches and RD01/RD08/RD36/RD46/RD59/RD73 accepted, chained, missing-reference, cyclic and oversized launches. |
+| `python test/docs.py`; `python ../../scripts/verify_capability_claims.py`; `git diff --check` | Pass: eleven structured active documents, 209 relative links, bounded public claims and whitespace. |
+
+Immediately before the final clean replay, `free -h` reported **15 GiB total, 5.4 GiB available, and 7.2/8.0 GiB swap used**. The largest observed resident processes were Helium (~713 MiB), Deadcells (~642 MiB) and Baloo (~627 MiB). The serial replay completed, but no comparable latency or peak-RSS benchmark was attempted; elapsed command times are not benchmark evidence. The full Python suite, corpus exports, parser regeneration, Lean, Z3 and Docker were intentionally not run. Source hashes are not authenticated authority, and passing tests do not establish evidence sufficiency, doctrinal validity, legal outcomes or formal refinement.
+
+## Original foundation verification
+
 **Host:** Fedora workstation, 12 September 2026; GHC 9.8.4, Cabal 3.10.3.0, Python 3.14.7 from `/usr/bin/python`. Commands below ran serially in `rewrite/haskell/` unless stated otherwise. This is a foundation check, not a new Haskell-versus-OCaml benchmark.
 
 | Check | Result |
