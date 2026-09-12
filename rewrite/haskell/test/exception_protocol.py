@@ -43,6 +43,9 @@ def verify_vector(vector: dict, result: dict) -> None:
     rule_map = {rule["id"]: rule for rule in rules}
     assert {key: rule["status"] for key, rule in rule_map.items()} == vector[
         "expected_rule_statuses"], vector["case"]
+    assert {key: [branch["path"] for branch in rule["branches"]]
+            for key, rule in rule_map.items()} == vector[
+                "expected_rule_branch_paths"], vector["case"]
     root = rule_map[result["root_rule"]]
     assert [branch["path"] for branch in root["branches"]] == vector[
         "expected_root_branch_paths"], vector["case"]

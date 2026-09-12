@@ -89,6 +89,7 @@ def vector(name: str, value: dict | None, expected: dict) -> dict:
          "target": ex["guard"].get("target", ""), "source_id": ex["source_id"]}
         for item in value["registry"] for ex in item["exceptions"]]
     root_paths = []
+    rule_paths = {}
     observations = []
     if value is not None:
         for item in value["registry"]:
@@ -102,9 +103,10 @@ def vector(name: str, value: dict | None, expected: dict) -> dict:
                     register_provision(child)
 
             register_provision(item["program"])
+            rule_paths[item["id"]] = [branch["path"] for branch in provision_by_id.values()
+                                       if branch["requirements"]]
             if item["id"] == value["root_rule"]:
-                root_paths = [branch["path"] for branch in provision_by_id.values()
-                              if branch["requirements"]]
+                root_paths = rule_paths[item["id"]]
             for ex in item["exceptions"]:
                 branch = provision_by_id.get(ex["branch_id"])
                 if branch is None or not all(value["facts"].get(identifier, False)
@@ -130,6 +132,7 @@ def vector(name: str, value: dict | None, expected: dict) -> dict:
             "reference_date": None if value is None else value["policy"]["reference_date"],
             "dependency_edges": edges, "expected_status": expected["status"],
             "expected_root_branch_paths": root_paths,
+            "expected_rule_branch_paths": rule_paths,
             "expected_branch_statuses": expected["branches"],
             "expected_fired_exception_ids": expected["fired"],
             "expected_rule_statuses": expected["rules"],
