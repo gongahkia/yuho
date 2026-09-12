@@ -37,6 +37,8 @@ Canonical JSON uses UTF-8, sorted mapping keys, fixed compact separators, stable
 
 One JSON request and one JSON response travel as one UTF-8 line each on stdin/stdout. Stdout contains no logs; stderr is nonprotocol diagnostics only. The envelope names operation, protocol version, input schema/fragment, request ID, source hash and explicit resource limit. Protocol errors are structured, distinguish decode/version/invariant/capability/evaluation failures and never masquerade as a negative legal result. The frozen [spike contract](LANGUAGE-SPIKE-SPEC.md) is historical evidence; the hardened production boundary is specified in [rewrite/haskell](../../rewrite/haskell/README.md). The first request has no free-form requested-capabilities field.
 
+The bounded [Haskell foundation](../../rewrite/haskell/README.md) resolves the independent review's shared findings in new code: every protocol object is closed; duplicate JSON keys and leaf `members` reject; `all`/`any` are nonempty; calendar dates and parser acceptance/error consistency are validated; `definitions` is retained with an explicit no-branch relationship; UTF-8 source boundaries, containment and displayed byte positions are checked; bytes, nesting and nodes are bounded before domain recursion; maintained Aeson/Crypton replace local JSON/SHA implementations while canonical ordering stays explicit. [Production-only H01–H20 fixtures](../../rewrite/haskell/test/fixtures/CASES.json) and [targeted test evidence](../../rewrite/haskell/TEST-RESULTS.md) cover these rules. The frozen spike schema and candidates are historical and were not edited.
+
 ## 4. Semantic fragment sequence
 
 | Order | Fragment | Production and proof claim boundary | Repository oracle |

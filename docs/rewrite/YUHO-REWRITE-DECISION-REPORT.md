@@ -7,6 +7,8 @@
 
 Both candidates passed the mandatory Phase 1 gates. The [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md) scored Haskell 4.33/5 and OCaml 4.15/5 for clarity and recommended Haskell; the maintainer accepts that recommendation. The [scorecard](../../experiments/language-spike/results/SCORECARD.md) preserves OCaml's latency, RSS, build and shared-library advantages. The initial Haskell foundation lives in [rewrite/haskell](../../rewrite/haskell/README.md), separate from the frozen spike.
 
+That foundation closes the shared protocol gaps documented by the independent review in new production modules and [H01–H20 hardening fixtures](../../rewrite/haskell/test/fixtures/CASES.json): closed fields and duplicate keys, group/leaf shape, real dates, parser diagnostic consistency, explicit definition-only state, source-byte/display spans, bounded requests/depth/nodes and maintained JSON/SHA libraries. The [workspace contract](../../rewrite/haskell/README.md) records the precise rules and dependency choices; the [test record](../../rewrite/haskell/TEST-RESULTS.md) separates passing checks from deferred toolchain and proof gates.
+
 ## Decision in context
 
 Yuho should migrate in stages from the Python 5.1.0 toolchain to a small, typed semantic kernel. The maintainer has authorised free redesign of the new surface language. Existing .yh syntax, parser quirks and exact export bytes are migration evidence, not permanent language obligations. Reviewed semantic behaviour needs equivalence or an explicit recorded correction. [MIGRATION-CONTRACT.md](MIGRATION-CONTRACT.md) makes this distinction concrete.
