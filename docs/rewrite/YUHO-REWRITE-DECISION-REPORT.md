@@ -5,6 +5,8 @@
 **Decision owner:** Yuho maintainer  
 **Decision:** Haskell is the new production implementation language; proof tooling remains undecided.
 
+The accepted [ModelBundle-v1 package contract](MODEL-BUNDLE-V1.md) adds an offline source/scope integrity validator alongside the seven existing kernel variants. It preserves their accepted response bytes and Canonical IR v1.2. Its unsigned reviews and source metadata are claims, not authenticated authority or legal correctness; the [source-registration research](LEGAL-SOURCE-REGISTRATION-DECISION-REPORT.md) remains the rationale.
+
 Both candidates passed the mandatory Phase 1 gates. The [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md) scored Haskell 4.33/5 and OCaml 4.15/5 for clarity and recommended Haskell; the maintainer accepts that recommendation. The [scorecard](../../experiments/language-spike/results/SCORECARD.md) preserves OCaml's latency, RSS, build and shared-library advantages. The initial Haskell foundation lives in [rewrite/haskell](../../rewrite/haskell/README.md), separate from the frozen spike.
 
 That foundation closes the shared protocol gaps documented by the independent review in new production modules and [H01–H21 hardening fixtures](../../rewrite/haskell/test/fixtures/CASES.json): closed fields and duplicate keys, group/leaf shape, real dates, parser diagnostic consistency, explicit definition-only state, source-byte/display spans, bounded requests/depth/nodes and maintained JSON/SHA libraries. The [workspace contract](../../rewrite/haskell/README.md) records the precise rules and dependency choices; the [test record](../../rewrite/haskell/TEST-RESULTS.md) separates passing checks from deferred toolchain and proof gates.

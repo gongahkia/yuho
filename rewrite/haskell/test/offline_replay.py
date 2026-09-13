@@ -17,15 +17,42 @@ def main() -> None:
         for name in ("cabal.project", "cabal.project.freeze", "yuho-foundation.cabal"):
             shutil.copy2(WORKSPACE / name, clean / name)
         for name in ("src", "app", "test"):
-            shutil.copytree(WORKSPACE / name, clean / name)
+            shutil.copytree(WORKSPACE / name, clean / name, symlinks=True)
         binary_dir = clean / "bin"
         binary_dir.mkdir()
-        subprocess.run(["cabal", "v2-build", "exe:yuho-kernel", "--offline", "--jobs=1"],
+        subprocess.run(["cabal", "v2-build", "exe:yuho-kernel", "exe:yuho-model-bundle",
+                        "--offline", "--jobs=1"],
                        cwd=clean, check=True)
         subprocess.run(["cabal", "v2-install", "exe:yuho-kernel", "--offline",
                         "--jobs=1", f"--installdir={binary_dir}",
                         "--overwrite-policy=always"], cwd=clean, check=True)
         binary = binary_dir / "yuho-kernel"
+        subprocess.run(["cabal", "v2-install", "exe:yuho-model-bundle", "--offline",
+                        "--jobs=1", f"--installdir={binary_dir}",
+                        "--overwrite-policy=always"], cwd=clean, check=True)
+        bundle_binary = binary_dir / "yuho-model-bundle"
+        bundle_fixtures = WORKSPACE / "test/model-bundle-fixtures/bundles"
+        for name, expected_exit, status in (
+            ("MB01-minimal", 0, "valid"),
+            ("MB09-length-mismatch", 1, "invalid"),
+            ("MB18-derivation-cycle", 1, "invalid"),
+            ("MB31-oversize-manifest", 1, "invalid"),
+        ):
+            completed = subprocess.run([str(bundle_binary), "validate",
+                                        str(bundle_fixtures / name)],
+                                       capture_output=True, timeout=30)
+            assert completed.returncode == expected_exit, (name, completed.stdout)
+            assert json.loads(completed.stdout)["status"] == status, name
+        unmet = subprocess.run([str(bundle_binary), "validate",
+                                str(bundle_fixtures / "MB03-unmet-policy"),
+                                "--require-asserted-review-purpose", "source_fidelity"],
+                               capture_output=True, timeout=30)
+        assert unmet.returncode == 3
+        assert json.loads(unmet.stdout)["status"] == "policy_unmet"
+        missing = subprocess.run([str(bundle_binary), "validate", str(clean / "absent")],
+                                 capture_output=True, timeout=30)
+        assert missing.returncode == 2
+        assert json.loads(missing.stdout)["status"] == "io_error"
         fixtures = WORKSPACE / "test/typed-fixtures/requests"
         for name, status, code in (("T17.json", "false", ""),
                                    ("T49.txt", "rejected", "KDEC002")):
@@ -91,7 +118,7 @@ def main() -> None:
             if name == "RD36.json":
                 assert [row["state"] for row in result["presumption_derivations"]] == [
                     "active", "active", "active"]
-    print("clean offline build/install and T/GP/PT/PS plus RD01/RD08/RD36/RD46/RD59/RD73 launches passed")
+    print("clean offline build/install of kernel and bundle validator, prior launches and representative MB results passed")
 
 
 if __name__ == "__main__":

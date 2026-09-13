@@ -1,6 +1,8 @@
 # Legal-source registration and model-scope boundary: provisional decision
 
-**Status:** architecture proposal for maintainer and legal review, 13 September 2026. **Repository baseline:** `d2c69981eda797367e2222089ab2028ce63a179a`. This document specifies no accepted protocol or legal doctrine. Read the companion [threat model](MODEL-SCOPE-AND-PROVENANCE-THREAT-MODEL.md) before treating a bundle as evidence of anything beyond the checks stated here.
+**Status:** historical architecture research, 13 September 2026; its recommended package boundary was accepted for the separate [ModelBundle-v1 specification](MODEL-BUNDLE-V1.md). **Research baseline:** `d2c69981eda797367e2222089ab2028ce63a179a`. This document itself is not the production schema and specifies no legal doctrine. Read the companion [threat model](MODEL-SCOPE-AND-PROVENANCE-THREAT-MODEL.md) before treating a bundle as evidence of anything beyond the checks stated here.
+
+The accepted v1 pins the existing explicit sorted-JSON encoder as `yuho.sorted-json/v1`, with duplicate-key rejection and exact canonical-byte validation. The earlier JCS suggestion remains a future interoperability question; no JCS equivalence is claimed. It uses the safe unpacked directory and limits in the [normative profile](MODEL-BUNDLE-V1.md), and unsigned descriptive reviews remain outside the core digest.
 
 ## Executive recommendation
 

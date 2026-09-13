@@ -27,6 +27,10 @@ The result is a typed `Either` validation/evaluation flow, with ADTs for result 
 | Doctrinal presumptions, outcomes, CPC and case-law effects | Unsupported | Require later versioned fragments and independent review. |
 | New parser, native CLI/LSP, corpus migration or formal proof | Not part of this executable | Existing Python/Tree-sitter owners remain; proof-tool choice is undecided. |
 
+## Separate ModelBundle-v1 package validator
+
+`yuho-model-bundle validate <bundle-directory>` implements the accepted [non-executable package contract](../../docs/rewrite/MODEL-BUNDLE-V1.md). It checks exact artifact bytes, source descriptions, semantic mappings, positive scope and detached unsigned reviews offline. It does not add an eighth kernel variant, assess legal correctness, authenticate a reviewer or change existing kernel results. `Yuho.ModelBundle.Types`, `Json`, `Validate`, `Package`, `Review` and `Run` keep this build/package boundary separate from rule evaluation. The [CLI fixture suite](test/model_bundle_protocol.py) and [schemas](schema/README.md) are independent of the existing B/H/E/T/GP/PT/PS/RD fixtures.
+
 ## Toolchain and dependencies
 
 `cabal.project` selects **GHC 9.8.4** and serial builds. The project index state and `cabal.project.freeze` pin the complete resolved dependency graph; `yuho-foundation.cabal` pins each direct dependency exactly. `-Wall -Werror -O1` applies to library, executable and tests; no warning suppression or advanced Haskell extension is used. The only extension is `OverloadedStrings` in modules that need string literals as `Text`.
@@ -41,7 +45,8 @@ The result is a typed `Either` validation/evaluation flow, with ADTs for result 
 | `text` | Decoded source, IDs, paths and diagnostic fields. |
 | `time` | Real Gregorian calendar-date validation. |
 | `QuickCheck` (tests) | Semantic invariants over randomized fact values and JSON key order. |
-| `directory`, `filepath` (tests) | Locate repository fixture files without hard-coded absolute paths. |
+| `directory`, `filepath` | Check and traverse the closed unpacked bundle profile; locate test fixtures. |
+| `unix` | Inspect filesystem object types without following symlinks, so artifact/review entries cannot be accepted as ordinary files through a symlink or special node. |
 
 Transitive packages in the freeze file are pinned because they are required by these direct libraries; they carry no Yuho semantics. The exposed Aeson token API is a deliberate upgrade-review point: changing Aeson requires rerunning duplicate-key, Unicode, depth and canonical-byte tests.
 
@@ -51,6 +56,7 @@ From this directory, with the pinned GHC/Cabal available:
 
 ```sh
 cabal v2-build exe:yuho-kernel --jobs=1
+cabal v2-build exe:yuho-model-bundle --offline --jobs=1
 cabal v2-test foundation-test --jobs=1 --test-show-details=direct
 python test/protocol.py "$(cabal list-bin exe:yuho-kernel)"
 python test/exception_protocol.py "$(cabal list-bin exe:yuho-kernel)"
@@ -60,6 +66,7 @@ python test/terms_protocol.py "$(cabal list-bin exe:yuho-kernel)"
 python test/proof_protocol.py "$(cabal list-bin exe:yuho-kernel)"
 python test/presumption_protocol.py "$(cabal list-bin exe:yuho-kernel)"
 python test/prior_bytes.py
+python test/model_bundle_protocol.py "$(cabal list-bin exe:yuho-model-bundle)"
 ```
 
 The [hardening cases](test/fixtures/CASES.json) are H01–H21; `test/fixtures/generate.py` documents how they derive from the frozen source inputs. H12 is over the request-byte limit and is checked at the subprocess boundary. The [exception cases](test/exception-fixtures/CASES.json) are E01–E40 with a SHA-256 [manifest](test/exception-fixtures/MANIFEST.json). The [typed cases](test/typed-fixtures/CASES.json) are T01–T53 with separate [manifest](test/typed-fixtures/MANIFEST.json), [migration probes](test/typed-fixtures/MIGRATION-PROBES.json) and [vectors](test/typed-fixtures/PROOF-VECTORS.json). The [penalty cases](test/penalty-fixtures/CASES.json) are GP01–GP49 with separate [manifest](test/penalty-fixtures/MANIFEST.json), [migration adapter](test/penalty-fixtures/legacy_adapter.py) and [vectors](test/penalty-fixtures/PROOF-VECTORS.json). The [term cases](test/term-fixtures/CASES.json) are PT01–PT68 with separate [manifest](test/term-fixtures/MANIFEST.json), [migration probes](test/term-fixtures/MIGRATION-PROBES.json) and [vectors](test/term-fixtures/PROOF-VECTORS.json). The [supplied-status cases](test/proof-fixtures/CASES.json) are PS01–PS72 with a separate [manifest](test/proof-fixtures/MANIFEST.json) and [vectors](test/proof-fixtures/PROOF-VECTORS.json). The [presumption cases](test/presumption-fixtures/CASES.json) are RD01–RD77 with a separate [manifest](test/presumption-fixtures/MANIFEST.json) and [proof-neutral vectors](test/presumption-fixtures/PROOF-VECTORS.json). PT, PS and RD fixture filenames use two-letter prefixes; their wire request IDs remain three characters. The production tests still compare every frozen spike response byte for byte. See [test evidence](TEST-RESULTS.md) for the checked host and commands.

@@ -34,7 +34,8 @@ decodeReview filename value = do
   if null purposes then issue "MBINV001" (path <> "/purposes") "empty purposes" else pure ()
   traverse_ (tagged (path <> "/purposes") reviewPurposesAllowed) purposes
   limitations <- field path "limitations" value >>= arr (path <> "/limitations")
-  traverse_ (str (path <> "/limitations")) limitations
+  limitationTexts <- traverse (str (path <> "/limitations")) limitations
+  uniqueSorted (path <> "/limitations") limitationTexts
   outcome <- taggedField path "outcome"
     ["asserted_acceptable", "changes_required", "informational"] value
   timestamp <- textField path "reviewed_at" value

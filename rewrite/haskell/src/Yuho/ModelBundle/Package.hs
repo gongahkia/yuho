@@ -34,6 +34,8 @@ validate :: FilePath -> Maybe Text -> IO Validation
 validate root policy = do
   requireDirectory "/" root
   requireEntries "/" root ["model-bundle.json", "artifacts"] ["reviews"]
+  reviewFiles <- listDirectoryIfPresent root
+  if length reviewFiles > 64 then reject "MBRES001" "/reviews" "review count exceeds 64" else pure ()
   requireDirectory "/artifacts" (root </> "artifacts")
   requireEntries "/artifacts" (root </> "artifacts") ["sha256"] []
   requireDirectory "/artifacts/sha256" (root </> "artifacts" </> "sha256")
@@ -56,8 +58,6 @@ validate root policy = do
     (filter ((== "source_text") . artifactRole) (coreArtifacts core)))
   let bundle = digestDomain "yuho.model-bundle/v1" (encodeJson (coreRaw core))
       scope = scopeDigest core
-  reviewFiles <- listDirectoryIfPresent root
-  if length reviewFiles > 64 then reject "MBRES001" "/reviews" "review count exceeds 64" else pure ()
   reviews <- traverse (\name -> do
     if safeReviewName name then pure ()
       else reject "MBPKG001" ("/reviews/" <> Text.pack name) "invalid review filename"
@@ -73,10 +73,10 @@ validateArtifact directory artifact = do
   let path = "/artifacts/sha256/" <> artifactDigest artifact
       file = directory </> Text.unpack (artifactDigest artifact)
   status <- requireRegular path file
-  if toInteger (fileSize status) /= artifactLength artifact
-    then reject "MBINV001" path "artifact byte length differs from declaration" else pure ()
   if toInteger (fileSize status) > 33554432
     then reject "MBRES001" path "artifact exceeds 32 MiB" else pure ()
+  if toInteger (fileSize status) /= artifactLength artifact
+    then reject "MBINV001" path "artifact byte length differs from declaration" else pure ()
   actual <- hashFile file
   if actual == artifactDigest artifact then pure ()
     else reject "MBINV001" path "artifact SHA-256 mismatch"

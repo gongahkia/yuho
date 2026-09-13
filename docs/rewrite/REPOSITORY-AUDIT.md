@@ -1,5 +1,7 @@
 # Yuho implementation-language rewrite: repository audit
 
+**Post-audit package boundary:** [ModelBundle-v1](MODEL-BUNDLE-V1.md) now provides a separate offline, non-executable source/artifact/scope validator. This additive boundary does not revise the repository observations below, Canonical IR v1.2, the Python product or the seven accepted kernel variants. Source labels, URLs and unsigned review records remain unauthenticated supplied assertions.
+
 Snapshot: 2026-09-12. This is a read-only architecture audit, not a migration implementation or a legal-fidelity assessment. Relative paths below are from the repository root. No build, regeneration, full test suite, Docker job, or Lean build was run locally because this workstation previously experienced memory pressure.
 
 **Later decision:** This audit's candidate comparison is historical. The maintainer selected Haskell after the [independent language-spike review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md), recorded in [accepted ADR-0001](ADR-0001-HASKELL.md). Its original snapshot claims below are retained as audit evidence.

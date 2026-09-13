@@ -116,7 +116,8 @@ decodeSourceRecord path value = do
   language <- requiredText path "language" value
   jurisdiction <- requiredText path "jurisdiction" value
   ids <- field path "identifiers" value >>= arr (path <> "/identifiers")
-  traverse_ (str (path <> "/identifiers")) ids
+  identifierTexts <- traverse (str (path <> "/identifiers")) ids
+  uniqueSorted (path <> "/identifiers") identifierTexts
   traverse_ (\key -> traverse_ (str (path <> "/" <> key)) (lookupField key value))
     ["publisher_label", "locator"]
   dates <- field path "dates" value
@@ -284,6 +285,10 @@ validateStructure core = do
        Just a -> artifactRole a /= "source_text"
        Nothing -> True) derivs
     then issue "MBINV001" "/derivations" "derivation child must be extracted text" else pure ()
+  if any (\d -> case Map.lookup (derivationParent d) artMap of
+       Just a -> artifactRole a == "executable_model"
+       Nothing -> True) derivs
+    then issue "MBINV001" "/derivations" "derivation parent must be a source artifact" else pure ()
   where
     headSafe (x:_) = x
     headSafe [] = ("", "")

@@ -5,6 +5,8 @@
 
 The maintainer has chosen a freely redesigned new surface language. Current .yh behaviour is evidence for migration and differential testing. The contract distinguishes *semantic behaviour to preserve*, *temporary migration compatibility* and *intentionally redesigned behaviour*. A fixture is normative only when its expected meaning and scope are reviewed. Existing Python outputs can be wrong, incomplete or ambiguous.
 
+The separately versioned [ModelBundle-v1](MODEL-BUNDLE-V1.md) packages an exact canonical executable request, raw source artifacts, checked text spans, source descriptions and positive semantic-ID scope. The Python parser and Canonical IR remain unchanged; any future adapter must disclose unmapped IDs, ambiguous source/extraction relationships and excluded metadata rather than inventing package authority. A bundle hash is byte integrity, not official publication; an unsigned review record is not an authenticated legal review. Existing KernelInput/KernelResult bytes remain the migration regression boundary.
+
 ## 1. Semantic behaviour to preserve
 
 | Supported subset | Observable equivalence target | Evidence and boundary |

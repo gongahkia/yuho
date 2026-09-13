@@ -1,5 +1,21 @@
 # Haskell foundation targeted verification
 
+## ModelBundle-v1 package validator completion
+
+On 13 September 2026, the separate non-executable [ModelBundle-v1](../../docs/rewrite/MODEL-BUNDLE-V1.md) validator was checked with pinned GHC 9.8.4, `-Wall -Werror -O1` and serial offline Cabal commands. It adds no KernelInput/KernelResult alternative and does not invoke rule evaluation. `directory` and `filepath` moved into direct library dependencies for closed package traversal; the already freeze-pinned `unix==2.8.6.0` became a direct dependency for non-following filesystem type checks. No dependency version or compiler extension changed.
+
+| Check | Result |
+|---|---|
+| `cabal v2-build all --offline --jobs=1` | Pass: kernel and separate bundle validator under the existing warning-as-error policy. |
+| `cabal v2-test test:foundation-test --offline --jobs=1 --test-show-details=never` | Pass: 15 exact frozen Boolean goldens, H01–H21, E01–E40, T01–T53, GP01–GP49, PT01–PT68, PS01–PS72, RD01–RD77 and all previous properties, plus 8 bounded ModelBundle properties and direct resource/span checks. |
+| Seven existing `python test/{protocol,exception_protocol,typed_protocol,penalty_protocol,terms_protocol,proof_protocol,presumption_protocol}.py <kernel-binary>` commands, run individually in sequence | Pass: all existing request/result schemas, proof-neutral vectors, canonical bytes, duplicate-key and Unicode regressions, fixture manifests, multi-request recovery and 112-request RD protocol run. |
+| `python test/model_bundle_protocol.py <bundle-binary>` | Pass: 72 synthetic directory cases, three new production schemas, exact canonical output/digest and exit codes, review applicability/staleness, byte/spans, malformed JSON, symlink/FIFO/package traversal rejection, dynamic resource-limit probes, repeat invocations and isolated byte-identical fixture regeneration. [Cases](test/model-bundle-fixtures/CASES.json) and [manifest](test/model-bundle-fixtures/MANIFEST.json) are separate from every kernel fixture family. |
+| `python test/prior_bytes.py` | Pass: all **318** earlier B/H/E/T/GP/PT/PS response byte strings matched the clean offline `9dd40b628bfb18e50f10050f3e9300e7f5bfc7c1` kernel baseline exactly. RD's existing protocol suite and foundation test also passed; the new package code has no kernel dispatch path. |
+| `python test/offline_replay.py` | Pass: clean temporary-directory pinned offline build and install of **both** executables, previous representative kernel launches, and installed validator valid/invalid/cyclic/oversized/policy-unmet/I/O launches. |
+| `python test/docs.py`; `python ../../scripts/verify_capability_claims.py`; `git diff --check` | Pass: 14 structured active documents, 264 relative links, bounded public claims and whitespace. |
+
+Before the baseline response comparison, `free -h` reported 15 GiB total RAM, 6.1 GiB available and 6.7/8.0 GiB swap used. Before the clean replay it reported 5.9 GiB available and 6.7/8.0 GiB swap used. Both serial runs completed; no latency distribution or peak-RSS benchmark was attempted. The full Python suite, corpus exports, parser regeneration, Lean, Z3 and Docker were intentionally not run. The tests support the package's declared structural/integrity behavior, not source authenticity, reviewer identity, legal applicability or correctness.
+
 ## RegisteredPresumptionDerivations-v1 completion
 
 On 13 September 2026 the seventh closed fragment was checked with pinned GHC 9.8.4/Cabal, serial offline builds and the existing `-Wall -Werror -O1` policy. No Haskell dependency, compiler extension or warning suppression was added. The [RD cases](test/presumption-fixtures/CASES.json) and [proof-neutral vectors](test/presumption-fixtures/PROOF-VECTORS.json) are synthetic technical evidence, not Singapore doctrine or a formal correspondence proof.

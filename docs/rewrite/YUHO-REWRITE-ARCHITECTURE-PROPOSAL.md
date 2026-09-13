@@ -1,11 +1,13 @@
 # Yuho rewrite architecture proposal
 
-**Status:** Repository-reconciled proposal; five bounded Haskell kernel fragments are implemented
+**Status:** Repository-reconciled proposal; seven bounded Haskell kernel fragments and a separate ModelBundle-v1 validator are implemented
 **Date:** 12 September 2026  
 **Production language:** Haskell, selected in [accepted ADR-0001](ADR-0001-HASKELL.md) after the [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md)
 
 **Proof environment:** undecided; the existing Lean work remains evidence  
 **Repository baseline:** [REPOSITORY-AUDIT.md](REPOSITORY-AUDIT.md)
+
+The non-executable [ModelBundle-v1 package](MODEL-BUNDLE-V1.md) sits before the unchanged seven-variant KernelInput subprocess. It binds exact source and executable-request artifact bytes, source records, semantic mappings and enumerated positive scope under a separate domain-separated digest. Detached unsigned review assertions are descriptive; bundle validity neither authenticates sources/reviewers nor establishes legal fidelity. This package boundary is not an eighth semantic fragment, a new Canonical IR version or a criminal-outcome model.
 
 ## 1. Product thesis and current limits
 
@@ -51,6 +53,7 @@ The bounded [Haskell foundation](../../rewrite/haskell/README.md) resolves the i
 | 5 | **PenaltyTerms-v1** | [Specified](PENALTY-TERMS-V1.md) closed source-ordered trees of imprisonment, life, fine, caning and death atoms with explicit bounds, validated across the complete registry. Selected declarations carry their terms; no alternative choice, range merger, sentence or doctrinal claim follows. | [PT01–PT68 synthetic fixtures](../../rewrite/haskell/test/term-fixtures/CASES.json) and [proof-neutral vectors](../../rewrite/haskell/test/term-fixtures/PROOF-VECTORS.json); legacy `PenaltyNode`, s304A and exporters remain migration evidence. |
 | 6 | **SuppliedProofStatus-v1** | [Specified](SUPPLIED-PROOF-STATUS-V1.md) exact leaf IDs carry externally assigned `proved`, `not_proved` or reasoned `unresolved`, checked assignment sources and separate S/N/U satisfaction. Full child traces, same-context exception propagation and final-S-only penalty selection include a reachable `guard_unresolved` skip. No evidence assessment, presumption, outcome or sentence. | [PS01–PS72 synthetic fixtures](../../rewrite/haskell/test/proof-fixtures/CASES.json) and [proof-neutral vectors](../../rewrite/haskell/test/proof-fixtures/PROOF-VECTORS.json). Legacy Boolean/optional outcomes and burden/presumption labels are migration evidence, not proof-status oracles. |
 | 7 | **RegisteredPresumptionDerivations-v1** | [Specified](REGISTERED-PRESUMPTION-DERIVATIONS-V1.md) closed source-linked rebuttable technical routes over effective leaf satisfaction, complete dependency-cycle rejection, all-route traces and independent direct/presumptive support. No evidence assessment, burden shift, legal presumption or outcome. | [RD01–RD77 synthetic fixtures](../../rewrite/haskell/test/presumption-fixtures/CASES.json) and [proof-neutral vectors](../../rewrite/haskell/test/presumption-fixtures/PROOF-VECTORS.json). Legacy `@presumed`, `rebuts` and case-law effects are migration evidence only. |
+| Package boundary, not fragment 8 | **ModelBundle-v1** | [Specified](MODEL-BUNDLE-V1.md) offline byte-integrity, exact semantic-ID mappings and enumerated scope, with detached unsigned review assertions. No source authentication, legal fidelity or new rule evaluation. | [Synthetic MB fixtures](../../rewrite/haskell/test/model-bundle-fixtures/CASES.json), [offline validator CLI](../../rewrite/haskell/app/ModelBundleMain.hs) and separate package schemas. |
 | Later | Product-discriminating SG package slice | Section 84 plus a **specified** CPC disposition, cross-Act resolution, reviewed proof-status derivation, typed outcome, authority and effective-date provenance. | Requires authoritative hash-bound source and named legal review; #63/#66 cross-Act/CPC and #51 outcomes remain open. Supplied sixth-fragment classifications and current s84 Boolean tests are insufficient. |
 
 Conduct, fault, causation, participation, jurisdiction-reviewed presumptions, temporal qualification, general case law and sentencing are longer-term product goals. Current AST fields or grammar productions do not confer executable or proven semantics. Each addition needs a capability declaration, prose rules, reviewed counterexamples and explicit unsupported results.

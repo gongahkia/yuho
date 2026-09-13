@@ -5,14 +5,12 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
-import os
 import shutil
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
-ROOT = WORKSPACE.parents[1]
 BASE_REQUEST = WORKSPACE / "test/presumption-fixtures/requests/RD01.json"
 DOMAIN = b"yuho.model-bundle/v1\0"
 SCOPE_DOMAIN = b"yuho.model-scope/v1\0"
@@ -231,7 +229,7 @@ def make(output: Path) -> list[dict]:
     value["coverage"]["semantic_ids"] = ["*"]
     (path / "reviews/review:1.json").write_bytes(canon(value))
     path = add("MB31-oversize-manifest", core, blobs, 1, "MBRES001")
-    (path / "model-bundle.json").write_bytes(b" " * 1048577)
+    (path / "model-bundle.json").write_bytes(b"x" * 1048577)
     path = add("MB32-review-symlink", core, blobs, 1, "MBPKG001",
                reviews={"review:1.json": review(core)})
     (path / "reviews/review:1.json").unlink()
@@ -246,6 +244,204 @@ def make(output: Path) -> list[dict]:
     path = add("MB35-invalid-utf8-text", core, blobs, 1, "MBINV001")
     text_digest = next(a["sha256"] for a in core["artifacts"] if a["role"] == "source_text")
     (path / "artifacts/sha256" / text_digest).write_bytes(b"\xff")
+
+    def extra_source(core: dict, blobs: dict[str, bytes], content: bytes,
+                     media: str, role: str, sid: str, expression: str) -> str:
+        digest = sha(content)
+        blobs[digest] = content
+        core["artifacts"].append({"sha256": digest, "byte_length": len(content),
+                                  "media_type": media, "role": role})
+        core["artifacts"].sort(key=lambda x: x["sha256"])
+        core["legal_sources"].append({
+            "source_id": sid, "work_id": "work:synthetic", "expression_id": expression,
+            "manifestation_id": f"manifestation:{sid}", "artifact_digest": digest,
+            "source_type": "synthetic", "language": "en", "jurisdiction": "SYN",
+            "identifiers": [], "dates": {}, "locator": "fixture:shared-locator",
+        })
+        core["legal_sources"].sort(key=lambda x: x["source_id"])
+        core["scope"]["source_ids"] = sorted(x["source_id"] for x in core["legal_sources"])
+        core["scope"]["expression_ids"] = sorted({x["expression_id"] for x in core["legal_sources"]})
+        return digest
+
+    changed, payload = copy.deepcopy(core), dict(blobs)
+    pdf = extra_source(changed, payload, b"%PDF-1.7\nsynthetic\n", "application/pdf",
+                       "evidence", "src:pdf", "expression:synthetic:1")
+    add("MB36-two-manifestations", changed, payload, 0)
+    changed["derivations"] = [{"child_digest": text_digest, "parent_digest": pdf,
+                               "tool_name": "fixture-extractor", "tool_version": "1",
+                               "configuration": "exact fixture bytes"}]
+    add("MB37-extracted-text", changed, payload, 0)
+    changed, payload = copy.deepcopy(core), dict(blobs)
+    extra_source(changed, payload, b"revised synthetic text\n", "text/plain; charset=utf-8",
+                 "source_text", "src:revision", "expression:synthetic:2")
+    add("MB38-two-expressions", changed, payload, 0)
+    changed, payload = copy.deepcopy(core), dict(blobs)
+    unicode_digest = extra_source(changed, payload, "A😀\r\nB".encode(),
+        "text/plain; charset=utf-8", "source_text", "src:unicode", "expression:synthetic:1")
+    add("MB39-non-bmp-crlf", changed, payload, 0)
+    changed["semantic_mappings"][0]["artifact_digest"] = unicode_digest
+    changed["semantic_mappings"][0]["source_id"] = "src:unicode"
+    changed["semantic_mappings"][0]["span"] = {
+        "start": 1, "end": 5, "start_line": 1, "start_col": 2,
+        "end_line": 1, "end_col": 6}
+    changed["semantic_mappings"].sort(key=lambda x: (x["semantic_id"],
+        x["artifact_digest"], x["span"]["start"], x["span"]["end"]))
+    add("MB40-unicode-byte-span", changed, payload, 0)
+    invalid = copy.deepcopy(changed)
+    invalid["semantic_mappings"][0]["span"]["start"] = 2
+    add("MB41-continuation-span", invalid, payload, 1, "MBINV001")
+    invalid = copy.deepcopy(core)
+    invalid["semantic_mappings"][0]["span"]["start_col"] = 2
+    add("MB42-line-column-mismatch", invalid, blobs, 1, "MBINV001")
+    invalid = copy.deepcopy(core)
+    invalid["semantic_mappings"][0]["source_id"] = "src:missing"
+    add("MB43-missing-source", invalid, blobs, 1, "MBINV001")
+    invalid = copy.deepcopy(core)
+    invalid["scope"]["expression_ids"] = ["expression:missing"]
+    add("MB44-missing-expression", invalid, blobs, 1, "MBINV001")
+    invalid = copy.deepcopy(core)
+    invalid["scope"]["exclusions"] = [{"exclusion_id": invalid["scope"]["semantic_ids"][0],
+                                        "reason": "cannot exclude a positive ID"}]
+    add("MB45-scope-exclusion-overlap", invalid, blobs, 1, "MBINV001")
+    invalid, payload = copy.deepcopy(core), dict(blobs)
+    pdf = extra_source(invalid, payload, b"%PDF-1.7\n", "application/pdf", "evidence",
+                       "src:pdf", "expression:synthetic:1")
+    invalid["semantic_mappings"][0]["artifact_digest"] = pdf
+    invalid["semantic_mappings"][0]["source_id"] = "src:pdf"
+    add("MB46-pdf-span", invalid, payload, 1, "MBINV001")
+    invalid, payload = copy.deepcopy(core), dict(blobs)
+    extra_source(invalid, payload, b"\xff", "text/plain; charset=utf-8", "source_text",
+                 "src:invalid", "expression:synthetic:1")
+    add("MB47-invalid-utf8-artifact", invalid, payload, 1, "MBINV001")
+    invalid = copy.deepcopy(core)
+    invalid["artifacts"][0]["media_type"] = "application/x-unknown"
+    add("MB48-unsupported-media", invalid, blobs, 1, "MBCAP001")
+    invalid = copy.deepcopy(core)
+    invalid["artifacts"].append({"sha256": "f" * 64, "byte_length": 0,
+                                 "media_type": "application/pdf", "role": "evidence"})
+    invalid["artifacts"].sort(key=lambda x: x["sha256"])
+    add("MB49-unreferenced-artifact", invalid, blobs, 1, "MBINV001")
+    invalid = copy.deepcopy(core)
+    invalid["derivations"] = [{"child_digest": text_digest, "parent_digest": "f" * 64,
+                               "tool_name": "fixture", "tool_version": "1", "configuration": "none"}]
+    add("MB50-missing-derivation-parent", invalid, blobs, 1, "MBINV001")
+    invalid = copy.deepcopy(core)
+    invalid["legal_sources"][0]["manifestation_id"] = "manifestation:duplicate"
+    duplicate = copy.deepcopy(invalid["legal_sources"][0])
+    duplicate["source_id"] = "src:other"
+    invalid["legal_sources"].append(duplicate)
+    invalid["scope"]["source_ids"] = ["src:main", "src:other"]
+    add("MB51-duplicate-manifestation", invalid, blobs, 1, "MBINV001")
+    invalid = copy.deepcopy(core)
+    invalid["legal_sources"][0]["dates"] = {"publication": "2026-02-30"}
+    add("MB52-impossible-date", invalid, blobs, 1, "MBINV001")
+    invalid = copy.deepcopy(core)
+    invalid["scope"]["temporal_context"] = {"kind": "asserted_point_in_time",
+                                               "date": "2026-13-01"}
+    add("MB53-invalid-point-in-time", invalid, blobs, 1, "MBINV001")
+    add("MB54-review-two-purposes", core, blobs, 0,
+        reviews={"review:1.json": {**review(core), "purposes": ["semantic_fidelity", "source_fidelity"]}},
+        policy="source_fidelity")
+    add("MB55-review-source-coverage", core, blobs, 0,
+        reviews={"review:1.json": review(core, coverage="source_ids", purpose="source_fidelity")},
+        policy="source_fidelity")
+    add("MB56-source-coverage-not-semantic", core, blobs, 3,
+        reviews={"review:1.json": review(core, coverage="source_ids")},
+        policy="semantic_fidelity")
+    path = add("MB57-review-unknown-field", core, blobs, 1, "MBDEC001",
+               reviews={"review:1.json": review(core)})
+    value = json.loads((path / "reviews/review:1.json").read_bytes())
+    value["authenticated"] = True
+    (path / "reviews/review:1.json").write_bytes(canon(value))
+    path = add("MB58-duplicate-review-key", core, blobs, 1, "MBDEC001",
+               reviews={"review:1.json": review(core)})
+    raw = (path / "reviews/review:1.json").read_bytes()
+    (path / "reviews/review:1.json").write_bytes(raw[:-1] + b',"review_id":"review:1"}')
+    path = add("MB59-review-limit", core, blobs, 1, "MBRES001")
+    (path / "reviews").mkdir()
+    for i in range(65):
+        (path / "reviews" / f"review:{i:02}.json").write_bytes(b"{}")
+    invalid = copy.deepcopy(core)
+    invalid["artifacts"] += [{"sha256": f"{i:064x}", "byte_length": 0,
+                               "media_type": "application/pdf", "role": "evidence"}
+                              for i in range(257)]
+    add("MB60-artifact-count-limit", invalid, blobs, 1, "MBRES001")
+    invalid = copy.deepcopy(core)
+    invalid["scope"]["exclusions"] = [
+        {"exclusion_id": f"excluded:{i:04}", "reason": "synthetic omitted unit"}
+        for i in range(1025)]
+    add("MB61-exclusion-count-limit", invalid, blobs, 1, "MBRES001")
+    changed, payload = copy.deepcopy(core), dict(blobs)
+    extra_source(changed, payload, b"first rendering\n", "text/plain; charset=utf-8",
+                 "source_text", "src:first", "expression:synthetic:1")
+    extra_source(changed, payload, b"second rendering\n", "text/plain; charset=utf-8",
+                 "source_text", "src:second", "expression:synthetic:1")
+    add("MB62-shared-locator-distinct-bytes", changed, payload, 0)
+    changed, payload = copy.deepcopy(core), dict(blobs)
+    second = extra_source(changed, payload, b"second supporting passage\n",
+                          "text/plain; charset=utf-8", "source_text", "src:second",
+                          "expression:synthetic:1")
+    extra_mapping = copy.deepcopy(changed["semantic_mappings"][0])
+    extra_mapping["artifact_digest"] = second
+    extra_mapping["source_id"] = "src:second"
+    changed["semantic_mappings"].append(extra_mapping)
+    changed["semantic_mappings"].sort(key=lambda x: (x["semantic_id"],
+        x["artifact_digest"], x["span"]["start"], x["span"]["end"]))
+    add("MB63-multiple-mappings", changed, payload, 0)
+    stale = review(core, stale=True, coverage="semantic_ids")
+    stale["coverage"]["semantic_ids"] = ["old:removed"]
+    add("MB64-stale-old-coverage", core, blobs, 3,
+        reviews={"review:1.json": stale}, policy="semantic_fidelity")
+    changed = copy.deepcopy(core)
+    changed["legal_sources"][0]["verified_official"] = True
+    add("MB65-untrusted-authority-claim", changed, blobs, 1, "MBDEC001")
+
+    def altered_model(request: dict) -> tuple[dict, dict[str, bytes]]:
+        altered_core, altered_payload = copy.deepcopy(core), dict(blobs)
+        old = altered_core["executable_model"]["artifact_digest"]
+        data = canon(request)
+        new = sha(data)
+        altered_payload.pop(old)
+        altered_payload[new] = data
+        altered_core["executable_model"]["artifact_digest"] = new
+        for artifact in altered_core["artifacts"]:
+            if artifact["sha256"] == old:
+                artifact["sha256"] = new
+                artifact["byte_length"] = len(data)
+        altered_core["artifacts"].sort(key=lambda x: x["sha256"])
+        return altered_core, altered_payload
+
+    duplicate_request = json.loads(BASE_REQUEST.read_bytes())
+    duplicate_request["registry"].append(copy.deepcopy(duplicate_request["registry"][0]))
+    changed, payload = altered_model(duplicate_request)
+    add("MB66-duplicate-model-semantic-id", changed, payload, 1, "MBINV001")
+    extra_fact_request = json.loads(BASE_REQUEST.read_bytes())
+    extra_fact_request["facts"]["not:a:leaf"] = extra_fact_request["facts"]["f:root"]
+    changed, payload = altered_model(extra_fact_request)
+    add("MB67-invalid-model-facts", changed, payload, 1, "MBINV001")
+    changed_source_request = json.loads(BASE_REQUEST.read_bytes())
+    changed_source_request["sources"][0]["text"] += "extra\n"
+    changed_source_request["sources"][0]["sha256"] = sha(
+        changed_source_request["sources"][0]["text"].encode())
+    changed, payload = altered_model(changed_source_request)
+    add("MB68-model-source-mismatch", changed, payload, 1, "MBINV001")
+    changed = copy.deepcopy(core)
+    changed["legal_sources"][0]["publisher_label"] = "unverified official-looking label"
+    add("MB69-unverified-publisher-label", changed, blobs, 0)
+    changed = copy.deepcopy(core)
+    changed["semantic_mappings"][0]["span"] = {
+        "start": 2, "end": 3, "start_line": 2, "start_col": 1,
+        "end_line": 2, "end_col": 2}
+    add("MB70-wrong-but-valid-passage", changed, blobs, 0)
+    changed = copy.deepcopy(core)
+    changed["derivations"] = [{"child_digest": text_digest,
+                               "parent_digest": changed["executable_model"]["artifact_digest"],
+                               "tool_name": "fixture", "tool_version": "1",
+                               "configuration": "invalid parent role"}]
+    add("MB71-model-as-extraction-parent", changed, blobs, 1, "MBINV001")
+    changed = copy.deepcopy(core)
+    changed["artifacts"].insert(0, copy.deepcopy(changed["artifacts"][0]))
+    add("MB72-duplicate-artifact-entry", changed, blobs, 1, "MBINV001")
     return cases
 
 
