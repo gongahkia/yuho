@@ -1,0 +1,640 @@
+{
+  "$id": "yuho.execution-trace/v0.1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "module_lock_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "outputs": {
+      "additionalProperties": false,
+      "properties": {
+        "assessment::root-status": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "basic_terms::selected-terms": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "penalty_id": {
+                    "enum": [
+                      "pen:basic",
+                      "pen:enhanced"
+                    ]
+                  },
+                  "term": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": {
+                        "const": "term_imprisonment"
+                      },
+                      "maximum": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "kind": {
+                            "enum": [
+                              "specified",
+                              "not_stated"
+                            ]
+                          },
+                          "value": {
+                            "minimum": 1,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "kind"
+                        ],
+                        "type": "object"
+                      },
+                      "minimum": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "kind": {
+                            "enum": [
+                              "specified",
+                              "not_stated"
+                            ]
+                          },
+                          "value": {
+                            "minimum": 1,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "kind"
+                        ],
+                        "type": "object"
+                      },
+                      "span": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "end": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "end_col": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "end_line": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "start": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "start_col": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "start_line": {
+                            "minimum": 0,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "start",
+                          "end",
+                          "start_line",
+                          "end_line",
+                          "start_col",
+                          "end_col"
+                        ],
+                        "type": "object"
+                      },
+                      "term_id": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "unit": {
+                        "const": "days"
+                      }
+                    },
+                    "required": [
+                      "term_id",
+                      "kind",
+                      "span",
+                      "unit",
+                      "minimum",
+                      "maximum"
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "penalty_id",
+                  "term"
+                ],
+                "type": "object"
+              },
+              "maxItems": 1,
+              "type": "array"
+            }
+          ]
+        },
+        "choice::selected-penalties": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "items": {
+                "enum": [
+                  "pen:basic",
+                  "pen:enhanced"
+                ]
+              },
+              "maxItems": 1,
+              "type": "array"
+            }
+          ]
+        },
+        "enhanced_terms::selected-terms": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "penalty_id": {
+                    "enum": [
+                      "pen:basic",
+                      "pen:enhanced"
+                    ]
+                  },
+                  "term": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": {
+                        "const": "term_imprisonment"
+                      },
+                      "maximum": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "kind": {
+                            "enum": [
+                              "specified",
+                              "not_stated"
+                            ]
+                          },
+                          "value": {
+                            "minimum": 1,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "kind"
+                        ],
+                        "type": "object"
+                      },
+                      "minimum": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "kind": {
+                            "enum": [
+                              "specified",
+                              "not_stated"
+                            ]
+                          },
+                          "value": {
+                            "minimum": 1,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "kind"
+                        ],
+                        "type": "object"
+                      },
+                      "span": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "end": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "end_col": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "end_line": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "start": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "start_col": {
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "start_line": {
+                            "minimum": 0,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "start",
+                          "end",
+                          "start_line",
+                          "end_line",
+                          "start_col",
+                          "end_col"
+                        ],
+                        "type": "object"
+                      },
+                      "term_id": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "unit": {
+                        "const": "days"
+                      }
+                    },
+                    "required": [
+                      "term_id",
+                      "kind",
+                      "span",
+                      "unit",
+                      "minimum",
+                      "maximum"
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "penalty_id",
+                  "term"
+                ],
+                "type": "object"
+              },
+              "maxItems": 1,
+              "type": "array"
+            }
+          ]
+        }
+      },
+      "required": [
+        "assessment::root-status",
+        "choice::selected-penalties",
+        "basic_terms::selected-terms",
+        "enhanced_terms::selected-terms"
+      ],
+      "type": "object"
+    },
+    "plan_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "plan_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "scenario_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schema": {
+      "const": "yuho.execution-trace/v0.1"
+    },
+    "scope": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "const": "none"
+        },
+        "court_outcome": {
+          "const": "excluded"
+        },
+        "jurisdiction": {
+          "const": "Fictional"
+        },
+        "review": {
+          "const": "none"
+        },
+        "use": {
+          "const": "compiler_fixture"
+        }
+      },
+      "required": [
+        "jurisdiction",
+        "authority",
+        "review",
+        "use",
+        "court_outcome"
+      ],
+      "type": "object"
+    },
+    "step_order": {
+      "items": {
+        "enum": [
+          "assessment",
+          "choice",
+          "basic_terms",
+          "enhanced_terms"
+        ]
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "steps": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "bundle_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "gate": {
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "unconditional",
+                  "checked"
+                ]
+              },
+              "matched": {
+                "type": "boolean"
+              },
+              "operation": {
+                "enum": [
+                  "is",
+                  "contains"
+                ]
+              },
+              "output": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "value": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "enum": [
+              "assessment",
+              "choice",
+              "basic_terms",
+              "enhanced_terms"
+            ]
+          },
+          "outputs": {
+            "additionalProperties": false,
+            "properties": {
+              "root-reason": {
+                "enum": [
+                  "satisfied",
+                  "requirements_not_satisfied",
+                  "defeated",
+                  "requirements_unresolved",
+                  "exception_unresolved"
+                ]
+              },
+              "root-status": {
+                "enum": [
+                  "satisfied",
+                  "not_satisfied",
+                  "unresolved"
+                ]
+              },
+              "selected-penalties": {
+                "items": {
+                  "enum": [
+                    "pen:basic",
+                    "pen:enhanced"
+                  ]
+                },
+                "maxItems": 1,
+                "type": "array"
+              },
+              "selected-terms": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "penalty_id": {
+                      "enum": [
+                        "pen:basic",
+                        "pen:enhanced"
+                      ]
+                    },
+                    "term": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "term_imprisonment"
+                        },
+                        "maximum": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "kind": {
+                              "enum": [
+                                "specified",
+                                "not_stated"
+                              ]
+                            },
+                            "value": {
+                              "minimum": 1,
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ],
+                          "type": "object"
+                        },
+                        "minimum": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "kind": {
+                              "enum": [
+                                "specified",
+                                "not_stated"
+                              ]
+                            },
+                            "value": {
+                              "minimum": 1,
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ],
+                          "type": "object"
+                        },
+                        "span": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "end": {
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "end_col": {
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "end_line": {
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "start": {
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "start_col": {
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "start_line": {
+                              "minimum": 0,
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "start",
+                            "end",
+                            "start_line",
+                            "end_line",
+                            "start_col",
+                            "end_col"
+                          ],
+                          "type": "object"
+                        },
+                        "term_id": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "unit": {
+                          "const": "days"
+                        }
+                      },
+                      "required": [
+                        "term_id",
+                        "kind",
+                        "span",
+                        "unit",
+                        "minimum",
+                        "maximum"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "penalty_id",
+                    "term"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 1,
+                "type": "array"
+              },
+              "selection-status": {
+                "enum": [
+                  "true",
+                  "false",
+                  "unresolved"
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "reason": {
+            "oneOf": [
+              {
+                "enum": [
+                  "upstream_not_proved",
+                  "upstream_defeated",
+                  "upstream_unresolved",
+                  "candidate_not_selected",
+                  "alternate_candidate_selected"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "request_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "response_sha256": {
+            "oneOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "state": {
+            "enum": [
+              "completed",
+              "skipped",
+              "unresolved"
+            ]
+          },
+          "variant": {
+            "enum": [
+              "SuppliedProofStatus-v1",
+              "GuardedPenaltySelection-v1",
+              "PenaltyTerms-v1"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "variant",
+          "request_sha256",
+          "bundle_digest",
+          "state",
+          "gate",
+          "response_sha256",
+          "outputs",
+          "reason"
+        ],
+        "type": "object"
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "plan_id",
+    "plan_sha256",
+    "module_lock_sha256",
+    "scenario_sha256",
+    "step_order",
+    "steps",
+    "outputs",
+    "scope"
+  ],
+  "type": "object"
+}

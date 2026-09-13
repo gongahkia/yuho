@@ -1,0 +1,20 @@
+// Synthetic technical plan; no finding, sentence or court outcome.
+language YuhoSurface-v0.4;
+execution-plan fictional.restricted-entry-plan version 1.0.0; {
+  jurisdiction Fictional;
+  purpose compiler_fixture;
+  step assessment uses SuppliedProofStatus-v1 module fictional.restricted-entry-composition version 1.0.0;
+  step choice uses GuardedPenaltySelection-v1 module fictional.candidate-selection version 1.0.0 when assessment::root-status is satisfied;
+  step basic_terms uses PenaltyTerms-v1 module fictional.basic-terms version 1.0.0 when choice::selected-penalties contains pen:basic;
+  step enhanced_terms uses PenaltyTerms-v1 module fictional.enhanced-terms version 1.0.0 when choice::selected-penalties contains pen:enhanced;
+  outputs {
+    output assessment::root-status;
+    output choice::selected-penalties;
+    output basic_terms::selected-terms;
+    output enhanced_terms::selected-terms;
+  }
+  limitations {
+    "Wholly fictional unreviewed compiler and kernel conformance fixture";
+    "Technical candidates and terms are not an imposed sentence or court outcome";
+  }
+}

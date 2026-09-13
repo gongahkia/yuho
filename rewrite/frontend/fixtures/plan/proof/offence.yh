@@ -1,0 +1,27 @@
+// Fictional and non-authoritative compiler fixture; not legal advice.
+language YuhoSurface-v0.2;
+module fictional.restricted-entry version 1.0.0; {
+  kind offence;
+  jurisdiction Fictional;
+  purpose compiler_fixture;
+  export offence o:entry;
+  export proposition g:offence-requirements;
+  export program p:entry;
+  export rule r:entry;
+  provenance {
+    quote q:entry "Entry into the restricted area";
+    quote q:authorization "Absence of authorization for that entry";
+    quote q:knowledge "Knowledge that the area was restricted";
+  }
+  annotations { burden none none none not_applicable; }
+  offence o:entry rule r:entry program p:entry path entry {
+    element conduct f:entry quote q:entry;
+    element circumstance f:no-authorization quote q:authorization;
+    element fault f:knowledge quote q:knowledge;
+    all g:offence-requirements (f:entry, f:no-authorization, f:knowledge);
+  }
+  limitations {
+    "Fictional restricted-entry offence for compiler conformance only";
+    "No evidence assessment or legal advice";
+  }
+}

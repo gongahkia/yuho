@@ -1,0 +1,17 @@
+// Authored synthetic term tree; unit follows the existing closed kernel vocabulary.
+language YuhoSurface-v0.4;
+fragment-model fictional.basic-terms version 1.0.0; {
+  jurisdiction Fictional;
+  purpose compiler_fixture;
+  variant PenaltyTerms-v1;
+  request B00;
+  policy 2026-09-13;
+  input f:available "Synthetic basic term availability";
+  require f:available;
+  candidate pen:basic when f:available;
+  term term:basic days 1;
+  limitations {
+    "Wholly fictional unreviewed basic term description";
+    "A selected term is not imposed by a court";
+  }
+}

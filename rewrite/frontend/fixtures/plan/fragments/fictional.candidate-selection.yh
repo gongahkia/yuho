@@ -1,0 +1,20 @@
+// Authored synthetic candidate declarations.
+language YuhoSurface-v0.4;
+fragment-model fictional.candidate-selection version 1.0.0; {
+  jurisdiction Fictional;
+  purpose compiler_fixture;
+  variant GuardedPenaltySelection-v1;
+  request C00;
+  policy 2026-09-13;
+  input f:eligible "Synthetic candidate eligibility";
+  input f:basic "Basic candidate indicator";
+  input f:enhanced "Enhanced candidate indicator";
+  require f:eligible;
+  require_any f:basic f:enhanced;
+  candidate pen:basic when f:basic;
+  candidate pen:enhanced when f:enhanced;
+  limitations {
+    "Wholly fictional unreviewed candidate selection";
+    "Candidate selection is not a sentence";
+  }
+}

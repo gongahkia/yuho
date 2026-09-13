@@ -6,11 +6,12 @@ import argparse
 from contextlib import ExitStack
 import os
 from pathlib import Path
+import shutil
 import sys
 import tempfile
 
 from . import core
-from . import modules, temporal
+from . import modules, plan, temporal
 
 
 def _publish(data: bytes, destination: Path) -> None:
@@ -98,7 +99,9 @@ def _publish_triple(items: tuple[tuple[bytes, Path], ...]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["check", "compile"])
+    parser.add_argument(
+        "command", choices=["check", "compile", "plan-check", "plan-run"]
+    )
     parser.add_argument("source", type=Path)
     parser.add_argument("--scenario", type=Path)
     parser.add_argument("--output", type=Path)
@@ -109,8 +112,92 @@ def main() -> int:
     parser.add_argument("--verify-lock", type=Path)
     parser.add_argument("--selection-output", type=Path)
     parser.add_argument("--verify-selection", type=Path)
+    parser.add_argument("--trace-output", type=Path)
+    parser.add_argument("--plan-output", type=Path)
+    parser.add_argument("--kernel-bin", type=Path)
+    parser.add_argument("--bundle-bin", type=Path)
     args = parser.parse_args()
     try:
+        if args.command in {"plan-check", "plan-run"}:
+            if args.module_root is None or len(args.module_root) != 1:
+                parser.error("plans require exactly one --module-root")
+            if (
+                args.input_dir
+                or args.packet_dir
+                or args.output
+                or args.selection_output
+            ):
+                parser.error("legacy compile outputs do not apply to plans")
+            source = core._regular_source(args.source).encode("utf-8")
+            authored = plan.parse_plan(source, str(args.source))
+            if args.command == "plan-check":
+                if args.trace_output or args.plan_output or args.lock_output:
+                    parser.error("plan-check never writes outputs")
+                if args.scenario:
+                    scenario = plan.parse_scenario(
+                        core._regular_source(args.scenario).encode("utf-8"),
+                        str(args.scenario),
+                    )
+                    plan._prepare(authored, scenario, args.module_root[0])
+                else:
+                    plan.check_modules(authored, args.module_root[0])
+                sys.stdout.buffer.write(
+                    core.canonical(
+                        {"status": "valid", "language_version": plan.LANGUAGE}
+                    )
+                    + b"\n"
+                )
+                return 0
+            if not args.scenario or not args.trace_output:
+                parser.error("plan-run requires --scenario and --trace-output")
+            if bool(args.plan_output) != bool(args.lock_output):
+                parser.error(
+                    "plan and lock outputs must both be supplied or both omitted"
+                )
+            kernel = args.kernel_bin or Path(
+                os.environ.get("YUHO_KERNEL_BIN")
+                or shutil.which("yuho-kernel")
+                or "yuho-kernel"
+            )
+            validator = args.bundle_bin or Path(
+                os.environ.get("YUHO_BUNDLE_BIN")
+                or shutil.which("yuho-model-bundle")
+                or "yuho-model-bundle"
+            )
+            scenario = plan.parse_scenario(
+                core._regular_source(args.scenario).encode("utf-8"),
+                str(args.scenario),
+            )
+            with tempfile.TemporaryDirectory(prefix=".yuho-plan-") as temporary:
+                plan_bytes, lock, trace, _ = plan.execute(
+                    authored,
+                    scenario,
+                    args.module_root[0],
+                    kernel,
+                    validator,
+                    Path(temporary),
+                )
+            if args.plan_output and args.lock_output:
+                _publish_triple(
+                    (
+                        (plan_bytes, args.plan_output),
+                        (lock, args.lock_output),
+                        (trace, args.trace_output),
+                    )
+                )
+            else:
+                _publish(trace, args.trace_output)
+            sys.stdout.buffer.write(
+                core.canonical(
+                    {
+                        "status": "completed",
+                        "plan_sha256": core.sha(plan_bytes),
+                        "trace_sha256": core.sha(trace),
+                    }
+                )
+                + b"\n"
+            )
+            return 0
         if args.command == "check" and (
             args.output is not None
             or args.lock_output is not None

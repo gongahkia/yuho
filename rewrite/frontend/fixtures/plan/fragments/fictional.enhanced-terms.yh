@@ -1,0 +1,17 @@
+// Authored synthetic term tree; unit follows the existing closed kernel vocabulary.
+language YuhoSurface-v0.4;
+fragment-model fictional.enhanced-terms version 1.0.0; {
+  jurisdiction Fictional;
+  purpose compiler_fixture;
+  variant PenaltyTerms-v1;
+  request E00;
+  policy 2026-09-13;
+  input f:available "Synthetic enhanced term availability";
+  require f:available;
+  candidate pen:enhanced when f:available;
+  term term:enhanced days 2;
+  limitations {
+    "Wholly fictional unreviewed enhanced term description";
+    "A selected term is not imposed by a court";
+  }
+}

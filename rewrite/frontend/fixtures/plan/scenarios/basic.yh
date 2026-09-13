@@ -1,0 +1,16 @@
+scenario M00 for fictional.restricted-entry-plan {
+  proof_assignments {
+    f:fictional.restricted-entry.version-1-0-0.entry = proved;
+    f:fictional.restricted-entry.version-1-0-0.no-authorization = proved;
+    f:fictional.restricted-entry.version-1-0-0.knowledge = proved;
+    f:fictional.emergency-rescue.version-1-0-0.immediate-danger = not_proved;
+    f:fictional.emergency-rescue.version-1-0-0.rescue-purpose = not_proved;
+  }
+  bool_assignments choice {
+    f:eligible = true;
+    f:basic = true;
+    f:enhanced = false;
+  }
+  bool_assignments basic_terms { f:available = true; }
+  bool_assignments enhanced_terms { f:available = true; }
+}

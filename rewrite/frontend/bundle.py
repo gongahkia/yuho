@@ -227,3 +227,165 @@ def build(model: core.SyntheticModel, request_bytes: bytes, destination: Path) -
             errno = ctypes.get_errno()
             raise OSError(errno, os.strerror(errno), str(destination))
     return digest
+
+
+def build_fragment(
+    model_id: str, request_bytes: bytes, limitations: tuple[str, ...], destination: Path
+) -> str:
+    """Package a complete fictional GP/PT request as one ordinary v1 bundle."""
+    import ctypes
+    import os
+    import tempfile
+
+    core._safe_output(destination)
+    request = json.loads(request_bytes)
+    if core.canonical(request) != request_bytes or request.get("fragment") not in {
+        "GuardedPenaltySelection-v1",
+        "PenaltyTerms-v1",
+    }:
+        raise ValueError("noncanonical or unsupported fragment request")
+    sources = request["sources"]
+    if len(sources) != 1 or sources[0]["id"] != "src:fictional-plan":
+        raise ValueError("one authored fictional source required")
+    source_bytes = sources[0]["text"].encode("utf-8")
+    if sources[0]["sha256"] != core.sha(source_bytes):
+        raise ValueError("source digest mismatch")
+    source_digest = core.sha(source_bytes)
+    request_digest = core.sha(request_bytes)
+    seen: dict[str, str] = {}
+
+    def collect(value: object) -> None:
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if key in {
+                    "id",
+                    "penalty_id",
+                    "term_id",
+                    "exception_id",
+                } and isinstance(item, str):
+                    role = {
+                        "penalty_id": "penalty_declaration",
+                        "term_id": "penalty_term",
+                        "exception_id": "exception",
+                    }.get(
+                        key,
+                        "rule"
+                        if item.startswith("r:")
+                        else "provision"
+                        if item.startswith("p:")
+                        else "requirement",
+                    )
+                    if item in seen:
+                        raise ValueError("duplicate semantic ID")
+                    seen[item] = role
+                collect(item)
+        elif isinstance(value, list):
+            for item in value:
+                collect(item)
+
+    collect(request["registry"])
+    whole = core.span(source_bytes, 0, len(source_bytes))
+    mappings = [
+        {
+            "semantic_id": identifier,
+            "artifact_digest": source_digest,
+            "source_id": "src:fictional-plan",
+            "role": role,
+            "span": whole,
+        }
+        for identifier, role in sorted(seen.items())
+    ]
+    manifest = {
+        "schema": "yuho.model-bundle/v1",
+        "canonical_profile": "yuho.sorted-json/v1",
+        "hash_algorithm": "sha256",
+        "model_id": model_id,
+        "artifacts": sorted(
+            [
+                {
+                    "sha256": request_digest,
+                    "byte_length": len(request_bytes),
+                    "media_type": "application/json",
+                    "role": "executable_model",
+                },
+                {
+                    "sha256": source_digest,
+                    "byte_length": len(source_bytes),
+                    "media_type": "text/plain; charset=utf-8",
+                    "role": "source_text",
+                },
+            ],
+            key=lambda item: item["sha256"],
+        ),
+        "legal_sources": [
+            {
+                "source_id": "src:fictional-plan",
+                "work_id": "work:fictional-plan",
+                "expression_id": "expression:fictional-plan:v0.4",
+                "manifestation_id": "manifestation:fictional-plan:text",
+                "artifact_digest": source_digest,
+                "source_type": "synthetic",
+                "language": "en",
+                "jurisdiction": "Fictional",
+                "identifiers": [],
+                "publisher_label": "Yuho fictional compiler fixture",
+                "locator": "research:fictional-plan",
+                "dates": {},
+            }
+        ],
+        "derivations": [],
+        "semantic_mappings": mappings,
+        "scope": {
+            "coverage_mode": "enumerated_only",
+            "semantic_ids": sorted(seen),
+            "source_ids": ["src:fictional-plan"],
+            "expression_ids": ["expression:fictional-plan:v0.4"],
+            "exclusions": [
+                {
+                    "exclusion_id": "ex:court-outcome",
+                    "reason": "no judicial disposition",
+                },
+                {"exclusion_id": "ex:evidence", "reason": "no evidence assessment"},
+                {"exclusion_id": "ex:real-law", "reason": "wholly fictional rule"},
+            ],
+            "limitations": sorted(limitations),
+            "unsupported_capabilities": [
+                "court outcome",
+                "evidence assessment",
+                "real jurisdiction applicability",
+            ],
+            "jurisdictions": ["Fictional"],
+            "subject_matters": ["synthetic candidate penalty description"],
+            "temporal_context": {"kind": "unspecified"},
+        },
+        "executable_model": {
+            "artifact_digest": request_digest,
+            "format": "yuho.kernel-input/v1",
+            "fragment": request["fragment"],
+        },
+    }
+    canonical = core.canonical(manifest)
+    digest = core.sha(b"yuho.model-bundle/v1\0" + canonical)
+    with tempfile.TemporaryDirectory(
+        prefix=".yuho-bundle-", dir=destination.parent
+    ) as temp:
+        temporary = Path(temp) / "bundle"
+        store = temporary / "artifacts/sha256"
+        store.mkdir(parents=True)
+        (temporary / "model-bundle.json").write_bytes(canonical)
+        (store / request_digest).write_bytes(request_bytes)
+        (store / source_digest).write_bytes(source_bytes)
+        libc = ctypes.CDLL(None, use_errno=True)
+        renameat2 = libc.renameat2
+        renameat2.argtypes = [
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_uint,
+        ]
+        renameat2.restype = ctypes.c_int
+        if renameat2(-100, os.fsencode(temporary), -100, os.fsencode(destination), 1):
+            error = ctypes.get_errno()
+            raise OSError(error, os.strerror(error), str(destination))
+    return digest
