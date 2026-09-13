@@ -1,0 +1,1 @@
+{"diagnostics":[{"code":"MBINV001","message":"artifact byte length differs from declaration","path":"/new/artifacts/sha256/2408d0a51cd717a8734137f246be3eb4331a9955a312fd24ce5a778393c27821"}],"schema":"yuho.model-bundle-diff-diagnostics/v1"}

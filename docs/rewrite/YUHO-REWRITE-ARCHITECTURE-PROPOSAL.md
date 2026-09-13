@@ -9,6 +9,8 @@
 
 The non-executable [ModelBundle-v1 package](MODEL-BUNDLE-V1.md) sits before the unchanged seven-variant KernelInput subprocess. It binds exact source and executable-request artifact bytes, source records, semantic mappings and enumerated positive scope under a separate domain-separated digest. Detached unsigned review assertions are descriptive; bundle validity neither authenticates sources/reviewers nor establishes legal fidelity. This package boundary is not an eighth semantic fragment, a new Canonical IR version or a criminal-outcome model.
 
+The separate [ModelBundleChangeSet-v1 comparator](MODEL-BUNDLE-CHANGE-IMPACT-PROVISIONAL-SPEC.md) now validates two v1 packages and reports bounded offline structural differences. It does not change their core digests, transfer reviews, infer a legal update or affect the seven-variant subprocess.
+
 ## 1. Product thesis and current limits
 
 Yuho's target is an inspectable criminal-law DSL toolchain: source and provenance, encoded rule, facts, semantic judgment, proof status, outcome and derivation trace should have explicit relationships. A small jurisdiction-neutral kernel plus versioned doctrine packages is a design direction. Singapore criminal law should test it deeply, but legal review must precede claims of doctrinal fidelity. The new surface language may be redesigned freely; current .yh acceptance is a migration oracle, not a syntax promise.

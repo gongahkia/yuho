@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.invalid/schema/model-bundle-change-set-v1",
+  "title": "Yuho ModelBundleChangeSet v1 mechanical report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "canonical_profile", "old_bundle_digest", "new_bundle_digest", "core_relation", "summary", "changes", "directly_affected_ids", "wider_downstream_impact", "review_impact"],
+  "properties": {
+    "schema": {"const": "yuho.model-bundle-change-set/v1"},
+    "canonical_profile": {"const": "yuho.sorted-json/v1"},
+    "old_bundle_digest": {"$ref": "#/$defs/digest"},
+    "new_bundle_digest": {"$ref": "#/$defs/digest"},
+    "core_relation": {"enum": ["identical", "different"]},
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["total", "added", "removed", "unchanged", "modified", "unknown-relationship"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0, "maximum": 100000},
+        "added": {"$ref": "#/$defs/count"},
+        "removed": {"$ref": "#/$defs/count"},
+        "unchanged": {"$ref": "#/$defs/count"},
+        "modified": {"$ref": "#/$defs/count"},
+        "unknown-relationship": {"$ref": "#/$defs/count"}
+      }
+    },
+    "changes": {"type": "array", "maxItems": 100000, "items": {"$ref": "#/$defs/change"}},
+    "directly_affected_ids": {"$ref": "#/$defs/ids"},
+    "wider_downstream_impact": {"const": "unknown"},
+    "review_impact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["old_reviews_non_applicable_to_new", "new_applicable_asserted_reviews", "new_stale_reviews", "new_partial_reviews", "review_authentication"],
+      "properties": {
+        "old_reviews_non_applicable_to_new": {"$ref": "#/$defs/ids"},
+        "new_applicable_asserted_reviews": {"$ref": "#/$defs/ids"},
+        "new_stale_reviews": {"$ref": "#/$defs/ids"},
+        "new_partial_reviews": {"$ref": "#/$defs/ids"},
+        "review_authentication": {"const": "none"}
+      }
+    }
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "count": {"type": "integer", "minimum": 0, "maximum": 100000},
+    "ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "change": {
+      "type": "object", "additionalProperties": false,
+      "required": ["category", "identity", "classification", "old_record_digest", "new_record_digest"],
+      "properties": {
+        "category": {"enum": ["artifacts", "legal_sources", "work_groups", "expression_groups", "manifestations", "derivations", "semantic_mappings", "scope", "executable_model", "metadata", "reviews"]},
+        "identity": {"type": "string", "minLength": 1},
+        "classification": {"enum": ["added", "removed", "unchanged", "modified", "unknown-relationship"]},
+        "old_record_digest": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "new_record_digest": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]}
+      }
+    }
+  }
+}

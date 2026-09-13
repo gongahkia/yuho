@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.ModelBundle.Package (validatePackage) where
+module Yuho.ModelBundle.Package (validatePackage, validatePackageSnapshot, PackageSnapshot(..)) where
 
 import Control.Exception (Exception, catch, throwIO)
 import Crypto.Hash (Context, Digest, SHA256, hashFinalize, hashInit, hashUpdate)
@@ -26,11 +26,20 @@ import Yuho.Protocol.Json (J(..), encodeJson, lookupField)
 newtype BundleException = BundleException Failure deriving (Show)
 instance Exception BundleException
 
+data PackageSnapshot = PackageSnapshot
+  { snapshotCore :: Core
+  , snapshotValidation :: Validation
+  , snapshotReviewDigests :: [(Text, Text)]
+  } deriving (Eq, Show)
+
 validatePackage :: FilePath -> Maybe Text -> IO (Either Failure Validation)
-validatePackage root policy = (Right <$> validate root policy) `catch` handle
+validatePackage root policy = fmap (fmap snapshotValidation) (validatePackageSnapshot root policy)
+
+validatePackageSnapshot :: FilePath -> Maybe Text -> IO (Either Failure PackageSnapshot)
+validatePackageSnapshot root policy = (Right <$> validate root policy) `catch` handle
   where handle (BundleException failure) = pure (Left failure)
 
-validate :: FilePath -> Maybe Text -> IO Validation
+validate :: FilePath -> Maybe Text -> IO PackageSnapshot
 validate root policy = do
   requireDirectory "/" root
   requireEntries "/" root ["model-bundle.json", "artifacts"] ["reviews"]
@@ -58,15 +67,19 @@ validate root policy = do
     (filter ((== "source_text") . artifactRole) (coreArtifacts core)))
   let bundle = digestDomain "yuho.model-bundle/v1" (encodeJson (coreRaw core))
       scope = scopeDigest core
-  reviews <- traverse (\name -> do
+  reviewsWithDigests <- traverse (\name -> do
     if safeReviewName name then pure ()
       else reject "MBPKG001" ("/reviews/" <> Text.pack name) "invalid review filename"
     bytes <- readBounded ("/reviews/" <> Text.pack name) 1048576 (root </> "reviews" </> name)
     value <- expect (parseCanonical ("/reviews/" <> Text.pack name) bytes)
-    expect (decodeReview (Text.pack name) value)) (sort reviewFiles)
+    review <- expect (decodeReview (Text.pack name) value)
+    pure (review, digestBytes bytes)) (sort reviewFiles)
+  let reviews = map fst reviewsWithDigests
   if Set.size (Set.fromList (map reviewId reviews)) == length reviews then pure ()
     else reject "MBINV001" "/reviews" "duplicate review ID"
-  expect (classifyReviews core bundle scope policy reviews)
+  classified <- expect (classifyReviews core bundle scope policy reviews)
+  pure (PackageSnapshot core classified
+    [(reviewId review, digest) | (review, digest) <- reviewsWithDigests])
 
 validateArtifact :: FilePath -> Artifact -> IO ()
 validateArtifact directory artifact = do
