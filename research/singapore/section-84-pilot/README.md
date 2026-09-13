@@ -66,7 +66,7 @@ The `run-synthetic` guard accepts only exact canonical requests with the committ
 
 ## Authored Yuho surface slice
 
-The [human-readable section 84 source](surface/section84.yh) is parsed, checked and lowered by a narrow [research frontend](surface/frontend.py). It separates named propositions and `all`/`any` references from supplied proof assignments, section 107 annotations, source/mapping references and non-executable limitations. The [surface-slice document](../../../docs/rewrite/SINGAPORE-SECTION-84-SURFACE-LANGUAGE-VERTICAL-SLICE.md) gives the grammar boundary, diagnostics and compatibility results. This is not a replacement for the existing production Python/Tree-sitter parser or a general Yuho grammar.
+The [human-readable section 84 source](surface/section84.yh) is parsed, checked and lowered by the [shared YuhoSurface-v0.1 frontend](../../../rewrite/frontend/core.py) through this pilot's [compatibility wrapper](surface/frontend.py). It separates named propositions and `all`/`any` references from supplied proof assignments, section 107 annotations, source/mapping references and non-executable limitations. The [original slice document](../../../docs/rewrite/SINGAPORE-SECTION-84-SURFACE-LANGUAGE-VERTICAL-SLICE.md) records the byte-exact pilot; the [reusable subset](../../../docs/rewrite/YUHO-SURFACE-V0.1.md) adds a wholly fictional offence and exception. The production Python/Tree-sitter parser remains separate.
 
 To compile without replacing the frozen request, use fresh output in an existing temporary parent:
 

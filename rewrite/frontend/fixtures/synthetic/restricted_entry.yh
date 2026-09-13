@@ -1,0 +1,47 @@
+// Wholly fictional, non-authoritative compiler and kernel conformance fixture.
+model FictionalRestrictedAreaEntry-v0.1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Fictional;
+  purpose compiler_fixture;
+  request S00;
+  policy 2026-09-13 1024;
+
+  provenance {
+    source src:fictional-rule source_text "fictional/restricted-entry.txt";
+    source src:fictional-status synthetic_status "fictional/classifications.txt";
+    quote q:entry "Entry into the restricted area";
+    quote q:authorization "Absence of authorization for that entry";
+    quote q:knowledge "Knowledge that the area was restricted";
+    quote q:danger "Immediate danger to another person";
+    quote q:rescue "Protective or rescue purpose";
+  }
+
+  annotations {
+    burden none none none not_applicable;
+  }
+
+  offence o:entry rule r:entry program p:entry path entry {
+    element conduct f:entry quote q:entry;
+    element circumstance f:no-authorization quote q:authorization;
+    element fault f:knowledge quote q:knowledge;
+    all g:offence-requirements (f:entry, f:no-authorization, f:knowledge);
+  }
+
+  exception x:emergency-rescue to o:entry rule r:rescue program p:rescue path rescue {
+    element circumstance f:immediate-danger quote q:danger;
+    element purpose f:rescue-purpose quote q:rescue;
+    all g:emergency-requirements (f:immediate-danger, f:rescue-purpose);
+  }
+
+  outputs {
+    offence_requirements g:offence-requirements;
+    exception_applicable g:emergency-requirements;
+    defeated_branch p:entry;
+    final_rule r:entry;
+  }
+
+  limitations {
+    "Fictional, non-authoritative compiler and kernel conformance fixture only";
+    "Not legal advice; no evidence assessment or court disposition";
+  }
+}
