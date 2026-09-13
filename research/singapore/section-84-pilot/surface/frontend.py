@@ -137,6 +137,7 @@ class Leaf:
     identifier: Token
     proposition: Token
     quote: Token
+    support: Token | None
 
 
 @dataclass(frozen=True)
@@ -265,7 +266,11 @@ class Parser:
                 proposition = self.word()
                 self.take("quote")
                 quote = self.word()
-                propositions.append(Leaf(leaf_id, proposition, quote))
+                support = None
+                if self.tokens[self.index].text == "support":
+                    self.take("support")
+                    support = self.word()
+                propositions.append(Leaf(leaf_id, proposition, quote, support))
             elif head.text in {"all", "any"}:
                 group_id = self.word()
                 self.take("(")
@@ -511,8 +516,10 @@ def lower(model: Model, input_dir: Path, packet_dir: Path, path: str) -> bytes:
         start = text.index(encoded)
         quote_spans[identifier.text] = pilot.span(text, start, start + len(encoded))
     for item in declarations.values():
-        if isinstance(item, Leaf) and item.quote.text not in quote_spans:
-            raise FrontendError("SFE003", path, item.quote, "unknown source quote")
+        if isinstance(item, Leaf):
+            for quote in (item.quote, item.support):
+                if quote is not None and quote.text not in quote_spans:
+                    raise FrontendError("SFE003", path, quote, "unknown source quote")
     mapping = json.loads((PROTOTYPE / "mapping.json").read_bytes())
     mapped = {row["semantic_id"]: row for row in mapping["leaf_mappings"]}
     for key, item in declarations.items():
@@ -529,17 +536,20 @@ def lower(model: Model, input_dir: Path, packet_dir: Path, path: str) -> bytes:
                     item.identifier,
                     "proposition mapping differs from reviewed mapping",
                 )
-            needle = quote_by_id[item.quote.text].encode("utf-8")
-            start = extracted.index(needle)
-            if (
-                pilot.span(extracted, start, start + len(needle))
-                not in row["supporting_spans"]
-            ):
+            expected_spans = []
+            for quote in (item.quote, item.support):
+                if quote is None:
+                    continue
+                needle = quote_by_id[quote.text].encode("utf-8")
+                start = extracted.index(needle)
+                expected_spans.append(pilot.span(extracted, start, start + len(needle)))
+            expected_spans.sort(key=lambda span: span["start"])
+            if expected_spans != row["supporting_spans"]:
                 raise FrontendError(
                     "SFE014",
                     path,
                     item.quote,
-                    "quote span differs from reviewed mapping",
+                    "quote support spans differ from reviewed mapping",
                 )
     if set(mapped) != {
         key for key, item in declarations.items() if isinstance(item, Leaf)

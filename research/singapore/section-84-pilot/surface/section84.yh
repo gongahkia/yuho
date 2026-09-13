@@ -27,8 +27,8 @@ model SingaporePenalCodeSection84Post2022ResearchPrototype-v1 {
     leaf f:nature-causation proposition P84-03 quote q:time;
     leaf f:nature-incapacity proposition P84-04 quote q:nature;
     leaf f:wrong-causation proposition P84-03 quote q:time;
-    leaf f:ordinary-wrongfulness-incapacity proposition P84-06 quote q:ordinary;
-    leaf f:contrary-law-incapacity proposition P84-07 quote q:law;
+    leaf f:ordinary-wrongfulness-incapacity proposition P84-06 quote q:ordinary support q:wrong_operator;
+    leaf f:contrary-law-incapacity proposition P84-07 quote q:law support q:wrong_operator;
     leaf f:control-causation proposition P84-03 quote q:time;
     leaf f:control-incapacity proposition P84-09 quote q:control;
     all g:nature (f:nature-causation, f:nature-incapacity);

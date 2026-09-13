@@ -277,6 +277,13 @@ class SurfaceTests(unittest.TestCase):
                 ),
                 "SFE014",
             ),
+            (
+                self.source.replace(
+                    "quote q:ordinary support q:wrong_operator;",
+                    "quote q:ordinary;",
+                ),
+                "SFE014",
+            ),
         ]
         for changed, code in cases:
             with self.subTest(code=code):
