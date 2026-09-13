@@ -1,0 +1,8 @@
+// Synthetic externally supplied statuses; not a factual or judicial finding.
+scenario M00 for FictionalRestrictedEntryComposition-v0.2 {
+  f:fictional.restricted-entry.version-1-0-0.entry = proved;
+  f:fictional.restricted-entry.version-1-0-0.no-authorization = proved;
+  f:fictional.restricted-entry.version-1-0-0.knowledge = proved;
+  f:fictional.emergency-rescue.version-1-0-0.immediate-danger = proved;
+  f:fictional.emergency-rescue.version-1-0-0.rescue-purpose = proved;
+}

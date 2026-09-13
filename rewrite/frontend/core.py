@@ -265,11 +265,11 @@ class Parser:
                 )
         return tuple(assignments)
 
-    def synthetic_rule(self, kind: str) -> SyntheticRule:
+    def synthetic_rule(self, kind: str, *, attached: bool = True) -> SyntheticRule:
         head = self.take(kind)
         identifier = self.word()
         target = None
-        if kind == "exception":
+        if kind == "exception" and attached:
             self.take("to")
             target = self.word()
         self.take("rule")
@@ -981,8 +981,8 @@ def check_synthetic(model: SyntheticModel, path: str) -> dict[str, object]:
     def fail(code: str, token: Token, message: str):
         raise FrontendError(code, path, token, message)
 
-    if not re.fullmatch(r"[A-Za-z][A-Za-z0-9-]*-v0\.1", model.identifier.text):
-        fail("SFE004", model.identifier, "invalid YuhoSurface-v0.1 model ID")
+    if not re.fullmatch(r"[A-Za-z][A-Za-z0-9-]*-v0\.[12]", model.identifier.text):
+        fail("SFE004", model.identifier, "invalid bounded YuhoSurface model ID")
     if model.variant.text != "SuppliedProofStatus-v1":
         fail("SFE004", model.variant, "this subset requires SuppliedProofStatus-v1")
     if (

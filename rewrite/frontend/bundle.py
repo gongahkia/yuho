@@ -73,6 +73,7 @@ def core_and_artifacts(
         raise ValueError("executable source bytes differ from the authored model")
     source_bytes = source["text"].encode("utf-8")
     status_bytes = status["text"].encode("utf-8")
+    expression_version = "v0.2" if model.identifier.text.endswith("-v0.2") else "v0.1"
     artifacts = {
         core.sha(data): data for data in (request_bytes, source_bytes, status_bytes)
     }
@@ -91,7 +92,7 @@ def core_and_artifacts(
         {
             "source_id": source["id"],
             "work_id": "work:fictional-rule",
-            "expression_id": "expression:fictional-rule:v0.1",
+            "expression_id": f"expression:fictional-rule:{expression_version}",
             "manifestation_id": "manifestation:fictional-rule:text",
             "artifact_digest": core.sha(source_bytes),
             "source_type": "synthetic",
@@ -105,7 +106,7 @@ def core_and_artifacts(
         {
             "source_id": status["id"],
             "work_id": "work:fictional-status",
-            "expression_id": "expression:fictional-status:v0.1",
+            "expression_id": f"expression:fictional-status:{expression_version}",
             "manifestation_id": "manifestation:fictional-status:text",
             "artifact_digest": core.sha(status_bytes),
             "source_type": "synthetic",
