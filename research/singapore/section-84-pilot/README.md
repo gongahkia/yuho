@@ -1,12 +1,12 @@
 # Section 84 offline source intake
 
-This is a **pre-bundle source and representability packet**, not an executable Singapore-law model, a valid `ModelBundle-v1`, or legal advice. The [intake report](../../../docs/rewrite/SINGAPORE-SECTION-84-SOURCE-INTAKE-REPORT.md) records the observed pages, source limitations and review gates. The prior [decision report](../../../docs/rewrite/SINGAPORE-SECTION-84-PILOT-DECISION-REPORT.md) remains provisional.
+The original source intake is a **pre-bundle source and representability packet**. This directory now also contains a bounded [executable research prototype](prototype/request.json) and an offline [ModelBundle-v1 recipe](prototype/pilot.py). Neither the technical rule result nor structural bundle validity is legal advice or a court outcome. The [intake report](../../../docs/rewrite/SINGAPORE-SECTION-84-SOURCE-INTAKE-REPORT.md) records the observed pages and source limitations; the [prototype report](../../../docs/rewrite/SINGAPORE-SECTION-84-EXECUTABLE-RESEARCH-PROTOTYPE.md) states the new scope. The prior [decision report](../../../docs/rewrite/SINGAPORE-SECTION-84-PILOT-DECISION-REPORT.md) remains historical decision evidence.
 
 The input directory contains three user-owned Firefox “Webpage, Complete” HTML snapshots and their `_files` directories. Do not edit or execute them. The extractor reads companion files only to compute a deterministic inventory; it never treats their scripts, styles or images as legislative text. It never uses the network. The committed [source lock](SOURCE-LOCK.json) contains exact source and generated-output hashes; these establish byte identity, not authenticity, legal authority, point-in-time applicability or model correctness.
 
 The later **research-only** [authority and temporal report](../../../docs/rewrite/SINGAPORE-SECTION-84-AUTHORITY-AND-TEMPORAL-RESEARCH.md) uses a separate [authority register](AUTHORITY-REGISTER.json), [proposition review matrix](PROPOSITION-REVIEW-MATRIX.json), [temporal applicability matrix](TEMPORAL-APPLICABILITY-MATRIX.json) and [qualified-review brief](QUALIFIED-REVIEW-BRIEF.md). Those internal JSON documents are **not** a public protocol schema, Canonical IR, an executable model, or a valid `ModelBundle-v1`. The report distinguishes directly read Gazette instruments and judgments from explanatory ministry material and unauthenticated snapshots. The maintainer subsequently attested to an unsigned written confirmation by a Singapore-qualified criminal-law reviewer. The [privacy-safe review record](QUALIFIED-REVIEW-RECORD.json) binds that report to research baseline commit `c057fb84000265b412d1b6ca3d050e7b2a1d5eca`; it does not authenticate the reviewer, answer each open proposition question, or review a future executable bundle digest.
 
-The next executable-prototype **source gate is blocked in this runtime**. On 13 September 2026, direct requests to the four official Gazette PDF URLs for Act 15/2019 s 27, S 849/2019 cl 2, Act 23/2021 s 8 and S 146/2022 cl 2 each returned HTTP 403. Direct SSO requests for the Penal Code and those instruments also returned HTTP 403. The earlier [authority register](AUTHORITY-REGISTER.json) preserves SHA-256 values from official PDFs actually obtained during the prior research pass, but those temporary bytes were intentionally removed and could not be independently re-fetched here. The locked browser capture is not authenticated official primary-source evidence. A direct, complete through-cutoff check for later section 84 amendments is also unavailable. Search-index snippets are not substituted for full primary text. Accordingly, no executable section 84 artifact, kernel request, or `ModelBundle-v1` is created by the review-record milestone. The review remains research-baseline scoped, and implementation conformance review for any future digest remains pending.
+At the earlier review-record milestone, direct requests to the four official Gazette PDF URLs and SSO returned HTTP 403. That milestone created **no executable section 84 artifact**. The maintainer has since accepted the reviewed source and authority packet as sufficient for this bounded research prototype. This decision does not change the existing hashes, source classifications, access history or review record. The locked browser capture remains an unverified snapshot; the review still binds the research baseline, not the new executable bytes or bundle digest. No new download is required to run the offline prototype.
 
 From the repository root, set explicit directories and use the locked inspection timestamp:
 
@@ -32,6 +32,34 @@ YUHO_S84_INPUT_DIR="$INTAKE_SOURCE_DIR" \
   -s research/singapore/section-84-pilot/test -p 'test_*.py' -v
 ```
 
-The external packet contains the receipt, manifest, span map, representability map, scope declaration and three extracted text files. The committed [representability summary](REPRESENTABILITY-SUMMARY.json) records classifications only; it has no fact assignments or executable request. The exact source-to-model, version, causation, burden and procedural questions remain for qualified review. `ModelBundle-v1` presently requires a complete executable-model artifact, so this packet cannot be validated or labelled as a ModelBundle. No source HTML or companion asset is committed.
+The external packet contains the receipt, manifest, span map, representability map, scope declaration and three extracted text files. The committed [representability summary](REPRESENTABILITY-SUMMARY.json) describes that original packet and has no fact assignments. The packet alone is not a ModelBundle; the separate prototype recipe adds the required executable artifact into a fresh, closed bundle. No source HTML, complete extracted statute or companion asset is committed.
 
-The same focused test command also validates research JSON structure, unique IDs, cross-references, source classifications, review-status and temporal-date discipline. Set `YUHO_S84_INPUT_DIR` as above to include read-only external source-lock verification. Run `python3 rewrite/haskell/test/docs.py` and `python3 scripts/verify_capability_claims.py` from the repository root for documentation and capability-claim checks. The temporary official PDFs used to research the authority report are not distributed with this repository; verify cited URLs and expressions afresh for any later legal review.
+The same focused test command also validates research JSON structure, unique IDs, cross-references, source classifications, review-status and temporal-date discipline. Set `YUHO_S84_INPUT_DIR` as above to include read-only external source-lock verification. Run `python3 rewrite/haskell/test/docs.py` and `python3 scripts/verify_capability_claims.py` from the repository root for documentation and capability-claim checks. The temporary official PDFs used to research the authority report are not distributed with this repository.
+
+## Reproduce the executable research prototype
+
+The [model scope](prototype/scope.json) pins the reviewed post-1-March-2022 structure and excludes case-specific temporal selection, evidence assessment, an anchor offence, diagnosis and all court outcomes. The committed [KernelInput](prototype/request.json) uses `SuppliedProofStatus-v1` and eight externally classified leaves. Its baseline classifications are all reasoned `unresolved`; the 11 [accepted synthetic requests](prototype/fixtures/CASES.json) exercise alternative technical routes. The 12 rejected requests verify closed fields, required references, proof-status and metadata diagnostics. Each has a committed canonical result snapshot. The [mapping](prototype/mapping.json) ties semantic IDs to exact offsets in the locked external extracted text; the bundled kernel request embeds only short necessary excerpts.
+
+From the repository root, set `INTAKE_SOURCE_DIR` and `INTAKE_OUTPUT_DIR` to the two immutable external directories, then run:
+
+```sh
+cd rewrite/haskell
+cabal v2-build exe:yuho-kernel exe:yuho-model-bundle --offline --jobs=1
+cd ../..
+export YUHO_S84_INPUT_DIR="$INTAKE_SOURCE_DIR"
+export YUHO_S84_PACKET_DIR="$INTAKE_OUTPUT_DIR"
+export YUHO_KERNEL_BIN="$(cd rewrite/haskell && cabal list-bin exe:yuho-kernel)"
+export YUHO_BUNDLE_BIN="$(cd rewrite/haskell && cabal list-bin exe:yuho-model-bundle)"
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover \
+  -s research/singapore/section-84-pilot/test -p 'test_*.py' -v
+"$YUHO_KERNEL_BIN" < research/singapore/section-84-pilot/prototype/fixtures/requests/X01-nature.json
+python3 research/singapore/section-84-pilot/prototype/pilot.py run-synthetic \
+  --input-dir "$INTAKE_SOURCE_DIR" --packet-dir "$INTAKE_OUTPUT_DIR" \
+  --request-path research/singapore/section-84-pilot/prototype/fixtures/requests/X01-nature.json \
+  --kernel "$YUHO_KERNEL_BIN"
+python3 research/singapore/section-84-pilot/prototype/pilot.py build-bundle \
+  --input-dir "$INTAKE_SOURCE_DIR" --packet-dir "$INTAKE_OUTPUT_DIR" \
+  --destination "$(mktemp -d)/bundle" --validator "$YUHO_BUNDLE_BIN"
+```
+
+The `run-synthetic` guard accepts only exact canonical requests with the committed registry, sources, policy, metadata and eight synthetic assignment records; only supplied proof statuses and the request ID may vary. This prevents a request from silently changing the model or using `reference_date` as a real-case selector within the pilot runner. Direct kernel invocation remains useful for inspecting protocol behavior, but does not perform that pilot-specific scope check. The bundle builder requires a nonexistent destination, verifies the committed source lock and prototype bytes, assembles into a fresh temporary directory, validates it offline and publishes only on success. Build twice into different fresh destinations and compare recursive file bytes to check determinism. The digest is `02e51da9fa1bf285eec7cca8b55494c1d6a8e82b9b7e7e300a30b338ecbd404a`. Snapshot updates are deliberate: the focused tests compare regenerated request structures and actual kernel bytes with committed snapshots; ordinary tests never rewrite them. An unsigned research-baseline review is recorded in [QUALIFIED-REVIEW-RECORD.json](QUALIFIED-REVIEW-RECORD.json); **no review assertion is added to the generated bundle**. A later implementation-conformance confirmation would have to name this exact digest and the exact reviewed bytes.
