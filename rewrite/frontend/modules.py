@@ -194,6 +194,10 @@ def parse_module(source: bytes, path: str) -> Module:
         composition = Composition(
             offence, exception, attached_exception, attached_offence, tuple(outputs)
         )
+    elif kind.text == "temporal":
+        raise core.FrontendError(
+            "SFE049", path, kind, "temporal roots require YuhoSurface-v0.3"
+        )
     else:
         raise core.FrontendError("SFE022", path, kind, "unsupported module kind")
     p.take("limitations")
@@ -615,7 +619,9 @@ def _compose(
     return model
 
 
-def resolve(root_file: Path, module_root: Path) -> Resolved:
+def resolve(
+    root_file: Path, module_root: Path, *, ignored: frozenset[Path] = frozenset()
+) -> Resolved:
     base = _regular_directory(module_root)
     selected = root_file.resolve(strict=False)
     if (
@@ -641,6 +647,8 @@ def resolve(root_file: Path, module_root: Path) -> Resolved:
     by_id: dict[str, set[str]] = {}
     selected_module: Module | None = None
     for path in files:
+        if path in ignored:
+            continue
         raw = path.read_bytes()
         relative = path.relative_to(base).as_posix()
         module = parse_module(raw, relative)

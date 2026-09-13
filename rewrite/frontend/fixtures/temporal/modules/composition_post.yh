@@ -1,0 +1,33 @@
+// Fictional and non-authoritative composition; importing alone does not execute.
+language YuhoSurface-v0.2;
+module fictional.restricted-entry-composition-post version 1.0.0; {
+  kind composition;
+  jurisdiction Fictional;
+  purpose compiler_fixture;
+  import fictional.restricted-entry version 1.0.0 as entry;
+  import fictional.emergency-rescue-post version 1.0.0 as rescue;
+  export output final_rule;
+  model FictionalRestrictedEntryPost-v0.2;
+  request M00;
+  policy 2026-09-13 1024;
+  provenance {
+    source src:fictional-rule source_text "fictional/composed-rule.txt";
+    source src:fictional-status synthetic_status "fictional/composed-classifications.txt";
+  }
+  annotations { burden none none none not_applicable; }
+  compose {
+    offence entry::o:entry;
+    exception rescue::x:emergency-rescue;
+    attach rescue::x:emergency-rescue to entry::o:entry;
+    outputs {
+      offence_requirements entry::g:offence-requirements;
+      exception_applicable rescue::g:emergency-requirements;
+      defeated_branch entry::p:entry;
+      final_rule entry::r:entry;
+    }
+  }
+  limitations {
+    "Wholly fictional, non-authoritative and unreviewed compiler fixture";
+    "No evidence assessment, diagnosis, court outcome or legal advice";
+  }
+}

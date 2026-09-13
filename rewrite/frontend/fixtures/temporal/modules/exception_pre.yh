@@ -1,0 +1,23 @@
+// Fictional and non-authoritative compiler fixture; not a real exception.
+language YuhoSurface-v0.2;
+module fictional.emergency-rescue-pre version 1.0.0; {
+  kind exception;
+  jurisdiction Fictional;
+  purpose compiler_fixture;
+  export exception x:emergency-rescue;
+  export proposition g:emergency-requirements;
+  provenance {
+    quote q:danger "Immediate danger to another person";
+    quote q:rescue "Protective or rescue purpose";
+  }
+  annotations { burden none none none not_applicable; }
+  exception x:emergency-rescue rule r:rescue program p:rescue path rescue {
+    element circumstance f:immediate-danger quote q:danger;
+    element purpose f:rescue-purpose quote q:rescue;
+    any g:emergency-requirements (f:immediate-danger, f:rescue-purpose);
+  }
+  limitations {
+    "Fictional emergency-rescue exception for compiler conformance only";
+    "No court disposition or legal advice";
+  }
+}

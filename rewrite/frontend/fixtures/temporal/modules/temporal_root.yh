@@ -1,0 +1,23 @@
+// Fictional temporal selection only; dates are authored test data.
+language YuhoSurface-v0.3;
+module fictional.restricted-entry-temporal version 1.0.0; {
+  kind temporal;
+  jurisdiction Fictional;
+  purpose compiler_fixture;
+  rule-family fictional.restricted-entry;
+  import fictional.restricted-entry-composition-pre version 1.0.0 as pre;
+  import fictional.restricted-entry-composition-post version 1.0.0 as post;
+  expression pre-amendment version 1.0.0 {
+    effective from 2030-01-01 until 2031-01-01;
+    model pre;
+  }
+  expression post-amendment version 2.0.0 {
+    effective from 2031-01-01;
+    supersedes pre-amendment;
+    model post;
+  }
+  limitations {
+    "Wholly fictional rule expressions for compiler tests";
+    "No real law, evidence assessment, court outcome or legal advice";
+  }
+}

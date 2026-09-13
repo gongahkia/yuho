@@ -1,0 +1,11 @@
+// Same supplied vocabulary for both complete fictional expressions.
+scenario M00 for fictional.restricted-entry {
+  conduct_date 2031-01-01;
+  proof_assignments {
+    f:entry = proved;
+    f:no-authorization = proved;
+    f:knowledge = proved;
+    f:immediate-danger = proved;
+    f:rescue-purpose = not_proved;
+  }
+}
