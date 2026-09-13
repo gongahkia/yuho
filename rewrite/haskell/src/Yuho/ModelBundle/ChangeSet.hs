@@ -213,9 +213,15 @@ diffMappings old new = concatMap one (Set.toAscList (Map.keysSet olds `Set.union
       ([a], [b]) -> diffCategory "semantic_mappings" (Map.singleton key a) (Map.singleton key b)
       ([a], []) -> diffCategory "semantic_mappings" (Map.singleton key a) Map.empty
       ([], [b]) -> diffCategory "semantic_mappings" Map.empty (Map.singleton key b)
-      (a, b) -> [ChangeRow "semantic_mappings" key UnknownRelationship
-        (recordDigest . JArr . sortOn encodeJson <$> nonempty a)
-        (recordDigest . JArr . sortOn encodeJson <$> nonempty b)]
+      (a, b) ->
+        let prior = recordDigest . JArr . sortOn encodeJson <$> nonempty a
+            later = recordDigest . JArr . sortOn encodeJson <$> nonempty b
+            kind = case (prior, later) of
+              (Nothing, Just _) -> Added
+              (Just _, Nothing) -> Removed
+              (Just x, Just y) | x == y -> Unchanged
+              _ -> UnknownRelationship
+        in [ChangeRow "semantic_mappings" key kind prior later]
     nonempty [] = Nothing
     nonempty xs = Just xs
 
@@ -314,7 +320,7 @@ decodeRow value = do
     (Removed, Just _, Nothing) -> pure ()
     (Unchanged, Just a, Just b) | a == b -> pure ()
     (Modified, Just a, Just b) | a /= b -> pure ()
-    (UnknownRelationship, _, _) -> pure ()
+    (UnknownRelationship, Just a, Just b) | a /= b -> pure ()
     _ -> Left (Failure "MBCDINV001" "/changes" "classification and digest presence disagree")
   pure (ChangeRow category identity classification prior later)
 

@@ -32,6 +32,7 @@ def make(output: Path) -> None:
         shutil.rmtree(output)
     core, blobs = base()
     write_bundle(output / "DX01-base", core, blobs)
+    write_bundle(output / "DX12-reordered-authoring", dict(reversed(list(core.items()))), blobs)
     write_bundle(output / "DX02-same-core-review", core, blobs,
                  {"review:1.json": review(core)})
 
@@ -101,6 +102,15 @@ def make(output: Path) -> None:
     write_bundle(output / "DX10-stale-review", changed, blobs,
                  {"review:1.json": review(core)})
 
+    changed = copy.deepcopy(core)
+    extra_mapping = copy.deepcopy(changed["semantic_mappings"][0])
+    extra_mapping["span"] = {"start": 2, "end": 3, "start_line": 2,
+                             "start_col": 1, "end_line": 2, "end_col": 2}
+    changed["semantic_mappings"].append(extra_mapping)
+    changed["semantic_mappings"].sort(key=lambda item: (item["semantic_id"],
+        item["artifact_digest"], item["span"]["start"], item["span"]["end"]))
+    write_bundle(output / "DX11-ambiguous-mapping", changed, blobs)
+
     cases = [
         ("DC01-identical", "DX01-base", "DX01-base", 0),
         ("DC02-review-only", "DX01-base", "DX02-same-core-review", 0),
@@ -124,6 +134,12 @@ def make(output: Path) -> None:
         ("DC20-invalid-new", "DX01-base", "MB09-length-mismatch", 1),
         ("DC21-invalid-both", "MB08-unknown-field", "MB09-length-mismatch", 1),
         ("DC22-resource-invalid", "MB31-oversize-manifest", "DX01-base", 1),
+        ("DC23-ambiguous-mapping", "DX01-base", "DX11-ambiguous-mapping", 0),
+        ("DC24-equal-multiple-mappings", "DX11-ambiguous-mapping", "DX11-ambiguous-mapping", 0),
+        ("DC25-reordered-authoring", "DX01-base", "DX12-reordered-authoring", 0),
+        ("DC26-non-bmp-crlf", "DX01-base", "MB39-non-bmp-crlf", 0),
+        ("DC27-unicode-span", "DX01-base", "MB40-unicode-byte-span", 0),
+        ("DC28-symlink-invalid", "MB22-symlink", "DX01-base", 1),
     ]
     (output.parent / "CASES.json").write_bytes(canon([
         {"id": name, "old": old, "new": new, "exit": code}

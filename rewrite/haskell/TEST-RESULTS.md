@@ -1,5 +1,21 @@
 # Haskell foundation targeted verification
 
+## ModelBundleChangeSet-v1 offline comparison completion
+
+On 13 September 2026, the separate [ModelBundleChangeSet-v1](../../docs/rewrite/MODEL-BUNDLE-CHANGE-IMPACT-PROVISIONAL-SPEC.md) comparator was built with pinned GHC 9.8.4, `-Wall -Werror -O1` and serial offline Cabal. It validates two v1 packages, reports structural changes and exact review non-transfer, and does not add a kernel variant or legal-update inference. No dependency or compiler extension changed.
+
+| Check | Result |
+| --- | --- |
+| `cabal v2-build all --offline --jobs=1`; `cabal v2-test foundation-test --offline --jobs=1 --test-show-details=never` | Passed: both executables and complete foundation suite, including 4 new bounded comparison properties, stored-report parser hardening, output/count limits and all prior fragment properties. |
+| Seven existing `python test/{protocol,exception_protocol,typed_protocol,penalty_protocol,terms_protocol,proof_protocol,presumption_protocol}.py <kernel-binary>` commands, run serially | Passed: all prior fixture families, persistent suites, schemas, vectors, canonical bytes and recovery. |
+| `python test/prior_bytes.py` | Passed: all 318 prior B/H/E/T/GP/PT/PS responses remain byte-identical to the pinned historical baseline. |
+| `python test/model_bundle_protocol.py <bundle-binary>` | Passed: 72 existing v1 package fixtures, schema, regeneration, integrity and dynamic resource checks. |
+| `python test/model_bundle_diff_protocol.py <bundle-binary>` | Passed: 28 committed canonical snapshots, report schema, both direction orders, authoring-order equivalence, same-core review changes, invalid old/new/both inputs, Unicode/CRLF and symlink cases, ambiguous identities, one MiB output refusal, deterministic repetition and isolated fixture regeneration. Snapshot updates are explicit only. |
+| `python test/offline_replay.py` | Passed: clean temporary-directory offline build/install of both executables, existing kernel and validator launches, installed diff success against a committed golden and invalid-input refusal. |
+| `python test/docs.py`; `python ../../scripts/verify_capability_claims.py`; `git diff --check` | Passed: active-document structure and relative links, bounded capability claims and whitespace checks. |
+
+Before the clean replay, `free -h` reported 15 GiB total RAM, about 5.9 GiB available and 8.0 GiB swap used. The serial replay completed; these coarse observations are not a latency or peak-RSS benchmark. No Haskell formatter was installed, so warning-as-error compilation, reviewed source formatting and diff whitespace checks are the available formatting gates. The full production Python suite, parser regeneration, corpus exports, Lean, Z3 and Docker were not run because no corresponding production bytes changed. Technical comparison tests establish neither legal supersession nor legal-review validity.
+
 ## ModelBundle-v1 package validator completion
 
 On 13 September 2026, the separate non-executable [ModelBundle-v1](../../docs/rewrite/MODEL-BUNDLE-V1.md) validator was checked with pinned GHC 9.8.4, `-Wall -Werror -O1` and serial offline Cabal commands. It adds no KernelInput/KernelResult alternative and does not invoke rule evaluation. `directory` and `filepath` moved into direct library dependencies for closed package traversal; the already freeze-pinned `unix==2.8.6.0` became a direct dependency for non-following filesystem type checks. No dependency version or compiler extension changed.

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -77,21 +78,71 @@ def main(executable: str, update: bool = False) -> None:
     assert outputs["DC01-identical"]["core_relation"] == "identical"
     assert outputs["DC01-identical"]["summary"]["total"] == outputs["DC01-identical"]["summary"]["unchanged"]
     assert outputs["DC02-review-only"]["core_relation"] == "identical"
+    assert outputs["DC25-reordered-authoring"]["core_relation"] == "identical"
     assert outputs["DC02-review-only"]["review_impact"]["old_reviews_non_applicable_to_new"] == []
     assert outputs["DC10-old-review-nontransfer"]["review_impact"]["old_reviews_non_applicable_to_new"] == ["review:1"]
     assert outputs["DC07-scope-added"]["summary"]["added"] == outputs["DC08-scope-removed"]["summary"]["removed"]
+    assert any(row["category"] == "legal_sources" and row["classification"] == "modified"
+               for row in outputs["DC03-metadata"]["changes"])
+    assert any(row["category"] == "semantic_mappings" and row["classification"] == "modified"
+               for row in outputs["DC05-span"]["changes"])
+    assert any(row["category"] == "artifacts" and row["classification"] == "added"
+               for row in outputs["DC09-source-bytes"]["changes"])
+    assert "f:root" in outputs["DC09-source-bytes"]["directly_affected_ids"]
     assert any(row["classification"] == "unknown-relationship" for row in outputs["DC06-model"]["changes"])
+    assert any(row["category"] == "semantic_mappings" and row["classification"] == "unknown-relationship"
+               for row in outputs["DC23-ambiguous-mapping"]["changes"])
+    assert all(row["classification"] == "unchanged" for row in outputs["DC24-equal-multiple-mappings"]["changes"])
     assert outputs["DC06-model"]["wider_downstream_impact"] == "unknown"
     missing = subprocess.run([executable, "diff", str(FIXTURES / "absent"),
                               str(location("DX01-base"))], capture_output=True, timeout=30)
     assert missing.returncode == 2 and not missing.stdout
     usage = subprocess.run([executable, "diff"], capture_output=True, timeout=30)
     assert usage.returncode == 2 and not usage.stdout
+    unsupported_version_check(executable)
+    output_limit_check(executable)
     good = run(executable, "DX01-base", "DX03-source-metadata")
     assert good.returncode == 0, good.stderr
     assert good.stdout == run(executable, "DX01-base", "DX03-source-metadata").stdout
     print(f"model bundle diff: {len(cases)} snapshot cases, schema, deterministic bytes, "
-          "fixture regeneration, direction, reviews and rejection recovery passed")
+          "fixture regeneration, direction, reviews, output limit and rejection recovery passed")
+
+
+def output_limit_check(executable: str) -> None:
+    with tempfile.TemporaryDirectory(prefix="yuho-diff-limit-") as temporary:
+        roots = []
+        for label in ("a", "b"):
+            target = Path(temporary) / label
+            shutil.copytree(location("DX01-base"), target)
+            core = json.loads((target / "model-bundle.json").read_bytes())
+            template = core["legal_sources"][0]
+            for index in range(1000):
+                item = dict(template)
+                item["source_id"] = f"src:{label}{'x' * 108}{index:04}"
+                item["manifestation_id"] = f"manifestation:{label}{'x' * 98}{index:04}"
+                core["legal_sources"].append(item)
+            core["legal_sources"].sort(key=lambda item: item["source_id"])
+            core["scope"]["source_ids"] = sorted(item["source_id"] for item in core["legal_sources"])
+            (target / "model-bundle.json").write_bytes(canonical(core))
+            roots.append(target)
+        completed = subprocess.run([executable, "diff", str(roots[0]), str(roots[1])],
+                                   capture_output=True, timeout=90)
+        assert completed.returncode == 4 and not completed.stdout, completed.stderr
+        diagnostic = json.loads(completed.stderr)
+        assert diagnostic["diagnostics"][0]["code"] == "MBCDRES001", diagnostic
+
+
+def unsupported_version_check(executable: str) -> None:
+    with tempfile.TemporaryDirectory(prefix="yuho-diff-version-") as temporary:
+        target = Path(temporary) / "future"
+        shutil.copytree(location("DX01-base"), target)
+        core = json.loads((target / "model-bundle.json").read_bytes())
+        core["schema"] = "yuho.model-bundle/v2"
+        (target / "model-bundle.json").write_bytes(canonical(core))
+        completed = subprocess.run([executable, "diff", str(location("DX01-base")), str(target)],
+                                   capture_output=True, timeout=30)
+        assert completed.returncode == 1 and not completed.stdout
+        assert json.loads(completed.stderr)["diagnostics"][0]["code"] == "MBCAP001"
 
 
 if __name__ == "__main__":

@@ -1,0 +1,1 @@
+{"diagnostics":[{"code":"MBPKG001","message":"expected regular file, no symlinks or special objects","path":"/old/artifacts/sha256/2408d0a51cd717a8734137f246be3eb4331a9955a312fd24ce5a778393c27821"}],"schema":"yuho.model-bundle-diff-diagnostics/v1"}

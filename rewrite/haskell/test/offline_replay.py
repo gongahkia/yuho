@@ -53,6 +53,19 @@ def main() -> None:
                                  capture_output=True, timeout=30)
         assert missing.returncode == 2
         assert json.loads(missing.stdout)["status"] == "io_error"
+        diff_fixtures = WORKSPACE / "test/model-bundle-diff-fixtures"
+        compared = subprocess.run([str(bundle_binary), "diff",
+                                   str(diff_fixtures / "bundles/DX01-base"),
+                                   str(diff_fixtures / "bundles/DX03-source-metadata")],
+                                  capture_output=True, timeout=30)
+        assert compared.returncode == 0 and not compared.stderr
+        assert compared.stdout == (diff_fixtures / "snapshots/DC03-metadata.json").read_bytes()
+        refused = subprocess.run([str(bundle_binary), "diff",
+                                  str(bundle_fixtures / "MB08-unknown-field"),
+                                  str(diff_fixtures / "bundles/DX01-base")],
+                                 capture_output=True, timeout=30)
+        assert refused.returncode == 1 and not refused.stdout
+        assert json.loads(refused.stderr)["diagnostics"][0]["code"] == "MBDEC001"
         fixtures = WORKSPACE / "test/typed-fixtures/requests"
         for name, status, code in (("T17.json", "false", ""),
                                    ("T49.txt", "rejected", "KDEC002")):
@@ -118,7 +131,7 @@ def main() -> None:
             if name == "RD36.json":
                 assert [row["state"] for row in result["presumption_derivations"]] == [
                     "active", "active", "active"]
-    print("clean offline build/install of kernel and bundle validator, prior launches and representative MB results passed")
+    print("clean offline build/install of kernel and bundle validator, prior launches, MB validation and change-set diff passed")
 
 
 if __name__ == "__main__":

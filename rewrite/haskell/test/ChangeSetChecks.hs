@@ -10,8 +10,8 @@ import System.Exit (exitFailure)
 import System.FilePath ((</>))
 import Test.QuickCheck (Testable, elements, forAll, isSuccess, maxSuccess, quickCheckWithResult, stdArgs)
 import Yuho.ModelBundle.ChangeSet
-import Yuho.ModelBundle.Package (PackageSnapshot, validatePackageSnapshot)
-import Yuho.ModelBundle.Types (Failure(..))
+import Yuho.ModelBundle.Package (PackageSnapshot(..), validatePackageSnapshot)
+import Yuho.ModelBundle.Types (Core(..), Failure(..))
 import Yuho.Protocol.Json (J(..), encodeJson, lookupField)
 
 runChangeSetChecks :: FilePath -> IO ()
@@ -69,9 +69,18 @@ runChangeSetChecks fixtures = do
     (case checkChangeSetLimits changed {changeAffectedIds = [Text.replicate changeSetLimit "x"]} of
       Left failure -> failureCode failure == "MBCDRES001"
       Right _ -> False)
-  let pairs = [(a,a), (a,b), (a,c), (c,a), (a,d), (d,a), (c,d)]
-  property "change-set deterministic validated comparison" $ forAll (elements pairs) $ \(left,right) ->
-    compareSnapshots left right == compareSnapshots left right
+  let emptySized = changed {changeAffectedIds = [""]}
+      padding = changeSetLimit - BS.length (encodeJson (encodeChangeSet emptySized)) - 1
+      atLimit = changed {changeAffectedIds = [Text.replicate padding "x"]}
+      overLimit = changed {changeAffectedIds = [Text.replicate (padding + 1) "x"]}
+  check "change-set final newline is included at exact byte boundary"
+    (padding > 0 && BS.length (encodeJson (encodeChangeSet atLimit)) + 1 == changeSetLimit
+      && checkChangeSetLimits atLimit == Right atLimit
+      && isLeft (checkChangeSetLimits overLimit))
+  let pairs = [(a,a), (a,b), (b,c), (c,b), (a,c), (c,a), (a,d), (d,a), (c,d)]
+  property "change-set ignores indexed record-list traversal order" $ forAll (elements pairs) $ \(left,right) ->
+    fmap (encodeJson . encodeChangeSet) (compareSnapshots left right)
+      == fmap (encodeJson . encodeChangeSet) (compareSnapshots (permuted left) (permuted right))
   property "change-set directional row classes" $ forAll (elements pairs) $ \(left,right) ->
     case (compareSnapshots left right, compareSnapshots right left) of
       (Right forward, Right backward) ->
@@ -81,6 +90,11 @@ runChangeSetChecks fixtures = do
     case compareSnapshots left right of
       Right result -> (lookupField "summary" (encodeChangeSet result) >>= lookupField "total")
         == Just (JNum (toInteger (length (changeRows result))))
+      _ -> False
+  property "change-set old review never transfers to a different core" $ forAll (elements pairs) $ \(left,right) ->
+    case compareSnapshots left right of
+      Right result -> changeOldBundle result == changeNewBundle result
+        || changeOldNonApplicableReviews result == map fst (snapshotReviewDigests left)
       _ -> False
   putStrLn "model bundle change set: pure checks and bounded properties passed"
 
@@ -96,6 +110,15 @@ flipClass :: Classification -> Classification
 flipClass Added = Removed
 flipClass Removed = Added
 flipClass value = value
+
+permuted :: PackageSnapshot -> PackageSnapshot
+permuted snapshotValue = snapshotValue {snapshotCore = core
+  { coreArtifacts = reverse (coreArtifacts core)
+  , coreSources = reverse (coreSources core)
+  , coreMappings = reverse (coreMappings core)
+  , coreDerivations = reverse (coreDerivations core)
+  }}
+  where core = snapshotCore snapshotValue
 
 replace :: Text.Text -> J -> J -> J
 replace key value (JObj pairs) = JObj [(name, if name == key then value else item)
