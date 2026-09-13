@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.invalid/schema/model-bundle-validation-v1",
+  "title": "Yuho ModelBundle validation result v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "status", "bundle_digest", "scope_digest", "applicable_asserted_reviews", "stale_reviews", "partial_reviews", "review_authentication", "diagnostics"],
+  "properties": {
+    "schema": {"const": "yuho.model-bundle-validation/v1"},
+    "status": {"enum": ["valid", "invalid", "policy_unmet", "io_error"]},
+    "bundle_digest": {"oneOf": [{"type": "null"}, {"type": "string", "pattern": "^[0-9a-f]{64}$"}]},
+    "scope_digest": {"oneOf": [{"type": "null"}, {"type": "string", "pattern": "^[0-9a-f]{64}$"}]},
+    "applicable_asserted_reviews": {"type": "array", "items": {"type": "string"}},
+    "stale_reviews": {"type": "array", "items": {"type": "string"}},
+    "partial_reviews": {"type": "array", "items": {"type": "string"}},
+    "review_authentication": {"const": "none"},
+    "diagnostics": {"type": "array", "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["code", "path", "message"],
+      "properties": {"code": {"type": "string", "pattern": "^MB[A-Z]+[0-9]{3}$"}, "path": {"type": "string"}, "message": {"type": "string"}}
+    }}
+  }
+}

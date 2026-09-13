@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.invalid/schema/model-bundle-review-v1",
+  "title": "Yuho unsigned ModelBundle review assertion v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "review_id", "bundle_digest", "scope_digest", "purposes", "coverage", "limitations", "outcome", "reviewed_at", "reviewer"],
+  "properties": {
+    "schema": {"const": "yuho.review-assertion/v1"},
+    "review_id": {"$ref": "#/$defs/id"},
+    "bundle_digest": {"$ref": "#/$defs/digest"},
+    "scope_digest": {"$ref": "#/$defs/digest"},
+    "purposes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["source_fidelity", "semantic_fidelity", "scope_completeness", "jurisdictional_applicability"]}},
+    "coverage": {"oneOf": [
+      {"type": "object", "additionalProperties": false, "required": ["kind", "scope_digest"], "properties": {"kind": {"const": "scope_digest"}, "scope_digest": {"$ref": "#/$defs/digest"}}},
+      {"type": "object", "additionalProperties": false, "required": ["kind", "semantic_ids"], "properties": {"kind": {"const": "semantic_ids"}, "semantic_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}},
+      {"type": "object", "additionalProperties": false, "required": ["kind", "source_ids"], "properties": {"kind": {"const": "source_ids"}, "source_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}}
+    ]},
+    "limitations": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+    "outcome": {"enum": ["asserted_acceptable", "changes_required", "informational"]},
+    "reviewed_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "reviewer": {"type": "object", "additionalProperties": false,
+      "required": ["reviewer_id", "name", "role"],
+      "properties": {"reviewer_id": {"$ref": "#/$defs/id"}, "name": {"$ref": "#/$defs/text"}, "role": {"$ref": "#/$defs/text"}, "organisation": {"$ref": "#/$defs/text"}}
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9_:.-]+$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 1024},
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -10,10 +10,25 @@ import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Time.Calendar (fromGregorianValid)
-import Yuho.Core.Types (Span(..))
+import Yuho.Core.Types (Diagnostic(..), Request(..), Span(..))
+import Yuho.Exception.Decode (decodeExceptionRequest)
+import Yuho.Exception.Types (ExceptionRequest(..))
+import Yuho.Exception.Validate (validateGraph)
+import Yuho.Kernel.Validate (validateInput)
 import Yuho.ModelBundle.Json
 import Yuho.ModelBundle.Types
+import Yuho.PenaltySelection.Decode (decodePenaltyRequest)
+import Yuho.PenaltySelection.Validate (validatePenalties)
+import Yuho.PenaltyTerms.Decode (decodeTermsRequest)
+import Yuho.PenaltyTerms.Validate (validateTerms)
+import Yuho.Presumption.Decode (decodePresumptionRequest)
+import Yuho.Presumption.Validate (validatePresumptionRequest)
+import Yuho.Protocol.Decode (decodeRequest)
 import Yuho.Protocol.Json (J(..), encodeJson, lookupField)
+import Yuho.SuppliedProofStatus.Decode (decodeProofRequest)
+import Yuho.SuppliedProofStatus.Validate (validateProofRequest)
+import Yuho.TypedFacts.Decode (decodeTypedRequest)
+import Yuho.TypedFacts.Validate (validateTyped)
 
 decodeCore :: J -> Either Failure Core
 decodeCore root = do
@@ -235,6 +250,13 @@ validateStructure core = do
     _ -> issue "MBINV001" "/executable_model" "exactly one referenced model artifact required"
   traverse_ (\s -> if Map.member (recordArtifact s) artMap then pure ()
     else issue "MBINV001" "/legal_sources" "missing source artifact") sources
+  traverse_ (\s -> case Map.lookup (recordArtifact s) artMap of
+    Just a | artifactRole a /= "executable_model" -> pure ()
+    _ -> issue "MBINV001" "/legal_sources" "source record cannot name executable model") sources
+  let referenced = Set.fromList (coreModelDigest core : map recordArtifact sources ++
+        concat [[derivationChild d, derivationParent d] | d <- derivs])
+  if any (`Set.notMember` referenced) artIds
+    then issue "MBINV001" "/artifacts" "unreferenced artifact declaration" else pure ()
   let manifestations = map recordManifestation sources
       exprWorks = Map.fromListWith (++) [(recordExpression s, [(recordWork s, recordLanguage s)]) | s <- sources]
   if Set.size (Set.fromList manifestations) /= length manifestations
@@ -297,11 +319,49 @@ semanticIds request = do
 
 validateCore :: Core -> J -> Either Failure ()
 validateCore core model = do
+  validateExecutable (coreModelFragment core) model
   ids <- semanticIds model
   fragment <- requiredText "/executable_model" "fragment" model
   if fragment /= coreModelFragment core then issue "MBINV001" "/executable_model/fragment" "fragment mismatch" else pure ()
   if ids /= scopeIds (coreScope core)
     then issue "MBINV001" "/scope/semantic_ids" "scope differs from executable inventory" else pure ()
+
+-- Package validation reuses only decoders and model validators; no rule is evaluated.
+validateExecutable :: Text -> J -> Either Failure ()
+validateExecutable fragment value
+  | fragment `notElem` fragments = issue "MBCAP001" "/executable_model/fragment" "unknown kernel fragment"
+  | otherwise = fromKernel $ case fragment of
+  "ClosedBooleanBranches-v1" -> do
+    request <- decodeRequest value
+    validateInput (requestInput request)
+  "AcyclicGuardedExceptions-v1" -> do
+    request <- decodeExceptionRequest value
+    _ <- validateGraph (exceptionRawGraph request)
+    pure ()
+  "TypedBooleanFacts-v1" -> do
+    request <- decodeTypedRequest value
+    _ <- validateTyped request
+    pure ()
+  "GuardedPenaltySelection-v1" -> do
+    request <- decodePenaltyRequest value
+    _ <- validatePenalties request
+    pure ()
+  "PenaltyTerms-v1" -> do
+    request <- decodeTermsRequest value
+    _ <- validateTerms request
+    pure ()
+  "SuppliedProofStatus-v1" -> do
+    request <- decodeProofRequest value
+    _ <- validateProofRequest request
+    pure ()
+  "RegisteredPresumptionDerivations-v1" -> do
+    request <- decodePresumptionRequest value
+    _ <- validatePresumptionRequest request
+    pure ()
+  _ -> Right ()
+  where
+    fromKernel = either (\d -> issue "MBINV001" ("/executable_model" <> diagPath d)
+      ("kernel model validation: " <> diagCode d)) Right
 
 scopeDigest :: Core -> Text
 scopeDigest core = digestDomain "yuho.model-scope/v1" (encodeJson (scopeRaw (coreScope core)))

@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.invalid/schema/model-bundle-core-v1",
+  "title": "Yuho ModelBundle v1 core",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "canonical_profile", "hash_algorithm", "model_id", "artifacts", "legal_sources", "derivations", "semantic_mappings", "scope", "executable_model"],
+  "properties": {
+    "schema": {"const": "yuho.model-bundle/v1"},
+    "canonical_profile": {"const": "yuho.sorted-json/v1"},
+    "hash_algorithm": {"const": "sha256"},
+    "model_id": {"$ref": "#/$defs/id"},
+    "artifacts": {"type": "array", "maxItems": 256, "items": {"$ref": "#/$defs/artifact"}},
+    "legal_sources": {"type": "array", "maxItems": 1024, "items": {"$ref": "#/$defs/source"}},
+    "derivations": {"type": "array", "maxItems": 4096, "items": {"$ref": "#/$defs/derivation"}},
+    "semantic_mappings": {"type": "array", "maxItems": 8192, "items": {"$ref": "#/$defs/mapping"}},
+    "scope": {"$ref": "#/$defs/scope"},
+    "executable_model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["artifact_digest", "format", "fragment"],
+      "properties": {
+        "artifact_digest": {"$ref": "#/$defs/digest"},
+        "format": {"const": "yuho.kernel-input/v1"},
+        "fragment": {"enum": ["ClosedBooleanBranches-v1", "AcyclicGuardedExceptions-v1", "TypedBooleanFacts-v1", "GuardedPenaltySelection-v1", "PenaltyTerms-v1", "SuppliedProofStatus-v1", "RegisteredPresumptionDerivations-v1"]}
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9_:.-]+$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 1024},
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "span": {
+      "type": "object", "additionalProperties": false,
+      "required": ["start", "end", "start_line", "start_col", "end_line", "end_col"],
+      "properties": {
+        "start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 0},
+        "start_line": {"type": "integer", "minimum": 1}, "start_col": {"type": "integer", "minimum": 1},
+        "end_line": {"type": "integer", "minimum": 1}, "end_col": {"type": "integer", "minimum": 1}
+      }
+    },
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sha256", "byte_length", "media_type", "role"],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/digest"},
+        "byte_length": {"type": "integer", "minimum": 0, "maximum": 33554432},
+        "media_type": {"enum": ["application/json", "text/plain; charset=utf-8", "application/pdf", "text/html", "application/xml", "image/png", "image/jpeg"]},
+        "role": {"enum": ["executable_model", "source_text", "evidence"]}
+      }
+    },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "work_id", "expression_id", "manifestation_id", "artifact_digest", "source_type", "language", "jurisdiction", "identifiers", "dates"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/id"}, "work_id": {"$ref": "#/$defs/id"},
+        "expression_id": {"$ref": "#/$defs/id"}, "manifestation_id": {"$ref": "#/$defs/id"},
+        "artifact_digest": {"$ref": "#/$defs/digest"},
+        "source_type": {"enum": ["legislation", "judgment", "synthetic", "other"]},
+        "language": {"$ref": "#/$defs/text"}, "jurisdiction": {"$ref": "#/$defs/text"},
+        "identifiers": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+        "publisher_label": {"$ref": "#/$defs/text"}, "locator": {"$ref": "#/$defs/text"},
+        "dates": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "publication": {"$ref": "#/$defs/date"}, "decision": {"$ref": "#/$defs/date"},
+            "revision": {"$ref": "#/$defs/date"}, "commencement": {"$ref": "#/$defs/date"},
+            "effective_from": {"$ref": "#/$defs/date"}, "effective_to": {"$ref": "#/$defs/date"},
+            "retrieval": {"$ref": "#/$defs/date"}, "supersession": {"$ref": "#/$defs/date"}
+          }
+        }
+      }
+    },
+    "derivation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["child_digest", "parent_digest", "tool_name", "tool_version", "configuration"],
+      "properties": {
+        "child_digest": {"$ref": "#/$defs/digest"}, "parent_digest": {"$ref": "#/$defs/digest"},
+        "tool_name": {"$ref": "#/$defs/text"}, "tool_version": {"$ref": "#/$defs/text"},
+        "configuration": {"$ref": "#/$defs/text"}
+      }
+    },
+    "mapping": {
+      "type": "object", "additionalProperties": false,
+      "required": ["semantic_id", "artifact_digest", "source_id", "role", "span"],
+      "properties": {
+        "semantic_id": {"$ref": "#/$defs/id"}, "artifact_digest": {"$ref": "#/$defs/digest"},
+        "source_id": {"$ref": "#/$defs/id"},
+        "role": {"enum": ["definition", "requirement", "exception", "presumption", "penalty_declaration", "penalty_term", "burden_annotation", "standard_annotation", "supporting_context", "rule", "provision"]},
+        "span": {"$ref": "#/$defs/span"}
+      }
+    },
+    "exclusion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["exclusion_id", "reason"],
+      "properties": {"exclusion_id": {"$ref": "#/$defs/id"}, "reason": {"$ref": "#/$defs/text"}}
+    },
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["coverage_mode", "semantic_ids", "source_ids", "expression_ids", "exclusions", "limitations", "unsupported_capabilities", "jurisdictions", "subject_matters", "temporal_context"],
+      "properties": {
+        "coverage_mode": {"const": "enumerated_only"},
+        "semantic_ids": {"type": "array", "maxItems": 8192, "items": {"$ref": "#/$defs/id"}},
+        "source_ids": {"type": "array", "maxItems": 1024, "items": {"$ref": "#/$defs/id"}},
+        "expression_ids": {"type": "array", "maxItems": 1024, "items": {"$ref": "#/$defs/id"}},
+        "exclusions": {"type": "array", "maxItems": 1024, "items": {"$ref": "#/$defs/exclusion"}},
+        "limitations": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+        "unsupported_capabilities": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+        "jurisdictions": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+        "subject_matters": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+        "temporal_context": {
+          "oneOf": [
+            {"type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "unspecified"}}},
+            {"type": "object", "additionalProperties": false, "required": ["kind", "date"], "properties": {"kind": {"const": "asserted_point_in_time"}, "date": {"$ref": "#/$defs/date"}}}
+          ]
+        }
+      }
+    }
+  }
+}

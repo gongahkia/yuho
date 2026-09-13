@@ -64,6 +64,7 @@ decodeReview filename value = do
         >>= traverse (str (path <> "/coverage/semantic_ids"))
       uniqueSorted (path <> "/coverage/semantic_ids") xs
       if null xs then issue "MBINV001" (path <> "/coverage/semantic_ids") "empty positive coverage" else pure ()
+      traverse_ (coverageId (path <> "/coverage/semantic_ids")) xs
       pure (xs, [])
     _ -> do
       _ <- exactKeys (path <> "/coverage") ["kind", "source_ids"] coverage
@@ -71,6 +72,7 @@ decodeReview filename value = do
         >>= traverse (str (path <> "/coverage/source_ids"))
       uniqueSorted (path <> "/coverage/source_ids") xs
       if null xs then issue "MBINV001" (path <> "/coverage/source_ids") "empty positive coverage" else pure ()
+      traverse_ (coverageId (path <> "/coverage/source_ids")) xs
       pure ([], xs)
   pure (Review rid bundle scope purposes semIds sourceIds kind outcome)
 
@@ -78,19 +80,22 @@ classifyReviews :: Core -> Text -> Text -> Maybe Text -> [Review] -> Either Fail
 classifyReviews core bundle scope requested reviews = do
   let ids = Set.fromList (scopeIds (coreScope core))
       sources = Set.fromList (scopeSources (coreScope core))
+  let applicable = [r | r <- reviews, reviewBundleDigest r == bundle && reviewScopeDigest r == scope]
   traverse_ (\r -> do
     if all (`Set.member` ids) (reviewSemanticIds r) && all (`Set.member` sources) (reviewSourceIds r)
-      then pure () else issue "MBINV001" ("/reviews/" <> reviewId r) "review covers unknown ID") reviews
-  let applicable = [r | r <- reviews, reviewBundleDigest r == bundle && reviewScopeDigest r == scope]
-      stale = [reviewId r | r <- reviews, reviewBundleDigest r /= bundle || reviewScopeDigest r /= scope]
-      full r = reviewCoverageKind r == "scope_digest"
-        || (reviewCoverageKind r == "semantic_ids" && reviewSemanticIds r == scopeIds (coreScope core))
-        || (reviewCoverageKind r == "source_ids" && reviewSourceIds r == scopeSources (coreScope core))
+      then pure () else issue "MBINV001" ("/reviews/" <> reviewId r) "review covers unknown ID") applicable
+  let stale = [reviewId r | r <- reviews, reviewBundleDigest r /= bundle || reviewScopeDigest r /= scope]
+      fullFor purpose r = reviewCoverageKind r == "scope_digest"
+        || (reviewCoverageKind r == "semantic_ids" && purpose /= "source_fidelity"
+          && reviewSemanticIds r == scopeIds (coreScope core))
+        || (reviewCoverageKind r == "source_ids" && purpose == "source_fidelity"
+          && reviewSourceIds r == scopeSources (coreScope core))
+      full r = any (`fullFor` r) (reviewPurposes r)
       partial = [reviewId r | r <- applicable, not (full r)]
       policyMet = case requested of
         Nothing -> True
         Just purpose -> any (\r -> purpose `elem` reviewPurposes r
-          && reviewOutcome r == "asserted_acceptable" && full r) applicable
+          && reviewOutcome r == "asserted_acceptable" && fullFor purpose r) applicable
   pure (Validation bundle scope (sort (map reviewId applicable)) (sort stale)
     (sort partial) policyMet)
 
@@ -110,3 +115,7 @@ exactKeys path expected value = do
   pairs <- fields path value
   if sort (map fst pairs) == sort expected then pure ()
     else issue "MBDEC001" path "wrong fields for tagged coverage"
+
+coverageId :: Text -> Text -> Either Failure ()
+coverageId path identifier = if safeId identifier then pure ()
+  else issue "MBINV001" path "invalid positive coverage ID"

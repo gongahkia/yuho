@@ -6,6 +6,7 @@ import Crypto.Hash (Context, Digest, SHA256, hashFinalize, hashInit, hashUpdate)
 import qualified Data.ByteString as BS
 import Data.Foldable (traverse_)
 import Data.List (sort)
+import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -20,7 +21,7 @@ import Yuho.ModelBundle.Json
 import Yuho.ModelBundle.Review (classifyReviews, decodeReview)
 import Yuho.ModelBundle.Types
 import Yuho.ModelBundle.Validate (decodeCore, scopeDigest, validateCore)
-import Yuho.Protocol.Json (encodeJson)
+import Yuho.Protocol.Json (J(..), encodeJson, lookupField)
 
 newtype BundleException = BundleException Failure deriving (Show)
 instance Exception BundleException
@@ -50,6 +51,7 @@ validate root policy = do
     (artifactDir </> Text.unpack (coreModelDigest core))
   model <- expect (parseCanonical "/executable_model" modelBytes)
   expect (validateCore core model)
+  expect (validateModelSources core model)
   traverse_ (validateMappings artifactDir core) (map artifactDigest
     (filter ((== "source_text") . artifactRole) (coreArtifacts core)))
   let bundle = digestDomain "yuho.model-bundle/v1" (encodeJson (coreRaw core))
@@ -141,6 +143,35 @@ safeReviewName name = case Text.stripSuffix ".json" (Text.pack name) of
 
 isDigestName :: FilePath -> Bool
 isDigestName name = length name == 64 && all (\c -> c >= '0' && c <= '9' || c >= 'a' && c <= 'f') name
+
+validateModelSources :: Core -> J -> Either Failure ()
+validateModelSources core model = do
+  let sourceRecords = Map.fromList [(recordId r, recordArtifact r) | r <- coreSources core]
+      textDigests = [artifactDigest a | a <- coreArtifacts core, artifactRole a == "source_text"]
+  case (lookupField "sources" model, lookupField "source" model) of
+    (Just (JArr xs), Nothing) -> traverse_ (checkNamed sourceRecords textDigests) xs
+    (Nothing, Just source) -> checkUnnamed textDigests source
+    _ -> issue "MBINV001" "/executable_model/sources" "expected one source shape"
+  where
+    checkNamed records digests value = do
+      _ <- obj "/executable_model/sources" ["id", "path", "text", "sha256"] value
+      rid <- field "/executable_model/sources" "id" value >>= str "/executable_model/sources/id"
+      digest <- checkText value
+      if Map.lookup rid records == Just digest && digest `elem` digests then pure ()
+        else issue "MBINV001" "/executable_model/sources" "model source is not bound to the same text artifact"
+    checkUnnamed digests value = do
+      _ <- obj "/executable_model/source" ["path", "text", "sha256"] value
+      digest <- checkText value
+      if digest `elem` digests then pure ()
+        else issue "MBINV001" "/executable_model/source" "model source text artifact missing"
+    checkText value = do
+      original <- case lookupField "text" value of
+        Just (JStr x) -> Right x
+        _ -> issue "MBDEC001" "/executable_model/source/text" "expected source text"
+      recorded <- field "/executable_model/source" "sha256" value >>= str "/executable_model/source/sha256"
+      let actual = digestBytes (Encoding.encodeUtf8 original)
+      if actual == recorded then pure actual
+        else issue "MBINV001" "/executable_model/source/sha256" "model source digest mismatch"
 
 expect :: Either Failure a -> IO a
 expect = either (throwIO . BundleException) pure
