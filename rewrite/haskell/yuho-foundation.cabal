@@ -12,8 +12,11 @@ common foundation
     , bytestring ==0.12.1.0
     , containers ==0.6.8
     , crypton ==1.1.5
+    , directory ==1.3.8.5
+    , filepath ==1.4.301.0
     , text ==2.1.1
     , time ==1.12.2
+    , unix ==2.8.6.0
 
 library
   import: foundation
@@ -63,6 +66,18 @@ library
       Yuho.Presumption.Evaluate
       Yuho.Presumption.Encode
       Yuho.Presumption.Run
+      Yuho.ModelBundle.Types
+      Yuho.ModelBundle.Json
+      Yuho.ModelBundle.Validate
+      Yuho.ModelBundle.Package
+      Yuho.ModelBundle.Review
+      Yuho.ModelBundle.Run
+
+executable yuho-model-bundle
+  import: foundation
+  main-is: ModelBundleMain.hs
+  hs-source-dirs: app
+  build-depends: yuho-foundation ==0.1.0.0
 
 executable yuho-kernel
   import: foundation
