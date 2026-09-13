@@ -4,6 +4,8 @@ This is a **pre-bundle source and representability packet**, not an executable S
 
 The input directory contains three user-owned Firefox “Webpage, Complete” HTML snapshots and their `_files` directories. Do not edit or execute them. The extractor reads companion files only to compute a deterministic inventory; it never treats their scripts, styles or images as legislative text. It never uses the network. The committed [source lock](SOURCE-LOCK.json) contains exact source and generated-output hashes; these establish byte identity, not authenticity, legal authority, point-in-time applicability or model correctness.
 
+The later **research-only** [authority and temporal report](../../../docs/rewrite/SINGAPORE-SECTION-84-AUTHORITY-AND-TEMPORAL-RESEARCH.md) uses a separate [authority register](AUTHORITY-REGISTER.json), [proposition review matrix](PROPOSITION-REVIEW-MATRIX.json), [temporal applicability matrix](TEMPORAL-APPLICABILITY-MATRIX.json) and [qualified-review brief](QUALIFIED-REVIEW-BRIEF.md). Those internal JSON documents are **not** a public protocol schema, Canonical IR, an executable model, or a valid `ModelBundle-v1`. The report distinguishes directly read Gazette instruments and judgments from explanatory ministry material and unauthenticated snapshots. No Singapore-qualified review has occurred.
+
 From the repository root, set explicit directories and use the locked inspection timestamp:
 
 ```sh
@@ -29,3 +31,5 @@ YUHO_S84_INPUT_DIR="$INTAKE_SOURCE_DIR" \
 ```
 
 The external packet contains the receipt, manifest, span map, representability map, scope declaration and three extracted text files. The committed [representability summary](REPRESENTABILITY-SUMMARY.json) records classifications only; it has no fact assignments or executable request. The exact source-to-model, version, causation, burden and procedural questions remain for qualified review. `ModelBundle-v1` presently requires a complete executable-model artifact, so this packet cannot be validated or labelled as a ModelBundle. No source HTML or companion asset is committed.
+
+The same focused test command also validates research JSON structure, unique IDs, cross-references, source classifications, review-status and temporal-date discipline. Set `YUHO_S84_INPUT_DIR` as above to include read-only external source-lock verification. Run `python3 rewrite/haskell/test/docs.py` and `python3 scripts/verify_capability_claims.py` from the repository root for documentation and capability-claim checks. The temporary official PDFs used to research the authority report are not distributed with this repository; verify cited URLs and expressions afresh for any later legal review.
