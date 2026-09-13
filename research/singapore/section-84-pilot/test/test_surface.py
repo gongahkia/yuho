@@ -315,6 +315,7 @@ class SurfaceTests(unittest.TestCase):
     def test_lf_utf8_and_failed_output_safety(self) -> None:
         self.assert_code(self.source.replace("\n", "\r\n"), "SFE001")
         self.assertEqual(self.compiled("// 🧪\n" + self.source), self.expected)
+        self.assert_code(self.source + (" " * surface.MAX_SOURCE_BYTES), "SFE016")
         with tempfile.TemporaryDirectory(prefix="yuho-s84-surface-negative-") as temp:
             root = Path(temp)
             invalid = root / "invalid.yh"
@@ -338,6 +339,13 @@ class SurfaceTests(unittest.TestCase):
                 surface.compile_file(SOURCE_FILE, output, SOURCE, PACKET)
             self.assertEqual(caught.exception.code, "SFE015")
             output.unlink()
+            parent_link = root / "parent-link"
+            parent_link.symlink_to(root, target_is_directory=True)
+            with self.assertRaises(surface.FrontendError) as caught:
+                surface.compile_file(
+                    SOURCE_FILE, parent_link / "request.json", SOURCE, PACKET
+                )
+            self.assertEqual(caught.exception.code, "SFE015")
 
 
 if __name__ == "__main__":

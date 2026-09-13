@@ -354,33 +354,31 @@ def check(
     def fail(code: str, token: Token, message: str):
         raise FrontendError(code, path, token, message)
 
-    if (
-        model.identifier.text
-        != "SingaporePenalCodeSection84Post2022ResearchPrototype-v1"
-        or model.variant.text != "SuppliedProofStatus-v1"
-        or model.jurisdiction.text != "Singapore"
-        or model.purpose.text != "research_prototype"
+    for token, expected in (
+        (model.identifier, "SingaporePenalCodeSection84Post2022ResearchPrototype-v1"),
+        (model.variant, "SuppliedProofStatus-v1"),
+        (model.jurisdiction, "Singapore"),
+        (model.purpose, "research_prototype"),
+        (model.reference_date, "2026-09-13"),
+        (model.max_nodes, "1024"),
     ):
-        fail("SFE004", model.identifier, "unsupported model, variant or scope")
-    if (
-        model.reference_date.text != "2026-09-13"
-        or model.max_nodes.text != "1024"
-        or not re.fullmatch(r"[A-Z][0-9]{2}", model.request_id.text)
-    ):
-        fail("SFE004", model.reference_date, "unsupported request policy or ID")
+        if token.text != expected:
+            fail("SFE004", token, "unsupported model, variant, scope or policy")
+    if not re.fullmatch(r"[A-Z][0-9]{2}", model.request_id.text):
+        fail("SFE004", model.request_id, "unsupported request ID")
     if (
         model.root_rule.text != "r:section84"
         or model.program.text != "p:section84"
         or model.path.text != "section84"
     ):
         fail("SFE007", model.root_rule, "unsupported or missing root declaration")
-    if tuple(token.text for token in model.burden) != (
-        "section107",
-        "defence",
-        "legal",
-        "balance_of_probabilities",
+    for token, expected in zip(
+        model.burden,
+        ("section107", "defence", "legal", "balance_of_probabilities"),
+        strict=True,
     ):
-        fail("SFE011", model.burden[0], "invalid contextual burden or standard")
+        if token.text != expected:
+            fail("SFE011", token, "invalid contextual burden or standard")
     if len(model.limitations) < 2 or not all(t.text for t in model.limitations):
         fail("SFE004", model.identifier, "research limitations are required")
 
@@ -551,6 +549,15 @@ def lower(model: Model, input_dir: Path, packet_dir: Path, path: str) -> bytes:
             path,
             model.identifier,
             "reviewed mapping and source leaves differ",
+        )
+    if {row["semantic_id"] for row in mapping["group_mappings"]} != {
+        key for key, item in declarations.items() if isinstance(item, Group)
+    } | {model.root_rule.text, model.program.text}:
+        raise FrontendError(
+            "SFE014",
+            path,
+            model.root_requirement,
+            "reviewed mapping and source groups differ",
         )
 
     burden = {"holder": model.burden[1].text, "kind": model.burden[2].text}
@@ -728,7 +735,7 @@ def main() -> int:
         return 1
     except (OSError, ValueError, KeyError) as error:
         diagnostic = {
-            "code": "SFE014",
+            "code": "SFE015" if isinstance(error, OSError) else "SFE014",
             "path": str(args.source),
             "line": 1,
             "column": 1,
