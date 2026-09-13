@@ -1,0 +1,57 @@
+model SingaporePenalCodeSection84Post2022ResearchPrototype-v1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Singapore;
+  purpose research_prototype;
+  request X00;
+  policy 2026-09-13 1024;
+  root r:section84 program p:section84 path section84 requires g:premise-and-routes;
+
+  provenance {
+    source src:pc84-excerpt excerpt "research/section84/excerpt.txt";
+    source src:synthetic-status synthetic_status "research/section84/synthetic-status.txt";
+    mapping_source src:pc84-extracted;
+    quote q:time "at the time of doing it, by reason of unsoundness of mind";
+    quote q:nature "incapable of knowing the nature of the act";
+    quote q:wrong_operator "incapable of knowing that what he is doing is wrong";
+    quote q:control "completely deprived of any power to control his actions";
+    quote q:ordinary "is wrong by the ordinary standards of reasonable and honest persons";
+    quote q:law "is wrong as contrary to law";
+  }
+
+  annotations {
+    burden section107 defence legal balance_of_probabilities;
+  }
+
+  propositions {
+    leaf f:unsoundness-time proposition P84-02 quote q:time;
+    leaf f:nature-causation proposition P84-03 quote q:time;
+    leaf f:nature-incapacity proposition P84-04 quote q:nature;
+    leaf f:wrong-causation proposition P84-03 quote q:time;
+    leaf f:ordinary-wrongfulness-incapacity proposition P84-06 quote q:ordinary;
+    leaf f:contrary-law-incapacity proposition P84-07 quote q:law;
+    leaf f:control-causation proposition P84-03 quote q:time;
+    leaf f:control-incapacity proposition P84-09 quote q:control;
+    all g:nature (f:nature-causation, f:nature-incapacity);
+    all g:wrongfulness (f:wrong-causation, f:ordinary-wrongfulness-incapacity, f:contrary-law-incapacity);
+    all g:control (f:control-causation, f:control-incapacity);
+    any g:alternative-routes (g:nature, g:wrongfulness, g:control);
+    all g:premise-and-routes (f:unsoundness-time, g:alternative-routes);
+  }
+
+  proof_assignments {
+    f:unsoundness-time = unresolved(not_determined);
+    f:nature-causation = unresolved(not_determined);
+    f:nature-incapacity = unresolved(not_determined);
+    f:wrong-causation = unresolved(not_determined);
+    f:ordinary-wrongfulness-incapacity = unresolved(not_determined);
+    f:contrary-law-incapacity = unresolved(not_determined);
+    f:control-causation = unresolved(not_determined);
+    f:control-incapacity = unresolved(not_determined);
+  }
+
+  limitations {
+    "Research prototype; technical rule status only";
+    "No evidence assessment, diagnosis, offence or court outcome";
+    "No case-specific temporal selection or legal advice";
+  }
+}

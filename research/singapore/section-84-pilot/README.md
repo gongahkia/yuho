@@ -63,3 +63,20 @@ python3 research/singapore/section-84-pilot/prototype/pilot.py build-bundle \
 ```
 
 The `run-synthetic` guard accepts only exact canonical requests with the committed registry, sources, policy, metadata and eight synthetic assignment records; only supplied proof statuses and the request ID may vary. This prevents a request from silently changing the model or using `reference_date` as a real-case selector within the pilot runner. Direct kernel invocation remains useful for inspecting protocol behavior, but does not perform that pilot-specific scope check. The bundle builder requires a nonexistent destination, verifies the committed source lock and prototype bytes, assembles into a fresh temporary directory, validates it offline and publishes only on success. Build twice into different fresh destinations and compare recursive file bytes to check determinism. The digest is `02e51da9fa1bf285eec7cca8b55494c1d6a8e82b9b7e7e300a30b338ecbd404a`. Snapshot updates are deliberate: the focused tests compare regenerated request structures and actual kernel bytes with committed snapshots; ordinary tests never rewrite them. The [research-baseline review](QUALIFIED-REVIEW-RECORD.json) and separate [implementation-conformance confirmation](IMPLEMENTATION-CONFORMANCE-RECORD.json) are unsigned. The latter binds only this exact bundle digest and implementation baseline; any changed digest requires a new confirmation. **No review assertion is added to the generated bundle.** The confirmation records a bounded research-prototype review, not source authentication, legal currency or approval for court outcomes.
+
+## Authored Yuho surface slice
+
+The [human-readable section 84 source](surface/section84.yh) is parsed, checked and lowered by a narrow [research frontend](surface/frontend.py). It separates named propositions and `all`/`any` references from supplied proof assignments, section 107 annotations, source/mapping references and non-executable limitations. The [surface-slice document](../../../docs/rewrite/SINGAPORE-SECTION-84-SURFACE-LANGUAGE-VERTICAL-SLICE.md) gives the grammar boundary, diagnostics and compatibility results. This is not a replacement for the existing production Python/Tree-sitter parser or a general Yuho grammar.
+
+To compile without replacing the frozen request, use fresh output in an existing temporary parent:
+
+```sh
+python3 research/singapore/section-84-pilot/surface/frontend.py compile \
+  --source research/singapore/section-84-pilot/surface/section84.yh \
+  --input-dir "$INTAKE_SOURCE_DIR" --packet-dir "$INTAKE_OUTPUT_DIR" \
+  --output "$FRESH_PARENT/section84-request.json"
+cmp "$FRESH_PARENT/section84-request.json" \
+  research/singapore/section-84-pilot/prototype/request.json
+```
+
+The compiled bytes are the existing no-newline KernelInput artifact. The new source file is excluded from the reviewed six-file ModelBundle; changing the bundle core would require a new digest and confirmation. The focused test suite compiles every accepted synthetic case and compares the built bundle byte-for-byte against the frozen recipe.
