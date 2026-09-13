@@ -1,6 +1,6 @@
 # Section 84 qualified-review brief
 
-**No Singapore-qualified legal review has occurred. No reviewer, approval, signature or authentication is asserted.** This is a bounded question packet for a Singapore criminal-law-qualified reviewer, not legal advice or an executable Singapore-law model. Its [research report](../../../docs/rewrite/SINGAPORE-SECTION-84-AUTHORITY-AND-TEMPORAL-RESEARCH.md), [authority register](AUTHORITY-REGISTER.json), [proposition matrix](PROPOSITION-REVIEW-MATRIX.json), [temporal matrix](TEMPORAL-APPLICABILITY-MATRIX.json), and earlier [source lock](SOURCE-LOCK.json) should be read together. Please identify the exact statute expression and alleged-conduct/proceeding dates when answering. The user-supplied SSO pages are unauthenticated browser snapshots; Gazette PDFs and official judgments listed in the register were read separately.
+**The maintainer reports written confirmation by a Singapore-qualified criminal-law reviewer of the research baseline and bounded prototype proposal.** The [internal review record](QUALIFIED-REVIEW-RECORD.json) records `qualified_review_confirmed_in_writing` for commit `c057fb84000265b412d1b6ca3d050e7b2a1d5eca`. The message is unsigned, private and outside Git; Yuho has not authenticated reviewer identity or independently verified the reported qualification. The confirmation did not give separate answers to Q1–Q10 below or approve any future executable bundle digest. This remains a bounded question packet, not legal advice or an executable Singapore-law model. Its [research report](../../../docs/rewrite/SINGAPORE-SECTION-84-AUTHORITY-AND-TEMPORAL-RESEARCH.md), [authority register](AUTHORITY-REGISTER.json), [proposition matrix](PROPOSITION-REVIEW-MATRIX.json), [temporal matrix](TEMPORAL-APPLICABILITY-MATRIX.json), and earlier [source lock](SOURCE-LOCK.json) should be read together. Please identify the exact statute expression and alleged-conduct/proceeding dates when answering. The user-supplied SSO pages are unauthenticated browser snapshots; Gazette PDFs and official judgments listed in the register were read separately.
 
 ## Proposed positive scope and exclusions
 
@@ -10,7 +10,7 @@ Exclude evidence assessment, medical diagnosis, witness credibility, actual lega
 
 ## Response convention
 
-For **each** question below, please mark `approve`, `reject`, or `amend`; supply exact authority, paragraph/section, applicable expression/date, explanation, and any limitation. An “approve” answer would be a supplied review assertion only; it would not authenticate the reviewer or automatically approve any future bundle digest. Do not write a blanket “complete defence engine” approval.
+For a later specific confirmation, mark **each** question `approve`, `reject`, or `amend`; supply exact authority, paragraph/section, applicable expression/date, explanation, and any limitation. The maintainer-attested broad confirmation is not recorded as ten individual answers. An “approve” answer would be a supplied review assertion only; it would not authenticate the reviewer or automatically approve any future bundle digest. Do not write a blanket “complete defence engine” approval.
 
 | ID | Bounded question and current evidence | Review response |
 | --- | --- | --- |

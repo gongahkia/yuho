@@ -147,8 +147,10 @@ class ResearchArtifactTests(unittest.TestCase):
         for body in (report, brief):
             self.assertIn('non-executable', body)
             self.assertIn('not a valid `ModelBundle-v1`', body)
-            self.assertRegex(body, r'(?i)no .*qualified.*review|no singapore-qualified legal review')
             self.assertIn('court', body.casefold())
+        self.assertIn('No qualified reviewer has approved the model', report)
+        self.assertIn('qualified_review_confirmed_in_writing', brief)
+        self.assertIn('did not give separate answers to Q1–Q10', brief)
         self.assertIn('rule result cannot', report)
         self.assertNotIn('qualified_review_completed":true',
                          (HERE / 'PROPOSITION-REVIEW-MATRIX.json').read_text())
