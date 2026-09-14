@@ -10,14 +10,12 @@ import resource
 import subprocess
 import tempfile
 
-from . import bundle, core, modules, temporal
+from . import bundle, core, modules
 
 
 LANGUAGE = "YuhoSurface-v0.4"
 PLAN_SCHEMA = "yuho.execution-plan/v0.1"
 TRACE_SCHEMA = "yuho.execution-trace/v0.1"
-TEMPORAL_PLAN_SCHEMA = "yuho.execution-plan/v0.2"
-TEMPORAL_TRACE_SCHEMA = "yuho.execution-trace/v0.2"
 MAX_STEPS = 4
 MAX_EDGES = 3
 MAX_OUTPUTS = 4
@@ -57,7 +55,6 @@ class Step:
     module: core.Token
     version: core.Token
     gate: Gate | None
-    source_kind: str = "module"
 
 
 @dataclass(frozen=True)
@@ -95,14 +92,6 @@ class Scenario:
     plan: core.Token
     proof: tuple[core.Assignment, ...]
     booleans: tuple[tuple[core.Token, tuple[core.Assignment, ...]], ...]
-    conduct_date: core.Token | None = None
-
-
-@dataclass(frozen=True)
-class TemporalAssessment:
-    resolved: temporal.Resolved
-    selected: temporal.Selected
-    conduct_date: core.Token
 
 
 def fail(code: str, path: str, token: core.Token, message: str) -> None:
@@ -173,9 +162,7 @@ def parse_plan(source: bytes, path: str) -> PlanSource:
         sid = p.word()
         p.take("uses")
         variant = p.word()
-        source_kind = p.word()
-        if source_kind.text not in {"module", "temporal"}:
-            fail("SFE052", p.path, source_kind, "module or temporal source required")
+        p.take("module")
         module = p.word()
         p.take("version")
         module_version = p.word()
@@ -184,7 +171,7 @@ def parse_plan(source: bytes, path: str) -> PlanSource:
             p.take("when")
             gate = Gate(p.word(), p.word(), p.word())
         p.take(";")
-        steps.append(Step(sid, variant, module, module_version, gate, source_kind.text))
+        steps.append(Step(sid, variant, module, module_version, gate))
         if len(steps) > MAX_STEPS:
             fail("SFE067", path, sid, "step limit exceeded")
     p.take("outputs")
@@ -282,8 +269,6 @@ def check_plan(plan: PlanSource) -> tuple[Step, ...]:
     }
     if any(step.variant.text != expected_variants[sid] for sid, step in index.items()):
         fail("SFE056", plan.path, plan.identifier, "step role and variant mismatch")
-    if any(step.source_kind == "temporal" for step in plan.steps[1:]):
-        fail("SFE056", plan.path, plan.identifier, "only assessment may be temporal")
     expected_gates = {
         "choice": ("assessment::root-status", "is", "satisfied"),
         "basic_terms": ("choice::selected-penalties", "contains", "pen:basic"),
@@ -417,12 +402,6 @@ def parse_scenario(source: bytes, path: str) -> Scenario:
     p.take("for")
     plan = p.word()
     p.take("{")
-    conduct_date = None
-    if p.tokens[p.index].text == "conduct_date":
-        p.take("conduct_date")
-        conduct_date = p.word()
-        temporal._date(path, conduct_date)
-        p.take(";")
     p.take("proof_assignments")
     p.take("{")
     proof = p.assignments()
@@ -439,7 +418,7 @@ def parse_scenario(source: bytes, path: str) -> Scenario:
     p.take("eof")
     if len(set(x.text for x, _ in booleans)) != len(booleans):
         fail("SFE053", path, identifier, "duplicate step assignments")
-    return Scenario(path, source, identifier, plan, proof, tuple(booleans), conduct_date)
+    return Scenario(path, source, identifier, plan, proof, tuple(booleans))
 
 
 def _model_path(root: Path, identifier: str, *, proof: bool = False) -> Path:
@@ -474,28 +453,19 @@ def check_modules(plan: PlanSource, root: Path) -> None:
     ):
         fail("SFE066", plan.path, plan.identifier, "unsafe or missing module root")
     source_step = plan.steps[0]
-    if source_step.source_kind == "temporal":
-        source_path = root / "proof" / "temporal_root.yh"
-        resolved_temporal = temporal.resolve(source_path, root / "proof")
-        if (
-            resolved_temporal.root.module_id.text != source_step.module.text
-            or resolved_temporal.root.module_version.text != source_step.version.text
-        ):
-            fail("SFE057", str(source_path), source_step.module, "exact temporal root mismatch")
-    else:
-        source_path = _model_path(root, source_step.module.text, proof=True)
-        resolved = modules.resolve(source_path, root / "proof")
-        if (
-            resolved.root.identifier.text != source_step.module.text
-            or resolved.root.version.text != source_step.version.text
-            or resolved.model.variant.text != source_step.variant.text
-        ):
-            fail(
-                "SFE057",
-                str(source_path),
-                source_step.module,
-                "exact proof model ID, version or variant mismatch",
-            )
+    source_path = _model_path(root, source_step.module.text, proof=True)
+    resolved = modules.resolve(source_path, root / "proof")
+    if (
+        resolved.root.identifier.text != source_step.module.text
+        or resolved.root.version.text != source_step.version.text
+        or resolved.model.variant.text != source_step.variant.text
+    ):
+        fail(
+            "SFE057",
+            str(source_path),
+            source_step.module,
+            "exact proof model ID, version or variant mismatch",
+        )
     for step in plan.steps[1:]:
         _load_fragment(root, step)
 
@@ -641,11 +611,9 @@ def verify_compiled(
 ) -> None:
     try:
         value = json.loads(plan_bytes)
-        if plan_bytes != core.canonical(value) or value["schema"] not in {
-            PLAN_SCHEMA, TEMPORAL_PLAN_SCHEMA
-        }:
+        if plan_bytes != core.canonical(value) or value["schema"] != PLAN_SCHEMA:
             raise ValueError("noncanonical plan")
-        fields = {
+        if set(value) != {
             "schema",
             "plan_id",
             "version",
@@ -654,16 +622,7 @@ def verify_compiled(
             "steps",
             "outputs",
             "limits",
-        }
-        if value["schema"] == TEMPORAL_PLAN_SCHEMA:
-            fields.add("temporal")
-            binding = value["temporal"]
-            if not isinstance(binding, dict) or set(binding) != {
-                "conduct_date", "expression_id", "expression_version",
-                "selection_sha256", "temporal_module_lock_sha256"
-            }:
-                raise ValueError("invalid temporal binding")
-        if set(value) != fields:
+        }:
             raise ValueError("unknown or missing plan field")
         steps = value["steps"]
         if len(steps) != len(requests) or {x["id"] for x in steps} != set(requests):
@@ -704,67 +663,36 @@ def verify_compiled(
         )
 
 
-def _prepare(
-    plan: PlanSource,
-    scenario: Scenario,
-    root: Path,
-    assessment: TemporalAssessment | None = None,
-):
+def _prepare(plan: PlanSource, scenario: Scenario, root: Path):
     if scenario.plan.text != plan.identifier.text:
         fail("SFE059", scenario.path, scenario.plan, "scenario targets another plan")
     check_modules(plan, root)
     source_step = plan.steps[0]
-    if source_step.source_kind == "temporal":
-        if assessment is None or scenario.conduct_date is None:
-            fail("SFE041", scenario.path, scenario.identifier, "temporal selection required")
-        if scenario.conduct_date.text != assessment.conduct_date.text:
-            fail("SFE051", scenario.path, scenario.conduct_date, "conduct date binding differs")
-        temporal_scenario = temporal.Scenario(
-            scenario.path,
-            scenario.identifier,
-            assessment.resolved.root.family,
-            scenario.conduct_date,
-            scenario.proof,
+    source_path = _model_path(root, source_step.module.text, proof=True)
+    resolved = modules.resolve(source_path, root / "proof")
+    if (
+        resolved.root.identifier.text != source_step.module.text
+        or resolved.root.version.text != source_step.version.text
+    ):
+        fail(
+            "SFE057",
+            str(source_path),
+            resolved.root.identifier,
+            "exact proof module version mismatch",
         )
-        selected = temporal.select(assessment.resolved, temporal_scenario)
-        if selected != assessment.selected:
-            fail("SFE051", scenario.path, scenario.conduct_date, "selected expression differs")
-        proof = selected.request
-        selected_root = next(
-            candidate.root for expression, candidate in assessment.resolved.candidates
-            if expression.identifier.text == selected.expression.identifier.text
+    if resolved.model.variant.text != source_step.variant.text:
+        fail(
+            "SFE056", str(source_path), resolved.model.variant, "proof variant mismatch"
         )
-        model = selected.model
-        sources = {
-            (item.identifier.text, item.version.text): item.source_bytes
-            for _, candidate in assessment.resolved.candidates
-            for item in candidate.ordered
-        }
-        sources[(assessment.resolved.root.module_id.text, assessment.resolved.root.module_version.text)] = assessment.resolved.root.source_bytes
-        entries = [(identifier, version, data) for (identifier, version), data in sources.items()]
-        if (
-            source_step.module.text != assessment.resolved.root.module_id.text
-            or source_step.version.text != assessment.resolved.root.module_version.text
-            or model.variant.text != source_step.variant.text
-            or selected_root.kind.text != "composition"
-        ):
-            fail("SFE057", plan.path, source_step.module, "temporal assessment model mismatch")
-    else:
-        if assessment is not None or scenario.conduct_date is not None:
-            fail("SFE049", scenario.path, scenario.identifier, "conduct date requires temporal assessment")
-        source_path = _model_path(root, source_step.module.text, proof=True)
-        resolved = modules.resolve(source_path, root / "proof")
-        if (
-            resolved.root.identifier.text != source_step.module.text
-            or resolved.root.version.text != source_step.version.text
-        ):
-            fail("SFE057", str(source_path), resolved.root.identifier, "exact proof module version mismatch")
-        if resolved.model.variant.text != source_step.variant.text:
-            fail("SFE056", str(source_path), resolved.model.variant, "proof variant mismatch")
-        proof_scenario = core.Scenario(scenario.identifier, resolved.model.identifier, scenario.proof)
-        proof = core.lower_synthetic(resolved.model, proof_scenario, resolved.root.path, scenario.path)
-        model = resolved.model
-        entries = [(x.identifier.text, x.version.text, x.source_bytes) for x in resolved.ordered]
+    proof_scenario = core.Scenario(
+        scenario.identifier, resolved.model.identifier, scenario.proof
+    )
+    proof = core.lower_synthetic(
+        resolved.model, proof_scenario, resolved.root.path, scenario.path
+    )
+    entries = [
+        (x.identifier.text, x.version.text, x.source_bytes) for x in resolved.ordered
+    ]
     booleans = {x.text: value for x, value in scenario.booleans}
     if set(booleans) != {x.identifier.text for x in plan.steps[1:]}:
         fail(
@@ -774,7 +702,7 @@ def _prepare(
             "Boolean assignment steps differ",
         )
     requests = {"assessment": proof}
-    models = {"assessment": model}
+    models = {"assessment": resolved.model}
     for step in plan.steps[1:]:
         model = _load_fragment(root, step)
         requests[step.identifier.text] = lower_fragment(
@@ -966,9 +894,8 @@ def execute(
     kernel: Path,
     bundle_validator: Path,
     bundle_dir: Path,
-    assessment: TemporalAssessment | None = None,
 ) -> tuple[bytes, bytes, bytes, dict[str, str]]:
-    requests, models, lock = _prepare(plan, scenario, root, assessment)
+    requests, models, lock = _prepare(plan, scenario, root)
     # Every independent request is packaged and validated before the first kernel call.
     digests = {}
     for step in plan.steps:
@@ -1019,7 +946,7 @@ def execute(
                 "step ModelBundle validation failed",
             )
     plan_record = {
-        "schema": TEMPORAL_PLAN_SCHEMA if assessment else PLAN_SCHEMA,
+        "schema": PLAN_SCHEMA,
         "plan_id": plan.identifier.text,
         "version": plan.version.text,
         "language": LANGUAGE,
@@ -1034,18 +961,8 @@ def execute(
             {
                 "id": x.identifier.text,
                 "variant": x.variant.text,
-                "module_id": next(
-                    candidate.root.identifier.text
-                    for expression, candidate in assessment.resolved.candidates
-                    if expression.identifier.text == assessment.selected.expression.identifier.text
-                )
-                if assessment and x.identifier.text == "assessment"
-                else x.module.text,
-                "module_version": next(
-                    candidate.root.version.text
-                    for expression, candidate in assessment.resolved.candidates
-                    if expression.identifier.text == assessment.selected.expression.identifier.text
-                ) if assessment and x.identifier.text == "assessment" else x.version.text,
+                "module_id": x.module.text,
+                "module_version": x.version.text,
                 "request_sha256": core.sha(requests[x.identifier.text]),
                 "bundle_digest": digests[x.identifier.text],
                 "depends_on": []
@@ -1072,14 +989,6 @@ def execute(
             "max_total_response_bytes": MAX_TOTAL_RESPONSE_BYTES,
         },
     }
-    if assessment:
-        plan_record["temporal"] = {
-            "conduct_date": assessment.conduct_date.text,
-            "expression_id": assessment.selected.expression.identifier.text,
-            "expression_version": assessment.selected.expression.version.text,
-            "selection_sha256": core.sha(assessment.selected.record),
-            "temporal_module_lock_sha256": core.sha(assessment.resolved.lock),
-        }
     plan_bytes = core.canonical(plan_record)
     verify_compiled(plan_bytes, requests, digests, plan.path)
     registered: dict[str, dict] = {}
@@ -1170,7 +1079,7 @@ def execute(
         )
     trace = core.canonical(
         {
-            "schema": TEMPORAL_TRACE_SCHEMA if assessment else TRACE_SCHEMA,
+            "schema": TRACE_SCHEMA,
             "plan_id": plan.identifier.text,
             "plan_sha256": core.sha(plan_bytes),
             "module_lock_sha256": core.sha(lock),
@@ -1184,7 +1093,6 @@ def execute(
                 for name in plan.outputs
             },
             "scope": plan_record["scope"],
-            **({"temporal_selection_sha256": core.sha(assessment.selected.record)} if assessment else {}),
         }
     )
     return plan_bytes, lock, trace, digests
