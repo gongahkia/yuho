@@ -8,6 +8,7 @@ module Yuho.Surface.AST
   , ActorAttributedFact(..), ActorAttributedMentalState(..), ActorAssignment(..)
   , RelationAssignment(..), ParticipationTarget(..), ParticipationRelation(..)
   , ParticipationRoute(..), StatutoryInstrument(..), AuthorityReference(..)
+  , Abetment(..), AbetmentRoute(..), PursuantConduct(..)
   , AttemptTarget(..), AttemptActor(..), TargetDirectedMentalState(..)
   , ConductStageDefinition(..), AttemptDefinition(..), AttemptScopeAssumption(..)
   , AttemptTechnicalOutput(..), ConductStage(..), ConductStageAssignment(..)
@@ -28,6 +29,7 @@ data Category = Conduct | Circumstance | Fault | Purpose | Result | Causation
   | MovableProperty | Possession | ConsentAbsence | DishonestIntention
   | Movement | MovementForTaking
   | AidAct | IllegalOmission | Consequence | SubstantialStep
+  | PursuantAct | PursuantIllegalOmission
   deriving (Eq, Ord, Show)
 data RuleKind = OffenceKind | ExceptionKind | ParticipationKind | AttemptKind deriving (Eq, Show)
 data Proof = Proved | NotProved | Unresolved Text deriving (Eq, Show)
@@ -60,6 +62,7 @@ data StatutoryDefinition = StatutoryDefinition
   , definitionOutputs :: [DefinitionOutput] }
   deriving (Eq, Show)
 data PartyRoleKind = PrincipalParty | AllegedAbettorParty | AllegedAttempterParty
+  | CoConspiratorParty
   deriving (Eq, Show)
 data PartyRole = PartyRole Token PartyRoleKind deriving (Eq, Show)
 data ActorBinding = ActorBinding Token Token deriving (Eq, Show)
@@ -77,6 +80,19 @@ data ParticipationRelation = ParticipationRelation
   , relationStatusId :: Token, relationQuote :: Token }
   deriving (Eq, Show)
 data ParticipationRoute = IntentionalAidRoute Rule ParticipationRelation deriving (Eq, Show)
+data PursuantConduct = PursuantConduct Token Token Element Element deriving (Eq, Show)
+data AbetmentRoute
+  = InstigationRoute Token ParticipationRelation
+  | ConspiracyRoute Token Token ParticipationRelation PursuantConduct
+      Element Proposition Proposition
+  | AidRoute Token ParticipationRelation [Element] Proposition Proposition
+  deriving (Eq, Show)
+data Abetment = Abetment
+  { abetmentRule :: Rule, abetmentActor :: Token, abetmentPrincipal :: Token
+  , abetmentRoutes :: [AbetmentRoute], abetmentOverall :: Proposition
+  , abetmentConsequence :: Element, abetmentConsequenceRelation :: ParticipationRelation
+  , abetmentCandidate :: Proposition }
+  deriving (Eq, Show)
 data StatutoryInstrument = PenalCode1871 | EvidenceAct1893 deriving (Eq, Show)
 data AuthorityReference = AuthorityReference Token StatutoryInstrument Token Token
   deriving (Eq, Show)
@@ -152,6 +168,10 @@ data Body = Section Token Token Token Token Token [Proposition] [Assignment]
       Rule AttemptDefinition [AuthorityReference] [AttemptTechnicalOutput]
   | ActorScopedLegal [PartyRole] [ActorAttributedFact] [ActorAttributedMentalState]
       [ScopeAssumption] Rule ParticipationRoute AttemptDefinition
+      ActorExceptionDefinition [ActorExceptionAttachment]
+      [AuthorityReference] [TechnicalOutput]
+  | AbetmentLegal [PartyRole] [ActorAttributedFact] [ActorAttributedMentalState]
+      [ScopeAssumption] Rule Abetment AttemptDefinition
       ActorExceptionDefinition [ActorExceptionAttachment]
       [AuthorityReference] [TechnicalOutput]
   deriving (Eq, Show)

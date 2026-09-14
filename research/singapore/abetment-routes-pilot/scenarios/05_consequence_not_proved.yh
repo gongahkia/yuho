@@ -1,0 +1,38 @@
+// Synthetic classifications and opaque actors only.
+scenario X00 for SingaporePenalCodeSection107RoutesTheftResearchPrototype-v1 {
+  analyse p:abet-theft;
+  bind role:principal to actor:principal-1;
+  bind role:alleged-abettor to actor:participant-1;
+  bind role:co-conspirator to actor:co-1;
+  bind role:alleged-attempter to actor:attempt-actor-1;
+  assume a:post-2022-section-84-expression-applicable;
+  assume a:dishonesty-externally-classified;
+  assume a:direct-s107-routes-only;
+  assume a:broader-section108-cases-excluded;
+  assume a:no-express-punishment-provision-modelled;
+  assume a:direct-self-attempt-only;
+  assume a:target-not-completed;
+  assume a:no-express-attempt-punishment-provision-modelled;
+  assume a:punishment-outside-scope;
+  assume a:statutory-expression-supplied;
+  assume a:stage-externally-classified;
+  assume a:impossible-attempts-excluded;
+  rel:instigates from actor:participant-1 to actor:principal-1 = proved;
+  rel:agreement from actor:participant-1 to actor:co-1 = not_proved;
+  f:pursuant-act by actor:co-1 = not_proved;
+  f:pursuant-omission by actor:co-1 = not_proved;
+  f:pursuance-link by rel:agreement = not_proved;
+  rel:aid from actor:participant-1 to actor:principal-1 = not_proved;
+  f:intends-aid by actor:participant-1 = not_proved;
+  f:aid-by-act by actor:participant-1 = not_proved;
+  f:aid-by-illegal-omission by actor:participant-1 = not_proved;
+  rel:consequence from actor:participant-1 to actor:principal-1 = not_proved;
+  exception-status xi:abettor-section84 f:unsoundness-time by actor:participant-1 context aid-conduct = not_proved;
+  exception-status xi:abettor-section84 f:nature-causation by actor:participant-1 context aid-conduct = not_proved;
+  exception-status xi:abettor-section84 f:nature-incapacity by actor:participant-1 context aid-conduct = not_proved;
+  exception-status xi:abettor-section84 f:wrong-causation by actor:participant-1 context aid-conduct = not_proved;
+  exception-status xi:abettor-section84 f:ordinary-wrongfulness-incapacity by actor:participant-1 context aid-conduct = not_proved;
+  exception-status xi:abettor-section84 f:contrary-law-incapacity by actor:participant-1 context aid-conduct = not_proved;
+  exception-status xi:abettor-section84 f:control-causation by actor:participant-1 context aid-conduct = not_proved;
+  exception-status xi:abettor-section84 f:control-incapacity by actor:participant-1 context aid-conduct = not_proved;
+}

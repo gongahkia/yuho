@@ -165,6 +165,8 @@ typedElement = do
         "substantial-step" -> pure SubstantialStep
         "aid-act" -> pure AidAct
         "illegal-omission" -> pure IllegalOmission
+        "pursuant-act" -> pure PursuantAct
+        "pursuant-illegal-omission" -> pure PursuantIllegalOmission
         "consequence" -> pure Consequence
         _ -> P $ \path _ -> at "SFE017" path category "invalid element category"
       pure (Element categoryKind category item quoteId support)
@@ -263,6 +265,7 @@ partyRoles = do
       "role:principal" -> pure PrincipalParty
       "role:alleged-abettor" -> pure AllegedAbettorParty
       "role:alleged-attempter" -> pure AllegedAttempterParty
+      "role:co-conspirator" -> pure CoConspiratorParty
       _ -> P $ \path _ -> at "SFE063" path role "unsupported party role"
     pure (PartyRole role partyKind)
   _ <- need "}"
@@ -339,6 +342,114 @@ participationRoute = do
         [value | Right (RuleGroup value) <- declarations]
         [value | Right (RuleReference value) <- declarations]
   pure (IntentionalAidRoute participationRuleId relation)
+
+typedRelation :: P ParticipationRelation
+typedRelation = do
+  _ <- need "relation"
+  item <- word
+  _ <- need "from"
+  source <- word
+  _ <- need "to"
+  destination <- word
+  _ <- need "target"
+  target <- word
+  _ <- need "status"
+  status <- word
+  _ <- need "quote"
+  quote <- word
+  _ <- need ";"
+  pure (ParticipationRelation item (RoleEndpoint source) (RoleEndpoint destination)
+    (ParticipationTarget target) status quote)
+
+abetmentDeclaration :: P Abetment
+abetmentDeclaration = do
+  headToken <- need "abetment"
+  item <- word
+  _ <- need "actor"
+  actor <- word
+  _ <- need "target"
+  target <- word
+  _ <- need "principal"
+  principal <- word
+  _ <- need "rule"
+  ruleId <- word
+  _ <- need "program"
+  programId <- word
+  _ <- need "path"
+  sourcePath <- word
+  _ <- need "sections"
+  first <- StatutorySection <$> word
+  rest <- manyBefore "{" (need "," >> (StatutorySection <$> word))
+  _ <- need "{"
+  routes <- manyBefore "any" abetmentRoute
+  overall <- need "any" >>= group
+  consequenceRelation <- typedRelation
+  _ <- need "element"
+  consequence <- typedElement
+  candidate <- need "all" >>= group
+  _ <- need "}"
+  let routeElements route = case route of
+        InstigationRoute _ relation -> [relationElement relation]
+        ConspiracyRoute _ _ relation (PursuantConduct _ _ act omission) link _ _ ->
+          [relationElement relation,act,omission,link]
+        AidRoute _ relation elements _ _ -> relationElement relation : elements
+      routeGroups route = case route of
+        InstigationRoute _ _ -> []
+        ConspiracyRoute _ _ _ _ _ form routeGroup -> [form,routeGroup]
+        AidRoute _ _ _ form routeGroup -> [form,routeGroup]
+      declared = Rule ParticipationKind headToken item (Just target) ruleId
+        programId sourcePath (first:rest)
+        (concatMap routeElements routes ++ [consequence])
+        (concatMap routeGroups routes ++ [overall,candidate]) []
+  pure (Abetment declared actor principal routes overall consequence
+    consequenceRelation candidate)
+
+abetmentRoute :: P AbetmentRoute
+abetmentRoute = do
+  kindToken <- word
+  _ <- need "route"
+  routeId <- word
+  case tokenText kindToken of
+    "instigation" -> do
+      _ <- need "{"
+      relation <- typedRelation
+      _ <- need "}"
+      pure (InstigationRoute routeId relation)
+    "conspiracy" -> do
+      _ <- need "with"
+      other <- word
+      _ <- need "{"
+      relation <- typedRelation
+      _ <- need "conduct"
+      conductId <- word
+      _ <- need "actor"
+      conductActor <- word
+      _ <- need "{"
+      _ <- need "element"
+      act <- typedElement
+      _ <- need "element"
+      omission <- typedElement
+      form <- need "any" >>= group
+      _ <- need "}"
+      _ <- need "element"
+      link <- typedElement
+      routeGroup <- need "all" >>= group
+      _ <- need "}"
+      pure (ConspiracyRoute routeId other relation
+        (PursuantConduct conductId conductActor act omission) link form routeGroup)
+    "intentional-aid" -> do
+      _ <- need "{"
+      relation <- typedRelation
+      elements <- manyBefore "any" (need "element" >> typedElement)
+      form <- need "any" >>= group
+      routeGroup <- need "all" >>= group
+      _ <- need "}"
+      pure (AidRoute routeId relation elements form routeGroup)
+    _ -> P $ \path _ -> at "SFE100" path kindToken "unsupported s 107 route"
+
+relationElement :: ParticipationRelation -> Element
+relationElement relation = Element Causation (relationIdentifier relation)
+  (relationStatusId relation) (relationQuote relation) Nothing
 
 attemptDeclaration :: P AttemptDefinition
 attemptDeclaration = do
@@ -640,28 +751,45 @@ body = do
         (attributedFacts, attributedMentalStates) <- actorAttributions
         assumptions <- scopeAssumptions
         offence <- rule "offence"
-        participation <- participationRoute
-        afterParticipation <- current
-        if tokenText afterParticipation == "attempt" then do
+        afterOffence <- current
+        if tokenText afterOffence == "abetment" then do
           case definitions of
             [] -> pure ()
-            first:_ -> P $ \path _ -> at "SFE087" path (definitionId first)
-              "actor-scoped integration uses the bounded direct theft candidate"
+            first:_ -> P $ \path _ -> at "SFE100" path (definitionId first)
+              "bounded abetment fixture uses the direct theft candidate"
+          abetment <- abetmentDeclaration
           attempt <- attemptDeclaration
           shared <- actorExceptionDefinition
           attached <- whileWord "attach" actorAttachment
           citations <- authorities
           declaredOutputs <- outputs
           pure (sources, quotes, burden,
-            ActorScopedLegal roles attributedFacts attributedMentalStates
-              assumptions offence participation attempt shared attached
+            AbetmentLegal roles attributedFacts attributedMentalStates
+              assumptions offence abetment attempt shared attached
               citations declaredOutputs)
         else do
-          citations <- authorities
-          declaredOutputs <- outputs
-          pure (sources, quotes, burden,
-            ParticipationLegal roles definitions attributedFacts attributedMentalStates
-              assumptions offence participation citations declaredOutputs)
+          participation <- participationRoute
+          afterParticipation <- current
+          if tokenText afterParticipation == "attempt" then do
+            case definitions of
+              [] -> pure ()
+              first:_ -> P $ \path _ -> at "SFE087" path (definitionId first)
+                "actor-scoped integration uses the bounded direct theft candidate"
+            attempt <- attemptDeclaration
+            shared <- actorExceptionDefinition
+            attached <- whileWord "attach" actorAttachment
+            citations <- authorities
+            declaredOutputs <- outputs
+            pure (sources, quotes, burden,
+              ActorScopedLegal roles attributedFacts attributedMentalStates
+                assumptions offence participation attempt shared attached
+                citations declaredOutputs)
+          else do
+            citations <- authorities
+            declaredOutputs <- outputs
+            pure (sources, quotes, burden,
+              ParticipationLegal roles definitions attributedFacts attributedMentalStates
+                assumptions offence participation citations declaredOutputs)
       else do
         assumptions <- map AttemptScopeAssumption <$> scopeAssumptions
         offence <- rule "offence"

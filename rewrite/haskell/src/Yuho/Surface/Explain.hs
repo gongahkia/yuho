@@ -136,6 +136,9 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
                 <> " (" <> reasonText (proofBranchReason branch) <> ")"
               ,"No guilt, conviction, acquittal, liability, diagnosis, sentence or court disposition was determined."]
         Right (Text.unlines output)
+      AbetmentLegal _ _ _ _ offence abetment attempt shared attachments citations _ ->
+        explainAbetment path checked target observed bindings stages acknowledgements
+          offence abetment attempt shared attachments citations offenceTree scopedExceptionTree
       _ -> at "SFE013" path (modelIdentifier model)
         "explain requires a checked actor-scoped research model"
     (Just (AttemptScenario _ _ bindings _ stages completions _ acknowledgements _), Nothing) ->
@@ -390,6 +393,121 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
       Right (Text.unlines linesOfText)
     _ -> at "SFE013" path (modelIdentifier model)
       "explain requires a checked research offence model and scenario"
+  where
+    kernel result = either (const (at "SFE014" path (modelIdentifier model)
+      "Haskell kernel rejected the compiled research model")) Right result
+
+explainAbetment :: FilePath -> Checked -> Token -> [Token] -> [ActorBinding]
+  -> [ConductStageAssignment] -> [ScopeAcknowledgement] -> Rule -> Abetment
+  -> AttemptDefinition -> ActorExceptionDefinition -> [ActorExceptionAttachment]
+  -> [AuthorityReference] -> Resolved -> Resolved -> Either Diagnostic Text
+explainAbetment path checked@(Checked model _ assignments _ _) target observed bindings
+    stages acknowledgements offence abetment attempt shared attachments citations
+    selectedTree scopedTree = do
+  attachment <- case [item | item <- attachments,
+    tokenText (attachmentTargetToken (attachmentTargetKind item)) == tokenText target] of
+    [item] -> Right item
+    _ -> at "SFE087" path target "selected actor attachment missing"
+  let route = abetmentRule abetment
+      AttemptDefinition attemptRuleId _ _ _ _ = attempt
+      selectedRule
+        | tokenText target == tokenText (ruleIdentifier offence) = offence
+        | tokenText target == tokenText (ruleIdentifier route) = route
+        | otherwise = attemptRuleId
+      instanceId = attachmentInstanceId attachment
+      actor role = case [tokenText item | ActorBinding declared item <- bindings,
+        tokenText declared == role] of
+        [item] -> item
+        _ -> "missing"
+  request <- lowerChecked checked
+  value <- either (const (at "SFE014" path (modelIdentifier model)
+    "compiled request is invalid JSON")) Right (decodeJson request)
+  decoded <- kernel (decodeProofRequest value)
+  validated <- kernel (validateProofRequest decoded)
+  result <- kernel (evaluateProof validated)
+  _ <- kernel (selectProofPenalties validated result)
+  evaluated <- case [item | item <- proofResultRules result,
+    proofRuleId item == tokenText (ruleId selectedRule)] of
+    [item] -> Right item
+    _ -> at "SFE014" path (ruleId selectedRule) "selected technical result missing"
+  authoredException <- sharedExceptionTree path shared
+  let supplied = Map.fromList [(tokenText item,proofText proof)
+        | (item,proof) <- assignments]
+      technical = traceValues evaluated
+      exceptionResult = case [item | item <- proofResultRules result,
+        proofRuleId item == tokenText (attachmentRuleId instanceId)] of
+        [item] -> Just item
+        _ -> Nothing
+      exceptionTechnical = maybe Map.empty traceValues exceptionResult
+      scopedStatus = maybe "not_evaluated" (satisfactionText . proofRuleStatus) exceptionResult
+      currentIsAbetment = tokenText target == tokenText (ruleIdentifier route)
+      treeId node = case node of
+        ResolvedLeaf item _ -> tokenText item
+        ResolvedGroup item _ _ -> tokenText item
+      routeLines = case selectedTree of
+        ResolvedGroup _ All [ResolvedGroup overall Any routeTrees, consequence]
+          | currentIsAbetment ->
+            ["Penal Code s 107 route classifications:"]
+            ++ concat [ ["  " <> treeId node <> ": " <>
+                Map.findWithDefault "not_evaluated" (treeId node) technical]
+               ++ renderTree 2 supplied technical node | node <- routeTrees]
+            ++ ["Overall technical s 107 status: " <>
+                Map.findWithDefault "not_evaluated" (tokenText overall) technical
+               ,"Separate s 109 candidate consequence:"]
+            ++ renderTree 1 supplied technical consequence
+            ++ ["Technical s 109 candidate status: " <>
+                Map.findWithDefault "not_evaluated" (treeId selectedTree) technical]
+        _ -> "Selected technical requirements:" : renderTree 1 supplied technical selectedTree
+      otherLine item = let other = attachmentInstanceId item
+        in "  " <> tokenText other <> " — " <>
+          (if tokenText other `elem` map tokenText observed
+           then "observed, but not_evaluated for this branch"
+           else "not_evaluated")
+      BurdenAnnotation annotation holder burdenKind standard = modelBurden model
+      ActorExceptionDefinition _ sharedRule = shared
+      stageLines = case stages of
+        [ConductStageAssignment _ _ (PreparationOnly _)] ->
+          ["Conduct stage: preparation_only — externally classified"]
+        [ConductStageAssignment _ _ (ActTowardsCommission _)] ->
+          ["Conduct stage: act_towards_commission — externally classified"]
+        [ConductStageAssignment _ _ (StageUnresolved _ why)] ->
+          ["Conduct stage: unresolved(" <> tokenText why <> ") — externally classified"]
+        _ -> []
+      output =
+        ["Model: " <> tokenText (modelIdentifier model)
+        ,"Jurisdiction: Singapore — research POC; synthetic classifications only"
+        ,"Analysis target: " <> tokenText target
+        ,"Principal actor: " <> actor "role:principal"
+        ,"Alleged-abettor actor: " <> actor "role:alleged-abettor"
+        ,"Co-conspirator actor: " <> actor "role:co-conspirator"
+        ,"Alleged-attempter actor: " <> actor "role:alleged-attempter"
+        ,"Target thing: " <> tokenText (ruleIdentifier offence)
+          <> " — Penal Code ss " <> sectionList (ruleSections offence)]
+        ++ stageLines ++ routeLines
+        ++ ["General exception instance: " <> tokenText instanceId
+           ,"Definition: " <> tokenText (ruleIdentifier sharedRule)
+             <> " — Penal Code s 84; shared structure, independent classifications"
+           ,"Subject actor: " <> actor (tokenText (attachmentSubjectRole attachment))
+           ,"Act context: " <> tokenText (actContextToken (attachmentContext attachment))
+           ,"Section 84 routes:"]
+        ++ renderScopedTree 1 supplied exceptionTechnical authoredException scopedTree
+        ++ ["Selected section 84 status: " <> scopedStatus
+           ,"Other actor instances:"]
+        ++ [otherLine item | item <- attachments,
+          tokenText (attachmentInstanceId item) /= tokenText instanceId]
+        ++ ["Typed statutory references:"]
+        ++ ["  " <> tokenText label <> ": " <> instrumentText instrument
+            <> " s " <> tokenText section
+           | AuthorityReference label instrument _ section <- citations]
+        ++ ["Evidence Act s 107 context: " <> tokenText annotation <> "; "
+            <> tokenText holder <> " " <> tokenText burdenKind <> " burden; "
+            <> tokenText standard <> ". It does not classify evidence."
+           ,"Scope assumptions: acknowledged by scenario, not inferred or proved"]
+        ++ ["  " <> tokenText item | ScopeAcknowledgement item <- acknowledgements]
+        ++ ["Final technical participation status: " <>
+          satisfactionText (proofResultStatus result)
+           ,"No guilt, conviction, acquittal, liability, punishment or sentence was determined."]
+  Right (Text.unlines output)
   where
     kernel result = either (const (at "SFE014" path (modelIdentifier model)
       "Haskell kernel rejected the compiled research model")) Right result

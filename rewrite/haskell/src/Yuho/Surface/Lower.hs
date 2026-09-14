@@ -394,6 +394,60 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
             (selectedRegistry : instanceRegistry) (object (map fact assignments)))
         _ -> at "SFE089" "<lower>" (modelIdentifier model)
           "actor-scoped scenario and selected instance required"
+    AbetmentLegal _ _ _ _ offence abetment attempt shared attachments _ _ ->
+      case (scenario,secondTree) of
+        (Just (ActorScopedScenario _ _ [target] observed _ _ _ _ _ _ _ _),
+          Just selectedExceptionTree) -> do
+          selected <- case [item | item <- attachments,
+            tokenText (attachmentTargetToken (attachmentTargetKind item)) == tokenText target] of
+            [item] -> pure item
+            _ -> at "SFE087" "<lower>" target "selected actor attachment missing"
+          let route = abetmentRule abetment
+              AttemptDefinition attemptRuleId _ _ _ _ = attempt
+              selectedRule
+                | tokenText target == tokenText (ruleIdentifier offence) = offence
+                | tokenText target == tokenText (ruleIdentifier route) = route
+                | otherwise = attemptRuleId
+              observedAttachments = [item | item <- attachments,
+                any ((== tokenText (attachmentInstanceId item)) . tokenText) observed]
+              active = selected : observedAttachments
+          commonTree <- sharedExceptionTree "<lower>" shared
+          selectedRoot <- requirement False burden text quoteSpans
+            (rulePath selectedRule) firstTree
+          instanceRegistry <- mapM (\item -> do
+            let instanceId = attachmentInstanceId item
+                instantiated = if tokenText instanceId == tokenText (attachmentInstanceId selected)
+                  then selectedExceptionTree else scopeTree instanceId commonTree
+                instancePath = attachmentPath instanceId
+            root <- requirement True burden text quoteSpans instancePath instantiated
+            pure (object
+              [("id", tokenValue (attachmentRuleId instanceId)),("source_id",tokenValue sourceId)
+              ,("program",program instancePath text
+                (tokenValue (attachmentProgramId instanceId)) root)
+              ,("exceptions",array [])])) active
+          let selectedId = attachmentInstanceId selected
+              binding = object
+                [("id",tokenValue selectedId)
+                ,("branch_id",tokenValue (ruleProgram selectedRule))
+                ,("source_id",tokenValue sourceId),("span",wholeSpan text)
+                ,("guard",object [("kind",string "is_infringed")
+                  ,("target",tokenValue (attachmentRuleId selectedId))])
+                ,("effect",string "defeat")]
+              selectedRegistry = object
+                [("id",tokenValue (ruleId selectedRule)),("source_id",tokenValue sourceId)
+                ,("program",program (rulePath selectedRule) text
+                  (tokenValue (ruleProgram selectedRule)) selectedRoot)
+                ,("exceptions",array [binding])]
+              exceptionIds = Set.fromList [tokenText item | attachment <- active,
+                item <- leafTokens (scopeTree (attachmentInstanceId attachment) commonTree)]
+              fact (key,value) = factValue (Set.member (tokenText key) exceptionIds)
+                "synthetic research fixture" (tokenText statusId) burden (key,value)
+          pure (baseRequest model (ruleId selectedRule)
+            [sourceValue sourceId sourcePath text,
+             sourceValue statusId statusPath statusBytes]
+            (selectedRegistry : instanceRegistry) (object (map fact assignments)))
+        _ -> at "SFE089" "<lower>" (modelIdentifier model)
+          "actor-scoped route scenario and selected instance required"
   pure (encodeJson request)
   where
     sourceRole = case modelBody model of
@@ -405,6 +459,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
       ParticipationLegal _ _ _ _ _ _ _ _ _ -> "source_text"
       AttemptLegal _ _ _ _ _ _ _ -> "source_text"
       ActorScopedLegal _ _ _ _ _ _ _ _ _ _ _ -> "source_text"
+      AbetmentLegal _ _ _ _ _ _ _ _ _ _ _ -> "source_text"
     BurdenAnnotation _ holder kind _ = modelBurden model
     burden = object [("holder", tokenValue holder), ("kind", tokenValue kind)]
 
