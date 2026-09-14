@@ -133,6 +133,15 @@ elementOrGroup = do
         "circumstance" -> pure Circumstance
         "fault" -> pure Fault
         "purpose" -> pure Purpose
+        "result" -> pure Result
+        "causation" -> pure Causation
+        "intention" -> pure Intention
+        "knowledge" -> pure Knowledge
+        "unsoundness" -> pure Unsoundness
+        "nature-incapacity" -> pure NatureIncapacity
+        "ordinary-wrongfulness" -> pure OrdinaryWrongfulness
+        "contrary-law-wrongfulness" -> pure ContraryLawWrongfulness
+        "control-incapacity" -> pure ControlIncapacity
         _ -> P $ \path _ -> at "SFE017" path category "invalid element category"
       pure (Left (Element categoryKind category item quoteId))
     "all" -> Right <$> group headToken
@@ -213,6 +222,30 @@ limitations = do
   _ <- need "}"
   pure values
 
+scopeAssumptions :: P [ScopeAssumption]
+scopeAssumptions = do
+  _ <- need "scope-assumptions"
+  _ <- need "{"
+  assumptions <- manyBefore "}" $ do
+    _ <- need "scope-assumption"
+    item <- word
+    _ <- need ";"
+    pure (ScopeAssumption item)
+  _ <- need "}"
+  pure assumptions
+
+outputs :: P [TechnicalOutput]
+outputs = do
+  _ <- need "outputs"
+  _ <- need "{"
+  values <- manyBefore "}" $ do
+    label <- word
+    target <- word
+    _ <- need ";"
+    pure (TechnicalOutput label target)
+  _ <- need "}"
+  pure values
+
 body :: P ([SourceDecl], [(Token, Token)], BurdenAnnotation, Body)
 body = do
   next <- current
@@ -244,17 +277,18 @@ body = do
       Just item -> P $ \file _ -> at "SFE014" file item "mapping source is unsupported for synthetic model"
       Nothing -> pure ()
     burden <- annotations
-    offence <- rule "offence"
-    exception <- rule "exception"
-    _ <- need "outputs"
-    _ <- need "{"
-    outputs <- manyBefore "}" $ do
-      label <- word
-      target <- word
-      _ <- need ";"
-      pure (TechnicalOutput label target)
-    _ <- need "}"
-    pure (sources, quotes, burden, Synthetic offence exception outputs)
+    next <- current
+    if tokenText next == "scope-assumptions" then do
+      assumptions <- scopeAssumptions
+      offence <- rule "offence"
+      exception <- rule "exception"
+      declaredOutputs <- outputs
+      pure (sources, quotes, burden, Legal assumptions offence exception declaredOutputs)
+    else do
+      offence <- rule "offence"
+      exception <- rule "exception"
+      declaredOutputs <- outputs
+      pure (sources, quotes, burden, Synthetic offence exception declaredOutputs)
 
 modelParser :: P Model
 modelParser = do
@@ -295,9 +329,19 @@ scenarioParser = do
   requestId <- word
   _ <- need "for"
   modelId <- word
-  assigned <- assignments
+  _ <- need "{"
+  entries <- manyBefore "}" $ do
+    next <- current
+    if tokenText next == "assume" then do
+      _ <- need "assume"
+      item <- word
+      _ <- need ";"
+      pure (Right (ScopeAcknowledgement item))
+    else Left <$> assignment
+  _ <- need "}"
   _ <- kind EndToken
-  pure (Scenario requestId modelId assigned)
+  pure (Scenario requestId modelId [item | Left item <- entries]
+    [item | Right item <- entries])
 
 parseScenario :: FilePath -> BS.ByteString -> Either Diagnostic Scenario
 parseScenario path bytes = do

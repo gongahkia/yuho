@@ -30,6 +30,8 @@ resolveTree path declarations root = do
       else if Set.member key visited then at "SFE006" path token "proposition used more than once"
       else case Map.lookup key indexed of
         Nothing
+          | "a:" `Text.isPrefixOf` key ->
+              at "SFE025" path token "research-scope assumption is not executable"
           | "ann:" `Text.isPrefixOf` key || key == "section107" ->
               at "SFE012" path token "contextual annotation is not executable"
           | not ("f:" `Text.isPrefixOf` key || "g:" `Text.isPrefixOf` key) ->

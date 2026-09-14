@@ -85,9 +85,51 @@ checkModel path model supplied = do
         else pure ()
       assignments <- case supplied of
         Nothing -> pure []
-        Just (scenarioPath, Scenario scenarioId modelId entries) -> do
+        Just (scenarioPath, Scenario scenarioId modelId entries acknowledgements) -> do
           expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
           expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          case acknowledgements of
+            ScopeAcknowledgement item:_ -> at "SFE023" scenarioPath item "undeclared scope acknowledgement"
+            [] -> pure ()
+          checkAssignments scenarioPath
+            (ResolvedGroup (ruleIdentifier offence) All [offenceTree, exceptionTree]) entries
+      pure (Checked model (snd <$> supplied) assignments offenceTree (Just exceptionTree))
+    Legal assumptions offence exception outputs -> do
+      if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
+        then pure () else at "SFE004" path (modelIdentifier model) "research model ID required"
+      expect path "SFE004" (modelJurisdiction model) "Singapore"
+      expect path "SFE004" (modelPurpose model) "research_prototype"
+      expect path "SFE004" (modelDate model) "2026-09-13"
+      let BurdenAnnotation annotation holder burdenKind standard = modelBurden model
+      expect path "SFE011" annotation "section107"
+      expect path "SFE011" holder "defence"
+      expect path "SFE011" burdenKind "legal"
+      expect path "SFE011" standard "balance_of_probabilities"
+      requireRoles path sourceIndex
+      if ruleKind offence == OffenceKind && ruleKind exception == ExceptionKind
+        then pure () else at "SFE017" path (ruleIdentifier offence) "offence and exception declarations required"
+      case ruleTarget exception of
+        Just target | tokenText target == tokenText (ruleIdentifier offence) -> pure ()
+        Just target -> at "SFE018" path target "exception must target the declared offence"
+        Nothing -> at "SFE018" path (ruleIdentifier exception) "exception target required"
+      declared <- checkScopeDeclarations path assumptions
+      offenceTree <- checkedLegalRule path quoteIndex offence
+      exceptionTree <- checkedLegalRule path quoteIndex exception
+      shape <- checkLegalShape path offence exception offenceTree exceptionTree
+      checkLegalOutputs path offence exception shape outputs
+      let allIds = map tokenText
+            ([ruleIdentifier offence, ruleIdentifier exception, ruleId offence, ruleId exception,
+              ruleProgram offence, ruleProgram exception]
+            ++ map elementId (ruleElements offence ++ ruleElements exception)
+            ++ map identifier (ruleGroups offence ++ ruleGroups exception))
+      if Set.size (Set.fromList allIds) == length allIds then pure ()
+        else at "SFE002" path (ruleIdentifier exception) "duplicate semantic identifier"
+      assignments <- case supplied of
+        Nothing -> pure []
+        Just (scenarioPath, Scenario scenarioId modelId entries acknowledgements) -> do
+          expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
+          expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          checkScopeAcknowledgements scenarioPath scenarioId declared acknowledgements
           checkAssignments scenarioPath
             (ResolvedGroup (ruleIdentifier offence) All [offenceTree, exceptionTree]) entries
       pure (Checked model (snd <$> supplied) assignments offenceTree (Just exceptionTree))
@@ -180,3 +222,120 @@ proofStatus path status reason = case tokenText status of
       Right (Unresolved (tokenText token))
     _ -> at "SFE010" path status "unresolved requires supported reason"
   _ -> at "SFE010" path status "invalid supplied proof classification"
+
+requireRoles :: FilePath -> Map.Map Text (Text, Text) -> Either Diagnostic ()
+requireRoles path sources =
+  if Set.fromList (map fst (Map.elems sources)) == Set.fromList ["source_text", "synthetic_status"]
+     && Map.size sources == 2
+  then Right () else at "SFE014" path (Token WordToken "provenance" 1 1)
+    "research model needs one text and one synthetic-status source"
+
+checkScopeDeclarations :: FilePath -> [ScopeAssumption] -> Either Diagnostic (Set.Set Text)
+checkScopeDeclarations path rows = do
+  if null rows then at "SFE022" path (Token WordToken "scope-assumptions" 1 1)
+    "research-scope assumptions required" else pure ()
+  go Set.empty rows
+  where
+    go seen [] = Right seen
+    go seen (ScopeAssumption item:rest)
+      | not ("a:" `Text.isPrefixOf` tokenText item) =
+          at "SFE022" path item "scope assumption requires a: identifier"
+      | Set.member (tokenText item) seen = at "SFE002" path item "duplicate scope assumption"
+      | otherwise = go (Set.insert (tokenText item) seen) rest
+
+checkScopeAcknowledgements :: FilePath -> Token -> Set.Set Text
+  -> [ScopeAcknowledgement] -> Either Diagnostic ()
+checkScopeAcknowledgements path scenarioId declared = go Set.empty
+  where
+    go seen []
+      | seen == declared = Right ()
+      | otherwise = at "SFE022" path scenarioId "missing required research-scope acknowledgement"
+    go seen (ScopeAcknowledgement item:rest)
+      | Set.member (tokenText item) seen = at "SFE024" path item "duplicate scope acknowledgement"
+      | not (Set.member (tokenText item) declared) = at "SFE023" path item "unknown scope assumption"
+      | otherwise = go (Set.insert (tokenText item) seen) rest
+
+checkedLegalRule :: FilePath -> Map.Map Text Token -> Rule -> Either Diagnostic Resolved
+checkedLegalRule path quotes rule = do
+  mapM_ (\item -> do
+    if "f:" `Text.isPrefixOf` tokenText (elementId item) then pure ()
+      else at "SFE017" path (elementId item) "typed element requires fact ID"
+    knownQuote path quotes (elementQuote item)) (ruleElements rule)
+  let declarations = [Leaf (elementId item) Nothing (elementQuote item) Nothing
+        | item <- ruleElements rule] ++ ruleGroups rule
+  case reverse (ruleGroups rule) of
+    Group root _ _: _ -> resolveTree path declarations root
+    _ -> at "SFE007" path (ruleIdentifier rule) "rule root proposition missing"
+
+data LegalShape = LegalShape
+  { legalHurt :: Token, legalFault :: Token, legalOffenceRoot :: Token
+  , legalNature :: Token, legalWrongfulness :: Token, legalControl :: Token
+  , legalExceptionRoot :: Token }
+
+checkLegalShape :: FilePath -> Rule -> Rule -> Resolved -> Resolved
+  -> Either Diagnostic LegalShape
+checkLegalShape path offence exception offenceTree exceptionTree = do
+  let offenceKinds = Map.fromList [(tokenText (elementId item), elementCategory item)
+        | item <- ruleElements offence]
+      exceptionKinds = Map.fromList [(tokenText (elementId item), elementCategory item)
+        | item <- ruleElements exception]
+      category index token = Map.lookup (tokenText token) index
+  (hurt, fault, offenceRoot) <- case offenceTree of
+    ResolvedGroup root All
+      [ResolvedLeaf act _, ResolvedLeaf result _, ResolvedLeaf causal _,
+       ResolvedGroup faultId Any [ResolvedLeaf intention _, ResolvedLeaf knowledge _]] -> do
+        if category offenceKinds causal == Just Causation then pure ()
+          else at "SFE026" path causal "voluntary hurt requires a causation element"
+        if map (category offenceKinds) [intention, knowledge] == [Just Intention, Just Knowledge]
+          then pure () else at "SFE027" path faultId "fault alternative requires intention or knowledge"
+        if map (category offenceKinds) [act, result] == [Just Conduct, Just Result]
+           && Map.size offenceKinds == 5 && length (ruleElements offence) == 5
+          then pure (result, faultId, root)
+          else at "SFE017" path (ruleIdentifier offence) "offence requires conduct and hurt result"
+    _ -> at "SFE027" path (ruleIdentifier offence)
+      "offence requires conduct, result, causation and one typed fault alternative"
+  (nature, wrongfulness, control, exceptionRoot) <- case exceptionTree of
+    ResolvedGroup root All [ResolvedLeaf condition _,
+      ResolvedGroup _ Any [natureRoute, wrongRoute, controlRoute]] -> do
+        if category exceptionKinds condition == Just Unsoundness
+          then pure () else at "SFE028" path condition "unsoundness at the act time required"
+        if routeKinds exceptionKinds natureRoute == Just [Causation, NatureIncapacity]
+           && routeKinds exceptionKinds wrongRoute ==
+                Just [Causation, OrdinaryWrongfulness, ContraryLawWrongfulness]
+           && routeKinds exceptionKinds controlRoute == Just [Causation, ControlIncapacity]
+           && Map.size exceptionKinds == 8 && length (ruleElements exception) == 8
+          then pure (resolvedToken natureRoute, resolvedToken wrongRoute,
+            resolvedToken controlRoute, root)
+          else at "SFE028" path (ruleIdentifier exception)
+            "section 84 routes require causal links and both wrongfulness components"
+    _ -> at "SFE028" path (ruleIdentifier exception)
+      "section 84 requires unsoundness and three alternative incapacity routes"
+  pure (LegalShape hurt fault offenceRoot nature wrongfulness control exceptionRoot)
+  where
+    routeKinds index (ResolvedGroup _ All members) =
+      traverse (\item -> case item of
+        ResolvedLeaf token _ -> Map.lookup (tokenText token) index
+        _ -> Nothing) members
+    routeKinds _ _ = Nothing
+    resolvedToken (ResolvedLeaf token _) = token
+    resolvedToken (ResolvedGroup token _ _) = token
+
+checkLegalOutputs :: FilePath -> Rule -> Rule -> LegalShape
+  -> [TechnicalOutput] -> Either Diagnostic ()
+checkLegalOutputs path offence exception shape rows = do
+  _ <- unique path "SFE002" [(label, target) | TechnicalOutput label target <- rows]
+  let expected =
+        [("hurt_status", legalHurt shape)
+        ,("fault_alternative", legalFault shape)
+        ,("voluntary_hurt_requirements", legalOffenceRoot shape)
+        ,("section323_candidate_requirements", ruleId offence)
+        ,("nature_route", legalNature shape)
+        ,("wrongfulness_route", legalWrongfulness shape)
+        ,("control_route", legalControl shape)
+        ,("section84_requirements", legalExceptionRoot shape)
+        ,("section84_defeat", ruleIdentifier exception)
+        ,("final_rule", ruleId offence)]
+  if map (\(TechnicalOutput label target) -> (tokenText label, tokenText target)) rows
+       == [(label, tokenText target) | (label, target) <- expected]
+    then Right () else at "SFE020" path (ruleIdentifier offence)
+      "technical outputs must name the checked offence and exception nodes"
