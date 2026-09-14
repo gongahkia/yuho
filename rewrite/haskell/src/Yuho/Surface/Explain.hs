@@ -21,6 +21,73 @@ import Yuho.SuppliedProofStatus.Validate (validateProofRequest)
 explainChecked :: FilePath -> Checked -> Either Diagnostic Text
 explainChecked path checked@(Checked model scenario assignments offenceTree exceptionTree) =
   case (scenario, exceptionTree) of
+    (Just (ParticipationScenario _ _ bindings _ _ _ acknowledgements _), Nothing) ->
+      case (modelBody model, offenceTree) of
+        (ParticipationLegal _ definitions _ _ _ offence
+          (IntentionalAidRoute route relation) citations _,
+          ResolvedGroup _ _ [principalTree, aidTree, consequenceTree]) -> do
+          request <- lowerChecked checked
+          value <- either (const (at "SFE014" path (modelIdentifier model)
+            "compiled request is invalid JSON")) Right (decodeJson request)
+          decoded <- kernel (decodeProofRequest value)
+          validated <- kernel (validateProofRequest decoded)
+          result <- kernel (evaluateProof validated)
+          _ <- kernel (selectProofPenalties validated result)
+          evaluated <- case [item | item <- proofResultRules result,
+            proofRuleId item == tokenText (ruleId route)] of
+            [item] -> Right item
+            _ -> at "SFE014" path (ruleId route) "participation rule result missing"
+          let actor role = case [tokenText item | ActorBinding declared item <- bindings,
+                tokenText declared == role] of
+                [item] -> item
+                _ -> "missing"
+              supplied = Map.fromList [(tokenText item, proofText status)
+                | (item,status) <- assignments]
+              technical = traceValues evaluated
+              selectedDefinitions = reachableDefinitions
+                (Map.fromList [(tokenText (definitionId item),item) | item <- definitions]) offence
+              definitionLines = concat
+                [["  " <> tokenText (definitionId definition) <> " — Penal Code s "
+                   <> sectionList (definitionSections definition)] ++
+                 ["    " <> tokenText (elementId element) <> " targets "
+                   <> tokenText target <> " (type-checked, not an occurrence finding)"
+                  | MentalStateInput element _ target _ <- definitionMentalStates definition]
+                | definition <- selectedDefinitions]
+              authorityLines = ["  " <> tokenText label <> ": "
+                <> instrumentText instrument <> " s " <> tokenText section
+                <> " (" <> tokenText source <> ")"
+                | AuthorityReference label instrument source section <- citations]
+              acknowledged = [tokenText item | ScopeAcknowledgement item <- acknowledgements]
+              output =
+                ["Model: " <> tokenText (modelIdentifier model)
+                ,"Jurisdiction: Singapore — research POC; synthetic classifications only"
+                ,"Analysis target: bounded intentional-aid participation"
+                ,"Scope assumptions: acknowledged by scenario, not inferred or proved"]
+                ++ map ("  " <>) acknowledged
+                ++ ["Principal role: " <> actor "role:principal"
+                   ,"Candidate target: theft, Penal Code ss " <> sectionList (ruleSections offence)
+                   ,"Reachable statutory definitions:"]
+                ++ definitionLines
+                ++ ["Principal target requirements:"]
+                ++ renderTree 1 supplied technical principalTree
+                ++ ["Alleged-abettor role: " <> actor "role:alleged-abettor"
+                   ,"Intentional assistance and aid form:"]
+                ++ renderTree 1 supplied technical aidTree
+                ++ ["Relationship: " <> actor "role:alleged-abettor" <> " -> "
+                   <> actor "role:principal" <> "; target "
+                   <> case relationTarget relation of ParticipationTarget item -> tokenText item
+                   ,"Relationship status: supplied " <>
+                     Map.findWithDefault "missing" (tokenText (relationStatusId relation)) supplied
+                   ,"Commission in consequence:"]
+                ++ renderTree 1 supplied technical consequenceTree
+                ++ ["Candidate participation provisions:"] ++ authorityLines
+                ++ ["Evidence Act s 107 is contextual here; it does not classify evidence or establish the aid route."
+                   ,"Final technical participation status: "
+                     <> satisfactionText (proofResultStatus result)
+                   ,"No guilt, conviction, acquittal, liability, punishment or sentence was determined."]
+          Right (Text.unlines output)
+        _ -> at "SFE013" path (modelIdentifier model)
+          "explain requires a checked intentional-aid scenario"
     (Just (Scenario _ _ _ acknowledgements targets), Just defenceTree) -> do
       (offence, exception, introduction, definitionLines, sourceReferences, offenceHeading) <-
         case modelBody model of
@@ -179,3 +246,7 @@ reasonText ProofExceptionUnresolved = "section 84 guard unresolved"
 sectionList :: [StatutorySection] -> Text
 sectionList sections = Text.intercalate ", "
   [tokenText item | StatutorySection item <- sections]
+
+instrumentText :: StatutoryInstrument -> Text
+instrumentText PenalCode1871 = "Penal Code 1871"
+instrumentText EvidenceAct1893 = "Evidence Act 1893"

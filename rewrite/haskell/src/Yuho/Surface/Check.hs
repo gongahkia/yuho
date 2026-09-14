@@ -9,6 +9,7 @@ import Yuho.Surface.AST
 import Yuho.Surface.Definitions
   ( definitionIndex, definitionLeaves, reachableDefinitions, resolveDefinition
   , resolveDefinitionRule )
+import Yuho.Surface.Participation (resolveParticipationTree)
 import Yuho.Surface.Resolve (resolveTree)
 import Yuho.Surface.Token
 
@@ -97,6 +98,8 @@ checkModel path model supplied = do
             [] -> pure ()
           checkAssignments scenarioPath
             (ResolvedGroup (ruleIdentifier offence) All [offenceTree, exceptionTree]) entries
+        Just (scenarioPath, _) -> at "SFE063" scenarioPath (modelIdentifier model)
+          "actor bindings require a participation model"
       pure (Checked model (snd <$> supplied) assignments offenceTree (Just exceptionTree))
     Legal assumptions offence exception outputs -> do
       if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
@@ -138,6 +141,8 @@ checkModel path model supplied = do
           checkScopeAcknowledgements scenarioPath path scenarioId declared acknowledgements
           checkAssignments scenarioPath
             (ResolvedGroup (ruleIdentifier offence) All [offenceTree, exceptionTree]) entries
+        Just (scenarioPath, _) -> at "SFE063" scenarioPath (modelIdentifier model)
+          "actor bindings require a participation model"
       pure (Checked model (snd <$> supplied) assignments offenceTree (Just exceptionTree))
     MultiLegal assumptions offences exceptions attachments declaredOutputs -> do
       if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
@@ -203,6 +208,8 @@ checkModel path model supplied = do
           assignments <- checkAssignments scenarioPath
             (ResolvedGroup (ruleIdentifier selected) All [offenceTree, exceptionTree]) entries
           pure (Checked model (Just scenario) assignments offenceTree (Just exceptionTree))
+        Just (scenarioPath, _) -> at "SFE063" scenarioPath (modelIdentifier model)
+          "actor bindings require a participation model"
     DefinitionsLegal definitions assumptions offences exceptions attachments declaredOutputs -> do
       if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
         then pure () else at "SFE004" path (modelIdentifier model) "research model ID required"
@@ -286,6 +293,67 @@ checkModel path model supplied = do
           assignments <- checkAssignments scenarioPath
             (ResolvedGroup (ruleIdentifier selected) All [offenceTree,exceptionTree]) entries
           pure (Checked model (Just scenario) assignments offenceTree (Just exceptionTree))
+        Just (scenarioPath, _) -> at "SFE063" scenarioPath (modelIdentifier model)
+          "actor bindings require a participation model"
+    ParticipationLegal roles definitions attributedFacts attributedMental assumptions offence
+      participation citations declaredOutputs -> do
+      if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
+        then pure () else at "SFE004" path (modelIdentifier model) "research model ID required"
+      expect path "SFE004" (modelJurisdiction model) "Singapore"
+      expect path "SFE004" (modelPurpose model) "research_prototype"
+      expect path "SFE004" (modelDate model) "2026-09-13"
+      let BurdenAnnotation annotation holder burdenKind standard = modelBurden model
+      mapM_ (\(item,wanted) -> expect path "SFE011" item wanted)
+        [(annotation,"none"),(holder,"none"),(burdenKind,"none"),
+         (standard,"not_applicable")]
+      let IntentionalAidRoute route relation = participation
+      checkParticipationSources path sourceIndex definitions offence route citations
+      (principalRole, abettorRole) <- checkPartyRoles path roles
+      index <- definitionIndex path definitions
+      mapM_ (checkDefinition path quoteIndex index) definitions
+      mapM_ (checkElementQuote path quoteIndex) (ruleElements offence)
+      checkSections path (ruleIdentifier offence) (ruleSections offence)
+      offenceTree <- resolveDefinitionRule path index offence
+      checkDefinitionOffence path index offence offenceTree
+      declared <- checkScopeDeclarations path assumptions
+      checkParticipationShape path quoteIndex offence offenceTree route relation
+      participationTree <- resolveParticipationTree path offenceTree participation
+      checkParticipationAttributions path principalRole abettorRole definitions offence
+        route relation attributedFacts attributedMental
+      checkParticipationOutputs path offence route relation declaredOutputs
+      case supplied of
+        Nothing -> pure (Checked model Nothing [] participationTree Nothing)
+        Just (scenarioPath, scenario@(ParticipationScenario scenarioId modelId bindings
+          actorRows relationRows plain acknowledgements targets)) -> do
+          expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
+          expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          target <- case targets of
+            [item] -> pure item
+            [] -> at "SFE036" scenarioPath scenarioId "participation analysis target required"
+            _:second:_ -> at "SFE037" scenarioPath second "multiple analysis targets"
+          expect scenarioPath "SFE069" target (tokenText (ruleIdentifier route))
+          checkScopeAcknowledgements scenarioPath path scenarioId declared acknowledgements
+          actorMap <- checkActorBindings scenarioPath principalRole abettorRole bindings
+          case plain of
+            Assignment item _ _:_ -> at "SFE065" scenarioPath item
+              "actor-specific classification requires by actor or relation"
+            [] -> pure ()
+          relationAssignment <- case relationRows of
+            [row] -> checkRelationAssignment scenarioPath actorMap relation row
+            [] -> at "SFE068" scenarioPath (relationIdentifier relation)
+              "relation status and endpoints required"
+            _:second:_ -> at "SFE002" scenarioPath (relationAssignmentId second)
+              "duplicate relation status"
+          checkedActorRows <- mapM (checkActorAssignment scenarioPath actorMap
+            attributedFacts attributedMental) actorRows
+          let RelationAssignment _ _ _ relationStatus relationReason = relationAssignment
+              relationFact = Assignment (relationStatusId relation)
+                relationStatus relationReason
+              entries = checkedActorRows ++ [relationFact]
+          assignments <- checkAssignments scenarioPath participationTree entries
+          pure (Checked model (Just scenario) assignments participationTree Nothing)
+        Just (scenarioPath, Scenario scenarioId _ _ _ _) ->
+          at "SFE064" scenarioPath scenarioId "participant role bindings required"
 
 checkElementQuote :: FilePath -> Map.Map Text Token -> Element -> Either Diagnostic ()
 checkElementQuote path quotes item = do
@@ -293,6 +361,230 @@ checkElementQuote path quotes item = do
     else at "SFE017" path (elementId item) "primitive input requires f: identifier"
   knownQuote path quotes (elementQuote item)
   mapM_ (knownQuote path quotes) (maybe [] (:[]) (elementSupport item))
+
+checkParticipationSources :: FilePath -> Map.Map Text (Text, Text)
+  -> [StatutoryDefinition] -> Rule -> Rule
+  -> [AuthorityReference] -> Either Diagnostic ()
+checkParticipationSources path sources definitions offence route citations = do
+  if Set.fromList (map fst (Map.elems sources)) ==
+      Set.fromList ["source_text", "synthetic_status", "contextual"]
+      && Map.size sources == 3 then pure () else
+    at "SFE014" path (Token WordToken "provenance" 1 1)
+      "participation model needs source, status and contextual authority references"
+  let labels = [(label, (instrument, source, section))
+        | AuthorityReference label instrument source section <- citations]
+  index <- unique path "SFE002" labels
+  let expected = Map.fromList
+        [("wrongful-concepts", (PenalCode1871,"23","source_text"))
+        ,("dishonesty", (PenalCode1871,"24","source_text"))
+        ,("theft-conduct", (PenalCode1871,"378","source_text"))
+        ,("theft-anchor", (PenalCode1871,"379","source_text"))
+        ,("abetment", (PenalCode1871,"107","source_text"))
+        ,("abettor", (PenalCode1871,"108","source_text"))
+        ,("consequence", (PenalCode1871,"109","source_text"))
+        ,("burden-context", (EvidenceAct1893,"107","contextual"))]
+  if Map.keysSet index == Map.keysSet expected then pure () else
+    at "SFE073" path (Token WordToken "authorities" 1 1)
+      "typed statutory-authority references required for each modelled provision"
+  mapM_ (checkOne expected) labels
+  let sections = map (map (tokenText . sectionToken) . definitionSections) definitions
+      sectionToken (StatutorySection item) = item
+      offenceSections = map (tokenText . sectionToken) (ruleSections offence)
+      routeSections = map (tokenText . sectionToken) (ruleSections route)
+  if sections == [["23"],["23"],["24"]]
+      && offenceSections == ["378","379"]
+      && routeSections == ["107","108","109"] then pure () else
+    at "SFE074" path (ruleIdentifier offence)
+      "modelled sections must match their typed Penal Code authority references"
+  where
+    checkOne expected (label,(instrument,source,section)) =
+      case Map.lookup (tokenText label) expected of
+        Just (wantedInstrument,wantedSection,wantedRole) ->
+          if instrument == wantedInstrument && tokenText section == wantedSection
+            && maybe False ((== wantedRole) . fst) (Map.lookup (tokenText source) sources)
+          then Right () else at "SFE074" path label
+            "authority instrument, source ID or section has the wrong legal role"
+        Nothing -> at "SFE073" path label "unknown statutory authority use"
+
+checkPartyRoles :: FilePath -> [PartyRole] -> Either Diagnostic (Token, Token)
+checkPartyRoles path rows = do
+  _ <- unique path "SFE063" [(role,()) | PartyRole role _ <- rows]
+  case rows of
+    [PartyRole principal PrincipalParty, PartyRole abettor AllegedAbettorParty]
+      | tokenText principal /= tokenText abettor -> Right (principal,abettor)
+    [PartyRole abettor AllegedAbettorParty, PartyRole principal PrincipalParty]
+      | tokenText principal /= tokenText abettor -> Right (principal,abettor)
+    PartyRole token _: _ -> at "SFE063" path token
+      "exactly one principal and one alleged-abettor role required"
+    [] -> at "SFE063" path (Token WordToken "party-roles" 1 1)
+      "principal and alleged-abettor roles required"
+
+checkParticipationShape :: FilePath -> Map.Map Text Token -> Rule -> Resolved
+  -> Rule -> ParticipationRelation -> Either Diagnostic ()
+checkParticipationShape path quotes offence offenceTree route relation = do
+  if ruleKind route == ParticipationKind &&
+      fmap tokenText (ruleTarget route) == Just (tokenText (ruleIdentifier offence))
+    then pure () else at "SFE069" path (ruleIdentifier route)
+      "participation must target the declared candidate offence"
+  if map (\(StatutorySection item) -> tokenText item) (ruleSections route) ==
+      ["107","108","109"] then pure () else
+    at "SFE074" path (ruleIdentifier route)
+      "bounded intentional-aid route requires Penal Code ss 107–109"
+  if ruleDefinitionReferences route == [] then pure () else
+    at "SFE069" path (ruleIdentifier route)
+      "participation cannot access a definition directly"
+  let endpoint (RoleEndpoint item) = tokenText item
+      endpoint (RelationEndpoint item) = tokenText item
+      offenceRoot = case offenceTree of
+        ResolvedGroup item _ _ -> item
+        ResolvedLeaf item _ -> item
+  if "rel:" `Text.isPrefixOf` tokenText (relationIdentifier relation)
+      && endpoint (relationFrom relation) == "role:alleged-abettor"
+      && endpoint (relationTo relation) == "role:principal"
+      && case relationTarget relation of
+        ParticipationTarget target -> tokenText target == tokenText (ruleIdentifier offence)
+      && "f:" `Text.isPrefixOf` tokenText (relationStatusId relation)
+    then pure () else at "SFE068" path (relationIdentifier relation)
+      "relation requires alleged-abettor to principal and the declared offence target"
+  knownQuote path quotes (relationQuote relation)
+  mapM_ (checkElementQuote path quotes) (ruleElements route)
+  let categories = Map.fromList [(tokenText (elementId item),elementCategory item)
+        | item <- ruleElements route]
+      category item = Map.lookup (tokenText item) categories
+  case ruleGroups route of
+    [Group aidForm Any [aidAct, omission],
+     Group aid All [intention, relationStatus, aidFormRef],
+     Group _ All [targetRef, aidRef, consequence]]
+      | tokenText aidForm == tokenText aidFormRef
+        && tokenText aid == tokenText aidRef
+        && tokenText targetRef == tokenText offenceRoot
+        && tokenText relationStatus == tokenText (relationStatusId relation)
+        && map category [aidAct,omission,intention,consequence] ==
+          map Just [AidAct,IllegalOmission,Intention,Consequence]
+        && length (ruleElements route) == 4 -> pure ()
+    _ -> at "SFE070" path (ruleIdentifier route)
+      "intentional aid needs act-or-illegal-omission, distinct intention and consequence"
+  let offenceIds = Set.fromList (treeIds offenceTree)
+      ownIds = map tokenText
+        (relationStatusId relation : map elementId (ruleElements route)
+          ++ map identifier (ruleGroups route))
+  if Set.null (Set.intersection offenceIds (Set.fromList ownIds))
+      && Set.size (Set.fromList ownIds) == length ownIds then pure () else
+    at "SFE002" path (ruleIdentifier route)
+      "participation and target proposition IDs must be distinct"
+  where
+    treeIds (ResolvedLeaf item _) = [tokenText item]
+    treeIds (ResolvedGroup item _ children) =
+      tokenText item : concatMap treeIds children
+
+checkParticipationAttributions :: FilePath -> Token -> Token
+  -> [StatutoryDefinition] -> Rule -> Rule -> ParticipationRelation
+  -> [ActorAttributedFact] -> [ActorAttributedMentalState] -> Either Diagnostic ()
+checkParticipationAttributions path principal abettor definitions offence route relation facts mental = do
+  let isMental kind = kind `elem` [Intention,Knowledge,Fault,DishonestIntention]
+      definitionMap = Map.fromList [(tokenText (definitionId item),item) | item <- definitions]
+      selectedDefinitions = reachableDefinitions definitionMap offence
+      principalRows = [(elementId item,(isMental (elementCategory item),RoleEndpoint principal))
+        | item <- concatMap definitionLeaves selectedDefinitions ++ ruleElements offence]
+      routeRows = [(elementId item,(isMental (elementCategory item),
+        if elementCategory item == Consequence then RelationEndpoint (relationIdentifier relation)
+        else RoleEndpoint abettor)) | item <- ruleElements route]
+      relationRows = [(relationStatusId relation,
+        (False,RelationEndpoint (relationIdentifier relation)))]
+      expectedRows = principalRows ++ routeRows ++ relationRows
+      actualRows = [(item,(False,endpoint)) | ActorAttributedFact item endpoint <- facts]
+        ++ [(item,(True,endpoint)) | ActorAttributedMentalState item endpoint <- mental]
+  expected <- unique path "SFE002" expectedRows
+  actual <- unique path "SFE002" actualRows
+  if Map.keysSet expected == Map.keysSet actual then pure () else
+    at "SFE065" path (ruleIdentifier route)
+      "every actor-specific primitive needs exactly one typed attribution"
+  let endpointKey :: RelationEndpoint -> (Text,Text)
+      endpointKey (RoleEndpoint item) = ("role",tokenText item)
+      endpointKey (RelationEndpoint item) = ("relation",tokenText item)
+      equalAttribution (kind,endpoint) (otherKind,otherEndpoint) =
+        kind == otherKind && endpointKey endpoint == endpointKey otherEndpoint
+  case [item | (item,wanted) <- expectedRows,
+        maybe True (not . equalAttribution wanted) (Map.lookup (tokenText item) actual)] of
+    item:_ -> at "SFE067" path item
+      "fact or mental state attributed to wrong role or relation"
+    [] -> pure ()
+
+checkParticipationOutputs :: FilePath -> Rule -> Rule -> ParticipationRelation
+  -> [TechnicalOutput] -> Either Diagnostic ()
+checkParticipationOutputs path offence route relation rows = do
+  let offenceRoot = case reverse (ruleGroups offence) of
+        Group item _ _:_ -> item
+        _ -> ruleIdentifier offence
+      ids kind = [elementId item | item <- ruleElements route,
+        elementCategory item == kind]
+      groups = [item | Group item _ _ <- ruleGroups route]
+      expected = case (ids Intention,ids AidAct,ids IllegalOmission,ids Consequence,groups) of
+        ([intention],[act],[omission],[consequence],[aidForm,aid,root]) ->
+          Just [("principal_target",offenceRoot),("aid_intention",intention),
+            ("aid_by_act",act),("aid_illegal_omission",omission),
+            ("aid_relationship",relationStatusId relation),
+            ("aid_form",aidForm),("intentional_aid",aid),
+            ("commission_in_consequence",consequence),
+            ("section109_candidate",root),("final_rule",ruleId route)]
+        _ -> Nothing
+  case expected of
+    Just pairs | map (\(TechnicalOutput label target) ->
+      (tokenText label,tokenText target)) rows ==
+      [(label,tokenText target) | (label,target) <- pairs] -> pure ()
+    _ -> at "SFE020" path (ruleIdentifier route)
+      "participation technical outputs differ from typed declarations"
+
+checkActorBindings :: FilePath -> Token -> Token -> [ActorBinding]
+  -> Either Diagnostic (Map.Map Text Token)
+checkActorBindings path principal abettor rows = do
+  bindings <- unique path "SFE064" [(role,actor) | ActorBinding role actor <- rows]
+  if Map.keysSet bindings == Set.fromList [tokenText principal,tokenText abettor]
+    then pure () else case rows of
+      ActorBinding item _:_ -> at "SFE063" path item
+        "missing or unknown participant role binding"
+      [] -> at "SFE064" path principal "principal and alleged-abettor bindings required"
+  let actors = Map.elems bindings
+  case actors of
+    [first,second] | all ("actor:" `Text.isPrefixOf`) (map tokenText actors)
+      && tokenText first /= tokenText second -> pure ()
+    first:_ -> at "SFE064" path first
+      "distinct opaque actor identifiers required for this bounded POC"
+    [] -> at "SFE064" path principal "participant actor bindings required"
+  pure bindings
+
+relationAssignmentId :: RelationAssignment -> Token
+relationAssignmentId (RelationAssignment item _ _ _ _) = item
+
+checkRelationAssignment :: FilePath -> Map.Map Text Token -> ParticipationRelation
+  -> RelationAssignment -> Either Diagnostic RelationAssignment
+checkRelationAssignment path actors relation row@(RelationAssignment item source destination _ _) = do
+  let expectedSource = Map.lookup "role:alleged-abettor" actors
+      expectedDestination = Map.lookup "role:principal" actors
+  if tokenText item == tokenText (relationIdentifier relation)
+      && fmap tokenText expectedSource == Just (tokenText source)
+      && fmap tokenText expectedDestination == Just (tokenText destination)
+    then Right row else at "SFE068" path item
+      "relation endpoints or identifier do not match declared direction"
+
+checkActorAssignment :: FilePath -> Map.Map Text Token
+  -> [ActorAttributedFact] -> [ActorAttributedMentalState]
+  -> ActorAssignment -> Either Diagnostic Assignment
+checkActorAssignment path actors facts mental (ActorAssignment item suppliedActor status reason) = do
+  let declarations = [(key,endpoint) | ActorAttributedFact key endpoint <- facts]
+        ++ [(key,endpoint) | ActorAttributedMentalState key endpoint <- mental]
+      expected = lookup (tokenText item)
+        [(tokenText key,endpoint) | (key,endpoint) <- declarations]
+      actual = case expected of
+        Just (RoleEndpoint role) -> Map.lookup (tokenText role) actors
+        Just (RelationEndpoint relation) -> Just relation
+        Nothing -> Nothing
+  case expected of
+    Nothing -> at "SFE065" path item "unknown or unselected actor-specific fact"
+    Just _ | fmap tokenText actual == Just (tokenText suppliedActor) ->
+      Right (Assignment item status reason)
+    Just _ -> at "SFE067" path suppliedActor
+      "classification attributed to wrong actor or relation"
 
 checkDefinition :: FilePath -> Map.Map Text Token
   -> Map.Map Text StatutoryDefinition -> StatutoryDefinition -> Either Diagnostic ()

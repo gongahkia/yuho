@@ -1,0 +1,26 @@
+// Synthetic actor IDs and externally supplied classifications only.
+scenario A00 for SingaporePenalCodeIntentionalAidTheftResearchPrototype-v1 {
+  analyse p:intentional-aid;
+  bind role:principal to actor:principal-1;
+  bind role:alleged-abettor to actor:participant-1;
+  assume a:no-express-punishment-provision-modelled;
+  assume a:only-intentional-aid-route;
+  assume a:principal-theft-requirements-separately-supplied;
+  assume a:broader-section108-cases-excluded;
+  assume a:punishment-outside-scope;
+  assume a:statutory-expression-supplied;
+  f:intends-wrongful-gain by actor:principal-1 = proved;
+  f:intends-wrongful-loss by actor:principal-1 = not_proved;
+  f:act-dishonest-ordinary-standards by actor:principal-1 = not_proved;
+  f:knows-act-dishonest-ordinary-standards by actor:principal-1 = not_proved;
+  f:movable-property by actor:principal-1 = proved;
+  f:another-possession by actor:principal-1 = proved;
+  f:without-consent by actor:principal-1 = proved;
+  f:property-moved by actor:principal-1 = proved;
+  f:moved-for-taking by actor:principal-1 = proved;
+  f:intends-aid by actor:participant-1 = proved;
+  f:aid-by-act by actor:participant-1 = not_proved;
+  f:aid-by-illegal-omission by actor:participant-1 = proved;
+  f:consequence by rel:aid = proved;
+  rel:aid from actor:participant-1 to actor:principal-1 = proved;
+}

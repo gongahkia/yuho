@@ -1,0 +1,55 @@
+Model: SingaporePenalCodeIntentionalAidTheftResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Analysis target: bounded intentional-aid participation
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:no-express-punishment-provision-modelled
+  a:only-intentional-aid-route
+  a:principal-theft-requirements-separately-supplied
+  a:broader-section108-cases-excluded
+  a:punishment-outside-scope
+  a:statutory-expression-supplied
+Principal role: actor:principal-1
+Candidate target: theft, Penal Code ss 378, 379
+Reachable statutory definitions:
+  d:dishonestly — Penal Code s 24
+    f:intends-wrongful-gain targets d:wrongful-gain (type-checked, not an occurrence finding)
+    f:intends-wrongful-loss targets d:wrongful-loss (type-checked, not an occurrence finding)
+Principal target requirements:
+  g:theft-requirements — all; technical satisfied
+    f:movable-property — supplied proved; technical satisfied
+    f:another-possession — supplied proved; technical satisfied
+    f:without-consent — supplied proved; technical satisfied
+    d:dishonestly — all; technical satisfied
+      g:dishonestly — any; technical satisfied
+        g:section24-intention — any; technical satisfied
+          f:intends-wrongful-gain — supplied proved; technical satisfied
+          f:intends-wrongful-loss — supplied not_proved; technical not_satisfied
+        g:section24-ordinary — all; technical not_satisfied
+          f:act-dishonest-ordinary-standards — supplied not_proved; technical not_satisfied
+          f:knows-act-dishonest-ordinary-standards — supplied not_proved; technical not_satisfied
+    f:property-moved — supplied proved; technical satisfied
+    f:moved-for-taking — supplied proved; technical satisfied
+Alleged-abettor role: actor:participant-1
+Intentional assistance and aid form:
+  g:intentional-aid — all; technical satisfied
+    f:intends-aid — supplied proved; technical satisfied
+    f:aid-link — supplied proved; technical satisfied
+    g:aid-form — any; technical satisfied
+      f:aid-by-act — supplied not_proved; technical not_satisfied
+      f:aid-by-illegal-omission — supplied proved; technical satisfied
+Relationship: actor:participant-1 -> actor:principal-1; target o:theft
+Relationship status: supplied proved
+Commission in consequence:
+  f:consequence — supplied proved; technical satisfied
+Candidate participation provisions:
+  wrongful-concepts: Penal Code 1871 s 23 (src:pc)
+  dishonesty: Penal Code 1871 s 24 (src:pc)
+  theft-conduct: Penal Code 1871 s 378 (src:pc)
+  theft-anchor: Penal Code 1871 s 379 (src:pc)
+  abetment: Penal Code 1871 s 107 (src:pc)
+  abettor: Penal Code 1871 s 108 (src:pc)
+  consequence: Penal Code 1871 s 109 (src:pc)
+  burden-context: Evidence Act 1893 s 107 (src:ea)
+Evidence Act s 107 is contextual here; it does not classify evidence or establish the aid route.
+Final technical participation status: satisfied
+No guilt, conviction, acquittal, liability, punishment or sentence was determined.

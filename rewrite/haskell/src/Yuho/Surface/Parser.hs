@@ -3,6 +3,7 @@ module Yuho.Surface.Parser (parseModel, parseScenario) where
 
 import qualified Data.ByteString as BS
 import Data.Text (Text)
+import qualified Data.Text as Text
 import Yuho.Surface.AST
 import Yuho.Surface.Lexer (lexSource)
 import Yuho.Surface.Token
@@ -70,6 +71,11 @@ manyBefore ending action = go []
 assignment :: P Assignment
 assignment = do
   item <- word
+  (status, reason) <- assignmentValue
+  pure (Assignment item status reason)
+
+assignmentValue :: P (Token, Maybe Token)
+assignmentValue = do
   _ <- need "="
   status <- word
   hasReason <- optional "("
@@ -79,7 +85,7 @@ assignment = do
     pure (Just value)
     else pure Nothing
   _ <- need ";"
-  pure (Assignment item status reason)
+  pure (status, reason)
 
 assignments :: P [Assignment]
 assignments = do
@@ -156,6 +162,9 @@ typedElement = do
         "dishonest-intention" -> pure DishonestIntention
         "movement" -> pure Movement
         "movement-for-taking" -> pure MovementForTaking
+        "aid-act" -> pure AidAct
+        "illegal-omission" -> pure IllegalOmission
+        "consequence" -> pure Consequence
         _ -> P $ \path _ -> at "SFE017" path category "invalid element category"
       pure (Element categoryKind category item quoteId support)
 
@@ -232,6 +241,126 @@ statutoryDefinition = do
     [value | DefinitionEntryReference value <- entries]
     [value | DefinitionEntryGroup value <- entries]
     [value | DefinitionEntryOutput value <- entries])
+
+definitionsBlock :: P [StatutoryDefinition]
+definitionsBlock = do
+  _ <- need "definitions"
+  _ <- need "{"
+  values <- manyBefore "}" statutoryDefinition
+  _ <- need "}"
+  pure values
+
+partyRoles :: P [PartyRole]
+partyRoles = do
+  _ <- need "party-roles"
+  _ <- need "{"
+  values <- manyBefore "}" $ do
+    _ <- need "party-role"
+    role <- word
+    _ <- need ";"
+    partyKind <- case tokenText role of
+      "role:principal" -> pure PrincipalParty
+      "role:alleged-abettor" -> pure AllegedAbettorParty
+      _ -> P $ \path _ -> at "SFE063" path role "unsupported party role"
+    pure (PartyRole role partyKind)
+  _ <- need "}"
+  pure values
+
+actorAttributions :: P ([ActorAttributedFact], [ActorAttributedMentalState])
+actorAttributions = do
+  _ <- need "actor-attributions"
+  _ <- need "{"
+  entries <- manyBefore "}" $ do
+    kindToken <- word
+    item <- word
+    _ <- need "to"
+    owner <- word
+    _ <- need ";"
+    case tokenText kindToken of
+      "fact" -> pure (Left (ActorAttributedFact item (RoleEndpoint owner)))
+      "mental-state" -> pure (Right (ActorAttributedMentalState item (RoleEndpoint owner)))
+      "relation-fact" -> pure (Left (ActorAttributedFact item (RelationEndpoint owner)))
+      _ -> P $ \path _ -> at "SFE067" path kindToken "unsupported actor attribution"
+  _ <- need "}"
+  pure ([value | Left value <- entries], [value | Right value <- entries])
+
+participationRoute :: P ParticipationRoute
+participationRoute = do
+  headToken <- need "participation"
+  item <- word
+  _ <- need "route"
+  route <- word
+  if tokenText route == "intentional-aid" then pure () else
+    P $ \path _ -> at "SFE070" path route "unsupported participation route"
+  _ <- need "target"
+  target <- word
+  _ <- need "rule"
+  declaredRule <- word
+  _ <- need "program"
+  programId <- word
+  _ <- need "path"
+  sourcePath <- word
+  _ <- need "sections"
+  first <- StatutorySection <$> word
+  rest <- manyBefore "{" $ do
+    _ <- need ","
+    StatutorySection <$> word
+  _ <- need "{"
+  declarations <- manyBefore "}" $ do
+    next <- current
+    if tokenText next == "relation" then do
+      _ <- need "relation"
+      relationId <- word
+      _ <- need "from"
+      source <- word
+      _ <- need "to"
+      destination <- word
+      _ <- need "target"
+      relationTargetId <- word
+      _ <- need "status"
+      statusId <- word
+      _ <- need "quote"
+      quote <- word
+      _ <- need ";"
+      pure (Left (ParticipationRelation relationId (RoleEndpoint source)
+        (RoleEndpoint destination) (ParticipationTarget relationTargetId) statusId quote))
+    else Right <$> ruleEntry
+  _ <- need "}"
+  relation <- case [value | Left value <- declarations] of
+    [value] -> pure value
+    [] -> P $ \path _ -> at "SFE068" path item "participation relation required"
+    _:second:_ -> P $ \path _ -> at "SFE068" path (relationIdentifier second)
+      "one participation relation required"
+  let participationRuleId = Rule ParticipationKind headToken item (Just target) declaredRule
+        programId sourcePath (first:rest)
+        [value | Right (RuleElement value) <- declarations]
+        [value | Right (RuleGroup value) <- declarations]
+        [value | Right (RuleReference value) <- declarations]
+  pure (IntentionalAidRoute participationRuleId relation)
+
+instrument :: P StatutoryInstrument
+instrument = do
+  item <- word
+  case tokenText item of
+    "PenalCode1871" -> pure PenalCode1871
+    "EvidenceAct1893" -> pure EvidenceAct1893
+    _ -> P $ \path _ -> at "SFE073" path item "ambiguous or unknown statutory authority"
+
+authorities :: P [AuthorityReference]
+authorities = do
+  _ <- need "authorities"
+  _ <- need "{"
+  values <- manyBefore "}" $ do
+    _ <- need "authority"
+    use <- word
+    citedInstrument <- instrument
+    source <- word
+    _ <- need "section"
+    section <- word
+    _ <- need ";"
+    pure (AuthorityReference use citedInstrument source section)
+  _ <- need "}"
+  pure values
 
 data DefinitionEntry = DefinitionEntryInput DefinitionInput
   | DefinitionEntryMental MentalStateInput
@@ -391,11 +520,20 @@ body = do
       Nothing -> pure ()
     burden <- annotations
     bodyNext <- current
-    if tokenText bodyNext == "definitions" then do
-      _ <- need "definitions"
-      _ <- need "{"
-      definitions <- manyBefore "}" statutoryDefinition
-      _ <- need "}"
+    if tokenText bodyNext == "party-roles" then do
+      roles <- partyRoles
+      definitions <- definitionsBlock
+      (attributedFacts, attributedMentalStates) <- actorAttributions
+      assumptions <- scopeAssumptions
+      offence <- rule "offence"
+      participation <- participationRoute
+      citations <- authorities
+      declaredOutputs <- outputs
+      pure (sources, quotes, burden,
+        ParticipationLegal roles definitions attributedFacts attributedMentalStates
+          assumptions offence participation citations declaredOutputs)
+    else if tokenText bodyNext == "definitions" then do
+      definitions <- definitionsBlock
       assumptions <- scopeAssumptions
       offence <- rule "offence"
       moreOffences <- whileWord "offence" (rule "offence")
@@ -491,17 +629,53 @@ scenarioParser = do
       _ <- need "analyse"
       item <- word
       _ <- need ";"
-      pure (Right (Right item))
+      pure (ScenarioTarget item)
     else if tokenText next == "assume" then do
       _ <- need "assume"
       item <- word
       _ <- need ";"
-      pure (Right (Left (ScopeAcknowledgement item)))
-    else Left <$> assignment
+      pure (ScenarioAssumption (ScopeAcknowledgement item))
+    else if tokenText next == "bind" then do
+      _ <- need "bind"
+      role <- word
+      _ <- need "to"
+      actor <- word
+      _ <- need ";"
+      pure (ScenarioBinding (ActorBinding role actor))
+    else do
+      item <- word
+      if "rel:" `Text.isPrefixOf` tokenText item then do
+        _ <- need "from"
+        source <- word
+        _ <- need "to"
+        destination <- word
+        (status,reason) <- assignmentValue
+        pure (ScenarioRelation (RelationAssignment item source destination status reason))
+      else do
+        attributed <- optional "by"
+        if attributed then do
+          actor <- word
+          (status,reason) <- assignmentValue
+          pure (ScenarioActorAssignment (ActorAssignment item actor status reason))
+        else do
+          (status,reason) <- assignmentValue
+          pure (ScenarioPlainAssignment (Assignment item status reason))
   _ <- need "}"
   _ <- kind EndToken
-  pure (Scenario requestId modelId [item | Left item <- entries]
-    [item | Right (Left item) <- entries] [item | Right (Right item) <- entries])
+  let bindings = [item | ScenarioBinding item <- entries]
+      actors = [item | ScenarioActorAssignment item <- entries]
+      relations = [item | ScenarioRelation item <- entries]
+      plain = [item | ScenarioPlainAssignment item <- entries]
+      acknowledgements = [item | ScenarioAssumption item <- entries]
+      targets = [item | ScenarioTarget item <- entries]
+  if null bindings && null actors && null relations then
+    pure (Scenario requestId modelId plain acknowledgements targets)
+  else pure (ParticipationScenario requestId modelId bindings actors relations
+    plain acknowledgements targets)
+
+data ScenarioEntry = ScenarioTarget Token | ScenarioAssumption ScopeAcknowledgement
+  | ScenarioBinding ActorBinding | ScenarioActorAssignment ActorAssignment
+  | ScenarioRelation RelationAssignment | ScenarioPlainAssignment Assignment
 
 parseScenario :: FilePath -> BS.ByteString -> Either Diagnostic Scenario
 parseScenario path bytes = do

@@ -149,6 +149,17 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
               in filter (\(key,_) -> Set.member (tokenText key) references)
                    (modelQuotes model)
             _ -> modelQuotes model
+        (ParticipationLegal _ definitions _ _ _ offence
+          (IntentionalAidRoute route relation) _ _, Just (ParticipationScenario _ _ _ _ _ _ _ _)) ->
+          let index = Map.fromList [(tokenText (definitionId item),item)
+                | item <- definitions]
+              selected = reachableDefinitions index offence
+              references = Set.fromList (map tokenText
+                ([item | rule <- [offence,route], element <- ruleElements rule,
+                    item <- elementQuote element : maybe [] (:[]) (elementSupport element)]
+                ++ relationQuote relation : concatMap definitionQuoteKeys selected))
+          in filter (\(key,_) -> Set.member (tokenText key) references)
+               (modelQuotes model)
         _ -> modelQuotes model
       (text, quoteSpans) = quoteSource quoted
   (sourceId, sourcePath) <- sourceDecl sourceRole (modelSources model)
@@ -288,6 +299,23 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
             _ -> at "SFE040" "<lower>" target "selected attachment is not unique"
         _ -> at "SFE036" "<lower>" (modelIdentifier model)
           "one scenario analysis target required"
+    ParticipationLegal _ _ _ _ _ _ (IntentionalAidRoute route _) _ _ ->
+      case scenario of
+        Just (ParticipationScenario _ _ _ _ _ _ _ _) -> do
+          root <- requirement False burden text quoteSpans (rulePath route) firstTree
+          let registry = [object
+                [("id", tokenValue (ruleId route)), ("source_id", tokenValue sourceId)
+                ,("program", program (rulePath route) text
+                  (tokenValue (ruleProgram route)) root)
+                ,("exceptions", array [])]]
+          pure (baseRequest model (ruleId route)
+            [sourceValue sourceId sourcePath text,
+             sourceValue statusId statusPath statusBytes]
+            registry (object (map
+              (factValue False "synthetic research fixture" (tokenText statusId) burden)
+              assignments)))
+        _ -> at "SFE064" "<lower>" (modelIdentifier model)
+          "actor-bound scenario required"
   pure (encodeJson request)
   where
     sourceRole = case modelBody model of
@@ -296,6 +324,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
       Legal _ _ _ _ -> "source_text"
       MultiLegal _ _ _ _ _ -> "source_text"
       DefinitionsLegal _ _ _ _ _ _ -> "source_text"
+      ParticipationLegal _ _ _ _ _ _ _ _ _ -> "source_text"
     BurdenAnnotation _ holder kind _ = modelBurden model
     burden = object [("holder", tokenValue holder), ("kind", tokenValue kind)]
 

@@ -25,6 +25,7 @@ import SurfaceChecks (runSurfaceChecks)
 import LegalSurfaceChecks (runLegalSurfaceChecks)
 import MultiOffenceChecks (runMultiOffenceChecks)
 import DefinitionSurfaceChecks (runDefinitionSurfaceChecks)
+import ParticipationSurfaceChecks (runParticipationSurfaceChecks)
 import Yuho.Core.Source (validateSpan)
 import Yuho.Core.Types (Source(..), Span(..))
 import Yuho.Kernel.Run (runLine)
@@ -49,6 +50,7 @@ main = do
   runLegalSurfaceChecks root
   runMultiOffenceChecks root
   runDefinitionSurfaceChecks root
+  runParticipationSurfaceChecks root
   b06 <- readJson (frozen </> "requests/B06.json")
   b01 <- readJson (frozen </> "requests/B01.json")
   b03 <- readJson (frozen </> "requests/B03.json")

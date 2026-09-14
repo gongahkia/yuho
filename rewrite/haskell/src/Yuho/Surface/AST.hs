@@ -4,6 +4,10 @@ module Yuho.Surface.AST
   , StatutorySection(..)
   , DefinitionKind(..), DefinitionInput(..), DefinitionOutput(..), DefinitionReference(..)
   , MentalStateKind(..), MentalStateInput(..), StatutoryDefinition(..)
+  , PartyRoleKind(..), PartyRole(..), ActorBinding(..), RelationEndpoint(..)
+  , ActorAttributedFact(..), ActorAttributedMentalState(..), ActorAssignment(..)
+  , RelationAssignment(..), ParticipationTarget(..), ParticipationRelation(..)
+  , ParticipationRoute(..), StatutoryInstrument(..), AuthorityReference(..)
   , BurdenAnnotation(..), TechnicalOutput(..), Proposition(..), Element(..), Rule(..), Body(..), Model(..), Scenario(..)
   , Resolved(..), Checked(..), identifier, leafTokens ) where
 
@@ -16,8 +20,9 @@ data Category = Conduct | Circumstance | Fault | Purpose | Result | Causation
   | OrdinaryWrongfulness | ContraryLawWrongfulness | ControlIncapacity
   | MovableProperty | Possession | ConsentAbsence | DishonestIntention
   | Movement | MovementForTaking
+  | AidAct | IllegalOmission | Consequence
   deriving (Eq, Ord, Show)
-data RuleKind = OffenceKind | ExceptionKind deriving (Eq, Show)
+data RuleKind = OffenceKind | ExceptionKind | ParticipationKind deriving (Eq, Show)
 data Proof = Proved | NotProved | Unresolved Text deriving (Eq, Show)
 data Assignment = Assignment Token Token (Maybe Token) deriving (Eq, Show)
 data SourceDecl = SourceDecl Token Token Token deriving (Eq, Show)
@@ -47,6 +52,26 @@ data StatutoryDefinition = StatutoryDefinition
   , definitionGroups :: [Proposition]
   , definitionOutputs :: [DefinitionOutput] }
   deriving (Eq, Show)
+data PartyRoleKind = PrincipalParty | AllegedAbettorParty deriving (Eq, Show)
+data PartyRole = PartyRole Token PartyRoleKind deriving (Eq, Show)
+data ActorBinding = ActorBinding Token Token deriving (Eq, Show)
+data RelationEndpoint = RoleEndpoint Token | RelationEndpoint Token deriving (Eq, Show)
+data ActorAttributedFact = ActorAttributedFact Token RelationEndpoint deriving (Eq, Show)
+data ActorAttributedMentalState = ActorAttributedMentalState Token RelationEndpoint
+  deriving (Eq, Show)
+data ActorAssignment = ActorAssignment Token Token Token (Maybe Token) deriving (Eq, Show)
+data RelationAssignment = RelationAssignment Token Token Token Token (Maybe Token)
+  deriving (Eq, Show)
+newtype ParticipationTarget = ParticipationTarget Token deriving (Eq, Show)
+data ParticipationRelation = ParticipationRelation
+  { relationIdentifier :: Token, relationFrom :: RelationEndpoint
+  , relationTo :: RelationEndpoint, relationTarget :: ParticipationTarget
+  , relationStatusId :: Token, relationQuote :: Token }
+  deriving (Eq, Show)
+data ParticipationRoute = IntentionalAidRoute Rule ParticipationRelation deriving (Eq, Show)
+data StatutoryInstrument = PenalCode1871 | EvidenceAct1893 deriving (Eq, Show)
+data AuthorityReference = AuthorityReference Token StatutoryInstrument Token Token
+  deriving (Eq, Show)
 data Proposition = Leaf Token (Maybe Token) Token (Maybe Token)
   | Group Token Combinator [Token] deriving (Eq, Show)
 data Element = Element
@@ -66,6 +91,9 @@ data Body = Section Token Token Token Token Token [Proposition] [Assignment]
   | MultiLegal [ScopeAssumption] [Rule] [GeneralException] [Attachment] [TechnicalOutput]
   | DefinitionsLegal [StatutoryDefinition] [ScopeAssumption] [Rule]
       [GeneralException] [Attachment] [TechnicalOutput]
+  | ParticipationLegal [PartyRole] [StatutoryDefinition]
+      [ActorAttributedFact] [ActorAttributedMentalState]
+      [ScopeAssumption] Rule ParticipationRoute [AuthorityReference] [TechnicalOutput]
   deriving (Eq, Show)
 data Model = Model
   { modelIdentifier :: Token
@@ -82,6 +110,8 @@ data Model = Model
   , modelLimitations :: [Token]
   } deriving (Eq, Show)
 data Scenario = Scenario Token Token [Assignment] [ScopeAcknowledgement] [Token]
+  | ParticipationScenario Token Token [ActorBinding] [ActorAssignment]
+      [RelationAssignment] [Assignment] [ScopeAcknowledgement] [Token]
   deriving (Eq, Show)
 data Resolved = ResolvedLeaf Token Token | ResolvedGroup Token Combinator [Resolved]
   deriving (Eq, Show)
