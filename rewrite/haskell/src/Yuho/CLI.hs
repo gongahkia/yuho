@@ -9,7 +9,7 @@ import System.Directory (doesDirectoryExist, removeFile)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
 import System.FilePath (takeDirectory)
-import System.IO (hClose, openBinaryTempFile, stderr, stdout)
+import System.IO (IOMode(ReadMode), hClose, openBinaryTempFile, stderr, stdout, withBinaryFile)
 import System.Posix.Files (createLink, fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.Kernel.Run (runLine)
 import Yuho.Protocol.Json (decodeJson, encodeJson, lookupField, textValue)
@@ -52,9 +52,11 @@ readSource path = do
     status <- getSymbolicLinkStatus path
     if not (isRegularFile status) || fileSize status > 65536
       then ioError (userError "source must be a regular file at most 65536 bytes")
-      else BS.readFile path
+      else withBinaryFile path ReadMode (\handle -> BS.hGet handle 65537)
   pure $ case result of
     Left (_ :: IOException) -> Left (Diagnostic "SFE015" path origin "source unavailable, unsafe or too large")
+    Right bytes | BS.length bytes > 65536 ->
+      Left (Diagnostic "SFE015" path origin "source unavailable, unsafe or too large")
     Right bytes -> Right bytes
   where origin = Token EndToken "" 1 1
 

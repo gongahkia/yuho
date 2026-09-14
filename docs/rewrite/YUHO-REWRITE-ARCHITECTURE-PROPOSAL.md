@@ -1,5 +1,7 @@
 # Yuho rewrite architecture proposal
 
+**Current authority note (14 September 2026):** [ADR-0002](ADR-0002-HASKELL-AUTHORITATIVE-FRONTEND.md) supersedes this proposal's initial Python-caller migration direction. The first [Haskell `yuho` frontend](HASKELL-YUHO-FRONTEND-POC.md) now checks, compiles and runs the accepted section 84 and fictional v0.1 sources without Python. The v0.2–v0.4 Python frontends remain frozen conformance references, not authoritative production execution paths. The historical architecture below records the earlier migration sequence and must not be read as a claim that later surface versions are Haskell-ported.
+
 **Status:** Repository-reconciled proposal; seven bounded Haskell kernel fragments and a separate ModelBundle-v1 validator are implemented
 **Date:** 12 September 2026  
 **Production language:** Haskell, selected in [accepted ADR-0001](ADR-0001-HASKELL.md) after the [independent review](../../experiments/language-spike/results/INDEPENDENT-REVIEW.md)

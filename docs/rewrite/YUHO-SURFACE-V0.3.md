@@ -2,6 +2,8 @@
 
 **Status:** bounded fictional compiler/kernel conformance subset, 14 September 2026. The [shared lexer and checked lowerer](../../rewrite/frontend/core.py), [exact-version module resolver](../../rewrite/frontend/modules.py), [temporal selector](../../rewrite/frontend/temporal.py), and [CLI](../../rewrite/frontend/__main__.py) compile one expressly authored rule expression selected by a supplied civil conduct date. The selector does not determine which law applies to real conduct. Authoritative dates, expressions and jurisdictional rules would need to be supplied and reviewed outside this compiler before any real-law claim.
 
+Under [ADR-0002](ADR-0002-HASKELL-AUTHORITATIVE-FRONTEND.md), this Python temporal implementation is a frozen conformance reference; v0.3 selection is not yet supported by the authoritative Haskell frontend.
+
 ## Three identities and the bundle digest
 
 A **module ID and exact semantic version** identify authored `.yh` bytes and resolve imports. A **rule-family ID** names the continuing fictional rule. An **expression ID and exact version** identify one complete dated graph within that family; its version does not select its interval. The **ModelBundle-v1 digest** separately identifies exact packaged executable and source bytes. Module version ordering, expression version ordering, a `supersedes` declaration and digest ordering have no automatic applicability or legal effect.

@@ -2,6 +2,8 @@
 
 **Status:** bounded fictional compiler and kernel conformance subset, 14 September 2026. The [plan parser and runner](../../rewrite/frontend/plan.py) use the existing [shared lexer](../../rewrite/frontend/core.py), [v0.2 resolver](../../rewrite/frontend/modules.py), [CLI](../../rewrite/frontend/__main__.py), Haskell kernel and ModelBundle-v1 validator. Orchestration does not turn a technical fragment result into a judicial decision.
 
+Under [ADR-0002](ADR-0002-HASKELL-AUTHORITATIVE-FRONTEND.md), this Python plan implementation is a frozen conformance reference; v0.4 orchestration is not yet supported by the authoritative Haskell frontend.
+
 ## Authored language and typed bridge
 
 The [fictional plan](../../rewrite/frontend/fixtures/plan/plan.yh) declares four explicit steps. Its first references an authored [offence-plus-exception composition](../../rewrite/frontend/fixtures/plan/proof/composition.yh). The others reference authored [candidate-selection](../../rewrite/frontend/fixtures/plan/fragments/fictional.candidate-selection.yh), [basic-term](../../rewrite/frontend/fixtures/plan/fragments/fictional.basic-terms.yh) and [enhanced-term](../../rewrite/frontend/fixtures/plan/fragments/fictional.enhanced-terms.yh) models. A separate [scenario](../../rewrite/frontend/fixtures/plan/scenarios/basic.yh) supplies proof classifications and Boolean inputs. Importing or resolving a model alone never executes it.

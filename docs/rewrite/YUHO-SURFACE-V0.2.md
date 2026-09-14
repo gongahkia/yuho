@@ -2,6 +2,8 @@
 
 **Status:** synthetic compiler/kernel conformance subset, 13 September 2026. The shared [Python frontend](../../rewrite/frontend/core.py) retains the v0.1 lexer, source-located AST and lowerer; [modules.py](../../rewrite/frontend/modules.py) adds offline module resolution and explicit composition. The [CLI](../../rewrite/frontend/__main__.py) accepts both versions. This is not a package manager, a general criminal-law language or a real-law model.
 
+Under [ADR-0002](ADR-0002-HASKELL-AUTHORITATIVE-FRONTEND.md), this Python module implementation is a frozen conformance reference; v0.2 modules are not yet supported by the authoritative Haskell frontend.
+
 ## Architecture decision
 
 The accepted [rewrite proposal](YUHO-REWRITE-ARCHITECTURE-PROPOSAL.md) §2 explicitly makes `yuho.kernel-input/v1` a separate subprocess boundary from Canonical IR v1.2 and shows the existing Python parser branching to each artifact. Its §3 keeps Canonical IR v1.2 as read/compare migration evidence: it lacks the kernel's source spans and uses opaque snapshots and AST adapters. The [migration contract](MIGRATION-CONTRACT.md) also treats the two as separate. The v0.1 `rewrite/frontend/core.py` lowerers directly construct KernelInput. YuhoSurface-v0.2 follows that accepted direct KernelInput path and does not create a competing general intermediate representation or alter Canonical IR. A future compiler-boundary change would require a separate versioned decision.

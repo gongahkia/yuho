@@ -28,10 +28,11 @@ checkModel path model supplied = do
       expect path "SFE007" programId "p:section84"
       expect path "SFE007" sourcePath "section84"
       expect path "SFE014" mapping "src:pc84-extracted"
-      expect path "SFE011" (first (modelBurden model)) "section107"
-      expect path "SFE011" (second (modelBurden model)) "defence"
-      expect path "SFE011" (third (modelBurden model)) "legal"
-      expect path "SFE011" (fourth (modelBurden model)) "balance_of_probabilities"
+      let BurdenAnnotation annotation holder burdenKind standard = modelBurden model
+      expect path "SFE011" annotation "section107"
+      expect path "SFE011" holder "defence"
+      expect path "SFE011" burdenKind "legal"
+      expect path "SFE011" standard "balance_of_probabilities"
       requireSources path sourceIndex
         [("src:pc84-excerpt", "excerpt", "research/section84/excerpt.txt")
         ,("src:synthetic-status", "synthetic_status", "research/section84/synthetic-status.txt")]
@@ -48,24 +49,26 @@ checkModel path model supplied = do
       expect path "SFE021" (modelJurisdiction model) "Fictional"
       expect path "SFE021" (modelPurpose model) "compiler_fixture"
       expect path "SFE004" (modelDate model) "2026-09-13"
-      let (annotation, holder, kind, standard) = modelBurden model
+      let BurdenAnnotation annotation holder burdenKind standard = modelBurden model
       if tokenText annotation `elem` ["none", "synthetic_context"]
-         && map tokenText [holder, kind, standard] == ["none", "none", "not_applicable"]
+         && map tokenText [holder, burdenKind, standard] == ["none", "none", "not_applicable"]
       then pure () else at "SFE011" path annotation "invalid contextual burden"
       requireSources path sourceIndex
         [("src:fictional-rule", "source_text", "fictional/restricted-entry.txt")
         ,("src:fictional-status", "synthetic_status", "fictional/classifications.txt")]
       if length (modelQuotes model) < 5 then at "SFE014" path (modelIdentifier model) "five source quotes required" else pure ()
       expect path "SFE017" (ruleIdentifier offence) "o:entry"
+      if ruleKind offence == OffenceKind && ruleKind exception == ExceptionKind then pure ()
+        else at "SFE017" path (ruleIdentifier offence) "invalid rule kinds"
       expect path "SFE017" (ruleIdentifier exception) "x:emergency-rescue"
       expect path "SFE018" (maybe (ruleIdentifier exception) id (ruleTarget exception)) "o:entry"
       if tokenText (ruleIdentifier offence) == tokenText (ruleIdentifier exception)
         then at "SFE002" path (ruleIdentifier exception) "duplicate rule identity"
         else pure ()
       offenceTree <- checkedRule path quoteIndex offence
-        (Set.fromList ["conduct", "circumstance", "fault"])
+        (Set.fromList [Conduct, Circumstance, Fault])
       exceptionTree <- checkedRule path quoteIndex exception
-        (Set.fromList ["circumstance", "purpose"])
+        (Set.fromList [Circumstance, Purpose])
       let topIds = map tokenText [ruleIdentifier offence, ruleIdentifier exception,
             ruleId offence, ruleId exception, ruleProgram offence, ruleProgram exception]
           propIds = map (tokenText . identifier) (ruleGroups offence ++ ruleGroups exception)
@@ -77,7 +80,7 @@ checkModel path model supplied = do
             ,("exception_applicable", treeId exceptionTree)
             ,("defeated_branch", tokenText (ruleProgram offence))
             ,("final_rule", tokenText (ruleId offence))]
-      if map (\(a,b) -> (tokenText a, tokenText b)) outputs /= expected
+      if map (\(TechnicalOutput a b) -> (tokenText a, tokenText b)) outputs /= expected
         then at "SFE020" path (modelIdentifier model) "typed technical outputs differ"
         else pure ()
       assignments <- case supplied of
@@ -88,12 +91,6 @@ checkModel path model supplied = do
           checkAssignments scenarioPath
             (ResolvedGroup (ruleIdentifier offence) All [offenceTree, exceptionTree]) entries
       pure (Checked model (snd <$> supplied) assignments offenceTree (Just exceptionTree))
-
-first, second, third, fourth :: (a,a,a,a) -> a
-first (a,_,_,_) = a
-second (_,b,_,_) = b
-third (_,_,c,_) = c
-fourth (_,_,_,d) = d
 
 expect :: FilePath -> Text -> Token -> Text -> Either Diagnostic ()
 expect path code token wanted
@@ -141,9 +138,9 @@ treeId :: Resolved -> Text
 treeId (ResolvedLeaf token _) = tokenText token
 treeId (ResolvedGroup token _ _) = tokenText token
 
-checkedRule :: FilePath -> Map.Map Text Token -> Rule -> Set.Set Text -> Either Diagnostic Resolved
+checkedRule :: FilePath -> Map.Map Text Token -> Rule -> Set.Set Category -> Either Diagnostic Resolved
 checkedRule path quotes rule expected = do
-  let categories = map (tokenText . elementCategory) (ruleElements rule)
+  let categories = map elementCategory (ruleElements rule)
   if Set.fromList categories /= expected || length categories /= Set.size expected
     then at "SFE017" path (ruleIdentifier rule) "typed offence or exception elements differ"
     else pure ()

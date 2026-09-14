@@ -128,7 +128,13 @@ elementOrGroup = do
       _ <- need "quote"
       quoteId <- word
       _ <- need ";"
-      pure (Left (Element category item quoteId))
+      categoryKind <- case tokenText category of
+        "conduct" -> pure Conduct
+        "circumstance" -> pure Circumstance
+        "fault" -> pure Fault
+        "purpose" -> pure Purpose
+        _ -> P $ \path _ -> at "SFE017" path category "invalid element category"
+      pure (Left (Element categoryKind category item quoteId))
     "all" -> Right <$> group headToken
     "any" -> Right <$> group headToken
     _ -> P $ \path _ -> at "SFE013" path headToken "unsupported rule declaration"
@@ -150,7 +156,7 @@ rule role = do
   _ <- need "{"
   declarations <- manyBefore "}" elementOrGroup
   _ <- need "}"
-  pure (Rule headToken item target declaredRule programId path
+  pure (Rule (if role == "offence" then OffenceKind else ExceptionKind) headToken item target declaredRule programId path
     [value | Left value <- declarations] [value | Right value <- declarations])
 
 provenance :: P ([SourceDecl], Maybe Token, [(Token, Token)])
@@ -183,7 +189,7 @@ provenance = do
     [mapping] -> pure ([item | Left (Left item) <- rows], Just mapping, [item | Right item <- rows])
     second:_ -> P $ \path _ -> at "SFE002" path second "duplicate mapping source"
 
-annotations :: P (Token, Token, Token, Token)
+annotations :: P BurdenAnnotation
 annotations = do
   _ <- need "annotations"
   _ <- need "{"
@@ -194,7 +200,7 @@ annotations = do
   d <- word
   _ <- need ";"
   _ <- need "}"
-  pure (a, b, c, d)
+  pure (BurdenAnnotation a b c d)
 
 limitations :: P [Token]
 limitations = do
@@ -207,7 +213,7 @@ limitations = do
   _ <- need "}"
   pure values
 
-body :: P ([SourceDecl], [(Token, Token)], (Token, Token, Token, Token), Body)
+body :: P ([SourceDecl], [(Token, Token)], BurdenAnnotation, Body)
 body = do
   next <- current
   if tokenText next == "root" then do
@@ -246,7 +252,7 @@ body = do
       label <- word
       target <- word
       _ <- need ";"
-      pure (label, target)
+      pure (TechnicalOutput label target)
     _ <- need "}"
     pure (sources, quotes, burden, Synthetic offence exception outputs)
 

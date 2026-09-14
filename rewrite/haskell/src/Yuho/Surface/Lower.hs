@@ -155,7 +155,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
     sourceRole = case modelBody model of
       Section _ _ _ _ _ _ _ -> "excerpt"
       Synthetic _ _ _ -> "source_text"
-    (_, holder, kind, _) = modelBurden model
+    BurdenAnnotation _ holder kind _ = modelBurden model
     burden = object [("holder", tokenValue holder), ("kind", tokenValue kind)]
 
 baseRequest :: Model -> Token -> [J] -> [J] -> J -> J

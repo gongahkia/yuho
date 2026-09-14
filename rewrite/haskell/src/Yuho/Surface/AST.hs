@@ -1,28 +1,32 @@
 module Yuho.Surface.AST
-  ( Combinator(..), Category(..), Proof(..), Assignment(..), SourceDecl(..)
-  , Proposition(..), Element(..), Rule(..), Body(..), Model(..), Scenario(..)
+  ( Combinator(..), Category(..), RuleKind(..), Proof(..), Assignment(..), SourceDecl(..)
+  , BurdenAnnotation(..), TechnicalOutput(..), Proposition(..), Element(..), Rule(..), Body(..), Model(..), Scenario(..)
   , Resolved(..), Checked(..), identifier, leafTokens ) where
 
 import Data.Text (Text)
 import Yuho.Surface.Token (Token(..))
 
 data Combinator = All | Any deriving (Eq, Show)
-data Category = Conduct | Circumstance | Fault | Purpose deriving (Eq, Show)
+data Category = Conduct | Circumstance | Fault | Purpose deriving (Eq, Ord, Show)
+data RuleKind = OffenceKind | ExceptionKind deriving (Eq, Show)
 data Proof = Proved | NotProved | Unresolved Text deriving (Eq, Show)
 data Assignment = Assignment Token Token (Maybe Token) deriving (Eq, Show)
 data SourceDecl = SourceDecl Token Token Token deriving (Eq, Show)
+data BurdenAnnotation = BurdenAnnotation Token Token Token Token deriving (Eq, Show)
+data TechnicalOutput = TechnicalOutput Token Token deriving (Eq, Show)
 data Proposition = Leaf Token (Maybe Token) Token (Maybe Token)
   | Group Token Combinator [Token] deriving (Eq, Show)
 data Element = Element
-  { elementCategory :: Token, elementId :: Token, elementQuote :: Token }
+  { elementCategory :: Category, elementCategorySource :: Token
+  , elementId :: Token, elementQuote :: Token }
   deriving (Eq, Show)
 data Rule = Rule
-  { ruleKind :: Token, ruleIdentifier :: Token, ruleTarget :: Maybe Token
+  { ruleKind :: RuleKind, ruleKindSource :: Token, ruleIdentifier :: Token, ruleTarget :: Maybe Token
   , ruleId :: Token, ruleProgram :: Token, rulePath :: Token
   , ruleElements :: [Element], ruleGroups :: [Proposition] }
   deriving (Eq, Show)
 data Body = Section Token Token Token Token Token [Proposition] [Assignment]
-  | Synthetic Rule Rule [(Token, Token)] deriving (Eq, Show)
+  | Synthetic Rule Rule [TechnicalOutput] deriving (Eq, Show)
 data Model = Model
   { modelIdentifier :: Token
   , modelVariant :: Token
@@ -33,7 +37,7 @@ data Model = Model
   , modelLimit :: Token
   , modelSources :: [SourceDecl]
   , modelQuotes :: [(Token, Token)]
-  , modelBurden :: (Token, Token, Token, Token)
+  , modelBurden :: BurdenAnnotation
   , modelBody :: Body
   , modelLimitations :: [Token]
   } deriving (Eq, Show)

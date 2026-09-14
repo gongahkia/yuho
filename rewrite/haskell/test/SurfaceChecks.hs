@@ -11,7 +11,7 @@ import System.FilePath ((</>))
 import Yuho.Kernel.Run (runLine)
 import Yuho.Protocol.Decode (sha256Text)
 import Yuho.Protocol.Json (J(..), decodeJson, lookupField, textValue)
-import Yuho.Surface.AST (Body(..), Checked(..), Model(..), Resolved(..))
+import Yuho.Surface.AST (Body(..), Category(..), Checked(..), Element(..), Model(..), Resolved(..), Rule(..), RuleKind(..))
 import Yuho.Surface.Compile (checkSource, compileSource)
 import Yuho.Surface.Token (Diagnostic(..), tokenColumn, tokenLine)
 
@@ -38,7 +38,10 @@ runSurfaceChecks root = do
       checkSource syntheticPath syntheticSource (Just (scenarioPath, scenario)) of
     Right (Checked model _ _ (ResolvedGroup _ _ _) (Just (ResolvedGroup _ _ _))) ->
       case modelBody model of
-        Synthetic _ _ _ -> True
+        Synthetic offence exception _ ->
+          ruleKind offence == OffenceKind && ruleKind exception == ExceptionKind
+            && map elementCategory (ruleElements offence) == [Conduct, Circumstance, Fault]
+            && map elementCategory (ruleElements exception) == [Circumstance, Purpose]
         _ -> False
     _ -> False
   let compiledSection = compileSource sectionPath sectionSource Nothing
@@ -76,6 +79,29 @@ runSurfaceChecks root = do
     errorCode (compileSource sectionPath
       (replace "all g:nature (f:nature-causation" "all g:nature (f:unknown" sectionSource) Nothing)
       `elem` [Just "SFE003", Just "SFE006"]
+  check "duplicate semantic identifier rejected" $
+    errorCode (compileSource sectionPath
+      (replace "leaf f:nature-incapacity proposition" "leaf f:nature-causation proposition" sectionSource) Nothing)
+      == Just "SFE002"
+  check "proposition cycle rejected" $
+    errorCode (compileSource sectionPath
+      (replace "(f:unsoundness-time, g:alternative-routes)" "(f:unsoundness-time, g:premise-and-routes)" sectionSource) Nothing)
+      == Just "SFE008"
+  check "invalid typed element rejected" $
+    errorCode (compileSource syntheticPath
+      (replace "element fault f:knowledge" "element sentence f:knowledge" syntheticSource)
+      (Just (scenarioPath, scenario))) == Just "SFE017"
+  check "missing separate scenario assignment rejected" $
+    errorCode (compileSource syntheticPath syntheticSource
+      (Just (scenarioPath, replace "  f:knowledge = proved;\n" "" scenario))) == Just "SFE009"
+  check "unexpected separate scenario assignment rejected" $
+    errorCode (compileSource syntheticPath syntheticSource
+      (Just (scenarioPath, replace "  f:knowledge = proved;"
+        "  f:knowledge = proved;\n  f:invented = proved;" scenario))) == Just "SFE009"
+  check "unknown source quote rejected" $
+    errorCode (compileSource syntheticPath
+      (replace "element conduct f:entry quote q:entry;" "element conduct f:entry quote q:missing;" syntheticSource)
+      (Just (scenarioPath, scenario))) == Just "SFE003"
   check "contextual annotation cannot become a proposition" $
     errorCode (compileSource sectionPath
       (replace "(f:nature-causation, f:nature-incapacity)" "(section107, f:nature-incapacity)" sectionSource) Nothing)

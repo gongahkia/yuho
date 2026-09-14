@@ -1,6 +1,6 @@
 # YuhoSurface-v0.1: bounded reusable frontend
 
-**Status:** compiler and kernel conformance subset, 13 September 2026. The authoritative [Python frontend](../../rewrite/frontend/core.py) supplies one UTF-8 lexer, source-located AST, parser, name/type checker and deterministic lowerer. The [CLI](../../rewrite/frontend/__main__.py) is `python3 -m rewrite.frontend`; the former section 84 script is a [compatibility wrapper](../../research/singapore/section-84-pilot/surface/frontend.py). This is neither the legacy production Tree-sitter grammar nor a complete criminal-law language. Canonical IR v1.2 and KernelInput v1 remain separate and unchanged.
+**Status:** frozen Python compiler and kernel conformance subset, 13 September 2026. The [Python frontend](../../rewrite/frontend/core.py) supplies one UTF-8 lexer, source-located AST, parser, name/type checker and deterministic lowerer as historical migration evidence. The [reference CLI](../../rewrite/frontend/__main__.py) is `python3 -m rewrite.frontend`; the former section 84 script is a [compatibility wrapper](../../research/singapore/section-84-pilot/surface/frontend.py). The [Haskell frontend](HASKELL-YUHO-FRONTEND-POC.md) is authoritative for the supported v0.1 slice under [ADR-0002](ADR-0002-HASKELL-AUTHORITATIVE-FRONTEND.md). This is neither the legacy production Tree-sitter grammar nor a complete criminal-law language. Canonical IR v1.2 and KernelInput v1 remain separate and unchanged.
 
 ## Authored syntax and technical meaning
 
