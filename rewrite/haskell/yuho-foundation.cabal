@@ -110,7 +110,7 @@ test-suite foundation-test
   import: foundation
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks
+  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks
   hs-source-dirs: test
   build-depends:
       yuho-foundation ==0.1.0.0

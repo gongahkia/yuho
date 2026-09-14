@@ -832,8 +832,11 @@ scenarioParser = do
     else if tokenText next == "attach" then do
       _ <- need "attach"
       replacement <- word
-      P $ \path _ -> at "SFE096" path replacement
-        "scenario cannot create or rebind an exception attachment"
+      _ <- need "to"
+      targetKind <- word
+      P $ \path _ -> at (if tokenText targetKind `elem`
+        ["offence", "participation", "attempt"] then "SFE096" else "SFE001")
+        path replacement "scenario cannot create or rebind an exception attachment"
     else do
       item <- word
       if "rel:" `Text.isPrefixOf` tokenText item then do
