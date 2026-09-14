@@ -48,8 +48,8 @@ model SingaporePenalCodeSection323WithSection84ResearchPrototype-v1 {
     element causation f:nature-causation quote q:time;
     element nature-incapacity f:nature-incapacity quote q:nature;
     element causation f:wrong-causation quote q:time;
-    element ordinary-wrongfulness f:ordinary-wrongfulness-incapacity quote q:ordinary;
-    element contrary-law-wrongfulness f:contrary-law-incapacity quote q:law;
+    element ordinary-wrongfulness f:ordinary-wrongfulness-incapacity quote q:ordinary support q:wrong_operator;
+    element contrary-law-wrongfulness f:contrary-law-incapacity quote q:law support q:wrong_operator;
     element causation f:control-causation quote q:time;
     element control-incapacity f:control-incapacity quote q:control;
     all g:nature (f:nature-causation, f:nature-incapacity);

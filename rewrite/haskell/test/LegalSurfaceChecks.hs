@@ -15,7 +15,7 @@ import Yuho.Protocol.Json (J(..), arrayValue, decodeJson, lookupField, objectFie
 import Yuho.Surface.AST
 import Yuho.Surface.Compile (checkSource, compileSource)
 import Yuho.Surface.Explain (explainChecked)
-import Yuho.Surface.Token (Diagnostic(..), tokenText)
+import Yuho.Surface.Token (Diagnostic(..))
 
 runLegalSurfaceChecks :: FilePath -> IO ()
 runLegalSurfaceChecks root = do

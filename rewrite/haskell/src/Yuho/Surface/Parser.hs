@@ -127,6 +127,8 @@ elementOrGroup = do
       item <- word
       _ <- need "quote"
       quoteId <- word
+      supported <- optional "support"
+      support <- if supported then Just <$> word else pure Nothing
       _ <- need ";"
       categoryKind <- case tokenText category of
         "conduct" -> pure Conduct
@@ -143,7 +145,7 @@ elementOrGroup = do
         "contrary-law-wrongfulness" -> pure ContraryLawWrongfulness
         "control-incapacity" -> pure ControlIncapacity
         _ -> P $ \path _ -> at "SFE017" path category "invalid element category"
-      pure (Left (Element categoryKind category item quoteId))
+      pure (Left (Element categoryKind category item quoteId support))
     "all" -> Right <$> group headToken
     "any" -> Right <$> group headToken
     _ -> P $ \path _ -> at "SFE013" path headToken "unsupported rule declaration"

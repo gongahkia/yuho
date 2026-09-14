@@ -24,7 +24,7 @@ data Proposition = Leaf Token (Maybe Token) Token (Maybe Token)
   | Group Token Combinator [Token] deriving (Eq, Show)
 data Element = Element
   { elementCategory :: Category, elementCategorySource :: Token
-  , elementId :: Token, elementQuote :: Token }
+  , elementId :: Token, elementQuote :: Token, elementSupport :: Maybe Token }
   deriving (Eq, Show)
 data Rule = Rule
   { ruleKind :: RuleKind, ruleKindSource :: Token, ruleIdentifier :: Token, ruleTarget :: Maybe Token

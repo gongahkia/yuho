@@ -189,8 +189,9 @@ checkedRule path quotes rule expected = do
   mapM_ (\item -> do
     if "f:" `Text.isPrefixOf` tokenText (elementId item) then pure ()
       else at "SFE017" path (elementId item) "element requires fact ID"
-    knownQuote path quotes (elementQuote item)) (ruleElements rule)
-  let declarations = [Leaf (elementId item) Nothing (elementQuote item) Nothing
+    knownQuote path quotes (elementQuote item)
+    mapM_ (knownQuote path quotes) (maybe [] (:[]) (elementSupport item))) (ruleElements rule)
+  let declarations = [Leaf (elementId item) Nothing (elementQuote item) (elementSupport item)
         | item <- ruleElements rule] ++ ruleGroups rule
   case reverse (ruleGroups rule) of
     Group root _ _: _ -> resolveTree path declarations root
@@ -260,8 +261,9 @@ checkedLegalRule path quotes rule = do
   mapM_ (\item -> do
     if "f:" `Text.isPrefixOf` tokenText (elementId item) then pure ()
       else at "SFE017" path (elementId item) "typed element requires fact ID"
-    knownQuote path quotes (elementQuote item)) (ruleElements rule)
-  let declarations = [Leaf (elementId item) Nothing (elementQuote item) Nothing
+    knownQuote path quotes (elementQuote item)
+    mapM_ (knownQuote path quotes) (maybe [] (:[]) (elementSupport item))) (ruleElements rule)
+  let declarations = [Leaf (elementId item) Nothing (elementQuote item) (elementSupport item)
         | item <- ruleElements rule] ++ ruleGroups rule
   case reverse (ruleGroups rule) of
     Group root _ _: _ -> resolveTree path declarations root
