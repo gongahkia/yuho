@@ -30,6 +30,7 @@ import AttemptSurfaceChecks (runAttemptSurfaceChecks)
 import ActorExceptionSurfaceChecks (runActorExceptionSurfaceChecks)
 import AbetmentSurfaceChecks (runAbetmentSurfaceChecks)
 import CaseSurfaceChecks (runCaseSurfaceChecks)
+import SharedCaseFactChecks (runSharedCaseFactChecks)
 import Yuho.Core.Source (validateSpan)
 import Yuho.Core.Types (Source(..), Span(..))
 import Yuho.Kernel.Run (runLine)
@@ -59,6 +60,7 @@ main = do
   runActorExceptionSurfaceChecks root
   runAbetmentSurfaceChecks root
   runCaseSurfaceChecks root
+  runSharedCaseFactChecks root
   b06 <- readJson (frozen </> "requests/B06.json")
   b01 <- readJson (frozen </> "requests/B01.json")
   b03 <- readJson (frozen </> "requests/B03.json")

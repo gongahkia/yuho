@@ -24,11 +24,11 @@ runCaseSurfaceChecks root = do
   model <- either (const (failed "model parse")) pure (parseModel modelPath modelSource)
   parsed <- either (const (failed "case parse")) pure (parseAnalysisCase path source)
   check "typed allegation declaration" $ case parsed of
-    AnalysisCase item location bindings allegations ->
+    AnalysisCase item location bindings facts allegations ->
       tokenText item == "case:warehouse-incident"
         && tokenText location == "section107-routes-theft.yh"
-        && length bindings == 4
-        && [kind | CaseAllegation _ kind _ _ _ <- allegations] ==
+        && length bindings == 4 && null facts
+        && [kind | CaseAllegation _ kind _ _ _ _ <- allegations] ==
           [CaseOffence,CaseParticipation,CaseAttempt]
   check "case resolves its sibling model" (caseModelFile path parsed == Right modelPath)
   check "one shared exception has three typed attachments" $ case modelBody model of
@@ -61,14 +61,14 @@ runCaseSurfaceChecks root = do
         Left _ -> False
   check "allegation source order cannot change canonical issue order" $
     case parsed of
-      AnalysisCase item location bindings allegations ->
-        case checkAnalysisCase path (AnalysisCase item location bindings
+      AnalysisCase item location bindings facts allegations ->
+        case checkAnalysisCase path (AnalysisCase item location bindings facts
           (reverse allegations)) modelPath model of
           Right reordered -> compileAnalysisCase reordered == Right request
             && runAnalysisCase reordered == Right result
           Left _ -> False
   check "all requests are separately lowered" $ case checked of
-    CheckedCase _ _ _ [CheckedIssue _ _ first,CheckedIssue _ _ second,
+    CheckedCase _ _ _ _ [CheckedIssue _ _ first,CheckedIssue _ _ second,
       CheckedIssue _ _ third] ->
         not ("f:instigation-link" `BS.isInfixOf` first)
           && not ("f:movable-property" `BS.isInfixOf` second)
@@ -151,8 +151,8 @@ runCaseSurfaceChecks root = do
     "xi:abettor-section84 f:unsoundness-time"
     "xi:principal-section84 f:unsoundness-time" source) "SFE093"
   check "missing allegation is rejected" $ case parsed of
-    AnalysisCase item location bindings allegations ->
-      case checkAnalysisCase path (AnalysisCase item location bindings
+    AnalysisCase item location bindings facts allegations ->
+      case checkAnalysisCase path (AnalysisCase item location bindings facts
         (take 2 allegations)) modelPath model of
         Left issue -> diagnosticCode issue == "SFE106"
         Right _ -> False
@@ -167,7 +167,7 @@ issueStatuses value = do
     pure (item,status)) rows
 
 issueRequests :: CheckedCase -> Int -> Maybe BS.ByteString
-issueRequests (CheckedCase _ _ _ rows) index = case drop index rows of
+issueRequests (CheckedCase _ _ _ _ rows) index = case drop index rows of
   CheckedIssue _ _ request:_ -> Just request
   [] -> Nothing
 

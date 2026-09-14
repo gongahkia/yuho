@@ -894,6 +894,14 @@ scenarioParser = do
 
 scenarioBody :: Token -> Token -> P Scenario
 scenarioBody requestId modelId = do
+  (scenario,bindings) <- scenarioBodyWithFacts requestId modelId
+  case bindings of
+    [] -> pure scenario
+    CaseFactBinding (CaseFactId item) _:_ ->
+      P $ \path _ -> at "SFE109" path item "fact bindings require an analysis case"
+
+scenarioBodyWithFacts :: Token -> Token -> P (Scenario,[CaseFactBinding])
+scenarioBodyWithFacts requestId modelId = do
   _ <- need "{"
   entries <- manyBefore "}" $ do
     next <- current
@@ -914,6 +922,19 @@ scenarioBody requestId modelId = do
       actor <- word
       _ <- need ";"
       pure (ScenarioBinding (ActorBinding role actor))
+    else if tokenText next == "bind-fact" then do
+      _ <- need "bind-fact"
+      fact <- word
+      _ <- need "to"
+      targetKind <- word
+      target <- case tokenText targetKind of
+        "input" -> CasePrimitiveInput <$> word
+        "relation-input" -> CaseRelationInput <$> word
+        "exception-input" -> CaseExceptionInput <$> word <*> word
+        _ -> P $ \path _ -> at "SFE112" path targetKind
+          "fact binding requires a typed primitive input"
+      _ <- need ";"
+      pure (ScenarioFactBinding (CaseFactBinding (CaseFactId fact) target))
     else if tokenText next == "observe" then do
       _ <- need "observe"
       instanceId <- word
@@ -1000,22 +1021,24 @@ scenarioBody requestId modelId = do
       plain = [item | ScenarioPlainAssignment item <- entries]
       acknowledgements = [item | ScenarioAssumption item <- entries]
       targets = [item | ScenarioTarget item <- entries]
+      factBindings = [item | ScenarioFactBinding item <- entries]
   if not (null scoped && null observations) then
     pure (ActorScopedScenario requestId modelId targets observations bindings
-      actors relations stages completions scoped plain acknowledgements)
+      actors relations stages completions scoped plain acknowledgements, factBindings)
   else if not (null stages && null completions) then
     pure (AttemptScenario requestId modelId bindings actors stages completions
-      plain acknowledgements targets)
+      plain acknowledgements targets, factBindings)
   else if null bindings && null actors && null relations then
-    pure (Scenario requestId modelId plain acknowledgements targets)
+    pure (Scenario requestId modelId plain acknowledgements targets, factBindings)
   else pure (ParticipationScenario requestId modelId bindings actors relations
-    plain acknowledgements targets)
+    plain acknowledgements targets, factBindings)
 
 data ScenarioEntry = ScenarioTarget Token | ScenarioAssumption ScopeAcknowledgement
   | ScenarioBinding ActorBinding | ScenarioActorAssignment ActorAssignment
   | ScenarioRelation RelationAssignment | ScenarioPlainAssignment Assignment
   | ScenarioStage ConductStageAssignment | ScenarioCompletion TargetCompletion
   | ScenarioObservation Token | ScenarioScopedException ScopedExceptionAssignment
+  | ScenarioFactBinding CaseFactBinding
 
 parseScenario :: FilePath -> BS.ByteString -> Either Diagnostic Scenario
 parseScenario path bytes = do
@@ -1029,17 +1052,64 @@ caseParser = do
   _ <- need "model"
   modelPath <- string
   _ <- need "{"
-  bindings <- manyBefore "allegation" $ do
-    _ <- need "bind"
-    role <- word
-    _ <- need "to"
-    actor <- word
-    _ <- need ";"
-    pure (ActorBinding role actor)
+  declarations <- manyBefore "allegation" $ do
+    next <- current
+    if tokenText next == "bind" then do
+      _ <- need "bind"
+      role <- word
+      _ <- need "to"
+      actor <- word
+      _ <- need ";"
+      pure (Left (ActorBinding role actor))
+    else Right <$> caseFact
   allegations <- manyBefore "}" (caseAllegation caseId)
   _ <- need "}"
   _ <- kind EndToken
-  pure (AnalysisCase caseId modelPath bindings allegations)
+  pure (AnalysisCase caseId modelPath
+    [item | Left item <- declarations] [item | Right item <- declarations] allegations)
+
+caseFact :: P CaseFact
+caseFact = do
+  _ <- need "supplied-fact"
+  item <- word
+  _ <- need "kind"
+  kindToken <- word
+  factKind <- case tokenText kindToken of
+    "conduct" -> pure FactConduct
+    "circumstance" -> pure FactCircumstance
+    "mental-state" -> pure FactMentalState
+    "relationship" -> pure FactRelationship
+    _ -> P $ \path _ -> at "SFE111" path kindToken "unknown case fact kind"
+  subject <- if factKind == FactRelationship then do
+      _ <- need "from"
+      source <- word
+      _ <- need "to"
+      destination <- word
+      _ <- need "target"
+      target <- word
+      pure (CaseRelationSubject source destination target)
+    else do
+      _ <- need "subject"
+      actor <- word
+      scoped <- optional "instance"
+      if scoped then CaseExceptionSubject actor <$> word <*> (need "context" >> actContext)
+        else do
+          targeted <- optional "target"
+          target <- if targeted then Just <$> word else pure Nothing
+          pure (CaseActorSubject actor target)
+  _ <- need "status"
+  status <- word
+  hasReasonCode <- optional "("
+  reasonCode <- if hasReasonCode then do
+    code <- word
+    _ <- need ")"
+    pure (Just code)
+    else pure Nothing
+  _ <- need "reason"
+  reason <- string
+  _ <- need ";"
+  pure (CaseFact (CaseFactId item) factKind subject
+    (CaseFactClassification status reasonCode reason))
 
 caseAllegation :: Token -> P CaseAllegation
 caseAllegation caseId = do
@@ -1055,8 +1125,21 @@ caseAllegation caseId = do
   target <- word
   _ <- need "for"
   role <- word
-  scenario <- scenarioBody caseId allegationId
-  pure (CaseAllegation allegationId targetKind target role scenario)
+  (scenario,factBindings) <- scenarioBodyWithFacts caseId allegationId
+  pure (CaseAllegation allegationId targetKind target role
+    (caseScenario scenario) factBindings)
+
+caseScenario :: Scenario -> Scenario
+caseScenario scenario = case scenario of
+  Scenario request model plain scopes targets ->
+    ActorScopedScenario request model targets [] [] [] [] [] [] [] plain scopes
+  ParticipationScenario request model bindings actors relations plain scopes targets ->
+    ActorScopedScenario request model targets [] bindings actors relations
+      [] [] [] plain scopes
+  AttemptScenario request model bindings actors stages completions plain scopes targets ->
+    ActorScopedScenario request model targets [] bindings actors []
+      stages completions [] plain scopes
+  other -> other
 
 parseAnalysisCase :: FilePath -> BS.ByteString -> Either Diagnostic AnalysisCase
 parseAnalysisCase path bytes = do

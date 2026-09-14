@@ -1,0 +1,105 @@
+// Synthetic classifications for three independent technical issues.
+analysis-case case:warehouse-incident model "section107-routes-theft.yh" {
+  bind role:principal to actor:principal-1;
+  bind role:alleged-abettor to actor:participant-1;
+  bind role:co-conspirator to actor:co-1;
+  bind role:alleged-attempter to actor:attempt-actor-1;
+  supplied-fact fact:abetment-agreement kind relationship from actor:participant-1 to actor:co-1 target o:theft status proved reason "synthetic agreement classification";
+  supplied-fact fact:principal-unsoundness kind circumstance subject actor:principal-1 instance xi:principal-section84 context principal-conduct status not_proved reason "synthetic principal classification";
+  supplied-fact fact:principal-dishonesty kind mental-state subject actor:principal-1 status proved reason "synthetic intention classification";
+  supplied-fact fact:principal-movement kind conduct subject actor:principal-1 status proved reason "synthetic movement classification";
+  allegation a:principal-theft analyse offence o:theft for role:principal {
+    assume a:post-2022-section-84-expression-applicable;
+    assume a:dishonesty-externally-classified;
+    assume a:direct-s107-routes-only;
+    assume a:broader-section108-cases-excluded;
+    assume a:no-express-punishment-provision-modelled;
+    assume a:direct-self-attempt-only;
+    assume a:target-not-completed;
+    assume a:no-express-attempt-punishment-provision-modelled;
+    assume a:punishment-outside-scope;
+    assume a:statutory-expression-supplied;
+    assume a:stage-externally-classified;
+    assume a:impossible-attempts-excluded;
+    f:movable-property by actor:principal-1 = proved;
+    f:another-possession by actor:principal-1 = proved;
+    f:without-consent by actor:principal-1 = proved;
+    bind-fact fact:principal-movement to input f:property-moved;
+    bind-fact fact:principal-dishonesty to input f:dishonest-intention;
+    f:moved-for-taking by actor:principal-1 = proved;
+    bind-fact fact:principal-unsoundness to exception-input xi:principal-section84 f:unsoundness-time;
+    exception-status xi:principal-section84 f:nature-causation by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:nature-incapacity by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:wrong-causation by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:ordinary-wrongfulness-incapacity by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:contrary-law-incapacity by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:control-causation by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:control-incapacity by actor:principal-1 context principal-conduct = not_proved;
+  }
+  allegation a:abet-theft analyse participation p:abet-theft for role:alleged-abettor {
+    observe xi:principal-section84;
+    assume a:post-2022-section-84-expression-applicable;
+    assume a:dishonesty-externally-classified;
+    assume a:direct-s107-routes-only;
+    assume a:broader-section108-cases-excluded;
+    assume a:no-express-punishment-provision-modelled;
+    assume a:direct-self-attempt-only;
+    assume a:target-not-completed;
+    assume a:no-express-attempt-punishment-provision-modelled;
+    assume a:punishment-outside-scope;
+    assume a:statutory-expression-supplied;
+    assume a:stage-externally-classified;
+    assume a:impossible-attempts-excluded;
+    rel:instigates from actor:participant-1 to actor:principal-1 = not_proved;
+    bind-fact fact:abetment-agreement to relation-input rel:agreement;
+    f:pursuant-act by actor:co-1 = proved;
+    f:pursuant-omission by actor:co-1 = not_proved;
+    f:pursuance-link by rel:agreement = proved;
+    rel:aid from actor:participant-1 to actor:principal-1 = not_proved;
+    f:intends-aid by actor:participant-1 = not_proved;
+    f:aid-by-act by actor:participant-1 = not_proved;
+    f:aid-by-illegal-omission by actor:participant-1 = not_proved;
+    rel:consequence from actor:participant-1 to actor:principal-1 = proved;
+    exception-status xi:principal-section84 f:nature-causation by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:nature-incapacity by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:wrong-causation by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:ordinary-wrongfulness-incapacity by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:contrary-law-incapacity by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:control-causation by actor:principal-1 context principal-conduct = not_proved;
+    exception-status xi:principal-section84 f:control-incapacity by actor:principal-1 context principal-conduct = not_proved;
+    bind-fact fact:principal-unsoundness to exception-input xi:principal-section84 f:unsoundness-time;
+    exception-status xi:abettor-section84 f:unsoundness-time by actor:participant-1 context aid-conduct = not_proved;
+    exception-status xi:abettor-section84 f:nature-causation by actor:participant-1 context aid-conduct = not_proved;
+    exception-status xi:abettor-section84 f:nature-incapacity by actor:participant-1 context aid-conduct = not_proved;
+    exception-status xi:abettor-section84 f:wrong-causation by actor:participant-1 context aid-conduct = not_proved;
+    exception-status xi:abettor-section84 f:ordinary-wrongfulness-incapacity by actor:participant-1 context aid-conduct = not_proved;
+    exception-status xi:abettor-section84 f:contrary-law-incapacity by actor:participant-1 context aid-conduct = not_proved;
+    exception-status xi:abettor-section84 f:control-causation by actor:participant-1 context aid-conduct = not_proved;
+    exception-status xi:abettor-section84 f:control-incapacity by actor:participant-1 context aid-conduct = not_proved;
+  }
+  allegation a:attempt-theft analyse attempt attempt:theft for role:alleged-attempter {
+    assume a:post-2022-section-84-expression-applicable;
+    assume a:dishonesty-externally-classified;
+    assume a:direct-s107-routes-only;
+    assume a:broader-section108-cases-excluded;
+    assume a:no-express-punishment-provision-modelled;
+    assume a:direct-self-attempt-only;
+    assume a:target-not-completed;
+    assume a:no-express-attempt-punishment-provision-modelled;
+    assume a:punishment-outside-scope;
+    assume a:statutory-expression-supplied;
+    assume a:stage-externally-classified;
+    assume a:impossible-attempts-excluded;
+    f:intends-target by actor:attempt-actor-1 = proved;
+    stage stage:theft-conduct by actor:attempt-actor-1 = preparation_only;
+    target-completion o:theft = not_completed;
+    exception-status xi:attempter-section84 f:unsoundness-time by actor:attempt-actor-1 context attempt-conduct = not_proved;
+    exception-status xi:attempter-section84 f:nature-causation by actor:attempt-actor-1 context attempt-conduct = not_proved;
+    exception-status xi:attempter-section84 f:nature-incapacity by actor:attempt-actor-1 context attempt-conduct = not_proved;
+    exception-status xi:attempter-section84 f:wrong-causation by actor:attempt-actor-1 context attempt-conduct = not_proved;
+    exception-status xi:attempter-section84 f:ordinary-wrongfulness-incapacity by actor:attempt-actor-1 context attempt-conduct = not_proved;
+    exception-status xi:attempter-section84 f:contrary-law-incapacity by actor:attempt-actor-1 context attempt-conduct = not_proved;
+    exception-status xi:attempter-section84 f:control-causation by actor:attempt-actor-1 context attempt-conduct = not_proved;
+    exception-status xi:attempter-section84 f:control-incapacity by actor:attempt-actor-1 context attempt-conduct = not_proved;
+  }
+}

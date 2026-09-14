@@ -17,6 +17,8 @@ module Yuho.Surface.AST
   , ActContext(..), ActorExceptionAttachment(..), ScopedExceptionAssignment(..)
   , ExceptionTechnicalStatus(..), ActorScopedExceptionResult(..)
   , CaseTargetKind(..), CaseAllegation(..), AnalysisCase(..)
+  , CaseFactId(..), CaseFactKind(..), CaseFactSubject(..)
+  , CaseFactClassification(..), CaseFact(..), CaseInputTarget(..), CaseFactBinding(..)
   , BurdenAnnotation(..), TechnicalOutput(..), Proposition(..), Element(..), Rule(..), Body(..), Model(..), Scenario(..)
   , Resolved(..), Checked(..), identifier, leafTokens ) where
 
@@ -145,9 +147,23 @@ data ActorScopedExceptionResult = ActorScopedExceptionResult
   ActorExceptionAttachment ExceptionTechnicalStatus deriving (Eq, Show)
 data CaseTargetKind = CaseOffence | CaseParticipation | CaseAttempt
   deriving (Eq, Ord, Show)
-data CaseAllegation = CaseAllegation Token CaseTargetKind Token Token Scenario
+newtype CaseFactId = CaseFactId Token deriving (Eq, Show)
+data CaseFactKind = FactConduct | FactCircumstance | FactMentalState
+  | FactRelationship deriving (Eq, Ord, Show)
+data CaseFactSubject = CaseActorSubject Token (Maybe Token)
+  | CaseRelationSubject Token Token Token
+  | CaseExceptionSubject Token Token ActContext deriving (Eq, Show)
+data CaseFactClassification = CaseFactClassification Token (Maybe Token) Token
   deriving (Eq, Show)
-data AnalysisCase = AnalysisCase Token Token [ActorBinding] [CaseAllegation]
+data CaseFact = CaseFact CaseFactId CaseFactKind CaseFactSubject
+  CaseFactClassification deriving (Eq, Show)
+data CaseInputTarget = CasePrimitiveInput Token | CaseRelationInput Token
+  | CaseExceptionInput Token Token deriving (Eq, Show)
+data CaseFactBinding = CaseFactBinding CaseFactId CaseInputTarget deriving (Eq, Show)
+data CaseAllegation = CaseAllegation Token CaseTargetKind Token Token Scenario
+  [CaseFactBinding]
+  deriving (Eq, Show)
+data AnalysisCase = AnalysisCase Token Token [ActorBinding] [CaseFact] [CaseAllegation]
   deriving (Eq, Show)
 data Proposition = Leaf Token (Maybe Token) Token (Maybe Token)
   | Group Token Combinator [Token] deriving (Eq, Show)
