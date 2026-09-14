@@ -3,6 +3,7 @@ module Yuho.Surface.Lower (lowerChecked) where
 
 import qualified Data.ByteString as BS
 import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Encoding
@@ -59,8 +60,8 @@ sourceValue sourceIdentifier location bytes = object
 statusBytes :: BS.ByteString
 statusBytes = "synthetic proof classifications only\n"
 
-factValue :: Bool -> Text -> J -> (Token, Proof) -> (Text, J)
-factValue section statusId context (key, proof) = (tokenText key, object (base ++ metadata))
+factValue :: Bool -> Text -> Text -> J -> (Token, Proof) -> (Text, J)
+factValue section issuer statusId context (key, proof) = (tokenText key, object (base ++ metadata))
   where
     proofValue = case proof of
       Proved -> object [("kind", string "proved")]
@@ -71,7 +72,7 @@ factValue section statusId context (key, proof) = (tokenText key, object (base +
       [ ("proof_status", proofValue)
       , ("status_source", object
           [("assignment_id", string assignment)
-          ,("issuer_label", string (if section then "synthetic research fixture" else "fictional compiler fixture"))
+          ,("issuer_label", string issuer)
           ,("origin", string "synthetic_fixture")
           ,("source_id", string statusId)
           ,("span", wholeSpan statusBytes)])
@@ -124,7 +125,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
         [object [("id", tokenValue rootRuleId), ("source_id", tokenValue sourceId)
           ,("program", program path text (tokenValue programId) root)
           ,("exceptions", array [])]]
-        (object (map (factValue True (tokenText statusId) burden) assignments)))
+        (object (map (factValue True "synthetic research fixture" (tokenText statusId) burden) assignments)))
     Synthetic offence exception _ -> case secondTree of
       Nothing -> at "SFE007" "<lower>" (ruleIdentifier exception) "exception tree missing"
       Just exceptionTree -> do
@@ -149,12 +150,41 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
                 ,("exceptions", array [])]]
         pure (baseRequest model (ruleId offence)
           [sourceValue sourceId sourcePath text, sourceValue statusId statusPath statusBytes]
-          registry (object (map (factValue False (tokenText statusId) burden) assignments)))
+          registry (object (map (factValue False "fictional compiler fixture" (tokenText statusId) burden) assignments)))
+    Legal _ offence exception _ -> case secondTree of
+      Nothing -> at "SFE007" "<lower>" (ruleIdentifier exception) "exception tree missing"
+      Just exceptionTree -> do
+        if scenario == Nothing
+          then at "SFE009" "<lower>" (modelIdentifier model) "scenario and scope acknowledgements required"
+          else pure ()
+        offenceRoot <- requirement False burden text quoteSpans (rulePath offence) firstTree
+        exceptionRoot <- requirement True burden text quoteSpans (rulePath exception) exceptionTree
+        let exceptionBinding = object
+              [("id", tokenValue (ruleIdentifier exception))
+              ,("branch_id", tokenValue (ruleProgram offence))
+              ,("source_id", tokenValue sourceId), ("span", wholeSpan text)
+              ,("guard", object [("kind", string "is_infringed")
+                  ,("target", tokenValue (ruleId exception))])
+              ,("effect", string "defeat")]
+            registry =
+              [object [("id", tokenValue (ruleId offence)), ("source_id", tokenValue sourceId)
+                ,("program", program (rulePath offence) text (tokenValue (ruleProgram offence)) offenceRoot)
+                ,("exceptions", array [exceptionBinding])]
+              ,object [("id", tokenValue (ruleId exception)), ("source_id", tokenValue sourceId)
+                ,("program", program (rulePath exception) text (tokenValue (ruleProgram exception)) exceptionRoot)
+                ,("exceptions", array [])]]
+            exceptionIds = Set.fromList (map (tokenText . elementId) (ruleElements exception))
+            fact (key, value) = factValue (Set.member (tokenText key) exceptionIds)
+              "synthetic research fixture" (tokenText statusId) burden (key, value)
+        pure (baseRequest model (ruleId offence)
+          [sourceValue sourceId sourcePath text, sourceValue statusId statusPath statusBytes]
+          registry (object (map fact assignments)))
   pure (encodeJson request)
   where
     sourceRole = case modelBody model of
       Section _ _ _ _ _ _ _ -> "excerpt"
       Synthetic _ _ _ -> "source_text"
+      Legal _ _ _ _ -> "source_text"
     BurdenAnnotation _ holder kind _ = modelBurden model
     burden = object [("holder", tokenValue holder), ("kind", tokenValue kind)]
 

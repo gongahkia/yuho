@@ -277,8 +277,8 @@ body = do
       Just item -> P $ \file _ -> at "SFE014" file item "mapping source is unsupported for synthetic model"
       Nothing -> pure ()
     burden <- annotations
-    next <- current
-    if tokenText next == "scope-assumptions" then do
+    bodyNext <- current
+    if tokenText bodyNext == "scope-assumptions" then do
       assumptions <- scopeAssumptions
       offence <- rule "offence"
       exception <- rule "exception"
