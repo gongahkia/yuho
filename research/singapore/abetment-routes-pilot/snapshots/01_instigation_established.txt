@@ -1,0 +1,76 @@
+Model: SingaporePenalCodeSection107RoutesTheftResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Analysis target: p:abet-theft
+Principal actor: actor:principal-1
+Alleged-abettor actor: actor:participant-1
+Co-conspirator actor: actor:co-1
+Alleged-attempter actor: actor:attempt-actor-1
+Target thing: o:theft — Penal Code ss 378, 379
+Penal Code s 107 route classifications:
+  f:instigation-link: satisfied
+    f:instigation-link — supplied proved; technical satisfied
+  g:conspiracy: not_satisfied
+    g:conspiracy — all; technical not_satisfied
+      f:agreement-link — supplied not_proved; technical not_satisfied
+      g:pursuant-form — any; technical not_satisfied
+        f:pursuant-act — supplied not_proved; technical not_satisfied
+        f:pursuant-omission — supplied not_proved; technical not_satisfied
+      f:pursuance-link — supplied not_proved; technical not_satisfied
+  g:intentional-aid: not_satisfied
+    g:intentional-aid — all; technical not_satisfied
+      f:intends-aid — supplied not_proved; technical not_satisfied
+      f:aid-link — supplied not_proved; technical not_satisfied
+      g:aid-form — any; technical not_satisfied
+        f:aid-by-act — supplied not_proved; technical not_satisfied
+        f:aid-by-illegal-omission — supplied not_proved; technical not_satisfied
+Overall technical s 107 status: satisfied
+Separate s 109 candidate consequence:
+  f:consequence — supplied proved; technical satisfied
+Technical s 109 candidate status: satisfied
+General exception instance: xi:abettor-section84
+Definition: x:section84 — Penal Code s 84; shared structure, independent classifications
+Subject actor: actor:participant-1
+Act context: aid-conduct
+Section 84 routes:
+  g:section84-requirements [g:abettor-section84--section84-requirements] — all; technical not_satisfied
+    f:unsoundness-time [f:abettor-section84--unsoundness-time] — supplied not_proved; technical not_satisfied
+    g:section84-routes [g:abettor-section84--section84-routes] — any; technical not_satisfied
+      g:nature [g:abettor-section84--nature] — all; technical not_satisfied
+        f:nature-causation [f:abettor-section84--nature-causation] — supplied not_proved; technical not_satisfied
+        f:nature-incapacity [f:abettor-section84--nature-incapacity] — supplied not_proved; technical not_satisfied
+      g:wrongfulness [g:abettor-section84--wrongfulness] — all; technical not_satisfied
+        f:wrong-causation [f:abettor-section84--wrong-causation] — supplied not_proved; technical not_satisfied
+        f:ordinary-wrongfulness-incapacity [f:abettor-section84--ordinary-wrongfulness-incapacity] — supplied not_proved; technical not_satisfied
+        f:contrary-law-incapacity [f:abettor-section84--contrary-law-incapacity] — supplied not_proved; technical not_satisfied
+      g:control [g:abettor-section84--control] — all; technical not_satisfied
+        f:control-causation [f:abettor-section84--control-causation] — supplied not_proved; technical not_satisfied
+        f:control-incapacity [f:abettor-section84--control-incapacity] — supplied not_proved; technical not_satisfied
+Selected section 84 status: not_satisfied
+Other actor instances:
+  xi:principal-section84 — not_evaluated
+  xi:attempter-section84 — not_evaluated
+Typed statutory references:
+  theft-conduct: Penal Code 1871 s 378
+  theft-anchor: Penal Code 1871 s 379
+  abetment: Penal Code 1871 s 107
+  abettor: Penal Code 1871 s 108
+  consequence: Penal Code 1871 s 109
+  attempt: Penal Code 1871 s 511
+  general-exception: Penal Code 1871 s 84
+  burden-context: Evidence Act 1893 s 107
+Evidence Act s 107 context: section107; defence legal burden; balance_of_probabilities. It does not classify evidence.
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:post-2022-section-84-expression-applicable
+  a:dishonesty-externally-classified
+  a:direct-s107-routes-only
+  a:broader-section108-cases-excluded
+  a:no-express-punishment-provision-modelled
+  a:direct-self-attempt-only
+  a:target-not-completed
+  a:no-express-attempt-punishment-provision-modelled
+  a:punishment-outside-scope
+  a:statutory-expression-supplied
+  a:stage-externally-classified
+  a:impossible-attempts-excluded
+Final technical participation status: satisfied
+No guilt, conviction, acquittal, liability, punishment or sentence was determined.

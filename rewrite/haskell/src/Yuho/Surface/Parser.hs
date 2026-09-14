@@ -372,7 +372,7 @@ abetmentDeclaration = do
   _ <- need "principal"
   principal <- word
   _ <- need "rule"
-  ruleId <- word
+  parsedRuleId <- word
   _ <- need "program"
   programId <- word
   _ <- need "path"
@@ -397,7 +397,7 @@ abetmentDeclaration = do
         InstigationRoute _ _ -> []
         ConspiracyRoute _ _ _ _ _ form routeGroup -> [form,routeGroup]
         AidRoute _ _ _ form routeGroup -> [form,routeGroup]
-      declared = Rule ParticipationKind headToken item (Just target) ruleId
+      declared = Rule ParticipationKind headToken item (Just target) parsedRuleId
         programId sourcePath (first:rest)
         (concatMap routeElements routes ++ [consequence])
         (concatMap routeGroups routes ++ [overall,candidate]) []

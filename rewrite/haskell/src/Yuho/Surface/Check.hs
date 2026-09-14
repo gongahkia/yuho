@@ -765,7 +765,7 @@ checkAbetmentScoped path model supplied quotes sources = case modelBody model of
       checkDefinitionIds path [] [offence,route,attemptRuleId,exception] []
       validateScopedAttachments path (principal,abettor,attempter)
         offence route attemptRuleId exception attachments
-      checkActorScopedAuthorities path sources citations
+      checkAbetmentAuthorities path sources citations
       let expectedRows = [(elementId item,
             elementCategory item `elem` [Intention,Knowledge,Fault,DishonestIntention],
             RoleEndpoint principal) | item <- ruleElements offence]
@@ -881,6 +881,33 @@ checkAbetmentRelationInput path actors rows relation = do
     then pure (Assignment (relationStatusId relation) status reason)
     else at "SFE102" path (relationAssignmentId row)
       "directed relation has incompatible actors"
+
+checkAbetmentAuthorities :: FilePath -> Map.Map Text (Text,Text)
+  -> [AuthorityReference] -> Either Diagnostic ()
+checkAbetmentAuthorities path sources citations = do
+  let expected = Map.fromList
+        [("theft-conduct",(PenalCode1871,"378","source_text")),
+         ("theft-anchor",(PenalCode1871,"379","source_text")),
+         ("abetment",(PenalCode1871,"107","source_text")),
+         ("abettor",(PenalCode1871,"108","source_text")),
+         ("consequence",(PenalCode1871,"109","source_text")),
+         ("attempt",(PenalCode1871,"511","source_text")),
+         ("general-exception",(PenalCode1871,"84","source_text")),
+         ("burden-context",(EvidenceAct1893,"107","contextual"))]
+      actual = [(label,(instrument,source,section))
+        | AuthorityReference label instrument source section <- citations]
+  indexed <- unique path "SFE074" [(label,()) | (label,_) <- actual]
+  if Map.keysSet indexed == Map.keysSet expected then pure () else
+    at "SFE074" path (Token WordToken "authorities" 1 1)
+      "typed Penal Code and Evidence Act references required"
+  mapM_ (\(label,(instrument,source,section)) ->
+    case Map.lookup (tokenText label) expected of
+      Just (wantedInstrument,wantedSection,wantedRole)
+        | instrument == wantedInstrument && tokenText section == wantedSection
+          && maybe False ((== wantedRole) . fst) (Map.lookup (tokenText source) sources) ->
+            pure ()
+      _ -> at "SFE074" path label "authority instrument, section or source role mismatch")
+    actual
 
 validateScopedAttachments :: FilePath -> (Token,Token,Token)
   -> Rule -> Rule -> Rule -> Rule -> [ActorExceptionAttachment]
