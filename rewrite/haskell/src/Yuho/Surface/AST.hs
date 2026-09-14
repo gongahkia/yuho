@@ -8,6 +8,10 @@ module Yuho.Surface.AST
   , ActorAttributedFact(..), ActorAttributedMentalState(..), ActorAssignment(..)
   , RelationAssignment(..), ParticipationTarget(..), ParticipationRelation(..)
   , ParticipationRoute(..), StatutoryInstrument(..), AuthorityReference(..)
+  , AttemptTarget(..), AttemptActor(..), TargetDirectedMentalState(..)
+  , ConductStageDefinition(..), AttemptDefinition(..), AttemptScopeAssumption(..)
+  , AttemptTechnicalOutput(..), ConductStage(..), ConductStageAssignment(..)
+  , TargetCompletion(..)
   , BurdenAnnotation(..), TechnicalOutput(..), Proposition(..), Element(..), Rule(..), Body(..), Model(..), Scenario(..)
   , Resolved(..), Checked(..), identifier, leafTokens ) where
 
@@ -20,9 +24,9 @@ data Category = Conduct | Circumstance | Fault | Purpose | Result | Causation
   | OrdinaryWrongfulness | ContraryLawWrongfulness | ControlIncapacity
   | MovableProperty | Possession | ConsentAbsence | DishonestIntention
   | Movement | MovementForTaking
-  | AidAct | IllegalOmission | Consequence
+  | AidAct | IllegalOmission | Consequence | SubstantialStep
   deriving (Eq, Ord, Show)
-data RuleKind = OffenceKind | ExceptionKind | ParticipationKind deriving (Eq, Show)
+data RuleKind = OffenceKind | ExceptionKind | ParticipationKind | AttemptKind deriving (Eq, Show)
 data Proof = Proved | NotProved | Unresolved Text deriving (Eq, Show)
 data Assignment = Assignment Token Token (Maybe Token) deriving (Eq, Show)
 data SourceDecl = SourceDecl Token Token Token deriving (Eq, Show)
@@ -52,7 +56,8 @@ data StatutoryDefinition = StatutoryDefinition
   , definitionGroups :: [Proposition]
   , definitionOutputs :: [DefinitionOutput] }
   deriving (Eq, Show)
-data PartyRoleKind = PrincipalParty | AllegedAbettorParty deriving (Eq, Show)
+data PartyRoleKind = PrincipalParty | AllegedAbettorParty | AllegedAttempterParty
+  deriving (Eq, Show)
 data PartyRole = PartyRole Token PartyRoleKind deriving (Eq, Show)
 data ActorBinding = ActorBinding Token Token deriving (Eq, Show)
 data RelationEndpoint = RoleEndpoint Token | RelationEndpoint Token deriving (Eq, Show)
@@ -71,6 +76,30 @@ data ParticipationRelation = ParticipationRelation
 data ParticipationRoute = IntentionalAidRoute Rule ParticipationRelation deriving (Eq, Show)
 data StatutoryInstrument = PenalCode1871 | EvidenceAct1893 deriving (Eq, Show)
 data AuthorityReference = AuthorityReference Token StatutoryInstrument Token Token
+  deriving (Eq, Show)
+newtype AttemptTarget = AttemptTarget Token deriving (Eq, Show)
+newtype AttemptActor = AttemptActor Token deriving (Eq, Show)
+data TargetDirectedMentalState = TargetDirectedMentalState
+  { attemptIntentionId :: Token, attemptIntentionActor :: AttemptActor
+  , attemptIntentionTarget :: AttemptTarget, attemptIntentionQuote :: Token }
+  deriving (Eq, Show)
+data ConductStageDefinition = ConductStageDefinition
+  { attemptStageId :: Token, attemptStageActor :: AttemptActor
+  , attemptStageOutput :: Token, attemptStageQuote :: Token }
+  deriving (Eq, Show)
+data AttemptDefinition = AttemptDefinition
+  { attemptRule :: Rule, attemptActor :: AttemptActor
+  , attemptTarget :: AttemptTarget
+  , attemptMentalState :: TargetDirectedMentalState
+  , attemptConductStage :: ConductStageDefinition }
+  deriving (Eq, Show)
+newtype AttemptScopeAssumption = AttemptScopeAssumption ScopeAssumption deriving (Eq, Show)
+newtype AttemptTechnicalOutput = AttemptTechnicalOutput TechnicalOutput deriving (Eq, Show)
+data ConductStage = PreparationOnly Token | ActTowardsCommission Token
+  | StageUnresolved Token Token deriving (Eq, Show)
+data ConductStageAssignment = ConductStageAssignment Token Token ConductStage
+  deriving (Eq, Show)
+data TargetCompletion = TargetNotCompleted Token Token | TargetCompleted Token Token
   deriving (Eq, Show)
 data Proposition = Leaf Token (Maybe Token) Token (Maybe Token)
   | Group Token Combinator [Token] deriving (Eq, Show)
@@ -94,6 +123,8 @@ data Body = Section Token Token Token Token Token [Proposition] [Assignment]
   | ParticipationLegal [PartyRole] [StatutoryDefinition]
       [ActorAttributedFact] [ActorAttributedMentalState]
       [ScopeAssumption] Rule ParticipationRoute [AuthorityReference] [TechnicalOutput]
+  | AttemptLegal [PartyRole] [StatutoryDefinition] [AttemptScopeAssumption]
+      Rule AttemptDefinition [AuthorityReference] [AttemptTechnicalOutput]
   deriving (Eq, Show)
 data Model = Model
   { modelIdentifier :: Token
@@ -112,6 +143,9 @@ data Model = Model
 data Scenario = Scenario Token Token [Assignment] [ScopeAcknowledgement] [Token]
   | ParticipationScenario Token Token [ActorBinding] [ActorAssignment]
       [RelationAssignment] [Assignment] [ScopeAcknowledgement] [Token]
+  | AttemptScenario Token Token [ActorBinding] [ActorAssignment]
+      [ConductStageAssignment] [TargetCompletion] [Assignment]
+      [ScopeAcknowledgement] [Token]
   deriving (Eq, Show)
 data Resolved = ResolvedLeaf Token Token | ResolvedGroup Token Combinator [Resolved]
   deriving (Eq, Show)

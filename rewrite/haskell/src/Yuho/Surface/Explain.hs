@@ -21,6 +21,73 @@ import Yuho.SuppliedProofStatus.Validate (validateProofRequest)
 explainChecked :: FilePath -> Checked -> Either Diagnostic Text
 explainChecked path checked@(Checked model scenario assignments offenceTree exceptionTree) =
   case (scenario, exceptionTree) of
+    (Just (AttemptScenario _ _ bindings _ stages completions _ acknowledgements _), Nothing) ->
+      case modelBody model of
+        AttemptLegal _ _ _ target attempt citations _ -> do
+          request <- lowerChecked checked
+          value <- either (const (at "SFE014" path (modelIdentifier model)
+            "compiled request is invalid JSON")) Right (decodeJson request)
+          decoded <- kernel (decodeProofRequest value)
+          validated <- kernel (validateProofRequest decoded)
+          result <- kernel (evaluateProof validated)
+          _ <- kernel (selectProofPenalties validated result)
+          evaluated <- case [item | item <- proofResultRules result,
+            proofRuleId item == tokenText (ruleId (attemptRule attempt))] of
+            [item] -> Right item
+            _ -> at "SFE014" path (ruleId (attemptRule attempt))
+              "attempt rule result missing"
+          let AttemptDefinition _ (AttemptActor role) (AttemptTarget targetId)
+                intention stageDefinition = attempt
+              actor = case [tokenText item | ActorBinding declared item <- bindings,
+                tokenText declared == tokenText role] of
+                [item] -> item
+                _ -> "missing"
+              stageText = case stages of
+                [ConductStageAssignment _ _ (PreparationOnly _)] -> "preparation_only"
+                [ConductStageAssignment _ _ (ActTowardsCommission _)] ->
+                  "act_towards_commission"
+                [ConductStageAssignment _ _ (StageUnresolved _ reason)] ->
+                  "unresolved(" <> tokenText reason <> ")"
+                _ -> "missing"
+              completionText = case completions of
+                [TargetNotCompleted _ _] -> "not_completed"
+                [TargetCompleted _ _] -> "completed"
+                _ -> "missing"
+              supplied = Map.fromList [(tokenText item, proofText status)
+                | (item,status) <- assignments]
+              technical = traceValues evaluated
+              authorities = ["  " <> tokenText label <> ": "
+                <> instrumentText instrument <> " s " <> tokenText section
+                | AuthorityReference label instrument _ section <- citations]
+              linesOfText =
+                ["Model: " <> tokenText (modelIdentifier model)
+                ,"Jurisdiction: Singapore — research POC; synthetic classifications only"
+                ,"Analysis target: bounded Penal Code s 511 attempt"
+                ,"Alleged-attempter: " <> actor
+                ,"Intended target: " <> tokenText targetId <> " — Penal Code ss "
+                  <> sectionList (ruleSections target)
+                ,"Target reference only; completed theft requirements are not executable prerequisites."
+                ,"Target completion: " <> completionText <> " — supplied scope status, not a kernel fact"
+                ,"Target-directed intention: " <> tokenText (attemptIntentionId intention)
+                  <> " — supplied " <> Map.findWithDefault "missing"
+                    (tokenText (attemptIntentionId intention)) supplied
+                ,"Conduct stage: " <> tokenText (attemptStageId stageDefinition)
+                  <> " — supplied " <> stageText
+                ,"Yuho did not determine the conduct-stage classification or assess evidence."
+                ,"Act-toward-commission projection: " <> tokenText (attemptStageOutput stageDefinition)
+                  <> " — technical " <> Map.findWithDefault "not_evaluated"
+                    (tokenText (attemptStageOutput stageDefinition)) technical
+                ,"Bounded s 511 requirements:"]
+                ++ renderTree 1 supplied technical offenceTree
+                ++ ["Typed statutory references:"] ++ authorities
+                ++ ["Scope assumptions: acknowledged by scenario, not inferred or proved"]
+                ++ ["  " <> tokenText item | ScopeAcknowledgement item <- acknowledgements]
+                ++ ["Final technical attempt status: "
+                  <> satisfactionText (proofResultStatus result)
+                  ,"No guilt, conviction, acquittal, liability, punishment, sentence or court disposition was determined."]
+          Right (Text.unlines linesOfText)
+        _ -> at "SFE013" path (modelIdentifier model)
+          "explain requires a checked attempt scenario"
     (Just (ParticipationScenario _ _ bindings _ _ _ acknowledgements _), Nothing) ->
       case (modelBody model, offenceTree) of
         (ParticipationLegal _ definitions _ _ _ offence

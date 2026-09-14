@@ -1,0 +1,112 @@
+// Singapore Penal Code s 511 research POC; all actors and classifications are synthetic.
+model SingaporePenalCodeSection511TheftAttemptResearchPrototype-v1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Singapore;
+  purpose research_prototype;
+  request A11;
+  policy 2026-09-13 1024;
+
+  provenance {
+    source src:pc source_text "research/attempt/penal-code-short-excerpts.txt";
+    source src:synthetic synthetic_status "research/attempt/synthetic-status.txt";
+    quote q:intends-gain "intention of causing wrongful gain";
+    quote q:intends-loss "intention of causing wrongful loss";
+    quote q:gain "gain by unlawful means of property";
+    quote q:gain-property "property";
+    quote q:gain-entitlement "not legally entitled";
+    quote q:loss "loss by unlawful means of property";
+    quote q:loss-property "property";
+    quote q:loss-entitlement "legally entitled";
+    quote q:dishonest-ordinary "dishonest by the ordinary standards of reasonable and honest persons";
+    quote q:knows-dishonest "knows that it is dishonest by those standards";
+    quote q:movable "any movable property";
+    quote q:possession "out of the possession of any person";
+    quote q:consent "without that person’s consent";
+    quote q:moves "moves that property";
+    quote q:for-taking "in order to such taking";
+    quote q:intends-target "with the intention of committing that offence";
+    quote q:substantial-step "takes a substantial step towards the commission of that offence";
+  }
+
+  annotations { burden none none none not_applicable; }
+
+  party-roles {
+    party-role role:alleged-attempter;
+  }
+
+  definitions {
+    statutory-definition d:wrongful-gain kind wrongful-gain sections 23 {
+      input circumstance f:gain-by-unlawful-means quote q:gain;
+      input circumstance f:gain-of-property quote q:gain-property;
+      input circumstance f:gain-without-entitlement quote q:gain-entitlement;
+      all g:wrongful-gain (f:gain-by-unlawful-means, f:gain-of-property, f:gain-without-entitlement);
+      output g:wrongful-gain;
+    }
+    statutory-definition d:wrongful-loss kind wrongful-loss sections 23 {
+      input circumstance f:loss-by-unlawful-means quote q:loss;
+      input circumstance f:loss-of-property quote q:loss-property;
+      input circumstance f:loss-of-entitled-property quote q:loss-entitlement;
+      all g:wrongful-loss (f:loss-by-unlawful-means, f:loss-of-property, f:loss-of-entitled-property);
+      output g:wrongful-loss;
+    }
+    statutory-definition d:dishonestly kind dishonesty sections 24 {
+      mental-state f:intends-wrongful-gain kind intention target d:wrongful-gain as wrongful-gain quote q:intends-gain;
+      mental-state f:intends-wrongful-loss kind intention target d:wrongful-loss as wrongful-loss quote q:intends-loss;
+      input circumstance f:act-dishonest-ordinary-standards quote q:dishonest-ordinary;
+      input knowledge f:knows-act-dishonest-ordinary-standards quote q:knows-dishonest;
+      any g:section24-intention (f:intends-wrongful-gain, f:intends-wrongful-loss);
+      all g:section24-ordinary (f:act-dishonest-ordinary-standards, f:knows-act-dishonest-ordinary-standards);
+      any g:dishonestly (g:section24-intention, g:section24-ordinary);
+      output g:dishonestly;
+    }
+  }
+
+  scope-assumptions {
+    scope-assumption a:direct-self-attempt-only;
+    scope-assumption a:target-not-completed;
+    scope-assumption a:no-express-attempt-punishment-provision-modelled;
+    scope-assumption a:punishment-outside-scope;
+    scope-assumption a:statutory-expression-supplied;
+    scope-assumption a:stage-externally-classified;
+    scope-assumption a:impossible-attempts-excluded;
+  }
+
+  offence o:theft rule r:section379-candidate program p:section379 path section379 sections 378,379 {
+    use d:dishonestly as dishonesty;
+    element movable-property f:movable-property quote q:movable;
+    element possession f:another-possession quote q:possession;
+    element consent-absence f:without-consent quote q:consent;
+    element movement f:property-moved quote q:moves;
+    element movement-for-taking f:moved-for-taking quote q:for-taking;
+    all g:theft-requirements (f:movable-property, f:another-possession, f:without-consent, d:dishonestly, f:property-moved, f:moved-for-taking);
+  }
+
+  attempt attempt:theft route direct-self actor role:alleged-attempter target o:theft rule r:section511-candidate program p:section511 path section511 sections 511 {
+    mental-state f:intends-target actor role:alleged-attempter kind intention target o:theft quote q:intends-target;
+    conduct-stage stage:theft-conduct actor role:alleged-attempter output f:substantial-step quote q:substantial-step;
+    all g:attempt-requirements (f:intends-target, f:substantial-step);
+  }
+
+  authorities {
+    authority wrongful-concepts PenalCode1871 src:pc section 23;
+    authority dishonesty PenalCode1871 src:pc section 24;
+    authority theft-conduct PenalCode1871 src:pc section 378;
+    authority theft-anchor PenalCode1871 src:pc section 379;
+    authority attempt PenalCode1871 src:pc section 511;
+  }
+
+  outputs {
+    intended_target f:intends-target;
+    conduct_stage stage:theft-conduct;
+    act_towards_commission f:substantial-step;
+    section511_requirements g:attempt-requirements;
+    final_rule r:section511-candidate;
+  }
+
+  limitations {
+    "Direct self-attempt only; target theft is a reference, not a completed-offence prerequisite";
+    "Conduct stage and intention are externally supplied; Yuho does not assess them";
+    "Impossible attempts, withdrawal, other-actor attempts and punishment are excluded";
+    "No legal advice, offence finding, guilt, conviction, acquittal or sentence";
+  }
+}

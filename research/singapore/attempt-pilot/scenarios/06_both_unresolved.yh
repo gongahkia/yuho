@@ -1,0 +1,15 @@
+// Synthetic actor and external classifications only.
+scenario A11 for SingaporePenalCodeSection511TheftAttemptResearchPrototype-v1 {
+  analyse attempt:theft;
+  bind role:alleged-attempter to actor:attempt-actor-1;
+  assume a:direct-self-attempt-only;
+  assume a:target-not-completed;
+  assume a:no-express-attempt-punishment-provision-modelled;
+  assume a:punishment-outside-scope;
+  assume a:statutory-expression-supplied;
+  assume a:stage-externally-classified;
+  assume a:impossible-attempts-excluded;
+  f:intends-target by actor:attempt-actor-1 = unresolved(not_determined);
+  stage stage:theft-conduct by actor:attempt-actor-1 = unresolved(not_determined);
+  target-completion o:theft = not_completed;
+}

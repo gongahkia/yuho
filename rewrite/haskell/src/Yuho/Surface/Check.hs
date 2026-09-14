@@ -354,6 +354,195 @@ checkModel path model supplied = do
           pure (Checked model (Just scenario) assignments participationTree Nothing)
         Just (scenarioPath, Scenario scenarioId _ _ _ _) ->
           at "SFE064" scenarioPath scenarioId "participant role bindings required"
+        Just (scenarioPath, AttemptScenario scenarioId _ _ _ _ _ _ _ _) ->
+          at "SFE064" scenarioPath scenarioId "participation scenario required"
+    AttemptLegal roles definitions assumptions offence attempt citations declaredOutputs -> do
+      if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
+        then pure () else at "SFE004" path (modelIdentifier model) "research model ID required"
+      expect path "SFE004" (modelJurisdiction model) "Singapore"
+      expect path "SFE004" (modelPurpose model) "research_prototype"
+      expect path "SFE004" (modelDate model) "2026-09-13"
+      let BurdenAnnotation annotation holder burdenKind standard = modelBurden model
+      mapM_ (\(item,wanted) -> expect path "SFE011" item wanted)
+        [(annotation,"none"),(holder,"none"),(burdenKind,"none"),
+         (standard,"not_applicable")]
+      requireRoles path sourceIndex
+      role <- case roles of
+        [PartyRole item AllegedAttempterParty] -> pure item
+        PartyRole item _: _ -> at "SFE083" path item
+          "exactly one alleged-attempter role required"
+        [] -> at "SFE083" path (modelIdentifier model) "alleged-attempter role required"
+      index <- definitionIndex path definitions
+      mapM_ (checkDefinition path quoteIndex index) definitions
+      mapM_ (checkElementQuote path quoteIndex) (ruleElements offence)
+      targetTree <- resolveDefinitionRule path index offence
+      checkDefinitionOffence path index offence targetTree
+      let AttemptDefinition attemptRuleId (AttemptActor declaredActor)
+            (AttemptTarget declaredTarget) intention stage = attempt
+          TargetDirectedMentalState mentalId (AttemptActor mentalActor)
+            (AttemptTarget mentalTarget) mentalQuote = intention
+          ConductStageDefinition stageId (AttemptActor stageActor) stageOutput stageQuote = stage
+          sections rule = [tokenText item | StatutorySection item <- ruleSections rule]
+          definitionSectionsText definition =
+            [tokenText item | StatutorySection item <- definitionSections definition]
+      checkDefinitionIds path definitions [offence,attemptRuleId] []
+      checkSections path (ruleIdentifier attemptRuleId) (ruleSections attemptRuleId)
+      if tokenText (ruleIdentifier offence) == "o:theft"
+          && sections offence == ["378","379"]
+          && map definitionSectionsText definitions == [["23"],["23"],["24"]]
+        then pure () else at "SFE075" path (ruleIdentifier offence)
+          "bounded target must be the authored theft candidate and definitions"
+      checkAttemptAuthorities path sourceIndex citations
+      if tokenText declaredActor == tokenText role
+          && tokenText mentalActor == tokenText role
+          && tokenText stageActor == tokenText role
+        then pure () else at "SFE081" path declaredActor
+          "attempt intention and stage must belong to alleged-attempter role"
+      if tokenText declaredTarget == tokenText (ruleIdentifier offence)
+          && tokenText mentalTarget == tokenText declaredTarget
+          && fmap tokenText (ruleTarget attemptRuleId) == Just (tokenText declaredTarget)
+        then pure () else atRelated "SFE075" path declaredTarget
+          "attempt and intention must target the candidate offence" path (ruleIdentifier offence)
+      if ruleKind attemptRuleId == AttemptKind
+          && "attempt:" `Text.isPrefixOf` tokenText (ruleIdentifier attemptRuleId)
+          && "r:" `Text.isPrefixOf` tokenText (ruleId attemptRuleId)
+          && sections attemptRuleId == ["511"]
+          && null (ruleDefinitionReferences attemptRuleId)
+          && map elementCategory (ruleElements attemptRuleId) == [Intention,SubstantialStep]
+          && map (tokenText . elementId) (ruleElements attemptRuleId) ==
+            map tokenText [mentalId,stageOutput]
+          && "stage:" `Text.isPrefixOf` tokenText stageId
+          && "f:" `Text.isPrefixOf` tokenText mentalId
+          && "f:" `Text.isPrefixOf` tokenText stageOutput
+        then pure () else at "SFE072" path (ruleIdentifier attemptRuleId)
+          "invalid typed direct-attempt declaration"
+      knownQuote path quoteIndex mentalQuote
+      knownQuote path quoteIndex stageQuote
+      root <- case ruleGroups attemptRuleId of
+        [Group item All [mentalRef,stageRef]]
+          | "g:" `Text.isPrefixOf` tokenText item
+            && map tokenText [mentalRef,stageRef] == map tokenText [mentalId,stageOutput] ->
+              pure item
+        _ -> at "SFE085" path (ruleIdentifier attemptRuleId)
+          "attempt requirements must use intention and substantial-step status only"
+      let declarations = [Leaf (elementId item) Nothing (elementQuote item) Nothing
+            | item <- ruleElements attemptRuleId] ++ ruleGroups attemptRuleId
+      attemptTree <- resolveTree path declarations root
+      let scoped = [item | AttemptScopeAssumption item <- assumptions]
+      declared <- checkScopeDeclarations path scoped
+      let requiredScopes = Set.fromList
+            ["a:direct-self-attempt-only", "a:target-not-completed",
+             "a:no-express-attempt-punishment-provision-modelled",
+             "a:punishment-outside-scope", "a:statutory-expression-supplied",
+             "a:stage-externally-classified", "a:impossible-attempts-excluded"]
+      if Map.keysSet declared == requiredScopes then pure () else
+        at "SFE084" path (ruleIdentifier attemptRuleId)
+          "bounded attempt research-scope declarations required"
+      let outputs = [item | AttemptTechnicalOutput item <- declaredOutputs]
+      if [(tokenText label,tokenText target) | TechnicalOutput label target <- outputs] ==
+          [("intended_target",tokenText mentalId),
+           ("conduct_stage",tokenText stageId),
+           ("act_towards_commission",tokenText stageOutput),
+           ("section511_requirements",tokenText root),
+           ("final_rule",tokenText (ruleId attemptRuleId))]
+        then pure () else at "SFE020" path (ruleIdentifier attemptRuleId)
+          "invalid typed attempt output reference"
+      case supplied of
+        Nothing -> pure (Checked model Nothing [] attemptTree Nothing)
+        Just (scenarioPath, scenario@(AttemptScenario scenarioId modelId bindings
+          actorRows stageRows completions plain acknowledgements targets)) -> do
+          expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
+          expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          case targets of
+            [item] -> expect scenarioPath "SFE075" item (tokenText (ruleIdentifier attemptRuleId))
+            [] -> at "SFE036" scenarioPath scenarioId "attempt analysis target required"
+            _:item:_ -> at "SFE037" scenarioPath item "multiple analysis targets"
+          checkScopeAcknowledgements scenarioPath path scenarioId declared acknowledgements
+          actor <- checkAttemptBinding scenarioPath scenarioId role bindings
+          case plain of
+            Assignment item _ _:_ -> at "SFE082" scenarioPath item
+              "attempt inputs require actor attribution or typed stage"
+            [] -> pure ()
+          mental <- case actorRows of
+            [row@(ActorAssignment item owner _ _)]
+              | tokenText item == tokenText mentalId && tokenText owner == tokenText actor ->
+                  pure row
+              | otherwise -> at "SFE081" scenarioPath item
+                  "target-directed intention must belong to alleged attempter"
+            [] -> at "SFE081" scenarioPath scenarioId "target-directed intention required"
+            _:item:_ -> at "SFE081" scenarioPath (actorAssignmentId item)
+              "one target-directed intention classification required"
+          suppliedStage <- case stageRows of
+            [row@(ConductStageAssignment item owner _)]
+              | tokenText item == tokenText stageId && tokenText owner == tokenText actor ->
+                  pure row
+              | otherwise -> at "SFE082" scenarioPath item
+                  "conduct stage must belong to alleged attempter and declared stage"
+            [] -> at "SFE076" scenarioPath scenarioId "conduct stage required"
+            first:second:_ -> atRelated "SFE077" scenarioPath (stageAssignmentId second)
+              "duplicate or contradictory conduct stages" scenarioPath (stageAssignmentId first)
+          case completions of
+            [TargetNotCompleted target _]
+              | tokenText target == tokenText declaredTarget -> pure ()
+              | otherwise -> at "SFE075" scenarioPath target
+                  "target completion reference cannot replace declared offence"
+            [TargetCompleted _ status] -> at "SFE080" scenarioPath status
+              "completed target offence is outside bounded attempt analysis"
+            [] -> at "SFE080" scenarioPath scenarioId "target completion status required"
+            _:second:_ -> at "SFE080" scenarioPath (completionToken second)
+              "multiple target completion statuses"
+          let ActorAssignment _ _ mentalStatus mentalReason = mental
+              ConductStageAssignment _ _ stageStatus = suppliedStage
+              (stageProof,stageReason) = case stageStatus of
+                PreparationOnly item -> (item { tokenText = "not_proved" },Nothing)
+                ActTowardsCommission item -> (item { tokenText = "proved" },Nothing)
+                StageUnresolved item reason -> (item { tokenText = "unresolved" },Just reason)
+          assignments <- checkAssignments scenarioPath attemptTree
+            [Assignment mentalId mentalStatus mentalReason,
+             Assignment stageOutput stageProof stageReason]
+          pure (Checked model (Just scenario) assignments attemptTree Nothing)
+        Just (scenarioPath, ParticipationScenario scenarioId _ _ _ _ _ _ _) ->
+          at "SFE076" scenarioPath scenarioId "typed attempt stage required"
+        Just (scenarioPath, Scenario scenarioId _ _ _ _) ->
+          at "SFE083" scenarioPath scenarioId "alleged-attempter binding required"
+
+checkAttemptAuthorities :: FilePath -> Map.Map Text (Text, Text)
+  -> [AuthorityReference] -> Either Diagnostic ()
+checkAttemptAuthorities path sources citations = do
+  let rows = [(label,(instrument,source,section))
+        | AuthorityReference label instrument source section <- citations]
+      expected = Map.fromList
+        [("wrongful-concepts","23"),("dishonesty","24"),
+         ("theft-conduct","378"),("theft-anchor","379"),("attempt","511")]
+  indexed <- unique path "SFE002" rows
+  if Map.keysSet indexed == Map.keysSet expected then pure () else
+    at "SFE074" path (Token WordToken "authorities" 1 1)
+      "typed Penal Code authority references required"
+  mapM_ (\(label,(instrument,source,section)) ->
+    if instrument == PenalCode1871
+      && Map.lookup (tokenText label) expected == Just (tokenText section)
+      && maybe False ((== "source_text") . fst) (Map.lookup (tokenText source) sources)
+    then pure () else at "SFE074" path label "attempt authority has incompatible instrument or section") rows
+
+checkAttemptBinding :: FilePath -> Token -> Token -> [ActorBinding] -> Either Diagnostic Token
+checkAttemptBinding path scenarioId role rows = case rows of
+  [ActorBinding declared actor]
+    | tokenText declared == tokenText role
+      && "actor:" `Text.isPrefixOf` tokenText actor -> Right actor
+    | otherwise -> at "SFE083" path declared "invalid alleged-attempter binding"
+  [] -> at "SFE083" path scenarioId "alleged-attempter binding required"
+  _:second:_ -> at "SFE083" path secondRole "duplicate or unknown actor binding"
+    where ActorBinding secondRole _ = second
+
+actorAssignmentId :: ActorAssignment -> Token
+actorAssignmentId (ActorAssignment item _ _ _) = item
+
+stageAssignmentId :: ConductStageAssignment -> Token
+stageAssignmentId (ConductStageAssignment item _ _) = item
+
+completionToken :: TargetCompletion -> Token
+completionToken (TargetNotCompleted item _) = item
+completionToken (TargetCompleted item _) = item
 
 checkElementQuote :: FilePath -> Map.Map Text Token -> Element -> Either Diagnostic ()
 checkElementQuote path quotes item = do

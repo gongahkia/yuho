@@ -1,0 +1,31 @@
+Model: SingaporePenalCodeSection511TheftAttemptResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Analysis target: bounded Penal Code s 511 attempt
+Alleged-attempter: actor:attempt-actor-1
+Intended target: o:theft — Penal Code ss 378, 379
+Target reference only; completed theft requirements are not executable prerequisites.
+Target completion: not_completed — supplied scope status, not a kernel fact
+Target-directed intention: f:intends-target — supplied proved
+Conduct stage: stage:theft-conduct — supplied preparation_only
+Yuho did not determine the conduct-stage classification or assess evidence.
+Act-toward-commission projection: f:substantial-step — technical not_satisfied
+Bounded s 511 requirements:
+  g:attempt-requirements — all; technical not_satisfied
+    f:intends-target — supplied proved; technical satisfied
+    f:substantial-step — supplied not_proved; technical not_satisfied
+Typed statutory references:
+  wrongful-concepts: Penal Code 1871 s 23
+  dishonesty: Penal Code 1871 s 24
+  theft-conduct: Penal Code 1871 s 378
+  theft-anchor: Penal Code 1871 s 379
+  attempt: Penal Code 1871 s 511
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:direct-self-attempt-only
+  a:target-not-completed
+  a:no-express-attempt-punishment-provision-modelled
+  a:punishment-outside-scope
+  a:statutory-expression-supplied
+  a:stage-externally-classified
+  a:impossible-attempts-excluded
+Final technical attempt status: not_satisfied
+No guilt, conviction, acquittal, liability, punishment, sentence or court disposition was determined.

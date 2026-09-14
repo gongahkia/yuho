@@ -162,6 +162,7 @@ typedElement = do
         "dishonest-intention" -> pure DishonestIntention
         "movement" -> pure Movement
         "movement-for-taking" -> pure MovementForTaking
+        "substantial-step" -> pure SubstantialStep
         "aid-act" -> pure AidAct
         "illegal-omission" -> pure IllegalOmission
         "consequence" -> pure Consequence
@@ -261,6 +262,7 @@ partyRoles = do
     partyKind <- case tokenText role of
       "role:principal" -> pure PrincipalParty
       "role:alleged-abettor" -> pure AllegedAbettorParty
+      "role:alleged-attempter" -> pure AllegedAttempterParty
       _ -> P $ \path _ -> at "SFE063" path role "unsupported party role"
     pure (PartyRole role partyKind)
   _ <- need "}"
@@ -337,6 +339,63 @@ participationRoute = do
         [value | Right (RuleGroup value) <- declarations]
         [value | Right (RuleReference value) <- declarations]
   pure (IntentionalAidRoute participationRuleId relation)
+
+attemptDeclaration :: P AttemptDefinition
+attemptDeclaration = do
+  headToken <- need "attempt"
+  item <- word
+  _ <- need "route"
+  route <- word
+  if tokenText route == "direct-self" then pure () else
+    P $ \path _ -> at "SFE086" path route "unsupported attempt route"
+  _ <- need "actor"
+  actor <- word
+  _ <- need "target"
+  target <- word
+  _ <- need "rule"
+  declaredRule <- word
+  _ <- need "program"
+  programId <- word
+  _ <- need "path"
+  sourcePath <- word
+  _ <- need "sections"
+  section <- StatutorySection <$> word
+  _ <- need "{"
+  mentalToken <- need "mental-state"
+  mentalId <- word
+  _ <- need "actor"
+  mentalActor <- word
+  _ <- need "kind"
+  mentalKind <- word
+  if tokenText mentalKind == "intention" then pure () else
+    P $ \path _ -> at "SFE081" path mentalKind "attempt requires target-directed intention"
+  _ <- need "target"
+  mentalTarget <- word
+  _ <- need "quote"
+  mentalQuote <- word
+  _ <- need ";"
+  stageToken <- need "conduct-stage"
+  stageId <- word
+  _ <- need "actor"
+  stageActor <- word
+  _ <- need "output"
+  stageOutput <- word
+  _ <- need "quote"
+  stageQuote <- word
+  _ <- need ";"
+  allToken <- need "all"
+  requirement <- group allToken
+  _ <- need "}"
+  let mental = TargetDirectedMentalState mentalId (AttemptActor mentalActor)
+        (AttemptTarget mentalTarget) mentalQuote
+      stage = ConductStageDefinition stageId (AttemptActor stageActor)
+        stageOutput stageQuote
+      authoredRule = Rule AttemptKind headToken item (Just target) declaredRule
+        programId sourcePath [section]
+        [Element Intention mentalToken mentalId mentalQuote Nothing,
+         Element SubstantialStep stageToken stageOutput stageQuote Nothing]
+        [requirement] []
+  pure (AttemptDefinition authoredRule (AttemptActor actor) (AttemptTarget target) mental stage)
 
 instrument :: P StatutoryInstrument
 instrument = do
@@ -523,15 +582,25 @@ body = do
     if tokenText bodyNext == "party-roles" then do
       roles <- partyRoles
       definitions <- definitionsBlock
-      (attributedFacts, attributedMentalStates) <- actorAttributions
-      assumptions <- scopeAssumptions
-      offence <- rule "offence"
-      participation <- participationRoute
-      citations <- authorities
-      declaredOutputs <- outputs
-      pure (sources, quotes, burden,
-        ParticipationLegal roles definitions attributedFacts attributedMentalStates
-          assumptions offence participation citations declaredOutputs)
+      following <- current
+      if tokenText following == "actor-attributions" then do
+        (attributedFacts, attributedMentalStates) <- actorAttributions
+        assumptions <- scopeAssumptions
+        offence <- rule "offence"
+        participation <- participationRoute
+        citations <- authorities
+        declaredOutputs <- outputs
+        pure (sources, quotes, burden,
+          ParticipationLegal roles definitions attributedFacts attributedMentalStates
+            assumptions offence participation citations declaredOutputs)
+      else do
+        assumptions <- map AttemptScopeAssumption <$> scopeAssumptions
+        offence <- rule "offence"
+        attempt <- attemptDeclaration
+        citations <- authorities
+        declaredOutputs <- map AttemptTechnicalOutput <$> outputs
+        pure (sources, quotes, burden,
+          AttemptLegal roles definitions assumptions offence attempt citations declaredOutputs)
     else if tokenText bodyNext == "definitions" then do
       definitions <- definitionsBlock
       assumptions <- scopeAssumptions
@@ -642,6 +711,39 @@ scenarioParser = do
       actor <- word
       _ <- need ";"
       pure (ScenarioBinding (ActorBinding role actor))
+    else if tokenText next == "stage" then do
+      _ <- need "stage"
+      stageId <- word
+      _ <- need "by"
+      actor <- word
+      (status,reason) <- assignmentValue
+      stage <- case tokenText status of
+        "preparation_only" | reason == Nothing -> pure (PreparationOnly status)
+        "act_towards_commission" | reason == Nothing -> pure (ActTowardsCommission status)
+        "unresolved" -> case reason of
+          Just value | tokenText value `elem` ["not_determined","external_decision_pending"] ->
+            pure (StageUnresolved status value)
+          _ -> P $ \path _ -> at "SFE078" path status "unsupported unresolved stage reason"
+        "completed" | reason == Nothing ->
+          P $ \path _ -> at "SFE078" path status "completed conduct is outside bounded attempt"
+        _ -> P $ \path _ -> at "SFE078" path status "unsupported conduct-stage classification"
+      pure (ScenarioStage (ConductStageAssignment stageId actor stage))
+    else if tokenText next == "target-completion" then do
+      _ <- need "target-completion"
+      target <- word
+      _ <- need "="
+      status <- word
+      _ <- need ";"
+      completion <- case tokenText status of
+        "not_completed" -> pure (TargetNotCompleted target status)
+        "completed" -> pure (TargetCompleted target status)
+        _ -> P $ \path _ -> at "SFE079" path status "unsupported target completion status"
+      pure (ScenarioCompletion completion)
+    else if tokenText next == "target" then do
+      _ <- need "target"
+      replacement <- word
+      P $ \path _ -> at "SFE075" path replacement
+        "scenario cannot replace the authored attempt target"
     else do
       item <- word
       if "rel:" `Text.isPrefixOf` tokenText item then do
@@ -665,10 +767,15 @@ scenarioParser = do
   let bindings = [item | ScenarioBinding item <- entries]
       actors = [item | ScenarioActorAssignment item <- entries]
       relations = [item | ScenarioRelation item <- entries]
+      stages = [item | ScenarioStage item <- entries]
+      completions = [item | ScenarioCompletion item <- entries]
       plain = [item | ScenarioPlainAssignment item <- entries]
       acknowledgements = [item | ScenarioAssumption item <- entries]
       targets = [item | ScenarioTarget item <- entries]
-  if null bindings && null actors && null relations then
+  if not (null stages && null completions) then
+    pure (AttemptScenario requestId modelId bindings actors stages completions
+      plain acknowledgements targets)
+  else if null bindings && null actors && null relations then
     pure (Scenario requestId modelId plain acknowledgements targets)
   else pure (ParticipationScenario requestId modelId bindings actors relations
     plain acknowledgements targets)
@@ -676,6 +783,7 @@ scenarioParser = do
 data ScenarioEntry = ScenarioTarget Token | ScenarioAssumption ScopeAcknowledgement
   | ScenarioBinding ActorBinding | ScenarioActorAssignment ActorAssignment
   | ScenarioRelation RelationAssignment | ScenarioPlainAssignment Assignment
+  | ScenarioStage ConductStageAssignment | ScenarioCompletion TargetCompletion
 
 parseScenario :: FilePath -> BS.ByteString -> Either Diagnostic Scenario
 parseScenario path bytes = do

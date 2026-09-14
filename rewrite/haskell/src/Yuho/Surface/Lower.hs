@@ -160,6 +160,11 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
                 ++ relationQuote relation : concatMap definitionQuoteKeys selected))
           in filter (\(key,_) -> Set.member (tokenText key) references)
                (modelQuotes model)
+        (AttemptLegal _ _ _ _ attempt _ _, Just (AttemptScenario _ _ _ _ _ _ _ _ _)) ->
+          let AttemptDefinition _ _ _ intention stage = attempt
+              references = Set.fromList
+                [tokenText (attemptIntentionQuote intention), tokenText (attemptStageQuote stage)]
+          in filter (\(key,_) -> Set.member (tokenText key) references) (modelQuotes model)
         _ -> modelQuotes model
       (text, quoteSpans) = quoteSource quoted
   (sourceId, sourcePath) <- sourceDecl sourceRole (modelSources model)
@@ -316,6 +321,23 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
               assignments)))
         _ -> at "SFE064" "<lower>" (modelIdentifier model)
           "actor-bound scenario required"
+    AttemptLegal _ _ _ _ (AttemptDefinition authoredRule _ _ _ _) _ _ ->
+      case scenario of
+        Just (AttemptScenario _ _ _ _ _ _ _ _ _) -> do
+          root <- requirement False burden text quoteSpans (rulePath authoredRule) firstTree
+          let registry = [object
+                [("id", tokenValue (ruleId authoredRule)), ("source_id", tokenValue sourceId)
+                ,("program", program (rulePath authoredRule) text
+                  (tokenValue (ruleProgram authoredRule)) root)
+                ,("exceptions", array [])]]
+          pure (baseRequest model (ruleId authoredRule)
+            [sourceValue sourceId sourcePath text,
+             sourceValue statusId statusPath statusBytes]
+            registry (object (map
+              (factValue False "synthetic research fixture" (tokenText statusId) burden)
+              assignments)))
+        _ -> at "SFE076" "<lower>" (modelIdentifier model)
+          "typed attempt scenario required"
   pure (encodeJson request)
   where
     sourceRole = case modelBody model of
@@ -325,6 +347,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
       MultiLegal _ _ _ _ _ -> "source_text"
       DefinitionsLegal _ _ _ _ _ _ -> "source_text"
       ParticipationLegal _ _ _ _ _ _ _ _ _ -> "source_text"
+      AttemptLegal _ _ _ _ _ _ _ -> "source_text"
     BurdenAnnotation _ holder kind _ = modelBurden model
     burden = object [("holder", tokenValue holder), ("kind", tokenValue kind)]
 
