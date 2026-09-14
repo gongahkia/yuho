@@ -1,0 +1,185 @@
+{-# LANGUAGE OverloadedStrings #-}
+module Yuho.Surface.Check (checkModel) where
+
+import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
+import Data.Text (Text)
+import qualified Data.Text as Text
+import Yuho.Surface.AST
+import Yuho.Surface.Resolve (resolveTree)
+import Yuho.Surface.Token
+
+checkModel :: FilePath -> Model -> Maybe (FilePath, Scenario) -> Either Diagnostic Checked
+checkModel path model supplied = do
+  expect path "SFE004" (modelVariant model) "SuppliedProofStatus-v1"
+  expect path "SFE004" (modelLimit model) "1024"
+  if null (modelLimitations model) || any (Text.null . tokenText) (modelLimitations model)
+    then at "SFE004" path (modelIdentifier model) "limitations required"
+    else pure ()
+  quoteIndex <- unique path "SFE002" (modelQuotes model)
+  sourceIndex <- sourceDeclarations path (modelSources model)
+  case modelBody model of
+    Section rootId programId sourcePath root mapping declarations inline -> do
+      expect path "SFE004" (modelIdentifier model) "SingaporePenalCodeSection84Post2022ResearchPrototype-v1"
+      expect path "SFE004" (modelJurisdiction model) "Singapore"
+      expect path "SFE004" (modelPurpose model) "research_prototype"
+      expect path "SFE004" (modelDate model) "2026-09-13"
+      expect path "SFE007" rootId "r:section84"
+      expect path "SFE007" programId "p:section84"
+      expect path "SFE007" sourcePath "section84"
+      expect path "SFE014" mapping "src:pc84-extracted"
+      expect path "SFE011" (first (modelBurden model)) "section107"
+      expect path "SFE011" (second (modelBurden model)) "defence"
+      expect path "SFE011" (third (modelBurden model)) "legal"
+      expect path "SFE011" (fourth (modelBurden model)) "balance_of_probabilities"
+      requireSources path sourceIndex
+        [("src:pc84-excerpt", "excerpt", "research/section84/excerpt.txt")
+        ,("src:synthetic-status", "synthetic_status", "research/section84/synthetic-status.txt")]
+      if null (modelQuotes model) then at "SFE014" path rootId "source quotes required" else pure ()
+      mapM_ (sectionProp path quoteIndex) declarations
+      tree <- resolveTree path declarations root
+      case supplied of
+        Just _ -> at "SFE004" path rootId "section 84 uses inline supplied classifications"
+        Nothing -> pure ()
+      assignments <- checkAssignments path tree inline
+      pure (Checked model Nothing assignments tree Nothing)
+    Synthetic offence exception outputs -> do
+      expect path "SFE004" (modelIdentifier model) "FictionalRestrictedAreaEntry-v0.1"
+      expect path "SFE021" (modelJurisdiction model) "Fictional"
+      expect path "SFE021" (modelPurpose model) "compiler_fixture"
+      expect path "SFE004" (modelDate model) "2026-09-13"
+      let (annotation, holder, kind, standard) = modelBurden model
+      if tokenText annotation `elem` ["none", "synthetic_context"]
+         && map tokenText [holder, kind, standard] == ["none", "none", "not_applicable"]
+      then pure () else at "SFE011" path annotation "invalid contextual burden"
+      requireSources path sourceIndex
+        [("src:fictional-rule", "source_text", "fictional/restricted-entry.txt")
+        ,("src:fictional-status", "synthetic_status", "fictional/classifications.txt")]
+      if length (modelQuotes model) < 5 then at "SFE014" path (modelIdentifier model) "five source quotes required" else pure ()
+      expect path "SFE017" (ruleIdentifier offence) "o:entry"
+      expect path "SFE017" (ruleIdentifier exception) "x:emergency-rescue"
+      expect path "SFE018" (maybe (ruleIdentifier exception) id (ruleTarget exception)) "o:entry"
+      if tokenText (ruleIdentifier offence) == tokenText (ruleIdentifier exception)
+        then at "SFE002" path (ruleIdentifier exception) "duplicate rule identity"
+        else pure ()
+      offenceTree <- checkedRule path quoteIndex offence
+        (Set.fromList ["conduct", "circumstance", "fault"])
+      exceptionTree <- checkedRule path quoteIndex exception
+        (Set.fromList ["circumstance", "purpose"])
+      let topIds = map tokenText [ruleIdentifier offence, ruleIdentifier exception,
+            ruleId offence, ruleId exception, ruleProgram offence, ruleProgram exception]
+          propIds = map (tokenText . identifier) (ruleGroups offence ++ ruleGroups exception)
+          leafIds = map (tokenText . elementId) (ruleElements offence ++ ruleElements exception)
+      if Set.size (Set.fromList (topIds ++ propIds ++ leafIds)) /= length (topIds ++ propIds ++ leafIds)
+        then at "SFE002" path (ruleIdentifier exception) "duplicate semantic identifier"
+        else pure ()
+      let expected = [("offence_requirements", treeId offenceTree)
+            ,("exception_applicable", treeId exceptionTree)
+            ,("defeated_branch", tokenText (ruleProgram offence))
+            ,("final_rule", tokenText (ruleId offence))]
+      if map (\(a,b) -> (tokenText a, tokenText b)) outputs /= expected
+        then at "SFE020" path (modelIdentifier model) "typed technical outputs differ"
+        else pure ()
+      assignments <- case supplied of
+        Nothing -> pure []
+        Just (scenarioPath, Scenario scenarioId modelId entries) -> do
+          expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
+          expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          checkAssignments scenarioPath
+            (ResolvedGroup (ruleIdentifier offence) All [offenceTree, exceptionTree]) entries
+      pure (Checked model (snd <$> supplied) assignments offenceTree (Just exceptionTree))
+
+first, second, third, fourth :: (a,a,a,a) -> a
+first (a,_,_,_) = a
+second (_,b,_,_) = b
+third (_,_,c,_) = c
+fourth (_,_,_,d) = d
+
+expect :: FilePath -> Text -> Token -> Text -> Either Diagnostic ()
+expect path code token wanted
+  | tokenText token == wanted = Right ()
+  | otherwise = at code path token ("expected " <> wanted)
+
+unique :: FilePath -> Text -> [(Token, a)] -> Either Diagnostic (Map.Map Text a)
+unique path code = go Map.empty
+  where
+    go seen [] = Right seen
+    go seen ((key,value):rest)
+      | Map.member (tokenText key) seen = at code path key "duplicate identifier"
+      | otherwise = go (Map.insert (tokenText key) value seen) rest
+
+sourceDeclarations :: FilePath -> [SourceDecl] -> Either Diagnostic (Map.Map Text (Text, Text))
+sourceDeclarations path rows = go Map.empty rows
+  where
+    go seen [] = Right seen
+    go seen (SourceDecl key role location:rest)
+      | Map.member (tokenText key) seen = at "SFE002" path key "duplicate source ID"
+      | Text.null (tokenText location)
+        || Text.isPrefixOf "/" (tokenText location)
+        || ".." `elem` Text.splitOn "/" (tokenText location) =
+          at "SFE015" path location "unsafe source reference"
+      | otherwise = go (Map.insert (tokenText key) (tokenText role, tokenText location) seen) rest
+
+requireSources :: FilePath -> Map.Map Text (Text, Text) -> [(Text, Text, Text)] -> Either Diagnostic ()
+requireSources path actual expected =
+  if actual == Map.fromList [(key,(role,location)) | (key,role,location) <- expected]
+  then Right () else at "SFE014" path (Token WordToken "source" 1 1) "source declarations differ from supported slice"
+
+sectionProp :: FilePath -> Map.Map Text Token -> Proposition -> Either Diagnostic ()
+sectionProp path quotes (Leaf key proposition quote support) = do
+  if "f:" `Text.isPrefixOf` tokenText key && maybe False ("P84-" `Text.isPrefixOf`) (tokenText <$> proposition)
+    then pure () else at "SFE005" path key "invalid section proposition ID"
+  mapM_ (knownQuote path quotes) (quote : maybe [] (:[]) support)
+sectionProp _ _ (Group _ _ _) = Right ()
+
+knownQuote :: FilePath -> Map.Map Text Token -> Token -> Either Diagnostic ()
+knownQuote path quotes token =
+  if Map.member (tokenText token) quotes then Right ()
+  else at "SFE003" path token "unknown source quote"
+
+treeId :: Resolved -> Text
+treeId (ResolvedLeaf token _) = tokenText token
+treeId (ResolvedGroup token _ _) = tokenText token
+
+checkedRule :: FilePath -> Map.Map Text Token -> Rule -> Set.Set Text -> Either Diagnostic Resolved
+checkedRule path quotes rule expected = do
+  let categories = map (tokenText . elementCategory) (ruleElements rule)
+  if Set.fromList categories /= expected || length categories /= Set.size expected
+    then at "SFE017" path (ruleIdentifier rule) "typed offence or exception elements differ"
+    else pure ()
+  mapM_ (\item -> do
+    if "f:" `Text.isPrefixOf` tokenText (elementId item) then pure ()
+      else at "SFE017" path (elementId item) "element requires fact ID"
+    knownQuote path quotes (elementQuote item)) (ruleElements rule)
+  let declarations = [Leaf (elementId item) Nothing (elementQuote item) Nothing
+        | item <- ruleElements rule] ++ ruleGroups rule
+  case reverse (ruleGroups rule) of
+    Group root _ _: _ -> resolveTree path declarations root
+    _ -> at "SFE007" path (ruleIdentifier rule) "root proposition missing"
+
+checkAssignments :: FilePath -> Resolved -> [Assignment] -> Either Diagnostic [(Token, Proof)]
+checkAssignments path tree rows = do
+  assigned <- go Map.empty rows
+  let leaves = Set.fromList (map tokenText (leafTokens tree))
+  if Map.keysSet assigned /= leaves
+    then at "SFE009" path (treeToken tree) "missing or unexpected supplied assignment"
+    else pure (Map.elems assigned)
+  where
+    go seen [] = Right seen
+    go seen (Assignment key status reason:rest)
+      | Map.member (tokenText key) seen = at "SFE002" path key "duplicate supplied assignment"
+      | otherwise = do
+          value <- proofStatus path status reason
+          go (Map.insert (tokenText key) (key, value) seen) rest
+    treeToken (ResolvedLeaf token _) = token
+    treeToken (ResolvedGroup token _ _) = token
+
+proofStatus :: FilePath -> Token -> Maybe Token -> Either Diagnostic Proof
+proofStatus path status reason = case tokenText status of
+  "proved" | reason == Nothing -> Right Proved
+  "not_proved" | reason == Nothing -> Right NotProved
+  "unresolved" -> case reason of
+    Just token | tokenText token `elem` ["not_determined", "external_decision_pending"] ->
+      Right (Unresolved (tokenText token))
+    _ -> at "SFE010" path status "unresolved requires supported reason"
+  _ -> at "SFE010" path status "invalid supplied proof classification"
