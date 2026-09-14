@@ -35,16 +35,16 @@ resolveTree path declarations root = do
           | not ("f:" `Text.isPrefixOf` key || "g:" `Text.isPrefixOf` key) ->
               at "SFE006" path token "incompatible proposition type"
           | otherwise -> at "SFE003" path token "unknown proposition reference"
-        Just (Leaf _ _ quote _) ->
+        Just (Leaf declared _ quote _) ->
           if "f:" `Text.isPrefixOf` key
-          then Right (ResolvedLeaf token quote, Set.insert key visited)
+          then Right (ResolvedLeaf declared quote, Set.insert key visited)
           else at "SFE005" path token "leaf requires fact identifier"
-        Just (Group _ combinator members) -> do
+        Just (Group declared combinator members) -> do
           if "g:" `Text.isPrefixOf` key && length members >= 2
           then pure () else at "SFE006" path token "invalid combinator or operands"
           (children, allVisited) <- foldMembers indexed (Set.insert key active)
             (Set.insert key visited) members []
-          Right (ResolvedGroup token combinator children, allVisited)
+          Right (ResolvedGroup declared combinator children, allVisited)
     foldMembers _ _ visited [] reversed = Right (reverse reversed, visited)
     foldMembers indexed active visited (member:rest) reversed = do
       (child, next) <- visit indexed active visited member
