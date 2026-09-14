@@ -79,6 +79,7 @@ library
       Yuho.Surface.AST
       Yuho.Surface.Parser
       Yuho.Surface.Resolve
+      Yuho.Surface.Definitions
       Yuho.Surface.Check
       Yuho.Surface.Lower
       Yuho.Surface.Compile

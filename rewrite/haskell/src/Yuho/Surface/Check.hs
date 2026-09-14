@@ -6,6 +6,9 @@ import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Yuho.Surface.AST
+import Yuho.Surface.Definitions
+  ( definitionIndex, definitionLeaves, reachableDefinitions, resolveDefinition
+  , resolveDefinitionRule )
 import Yuho.Surface.Resolve (resolveTree)
 import Yuho.Surface.Token
 
@@ -200,6 +203,160 @@ checkModel path model supplied = do
           assignments <- checkAssignments scenarioPath
             (ResolvedGroup (ruleIdentifier selected) All [offenceTree, exceptionTree]) entries
           pure (Checked model (Just scenario) assignments offenceTree (Just exceptionTree))
+    DefinitionsLegal definitions assumptions offences exceptions attachments declaredOutputs -> do
+      if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
+        then pure () else at "SFE004" path (modelIdentifier model) "research model ID required"
+      expect path "SFE004" (modelJurisdiction model) "Singapore"
+      expect path "SFE004" (modelPurpose model) "research_prototype"
+      expect path "SFE004" (modelDate model) "2026-09-13"
+      let BurdenAnnotation annotation holder burdenKind standard = modelBurden model
+      mapM_ (\(item,wanted) -> expect path "SFE011" item wanted)
+        [(annotation,"section107"),(holder,"defence"),(burdenKind,"legal"),
+         (standard,"balance_of_probabilities")]
+      requireRoles path sourceIndex
+      index <- definitionIndex path definitions
+      mapM_ (checkDefinition path quoteIndex index) definitions
+      declared <- checkMultiScope path offences assumptions
+      checkPrivateReferences path (offences ++ [item | GeneralException item <- exceptions])
+      checkedOffences <- mapM (\offence -> do
+        mapM_ (checkElementQuote path quoteIndex) (ruleElements offence)
+        checkSections path (ruleIdentifier offence) (ruleSections offence)
+        tree <- resolveDefinitionRule path index offence
+        checkDefinitionOffence path index offence tree
+        pure (offence, tree)) offences
+      checkedExceptions <- mapM (\(GeneralException exception) -> do
+        tree <- checkedLegalRule path quoteIndex exception
+        checkSharedExceptionShape path exception tree
+        pure (exception, tree)) exceptions
+      checkMultiIdentities path checkedOffences checkedExceptions
+      checkAttachments path checkedOffences checkedExceptions attachments
+      checkDefinitionIds path definitions offences exceptions
+      checkDefinitionOutputs path index checkedOffences checkedExceptions declaredOutputs
+      case supplied of
+        Nothing -> case (checkedOffences, checkedExceptions) of
+          ((_,tree):_, (_,exceptionTree):_) ->
+            pure (Checked model Nothing [] tree (Just exceptionTree))
+          _ -> at "SFE030" path (modelIdentifier model) "offence and exception required"
+        Just (scenarioPath, scenario@(Scenario scenarioId modelId entries acknowledgements targets)) -> do
+          expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
+          expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          target <- case targets of
+            [] -> at "SFE036" scenarioPath scenarioId "one analysis target required"
+            [item] -> pure item
+            item:second:_ -> atRelated "SFE037" scenarioPath second
+              "multiple analysis targets" scenarioPath item
+          (selected, offenceTree) <- case [row | row@(offence,_) <- checkedOffences,
+              tokenText (ruleIdentifier offence) == tokenText target] of
+            [row] -> pure row
+            _ -> at "SFE038" scenarioPath target "unknown candidate offence analysis target"
+          (_, exceptionTree) <- attachedException scenarioPath target
+            checkedExceptions attachments
+          let expectedAssumptions = Map.filter
+                (\(_,owner) -> maybe True (== tokenText target) owner) declared
+          checkScopeAcknowledgements scenarioPath path scenarioId
+            (Map.map fst expectedAssumptions) acknowledgements
+          let derived = Set.fromList
+                (map (tokenText . definitionId) definitions
+                ++ [tokenText item | definition <- definitions,
+                    DefinitionOutput item <- definitionOutputs definition])
+              selectedDefinitions = reachableDefinitions index selected
+              selectedLeaves = Set.fromList (map (tokenText . elementId)
+                (concatMap definitionLeaves selectedDefinitions))
+              allDefinitionLeaves = Set.fromList (map (tokenText . elementId)
+                (concatMap definitionLeaves definitions))
+              unreachable = allDefinitionLeaves `Set.difference` selectedLeaves
+              otherOffence = Set.fromList [tokenText (elementId item)
+                | offence <- offences, tokenText (ruleIdentifier offence) /= tokenText target,
+                  item <- ruleElements offence]
+          case [item | Assignment item _ _ <- entries,
+               Set.member (tokenText item) derived] of
+            item:_ -> at "SFE059" scenarioPath item "derived definition output cannot be assigned"
+            [] -> pure ()
+          case [item | Assignment item _ _ <- entries,
+               Set.member (tokenText item) (unreachable `Set.union` otherOffence)] of
+            item:_ -> at "SFE060" scenarioPath item
+              "assignment belongs only to an unselected or unreachable definition"
+            [] -> pure ()
+          let required = Set.fromList (map tokenText
+                (leafTokens offenceTree ++ leafTokens exceptionTree))
+              provided = Set.fromList [tokenText item | Assignment item _ _ <- entries]
+          if Set.null (required `Set.difference` provided) then pure ()
+            else at "SFE061" scenarioPath target
+              "missing reachable primitive classification"
+          assignments <- checkAssignments scenarioPath
+            (ResolvedGroup (ruleIdentifier selected) All [offenceTree,exceptionTree]) entries
+          pure (Checked model (Just scenario) assignments offenceTree (Just exceptionTree))
+
+checkElementQuote :: FilePath -> Map.Map Text Token -> Element -> Either Diagnostic ()
+checkElementQuote path quotes item = do
+  if "f:" `Text.isPrefixOf` tokenText (elementId item) then pure ()
+    else at "SFE017" path (elementId item) "primitive input requires f: identifier"
+  knownQuote path quotes (elementQuote item)
+  mapM_ (knownQuote path quotes) (maybe [] (:[]) (elementSupport item))
+
+checkDefinition :: FilePath -> Map.Map Text Token
+  -> Map.Map Text StatutoryDefinition -> StatutoryDefinition -> Either Diagnostic ()
+checkDefinition path quotes index definition = do
+  checkSections path (definitionId definition) (definitionSections definition)
+  mapM_ (checkElementQuote path quotes) (definitionLeaves definition)
+  _ <- resolveDefinition path index (definitionId definition)
+  pure ()
+
+checkDefinitionOffence :: FilePath -> Map.Map Text StatutoryDefinition
+  -> Rule -> Resolved -> Either Diagnostic ()
+checkDefinitionOffence path index offence tree = do
+  if ruleKind offence == OffenceKind then pure () else
+    at "SFE017" path (ruleIdentifier offence) "candidate offence required"
+  case (ruleDefinitionReferences offence, tree) of
+    ([DefinitionReference item _ VoluntaryHurt],
+      ResolvedGroup _ All [ResolvedGroup used All [_]])
+      | tokenText item == tokenText used && null (ruleElements offence) -> pure ()
+    ([DefinitionReference item _ Dishonesty],
+      ResolvedGroup _ All members)
+      | any (\node -> case node of
+          ResolvedGroup used All [_] -> tokenText used == tokenText item
+          _ -> False) members
+        && Set.fromList (map elementCategory (ruleElements offence)) ==
+          Set.fromList [MovableProperty,Possession,ConsentAbsence,Movement,MovementForTaking]
+        && length (ruleElements offence) == 5 -> pure ()
+    _ -> at "SFE062" path (ruleIdentifier offence)
+      "candidate offence must explicitly use its typed statutory definition"
+  let referenced = [item | DefinitionReference item _ _ <- ruleDefinitionReferences offence]
+  if all (\item -> Map.member (tokenText item) index) referenced then pure ()
+    else at "SFE053" path (ruleIdentifier offence) "unknown offence definition"
+
+checkDefinitionIds :: FilePath -> [StatutoryDefinition] -> [Rule]
+  -> [GeneralException] -> Either Diagnostic ()
+checkDefinitionIds path definitions offences exceptions = do
+  let definitionIds definition = definitionId definition
+        : map (elementId) (definitionLeaves definition)
+        ++ map identifier (definitionGroups definition)
+      ruleIds rule = [ruleIdentifier rule,ruleId rule,ruleProgram rule]
+        ++ map elementId (ruleElements rule) ++ map identifier (ruleGroups rule)
+      allIds = concatMap definitionIds definitions
+        ++ concatMap ruleIds offences
+        ++ concatMap (ruleIds . (\(GeneralException rule) -> rule)) exceptions
+  _ <- unique path "SFE002" [(item, ()) | item <- allIds]
+  pure ()
+
+checkDefinitionOutputs :: FilePath -> Map.Map Text StatutoryDefinition
+  -> [(Rule, Resolved)] -> [(Rule, Resolved)] -> [TechnicalOutput]
+  -> Either Diagnostic ()
+checkDefinitionOutputs path index offences exceptions rows = do
+  if null rows then at "SFE020" path (Token WordToken "outputs" 1 1)
+    "technical outputs required" else pure ()
+  _ <- unique path "SFE002" [(label, ()) | TechnicalOutput label _ <- rows]
+  let valid = Set.fromList
+        ([tokenText item | definition <- Map.elems index,
+           DefinitionOutput item <- definitionOutputs definition]
+        ++ [tokenText (ruleId rule) | (rule,_) <- offences]
+        ++ [tokenText (ruleIdentifier rule) | (rule,_) <- exceptions]
+        ++ [tokenText item | (rule,_) <- offences ++ exceptions,
+            Group item _ _ <- ruleGroups rule])
+  case [item | TechnicalOutput _ item <- rows,
+        not (Set.member (tokenText item) valid)] of
+    item:_ -> at "SFE020" path item "invalid technical-output reference"
+    [] -> pure ()
 
 expect :: FilePath -> Text -> Token -> Text -> Either Diagnostic ()
 expect path code token wanted

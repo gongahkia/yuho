@@ -122,7 +122,13 @@ elementOrGroup :: P (Either Element Proposition)
 elementOrGroup = do
   headToken <- word
   case tokenText headToken of
-    "element" -> do
+    "element" -> Left <$> typedElement
+    "all" -> Right <$> group headToken
+    "any" -> Right <$> group headToken
+    _ -> P $ \path _ -> at "SFE013" path headToken "unsupported rule declaration"
+
+typedElement :: P Element
+typedElement = do
       category <- word
       item <- word
       _ <- need "quote"
@@ -151,10 +157,97 @@ elementOrGroup = do
         "movement" -> pure Movement
         "movement-for-taking" -> pure MovementForTaking
         _ -> P $ \path _ -> at "SFE017" path category "invalid element category"
-      pure (Left (Element categoryKind category item quoteId support))
-    "all" -> Right <$> group headToken
-    "any" -> Right <$> group headToken
-    _ -> P $ \path _ -> at "SFE013" path headToken "unsupported rule declaration"
+      pure (Element categoryKind category item quoteId support)
+
+parseDefinitionKind :: P DefinitionKind
+parseDefinitionKind = do
+  item <- word
+  case tokenText item of
+    "hurt-result" -> pure HurtResult
+    "voluntary-hurt" -> pure VoluntaryHurt
+    "wrongful-gain" -> pure WrongfulGain
+    "wrongful-loss" -> pure WrongfulLoss
+    "dishonesty" -> pure Dishonesty
+    _ -> P $ \path _ -> at "SFE051" path item "invalid statutory-definition type"
+
+definitionReference :: P DefinitionReference
+definitionReference = do
+  _ <- need "use"
+  item <- word
+  _ <- need "as"
+  targetKind <- parseDefinitionKind
+  _ <- need ";"
+  pure (DefinitionReference item item targetKind)
+
+statutoryDefinition :: P StatutoryDefinition
+statutoryDefinition = do
+  _ <- need "statutory-definition"
+  item <- word
+  _ <- need "kind"
+  declaredKind <- parseDefinitionKind
+  _ <- need "sections"
+  first <- StatutorySection <$> word
+  more <- manyBefore "{" $ do
+    _ <- need ","
+    StatutorySection <$> word
+  _ <- need "{"
+  entries <- manyBefore "}" $ do
+    next <- current
+    case tokenText next of
+      "input" -> need "input" >> (DefinitionEntryInput . DefinitionInput <$> typedElement)
+      "mental-state" -> do
+        _ <- need "mental-state"
+        leaf <- word
+        _ <- need "kind"
+        kindToken <- word
+        mentalKind <- case tokenText kindToken of
+          "intention" -> pure MentalIntention
+          "knowledge" -> pure MentalKnowledge
+          _ -> P $ \path _ -> at "SFE052" path kindToken "invalid mental-state kind"
+        _ <- need "target"
+        target <- word
+        _ <- need "as"
+        targetKind <- parseDefinitionKind
+        _ <- need "quote"
+        quote <- word
+        _ <- need ";"
+        let category = case mentalKind of
+              MentalIntention -> Intention
+              MentalKnowledge -> Knowledge
+            element = Element category kindToken leaf quote Nothing
+        pure (DefinitionEntryMental (MentalStateInput element mentalKind target targetKind))
+      "use" -> DefinitionEntryReference <$> definitionReference
+      "all" -> need "all" >>= \headToken -> DefinitionEntryGroup <$> group headToken
+      "any" -> need "any" >>= \headToken -> DefinitionEntryGroup <$> group headToken
+      "output" -> do
+        _ <- need "output"
+        output <- word
+        _ <- need ";"
+        pure (DefinitionEntryOutput (DefinitionOutput output))
+      _ -> P $ \path _ -> at "SFE051" path next "unsupported statutory-definition declaration"
+  _ <- need "}"
+  pure (StatutoryDefinition item declaredKind (first:more)
+    [value | DefinitionEntryInput value <- entries]
+    [value | DefinitionEntryMental value <- entries]
+    [value | DefinitionEntryReference value <- entries]
+    [value | DefinitionEntryGroup value <- entries]
+    [value | DefinitionEntryOutput value <- entries])
+
+data DefinitionEntry = DefinitionEntryInput DefinitionInput
+  | DefinitionEntryMental MentalStateInput
+  | DefinitionEntryReference DefinitionReference
+  | DefinitionEntryGroup Proposition
+  | DefinitionEntryOutput DefinitionOutput
+
+data RuleEntry = RuleElement Element | RuleGroup Proposition | RuleReference DefinitionReference
+
+ruleEntry :: P RuleEntry
+ruleEntry = do
+  next <- current
+  if tokenText next == "use" then RuleReference <$> definitionReference
+  else do
+    declaration <- elementOrGroup
+    pure (either RuleElement RuleGroup declaration)
 
 rule :: Text -> P Rule
 rule role = do
@@ -179,10 +272,12 @@ rule role = do
     pure (first : rest)
     else pure []
   _ <- need "{"
-  declarations <- manyBefore "}" elementOrGroup
+  declarations <- manyBefore "}" ruleEntry
   _ <- need "}"
   pure (Rule (if role == "offence" then OffenceKind else ExceptionKind) headToken item target declaredRule programId path
-    sections [value | Left value <- declarations] [value | Right value <- declarations])
+    sections [value | RuleElement value <- declarations]
+    [value | RuleGroup value <- declarations]
+    [value | RuleReference value <- declarations])
 
 provenance :: P ([SourceDecl], Maybe Token, [(Token, Token)])
 provenance = do
@@ -296,7 +391,22 @@ body = do
       Nothing -> pure ()
     burden <- annotations
     bodyNext <- current
-    if tokenText bodyNext == "scope-assumptions" then do
+    if tokenText bodyNext == "definitions" then do
+      _ <- need "definitions"
+      _ <- need "{"
+      definitions <- manyBefore "}" statutoryDefinition
+      _ <- need "}"
+      assumptions <- scopeAssumptions
+      offence <- rule "offence"
+      moreOffences <- whileWord "offence" (rule "offence")
+      exceptions <- whileWord "general-exception"
+        (GeneralException <$> rule "general-exception")
+      attachments <- whileWord "attach" attachment
+      declaredOutputs <- outputs
+      pure (sources, quotes, burden,
+        DefinitionsLegal definitions assumptions (offence:moreOffences)
+          exceptions attachments declaredOutputs)
+    else if tokenText bodyNext == "scope-assumptions" then do
       assumptions <- scopeAssumptions
       offence <- rule "offence"
       moreOffences <- whileWord "offence" (rule "offence")

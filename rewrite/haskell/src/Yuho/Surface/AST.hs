@@ -2,6 +2,8 @@ module Yuho.Surface.AST
   ( Combinator(..), Category(..), RuleKind(..), Proof(..), Assignment(..), SourceDecl(..)
   , ScopeAssumption(..), ScopeAcknowledgement(..), GeneralException(..), Attachment(..)
   , StatutorySection(..)
+  , DefinitionKind(..), DefinitionInput(..), DefinitionOutput(..), DefinitionReference(..)
+  , MentalStateKind(..), MentalStateInput(..), StatutoryDefinition(..)
   , BurdenAnnotation(..), TechnicalOutput(..), Proposition(..), Element(..), Rule(..), Body(..), Model(..), Scenario(..)
   , Resolved(..), Checked(..), identifier, leafTokens ) where
 
@@ -27,6 +29,24 @@ data Attachment = Attachment Token Token Token deriving (Eq, Show)
 newtype StatutorySection = StatutorySection Token deriving (Eq, Show)
 data BurdenAnnotation = BurdenAnnotation Token Token Token Token deriving (Eq, Show)
 data TechnicalOutput = TechnicalOutput Token Token deriving (Eq, Show)
+data DefinitionKind = HurtResult | VoluntaryHurt | WrongfulGain | WrongfulLoss
+  | Dishonesty deriving (Eq, Ord, Show)
+newtype DefinitionInput = DefinitionInput Element deriving (Eq, Show)
+newtype DefinitionOutput = DefinitionOutput Token deriving (Eq, Show)
+data DefinitionReference = DefinitionReference Token Token DefinitionKind
+  deriving (Eq, Show)
+data MentalStateKind = MentalIntention | MentalKnowledge deriving (Eq, Show)
+data MentalStateInput = MentalStateInput Element MentalStateKind Token DefinitionKind
+  deriving (Eq, Show)
+data StatutoryDefinition = StatutoryDefinition
+  { definitionId :: Token, definitionKind :: DefinitionKind
+  , definitionSections :: [StatutorySection]
+  , definitionInputs :: [DefinitionInput]
+  , definitionMentalStates :: [MentalStateInput]
+  , definitionReferences :: [DefinitionReference]
+  , definitionGroups :: [Proposition]
+  , definitionOutputs :: [DefinitionOutput] }
+  deriving (Eq, Show)
 data Proposition = Leaf Token (Maybe Token) Token (Maybe Token)
   | Group Token Combinator [Token] deriving (Eq, Show)
 data Element = Element
@@ -37,12 +57,15 @@ data Rule = Rule
   { ruleKind :: RuleKind, ruleKindSource :: Token, ruleIdentifier :: Token, ruleTarget :: Maybe Token
   , ruleId :: Token, ruleProgram :: Token, rulePath :: Token
   , ruleSections :: [StatutorySection]
-  , ruleElements :: [Element], ruleGroups :: [Proposition] }
+  , ruleElements :: [Element], ruleGroups :: [Proposition]
+  , ruleDefinitionReferences :: [DefinitionReference] }
   deriving (Eq, Show)
 data Body = Section Token Token Token Token Token [Proposition] [Assignment]
   | Synthetic Rule Rule [TechnicalOutput]
   | Legal [ScopeAssumption] Rule Rule [TechnicalOutput]
   | MultiLegal [ScopeAssumption] [Rule] [GeneralException] [Attachment] [TechnicalOutput]
+  | DefinitionsLegal [StatutoryDefinition] [ScopeAssumption] [Rule]
+      [GeneralException] [Attachment] [TechnicalOutput]
   deriving (Eq, Show)
 data Model = Model
   { modelIdentifier :: Token

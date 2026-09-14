@@ -7,6 +7,7 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 import Yuho.Protocol.Json (decodeJson)
 import Yuho.Surface.AST
+import Yuho.Surface.Definitions (reachableDefinitions)
 import Yuho.Surface.Lower (lowerChecked)
 import Yuho.Surface.Token (Diagnostic, Token(..), at)
 import Yuho.SuppliedProofStatus.Decode (decodeProofRequest)
@@ -21,10 +22,10 @@ explainChecked :: FilePath -> Checked -> Either Diagnostic Text
 explainChecked path checked@(Checked model scenario assignments offenceTree exceptionTree) =
   case (scenario, exceptionTree) of
     (Just (Scenario _ _ _ acknowledgements targets), Just defenceTree) -> do
-      (offence, exception, introduction, sourceReferences, offenceHeading) <-
+      (offence, exception, introduction, definitionLines, sourceReferences, offenceHeading) <-
         case modelBody model of
           Legal _ selected shared _ | null targets -> Right
-            (selected, shared, [], [], "Candidate offence chain (Penal Code ss 319, 321, 323):")
+            (selected, shared, [], [], [], "Candidate offence chain (Penal Code ss 319, 321, 323):")
           MultiLegal _ offences exceptions attachments _ -> case targets of
             [target] -> case [(selected, shared) | selected <- offences,
               tokenText (ruleIdentifier selected) == tokenText target,
@@ -41,6 +42,7 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
                  ,"Attachment: s " <> sectionList (ruleSections shared)
                     <> " -> candidate " <> tokenText target
                  ,"Definition instance: shared " <> tokenText (ruleIdentifier shared)],
+                 [],
                  ["  " <> tokenText (elementId item) <> " -> "
                    <> tokenText (elementQuote item)
                    <> maybe "" (\support -> " + " <> tokenText support) (elementSupport item)
@@ -48,6 +50,44 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
                  "Selected candidate offence requirements:")
               _ -> at "SFE040" path target "selected exception attachment is not unique"
             _ -> at "SFE036" path (modelIdentifier model) "one analysis target required"
+          DefinitionsLegal definitions _ offences exceptions attachments _ ->
+            case targets of
+              [target] -> case [(selected, shared) | selected <- offences,
+                tokenText (ruleIdentifier selected) == tokenText target,
+                Attachment _ exceptionId owner <- attachments,
+                tokenText owner == tokenText target,
+                GeneralException shared <- exceptions,
+                tokenText (ruleIdentifier shared) == tokenText exceptionId] of
+                [(selected, shared)] ->
+                  let index = Map.fromList [(tokenText (definitionId item), item)
+                        | item <- definitions]
+                      selectedDefinitions = reachableDefinitions index selected
+                      describe definition =
+                        ["Statutory definition: " <> tokenText (definitionId definition)
+                          <> " — Penal Code s " <> sectionList (definitionSections definition)
+                        ,"  Derived output: " <> Text.intercalate ", "
+                          [tokenText item | DefinitionOutput item <- definitionOutputs definition]
+                        ] ++ ["  Mental-state target: " <> tokenText (elementId element)
+                          <> " -> " <> tokenText targetId <> " (type-checked; not an executable dependency)"
+                          | MentalStateInput element _ targetId _ <- definitionMentalStates definition]
+                  in Right
+                    (selected, shared,
+                     ["Selected candidate offence: " <> tokenText target
+                     ,"Candidate statutory sections: Penal Code ss " <>
+                       sectionList (ruleSections selected)
+                     ,"General exception: Penal Code s " <> sectionList (ruleSections shared)
+                     ,"Attachment: s " <> sectionList (ruleSections shared)
+                       <> " -> candidate " <> tokenText target
+                     ,"Definition instance: shared " <> tokenText (ruleIdentifier shared)],
+                     concatMap describe selectedDefinitions ++
+                       ["Referenced by: " <> tokenText (ruleIdentifier selected)],
+                     ["  " <> tokenText (elementId item) <> " -> "
+                       <> tokenText (elementQuote item)
+                       <> maybe "" (\support -> " + " <> tokenText support) (elementSupport item)
+                      | item <- ruleElements shared],
+                     "Selected candidate offence requirements:")
+                _ -> at "SFE040" path target "selected exception attachment is not unique"
+              _ -> at "SFE036" path (modelIdentifier model) "one analysis target required"
           _ -> at "SFE013" path (modelIdentifier model)
             "explain requires a checked research offence model and scenario"
       request <- lowerChecked checked
@@ -81,6 +121,7 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
             ] ++ introduction ++
             ["Scope assumptions: acknowledged by scenario, not inferred or proved"]
             ++ map ("  " <>) acknowledged
+            ++ definitionLines
             ++ [offenceHeading]
             ++ renderTree 1 supplied offenceValues offenceTree
             ++ ["Section 84 general exception:"]
