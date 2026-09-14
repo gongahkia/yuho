@@ -530,7 +530,11 @@ checkActorScoped path model supplied quotes sources = case modelBody model of
       mapM_ (\(item,wanted) -> expect path "SFE011" item wanted)
         [(annotation,"section107"),(holder,"defence"),(burdenKind,"legal"),
          (standard,"balance_of_probabilities")]
-      requireRoles path sources
+      if Set.fromList (map fst (Map.elems sources)) ==
+          Set.fromList ["source_text", "synthetic_status", "contextual"]
+          && Map.size sources == 3 then pure () else
+        at "SFE014" path (modelIdentifier model)
+          "actor-scoped model requires source, synthetic status and contextual authority"
       _ <- unique path "SFE063" [(item,()) | PartyRole item _ <- roles]
       let roleKind wanted = [item | PartyRole item kind <- roles, kind == wanted]
       (principal,abettor,attempter) <- case

@@ -1,0 +1,151 @@
+// Research POC. All actors and classifications are synthetic.
+model SingaporePenalCodeActorScopedSection84ResearchPrototype-v1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Singapore;
+  purpose research_prototype;
+  request X00;
+  policy 2026-09-13 1024;
+
+  provenance {
+    source src:pc source_text "research/actor-exceptions/short-excerpts.txt";
+    source src:synthetic synthetic_status "research/actor-exceptions/synthetic-status.txt";
+    source src:ea contextual "research/actor-exceptions/evidence-act-context.txt";
+    quote q:movable "any movable property";
+    quote q:possession "out of the possession of any person";
+    quote q:consent "without that person’s consent";
+    quote q:dishonest "intending to take dishonestly";
+    quote q:moves "moves that property";
+    quote q:for-taking "in order to such taking";
+    quote q:aid-act "intentionally aids, by any act";
+    quote q:aid-omission "or illegal omission";
+    quote q:intends-aid "intentionally aids";
+    quote q:aid-link "facilitates the commission thereof";
+    quote q:consequence "act abetted is committed in consequence of the abetment";
+    quote q:intends-target "with the intention of committing that offence";
+    quote q:substantial-step "takes a substantial step towards the commission of that offence";
+    quote q:time "at the time of doing it, by reason of unsoundness of mind";
+    quote q:nature "incapable of knowing the nature of the act";
+    quote q:wrong-operator "incapable of knowing that what he is doing is wrong";
+    quote q:control "completely deprived of any power to control his actions";
+    quote q:ordinary "is wrong by the ordinary standards of reasonable and honest persons";
+    quote q:law "is wrong as contrary to law";
+  }
+
+  annotations { burden section107 defence legal balance_of_probabilities; }
+
+  party-roles {
+    party-role role:principal;
+    party-role role:alleged-abettor;
+    party-role role:alleged-attempter;
+  }
+
+  definitions {}
+
+  actor-attributions {
+    fact f:movable-property to role:principal;
+    fact f:another-possession to role:principal;
+    fact f:without-consent to role:principal;
+    mental-state f:dishonest-intention to role:principal;
+    fact f:property-moved to role:principal;
+    fact f:moved-for-taking to role:principal;
+    mental-state f:intends-aid to role:alleged-abettor;
+    fact f:aid-by-act to role:alleged-abettor;
+    fact f:aid-by-illegal-omission to role:alleged-abettor;
+    relation-fact f:aid-link to rel:aid;
+    relation-fact f:consequence to rel:aid;
+  }
+
+  scope-assumptions {
+    scope-assumption a:post-2022-section-84-expression-applicable;
+    scope-assumption a:dishonesty-externally-classified;
+    scope-assumption a:only-intentional-aid-route;
+    scope-assumption a:principal-theft-requirements-separately-supplied;
+    scope-assumption a:broader-section108-cases-excluded;
+    scope-assumption a:no-express-punishment-provision-modelled;
+    scope-assumption a:direct-self-attempt-only;
+    scope-assumption a:target-not-completed;
+    scope-assumption a:no-express-attempt-punishment-provision-modelled;
+    scope-assumption a:punishment-outside-scope;
+    scope-assumption a:statutory-expression-supplied;
+    scope-assumption a:stage-externally-classified;
+    scope-assumption a:impossible-attempts-excluded;
+  }
+
+  offence o:theft rule r:section379-candidate program p:section379 path section379 sections 378,379 {
+    element movable-property f:movable-property quote q:movable;
+    element possession f:another-possession quote q:possession;
+    element consent-absence f:without-consent quote q:consent;
+    element dishonest-intention f:dishonest-intention quote q:dishonest;
+    element movement f:property-moved quote q:moves;
+    element movement-for-taking f:moved-for-taking quote q:for-taking;
+    all g:theft-requirements (f:movable-property, f:another-possession, f:without-consent, f:dishonest-intention, f:property-moved, f:moved-for-taking);
+  }
+
+  participation p:intentional-aid route intentional-aid target o:theft rule r:section109-candidate program p:section109 path section109 sections 107,108,109 {
+    relation rel:aid from role:alleged-abettor to role:principal target o:theft status f:aid-link quote q:aid-link;
+    element intention f:intends-aid quote q:intends-aid;
+    element aid-act f:aid-by-act quote q:aid-act;
+    element illegal-omission f:aid-by-illegal-omission quote q:aid-omission;
+    element consequence f:consequence quote q:consequence;
+    any g:aid-form (f:aid-by-act, f:aid-by-illegal-omission);
+    all g:intentional-aid (f:intends-aid, f:aid-link, g:aid-form);
+    all g:section109 (g:theft-requirements, g:intentional-aid, f:consequence);
+  }
+
+  attempt attempt:theft route direct-self actor role:alleged-attempter target o:theft rule r:section511-candidate program p:section511 path section511 sections 511 {
+    mental-state f:intends-target actor role:alleged-attempter kind intention target o:theft quote q:intends-target;
+    conduct-stage stage:theft-conduct actor role:alleged-attempter output f:substantial-step quote q:substantial-step;
+    all g:attempt-requirements (f:intends-target, f:substantial-step);
+  }
+
+  general-exception x:section84 subject subject:actor rule r:section84 program p:section84 path section84 sections 84 {
+    element unsoundness f:unsoundness-time quote q:time;
+    element causation f:nature-causation quote q:time;
+    element nature-incapacity f:nature-incapacity quote q:nature;
+    element causation f:wrong-causation quote q:time;
+    element ordinary-wrongfulness f:ordinary-wrongfulness-incapacity quote q:ordinary support q:wrong-operator;
+    element contrary-law-wrongfulness f:contrary-law-incapacity quote q:law support q:wrong-operator;
+    element causation f:control-causation quote q:time;
+    element control-incapacity f:control-incapacity quote q:control;
+    all g:nature (f:nature-causation, f:nature-incapacity);
+    all g:wrongfulness (f:wrong-causation, f:ordinary-wrongfulness-incapacity, f:contrary-law-incapacity);
+    all g:control (f:control-causation, f:control-incapacity);
+    any g:section84-routes (g:nature, g:wrongfulness, g:control);
+    all g:section84-requirements (f:unsoundness-time, g:section84-routes);
+  }
+
+  attach x:section84 to offence o:theft for role:principal context principal-conduct as xi:principal-section84;
+  attach x:section84 to participation p:intentional-aid for role:alleged-abettor context aid-conduct as xi:abettor-section84;
+  attach x:section84 to attempt attempt:theft for role:alleged-attempter context attempt-conduct as xi:attempter-section84;
+
+  authorities {
+    authority theft-conduct PenalCode1871 src:pc section 378;
+    authority theft-anchor PenalCode1871 src:pc section 379;
+    authority aid PenalCode1871 src:pc section 107;
+    authority abettor PenalCode1871 src:pc section 108;
+    authority consequence PenalCode1871 src:pc section 109;
+    authority attempt PenalCode1871 src:pc section 511;
+    authority general-exception PenalCode1871 src:pc section 84;
+    authority burden-context EvidenceAct1893 src:ea section 107;
+  }
+
+  outputs {
+    principal_requirements g:theft-requirements;
+    principal_section84 xi:principal-section84;
+    principal_final r:section379-candidate;
+    abettor_requirements g:section109;
+    abettor_section84 xi:abettor-section84;
+    abettor_final r:section109-candidate;
+    attempter_requirements g:attempt-requirements;
+    attempter_section84 xi:attempter-section84;
+    attempter_final r:section511-candidate;
+  }
+
+  limitations {
+    "Synthetic actors and externally supplied classifications only";
+    "Each section 84 instance has its own actor and relevant act context";
+    "The principal's section 84 status does not determine abettor or attempter status";
+    "No evidence assessment, statutory-expression selection, diagnosis or judicial outcome";
+    "No legal advice, guilt, conviction, acquittal or sentence";
+  }
+}
