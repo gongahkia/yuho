@@ -1,0 +1,22 @@
+// Wholly synthetic supplied classifications; no actual person or proceeding.
+scenario D00 for SingaporePenalCodeStatutoryDefinitionsResearchPrototype-v1 {
+  analyse o:voluntary-hurt;
+  assume a:post-2022-section-84-expression-applicable;
+  assume a:outside-section-323A;
+  assume a:outside-section-334;
+  f:unsoundness-time = not_proved;
+  f:nature-causation = not_proved;
+  f:nature-incapacity = not_proved;
+  f:wrong-causation = not_proved;
+  f:ordinary-wrongfulness-incapacity = not_proved;
+  f:contrary-law-incapacity = not_proved;
+  f:control-causation = not_proved;
+  f:control-incapacity = not_proved;
+  f:bodily-pain = not_proved;
+  f:disease = proved;
+  f:infirmity = not_proved;
+  f:act-performed = proved;
+  f:hurt-caused-by-act = proved;
+  f:intention-to-cause-hurt = proved;
+  f:knowledge-hurt-likely = not_proved;
+}

@@ -1,0 +1,59 @@
+Model: SingaporePenalCodeStatutoryDefinitionsResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Selected candidate offence: o:voluntary-hurt
+Candidate statutory sections: Penal Code ss 321, 323
+General exception: Penal Code s 84
+Attachment: s 84 -> candidate o:voluntary-hurt
+Definition instance: shared x:section84
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:post-2022-section-84-expression-applicable
+  a:outside-section-323A
+  a:outside-section-334
+Statutory definition: d:voluntarily-causing-hurt — Penal Code s 321
+  Derived output: g:voluntarily-causing-hurt
+  Mental-state target: f:intention-to-cause-hurt -> d:hurt (type-checked; not an executable dependency)
+  Mental-state target: f:knowledge-hurt-likely -> d:hurt (type-checked; not an executable dependency)
+Statutory definition: d:hurt — Penal Code s 319
+  Derived output: g:hurt
+Referenced by: o:voluntary-hurt
+Selected candidate offence requirements:
+  g:section323-requirements — all; technical satisfied
+    d:voluntarily-causing-hurt — all; technical satisfied
+      g:voluntarily-causing-hurt — all; technical satisfied
+        f:act-performed — supplied proved; technical satisfied
+        d:hurt — all; technical satisfied
+          g:hurt — any; technical satisfied
+            f:bodily-pain — supplied proved; technical satisfied
+            f:disease — supplied not_proved; technical not_satisfied
+            f:infirmity — supplied not_proved; technical not_satisfied
+        f:hurt-caused-by-act — supplied proved; technical satisfied
+        g:section321-fault — any; technical satisfied
+          f:intention-to-cause-hurt — supplied proved; technical satisfied
+          f:knowledge-hurt-likely — supplied not_proved; technical not_satisfied
+Section 84 general exception:
+  g:section84-requirements — all; technical not_satisfied
+    f:unsoundness-time — supplied not_proved; technical not_satisfied
+    g:section84-routes — any; technical not_satisfied
+      g:nature — all; technical not_satisfied
+        f:nature-causation — supplied not_proved; technical not_satisfied
+        f:nature-incapacity — supplied not_proved; technical not_satisfied
+      g:wrongfulness — all; technical not_satisfied
+        f:wrong-causation — supplied not_proved; technical not_satisfied
+        f:ordinary-wrongfulness-incapacity — supplied not_proved; technical not_satisfied
+        f:contrary-law-incapacity — supplied not_proved; technical not_satisfied
+      g:control — all; technical not_satisfied
+        f:control-causation — supplied not_proved; technical not_satisfied
+        f:control-incapacity — supplied not_proved; technical not_satisfied
+Section 84 source references:
+  f:unsoundness-time -> q:time
+  f:nature-causation -> q:time
+  f:nature-incapacity -> q:nature
+  f:wrong-causation -> q:time
+  f:ordinary-wrongfulness-incapacity -> q:ordinary + q:wrong-operator
+  f:contrary-law-incapacity -> q:law + q:wrong-operator
+  f:control-causation -> q:time
+  f:control-incapacity -> q:control
+Section 84 kernel rule: not_satisfied
+Section 107 context: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: satisfied (candidate requirements technically satisfied; no section 84 defeat)
+No guilt, conviction, acquittal or sentence was determined.

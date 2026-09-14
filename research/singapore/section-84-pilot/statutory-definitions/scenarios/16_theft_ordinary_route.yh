@@ -1,0 +1,23 @@
+// Wholly synthetic supplied classifications; no actual person or proceeding.
+scenario D00 for SingaporePenalCodeStatutoryDefinitionsResearchPrototype-v1 {
+  analyse o:theft;
+  assume a:post-2022-section-84-expression-applicable;
+  assume a:bounded-section-23-and-24-classifications;
+  f:unsoundness-time = not_proved;
+  f:nature-causation = not_proved;
+  f:nature-incapacity = not_proved;
+  f:wrong-causation = not_proved;
+  f:ordinary-wrongfulness-incapacity = not_proved;
+  f:contrary-law-incapacity = not_proved;
+  f:control-causation = not_proved;
+  f:control-incapacity = not_proved;
+  f:movable-property = proved;
+  f:another-possession = proved;
+  f:without-consent = proved;
+  f:property-moved = proved;
+  f:moved-for-taking = proved;
+  f:intends-wrongful-gain = not_proved;
+  f:intends-wrongful-loss = not_proved;
+  f:act-dishonest-ordinary-standards = proved;
+  f:knows-act-dishonest-ordinary-standards = proved;
+}

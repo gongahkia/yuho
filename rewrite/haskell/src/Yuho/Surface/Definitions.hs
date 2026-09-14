@@ -102,7 +102,18 @@ resolveLocal path definitions active owner elements mental references groups roo
         | Set.member (tokenText item) private = at "SFE058" path item
             "direct access to a definition's private proposition"
         | otherwise = at "SFE003" path item "unknown proposition or undeclared definition reference"
-  walk Set.empty root
+  tree <- walk Set.empty root
+  let used = treeIds tree
+      unused = Set.fromList allIds `Set.difference` used
+  case Set.toAscList unused of
+    item:_ -> at "SFE058" path (Token WordToken item (tokenLine owner) (tokenColumn owner))
+      "declared input, proposition or definition reference is not reachable from output"
+    [] -> Right tree
+
+treeIds :: Resolved -> Set Text
+treeIds (ResolvedLeaf item _) = Set.singleton (tokenText item)
+treeIds (ResolvedGroup item _ members) =
+  Set.insert (tokenText item) (Set.unions (map treeIds members))
 
 checkReference :: FilePath -> Map Text StatutoryDefinition -> DefinitionReference
   -> Either Diagnostic ()
