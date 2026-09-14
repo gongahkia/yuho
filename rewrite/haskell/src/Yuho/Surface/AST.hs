@@ -14,6 +14,7 @@ module Yuho.Surface.AST
   , TargetCompletion(..)
   , ExceptionSubject(..), ActorExceptionDefinition(..), AttachmentTargetKind(..)
   , ActContext(..), ActorExceptionAttachment(..), ScopedExceptionAssignment(..)
+  , ExceptionTechnicalStatus(..), ActorScopedExceptionResult(..)
   , BurdenAnnotation(..), TechnicalOutput(..), Proposition(..), Element(..), Rule(..), Body(..), Model(..), Scenario(..)
   , Resolved(..), Checked(..), identifier, leafTokens ) where
 
@@ -121,6 +122,10 @@ data ScopedExceptionAssignment = ScopedExceptionAssignment
   , scopedAssignmentActor :: Token, scopedAssignmentContext :: ActContext
   , scopedAssignmentStatus :: Token, scopedAssignmentReason :: Maybe Token }
   deriving (Eq, Show)
+data ExceptionTechnicalStatus = ExceptionSatisfied | ExceptionNotSatisfied
+  | ExceptionUnresolved | ExceptionNotEvaluated deriving (Eq, Show)
+data ActorScopedExceptionResult = ActorScopedExceptionResult
+  ActorExceptionAttachment ExceptionTechnicalStatus deriving (Eq, Show)
 data Proposition = Leaf Token (Maybe Token) Token (Maybe Token)
   | Group Token Combinator [Token] deriving (Eq, Show)
 data Element = Element

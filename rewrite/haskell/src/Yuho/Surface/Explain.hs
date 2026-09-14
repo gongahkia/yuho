@@ -6,6 +6,7 @@ import Data.Map.Strict (Map)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Yuho.Protocol.Json (decodeJson)
+import Yuho.Exception.Types (Truth(..))
 import Yuho.Surface.AST
 import Yuho.Surface.ActorExceptions
   ( actContextToken, attachmentRuleId, attachmentTargetToken, sharedExceptionTree )
@@ -67,6 +68,12 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
               | (item,status) <- assignments]
             selectedTrace = traceValues selectedResult
             exceptionTrace = maybe Map.empty traceValues exceptionResult
+            ActorScopedExceptionResult _ scopedStatus = ActorScopedExceptionResult attachment
+              (case fmap proofRuleStatus exceptionResult of
+                Just TrueValue -> ExceptionSatisfied
+                Just FalseValue -> ExceptionNotSatisfied
+                Just UnresolvedValue -> ExceptionUnresolved
+                Nothing -> ExceptionNotEvaluated)
             BurdenAnnotation annotation holder burdenKind standard = modelBurden model
             otherLine item =
               let instanceId = attachmentInstanceId item
@@ -110,8 +117,12 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
               ++ renderScopedTree 1 supplied exceptionTrace authoredTree scopedExceptionTree ++
               ["Section 84 source references:"] ++ sourceLines ++
               ["Selected section 84 instance status: "
-                <> maybe "not_evaluated (selected branch did not satisfy its requirements)"
-                  (satisfactionText . proofRuleStatus) exceptionResult
+                <> case scopedStatus of
+                  ExceptionSatisfied -> "satisfied"
+                  ExceptionNotSatisfied -> "not_satisfied"
+                  ExceptionUnresolved -> "unresolved"
+                  ExceptionNotEvaluated ->
+                    "not_evaluated (selected branch did not satisfy its requirements)"
               ,"Other actor instances:"]
               ++ [otherLine item | item <- attachments,
                    tokenText (attachmentInstanceId item) /= tokenText selectedInstance] ++

@@ -79,8 +79,9 @@ runActorExceptionSurfaceChecks root = do
           (not ("actor:principal-1" `BS.isInfixOf` request)
             && not ("a:post-2022-section-84-expression-applicable" `BS.isInfixOf` request))
         case explainChecked modelPath checked of
-          Right explanation -> check (name <> " actor-scoped explanation")
-            ("Definition: x:section84" `Text.isInfixOf` explanation
+          Right explanation -> check (name <> " deterministic actor-scoped explanation")
+            (explainChecked modelPath checked == Right explanation
+              && "Definition: x:section84" `Text.isInfixOf` explanation
               && ("General exception instance: " <> instanceId) `Text.isInfixOf` explanation
               && "Other actor instances:" `Text.isInfixOf` explanation
               && "No guilt, conviction, acquittal" `Text.isInfixOf` explanation)
@@ -113,8 +114,11 @@ runActorExceptionSurfaceChecks root = do
         && not ("f:attempter-section84--unsoundness-time" `BS.isInfixOf` request))
     _ -> check "observed instance case exists" False
   baseScenario <- BS.readFile (scenarioPath "01_principal_not_established")
+  attempterScenario <- BS.readFile (scenarioPath "10_attempter_not_established")
   let scenarioError old new = errorCode (checkSource modelPath source
         (Just (scenarioPath "invalid",replace old new baseScenario)))
+      attempterError old new = errorCode (checkSource modelPath source
+        (Just (scenarioPath "invalid",replace old new attempterScenario)))
       modelError old new = errorCode (checkSource modelPath (replace old new source) Nothing)
       refuse label actual wanted = check label (actual == Just wanted)
   refuse "unqualified section 84 classification" (scenarioError
@@ -124,6 +128,9 @@ runActorExceptionSurfaceChecks root = do
     "xi:principal-section84 f:unsoundness-time" "xi:unknown f:unsoundness-time") "SFE089"
   refuse "wrong subject actor" (scenarioError
     "f:unsoundness-time by actor:principal-1" "f:unsoundness-time by actor:participant-1") "SFE091"
+  refuse "attempter instance cannot use principal status" (attempterError
+    "f:unsoundness-time by actor:attempt-actor-1"
+    "f:unsoundness-time by actor:principal-1") "SFE091"
   refuse "wrong act context" (scenarioError
     "f:unsoundness-time by actor:principal-1 context principal-conduct"
     "f:unsoundness-time by actor:principal-1 context aid-conduct") "SFE092"
@@ -136,6 +143,11 @@ runActorExceptionSurfaceChecks root = do
     "to offence o:theft for role:principal" "to offence f:movable-property for role:principal") "SFE087"
   refuse "duplicate instance ID" (modelError
     "as xi:abettor-section84;" "as xi:principal-section84;") "SFE089"
+  refuse "unknown exception definition in attachment" (modelError
+    "attach x:section84 to offence" "attach x:unknown to offence") "SFE089"
+  refuse "missing explicit attachment" (modelError
+    "  attach x:section84 to attempt attempt:theft for role:alleged-attempter context attempt-conduct as xi:attempter-section84;\n"
+    "") "SFE089"
   refuse "scenario cannot rebind attachment" (scenarioError
     "  analyse o:theft;" "  analyse o:theft;\n  attach x:section84 to offence o:theft;") "SFE096"
   refuse "cross-instance graph reference" (modelError
@@ -154,7 +166,7 @@ runActorExceptionSurfaceChecks root = do
       baseScenario)) of
       Left _ -> True
       Right _ -> False
-  putStrLn "actor-scoped section 84: 16 technical scenarios and 13 refusals passed"
+  putStrLn "actor-scoped section 84: 16 technical scenarios and 16 refusals passed"
 
 check :: String -> Bool -> IO ()
 check label success = unless success
