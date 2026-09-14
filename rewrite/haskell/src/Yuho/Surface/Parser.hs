@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.Surface.Parser (parseModel, parseScenario) where
+module Yuho.Surface.Parser (parseModel, parseScenario, parseAnalysisCase) where
 
 import qualified Data.ByteString as BS
 import Data.Text (Text)
@@ -888,6 +888,12 @@ scenarioParser = do
   requestId <- word
   _ <- need "for"
   modelId <- word
+  parsed <- scenarioBody requestId modelId
+  _ <- kind EndToken
+  pure parsed
+
+scenarioBody :: Token -> Token -> P Scenario
+scenarioBody requestId modelId = do
   _ <- need "{"
   entries <- manyBefore "}" $ do
     next <- current
@@ -984,7 +990,6 @@ scenarioParser = do
           (status,reason) <- assignmentValue
           pure (ScenarioPlainAssignment (Assignment item status reason))
   _ <- need "}"
-  _ <- kind EndToken
   let bindings = [item | ScenarioBinding item <- entries]
       actors = [item | ScenarioActorAssignment item <- entries]
       relations = [item | ScenarioRelation item <- entries]
@@ -1016,3 +1021,44 @@ parseScenario :: FilePath -> BS.ByteString -> Either Diagnostic Scenario
 parseScenario path bytes = do
   tokens <- lexSource path bytes
   fst <$> runP scenarioParser path tokens
+
+caseParser :: P AnalysisCase
+caseParser = do
+  _ <- need "analysis-case"
+  caseId <- word
+  _ <- need "model"
+  modelPath <- string
+  _ <- need "{"
+  bindings <- manyBefore "allegation" $ do
+    _ <- need "bind"
+    role <- word
+    _ <- need "to"
+    actor <- word
+    _ <- need ";"
+    pure (ActorBinding role actor)
+  allegations <- manyBefore "}" (caseAllegation caseId)
+  _ <- need "}"
+  _ <- kind EndToken
+  pure (AnalysisCase caseId modelPath bindings allegations)
+
+caseAllegation :: Token -> P CaseAllegation
+caseAllegation caseId = do
+  _ <- need "allegation"
+  allegationId <- word
+  _ <- need "analyse"
+  kindToken <- word
+  targetKind <- case tokenText kindToken of
+    "offence" -> pure CaseOffence
+    "participation" -> pure CaseParticipation
+    "attempt" -> pure CaseAttempt
+    _ -> P $ \path _ -> at "SFE106" path kindToken "unknown allegation target kind"
+  target <- word
+  _ <- need "for"
+  role <- word
+  scenario <- scenarioBody caseId allegationId
+  pure (CaseAllegation allegationId targetKind target role scenario)
+
+parseAnalysisCase :: FilePath -> BS.ByteString -> Either Diagnostic AnalysisCase
+parseAnalysisCase path bytes = do
+  tokens <- lexSource path bytes
+  fst <$> runP caseParser path tokens

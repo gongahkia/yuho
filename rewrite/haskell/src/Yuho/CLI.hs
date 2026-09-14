@@ -15,7 +15,12 @@ import System.Posix.Files (createLink, fileSize, getSymbolicLinkStatus, isRegula
 import Yuho.Kernel.Run (runLine)
 import Yuho.Protocol.Json (decodeJson, encodeJson, lookupField, textValue)
 import Yuho.Surface.Compile (checkSource, compileSource)
+import Yuho.Surface.Case
+  ( caseModelFile, checkAnalysisCase, compileAnalysisCase, runAnalysisCase
+  , explainAnalysisCase )
 import Yuho.Surface.Explain (explainChecked)
+import Yuho.Surface.Lexer (lexSource)
+import Yuho.Surface.Parser (parseAnalysisCase, parseModel)
 import Yuho.Surface.Token (Diagnostic(..), Kind(..), Token(..), diagnosticJson)
 
 data Command = Check | Compile | Run | Explain deriving (Eq)
@@ -77,29 +82,57 @@ operate (Options command path scenarioPath output) = do
             Just (Right item) -> Just item
             _ -> Nothing
           compiled = compileSource path bytes supplied
-      case command of
-        Check -> case checkSource path bytes supplied of
-          Left issue -> report issue
-          Right _ -> BS.hPut stdout "{\"status\":\"valid\"}\n"
-        Compile -> case compiled of
-          Left issue -> report issue
-          Right request -> case output of
-            Nothing -> BS.hPut stdout request
-            Just destination -> publish destination request
-        Run -> case compiled of
-          Left issue -> report issue
-          Right request -> do
-            let response = runLine request
-            case decodeJson response of
-              Right value | (lookupField "status" value >>= textValue) /= Just "rejected" ->
-                BS.hPut stdout response
-              _ -> report (Diagnostic "SFE014" path (Token EndToken "" 1 1)
-                "compiled request was rejected by the Haskell kernel" Nothing)
-        Explain -> case checkSource path bytes supplied of
-          Left issue -> report issue
-          Right checked -> case explainChecked path checked of
+      case lexSource path bytes of
+        Left issue -> report issue
+        Right (first:_) | tokenText first == "analysis-case" ->
+          operateCase command path bytes scenarioPath output
+        _ -> case command of
+          Check -> case checkSource path bytes supplied of
             Left issue -> report issue
-            Right explanation -> BS.hPut stdout (Encoding.encodeUtf8 explanation)
+            Right _ -> BS.hPut stdout "{\"status\":\"valid\"}\n"
+          Compile -> case compiled of
+            Left issue -> report issue
+            Right request -> case output of
+              Nothing -> BS.hPut stdout request
+              Just destination -> publish destination request
+          Run -> case compiled of
+            Left issue -> report issue
+            Right request -> do
+              let response = runLine request
+              case decodeJson response of
+                Right value | (lookupField "status" value >>= textValue) /= Just "rejected" ->
+                  BS.hPut stdout response
+                _ -> report (Diagnostic "SFE014" path (Token EndToken "" 1 1)
+                  "compiled request was rejected by the Haskell kernel" Nothing)
+          Explain -> case checkSource path bytes supplied of
+            Left issue -> report issue
+            Right checked -> case explainChecked path checked of
+              Left issue -> report issue
+              Right explanation -> BS.hPut stdout (Encoding.encodeUtf8 explanation)
+
+operateCase :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
+  -> Maybe FilePath -> IO ()
+operateCase command path bytes scenarioPath output = do
+  case scenarioPath of
+    Just _ -> report (Diagnostic "SFE106" path origin
+      "analysis case contains its own allegation inputs" Nothing)
+    Nothing -> pure ()
+  declaration <- either report pure (parseAnalysisCase path bytes)
+  modelPath <- either report pure (caseModelFile path declaration)
+  modelBytes <- readSource modelPath >>= either report pure
+  model <- either report pure (parseModel modelPath modelBytes)
+  checked <- either report pure (checkAnalysisCase path declaration modelPath model)
+  case command of
+    Check -> BS.hPut stdout "{\"kind\":\"analysis-case\",\"status\":\"valid\"}\n"
+    Compile -> do
+      request <- either report pure (compileAnalysisCase checked)
+      case output of
+        Nothing -> BS.hPut stdout request
+        Just destination -> publish destination request
+    Run -> either report (BS.hPut stdout) (runAnalysisCase checked)
+    Explain -> either report (BS.hPut stdout . Encoding.encodeUtf8)
+      (explainAnalysisCase modelPath checked)
+  where origin = Token EndToken "" 1 1
 
 publish :: FilePath -> BS.ByteString -> IO ()
 publish destination bytes = do
