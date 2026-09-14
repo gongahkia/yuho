@@ -25,7 +25,7 @@ main :: IO ()
 main = do
   arguments <- getArgs
   case options arguments of
-    Left message -> report (Diagnostic "SFE001" "<command>" origin message)
+    Left message -> report (Diagnostic "SFE001" "<command>" origin message Nothing)
     Right selected -> operate selected
   where origin = Token EndToken "" 1 1
 
@@ -57,9 +57,9 @@ readSource path = do
       then ioError (userError "source must be a regular file at most 65536 bytes")
       else withBinaryFile path ReadMode (\handle -> BS.hGet handle 65537)
   pure $ case result of
-    Left (_ :: IOException) -> Left (Diagnostic "SFE015" path origin "source unavailable, unsafe or too large")
+    Left (_ :: IOException) -> Left (Diagnostic "SFE015" path origin "source unavailable, unsafe or too large" Nothing)
     Right bytes | BS.length bytes > 65536 ->
-      Left (Diagnostic "SFE015" path origin "source unavailable, unsafe or too large")
+      Left (Diagnostic "SFE015" path origin "source unavailable, unsafe or too large" Nothing)
     Right bytes -> Right bytes
   where origin = Token EndToken "" 1 1
 
@@ -94,7 +94,7 @@ operate (Options command path scenarioPath output) = do
               Right value | (lookupField "status" value >>= textValue) /= Just "rejected" ->
                 BS.hPut stdout response
               _ -> report (Diagnostic "SFE014" path (Token EndToken "" 1 1)
-                "compiled request was rejected by the Haskell kernel")
+                "compiled request was rejected by the Haskell kernel" Nothing)
         Explain -> case checkSource path bytes supplied of
           Left issue -> report issue
           Right checked -> case explainChecked path checked of
@@ -105,7 +105,7 @@ publish :: FilePath -> BS.ByteString -> IO ()
 publish destination bytes = do
   parentExists <- doesDirectoryExist (takeDirectory destination)
   if not parentExists
-    then report (Diagnostic "SFE015" destination origin "output parent does not exist")
+    then report (Diagnostic "SFE015" destination origin "output parent does not exist" Nothing)
     else do
       result <- try $ do
         (temporary, handle) <- openBinaryTempFile (takeDirectory destination) ".yuho-compile-"
@@ -115,7 +115,7 @@ publish destination bytes = do
               _ <- try (hClose handle) :: IO (Either IOException ())
               removeFile temporary
       case result of
-        Left (_ :: IOException) -> report (Diagnostic "SFE015" destination origin "output is unsafe or already exists")
+        Left (_ :: IOException) -> report (Diagnostic "SFE015" destination origin "output is unsafe or already exists" Nothing)
         Right () -> pure ()
   where origin = Token EndToken "" 1 1
 

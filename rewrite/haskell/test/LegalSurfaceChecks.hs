@@ -15,7 +15,7 @@ import Yuho.Protocol.Json (J(..), arrayValue, decodeJson, lookupField, objectFie
 import Yuho.Surface.AST
 import Yuho.Surface.Compile (checkSource, compileSource)
 import Yuho.Surface.Explain (explainChecked)
-import Yuho.Surface.Token (Diagnostic(..))
+import Yuho.Surface.Token (Diagnostic(..), Token(..))
 
 runLegalSurfaceChecks :: FilePath -> IO ()
 runLegalSurfaceChecks root = do
@@ -81,6 +81,13 @@ runLegalSurfaceChecks root = do
     check (name <> " fails closed at the scenario boundary")
       (errorCode (compileSource modelPath modelSource (Just (scenarioPath name, scenario)))
         == Just "SFE022")
+    check (name <> " identifies the related model declaration") $ case
+        checkSource modelPath modelSource (Just (scenarioPath name, scenario)) of
+      Left issue -> case diagnosticRelated issue of
+        Just (relatedPath, token) -> relatedPath == modelPath
+          && "a:" `Text.isPrefixOf` tokenText token
+        Nothing -> False
+      Right _ -> False
   baseline <- BS.readFile (scenarioPath "01_intention_no_exception")
   let invalidSource old new = errorCode (checkSource modelPath
         (replace old new modelSource) Nothing)

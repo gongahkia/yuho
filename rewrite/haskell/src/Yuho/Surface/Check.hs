@@ -110,7 +110,8 @@ checkModel path model supplied = do
         then pure () else at "SFE017" path (ruleIdentifier offence) "offence and exception declarations required"
       case ruleTarget exception of
         Just target | tokenText target == tokenText (ruleIdentifier offence) -> pure ()
-        Just target -> at "SFE018" path target "exception must target the declared offence"
+        Just target -> atRelated "SFE018" path target
+          "exception must target the declared offence" path (ruleIdentifier offence)
         Nothing -> at "SFE018" path (ruleIdentifier exception) "exception target required"
       declared <- checkScopeDeclarations path assumptions
       offenceTree <- checkedLegalRule path quoteIndex offence
@@ -129,7 +130,7 @@ checkModel path model supplied = do
         Just (scenarioPath, Scenario scenarioId modelId entries acknowledgements) -> do
           expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
           expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
-          checkScopeAcknowledgements scenarioPath scenarioId declared acknowledgements
+          checkScopeAcknowledgements scenarioPath path scenarioId declared acknowledgements
           checkAssignments scenarioPath
             (ResolvedGroup (ruleIdentifier offence) All [offenceTree, exceptionTree]) entries
       pure (Checked model (snd <$> supplied) assignments offenceTree (Just exceptionTree))
@@ -231,29 +232,33 @@ requireRoles path sources =
   then Right () else at "SFE014" path (Token WordToken "provenance" 1 1)
     "research model needs one text and one synthetic-status source"
 
-checkScopeDeclarations :: FilePath -> [ScopeAssumption] -> Either Diagnostic (Set.Set Text)
+checkScopeDeclarations :: FilePath -> [ScopeAssumption]
+  -> Either Diagnostic (Map.Map Text Token)
 checkScopeDeclarations path rows = do
   if null rows then at "SFE022" path (Token WordToken "scope-assumptions" 1 1)
     "research-scope assumptions required" else pure ()
-  go Set.empty rows
+  go Map.empty rows
   where
     go seen [] = Right seen
     go seen (ScopeAssumption item:rest)
       | not ("a:" `Text.isPrefixOf` tokenText item) =
           at "SFE022" path item "scope assumption requires a: identifier"
-      | Set.member (tokenText item) seen = at "SFE002" path item "duplicate scope assumption"
-      | otherwise = go (Set.insert (tokenText item) seen) rest
+      | Map.member (tokenText item) seen = at "SFE002" path item "duplicate scope assumption"
+      | otherwise = go (Map.insert (tokenText item) item seen) rest
 
-checkScopeAcknowledgements :: FilePath -> Token -> Set.Set Text
+checkScopeAcknowledgements :: FilePath -> FilePath -> Token -> Map.Map Text Token
   -> [ScopeAcknowledgement] -> Either Diagnostic ()
-checkScopeAcknowledgements path scenarioId declared = go Set.empty
+checkScopeAcknowledgements path modelPath scenarioId declared = go Set.empty
   where
     go seen []
-      | seen == declared = Right ()
-      | otherwise = at "SFE022" path scenarioId "missing required research-scope acknowledgement"
+      | seen == Map.keysSet declared = Right ()
+      | otherwise = case Map.toAscList (Map.withoutKeys declared seen) of
+          (_, declaration):_ -> atRelated "SFE022" path scenarioId
+            "missing required research-scope acknowledgement" modelPath declaration
+          [] -> at "SFE022" path scenarioId "missing required research-scope acknowledgement"
     go seen (ScopeAcknowledgement item:rest)
       | Set.member (tokenText item) seen = at "SFE024" path item "duplicate scope acknowledgement"
-      | not (Set.member (tokenText item) declared) = at "SFE023" path item "unknown scope assumption"
+      | not (Map.member (tokenText item) declared) = at "SFE023" path item "unknown scope assumption"
       | otherwise = go (Set.insert (tokenText item) seen) rest
 
 checkedLegalRule :: FilePath -> Map.Map Text Token -> Rule -> Either Diagnostic Resolved
@@ -330,14 +335,17 @@ checkLegalOutputs path offence exception shape rows = do
         [("hurt_status", legalHurt shape)
         ,("fault_alternative", legalFault shape)
         ,("voluntary_hurt_requirements", legalOffenceRoot shape)
-        ,("section323_candidate_requirements", ruleId offence)
+        ,("section323_candidate_requirements", legalOffenceRoot shape)
         ,("nature_route", legalNature shape)
         ,("wrongfulness_route", legalWrongfulness shape)
         ,("control_route", legalControl shape)
         ,("section84_requirements", legalExceptionRoot shape)
         ,("section84_defeat", ruleIdentifier exception)
         ,("final_rule", ruleId offence)]
-  if map (\(TechnicalOutput label target) -> (tokenText label, tokenText target)) rows
-       == [(label, tokenText target) | (label, target) <- expected]
-    then Right () else at "SFE020" path (ruleIdentifier offence)
-      "technical outputs must name the checked offence and exception nodes"
+  case [(target, correct) | (TechnicalOutput label target, (expectedLabel, correct)) <- zip rows expected,
+      tokenText label /= expectedLabel || tokenText target /= tokenText correct] of
+    (wrong, correct):_ -> atRelated "SFE020" path wrong
+      "technical output must name the checked offence or exception node" path correct
+    [] | length rows == length expected -> Right ()
+       | otherwise -> at "SFE020" path (ruleIdentifier offence)
+           "technical output list is incomplete"

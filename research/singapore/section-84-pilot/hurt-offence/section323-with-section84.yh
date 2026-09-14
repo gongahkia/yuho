@@ -63,7 +63,7 @@ model SingaporePenalCodeSection323WithSection84ResearchPrototype-v1 {
     hurt_status f:hurt-caused;
     fault_alternative g:section321-fault;
     voluntary_hurt_requirements g:voluntary-hurt;
-    section323_candidate_requirements r:section323-candidate;
+    section323_candidate_requirements g:voluntary-hurt;
     nature_route g:nature;
     wrongfulness_route g:wrongfulness;
     control_route g:control;
