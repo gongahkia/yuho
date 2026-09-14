@@ -19,8 +19,37 @@ import Yuho.SuppliedProofStatus.Validate (validateProofRequest)
 
 explainChecked :: FilePath -> Checked -> Either Diagnostic Text
 explainChecked path checked@(Checked model scenario assignments offenceTree exceptionTree) =
-  case (modelBody model, scenario, exceptionTree) of
-    (Legal _ offence exception _, Just (Scenario _ _ _ acknowledgements), Just defenceTree) -> do
+  case (scenario, exceptionTree) of
+    (Just (Scenario _ _ _ acknowledgements targets), Just defenceTree) -> do
+      (offence, exception, introduction, sourceReferences, offenceHeading) <-
+        case modelBody model of
+          Legal _ selected shared _ | null targets -> Right
+            (selected, shared, [], [], "Candidate offence chain (Penal Code ss 319, 321, 323):")
+          MultiLegal _ offences exceptions attachments _ -> case targets of
+            [target] -> case [(selected, shared) | selected <- offences,
+              tokenText (ruleIdentifier selected) == tokenText target,
+              Attachment _ exceptionId owner <- attachments,
+              tokenText owner == tokenText target,
+              GeneralException shared <- exceptions,
+              tokenText (ruleIdentifier shared) == tokenText exceptionId] of
+              [(selected, shared)] -> Right
+                (selected, shared,
+                 ["Selected candidate offence: " <> tokenText target
+                 ,"Candidate statutory sections: Penal Code ss " <>
+                    sectionList (ruleSections selected)
+                 ,"General exception: Penal Code s " <> sectionList (ruleSections shared)
+                 ,"Attachment: s " <> sectionList (ruleSections shared)
+                    <> " -> candidate " <> tokenText target
+                 ,"Definition instance: shared " <> tokenText (ruleIdentifier shared)],
+                 ["  " <> tokenText (elementId item) <> " -> "
+                   <> tokenText (elementQuote item)
+                   <> maybe "" (\support -> " + " <> tokenText support) (elementSupport item)
+                  | item <- ruleElements shared],
+                 "Selected candidate offence requirements:")
+              _ -> at "SFE040" path target "selected exception attachment is not unique"
+            _ -> at "SFE036" path (modelIdentifier model) "one analysis target required"
+          _ -> at "SFE013" path (modelIdentifier model)
+            "explain requires a checked research offence model and scenario"
       request <- lowerChecked checked
       value <- either (const (at "SFE014" path (modelIdentifier model) "compiled request is invalid JSON"))
         Right (decodeJson request)
@@ -49,12 +78,15 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
             ["Model: " <> tokenText (modelIdentifier model)
             ,"Jurisdiction: " <> tokenText (modelJurisdiction model)
               <> " — research POC; synthetic classifications only"
-            ,"Scope assumptions: acknowledged by scenario, not inferred or proved"]
+            ] ++ introduction ++
+            ["Scope assumptions: acknowledged by scenario, not inferred or proved"]
             ++ map ("  " <>) acknowledged
-            ++ ["Candidate offence chain (Penal Code ss 319, 321, 323):"]
+            ++ [offenceHeading]
             ++ renderTree 1 supplied offenceValues offenceTree
             ++ ["Section 84 general exception:"]
             ++ renderTree 1 supplied defenceValues defenceTree
+            ++ (if null sourceReferences then [] else
+                  "Section 84 source references:" : sourceReferences)
             ++ ["Section 84 kernel rule: " <>
                   maybe "not_evaluated" (satisfactionText . proofRuleStatus) defenceResult
                 ,"Section 107 context: " <> tokenText annotation <> "; "
@@ -102,3 +134,7 @@ reasonText ProofRequirementsNotSatisfied = "candidate requirements not technical
 reasonText ProofRequirementsUnresolved = "candidate requirements unresolved"
 reasonText ProofDefeated = "candidate branch technically defeated by section 84"
 reasonText ProofExceptionUnresolved = "section 84 guard unresolved"
+
+sectionList :: [StatutorySection] -> Text
+sectionList sections = Text.intercalate ", "
+  [tokenText item | StatutorySection item <- sections]

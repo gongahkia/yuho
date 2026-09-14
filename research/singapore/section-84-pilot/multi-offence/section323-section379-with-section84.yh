@@ -1,0 +1,97 @@
+// Research POC: one authored section 84 definition, two explicit candidate attachments.
+model SingaporePenalCodeHurtTheftWithSection84ResearchPrototype-v1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Singapore;
+  purpose research_prototype;
+  request H00;
+  policy 2026-09-13 1024;
+
+  provenance {
+    source src:pc-candidates source_text "research/hurt-theft-section84/short-excerpts.txt";
+    source src:synthetic-status synthetic_status "research/hurt-theft-section84/synthetic-status.txt";
+    quote q:act "does any act";
+    quote q:hurt "bodily pain, disease or infirmity to any person";
+    quote q:hurt-causation "and does thereby cause hurt";
+    quote q:intention "intention of thereby causing hurt";
+    quote q:knowledge "knowledge that he is likely thereby to cause hurt";
+    quote q:movable "any movable property";
+    quote q:possession "out of the possession of any person";
+    quote q:consent "without that person’s consent";
+    quote q:dishonest "intending to take dishonestly";
+    quote q:moves "moves that property";
+    quote q:for-taking "in order to such taking";
+    quote q:time "at the time of doing it, by reason of unsoundness of mind";
+    quote q:nature "incapable of knowing the nature of the act";
+    quote q:wrong-operator "incapable of knowing that what he is doing is wrong";
+    quote q:control "completely deprived of any power to control his actions";
+    quote q:ordinary "is wrong by the ordinary standards of reasonable and honest persons";
+    quote q:law "is wrong as contrary to law";
+  }
+
+  annotations {
+    burden section107 defence legal balance_of_probabilities;
+  }
+
+  scope-assumptions {
+    scope-assumption a:post-2022-section-84-expression-applicable;
+    scope-assumption a:outside-section-323A for o:voluntary-hurt;
+    scope-assumption a:outside-section-334 for o:voluntary-hurt;
+    scope-assumption a:dishonesty-externally-classified for o:theft;
+  }
+
+  offence o:voluntary-hurt rule r:section323-candidate program p:section323 path section323 sections 319,321,323 {
+    element conduct f:act-performed quote q:act;
+    element result f:hurt-caused quote q:hurt;
+    element causation f:hurt-caused-by-act quote q:hurt-causation;
+    element intention f:intention-to-cause-hurt quote q:intention;
+    element knowledge f:knowledge-hurt-likely quote q:knowledge;
+    any g:section321-fault (f:intention-to-cause-hurt, f:knowledge-hurt-likely);
+    all g:voluntary-hurt (f:act-performed, f:hurt-caused, f:hurt-caused-by-act, g:section321-fault);
+  }
+
+  offence o:theft rule r:section379-candidate program p:section379 path section379 sections 378,379 {
+    element movable-property f:movable-property quote q:movable;
+    element possession f:another-possession quote q:possession;
+    element consent-absence f:without-consent quote q:consent;
+    element dishonest-intention f:dishonest-intention quote q:dishonest;
+    element movement f:property-moved quote q:moves;
+    element movement-for-taking f:moved-for-taking quote q:for-taking;
+    all g:theft-requirements (f:movable-property, f:another-possession, f:without-consent, f:dishonest-intention, f:property-moved, f:moved-for-taking);
+  }
+
+  general-exception x:section84 rule r:section84 program p:section84 path section84 sections 84 {
+    element unsoundness f:unsoundness-time quote q:time;
+    element causation f:nature-causation quote q:time;
+    element nature-incapacity f:nature-incapacity quote q:nature;
+    element causation f:wrong-causation quote q:time;
+    element ordinary-wrongfulness f:ordinary-wrongfulness-incapacity quote q:ordinary support q:wrong-operator;
+    element contrary-law-wrongfulness f:contrary-law-incapacity quote q:law support q:wrong-operator;
+    element causation f:control-causation quote q:time;
+    element control-incapacity f:control-incapacity quote q:control;
+    all g:nature (f:nature-causation, f:nature-incapacity);
+    all g:wrongfulness (f:wrong-causation, f:ordinary-wrongfulness-incapacity, f:contrary-law-incapacity);
+    all g:control (f:control-causation, f:control-incapacity);
+    any g:section84-routes (g:nature, g:wrongfulness, g:control);
+    all g:section84-requirements (f:unsoundness-time, g:section84-routes);
+  }
+
+  attach x:section84 to o:voluntary-hurt;
+  attach x:section84 to o:theft;
+
+  outputs {
+    hurt_requirements g:voluntary-hurt;
+    theft_requirements g:theft-requirements;
+    section84_requirements g:section84-requirements;
+    section84_defeat x:section84;
+    hurt_final r:section323-candidate;
+    theft_final r:section379-candidate;
+  }
+
+  limitations {
+    "Research POC; only synthetic supplied classifications and scope acknowledgements";
+    "Section 24 dishonesty definition is not executed; classification supplied externally";
+    "Section 378 explanations and section 379 punishment terms are not modelled";
+    "No evidence assessment, diagnosis, temporal selection or judicial outcome";
+    "No legal advice or determination of guilt, acquittal, liability or sentence";
+  }
+}

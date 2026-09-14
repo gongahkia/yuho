@@ -1,0 +1,45 @@
+Model: SingaporePenalCodeHurtTheftWithSection84ResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Selected candidate offence: o:theft
+Candidate statutory sections: Penal Code ss 378, 379
+General exception: Penal Code s 84
+Attachment: s 84 -> candidate o:theft
+Definition instance: shared x:section84
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:post-2022-section-84-expression-applicable
+  a:dishonesty-externally-classified
+Selected candidate offence requirements:
+  g:theft-requirements — all; technical satisfied
+    f:movable-property — supplied proved; technical satisfied
+    f:another-possession — supplied proved; technical satisfied
+    f:without-consent — supplied proved; technical satisfied
+    f:dishonest-intention — supplied proved; technical satisfied
+    f:property-moved — supplied proved; technical satisfied
+    f:moved-for-taking — supplied proved; technical satisfied
+Section 84 general exception:
+  g:section84-requirements — all; technical satisfied
+    f:unsoundness-time — supplied proved; technical satisfied
+    g:section84-routes — any; technical satisfied
+      g:nature — all; technical satisfied
+        f:nature-causation — supplied proved; technical satisfied
+        f:nature-incapacity — supplied proved; technical satisfied
+      g:wrongfulness — all; technical not_satisfied
+        f:wrong-causation — supplied not_proved; technical not_satisfied
+        f:ordinary-wrongfulness-incapacity — supplied not_proved; technical not_satisfied
+        f:contrary-law-incapacity — supplied not_proved; technical not_satisfied
+      g:control — all; technical not_satisfied
+        f:control-causation — supplied not_proved; technical not_satisfied
+        f:control-incapacity — supplied not_proved; technical not_satisfied
+Section 84 source references:
+  f:unsoundness-time -> q:time
+  f:nature-causation -> q:time
+  f:nature-incapacity -> q:nature
+  f:wrong-causation -> q:time
+  f:ordinary-wrongfulness-incapacity -> q:ordinary + q:wrong-operator
+  f:contrary-law-incapacity -> q:law + q:wrong-operator
+  f:control-causation -> q:time
+  f:control-incapacity -> q:control
+Section 84 kernel rule: satisfied
+Section 107 context: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: not_satisfied (candidate branch technically defeated by section 84)
+No guilt, conviction, acquittal or sentence was determined.

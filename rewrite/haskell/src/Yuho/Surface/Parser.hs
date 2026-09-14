@@ -144,6 +144,12 @@ elementOrGroup = do
         "ordinary-wrongfulness" -> pure OrdinaryWrongfulness
         "contrary-law-wrongfulness" -> pure ContraryLawWrongfulness
         "control-incapacity" -> pure ControlIncapacity
+        "movable-property" -> pure MovableProperty
+        "possession" -> pure Possession
+        "consent-absence" -> pure ConsentAbsence
+        "dishonest-intention" -> pure DishonestIntention
+        "movement" -> pure Movement
+        "movement-for-taking" -> pure MovementForTaking
         _ -> P $ \path _ -> at "SFE017" path category "invalid element category"
       pure (Left (Element categoryKind category item quoteId support))
     "all" -> Right <$> group headToken
@@ -164,11 +170,19 @@ rule role = do
   programId <- word
   _ <- need "path"
   path <- word
+  hasSections <- optional "sections"
+  sections <- if hasSections then do
+    first <- StatutorySection <$> word
+    rest <- manyBefore "{" $ do
+      _ <- need ","
+      StatutorySection <$> word
+    pure (first : rest)
+    else pure []
   _ <- need "{"
   declarations <- manyBefore "}" elementOrGroup
   _ <- need "}"
   pure (Rule (if role == "offence" then OffenceKind else ExceptionKind) headToken item target declaredRule programId path
-    [value | Left value <- declarations] [value | Right value <- declarations])
+    sections [value | Left value <- declarations] [value | Right value <- declarations])
 
 provenance :: P ([SourceDecl], Maybe Token, [(Token, Token)])
 provenance = do
@@ -231,8 +245,10 @@ scopeAssumptions = do
   assumptions <- manyBefore "}" $ do
     _ <- need "scope-assumption"
     item <- word
+    targeted <- optional "for"
+    target <- if targeted then Just <$> word else pure Nothing
     _ <- need ";"
-    pure (ScopeAssumption item)
+    pure (maybe (ScopeAssumption item) (TargetScopeAssumption item) target)
   _ <- need "}"
   pure assumptions
 
@@ -283,14 +299,41 @@ body = do
     if tokenText bodyNext == "scope-assumptions" then do
       assumptions <- scopeAssumptions
       offence <- rule "offence"
-      exception <- rule "exception"
-      declaredOutputs <- outputs
-      pure (sources, quotes, burden, Legal assumptions offence exception declaredOutputs)
+      moreOffences <- whileWord "offence" (rule "offence")
+      bodyAfterOffences <- current
+      if tokenText bodyAfterOffences == "general-exception" then do
+        exceptions <- whileWord "general-exception"
+          (GeneralException <$> rule "general-exception")
+        attachments <- whileWord "attach" attachment
+        declaredOutputs <- outputs
+        pure (sources, quotes, burden,
+          MultiLegal assumptions (offence : moreOffences) exceptions attachments declaredOutputs)
+      else do
+        exception <- rule "exception"
+        declaredOutputs <- outputs
+        pure (sources, quotes, burden, Legal assumptions offence exception declaredOutputs)
     else do
       offence <- rule "offence"
       exception <- rule "exception"
       declaredOutputs <- outputs
       pure (sources, quotes, burden, Synthetic offence exception declaredOutputs)
+
+whileWord :: Text -> P a -> P [a]
+whileWord wanted action = do
+  next <- current
+  if tokenText next == wanted then do
+    item <- action
+    (item :) <$> whileWord wanted action
+  else pure []
+
+attachment :: P Attachment
+attachment = do
+  keyword <- need "attach"
+  exception <- word
+  _ <- need "to"
+  offence <- word
+  _ <- need ";"
+  pure (Attachment keyword exception offence)
 
 modelParser :: P Model
 modelParser = do
@@ -334,16 +377,21 @@ scenarioParser = do
   _ <- need "{"
   entries <- manyBefore "}" $ do
     next <- current
-    if tokenText next == "assume" then do
+    if tokenText next == "analyse" then do
+      _ <- need "analyse"
+      item <- word
+      _ <- need ";"
+      pure (Right (Right item))
+    else if tokenText next == "assume" then do
       _ <- need "assume"
       item <- word
       _ <- need ";"
-      pure (Right (ScopeAcknowledgement item))
+      pure (Right (Left (ScopeAcknowledgement item)))
     else Left <$> assignment
   _ <- need "}"
   _ <- kind EndToken
   pure (Scenario requestId modelId [item | Left item <- entries]
-    [item | Right item <- entries])
+    [item | Right (Left item) <- entries] [item | Right (Right item) <- entries])
 
 parseScenario :: FilePath -> BS.ByteString -> Either Diagnostic Scenario
 parseScenario path bytes = do

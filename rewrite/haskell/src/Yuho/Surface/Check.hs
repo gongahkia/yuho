@@ -85,9 +85,10 @@ checkModel path model supplied = do
         else pure ()
       assignments <- case supplied of
         Nothing -> pure []
-        Just (scenarioPath, Scenario scenarioId modelId entries acknowledgements) -> do
+        Just (scenarioPath, Scenario scenarioId modelId entries acknowledgements targets) -> do
           expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
           expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          noAnalysisTarget scenarioPath targets
           case acknowledgements of
             ScopeAcknowledgement item:_ -> at "SFE023" scenarioPath item "undeclared scope acknowledgement"
             [] -> pure ()
@@ -127,13 +128,78 @@ checkModel path model supplied = do
         else at "SFE002" path (ruleIdentifier exception) "duplicate semantic identifier"
       assignments <- case supplied of
         Nothing -> pure []
-        Just (scenarioPath, Scenario scenarioId modelId entries acknowledgements) -> do
+        Just (scenarioPath, Scenario scenarioId modelId entries acknowledgements targets) -> do
           expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
           expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          noAnalysisTarget scenarioPath targets
           checkScopeAcknowledgements scenarioPath path scenarioId declared acknowledgements
           checkAssignments scenarioPath
             (ResolvedGroup (ruleIdentifier offence) All [offenceTree, exceptionTree]) entries
       pure (Checked model (snd <$> supplied) assignments offenceTree (Just exceptionTree))
+    MultiLegal assumptions offences exceptions attachments declaredOutputs -> do
+      if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
+        then pure () else at "SFE004" path (modelIdentifier model) "research model ID required"
+      expect path "SFE004" (modelJurisdiction model) "Singapore"
+      expect path "SFE004" (modelPurpose model) "research_prototype"
+      expect path "SFE004" (modelDate model) "2026-09-13"
+      let BurdenAnnotation annotation holder burdenKind standard = modelBurden model
+      mapM_ (\(item,wanted) -> expect path "SFE011" item wanted)
+        [(annotation,"section107"),(holder,"defence"),(burdenKind,"legal"),
+         (standard,"balance_of_probabilities")]
+      requireRoles path sourceIndex
+      declared <- checkMultiScope path offences assumptions
+      checkPrivateReferences path (offences ++ [item | GeneralException item <- exceptions])
+      checkedOffences <- mapM (\offence -> do
+        tree <- checkedLegalRule path quoteIndex offence
+        checkOffenceShape path offence tree
+        pure (offence, tree)) offences
+      checkedExceptions <- mapM (\(GeneralException exception) -> do
+        tree <- checkedLegalRule path quoteIndex exception
+        checkSharedExceptionShape path exception tree
+        pure (exception, tree)) exceptions
+      checkMultiIdentities path checkedOffences checkedExceptions
+      checkAttachments path checkedOffences checkedExceptions attachments
+      checkMultiOutputs path checkedOffences checkedExceptions declaredOutputs
+      case supplied of
+        Nothing -> case (checkedOffences, checkedExceptions) of
+          ((_,tree):_, (_,exceptionTree):_) ->
+            pure (Checked model Nothing [] tree (Just exceptionTree))
+          _ -> at "SFE030" path (modelIdentifier model) "offence and general exception required"
+        Just (scenarioPath, scenario@(Scenario scenarioId modelId entries acknowledgements targets)) -> do
+          expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
+          expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          target <- case targets of
+            [] -> at "SFE036" scenarioPath scenarioId "one analysis target required"
+            [item] -> pure item
+            item:second:_ -> atRelated "SFE037" scenarioPath second
+              "multiple analysis targets" scenarioPath item
+          (selected, offenceTree) <- case [row | row@(offence,_) <- checkedOffences,
+              tokenText (ruleIdentifier offence) == tokenText target] of
+            [row] -> pure row
+            _ -> at "SFE038" scenarioPath target "unknown candidate offence analysis target"
+          (_, exceptionTree) <- attachedException scenarioPath target
+            checkedExceptions attachments
+          let expectedAssumptions = Map.filter
+                (\(_,owner) -> maybe True (== tokenText target) owner) declared
+          checkScopeAcknowledgements scenarioPath path scenarioId
+            (Map.map fst expectedAssumptions) acknowledgements
+          let unselected = Set.fromList [tokenText (elementId item)
+                | (offence,_) <- checkedOffences,
+                  tokenText (ruleIdentifier offence) /= tokenText target,
+                  item <- ruleElements offence]
+          case [item | Assignment item _ _ <- entries,
+               Set.member (tokenText item) unselected] of
+            item:_ -> at "SFE039" scenarioPath item "assignment belongs to an unselected offence"
+            [] -> pure ()
+          let required = Set.fromList (map tokenText
+                (leafTokens offenceTree ++ leafTokens exceptionTree))
+              provided = Set.fromList [tokenText item | Assignment item _ _ <- entries]
+          if Set.null (required `Set.difference` provided) then pure ()
+            else at "SFE042" scenarioPath target
+              "missing selected-offence or attached-exception classification"
+          assignments <- checkAssignments scenarioPath
+            (ResolvedGroup (ruleIdentifier selected) All [offenceTree, exceptionTree]) entries
+          pure (Checked model (Just scenario) assignments offenceTree (Just exceptionTree))
 
 expect :: FilePath -> Text -> Token -> Text -> Either Diagnostic ()
 expect path code token wanted
@@ -245,6 +311,184 @@ checkScopeDeclarations path rows = do
           at "SFE022" path item "scope assumption requires a: identifier"
       | Map.member (tokenText item) seen = at "SFE002" path item "duplicate scope assumption"
       | otherwise = go (Map.insert (tokenText item) item seen) rest
+    go _ (TargetScopeAssumption item _:_) =
+      at "SFE030" path item "targeted scope requires a multi-offence model"
+
+noAnalysisTarget :: FilePath -> [Token] -> Either Diagnostic ()
+noAnalysisTarget _ [] = Right ()
+noAnalysisTarget path (item:_) = at "SFE030" path item
+  "analysis targets require a multi-offence model"
+
+checkMultiScope :: FilePath -> [Rule] -> [ScopeAssumption]
+  -> Either Diagnostic (Map.Map Text (Token, Maybe Text))
+checkMultiScope path offences rows = do
+  if null rows then at "SFE022" path (Token WordToken "scope-assumptions" 1 1)
+    "research scope assumptions required" else pure ()
+  go Map.empty rows
+  where
+    owners = Set.fromList (map (tokenText . ruleIdentifier) offences)
+    go seen [] = Right seen
+    go seen (row:rest) = do
+      let (item, owner) = case row of
+            ScopeAssumption token -> (token, Nothing)
+            TargetScopeAssumption token target -> (token, Just target)
+      if not ("a:" `Text.isPrefixOf` tokenText item) then
+        at "SFE022" path item "scope assumption requires a: identifier" else pure ()
+      case owner of
+        Just target | not (Set.member (tokenText target) owners) ->
+          at "SFE033" path target "scope assumption targets an unknown offence"
+        _ -> pure ()
+      if Map.member (tokenText item) seen then
+        at "SFE002" path item "duplicate scope assumption" else
+        go (Map.insert (tokenText item) (item, tokenText <$> owner) seen) rest
+
+checkPrivateReferences :: FilePath -> [Rule] -> Either Diagnostic ()
+checkPrivateReferences path rules = go rules
+  where
+    declared rule = map elementId (ruleElements rule) ++ map identifier (ruleGroups rule)
+    go [] = Right ()
+    go (rule:rest) = do
+      let local = Set.fromList (map tokenText (declared rule))
+          other = Map.fromList [(tokenText item, item) | candidate <- rules,
+            tokenText (ruleIdentifier candidate) /= tokenText (ruleIdentifier rule),
+            item <- declared candidate]
+      case [(member, original) | Group _ _ members <- ruleGroups rule,
+            member <- members, not (Set.member (tokenText member) local),
+            Just original <- [Map.lookup (tokenText member) other]] of
+        (member, original):_ -> atRelated "SFE045" path member
+          "reference crosses a private offence or exception graph" path original
+        [] -> go rest
+
+checkOffenceShape :: FilePath -> Rule -> Resolved -> Either Diagnostic ()
+checkOffenceShape path offence tree = do
+  if ruleKind offence == OffenceKind then pure () else
+    at "SFE017" path (ruleIdentifier offence) "candidate offence required"
+  checkSections path (ruleIdentifier offence) (ruleSections offence)
+  let categories = Map.fromList [(tokenText (elementId item), elementCategory item)
+        | item <- ruleElements offence]
+      kind item = Map.lookup (tokenText item) categories
+  case tree of
+    ResolvedGroup _ All [ResolvedLeaf act _, ResolvedLeaf result _,
+      ResolvedLeaf causal _, ResolvedGroup _ Any [ResolvedLeaf intention _, ResolvedLeaf knowledge _]]
+      | map kind [act,result,causal,intention,knowledge] ==
+          map Just [Conduct,Result,Causation,Intention,Knowledge]
+        && length (ruleElements offence) == 5 -> pure ()
+    ResolvedGroup _ All [ResolvedLeaf movable _, ResolvedLeaf possession _,
+      ResolvedLeaf consent _, ResolvedLeaf dishonest _, ResolvedLeaf moved _,
+      ResolvedLeaf forTaking _]
+      | map kind [movable,possession,consent,dishonest,moved,forTaking] ==
+          map Just [MovableProperty,Possession,ConsentAbsence,DishonestIntention,
+                    Movement,MovementForTaking]
+        && length (ruleElements offence) == 6 -> pure ()
+    _ -> at "SFE031" path (ruleIdentifier offence)
+      "candidate offence must use the supported hurt or theft typed structure"
+
+checkSharedExceptionShape :: FilePath -> Rule -> Resolved -> Either Diagnostic ()
+checkSharedExceptionShape path exception tree = do
+  if ruleKind exception == ExceptionKind && ruleTarget exception == Nothing
+    then pure () else at "SFE032" path (ruleIdentifier exception)
+      "general exception must be a reusable exception declaration"
+  checkSections path (ruleIdentifier exception) (ruleSections exception)
+  let categories = Map.fromList [(tokenText (elementId item), elementCategory item)
+        | item <- ruleElements exception]
+      route wanted (ResolvedGroup _ All members) =
+        traverse (\item -> case item of
+          ResolvedLeaf token _ -> Map.lookup (tokenText token) categories
+          _ -> Nothing) members == Just wanted
+      route _ _ = False
+  case tree of
+    ResolvedGroup _ All [ResolvedLeaf condition _,
+      ResolvedGroup _ Any [nature,wrong,control]]
+      | Map.lookup (tokenText condition) categories == Just Unsoundness
+        && route [Causation,NatureIncapacity] nature
+        && route [Causation,OrdinaryWrongfulness,ContraryLawWrongfulness] wrong
+        && route [Causation,ControlIncapacity] control
+        && length (ruleElements exception) == 8 -> pure ()
+    _ -> at "SFE032" path (ruleIdentifier exception)
+      "shared section 84 needs unsoundness and the three reviewed causal routes"
+
+checkSections :: FilePath -> Token -> [StatutorySection] -> Either Diagnostic ()
+checkSections path declaration sections = do
+  if null sections then at "SFE031" path declaration
+    "authored statutory section references required" else pure ()
+  let tokens = [item | StatutorySection item <- sections]
+  case [item | item <- tokens,
+        Text.null (tokenText item) || not (Text.all (`elem` ['0'..'9']) (tokenText item))] of
+    item:_ -> at "SFE031" path item "statutory section reference must be numeric"
+    [] -> pure ()
+  _ <- unique path "SFE002" [(item, ()) | item <- tokens]
+  pure ()
+
+checkMultiIdentities :: FilePath -> [(Rule, Resolved)] -> [(Rule, Resolved)]
+  -> Either Diagnostic ()
+checkMultiIdentities path offences exceptions = do
+  let exceptionNames = map (ruleIdentifier . fst) exceptions
+  if Set.size (Set.fromList (map tokenText exceptionNames)) == length exceptionNames
+    then pure () else case exceptionNames of
+      first:second:_ -> atRelated "SFE043" path second
+        "duplicate general exception" path first
+      _ -> at "SFE043" path (Token WordToken "general-exception" 1 1)
+        "duplicate general exception"
+  if length offences >= 2 && length exceptions == 1 then pure () else
+    at "SFE030" path (Token WordToken "general-exception" 1 1)
+      "bounded composition requires two candidate offences and one general exception"
+  let rules = map fst (offences ++ exceptions)
+      ids rule = [ruleIdentifier rule, ruleId rule, ruleProgram rule]
+        ++ map elementId (ruleElements rule)
+        ++ map identifier (ruleGroups rule)
+  _ <- unique path "SFE002" [(item, ()) | rule <- rules, item <- ids rule]
+  pure ()
+
+checkAttachments :: FilePath -> [(Rule, Resolved)] -> [(Rule, Resolved)]
+  -> [Attachment] -> Either Diagnostic ()
+checkAttachments path offences exceptions = go Set.empty
+  where
+    offenceIds = Set.fromList (map (tokenText . ruleIdentifier . fst) offences)
+    exceptionIds = Set.fromList (map (tokenText . ruleIdentifier . fst) exceptions)
+    privateIds = Set.fromList [tokenText item | (rule,_) <- offences,
+      item <- map elementId (ruleElements rule) ++ map identifier (ruleGroups rule)]
+    go _ [] = Right ()
+    go seen (Attachment _ exception target:rest)
+      | not (Set.member (tokenText exception) exceptionIds) =
+          at "SFE044" path exception "unknown general exception in attachment"
+      | Set.member (tokenText target) privateIds =
+          at "SFE034" path target "attachment target is a private offence proposition"
+      | not (Set.member (tokenText target) offenceIds) =
+          at "SFE033" path target "unknown candidate offence in attachment"
+      | Set.member (tokenText exception, tokenText target) seen =
+          at "SFE035" path target "duplicate general-exception attachment"
+      | otherwise = go (Set.insert (tokenText exception, tokenText target) seen) rest
+
+attachedException :: FilePath -> Token -> [(Rule, Resolved)] -> [Attachment]
+  -> Either Diagnostic (Rule, Resolved)
+attachedException path target exceptions attachments =
+  case [(rule,tree) | Attachment _ exception owner <- attachments,
+       tokenText owner == tokenText target, (rule,tree) <- exceptions,
+       tokenText (ruleIdentifier rule) == tokenText exception] of
+    [row] -> Right row
+    [] -> at "SFE040" path target "selected offence has no attached general exception"
+    _ -> at "SFE041" path target "bounded slice supports one attached exception per offence"
+
+checkMultiOutputs :: FilePath -> [(Rule, Resolved)] -> [(Rule, Resolved)]
+  -> [TechnicalOutput] -> Either Diagnostic ()
+checkMultiOutputs path offences exceptions rows = do
+  if null rows then at "SFE020" path (Token WordToken "outputs" 1 1)
+    "technical outputs required" else pure ()
+  _ <- unique path "SFE002" [(label, ()) | TechnicalOutput label _ <- rows]
+  let rules = map fst (offences ++ exceptions)
+      groups = Set.fromList [tokenText (identifier item) | rule <- rules,
+        item <- ruleGroups rule]
+      ruleIds = Set.fromList (map (tokenText . ruleId) (map fst offences))
+      exceptionIds = Set.fromList (map (tokenText . ruleIdentifier . fst) exceptions)
+      valid label target
+        | "_requirements" `Text.isSuffixOf` label = Set.member target groups
+        | "_final" `Text.isSuffixOf` label = Set.member target ruleIds
+        | label == "section84_defeat" = Set.member target exceptionIds
+        | otherwise = False
+  case [item | TechnicalOutput label item <- rows,
+       not (valid (tokenText label) (tokenText item))] of
+    item:_ -> at "SFE020" path item "technical output has unknown or incompatible reference"
+    [] -> pure ()
 
 checkScopeAcknowledgements :: FilePath -> FilePath -> Token -> Map.Map Text Token
   -> [ScopeAcknowledgement] -> Either Diagnostic ()

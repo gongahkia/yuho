@@ -114,7 +114,22 @@ sourceDecl role rows = case [(item, location) | SourceDecl item kind location <-
 
 lowerChecked :: Checked -> Either Diagnostic BS.ByteString
 lowerChecked (Checked model scenario assignments firstTree secondTree) = do
-  let (text, quoteSpans) = quoteSource (modelQuotes model)
+  let quoted = case (modelBody model, scenario) of
+        (MultiLegal _ offences exceptions attachments _, Just (Scenario _ _ _ _ [target])) ->
+          case [(offence, exception) | offence <- offences,
+            tokenText (ruleIdentifier offence) == tokenText target,
+            Attachment _ exceptionId owner <- attachments,
+            tokenText owner == tokenText target,
+            GeneralException exception <- exceptions,
+            tokenText (ruleIdentifier exception) == tokenText exceptionId] of
+            [(offence, exception)] ->
+              let references = Set.fromList [tokenText item | rule <- [offence, exception],
+                    element <- ruleElements rule,
+                    item <- elementQuote element : maybe [] (:[]) (elementSupport element)]
+              in filter (\(key,_) -> Set.member (tokenText key) references) (modelQuotes model)
+            _ -> modelQuotes model
+        _ -> modelQuotes model
+      (text, quoteSpans) = quoteSource quoted
   (sourceId, sourcePath) <- sourceDecl sourceRole (modelSources model)
   (statusId, statusPath) <- sourceDecl "synthetic_status" (modelSources model)
   request <- case modelBody model of
@@ -179,12 +194,46 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
         pure (baseRequest model (ruleId offence)
           [sourceValue sourceId sourcePath text, sourceValue statusId statusPath statusBytes]
           registry (object (map fact assignments)))
+    MultiLegal _ offences exceptions attachments _ -> case (scenario, secondTree) of
+      (Just (Scenario _ _ _ _ [target]), Just exceptionTree) ->
+        case [(offence, exception) | offence <- offences,
+          tokenText (ruleIdentifier offence) == tokenText target,
+          Attachment _ exceptionId owner <- attachments,
+          tokenText owner == tokenText target,
+          GeneralException exception <- exceptions,
+          tokenText (ruleIdentifier exception) == tokenText exceptionId] of
+          [(offence, exception)] -> do
+            offenceRoot <- requirement False burden text quoteSpans (rulePath offence) firstTree
+            exceptionRoot <- requirement True burden text quoteSpans (rulePath exception) exceptionTree
+            let binding = object
+                  [("id", tokenValue (ruleIdentifier exception))
+                  ,("branch_id", tokenValue (ruleProgram offence))
+                  ,("source_id", tokenValue sourceId), ("span", wholeSpan text)
+                  ,("guard", object [("kind", string "is_infringed")
+                    ,("target", tokenValue (ruleId exception))])
+                  ,("effect", string "defeat")]
+                registry =
+                  [object [("id", tokenValue (ruleId offence)), ("source_id", tokenValue sourceId)
+                    ,("program", program (rulePath offence) text (tokenValue (ruleProgram offence)) offenceRoot)
+                    ,("exceptions", array [binding])]
+                  ,object [("id", tokenValue (ruleId exception)), ("source_id", tokenValue sourceId)
+                    ,("program", program (rulePath exception) text (tokenValue (ruleProgram exception)) exceptionRoot)
+                    ,("exceptions", array [])]]
+                exceptionIds = Set.fromList (map (tokenText . elementId) (ruleElements exception))
+                fact (key, value) = factValue (Set.member (tokenText key) exceptionIds)
+                  "synthetic research fixture" (tokenText statusId) burden (key, value)
+            pure (baseRequest model (ruleId offence)
+              [sourceValue sourceId sourcePath text, sourceValue statusId statusPath statusBytes]
+              registry (object (map fact assignments)))
+          _ -> at "SFE040" "<lower>" target "selected attachment is not unique"
+      _ -> at "SFE036" "<lower>" (modelIdentifier model) "one scenario analysis target required"
   pure (encodeJson request)
   where
     sourceRole = case modelBody model of
       Section _ _ _ _ _ _ _ -> "excerpt"
       Synthetic _ _ _ -> "source_text"
       Legal _ _ _ _ -> "source_text"
+      MultiLegal _ _ _ _ _ -> "source_text"
     BurdenAnnotation _ holder kind _ = modelBurden model
     burden = object [("holder", tokenValue holder), ("kind", tokenValue kind)]
 

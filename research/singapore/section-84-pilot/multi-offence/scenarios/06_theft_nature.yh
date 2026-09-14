@@ -1,0 +1,20 @@
+// Entirely synthetic supplied classifications; no person or proceeding.
+scenario H00 for SingaporePenalCodeHurtTheftWithSection84ResearchPrototype-v1 {
+  analyse o:theft;
+  assume a:post-2022-section-84-expression-applicable;
+  assume a:dishonesty-externally-classified;
+  f:movable-property = proved;
+  f:another-possession = proved;
+  f:without-consent = proved;
+  f:dishonest-intention = proved;
+  f:property-moved = proved;
+  f:moved-for-taking = proved;
+  f:unsoundness-time = proved;
+  f:nature-causation = proved;
+  f:nature-incapacity = proved;
+  f:wrong-causation = not_proved;
+  f:ordinary-wrongfulness-incapacity = not_proved;
+  f:contrary-law-incapacity = not_proved;
+  f:control-causation = not_proved;
+  f:control-incapacity = not_proved;
+}
