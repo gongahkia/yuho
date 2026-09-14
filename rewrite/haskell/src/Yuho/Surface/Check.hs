@@ -6,6 +6,8 @@ import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Yuho.Surface.AST
+import Yuho.Surface.ActorExceptions
+  ( scopedToken, scopeTree, actContextToken, attachmentTargetToken, sharedExceptionTree )
 import Yuho.Surface.Definitions
   ( definitionIndex, definitionLeaves, reachableDefinitions, resolveDefinition
   , resolveDefinitionRule )
@@ -356,6 +358,8 @@ checkModel path model supplied = do
           at "SFE064" scenarioPath scenarioId "participant role bindings required"
         Just (scenarioPath, AttemptScenario scenarioId _ _ _ _ _ _ _ _) ->
           at "SFE064" scenarioPath scenarioId "participation scenario required"
+        Just (scenarioPath, ActorScopedScenario scenarioId _ _ _ _ _ _ _ _ _ _ _) ->
+          at "SFE064" scenarioPath scenarioId "participation scenario required"
     AttemptLegal roles definitions assumptions offence attempt citations declaredOutputs -> do
       if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
         then pure () else at "SFE004" path (modelIdentifier model) "research model ID required"
@@ -505,6 +509,365 @@ checkModel path model supplied = do
           at "SFE076" scenarioPath scenarioId "typed attempt stage required"
         Just (scenarioPath, Scenario scenarioId _ _ _ _) ->
           at "SFE083" scenarioPath scenarioId "alleged-attempter binding required"
+        Just (scenarioPath, ActorScopedScenario scenarioId _ _ _ _ _ _ _ _ _ _ _) ->
+          at "SFE083" scenarioPath scenarioId "typed attempt scenario required"
+    ActorScopedLegal _ _ _ _ _ _ _ _ _ _ _ ->
+      checkActorScoped path model supplied quoteIndex sourceIndex
+
+checkActorScoped :: FilePath -> Model -> Maybe (FilePath, Scenario)
+  -> Map.Map Text Token -> Map.Map Text (Text, Text) -> Either Diagnostic Checked
+checkActorScoped path model supplied quotes sources = case modelBody model of
+  ActorScopedLegal roles attributedFacts attributedMental assumptions offence
+    participation@(IntentionalAidRoute route relation) attempt
+    shared@(ActorExceptionDefinition (ActorSubject subject) exception)
+    attachments citations declaredOutputs -> do
+      if "ResearchPrototype-v1" `Text.isSuffixOf` tokenText (modelIdentifier model)
+        then pure () else at "SFE004" path (modelIdentifier model) "research model ID required"
+      expect path "SFE004" (modelJurisdiction model) "Singapore"
+      expect path "SFE004" (modelPurpose model) "research_prototype"
+      expect path "SFE004" (modelDate model) "2026-09-13"
+      let BurdenAnnotation annotation holder burdenKind standard = modelBurden model
+      mapM_ (\(item,wanted) -> expect path "SFE011" item wanted)
+        [(annotation,"section107"),(holder,"defence"),(burdenKind,"legal"),
+         (standard,"balance_of_probabilities")]
+      requireRoles path sources
+      _ <- unique path "SFE063" [(item,()) | PartyRole item _ <- roles]
+      let roleKind wanted = [item | PartyRole item kind <- roles, kind == wanted]
+      (principal,abettor,attempter) <- case
+        (roleKind PrincipalParty,roleKind AllegedAbettorParty,
+         roleKind AllegedAttempterParty) of
+        ([a],[b],[c]) | length roles == 3 -> pure (a,b,c)
+        _ -> at "SFE088" path (modelIdentifier model)
+          "principal, alleged-abettor and alleged-attempter roles required"
+      declared <- checkScopeDeclarations path assumptions
+      let requiredScopes = Set.fromList
+            ["a:post-2022-section-84-expression-applicable",
+             "a:dishonesty-externally-classified",
+             "a:only-intentional-aid-route",
+             "a:principal-theft-requirements-separately-supplied",
+             "a:broader-section108-cases-excluded",
+             "a:no-express-punishment-provision-modelled",
+             "a:direct-self-attempt-only",
+             "a:target-not-completed",
+             "a:no-express-attempt-punishment-provision-modelled",
+             "a:punishment-outside-scope",
+             "a:statutory-expression-supplied",
+             "a:stage-externally-classified",
+             "a:impossible-attempts-excluded"]
+      if Map.keysSet declared == requiredScopes then pure () else
+        at "SFE088" path (modelIdentifier model) "bounded actor-specific scope required"
+      offenceTree <- checkedLegalRule path quotes offence
+      checkOffenceShape path offence offenceTree
+      checkParticipationShape path quotes offence offenceTree route relation
+      participationTree <- resolveParticipationTree path offenceTree participation
+      checkParticipationAttributions path principal abettor [] offence route relation
+        attributedFacts attributedMental
+      let AttemptDefinition attemptRuleId (AttemptActor declaredAttemptActor)
+            (AttemptTarget declaredAttemptTarget) intention stage = attempt
+          TargetDirectedMentalState mentalId (AttemptActor mentalActor)
+            (AttemptTarget mentalTarget) mentalQuote = intention
+          ConductStageDefinition stageId (AttemptActor stageActor) stageOutput stageQuote = stage
+          sectionNumbers rule = [tokenText item | StatutorySection item <- ruleSections rule]
+      checkSections path (ruleIdentifier attemptRuleId) (ruleSections attemptRuleId)
+      if ruleKind offence == OffenceKind && tokenText (ruleIdentifier offence) == "o:theft"
+          && sectionNumbers offence == ["378","379"]
+          && ruleKind attemptRuleId == AttemptKind
+          && sectionNumbers attemptRuleId == ["511"]
+          && map elementCategory (ruleElements attemptRuleId) == [Intention,SubstantialStep]
+          && map (tokenText . elementId) (ruleElements attemptRuleId) ==
+            map tokenText [mentalId,stageOutput]
+          && all ((== tokenText attempter) . tokenText)
+            [declaredAttemptActor,mentalActor,stageActor]
+          && all ((== tokenText (ruleIdentifier offence)) . tokenText)
+            [declaredAttemptTarget,mentalTarget]
+          && fmap tokenText (ruleTarget attemptRuleId) ==
+            Just (tokenText (ruleIdentifier offence))
+          && "stage:" `Text.isPrefixOf` tokenText stageId
+        then pure () else at "SFE087" path (ruleIdentifier attemptRuleId)
+          "attempt must target the declared theft candidate for the alleged attempter"
+      knownQuote path quotes mentalQuote
+      knownQuote path quotes stageQuote
+      attemptRoot <- case ruleGroups attemptRuleId of
+        [Group item All [mentalRef,stageRef]]
+          | map tokenText [mentalRef,stageRef] == map tokenText [mentalId,stageOutput] ->
+              pure item
+        _ -> at "SFE087" path (ruleIdentifier attemptRuleId)
+          "bounded attempt needs distinct intention and supplied stage"
+      let attemptDeclarations = [Leaf (elementId item) Nothing (elementQuote item) Nothing
+            | item <- ruleElements attemptRuleId] ++ ruleGroups attemptRuleId
+      attemptTree <- resolveTree path attemptDeclarations attemptRoot
+      if tokenText subject == "subject:actor" then pure () else
+        at "SFE088" path subject "general exception requires actor subject parameter"
+      case [member | Group _ _ members <- ruleGroups exception, member <- members,
+          "xi:" `Text.isPrefixOf` tokenText member ||
+          "f:xi-" `Text.isPrefixOf` tokenText member ||
+          "g:xi-" `Text.isPrefixOf` tokenText member] of
+        item:_ -> at "SFE095" path item "cross-instance exception reference is forbidden"
+        [] -> pure ()
+      exceptionTree <- sharedExceptionTree path shared
+      mapM_ (checkElementQuote path quotes) (ruleElements exception)
+      checkSharedExceptionShape path exception exceptionTree
+      checkDefinitionIds path [] [offence,route,attemptRuleId,exception] []
+      validateScopedAttachments path (principal,abettor,attempter)
+        offence route attemptRuleId exception attachments
+      checkActorScopedAuthorities path sources citations
+      checkActorScopedOutputs path offence route attemptRuleId attachments declaredOutputs
+      case supplied of
+        Nothing -> case attachments of
+          first:_ -> pure (Checked model Nothing [] offenceTree
+            (Just (scopeTree (attachmentInstanceId first) exceptionTree)))
+          [] -> at "SFE089" path (ruleIdentifier exception) "attachment required"
+        Just (scenarioPath, scenario@(ActorScopedScenario scenarioId modelId targets
+          observations bindings actorRows relationRows stageRows completions scopedRows
+          plain acknowledgements)) -> do
+          expect scenarioPath "SFE004" scenarioId (tokenText (modelRequest model))
+          expect scenarioPath "SFE004" modelId (tokenText (modelIdentifier model))
+          target <- case targets of
+            [item] -> pure item
+            [] -> at "SFE036" scenarioPath scenarioId "one analysis target required"
+            _:second:_ -> at "SFE037" scenarioPath second "multiple analysis targets"
+          selected <- case [item | item <- attachments,
+            tokenText (attachmentTargetToken (attachmentTargetKind item)) == tokenText target] of
+            [item] -> pure item
+            _ -> at "SFE087" scenarioPath target "unknown actor-scoped analysis target"
+          checkScopeAcknowledgements scenarioPath path scenarioId declared acknowledgements
+          actors <- checkScopedActorBindings scenarioPath scenarioId roles bindings
+          let chosen = tokenText target
+              selectedBranch
+                | chosen == tokenText (ruleIdentifier offence) = offenceTree
+                | chosen == tokenText (ruleIdentifier route) = participationTree
+                | otherwise = attemptTree
+              exceptionFacts = Set.fromList (map (tokenText . elementId)
+                (ruleElements exception))
+          case [item | Assignment item _ _ <- plain, Set.member (tokenText item) exceptionFacts]
+            ++ [item | ActorAssignment item _ _ _ <- actorRows,
+              Set.member (tokenText item) exceptionFacts] of
+            item:_ -> at "SFE090" scenarioPath item
+              "section 84 input requires an explicit exception instance"
+            [] -> pure ()
+          case plain of
+            Assignment item _ _:_ -> at "SFE090" scenarioPath item
+              "actor-specific classifications require typed attribution"
+            [] -> pure ()
+          active <- checkedObservations scenarioPath selected observations attachments
+          targetEntries <- if chosen == tokenText (ruleIdentifier attemptRuleId)
+            then checkScopedAttemptInputs scenarioPath scenarioId actors attempt
+              actorRows relationRows stageRows completions
+            else do
+              if null stageRows && null completions then pure () else
+                at "SFE087" scenarioPath scenarioId
+                  "attempt-stage inputs are inactive for this analysis"
+              converted <- mapM (checkActorAssignment scenarioPath actors
+                attributedFacts attributedMental) actorRows
+              if chosen == tokenText (ruleIdentifier route) then case relationRows of
+                [row@(RelationAssignment _ _ _ status reason)] -> do
+                  _ <- checkRelationAssignment scenarioPath actors relation row
+                  pure (converted ++ [Assignment (relationStatusId relation) status reason])
+                [] -> at "SFE068" scenarioPath scenarioId "aid relation required"
+                _:second:_ -> at "SFE068" scenarioPath (relationAssignmentId second)
+                  "duplicate aid relation"
+              else if null relationRows then pure converted else
+                at "SFE087" scenarioPath scenarioId "aid relation inactive for offence analysis"
+          scopedEntries <- mapM (checkScopedExceptionInput scenarioPath actors
+            exceptionFacts attachments active) scopedRows
+          let activeTrees = [scopeTree (attachmentInstanceId item) exceptionTree
+                | item <- active]
+              combined = ResolvedGroup scenarioId All (selectedBranch : activeTrees)
+          checked <- checkAssignments scenarioPath combined (targetEntries ++ scopedEntries)
+          pure (Checked model (Just scenario) checked selectedBranch
+            (Just (scopeTree (attachmentInstanceId selected) exceptionTree)))
+        Just (scenarioPath, _) -> at "SFE089" scenarioPath (modelIdentifier model)
+          "actor-scoped exception scenario and instance classifications required"
+  _ -> at "SFE087" path (modelIdentifier model) "actor-scoped model required"
+
+validateScopedAttachments :: FilePath -> (Token,Token,Token)
+  -> Rule -> Rule -> Rule -> Rule -> [ActorExceptionAttachment]
+  -> Either Diagnostic ()
+validateScopedAttachments path (principal,abettor,attempter)
+    offence route attemptRuleId exception attachments = do
+  _ <- unique path "SFE089" [(attachmentInstanceId item,()) | item <- attachments]
+  _ <- unique path "SFE087" [(attachmentTargetToken (attachmentTargetKind item),())
+    | item <- attachments]
+  if length attachments == 3 then pure () else
+    at "SFE089" path (ruleIdentifier exception) "three explicit actor attachments required"
+  mapM_ validate attachments
+  where
+    validate item = do
+      let instanceId = attachmentInstanceId item
+          definition = attachmentDefinition item
+          role = attachmentSubjectRole item
+          context = attachmentContext item
+      if "xi:" `Text.isPrefixOf` tokenText instanceId
+          && tokenText definition == tokenText (ruleIdentifier exception)
+        then pure () else at "SFE089" path instanceId
+          "attachment requires the authored section 84 definition and unique instance ID"
+      let target = attachmentTargetToken (attachmentTargetKind item)
+          valid = case (attachmentTargetKind item,context) of
+            (CandidateOffenceTarget _,PrincipalConductContext _) ->
+              tokenText target == tokenText (ruleIdentifier offence)
+                && tokenText role == tokenText principal
+            (ParticipationAttachmentTarget _,AidConductContext _) ->
+              tokenText target == tokenText (ruleIdentifier route)
+                && tokenText role == tokenText abettor
+            (AttemptAttachmentTarget _,AttemptConductContext _) ->
+              tokenText target == tokenText (ruleIdentifier attemptRuleId)
+                && tokenText role == tokenText attempter
+            _ -> False
+      if valid then pure () else
+        if tokenText target `elem` [tokenText (ruleIdentifier offence),
+          tokenText (ruleIdentifier route),tokenText (ruleIdentifier attemptRuleId)]
+        then at "SFE088" path role "attachment subject or act context does not belong to target"
+        else at "SFE087" path target "invalid exception attachment target"
+
+checkActorScopedAuthorities :: FilePath -> Map.Map Text (Text,Text)
+  -> [AuthorityReference] -> Either Diagnostic ()
+checkActorScopedAuthorities path sources citations = do
+  let expected = Map.fromList
+        [("theft-conduct",(PenalCode1871,"378","source_text")),
+         ("theft-anchor",(PenalCode1871,"379","source_text")),
+         ("aid",(PenalCode1871,"107","source_text")),
+         ("abettor",(PenalCode1871,"108","source_text")),
+         ("consequence",(PenalCode1871,"109","source_text")),
+         ("attempt",(PenalCode1871,"511","source_text")),
+         ("general-exception",(PenalCode1871,"84","source_text")),
+         ("burden-context",(EvidenceAct1893,"107","contextual"))]
+      rows = [(label,(instrument,source,section))
+        | AuthorityReference label instrument source section <- citations]
+  actual <- unique path "SFE074" rows
+  if Map.keysSet actual == Map.keysSet expected then pure () else
+    at "SFE074" path (Token WordToken "authorities" 1 1)
+      "typed offence, participation, attempt and burden authorities required"
+  mapM_ (\(label,(instrument,source,section)) ->
+    case Map.lookup (tokenText label) expected of
+      Just (wantedInstrument,wantedSection,wantedRole)
+        | instrument == wantedInstrument
+          && tokenText section == wantedSection
+          && maybe False ((== wantedRole) . fst) (Map.lookup (tokenText source) sources) ->
+            pure ()
+      _ -> at "SFE074" path label "authority instrument, section or source role mismatch") rows
+
+checkActorScopedOutputs :: FilePath -> Rule -> Rule -> Rule
+  -> [ActorExceptionAttachment] -> [TechnicalOutput] -> Either Diagnostic ()
+checkActorScopedOutputs path offence route attemptRuleId attachments rows = do
+  let instanceFor target = [attachmentInstanceId item | item <- attachments,
+        tokenText (attachmentTargetToken (attachmentTargetKind item)) == tokenText target]
+      outputRoot rule = case reverse (ruleGroups rule) of
+        Group item _ _:_ -> item
+        _ -> ruleIdentifier rule
+      expected = case (instanceFor (ruleIdentifier offence),
+        instanceFor (ruleIdentifier route),instanceFor (ruleIdentifier attemptRuleId)) of
+        ([principal],[abettor],[attempter]) ->
+          [("principal_requirements",outputRoot offence),
+           ("principal_section84",principal),
+           ("principal_final",ruleId offence),
+           ("abettor_requirements",outputRoot route),
+           ("abettor_section84",abettor),
+           ("abettor_final",ruleId route),
+           ("attempter_requirements",outputRoot attemptRuleId),
+           ("attempter_section84",attempter),
+           ("attempter_final",ruleId attemptRuleId)]
+        _ -> []
+  if [(tokenText label,tokenText target) | TechnicalOutput label target <- rows] ==
+      [(label,tokenText target) | (label,target) <- expected]
+    then pure () else at "SFE020" path (ruleIdentifier offence)
+      "actor-qualified technical outputs required"
+
+checkScopedActorBindings :: FilePath -> Token -> [PartyRole] -> [ActorBinding]
+  -> Either Diagnostic (Map.Map Text Token)
+checkScopedActorBindings path scenarioId roles rows = do
+  bound <- unique path "SFE088" [(role,actor) | ActorBinding role actor <- rows]
+  if Map.keysSet bound == Set.fromList [tokenText item | PartyRole item _ <- roles]
+    then pure () else at "SFE088" path scenarioId
+      "all three declared actor roles require one binding"
+  let actors = Map.elems bound
+  if length actors == 3 && all ("actor:" `Text.isPrefixOf`) (map tokenText actors)
+      && Set.size (Set.fromList (map tokenText actors)) == 3
+    then pure bound else at "SFE088" path scenarioId
+      "three distinct opaque actor identifiers required"
+
+checkedObservations :: FilePath -> ActorExceptionAttachment -> [Token]
+  -> [ActorExceptionAttachment] -> Either Diagnostic [ActorExceptionAttachment]
+checkedObservations path selected observations attachments = do
+  _ <- unique path "SFE089" [(item,()) | item <- observations]
+  others <- mapM findObservation observations
+  pure (selected:others)
+  where
+    findObservation item
+      | tokenText item == tokenText (attachmentInstanceId selected) =
+          at "SFE089" path item "selected instance is already active"
+      | otherwise = case [attachment | attachment <- attachments,
+          tokenText (attachmentInstanceId attachment) == tokenText item] of
+          [attachment] -> pure attachment
+          _ -> at "SFE089" path item "unknown exception instance observation"
+
+checkScopedAttemptInputs :: FilePath -> Token -> Map.Map Text Token
+  -> AttemptDefinition -> [ActorAssignment] -> [RelationAssignment]
+  -> [ConductStageAssignment] -> [TargetCompletion]
+  -> Either Diagnostic [Assignment]
+checkScopedAttemptInputs path scenarioId actors attempt actorRows relationRows stages completions = do
+  let AttemptDefinition _ (AttemptActor role) (AttemptTarget target) intention stage = attempt
+      intended = attemptIntentionId intention
+      stageId = attemptStageId stage
+      expectedActor = Map.lookup (tokenText role) actors
+  if null relationRows then pure () else at "SFE087" path scenarioId
+    "aid relation is inactive for attempt analysis"
+  intentionAssignment <- case actorRows of
+    [ActorAssignment item actor status reason]
+      | tokenText item == tokenText intended
+        && fmap tokenText expectedActor == Just (tokenText actor) ->
+          pure (Assignment intended status reason)
+      | otherwise -> at "SFE091" path actor
+          "target intention belongs to the alleged-attempter actor"
+    [] -> at "SFE081" path scenarioId "attempt intention classification required"
+    _:second:_ -> at "SFE091" path (actorAssignmentId second)
+      "only the selected attempt intention may be supplied"
+  stageAssignment <- case stages of
+    [ConductStageAssignment item actor status]
+      | tokenText item == tokenText stageId
+        && fmap tokenText expectedActor == Just (tokenText actor) ->
+          let (proof,reason) = case status of
+                PreparationOnly source -> (source { tokenText = "not_proved" },Nothing)
+                ActTowardsCommission source -> (source { tokenText = "proved" },Nothing)
+                StageUnresolved source why -> (source { tokenText = "unresolved" },Just why)
+          in pure (Assignment (attemptStageOutput stage) proof reason)
+      | otherwise -> at "SFE091" path actor "attempt stage belongs to alleged attempter"
+    [] -> at "SFE076" path scenarioId "attempt conduct stage required"
+    _:second:_ -> at "SFE077" path (stageAssignmentId second) "duplicate conduct stage"
+  case completions of
+    [TargetNotCompleted item _] | tokenText item == tokenText target -> pure ()
+    [TargetNotCompleted item _] -> at "SFE075" path item "attempt target cannot be replaced"
+    [TargetCompleted _ item] -> at "SFE080" path item
+      "completed target is outside bounded attempt analysis"
+    [] -> at "SFE080" path scenarioId "target completion status required"
+    _:second:_ -> at "SFE080" path (completionToken second)
+      "duplicate target completion status"
+  pure [intentionAssignment,stageAssignment]
+
+checkScopedExceptionInput :: FilePath -> Map.Map Text Token -> Set.Set Text
+  -> [ActorExceptionAttachment] -> [ActorExceptionAttachment]
+  -> ScopedExceptionAssignment -> Either Diagnostic Assignment
+checkScopedExceptionInput path actors facts attachments active row = do
+  let instanceId = scopedAssignmentInstance row
+      fact = scopedAssignmentFact row
+  attachment <- case [item | item <- attachments,
+    tokenText (attachmentInstanceId item) == tokenText instanceId] of
+    [item] -> pure item
+    _ -> at "SFE089" path instanceId "unknown exception instance"
+  if any ((== tokenText instanceId) . tokenText . attachmentInstanceId) active
+    then pure () else at "SFE093" path instanceId
+      "classification for inactive exception instance"
+  if Set.member (tokenText fact) facts then pure () else
+    at "SFE095" path fact "unknown or cross-instance section 84 proposition"
+  let expectedActor = Map.lookup (tokenText (attachmentSubjectRole attachment)) actors
+  if fmap tokenText expectedActor == Just (tokenText (scopedAssignmentActor row))
+    then pure () else at "SFE091" path (scopedAssignmentActor row)
+      "exception classification belongs to the attachment subject actor"
+  if tokenText (actContextToken (scopedAssignmentContext row)) ==
+      tokenText (actContextToken (attachmentContext attachment))
+    then pure () else at "SFE092" path (actContextToken (scopedAssignmentContext row))
+      "exception classification uses another act context"
+  pure (Assignment (scopedToken instanceId fact)
+    (scopedAssignmentStatus row) (scopedAssignmentReason row))
 
 checkAttemptAuthorities :: FilePath -> Map.Map Text (Text, Text)
   -> [AuthorityReference] -> Either Diagnostic ()

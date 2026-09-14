@@ -397,6 +397,59 @@ attemptDeclaration = do
         [requirement] []
   pure (AttemptDefinition authoredRule (AttemptActor actor) (AttemptTarget target) mental stage)
 
+actorExceptionDefinition :: P ActorExceptionDefinition
+actorExceptionDefinition = do
+  headToken <- need "general-exception"
+  item <- word
+  _ <- need "subject"
+  subject <- word
+  _ <- need "rule"
+  exceptionRuleId <- word
+  _ <- need "program"
+  programId <- word
+  _ <- need "path"
+  sourcePath <- word
+  _ <- need "sections"
+  section <- StatutorySection <$> word
+  _ <- need "{"
+  declarations <- manyBefore "}" ruleEntry
+  _ <- need "}"
+  pure (ActorExceptionDefinition (ActorSubject subject)
+    (Rule ExceptionKind headToken item Nothing exceptionRuleId programId sourcePath
+      [section] [value | RuleElement value <- declarations]
+      [value | RuleGroup value <- declarations]
+      [value | RuleReference value <- declarations]))
+
+actContext :: P ActContext
+actContext = do
+  item <- word
+  case tokenText item of
+    "principal-conduct" -> pure (PrincipalConductContext item)
+    "aid-conduct" -> pure (AidConductContext item)
+    "attempt-conduct" -> pure (AttemptConductContext item)
+    _ -> P $ \path _ -> at "SFE092" path item "unknown actor-specific act context"
+
+actorAttachment :: P ActorExceptionAttachment
+actorAttachment = do
+  _ <- need "attach"
+  definition <- word
+  _ <- need "to"
+  kindToken <- word
+  target <- word
+  targetKind <- case tokenText kindToken of
+    "offence" -> pure (CandidateOffenceTarget target)
+    "participation" -> pure (ParticipationAttachmentTarget target)
+    "attempt" -> pure (AttemptAttachmentTarget target)
+    _ -> P $ \path _ -> at "SFE087" path kindToken "invalid exception attachment target kind"
+  _ <- need "for"
+  role <- word
+  _ <- need "context"
+  context <- actContext
+  _ <- need "as"
+  instanceId <- word
+  _ <- need ";"
+  pure (ActorExceptionAttachment definition targetKind role context instanceId)
+
 instrument :: P StatutoryInstrument
 instrument = do
   item <- word
@@ -588,11 +641,27 @@ body = do
         assumptions <- scopeAssumptions
         offence <- rule "offence"
         participation <- participationRoute
-        citations <- authorities
-        declaredOutputs <- outputs
-        pure (sources, quotes, burden,
-          ParticipationLegal roles definitions attributedFacts attributedMentalStates
-            assumptions offence participation citations declaredOutputs)
+        afterParticipation <- current
+        if tokenText afterParticipation == "attempt" then do
+          case definitions of
+            [] -> pure ()
+            first:_ -> P $ \path _ -> at "SFE087" path (definitionId first)
+              "actor-scoped integration uses the bounded direct theft candidate"
+          attempt <- attemptDeclaration
+          shared <- actorExceptionDefinition
+          attached <- whileWord "attach" actorAttachment
+          citations <- authorities
+          declaredOutputs <- outputs
+          pure (sources, quotes, burden,
+            ActorScopedLegal roles attributedFacts attributedMentalStates
+              assumptions offence participation attempt shared attached
+              citations declaredOutputs)
+        else do
+          citations <- authorities
+          declaredOutputs <- outputs
+          pure (sources, quotes, burden,
+            ParticipationLegal roles definitions attributedFacts attributedMentalStates
+              assumptions offence participation citations declaredOutputs)
       else do
         assumptions <- map AttemptScopeAssumption <$> scopeAssumptions
         offence <- rule "offence"
@@ -711,6 +780,22 @@ scenarioParser = do
       actor <- word
       _ <- need ";"
       pure (ScenarioBinding (ActorBinding role actor))
+    else if tokenText next == "observe" then do
+      _ <- need "observe"
+      instanceId <- word
+      _ <- need ";"
+      pure (ScenarioObservation instanceId)
+    else if tokenText next == "exception-status" then do
+      _ <- need "exception-status"
+      instanceId <- word
+      fact <- word
+      _ <- need "by"
+      actor <- word
+      _ <- need "context"
+      context <- actContext
+      (status,reason) <- assignmentValue
+      pure (ScenarioScopedException (ScopedExceptionAssignment
+        instanceId fact actor context status reason))
     else if tokenText next == "stage" then do
       _ <- need "stage"
       stageId <- word
@@ -744,6 +829,11 @@ scenarioParser = do
       replacement <- word
       P $ \path _ -> at "SFE075" path replacement
         "scenario cannot replace the authored attempt target"
+    else if tokenText next == "attach" then do
+      _ <- need "attach"
+      replacement <- word
+      P $ \path _ -> at "SFE096" path replacement
+        "scenario cannot create or rebind an exception attachment"
     else do
       item <- word
       if "rel:" `Text.isPrefixOf` tokenText item then do
@@ -769,10 +859,15 @@ scenarioParser = do
       relations = [item | ScenarioRelation item <- entries]
       stages = [item | ScenarioStage item <- entries]
       completions = [item | ScenarioCompletion item <- entries]
+      scoped = [item | ScenarioScopedException item <- entries]
+      observations = [item | ScenarioObservation item <- entries]
       plain = [item | ScenarioPlainAssignment item <- entries]
       acknowledgements = [item | ScenarioAssumption item <- entries]
       targets = [item | ScenarioTarget item <- entries]
-  if not (null stages && null completions) then
+  if not (null scoped && null observations) then
+    pure (ActorScopedScenario requestId modelId targets observations bindings
+      actors relations stages completions scoped plain acknowledgements)
+  else if not (null stages && null completions) then
     pure (AttemptScenario requestId modelId bindings actors stages completions
       plain acknowledgements targets)
   else if null bindings && null actors && null relations then
@@ -784,6 +879,7 @@ data ScenarioEntry = ScenarioTarget Token | ScenarioAssumption ScopeAcknowledgem
   | ScenarioBinding ActorBinding | ScenarioActorAssignment ActorAssignment
   | ScenarioRelation RelationAssignment | ScenarioPlainAssignment Assignment
   | ScenarioStage ConductStageAssignment | ScenarioCompletion TargetCompletion
+  | ScenarioObservation Token | ScenarioScopedException ScopedExceptionAssignment
 
 parseScenario :: FilePath -> BS.ByteString -> Either Diagnostic Scenario
 parseScenario path bytes = do

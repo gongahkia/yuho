@@ -12,6 +12,8 @@ module Yuho.Surface.AST
   , ConductStageDefinition(..), AttemptDefinition(..), AttemptScopeAssumption(..)
   , AttemptTechnicalOutput(..), ConductStage(..), ConductStageAssignment(..)
   , TargetCompletion(..)
+  , ExceptionSubject(..), ActorExceptionDefinition(..), AttachmentTargetKind(..)
+  , ActContext(..), ActorExceptionAttachment(..), ScopedExceptionAssignment(..)
   , BurdenAnnotation(..), TechnicalOutput(..), Proposition(..), Element(..), Rule(..), Body(..), Model(..), Scenario(..)
   , Resolved(..), Checked(..), identifier, leafTokens ) where
 
@@ -101,6 +103,24 @@ data ConductStageAssignment = ConductStageAssignment Token Token ConductStage
   deriving (Eq, Show)
 data TargetCompletion = TargetNotCompleted Token Token | TargetCompleted Token Token
   deriving (Eq, Show)
+newtype ExceptionSubject = ActorSubject Token deriving (Eq, Show)
+data ActorExceptionDefinition = ActorExceptionDefinition ExceptionSubject Rule
+  deriving (Eq, Show)
+data AttachmentTargetKind = CandidateOffenceTarget Token
+  | ParticipationAttachmentTarget Token | AttemptAttachmentTarget Token
+  deriving (Eq, Show)
+data ActContext = PrincipalConductContext Token | AidConductContext Token
+  | AttemptConductContext Token deriving (Eq, Show)
+data ActorExceptionAttachment = ActorExceptionAttachment
+  { attachmentDefinition :: Token, attachmentTargetKind :: AttachmentTargetKind
+  , attachmentSubjectRole :: Token, attachmentContext :: ActContext
+  , attachmentInstanceId :: Token }
+  deriving (Eq, Show)
+data ScopedExceptionAssignment = ScopedExceptionAssignment
+  { scopedAssignmentInstance :: Token, scopedAssignmentFact :: Token
+  , scopedAssignmentActor :: Token, scopedAssignmentContext :: ActContext
+  , scopedAssignmentStatus :: Token, scopedAssignmentReason :: Maybe Token }
+  deriving (Eq, Show)
 data Proposition = Leaf Token (Maybe Token) Token (Maybe Token)
   | Group Token Combinator [Token] deriving (Eq, Show)
 data Element = Element
@@ -125,6 +145,10 @@ data Body = Section Token Token Token Token Token [Proposition] [Assignment]
       [ScopeAssumption] Rule ParticipationRoute [AuthorityReference] [TechnicalOutput]
   | AttemptLegal [PartyRole] [StatutoryDefinition] [AttemptScopeAssumption]
       Rule AttemptDefinition [AuthorityReference] [AttemptTechnicalOutput]
+  | ActorScopedLegal [PartyRole] [ActorAttributedFact] [ActorAttributedMentalState]
+      [ScopeAssumption] Rule ParticipationRoute AttemptDefinition
+      ActorExceptionDefinition [ActorExceptionAttachment]
+      [AuthorityReference] [TechnicalOutput]
   deriving (Eq, Show)
 data Model = Model
   { modelIdentifier :: Token
@@ -146,6 +170,10 @@ data Scenario = Scenario Token Token [Assignment] [ScopeAcknowledgement] [Token]
   | AttemptScenario Token Token [ActorBinding] [ActorAssignment]
       [ConductStageAssignment] [TargetCompletion] [Assignment]
       [ScopeAcknowledgement] [Token]
+  | ActorScopedScenario Token Token [Token] [Token] [ActorBinding]
+      [ActorAssignment] [RelationAssignment] [ConductStageAssignment]
+      [TargetCompletion] [ScopedExceptionAssignment] [Assignment]
+      [ScopeAcknowledgement]
   deriving (Eq, Show)
 data Resolved = ResolvedLeaf Token Token | ResolvedGroup Token Combinator [Resolved]
   deriving (Eq, Show)
