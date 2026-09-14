@@ -3,7 +3,6 @@ module Yuho.Surface.Lexer (lexSource) where
 
 import qualified Data.ByteString as BS
 import Data.Char (isAsciiLower, isAsciiUpper, isDigit)
-import Data.Text (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Encoding
 import Yuho.Surface.Token

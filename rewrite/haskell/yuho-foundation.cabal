@@ -74,6 +74,21 @@ library
       Yuho.ModelBundle.ChangeSet
       Yuho.ModelBundle.Diff
       Yuho.ModelBundle.Run
+      Yuho.Surface.Token
+      Yuho.Surface.Lexer
+      Yuho.Surface.AST
+      Yuho.Surface.Parser
+      Yuho.Surface.Resolve
+      Yuho.Surface.Check
+      Yuho.Surface.Lower
+      Yuho.Surface.Compile
+      Yuho.CLI
+
+executable yuho
+  import: foundation
+  main-is: YuhoMain.hs
+  hs-source-dirs: app
+  build-depends: yuho-foundation ==0.1.0.0
 
 executable yuho-model-bundle
   import: foundation

@@ -3,7 +3,6 @@ module Yuho.Surface.Resolve (resolveTree) where
 
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
-import Data.Text (Text)
 import qualified Data.Text as Text
 import Yuho.Surface.AST
 import Yuho.Surface.Token

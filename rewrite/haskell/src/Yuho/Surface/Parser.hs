@@ -56,8 +56,8 @@ optional wanted = do
   token <- current
   if tokenText token == wanted then need wanted >> pure True else pure False
 
-until :: Text -> P a -> P [a]
-until ending action = go []
+manyBefore :: Text -> P a -> P [a]
+manyBefore ending action = go []
   where
     go reversed = do
       token <- current
@@ -84,7 +84,7 @@ assignment = do
 assignments :: P [Assignment]
 assignments = do
   _ <- need "{"
-  rows <- until "}" assignment
+  rows <- manyBefore "}" assignment
   _ <- need "}"
   pure rows
 
@@ -93,7 +93,7 @@ group headToken = do
   item <- word
   _ <- need "("
   first <- word
-  more <- until ")" $ do
+  more <- manyBefore ")" $ do
     _ <- need ","
     word
   _ <- need ")"
@@ -142,22 +142,22 @@ rule role = do
     Just <$> word
     else pure Nothing
   _ <- need "rule"
-  ruleId <- word
+  declaredRule <- word
   _ <- need "program"
   programId <- word
   _ <- need "path"
   path <- word
   _ <- need "{"
-  declarations <- until "}" elementOrGroup
+  declarations <- manyBefore "}" elementOrGroup
   _ <- need "}"
-  pure (Rule headToken item target ruleId programId path
+  pure (Rule headToken item target declaredRule programId path
     [value | Left value <- declarations] [value | Right value <- declarations])
 
 provenance :: P ([SourceDecl], Maybe Token, [(Token, Token)])
 provenance = do
   _ <- need "provenance"
   _ <- need "{"
-  rows <- until "}" $ do
+  rows <- manyBefore "}" $ do
     headToken <- word
     case tokenText headToken of
       "source" -> do
@@ -200,7 +200,7 @@ limitations :: P [Token]
 limitations = do
   _ <- need "limitations"
   _ <- need "{"
-  values <- until "}" $ do
+  values <- manyBefore "}" $ do
     value <- string
     _ <- need ";"
     pure value
@@ -224,7 +224,7 @@ body = do
     burden <- annotations
     _ <- need "propositions"
     _ <- need "{"
-    declarations <- until "}" proposition
+    declarations <- manyBefore "}" proposition
     _ <- need "}"
     _ <- need "proof_assignments"
     assigned <- assignments
@@ -242,7 +242,7 @@ body = do
     exception <- rule "exception"
     _ <- need "outputs"
     _ <- need "{"
-    outputs <- until "}" $ do
+    outputs <- manyBefore "}" $ do
       label <- word
       target <- word
       _ <- need ";"
@@ -271,12 +271,12 @@ modelParser = do
   referenceDate <- word
   limit <- word
   _ <- need ";"
-  (sources, quotes, burden, modelBody) <- body
+  (sources, quotes, burden, parsedBody) <- body
   limits <- limitations
   _ <- need "}"
   _ <- kind EndToken
   pure (Model item variant jurisdiction purpose requestId referenceDate limit
-    sources quotes burden modelBody limits)
+    sources quotes burden parsedBody limits)
 
 parseModel :: FilePath -> BS.ByteString -> Either Diagnostic Model
 parseModel path bytes = do
