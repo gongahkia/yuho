@@ -1,0 +1,19 @@
+// Synthetic classifications; no person, allegation, diagnosis or evidence is assessed.
+scenario H00 for SingaporePenalCodeSection323WithSection84ResearchPrototype-v1 {
+  assume a:outside-section-323A;
+  assume a:outside-section-334;
+  assume a:post-2022-section-84-expression-applicable;
+  f:act-performed = proved;
+  f:hurt-caused = proved;
+  f:hurt-caused-by-act = proved;
+  f:intention-to-cause-hurt = proved;
+  f:knowledge-hurt-likely = not_proved;
+  f:unsoundness-time = proved;
+  f:nature-causation = not_proved;
+  f:nature-incapacity = not_proved;
+  f:wrong-causation = proved;
+  f:ordinary-wrongfulness-incapacity = proved;
+  f:contrary-law-incapacity = proved;
+  f:control-causation = not_proved;
+  f:control-incapacity = not_proved;
+}

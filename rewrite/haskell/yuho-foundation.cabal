@@ -82,6 +82,7 @@ library
       Yuho.Surface.Check
       Yuho.Surface.Lower
       Yuho.Surface.Compile
+      Yuho.Surface.Explain
       Yuho.CLI
 
 executable yuho

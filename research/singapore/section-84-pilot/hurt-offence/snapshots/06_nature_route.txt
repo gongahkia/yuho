@@ -1,0 +1,32 @@
+Model: SingaporePenalCodeSection323WithSection84ResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:outside-section-323A
+  a:outside-section-334
+  a:post-2022-section-84-expression-applicable
+Candidate offence chain (Penal Code ss 319, 321, 323):
+  g:voluntary-hurt — all; technical satisfied
+    f:act-performed — supplied proved; technical satisfied
+    f:hurt-caused — supplied proved; technical satisfied
+    f:hurt-caused-by-act — supplied proved; technical satisfied
+    g:section321-fault — any; technical satisfied
+      f:intention-to-cause-hurt — supplied proved; technical satisfied
+      f:knowledge-hurt-likely — supplied not_proved; technical not_satisfied
+Section 84 general exception:
+  g:section84-requirements — all; technical satisfied
+    f:unsoundness-time — supplied proved; technical satisfied
+    g:section84-routes — any; technical satisfied
+      g:nature — all; technical satisfied
+        f:nature-causation — supplied proved; technical satisfied
+        f:nature-incapacity — supplied proved; technical satisfied
+      g:wrongfulness — all; technical not_satisfied
+        f:wrong-causation — supplied not_proved; technical not_satisfied
+        f:ordinary-wrongfulness-incapacity — supplied not_proved; technical not_satisfied
+        f:contrary-law-incapacity — supplied not_proved; technical not_satisfied
+      g:control — all; technical not_satisfied
+        f:control-causation — supplied not_proved; technical not_satisfied
+        f:control-incapacity — supplied not_proved; technical not_satisfied
+Section 84 kernel rule: satisfied
+Section 107 context: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: not_satisfied (candidate branch technically defeated by section 84)
+No guilt, conviction, acquittal or sentence was determined.
