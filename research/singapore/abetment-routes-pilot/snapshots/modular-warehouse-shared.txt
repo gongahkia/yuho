@@ -107,7 +107,7 @@ Scope assumptions: acknowledged by scenario, not inferred or proved
   a:statutory-expression-supplied
   a:stage-externally-classified
   a:impossible-attempts-excluded
-Final technical participation status: satisfied
+Final technical offence status: satisfied
 No guilt, conviction, acquittal, liability, punishment or sentence was determined.
 
 
@@ -249,7 +249,7 @@ Scope assumptions: acknowledged by scenario, not inferred or proved
   a:statutory-expression-supplied
   a:stage-externally-classified
   a:impossible-attempts-excluded
-Final technical participation status: not_satisfied
+Final technical attempt status: not_satisfied
 No guilt, conviction, acquittal, liability, punishment or sentence was determined.
 
 No guilt, conviction, acquittal, liability or sentence was determined.

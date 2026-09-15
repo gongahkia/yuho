@@ -496,6 +496,10 @@ explainAbetment path checked@(Checked model _ assignments _ _) target observed b
       exceptionTechnical = maybe Map.empty traceValues exceptionResult
       scopedStatus = maybe "not_evaluated" (satisfactionText . proofRuleStatus) exceptionResult
       currentIsAbetment = tokenText target == tokenText (ruleIdentifier route)
+      finalStatusLabel
+        | tokenText target == tokenText (ruleIdentifier offence) = "offence"
+        | currentIsAbetment = "participation"
+        | otherwise = "attempt"
       treeId node = case node of
         ResolvedLeaf item _ -> tokenText item
         ResolvedGroup item _ _ -> tokenText item
@@ -559,7 +563,7 @@ explainAbetment path checked@(Checked model _ assignments _ _) target observed b
             <> tokenText standard <> ". It does not classify evidence."
            ,"Scope assumptions: acknowledged by scenario, not inferred or proved"]
         ++ ["  " <> tokenText item | ScopeAcknowledgement item <- acknowledgements]
-        ++ ["Final technical participation status: " <>
+        ++ ["Final technical " <> finalStatusLabel <> " status: " <>
           satisfactionText (proofResultStatus result)
            ,"No guilt, conviction, acquittal, liability, punishment or sentence was determined."]
   Right (Text.unlines output)
