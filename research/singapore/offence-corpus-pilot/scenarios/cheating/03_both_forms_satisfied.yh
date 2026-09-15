@@ -19,4 +19,3 @@ scenario C00 for SingaporePenalCodeCheatingMischiefResearchPrototype-v1 {
   f:control-causation = not_proved;
   f:control-incapacity = not_proved;
 }
-

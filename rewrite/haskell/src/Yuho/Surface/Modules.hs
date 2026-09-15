@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module Yuho.Surface.Modules
-  ( AuthoredModel(..), loadAuthoredModel, authoredPrefix ) where
+  ( AuthoredModel(..), loadAuthoredModel, authoredPrefix
+  , validateAuthoredChecked, validateAuthoredTargets ) where
 
 import Control.Exception (IOException, try)
 import qualified Data.ByteString as BS
@@ -22,6 +23,7 @@ data AuthoredModel = AuthoredModel
   { authoredModel :: Model
   , authoredHost :: Maybe Text
   , authoredImports :: [(Text,Text,Text)]
+  , authoredVisible :: [Text]
   } deriving (Eq, Show)
 
 data Import = Import Token Token Token deriving (Eq, Show)
@@ -215,7 +217,8 @@ data Loaded = Loaded FilePath StatutoryModule Model
 loadAuthoredModel :: FilePath -> BS.ByteString -> IO (Either Diagnostic AuthoredModel)
 loadAuthoredModel path bytes = case lexSource path bytes of
   Right (first:_) | tokenText first == "modular-model" -> loadHost path bytes
-  _ -> pure (AuthoredModel <$> parseModel path bytes <*> pure Nothing <*> pure [])
+  _ -> pure (AuthoredModel <$> parseModel path bytes <*> pure Nothing <*> pure []
+    <*> pure [])
 
 loadHost :: FilePath -> BS.ByteString -> IO (Either Diagnostic AuthoredModel)
 loadHost path bytes = case parseWith hostParser path bytes of
@@ -241,7 +244,9 @@ loadHost path bytes = case parseWith hostParser path bytes of
         mapM_ (validateAttachment path modules model) attachments
         let records = [(tokenText name,tokenText version,tokenText alias)
               | Import name version alias <- imports]
-        Right (AuthoredModel model (Just (tokenText hostId)) records)
+            visible = [item | Use kindValue token <- uses, kindValue /= ExportModel,
+              Right (_,item) <- [qualified path token]]
+        Right (AuthoredModel model (Just (tokenText hostId)) records visible)
 
 loadImports :: FilePath -> FilePath -> [Import] -> IO (Either Diagnostic (Map Text Loaded))
 loadImports hostPath root imports = go Map.empty Set.empty Set.empty imports
@@ -431,3 +436,34 @@ authoredPrefix authored = case authoredHost authored of
        ,"Resolved imports:"] ++
        ["  " <> name <> "@" <> version <> " as " <> alias
         | (name,version,alias) <- imports])
+
+validateAuthoredChecked :: FilePath -> AuthoredModel -> Checked
+  -> Either Diagnostic ()
+validateAuthoredChecked path authored (Checked model scenario _ _ _) =
+  validateAuthoredTargets path authored (selectedTargets model scenario)
+  where
+    selectedTargets _ Nothing = []
+    selectedTargets _ (Just (Scenario _ _ _ _ targets)) = targets
+    selectedTargets _ (Just (ActorScopedScenario _ _ targets _ _ _ _ _ _ _ _ _)) = targets
+    selectedTargets selected (Just (ParticipationScenario _ _ _ _ _ _ _ _)) =
+      case modelBody selected of
+        ParticipationLegal _ _ _ _ _ _ (IntentionalAidRoute route _) _ _ ->
+          [ruleIdentifier route]
+        _ -> []
+    selectedTargets selected (Just (AttemptScenario _ _ _ _ _ _ _ _ _)) =
+      case modelBody selected of
+        AttemptLegal _ _ _ _ attempt _ _ -> [ruleIdentifier (attemptRule attempt)]
+        _ -> []
+
+validateAuthoredTargets :: FilePath -> AuthoredModel -> [Token]
+  -> Either Diagnostic ()
+validateAuthoredTargets path authored targets = case authoredHost authored of
+  Nothing -> Right ()
+  Just _ | any (\(name,_,_) -> name == "effective-expression")
+      (authoredImports authored) -> Right ()
+  Just _ -> case [target | target <- targets,
+      not (Set.member (tokenText target) visible)] of
+    target:_ -> at "SFM006" path target
+      "analysis target is private or was not explicitly composed by the modular host"
+    [] -> Right ()
+  where visible = Set.fromList (authoredVisible authored)

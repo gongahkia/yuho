@@ -16,7 +16,8 @@ import Yuho.Surface.Case
   ( caseModelFile, checkAnalysisCase, compileAnalysisCase, explainAnalysisCase
   , runAnalysisCase )
 import Yuho.Surface.Explain (explainChecked)
-import Yuho.Surface.Modules (AuthoredModel(..), authoredPrefix, loadAuthoredModel)
+import Yuho.Surface.Modules
+  ( AuthoredModel(..), authoredPrefix, loadAuthoredModel, validateAuthoredChecked )
 import Yuho.Surface.Parser (parseAnalysisCase)
 import Yuho.Surface.Temporal (loadAuthoredInput)
 import Yuho.Surface.Token (Diagnostic(..), tokenColumn, tokenLine)
@@ -77,6 +78,14 @@ moduleChecks root = do
       "  use model theft::SingaporePenalCodeStatutoryDefinitionsResearchPrototype-v1;\n" "" theftSource))
   expectLoad "duplicate alias is refused" "SFM005" theftHost
     (loadAuthoredModel theftHost (replace "as theft;" "as defs;" theftSource))
+  hurtAuthored <- loadAuthoredModel hurtHost hurtSource >>= requireRight "hurt host"
+  privateChecked <- either (const (failed "private target setup")) pure
+    (checkParsed hurtHost (authoredModel hurtAuthored)
+      (Just (theftScenarioPath,theftScenario)))
+  check "a scenario cannot select a private uncomposed offence" $ case
+      validateAuthoredChecked theftScenarioPath hurtAuthored privateChecked of
+    Left issue -> diagnosticCode issue == "SFM006" && located issue theftScenarioPath
+    Right () -> False
 
 temporalChecks :: FilePath -> IO ()
 temporalChecks root = do
@@ -93,6 +102,9 @@ temporalChecks root = do
     (status (runLine beforeRequest) == Just "not_satisfied")
   check "boundary uses inclusive effective-from expression"
     (status (runLine boundaryRequest) == Just "satisfied")
+  check "fictional penalty grammar executes separately at the boundary"
+    (selectedPenaltyIds (runLine beforeRequest) == []
+      && selectedPenaltyIds (runLine boundaryRequest) == ["pen:fictional-entry"])
   boundaryAgain <- temporalRequest modelPath modelSource boundaryPath boundary
   check "temporal compilation is deterministic"
     (boundaryRequest == boundaryAgain)
@@ -215,6 +227,10 @@ runCorpus modelPath hostSource base penaltyId (family,name,wanted,wantPenalty) =
   let (authored,supplied) = resolved
       request = compileParsed modelPath (authoredModel authored) supplied
   compiled <- either (const (failed (name <> " compile"))) pure request
+  checked <- either (const (failed (name <> " check"))) pure
+    (checkParsed modelPath (authoredModel authored) supplied)
+  check (name <> " respects modular visibility")
+    (validateAuthoredChecked scenarioPath authored checked == Right ())
   check (name <> " deterministic compile")
     (request == compileParsed modelPath (authoredModel authored) supplied)
   let response = runLine compiled
@@ -238,6 +254,8 @@ explanationBytes modelPath modelSource scenarioPath scenario = do
   let (authored,supplied) = resolved
   checked <- either (const (failed "explanation check")) pure
     (checkParsed modelPath (authoredModel authored) supplied)
+  either (const (failed "explanation visibility")) pure
+    (validateAuthoredChecked scenarioPath authored checked)
   explanation <- either (const (failed "explanation render")) pure
     (explainChecked modelPath checked)
   pure (Encoding.encodeUtf8 (authoredPrefix authored <> explanation))

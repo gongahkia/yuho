@@ -1645,9 +1645,10 @@ checkCandidatePenalties path model sources = do
       if Set.member (tokenText (candidatePenaltyTarget item)) targets then pure ()
       else at "SFP003" path (candidatePenaltyTarget item)
         "candidate penalty targets an unknown offence"
-      if Map.member (tokenText (candidatePenaltySource item)) sources then pure ()
-      else at "SFP003" path (candidatePenaltySource item)
-        "candidate penalty source is not declared"
+      case Map.lookup (tokenText (candidatePenaltySource item)) sources of
+        Just ("source_text",_) -> pure ()
+        _ -> at "SFP003" path (candidatePenaltySource item)
+          "candidate penalty needs a declared source-text reference"
       if not (Text.null (tokenText (candidatePenaltyProvision item)))
           && Text.all (`elem` ['0'..'9']) (tokenText (candidatePenaltyProvision item))
         then pure () else at "SFP003" path (candidatePenaltyProvision item)

@@ -15,12 +15,15 @@ import System.Posix.Files (createLink, fileSize, getSymbolicLinkStatus, isRegula
 import Yuho.Kernel.Run (runLine)
 import Yuho.Protocol.Json (decodeJson, encodeJson, lookupField, textValue)
 import Yuho.Surface.Compile (checkParsed, compileParsed)
+import Yuho.Surface.AST (AnalysisCase(..), CaseAllegation(..))
 import Yuho.Surface.Case
   ( caseModelFile, checkAnalysisCase, compileAnalysisCase, runAnalysisCase
   , explainAnalysisCase )
 import Yuho.Surface.Explain (explainChecked)
 import Yuho.Surface.Lexer (lexSource)
-import Yuho.Surface.Modules (AuthoredModel(..), authoredPrefix, loadAuthoredModel)
+import Yuho.Surface.Modules
+  ( AuthoredModel(..), authoredPrefix, loadAuthoredModel
+  , validateAuthoredChecked, validateAuthoredTargets )
 import Yuho.Surface.Parser (parseAnalysisCase)
 import Yuho.Surface.Temporal (loadAuthoredInput)
 import Yuho.Surface.Token (Diagnostic(..), Kind(..), Token(..), diagnosticJson)
@@ -92,30 +95,42 @@ operate (Options command path scenarioPath output) = do
             >>= either report pure
           let model = authoredModel authored
               compiled = compileParsed path model resolvedScenario
+              validationPath = maybe path fst resolvedScenario
           case command of
             Check -> case checkParsed path model resolvedScenario of
               Left issue -> report issue
-              Right _ -> BS.hPut stdout "{\"status\":\"valid\"}\n"
+              Right checked -> case validateAuthoredChecked validationPath authored checked of
+                Left issue -> report issue
+                Right () -> BS.hPut stdout "{\"status\":\"valid\"}\n"
             Compile -> case compiled of
               Left issue -> report issue
-              Right request -> case output of
-                Nothing -> BS.hPut stdout request
-                Just destination -> publish destination request
+              Right request -> case checkParsed path model resolvedScenario
+                  >>= validateAuthoredChecked validationPath authored of
+                Left issue -> report issue
+                Right () -> case output of
+                  Nothing -> BS.hPut stdout request
+                  Just destination -> publish destination request
             Run -> case compiled of
               Left issue -> report issue
               Right request -> do
-                let response = runLine request
-                case decodeJson response of
-                  Right value | (lookupField "status" value >>= textValue) /= Just "rejected" ->
-                    BS.hPut stdout response
-                  _ -> report (Diagnostic "SFE014" path (Token EndToken "" 1 1)
-                    "compiled request was rejected by the Haskell kernel" Nothing)
+                case checkParsed path model resolvedScenario
+                    >>= validateAuthoredChecked validationPath authored of
+                  Left issue -> report issue
+                  Right () -> do
+                    let response = runLine request
+                    case decodeJson response of
+                      Right value | (lookupField "status" value >>= textValue) /= Just "rejected" ->
+                        BS.hPut stdout response
+                      _ -> report (Diagnostic "SFE014" path (Token EndToken "" 1 1)
+                        "compiled request was rejected by the Haskell kernel" Nothing)
             Explain -> case checkParsed path model resolvedScenario of
               Left issue -> report issue
-              Right checked -> case explainChecked path checked of
+              Right checked -> case validateAuthoredChecked validationPath authored checked of
                 Left issue -> report issue
-                Right explanation -> BS.hPut stdout
-                  (Encoding.encodeUtf8 (authoredPrefix authored <> explanation))
+                Right () -> case explainChecked path checked of
+                  Left issue -> report issue
+                  Right explanation -> BS.hPut stdout
+                    (Encoding.encodeUtf8 (authoredPrefix authored <> explanation))
 
 operateCase :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
   -> Maybe FilePath -> IO ()
@@ -129,6 +144,9 @@ operateCase command path bytes scenarioPath output = do
   modelBytes <- readSource modelPath >>= either report pure
   authored <- loadAuthoredModel modelPath modelBytes >>= either report pure
   let model = authoredModel authored
+      AnalysisCase _ _ _ _ allegations = declaration
+  either report pure (validateAuthoredTargets path authored
+    [target | CaseAllegation _ _ target _ _ _ <- allegations])
   checked <- either report pure (checkAnalysisCase path declaration modelPath model)
   case command of
     Check -> BS.hPut stdout "{\"kind\":\"analysis-case\",\"status\":\"valid\"}\n"

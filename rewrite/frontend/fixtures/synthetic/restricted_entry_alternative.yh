@@ -40,6 +40,15 @@ model FictionalRestrictedAreaEntry-v0.1 {
     final_rule r:entry;
   }
 
+  candidate-penalties {
+    candidate pen:fictional-entry for offence o:entry source src:fictional-rule provision 999 {
+      exactly-one-of term:fictional-alternatives {
+        imprisonment term:fictional-custody minimum not-stated maximum 1 days;
+        fine term:fictional-fine currency SGD minimum not-stated maximum 100;
+      }
+    }
+  }
+
   limitations {
     "Fictional alternative expression for mechanical date selection only";
     "The interval is an authored assumption, not a legal-currency finding";

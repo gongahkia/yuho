@@ -15,6 +15,9 @@ Fictional exception requirements:
   g:emergency-requirements — all; technical not_satisfied
     f:immediate-danger — supplied not_proved; technical not_satisfied
     f:rescue-purpose — supplied not_proved; technical not_satisfied
+Candidate penalty presentation (not an imposed sentence):
+  pen:fictional-entry — Penal Code s 999; kernel selection: selected
+    exactly one of (imprisonment minimum not stated, maximum 1 days; fine SGD minimum not stated, maximum 100)
 Fictional exception kernel rule: not_satisfied
 Contextual burden annotation: none; none none burden; not_applicable. This annotation does not classify evidence.
 Final technical status: satisfied (selected expression requirements technically satisfied)
