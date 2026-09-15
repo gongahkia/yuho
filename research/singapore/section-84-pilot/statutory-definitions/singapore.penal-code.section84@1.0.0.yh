@@ -1,0 +1,4 @@
+statutory-module singapore.penal-code.section84 version 1.0.0 {
+  export general-exception x:section84;
+  source-model "section323-section379-definitions.yh";
+}

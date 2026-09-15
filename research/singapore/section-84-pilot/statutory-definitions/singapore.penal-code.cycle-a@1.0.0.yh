@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.cycle-a version 1.0.0 {
+  import singapore.penal-code.cycle-b version 1.0.0 as b;
+  export model SingaporePenalCodeStatutoryDefinitionsResearchPrototype-v1;
+  source-model "section323-section379-definitions.yh";
+}

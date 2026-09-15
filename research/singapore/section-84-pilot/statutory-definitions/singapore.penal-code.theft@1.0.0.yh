@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.theft version 1.0.0 {
+  export model SingaporePenalCodeStatutoryDefinitionsResearchPrototype-v1;
+  export offence o:theft;
+  source-model "section323-section379-definitions.yh";
+}

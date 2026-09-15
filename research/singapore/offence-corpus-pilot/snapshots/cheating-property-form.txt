@@ -1,0 +1,57 @@
+Modular host: SingaporeModularCheatingMischief-v1
+Authored module versions select local model identity, not law by conduct date.
+Resolved imports:
+  singapore.penal-code.cheating-mischief@1.0.0 as pc
+Model: SingaporePenalCodeCheatingMischiefResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Selected candidate offence: o:cheating
+Candidate statutory sections: Penal Code ss 415, 417
+General exception: Penal Code s 84
+Attachment: s 84 -> candidate o:cheating
+Definition instance: shared x:section84
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:post-2022-section-84-expression-applicable
+  a:bounded-section415-text-expression
+  a:section417-candidate-terms-only
+Selected candidate offence requirements:
+  g:cheating-requirements — all; technical satisfied
+    f:deception — supplied proved; technical satisfied
+    g:cheating-forms — any; technical satisfied
+      g:cheating-property-form — all; technical satisfied
+        f:property-fraudulent-or-dishonest — supplied proved; technical satisfied
+        f:property-delivery-or-retention — supplied proved; technical satisfied
+      g:cheating-act-harm-form — all; technical not_satisfied
+        f:intentional-inducement — supplied not_proved; technical not_satisfied
+        f:induced-act-or-omission — supplied not_proved; technical not_satisfied
+        f:damage-or-harm — supplied not_proved; technical not_satisfied
+Section 84 general exception:
+  g:section84-requirements — all; technical not_satisfied
+    f:unsoundness-time — supplied not_proved; technical not_satisfied
+    g:section84-routes — any; technical not_satisfied
+      g:nature — all; technical not_satisfied
+        f:nature-causation — supplied not_proved; technical not_satisfied
+        f:nature-incapacity — supplied not_proved; technical not_satisfied
+      g:wrongfulness — all; technical not_satisfied
+        f:wrong-causation — supplied not_proved; technical not_satisfied
+        f:ordinary-wrongfulness-incapacity — supplied not_proved; technical not_satisfied
+        f:contrary-law-incapacity — supplied not_proved; technical not_satisfied
+      g:control — all; technical not_satisfied
+        f:control-causation — supplied not_proved; technical not_satisfied
+        f:control-incapacity — supplied not_proved; technical not_satisfied
+Section 84 source references:
+  f:unsoundness-time -> q:time
+  f:nature-causation -> q:time
+  f:nature-incapacity -> q:nature
+  f:wrong-causation -> q:time
+  f:ordinary-wrongfulness-incapacity -> q:ordinary + q:wrong-operator
+  f:contrary-law-incapacity -> q:law + q:wrong-operator
+  f:control-causation -> q:time
+  f:control-incapacity -> q:control
+Candidate penalty presentation (not an imposed sentence):
+  pen:section417 — Penal Code s 417; kernel selection: selected
+    one or more of (imprisonment minimum not stated, maximum 3 years; fine SGD minimum not stated, maximum unbounded in this authored term)
+Section 84 kernel rule: not_satisfied
+Section 107 context: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: satisfied (candidate requirements technically satisfied; no section 84 defeat)
+No guilt, conviction, acquittal or sentence was determined.
+

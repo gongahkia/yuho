@@ -1,0 +1,11 @@
+modular-model SingaporeModularHurtWithSection84-v1 {
+  module-root ".";
+  import singapore.penal-code.hurt version 1.0.0 as hurt;
+  import singapore.penal-code.section84 version 1.0.0 as s84;
+  use model hurt::SingaporePenalCodeStatutoryDefinitionsResearchPrototype-v1;
+  use definition hurt::d:hurt;
+  use definition hurt::d:voluntarily-causing-hurt;
+  use offence hurt::o:voluntary-hurt;
+  use general-exception s84::x:section84;
+  attach s84::x:section84 to offence hurt::o:voluntary-hurt;
+}

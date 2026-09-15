@@ -25,6 +25,7 @@ checkModel path model supplied = do
     else pure ()
   quoteIndex <- unique path "SFE002" (modelQuotes model)
   sourceIndex <- sourceDeclarations path (modelSources model)
+  checkCandidatePenalties path model sourceIndex
   case modelBody model of
     Section rootId programId sourcePath root mapping declarations inline -> do
       expect path "SFE004" (modelIdentifier model) "SingaporePenalCodeSection84Post2022ResearchPrototype-v1"
@@ -1610,8 +1611,84 @@ checkOffenceShape path offence tree = do
           map Just [MovableProperty,Possession,ConsentAbsence,DishonestIntention,
                     Movement,MovementForTaking]
         && length (ruleElements offence) == 6 -> pure ()
+    _ | not (null (ruleElements offence)) && not (null (ruleGroups offence)) -> pure ()
     _ -> at "SFE031" path (ruleIdentifier offence)
-      "candidate offence must use the supported hurt or theft typed structure"
+      "candidate offence requires typed elements and a root proposition"
+
+checkCandidatePenalties :: FilePath -> Model -> Map.Map Text (Text,Text)
+  -> Either Diagnostic ()
+checkCandidatePenalties path model sources = do
+  let penalties = modelCandidatePenalties model
+      offences = offenceRules (modelBody model)
+      targets = Set.fromList (map (tokenText . ruleIdentifier) offences)
+  _ <- unique path "SFP002"
+    [(candidatePenaltyId item,()) | item <- penalties]
+  mapM_ (checkOne targets) penalties
+  let termIds = concatMap (termTokens . candidatePenaltyTerm) penalties
+  _ <- unique path "SFP002" [(item,()) | item <- termIds]
+  pure ()
+  where
+    offenceRules bodyValue = case bodyValue of
+      Synthetic offence _ _ -> [offence]
+      Legal _ offence _ _ -> [offence]
+      MultiLegal _ offences _ _ _ -> offences
+      DefinitionsLegal _ _ offences _ _ _ -> offences
+      ParticipationLegal _ _ _ _ _ offence _ _ _ -> [offence]
+      AttemptLegal _ _ _ offence _ _ _ -> [offence]
+      ActorScopedLegal _ _ _ _ offence _ _ _ _ _ _ -> [offence]
+      AbetmentLegal _ _ _ _ offence _ _ _ _ _ _ -> [offence]
+      Section _ _ _ _ _ _ _ -> []
+    checkOne targets item = do
+      if "pen:" `Text.isPrefixOf` tokenText (candidatePenaltyId item) then pure ()
+      else at "SFP002" path (candidatePenaltyId item)
+        "candidate penalty requires pen: identifier"
+      if Set.member (tokenText (candidatePenaltyTarget item)) targets then pure ()
+      else at "SFP003" path (candidatePenaltyTarget item)
+        "candidate penalty targets an unknown offence"
+      if Map.member (tokenText (candidatePenaltySource item)) sources then pure ()
+      else at "SFP003" path (candidatePenaltySource item)
+        "candidate penalty source is not declared"
+      if not (Text.null (tokenText (candidatePenaltyProvision item)))
+          && Text.all (`elem` ['0'..'9']) (tokenText (candidatePenaltyProvision item))
+        then pure () else at "SFP003" path (candidatePenaltyProvision item)
+          "candidate penalty provision must be a numeric section reference"
+      checkTerm (candidatePenaltyTerm item)
+    checkTerm term = case term of
+      ImprisonmentTerm item minimumValue maximumValue unit -> do
+        if tokenText unit `elem` ["days","weeks","months","years"] then pure ()
+        else at "SFP004" path unit "unsupported imprisonment unit"
+        checkBounds item minimumValue maximumValue
+      FineTerm item currency minimumValue maximumValue -> do
+        expect path "SFP004" currency "SGD"
+        checkBounds item minimumValue maximumValue
+      PenaltyAllOf item children -> checkChildren item children
+      PenaltyExactlyOneOf item children -> checkChildren item children
+      PenaltyOneOrMoreOf item children -> checkChildren item children
+    checkChildren item children = do
+      if length children >= 2 then pure ()
+      else at "SFP004" path item "penalty combination requires at least two terms"
+      mapM_ checkTerm children
+    checkBounds item minimumValue maximumValue = do
+      minimumNumber <- endpointNumber True minimumValue
+      maximumNumber <- endpointNumber False maximumValue
+      case (minimumNumber,maximumNumber) of
+        (Just minimumAmount,Just maximumAmount) | minimumAmount > maximumAmount ->
+          at "SFP004" path item "candidate penalty minimum exceeds maximum"
+        _ -> pure ()
+    endpointNumber isMinimum endpoint = case endpoint of
+      PenaltyNotStated _ -> Right Nothing
+      PenaltyUnbounded token -> if isMinimum
+        then at "SFP004" path token "candidate penalty minimum cannot be unbounded"
+        else Right Nothing
+      PenaltySpecified token -> case reads (Text.unpack (tokenText token)) of
+        [(value,"")] | value > (0 :: Integer) -> Right (Just value)
+        _ -> at "SFP004" path token "candidate penalty endpoint must be a positive integer"
+    termTokens term = case term of
+      ImprisonmentTerm item _ _ _ -> [item]
+      FineTerm item _ _ _ -> [item]
+      PenaltyAllOf item children -> item : concatMap termTokens children
+      PenaltyExactlyOneOf item children -> item : concatMap termTokens children
+      PenaltyOneOrMoreOf item children -> item : concatMap termTokens children
 
 checkSharedExceptionShape :: FilePath -> Rule -> Resolved -> Either Diagnostic ()
 checkSharedExceptionShape path exception tree = do

@@ -20,6 +20,7 @@ module Yuho.Surface.AST
   , CaseFactId(..), CaseFactKind(..), CaseFactSubject(..)
   , CaseFactClassification(..), CaseFact(..), CaseInputTarget(..), CaseFactBinding(..)
   , BurdenAnnotation(..), TechnicalOutput(..), Proposition(..), Element(..), Rule(..), Body(..), Model(..), Scenario(..)
+  , PenaltyEndpoint(..), PenaltyTerm(..), CandidatePenalty(..)
   , Resolved(..), Checked(..), identifier, leafTokens ) where
 
 import Data.Text (Text)
@@ -46,6 +47,20 @@ data Attachment = Attachment Token Token Token deriving (Eq, Show)
 newtype StatutorySection = StatutorySection Token deriving (Eq, Show)
 data BurdenAnnotation = BurdenAnnotation Token Token Token Token deriving (Eq, Show)
 data TechnicalOutput = TechnicalOutput Token Token deriving (Eq, Show)
+data PenaltyEndpoint = PenaltyNotStated Token | PenaltyUnbounded Token
+  | PenaltySpecified Token deriving (Eq, Show)
+data PenaltyTerm
+  = ImprisonmentTerm Token PenaltyEndpoint PenaltyEndpoint Token
+  | FineTerm Token Token PenaltyEndpoint PenaltyEndpoint
+  | PenaltyAllOf Token [PenaltyTerm]
+  | PenaltyExactlyOneOf Token [PenaltyTerm]
+  | PenaltyOneOrMoreOf Token [PenaltyTerm]
+  deriving (Eq, Show)
+data CandidatePenalty = CandidatePenalty
+  { candidatePenaltyId :: Token, candidatePenaltyTarget :: Token
+  , candidatePenaltySource :: Token, candidatePenaltyProvision :: Token
+  , candidatePenaltyTerm :: PenaltyTerm }
+  deriving (Eq, Show)
 data DefinitionKind = HurtResult | VoluntaryHurt | WrongfulGain | WrongfulLoss
   | Dishonesty deriving (Eq, Ord, Show)
 newtype DefinitionInput = DefinitionInput Element deriving (Eq, Show)
@@ -210,6 +225,7 @@ data Model = Model
   , modelQuotes :: [(Token, Token)]
   , modelBurden :: BurdenAnnotation
   , modelBody :: Body
+  , modelCandidatePenalties :: [CandidatePenalty]
   , modelLimitations :: [Token]
   } deriving (Eq, Show)
 data Scenario = Scenario Token Token [Assignment] [ScopeAcknowledgement] [Token]

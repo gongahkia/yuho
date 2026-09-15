@@ -1,0 +1,4 @@
+temporal-scenario TS00 {
+  conduct-date 2023-12-31;
+  input "scenario_temporal_boundary_input.yh";
+}

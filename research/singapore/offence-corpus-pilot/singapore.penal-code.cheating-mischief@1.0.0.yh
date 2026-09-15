@@ -1,0 +1,7 @@
+statutory-module singapore.penal-code.cheating-mischief version 1.0.0 {
+  export model SingaporePenalCodeCheatingMischiefResearchPrototype-v1;
+  export offence o:cheating;
+  export offence o:mischief;
+  export general-exception x:section84;
+  source-model "cheating-mischief.yh";
+}

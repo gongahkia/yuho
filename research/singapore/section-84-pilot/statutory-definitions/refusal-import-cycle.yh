@@ -1,0 +1,5 @@
+modular-model RefusalImportCycle-v1 {
+  module-root ".";
+  import singapore.penal-code.cycle-a version 1.0.0 as cycle;
+  use model cycle::SingaporePenalCodeStatutoryDefinitionsResearchPrototype-v1;
+}

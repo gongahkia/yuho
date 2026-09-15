@@ -685,6 +685,72 @@ limitations = do
   _ <- need "}"
   pure values
 
+penaltyEndpoint :: P PenaltyEndpoint
+penaltyEndpoint = do
+  item <- word
+  case tokenText item of
+    "not-stated" -> pure (PenaltyNotStated item)
+    "unbounded" -> pure (PenaltyUnbounded item)
+    _ -> pure (PenaltySpecified item)
+
+penaltyTerm :: P PenaltyTerm
+penaltyTerm = do
+  kindToken <- word
+  termId <- word
+  case tokenText kindToken of
+    "imprisonment" -> do
+      _ <- need "minimum"
+      minimumValue <- penaltyEndpoint
+      _ <- need "maximum"
+      maximumValue <- penaltyEndpoint
+      unit <- word
+      _ <- need ";"
+      pure (ImprisonmentTerm termId minimumValue maximumValue unit)
+    "fine" -> do
+      _ <- need "currency"
+      currency <- word
+      _ <- need "minimum"
+      minimumValue <- penaltyEndpoint
+      _ <- need "maximum"
+      maximumValue <- penaltyEndpoint
+      _ <- need ";"
+      pure (FineTerm termId currency minimumValue maximumValue)
+    "all-of" -> PenaltyAllOf termId <$> penaltyChildren
+    "exactly-one-of" -> PenaltyExactlyOneOf termId <$> penaltyChildren
+    "one-or-more-of" -> PenaltyOneOrMoreOf termId <$> penaltyChildren
+    _ -> P $ \path _ -> at "SFP001" path kindToken
+      "unsupported candidate penalty term"
+  where
+    penaltyChildren = do
+      _ <- need "{"
+      children <- manyBefore "}" penaltyTerm
+      _ <- need "}"
+      pure children
+
+candidatePenalties :: P [CandidatePenalty]
+candidatePenalties = do
+  next <- current
+  if tokenText next /= "candidate-penalties" then pure []
+  else do
+    _ <- need "candidate-penalties"
+    _ <- need "{"
+    values <- manyBefore "}" $ do
+      _ <- need "candidate"
+      item <- word
+      _ <- need "for"
+      _ <- need "offence"
+      target <- word
+      _ <- need "source"
+      source <- word
+      _ <- need "provision"
+      provision <- word
+      _ <- need "{"
+      term <- penaltyTerm
+      _ <- need "}"
+      pure (CandidatePenalty item target source provision term)
+    _ <- need "}"
+    pure values
+
 scopeAssumptions :: P [ScopeAssumption]
 scopeAssumptions = do
   _ <- need "scope-assumptions"
@@ -871,11 +937,12 @@ modelParser = do
   limit <- word
   _ <- need ";"
   (sources, quotes, burden, parsedBody) <- body
+  penalties <- candidatePenalties
   limits <- limitations
   _ <- need "}"
   _ <- kind EndToken
   pure (Model item variant jurisdiction purpose requestId referenceDate limit
-    sources quotes burden parsedBody limits)
+    sources quotes burden parsedBody penalties limits)
 
 parseModel :: FilePath -> BS.ByteString -> Either Diagnostic Model
 parseModel path bytes = do

@@ -1,0 +1,10 @@
+modular-model SingaporeModularCheatingMischief-v1 {
+  module-root ".";
+  import singapore.penal-code.cheating-mischief version 1.0.0 as pc;
+  use model pc::SingaporePenalCodeCheatingMischiefResearchPrototype-v1;
+  use offence pc::o:cheating;
+  use offence pc::o:mischief;
+  use general-exception pc::x:section84;
+  attach pc::x:section84 to offence pc::o:cheating;
+  attach pc::x:section84 to offence pc::o:mischief;
+}

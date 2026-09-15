@@ -3,10 +3,12 @@ module Yuho.Surface.Explain (explainChecked) where
 
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Yuho.Protocol.Json (decodeJson)
 import Yuho.Exception.Types (Truth(..))
+import Yuho.PenaltySelection.Types (PenaltyDeclaration(..))
 import Yuho.Surface.AST
 import Yuho.Surface.ActorExceptions
   ( actContextToken, attachmentRuleId, attachmentTargetToken, sharedExceptionTree )
@@ -18,6 +20,7 @@ import Yuho.SuppliedProofStatus.Evaluate (evaluateProof)
 import Yuho.SuppliedProofStatus.Select (selectProofPenalties)
 import Yuho.SuppliedProofStatus.Types
   ( ProofBranch(..), ProofReason(..), ProofResult(..), ProofRule(..), ProofTrace(..)
+  , ProofSelected(..), ProofSelection(..)
   , satisfactionText )
 import Yuho.SuppliedProofStatus.Validate (validateProofRequest)
 
@@ -276,10 +279,16 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
         _ -> at "SFE013" path (modelIdentifier model)
           "explain requires a checked intentional-aid scenario"
     (Just (Scenario _ _ _ acknowledgements targets), Just defenceTree) -> do
-      (offence, exception, introduction, definitionLines, sourceReferences, offenceHeading) <-
+      (offence, exception, introduction, definitionLines, sourceReferences,
+        offenceHeading, section84Context) <-
         case modelBody model of
+          Synthetic selected shared _ | null targets -> Right
+            (selected, shared,
+             ["Selected fictional expression: " <> tokenText (ruleIdentifier selected)],
+             [], [], "Selected fictional rule requirements:", False)
           Legal _ selected shared _ | null targets -> Right
-            (selected, shared, [], [], [], "Candidate offence chain (Penal Code ss 319, 321, 323):")
+            (selected, shared, [], [], [],
+              "Candidate offence chain (Penal Code ss 319, 321, 323):", True)
           MultiLegal _ offences exceptions attachments _ -> case targets of
             [target] -> case [(selected, shared) | selected <- offences,
               tokenText (ruleIdentifier selected) == tokenText target,
@@ -301,7 +310,7 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
                    <> tokenText (elementQuote item)
                    <> maybe "" (\support -> " + " <> tokenText support) (elementSupport item)
                   | item <- ruleElements shared],
-                 "Selected candidate offence requirements:")
+                 "Selected candidate offence requirements:", True)
               _ -> at "SFE040" path target "selected exception attachment is not unique"
             _ -> at "SFE036" path (modelIdentifier model) "one analysis target required"
           DefinitionsLegal definitions _ offences exceptions attachments _ ->
@@ -339,7 +348,7 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
                        <> tokenText (elementQuote item)
                        <> maybe "" (\support -> " + " <> tokenText support) (elementSupport item)
                       | item <- ruleElements shared],
-                     "Selected candidate offence requirements:")
+                     "Selected candidate offence requirements:", True)
                 _ -> at "SFE040" path target "selected exception attachment is not unique"
               _ -> at "SFE036" path (modelIdentifier model) "one analysis target required"
           _ -> at "SFE013" path (modelIdentifier model)
@@ -350,7 +359,7 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
       decoded <- kernel (decodeProofRequest value)
       validated <- kernel (validateProofRequest decoded)
       result <- kernel (evaluateProof validated)
-      _ <- kernel (selectProofPenalties validated result)
+      selection <- kernel (selectProofPenalties validated result)
       offenceResult <- case [item | item <- proofResultRules result,
         proofRuleId item == tokenText (ruleId offence)] of
         [item] -> Right item
@@ -368,6 +377,13 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
           defenceValues = maybe Map.empty traceValues defenceResult
           acknowledged = [tokenText item | ScopeAcknowledgement item <- acknowledgements]
           BurdenAnnotation annotation holder burdenKind standard = modelBurden model
+          selectedPenaltyIds = Set.fromList [penaltyId declaration
+            | ProofSelected declaration _ <- proofSelected selection]
+          candidatePenaltyLines = case [item | item <- modelCandidatePenalties model,
+              tokenText (candidatePenaltyTarget item) == tokenText (ruleIdentifier offence)] of
+            [] -> []
+            candidates -> ["Candidate penalty presentation (not an imposed sentence):"]
+              ++ concatMap (renderCandidatePenalty selectedPenaltyIds) candidates
           linesOfText =
             ["Model: " <> tokenText (modelIdentifier model)
             ,"Jurisdiction: " <> tokenText (modelJurisdiction model)
@@ -378,17 +394,22 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
             ++ definitionLines
             ++ [offenceHeading]
             ++ renderTree 1 supplied offenceValues offenceTree
-            ++ ["Section 84 general exception:"]
+            ++ [if section84Context then "Section 84 general exception:"
+                else "Fictional exception requirements:"]
             ++ renderTree 1 supplied defenceValues defenceTree
             ++ (if null sourceReferences then [] else
                   "Section 84 source references:" : sourceReferences)
-            ++ ["Section 84 kernel rule: " <>
+            ++ candidatePenaltyLines
+            ++ [(if section84Context then "Section 84 kernel rule: "
+                  else "Fictional exception kernel rule: ") <>
                   maybe "not_evaluated" (satisfactionText . proofRuleStatus) defenceResult
-                ,"Section 107 context: " <> tokenText annotation <> "; "
+                ,(if section84Context then "Section 107 context: "
+                  else "Contextual burden annotation: ") <> tokenText annotation <> "; "
                   <> tokenText holder <> " " <> tokenText burdenKind <> " burden; "
                   <> tokenText standard <> ". This annotation does not classify evidence."
                 ,"Final technical status: " <> satisfactionText (proofResultStatus result)
-                  <> " (" <> reasonText (proofBranchReason branch) <> ")"
+                  <> " (" <> (if section84Context then reasonText
+                    else genericReasonText) (proofBranchReason branch) <> ")"
                 ,"No guilt, conviction, acquittal or sentence was determined."]
       Right (Text.unlines linesOfText)
     _ -> at "SFE013" path (modelIdentifier model)
@@ -396,6 +417,40 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
   where
     kernel result = either (const (at "SFE014" path (modelIdentifier model)
       "Haskell kernel rejected the compiled research model")) Right result
+
+renderCandidatePenalty :: Set.Set Text -> CandidatePenalty -> [Text]
+renderCandidatePenalty selected item =
+  ["  " <> tokenText (candidatePenaltyId item) <> " — Penal Code s "
+    <> tokenText (candidatePenaltyProvision item) <> "; kernel selection: "
+    <> if Set.member (tokenText (candidatePenaltyId item)) selected
+      then "selected" else "not_selected"
+  ,"    " <> renderPenaltyTerm (candidatePenaltyTerm item)]
+
+renderPenaltyTerm :: PenaltyTerm -> Text
+renderPenaltyTerm term = case term of
+  ImprisonmentTerm _ minimumValue maximumValue unit ->
+    "imprisonment " <> endpoints minimumValue maximumValue <> " " <> tokenText unit
+  FineTerm _ currency minimumValue maximumValue ->
+    "fine " <> tokenText currency <> " " <> endpoints minimumValue maximumValue
+  PenaltyAllOf _ children -> "all of (" <> joined children <> ")"
+  PenaltyExactlyOneOf _ children -> "exactly one of (" <> joined children <> ")"
+  PenaltyOneOrMoreOf _ children -> "one or more of (" <> joined children <> ")"
+  where
+    joined = Text.intercalate "; " . map renderPenaltyTerm
+    endpoints minimumValue maximumValue = "minimum " <> endpoint minimumValue
+      <> ", maximum " <> endpoint maximumValue
+    endpoint value = case value of
+      PenaltyNotStated _ -> "not stated"
+      PenaltyUnbounded _ -> "unbounded in this authored term"
+      PenaltySpecified token -> tokenText token
+
+genericReasonText :: ProofReason -> Text
+genericReasonText reason = case reason of
+  ProofSatisfied -> "selected expression requirements technically satisfied"
+  ProofRequirementsNotSatisfied -> "selected expression requirements not satisfied"
+  ProofRequirementsUnresolved -> "selected expression requirements unresolved"
+  ProofDefeated -> "attached exception technically defeated the branch"
+  ProofExceptionUnresolved -> "attached exception remained unresolved"
 
 explainAbetment :: FilePath -> Checked -> Token -> [Token] -> [ActorBinding]
   -> [ConductStageAssignment] -> [ScopeAcknowledgement] -> Rule -> Abetment

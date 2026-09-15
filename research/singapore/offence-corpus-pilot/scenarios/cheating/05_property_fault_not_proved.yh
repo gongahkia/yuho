@@ -1,0 +1,22 @@
+// Synthetic decision path: property form lacks its fraudulent-or-dishonest classification.
+scenario C00 for SingaporePenalCodeCheatingMischiefResearchPrototype-v1 {
+  analyse o:cheating;
+  assume a:post-2022-section-84-expression-applicable;
+  assume a:bounded-section415-text-expression;
+  assume a:section417-candidate-terms-only;
+  f:deception = proved;
+  f:property-fraudulent-or-dishonest = not_proved;
+  f:property-delivery-or-retention = proved;
+  f:intentional-inducement = not_proved;
+  f:induced-act-or-omission = not_proved;
+  f:damage-or-harm = not_proved;
+  f:unsoundness-time = not_proved;
+  f:nature-causation = not_proved;
+  f:nature-incapacity = not_proved;
+  f:wrong-causation = not_proved;
+  f:ordinary-wrongfulness-incapacity = not_proved;
+  f:contrary-law-incapacity = not_proved;
+  f:control-causation = not_proved;
+  f:control-incapacity = not_proved;
+}
+

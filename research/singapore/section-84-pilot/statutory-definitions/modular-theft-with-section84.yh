@@ -1,0 +1,13 @@
+modular-model SingaporeModularTheftWithSection84-v1 {
+  module-root ".";
+  import singapore.penal-code.sections23-24 version 1.0.0 as defs;
+  import singapore.penal-code.theft version 1.0.0 as theft;
+  import singapore.penal-code.section84 version 1.0.0 as s84;
+  use model theft::SingaporePenalCodeStatutoryDefinitionsResearchPrototype-v1;
+  use definition defs::d:wrongful-gain;
+  use definition defs::d:wrongful-loss;
+  use definition defs::d:dishonestly;
+  use offence theft::o:theft;
+  use general-exception s84::x:section84;
+  attach s84::x:section84 to offence theft::o:theft;
+}

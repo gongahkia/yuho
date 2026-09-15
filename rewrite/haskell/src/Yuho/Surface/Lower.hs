@@ -105,11 +105,52 @@ requirement section burden text quoteSpans path node = case node of
       ,("span", wholeSpan text)
       ,("members", array lowered)])
 
-program :: Token -> BS.ByteString -> J -> J -> J
-program path text programId root = object
+program :: Model -> Maybe Rule -> Token -> BS.ByteString -> J -> J -> J
+program model selectedRule path text programId root = object
   [("id", programId), ("path", array [tokenValue path])
   ,("span", wholeSpan text), ("definitions", JBool False)
-  ,("requirements", array [root]), ("children", array []), ("penalties", array [])]
+  ,("requirements", array [root]), ("children", array [])
+  ,("penalties", array (map (penaltyValue text) selected))]
+  where
+    selected = case selectedRule of
+      Nothing -> []
+      Just rule -> [item | item <- modelCandidatePenalties model,
+        tokenText (candidatePenaltyTarget item) == tokenText (ruleIdentifier rule)]
+
+penaltyValue :: BS.ByteString -> CandidatePenalty -> J
+penaltyValue text item = object
+  [("penalty_id",tokenValue (candidatePenaltyId item))
+  ,("source_id",tokenValue (candidatePenaltySource item))
+  ,("span",wholeSpan text)
+  ,("guard",object [("kind",string "unguarded")])
+  ,("term",termValue text (candidatePenaltyTerm item))]
+
+termValue :: BS.ByteString -> PenaltyTerm -> J
+termValue text term = case term of
+  ImprisonmentTerm item minimumValue maximumValue unit -> object
+    [("term_id",tokenValue item),("span",wholeSpan text)
+    ,("kind",string "term_imprisonment"),("unit",tokenValue unit)
+    ,("minimum",endpointValue False minimumValue)
+    ,("maximum",endpointValue False maximumValue)]
+  FineTerm item currency minimumValue maximumValue -> object
+    [("term_id",tokenValue item),("span",wholeSpan text),("kind",string "fine")
+    ,("currency",tokenValue currency),("minimum",endpointValue True minimumValue)
+    ,("maximum",endpointValue True maximumValue)]
+  PenaltyAllOf item children -> combination "all_of" item children
+  PenaltyExactlyOneOf item children -> combination "exactly_one_of" item children
+  PenaltyOneOrMoreOf item children -> combination "one_or_more_of" item children
+  where
+    combination kindValue item children = object
+      [("term_id",tokenValue item),("span",wholeSpan text),("kind",string kindValue)
+      ,("terms",array (map (termValue text) children))]
+
+endpointValue :: Bool -> PenaltyEndpoint -> J
+endpointValue fine endpoint = case endpoint of
+  PenaltyNotStated _ -> object [("kind",string "not_stated")]
+  PenaltyUnbounded _ -> object [("kind",string "unbounded")]
+  PenaltySpecified item -> object
+    [("kind",string "specified"),("value",if fine then tokenValue item
+      else JNum (read (Text.unpack (tokenText item))))]
 
 sourceDecl :: Text -> [SourceDecl] -> Either Diagnostic (Token, Token)
 sourceDecl role rows = case [(item, location) | SourceDecl item kind location <- rows,
@@ -178,7 +219,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
       pure (baseRequest model rootRuleId
         [sourceValue sourceId sourcePath text, sourceValue statusId statusPath statusBytes]
         [object [("id", tokenValue rootRuleId), ("source_id", tokenValue sourceId)
-          ,("program", program path text (tokenValue programId) root)
+          ,("program", program model Nothing path text (tokenValue programId) root)
           ,("exceptions", array [])]]
         (object (map (factValue True "synthetic research fixture" (tokenText statusId) burden) assignments)))
     Synthetic offence exception _ -> case secondTree of
@@ -198,10 +239,10 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
               ,("effect", string "defeat")]
             registry =
               [object [("id", tokenValue (ruleId offence)), ("source_id", tokenValue sourceId)
-                ,("program", program (rulePath offence) text (tokenValue (ruleProgram offence)) offenceRoot)
+                ,("program", program model (Just offence) (rulePath offence) text (tokenValue (ruleProgram offence)) offenceRoot)
                 ,("exceptions", array [exceptionBinding])]
               ,object [("id", tokenValue (ruleId exception)), ("source_id", tokenValue sourceId)
-                ,("program", program (rulePath exception) text (tokenValue (ruleProgram exception)) exceptionRoot)
+                ,("program", program model Nothing (rulePath exception) text (tokenValue (ruleProgram exception)) exceptionRoot)
                 ,("exceptions", array [])]]
         pure (baseRequest model (ruleId offence)
           [sourceValue sourceId sourcePath text, sourceValue statusId statusPath statusBytes]
@@ -223,10 +264,10 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
               ,("effect", string "defeat")]
             registry =
               [object [("id", tokenValue (ruleId offence)), ("source_id", tokenValue sourceId)
-                ,("program", program (rulePath offence) text (tokenValue (ruleProgram offence)) offenceRoot)
+                ,("program", program model (Just offence) (rulePath offence) text (tokenValue (ruleProgram offence)) offenceRoot)
                 ,("exceptions", array [exceptionBinding])]
               ,object [("id", tokenValue (ruleId exception)), ("source_id", tokenValue sourceId)
-                ,("program", program (rulePath exception) text (tokenValue (ruleProgram exception)) exceptionRoot)
+                ,("program", program model Nothing (rulePath exception) text (tokenValue (ruleProgram exception)) exceptionRoot)
                 ,("exceptions", array [])]]
             exceptionIds = Set.fromList (map (tokenText . elementId) (ruleElements exception))
             fact (key, value) = factValue (Set.member (tokenText key) exceptionIds)
@@ -254,10 +295,10 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
                   ,("effect", string "defeat")]
                 registry =
                   [object [("id", tokenValue (ruleId offence)), ("source_id", tokenValue sourceId)
-                    ,("program", program (rulePath offence) text (tokenValue (ruleProgram offence)) offenceRoot)
+                    ,("program", program model (Just offence) (rulePath offence) text (tokenValue (ruleProgram offence)) offenceRoot)
                     ,("exceptions", array [binding])]
                   ,object [("id", tokenValue (ruleId exception)), ("source_id", tokenValue sourceId)
-                    ,("program", program (rulePath exception) text (tokenValue (ruleProgram exception)) exceptionRoot)
+                    ,("program", program model Nothing (rulePath exception) text (tokenValue (ruleProgram exception)) exceptionRoot)
                     ,("exceptions", array [])]]
                 exceptionIds = Set.fromList (map (tokenText . elementId) (ruleElements exception))
                 fact (key, value) = factValue (Set.member (tokenText key) exceptionIds)
@@ -289,11 +330,11 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
                     ,("effect", string "defeat")]
                   registry =
                     [object [("id", tokenValue (ruleId offence)), ("source_id", tokenValue sourceId)
-                      ,("program", program (rulePath offence) text
+                      ,("program", program model (Just offence) (rulePath offence) text
                         (tokenValue (ruleProgram offence)) offenceRoot)
                       ,("exceptions", array [binding])]
                     ,object [("id", tokenValue (ruleId exception)), ("source_id", tokenValue sourceId)
-                      ,("program", program (rulePath exception) text
+                      ,("program", program model Nothing (rulePath exception) text
                         (tokenValue (ruleProgram exception)) exceptionRoot)
                       ,("exceptions", array [])]]
                   exceptionIds = Set.fromList
@@ -313,7 +354,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
           root <- requirement False burden text quoteSpans (rulePath route) firstTree
           let registry = [object
                 [("id", tokenValue (ruleId route)), ("source_id", tokenValue sourceId)
-                ,("program", program (rulePath route) text
+                ,("program", program model Nothing (rulePath route) text
                   (tokenValue (ruleProgram route)) root)
                 ,("exceptions", array [])]]
           pure (baseRequest model (ruleId route)
@@ -330,7 +371,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
           root <- requirement False burden text quoteSpans (rulePath authoredRule) firstTree
           let registry = [object
                 [("id", tokenValue (ruleId authoredRule)), ("source_id", tokenValue sourceId)
-                ,("program", program (rulePath authoredRule) text
+                ,("program", program model Nothing (rulePath authoredRule) text
                   (tokenValue (ruleProgram authoredRule)) root)
                 ,("exceptions", array [])]]
           pure (baseRequest model (ruleId authoredRule)
@@ -368,7 +409,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
             root <- requirement True burden text quoteSpans instancePath instantiated
             pure (object
               [("id", tokenValue (attachmentRuleId instanceId)),("source_id",tokenValue sourceId)
-              ,("program",program instancePath text
+              ,("program",program model Nothing instancePath text
                 (tokenValue (attachmentProgramId instanceId)) root)
               ,("exceptions",array [])])) active
           let selectedId = attachmentInstanceId selected
@@ -381,7 +422,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
                 ,("effect",string "defeat")]
               selectedRegistry = object
                 [("id",tokenValue (ruleId selectedRule)),("source_id",tokenValue sourceId)
-                ,("program",program (rulePath selectedRule) text
+                ,("program",program model (Just selectedRule) (rulePath selectedRule) text
                   (tokenValue (ruleProgram selectedRule)) selectedRoot)
                 ,("exceptions",array [binding])]
               exceptionIds = Set.fromList [tokenText item | attachment <- active,
@@ -422,7 +463,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
             root <- requirement True burden text quoteSpans instancePath instantiated
             pure (object
               [("id", tokenValue (attachmentRuleId instanceId)),("source_id",tokenValue sourceId)
-              ,("program",program instancePath text
+              ,("program",program model Nothing instancePath text
                 (tokenValue (attachmentProgramId instanceId)) root)
               ,("exceptions",array [])])) active
           let selectedId = attachmentInstanceId selected
@@ -435,7 +476,7 @@ lowerChecked (Checked model scenario assignments firstTree secondTree) = do
                 ,("effect",string "defeat")]
               selectedRegistry = object
                 [("id",tokenValue (ruleId selectedRule)),("source_id",tokenValue sourceId)
-                ,("program",program (rulePath selectedRule) text
+                ,("program",program model (Just selectedRule) (rulePath selectedRule) text
                   (tokenValue (ruleProgram selectedRule)) selectedRoot)
                 ,("exceptions",array [binding])]
               exceptionIds = Set.fromList [tokenText item | attachment <- active,

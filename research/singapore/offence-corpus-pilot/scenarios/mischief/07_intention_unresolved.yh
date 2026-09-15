@@ -1,0 +1,20 @@
+// Synthetic decision path: only available mental-state path is materially unresolved.
+scenario C00 for SingaporePenalCodeCheatingMischiefResearchPrototype-v1 {
+  analyse o:mischief;
+  assume a:post-2022-section-84-expression-applicable;
+  assume a:bounded-section425-text-expression;
+  assume a:section426-candidate-terms-only;
+  f:intent-wrongful-loss-or-damage = unresolved(not_determined);
+  f:knowledge-likely-wrongful-loss-or-damage = not_proved;
+  f:destruction-of-property = proved;
+  f:injurious-property-change = not_proved;
+  f:unsoundness-time = not_proved;
+  f:nature-causation = not_proved;
+  f:nature-incapacity = not_proved;
+  f:wrong-causation = not_proved;
+  f:ordinary-wrongfulness-incapacity = not_proved;
+  f:contrary-law-incapacity = not_proved;
+  f:control-causation = not_proved;
+  f:control-incapacity = not_proved;
+}
+

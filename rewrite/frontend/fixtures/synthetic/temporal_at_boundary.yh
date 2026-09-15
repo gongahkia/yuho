@@ -1,0 +1,4 @@
+temporal-scenario TS01 {
+  conduct-date 2024-01-01;
+  input "scenario_temporal_boundary_input.yh";
+}

@@ -1,0 +1,12 @@
+modular-model SingaporeModularWarehouseCase-v1 {
+  module-root ".";
+  import singapore.penal-code.warehouse-case version 1.0.0 as warehouse;
+  use model warehouse::SingaporePenalCodeSection107RoutesTheftResearchPrototype-v1;
+  use offence warehouse::o:theft;
+  use participation warehouse::p:abet-theft;
+  use attempt warehouse::attempt:theft;
+  use general-exception warehouse::x:section84;
+  attach warehouse::x:section84 to offence warehouse::o:theft for role:principal context principal-conduct as xi:principal-section84;
+  attach warehouse::x:section84 to participation warehouse::p:abet-theft for role:alleged-abettor context aid-conduct as xi:abettor-section84;
+  attach warehouse::x:section84 to attempt warehouse::attempt:theft for role:alleged-attempter context attempt-conduct as xi:attempter-section84;
+}

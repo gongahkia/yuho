@@ -1,0 +1,8 @@
+statutory-module singapore.penal-code.warehouse-case version 1.0.0 {
+  export model SingaporePenalCodeSection107RoutesTheftResearchPrototype-v1;
+  export offence o:theft;
+  export participation p:abet-theft;
+  export attempt attempt:theft;
+  export general-exception x:section84;
+  source-model "section107-routes-theft.yh";
+}

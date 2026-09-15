@@ -1,0 +1,4 @@
+temporal-model FictionalRestrictedAreaTemporal-v1 {
+  expression expr:all-requirements effective-from 2020-01-01 effective-to 2024-01-01 source-model "restricted_entry.yh";
+  expression expr:any-requirement effective-from 2024-01-01 open-end source-model "restricted_entry_alternative.yh" supersedes expr:all-requirements;
+}

@@ -1,0 +1,6 @@
+statutory-module singapore.penal-code.sections23-24 version 1.0.0 {
+  export definition d:wrongful-gain;
+  export definition d:wrongful-loss;
+  export definition d:dishonestly;
+  source-model "section323-section379-definitions.yh";
+}
