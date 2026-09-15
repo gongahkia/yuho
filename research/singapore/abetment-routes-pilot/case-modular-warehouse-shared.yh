@@ -1,5 +1,5 @@
 // Synthetic classifications for three independent technical issues.
-analysis-case case:modular-warehouse-incident model "modular-warehouse-model.yh" {
+analysis-case case:warehouse-incident model "modular-warehouse-model.yh" {
   bind role:principal to actor:principal-1;
   bind role:alleged-abettor to actor:participant-1;
   bind role:co-conspirator to actor:co-1;
@@ -103,4 +103,3 @@ analysis-case case:modular-warehouse-incident model "modular-warehouse-model.yh"
     exception-status xi:attempter-section84 f:control-incapacity by actor:attempt-actor-1 context attempt-conduct = not_proved;
   }
 }
-

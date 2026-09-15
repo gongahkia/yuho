@@ -54,4 +54,3 @@ Section 84 kernel rule: not_satisfied
 Section 107 context: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
 Final technical status: satisfied (candidate requirements technically satisfied; no section 84 defeat)
 No guilt, conviction, acquittal or sentence was determined.
-

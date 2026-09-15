@@ -2,7 +2,7 @@ Modular host: SingaporeModularWarehouseCase-v1
 Authored module versions select local model identity, not law by conduct date.
 Resolved imports:
   singapore.penal-code.warehouse-case@1.0.0 as warehouse
-Analysis case: case:modular-warehouse-incident
+Analysis case: case:warehouse-incident
 Three independent technical issues; no aggregate case status.
 Supplied case facts
 
@@ -253,4 +253,3 @@ Final technical participation status: not_satisfied
 No guilt, conviction, acquittal, liability, punishment or sentence was determined.
 
 No guilt, conviction, acquittal, liability or sentence was determined.
-

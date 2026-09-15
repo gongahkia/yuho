@@ -1,7 +1,7 @@
-Modular host: FictionalRestrictedAreaTemporal-v1
-Authored module versions select local model identity, not law by conduct date.
-Resolved imports:
-  effective-expression@expr:any-requirement as conduct-date=2024-01-01; 2024-01-01 <= date < open; supersedes-metadata=expr:all-requirements
+Temporal model: FictionalRestrictedAreaTemporal-v1
+Selected authored expression: expr:any-requirement
+Mechanical interval match: conduct-date=2024-01-01; 2024-01-01 <= date < open; supersedes-metadata=expr:all-requirements
+This selection applies authored assumptions; it is not a legal-currency determination.
 Model: FictionalRestrictedAreaEntry-v0.1
 Jurisdiction: Fictional — research POC; synthetic classifications only
 Selected fictional expression: o:entry
@@ -17,6 +17,5 @@ Fictional exception requirements:
     f:rescue-purpose — supplied not_proved; technical not_satisfied
 Fictional exception kernel rule: not_satisfied
 Contextual burden annotation: none; none none burden; not_applicable. This annotation does not classify evidence.
-Final technical status: satisfied (candidate requirements technically satisfied; no section 84 defeat)
+Final technical status: satisfied (selected expression requirements technically satisfied)
 No guilt, conviction, acquittal or sentence was determined.
-

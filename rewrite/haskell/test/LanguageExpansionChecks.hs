@@ -9,10 +9,15 @@ import qualified Data.Text.Encoding as Encoding
 import System.Exit (exitFailure)
 import System.FilePath ((</>))
 import Yuho.Kernel.Run (runLine)
+import Yuho.Protocol.Decode (sha256Text)
 import Yuho.Protocol.Json (J(..), decodeJson, lookupField, textValue)
 import Yuho.Surface.Compile (checkParsed, compileParsed)
+import Yuho.Surface.Case
+  ( caseModelFile, checkAnalysisCase, compileAnalysisCase, explainAnalysisCase
+  , runAnalysisCase )
 import Yuho.Surface.Explain (explainChecked)
 import Yuho.Surface.Modules (AuthoredModel(..), authoredPrefix, loadAuthoredModel)
+import Yuho.Surface.Parser (parseAnalysisCase)
 import Yuho.Surface.Temporal (loadAuthoredInput)
 import Yuho.Surface.Token (Diagnostic(..), tokenColumn, tokenLine)
 
@@ -21,6 +26,7 @@ runLanguageExpansionChecks root = do
   moduleChecks root
   temporalChecks root
   penaltyAndCorpusChecks root
+  modularCaseChecks root
   putStrLn "language expansion: modules, temporal selection, penalties and 20 corpus scenarios passed"
 
 moduleChecks :: FilePath -> IO ()
@@ -172,6 +178,32 @@ penaltyAndCorpusChecks root = do
         "a:bounded-section415-text-expression" "a:bounded-section425-text-expression" scenario)) of
     Left issue -> diagnosticCode issue == "SFE023" && located issue scenarioPath
     Right _ -> False
+
+modularCaseChecks :: FilePath -> IO ()
+modularCaseChecks root = do
+  let base = root </> "research/singapore/abetment-routes-pilot"
+      casePath = base </> "case-modular-warehouse-shared.yh"
+  source <- BS.readFile casePath
+  declaration <- either (const (failed "modular case parse")) pure
+    (parseAnalysisCase casePath source)
+  modelPath <- either (const (failed "modular case model path")) pure
+    (caseModelFile casePath declaration)
+  modelSource <- BS.readFile modelPath
+  authored <- loadAuthoredModel modelPath modelSource >>= requireRight "modular case model"
+  checked <- either (const (failed "modular case check")) pure
+    (checkAnalysisCase casePath declaration modelPath (authoredModel authored))
+  compiled <- either (const (failed "modular case compile")) pure
+    (compileAnalysisCase checked)
+  result <- either (const (failed "modular case run")) pure (runAnalysisCase checked)
+  check "modular shared-case input preserves frozen bytes"
+    (sha256Text compiled == "5e37a7b21eb87cbab22469e9da581adfb582cda71790a577f861045a2b95e5d0")
+  check "modular shared-case result preserves frozen bytes"
+    (sha256Text result == "8bf27446bfb7298642098a9a63f6c164029cd69cdf80eba7b847f1028f020f38")
+  explanation <- either (const (failed "modular case explain")) pure
+    (explainAnalysisCase modelPath checked)
+  snapshot <- BS.readFile (base </> "snapshots/modular-warehouse-shared.txt")
+  check "modular warehouse explanation snapshot"
+    (Encoding.encodeUtf8 (authoredPrefix authored <> explanation) == snapshot)
 
 runCorpus :: FilePath -> BS.ByteString -> FilePath -> Text
   -> (String,String,Text,Bool) -> IO ()
