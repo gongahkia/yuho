@@ -24,6 +24,7 @@ data PresumptionProgram = PresumptionProgram
   , presumptionBurdenBearer :: Token
   , presumptionStandard :: Token
   , presumptionNote :: Token
+  , presumptionRegistrations :: [(Text,Text,Text,Text,Text)]
   , presumptionRequest :: BS.ByteString
   , presumptionResult :: BS.ByteString
   } deriving (Eq, Show)
@@ -155,7 +156,11 @@ loadPresumptionProgram path bytes = case lexSource path bytes >>= \tokens ->
               case lookupField "status" response >>= textValue of
                 Just "rejected" -> at "SFR004" path name
                   "registered-presumption kernel rejected the authored program"
-                Just _ -> Right (PresumptionProgram name bearer standard note request result)
+                Just _ -> Right (PresumptionProgram name bearer standard note
+                  [(tokenText item,tokenText target,tokenText source,
+                    tokenText trigger,tokenText rebuttal)
+                  | Registration item target source trigger rebuttal <- registrations]
+                  request result)
                 Nothing -> at "SFR004" path name "presumption response has no status"
           (Left issue,_) -> pure (Left issue)
           (_,Left issue) -> pure (Left issue)

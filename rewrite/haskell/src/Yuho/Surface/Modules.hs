@@ -24,6 +24,7 @@ data AuthoredModel = AuthoredModel
   , authoredHost :: Maybe Text
   , authoredImports :: [(Text,Text,Text)]
   , authoredVisible :: [Text]
+  , authoredSelections :: [(Text,Text,Text)]
   } deriving (Eq, Show)
 
 data Import = Import Token Token Token deriving (Eq, Show)
@@ -220,7 +221,7 @@ loadAuthoredModel :: FilePath -> BS.ByteString -> IO (Either Diagnostic Authored
 loadAuthoredModel path bytes = case lexSource path bytes of
   Right (first:_) | tokenText first == "modular-model" -> loadHost path bytes
   _ -> pure (AuthoredModel <$> parseModel path bytes <*> pure Nothing <*> pure []
-    <*> pure [])
+    <*> pure [] <*> pure [])
 
 loadHost :: FilePath -> BS.ByteString -> IO (Either Diagnostic AuthoredModel)
 loadHost path bytes = case parseWith hostParser path bytes of
@@ -248,7 +249,20 @@ loadHost path bytes = case parseWith hostParser path bytes of
               | Import name version alias <- imports]
             visible = [item | Use kindValue token <- uses, kindValue /= ExportModel,
               Right (_,item) <- [qualified path token]]
-        Right (AuthoredModel model (Just (tokenText hostId)) records visible)
+            selections = [(exportKindText kindValue,alias,item)
+              | Use kindValue token <- uses, kindValue /= ExportModel,
+                Right (alias,item) <- [qualified path token]]
+        Right (AuthoredModel model (Just (tokenText hostId)) records visible selections)
+
+exportKindText :: ExportKind -> Text
+exportKindText kindValue = case kindValue of
+  ExportModel -> "model"
+  ExportDefinition -> "definition"
+  ExportOffence -> "offence"
+  ExportException -> "general-exception"
+  ExportParticipation -> "participation"
+  ExportAttempt -> "attempt"
+  ExportPenalty -> "candidate-penalty"
 
 loadImports :: FilePath -> FilePath -> [Import] -> IO (Either Diagnostic (Map Text Loaded))
 loadImports hostPath root imports = go Map.empty Set.empty Set.empty imports

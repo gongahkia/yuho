@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" role="img" aria-labelledby="title desc">
+<title id="title">Yuho semantic diagram: FictionalAuthorizationPresumptionActive-v1</title>
+<desc id="desc">Technical research statuses only; no guilt, conviction, acquittal, liability or sentence.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:ui-sans-serif,system-ui,sans-serif;fill:#0f172a}.edge{stroke:#475569;stroke-width:1.5;fill:none;marker-end:url(#arrow)}.edge-label{font-size:10px;fill:#475569}.node-label{font-size:12px;font-weight:600}.node-meta{font-size:10px}.legend{font-size:11px}</style>
+<g id="edges">
+<path class="edge" data-kind="trigger" d="M 250 78 C 275 78 285 78 310 78"/><text class="edge-label" x="265" y="71">trigger</text>
+<path class="edge" data-kind="rebuttal" d="M 250 208 C 275 208 285 78 310 78"/><text class="edge-label" x="265" y="136">rebuttal</text>
+<path class="edge" data-kind="derives" d="M 520 78 C 545 78 555 78 580 78"/><text class="edge-label" x="535" y="71">active</text>
+</g><g id="nodes">
+<g id="node-input-f-knowledge" data-semantic-id="input:f:knowledge" data-kind="input"><rect x="40" y="40" width="210" height="76" rx="0" fill="#f0fdf4" stroke="#166534" stroke-width="2" stroke-dasharray="3 2"/><text class="node-label" x="52" y="60"><tspan x="52" dy="0">f:knowledge</tspan></text></g>
+<g id="node-input-f-rescue-purpose" data-semantic-id="input:f:rescue-purpose" data-kind="input"><rect x="40" y="170" width="210" height="76" rx="0" fill="#f0fdf4" stroke="#166534" stroke-width="2" stroke-dasharray="3 2"/><text class="node-label" x="52" y="190"><tspan x="52" dy="0">f:rescue-purpose</tspan></text></g>
+<g id="node-presumption-pres-fictional-authorization" data-semantic-id="presumption:pres:fictional-authorization" data-kind="presumption"><rect x="310" y="40" width="210" height="76" rx="8" fill="#fff7ed" stroke="#9a3412" stroke-width="2" stroke-dasharray="6 3"/><text class="node-label" x="322" y="60"><tspan x="322" dy="0">pres:fictional-authorization</tspan><tspan x="322" dy="14">target f:no-authorization</tspan></text><text class="node-meta" x="322" y="98">citation: src:fictional-rule</text><text class="node-meta" x="322" y="110">status: active</text></g>
+<g id="node-presumption-program-FictionalAuthorizationPresumptionActive-v1" data-semantic-id="presumption-program:FictionalAuthorizationPresumptionActive-v1" data-kind="presumption-program"><rect x="580" y="40" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="592" y="60"><tspan x="592" dy="0">FictionalAuthorizationPresumptionActive-v1</tspan><tspan x="592" dy="14">burden: fictional-proponent</tspan><tspan x="592" dy="14">standard:</tspan></text><text class="node-meta" x="592" y="110">status: satisfied</text></g>
+</g>
+<g id="legend"><text class="legend" x="24" y="320" font-weight="700">Legend</text><text class="legend" x="24" y="340">ellipse actor; square/dotted input or fact; rounded rule/group; dashed exception; dash-dot penalty. Colours are redundant.</text><text class="legend" x="24" y="360">Statuses are supplied or technical: satisfied, not satisfied, unresolved, defeated, not evaluated.</text></g>
+<text x="24" y="452" font-size="11" fill="#7f1d1d">Technical research statuses only; no guilt, conviction, acquittal, liability or sentence.</text>
+</svg>

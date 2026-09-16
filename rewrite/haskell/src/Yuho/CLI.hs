@@ -13,6 +13,10 @@ import System.FilePath (takeDirectory)
 import System.IO (IOMode(ReadMode), hClose, openBinaryTempFile, stderr, stdout, withBinaryFile)
 import System.Posix.Files (createLink, fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.Kernel.Run (runLine)
+import Yuho.CoreYuho.Normalize (normalizeCase, normalizeChecked, normalizePresumption)
+import Yuho.Diagram.Build (caseGraph, presumptionGraph, programGraph)
+import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg)
+import Yuho.Diagram.Types (DiagramFormat(..), DiagramView(..), SemanticGraph)
 import Yuho.Protocol.Json (decodeJson, encodeJson, lookupField, textValue)
 import Yuho.Surface.Compile (checkParsed, compileParsed)
 import Yuho.Surface.AST (AnalysisCase(..), CaseAllegation(..))
@@ -30,7 +34,8 @@ import Yuho.Surface.Presumption
 import Yuho.Surface.Temporal (loadAuthoredInput)
 import Yuho.Surface.Token (Diagnostic(..), Kind(..), Token(..), diagnosticJson)
 
-data Command = Check | Compile | Run | Explain deriving (Eq)
+data Command = Check | Compile | Run | Explain | Diagram DiagramView DiagramFormat
+  deriving (Eq)
 data Options = Options Command FilePath (Maybe FilePath) (Maybe FilePath)
 
 main :: IO ()
@@ -43,23 +48,49 @@ main = do
 
 options :: [String] -> Either Text Options
 options arguments = case arguments of
+  "diagram":path:rest -> do
+    (scenario, output, view, format) <- diagramFlags rest Nothing Nothing Nothing Nothing
+    selectedView <- maybe (Left "diagram requires --view rule|modules|case|trace") Right view
+    selectedFormat <- maybe (Left "diagram requires --format svg|json") Right format
+    destination <- maybe (Left "diagram requires --output <path>") (Right . Just) output
+    Right (Options (Diagram selectedView selectedFormat) path scenario destination)
   command:path:rest -> do
     operation <- case command of
       "check" -> Right Check
       "compile" -> Right Compile
       "run" -> Right Run
       "explain" -> Right Explain
-      _ -> Left "expected check, compile, run or explain"
+      _ -> Left "expected check, compile, run, explain or diagram"
     (scenario, output) <- flags rest Nothing Nothing
     if operation /= Compile && output /= Nothing
       then Left "--output applies only to compile"
       else Right (Options operation path scenario output)
-  _ -> Left "usage: yuho check|compile|run|explain <source.yh> [--scenario <path>] [--output <path>]"
+  _ -> Left "usage: yuho check|compile|run|explain <source.yh> [--scenario <path>] [--output <path>]; yuho diagram <source.yh> --view rule|modules|case|trace --format svg|json --output <path> [--scenario <path>]"
   where
     flags [] scenario output = Right (scenario, output)
     flags ("--scenario":path:rest) Nothing output = flags rest (Just path) output
     flags ("--output":path:rest) scenario Nothing = flags rest scenario (Just path)
     flags _ _ _ = Left "unknown or duplicate option"
+    diagramFlags [] scenario output view format = Right (scenario,output,view,format)
+    diagramFlags ("--scenario":path:rest) Nothing output view format =
+      diagramFlags rest (Just path) output view format
+    diagramFlags ("--output":path:rest) scenario Nothing view format =
+      diagramFlags rest scenario (Just path) view format
+    diagramFlags ("--view":value:rest) scenario output Nothing format = do
+      selected <- case value of
+        "rule" -> Right RuleView
+        "modules" -> Right ModulesView
+        "case" -> Right CaseView
+        "trace" -> Right TraceView
+        _ -> Left "unknown diagram view"
+      diagramFlags rest scenario output (Just selected) format
+    diagramFlags ("--format":value:rest) scenario output view Nothing = do
+      selected <- case value of
+        "svg" -> Right SvgFormat
+        "json" -> Right JsonFormat
+        _ -> Left "unknown diagram format"
+      diagramFlags rest scenario output view (Just selected)
+    diagramFlags _ _ _ _ _ = Left "unknown or duplicate diagram option"
 
 readSource :: FilePath -> IO (Either Diagnostic BS.ByteString)
 readSource path = do
@@ -135,6 +166,12 @@ operate (Options command path scenarioPath output) = do
                   Left issue -> report issue
                   Right explanation -> BS.hPut stdout
                     (Encoding.encodeUtf8 (authoredPrefix authored <> explanation))
+            Diagram view format -> case checkParsed path model resolvedScenario of
+              Left issue -> report issue
+              Right checked -> case validateAuthoredChecked validationPath authored checked of
+                Left issue -> report issue
+                Right () -> emitDiagram output format
+                  (programGraph view (normalizeChecked authored checked))
 
 operateCase :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
   -> Maybe FilePath -> IO ()
@@ -162,6 +199,9 @@ operateCase command path bytes scenarioPath output = do
     Run -> either report (BS.hPut stdout) (runAnalysisCase checked)
     Explain -> either report (BS.hPut stdout . Encoding.encodeUtf8
       . (authoredPrefix authored <>)) (explainAnalysisCase modelPath checked)
+    Diagram view format -> if view `notElem` [CaseView,TraceView] then report
+      (Diagnostic "SFD001" path origin "analysis case requires --view case or trace" Nothing)
+      else emitDiagram output format (caseGraph view (normalizeCase authored checked))
   where origin = Token EndToken "" 1 1
 
 operatePresumption :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
@@ -180,6 +220,10 @@ operatePresumption command path bytes scenarioPath output = do
     Run -> BS.hPut stdout (presumptionResult program)
     Explain -> either report (BS.hPut stdout . Encoding.encodeUtf8)
       (explainPresumptionProgram program)
+    Diagram view format -> if view /= TraceView then report
+      (Diagnostic "SFD001" path origin "presumption program requires --view trace" Nothing)
+      else emitDiagram output format
+        (presumptionGraph (normalizePresumption program))
   where origin = Token EndToken "" 1 1
 
 publish :: FilePath -> BS.ByteString -> IO ()
@@ -199,6 +243,17 @@ publish destination bytes = do
         Left (_ :: IOException) -> report (Diagnostic "SFE015" destination origin "output is unsafe or already exists" Nothing)
         Right () -> pure ()
   where origin = Token EndToken "" 1 1
+
+emitDiagram :: Maybe FilePath -> DiagramFormat -> SemanticGraph -> IO ()
+emitDiagram destination format graph = case destination of
+  Nothing -> report (Diagnostic "SFD001" "<diagram>" origin
+    "diagram output path is required" Nothing)
+  Just path -> publish path bytes
+  where
+    bytes = case format of
+      SvgFormat -> encodeSvg graph
+      JsonFormat -> encodeSemanticGraph graph
+    origin = Token EndToken "" 1 1
 
 report :: Diagnostic -> IO a
 report issue = do

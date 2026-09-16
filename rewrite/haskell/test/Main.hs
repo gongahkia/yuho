@@ -33,6 +33,8 @@ import CaseSurfaceChecks (runCaseSurfaceChecks)
 import SharedCaseFactChecks (runSharedCaseFactChecks)
 import LanguageExpansionChecks (runLanguageExpansionChecks)
 import ReleaseChecks (runReleaseChecks)
+import CoreYuhoChecks (runCoreYuhoChecks)
+import DiagramChecks (runDiagramChecks)
 import Yuho.Core.Source (validateSpan)
 import Yuho.Core.Types (Source(..), Span(..))
 import Yuho.Kernel.Run (runLine)
@@ -65,6 +67,8 @@ main = do
   runSharedCaseFactChecks root
   runLanguageExpansionChecks root
   runReleaseChecks root
+  runCoreYuhoChecks root
+  runDiagramChecks root
   b06 <- readJson (frozen </> "requests/B06.json")
   b01 <- readJson (frozen </> "requests/B01.json")
   b03 <- readJson (frozen </> "requests/B03.json")

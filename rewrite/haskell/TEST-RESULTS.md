@@ -1,5 +1,21 @@
 # Haskell foundation targeted verification
 
+## Core Yuho v0.1 and native semantic diagrams
+
+On 17 September 2026, Core Yuho v0.1 and the native Haskell semantic-diagram backend were checked with genuine GHC 9.8.4, the unchanged freeze file and the existing `-Wall -Werror -O1` policy. Core truth functions reuse the established supplied-proof, exception and presumption operations; kernel and lowering modules, KernelInput v1, Canonical IR v1.2 and all seven fragment identifiers remain unchanged.
+
+| Check | Result |
+|---|---|
+| `cabal v2-build all --offline -j1`; complete `foundation-test` | Passed, including exhaustive three-valued tables, two 200-case Core properties for order independence and total deterministic closed evaluation, construct-registry completeness and deterministic Core-derived diagram checks. |
+| Seven existing protocol scripts | Passed: 15 frozen/21 hardening, 40 exception, 53 typed, 49 penalty, 68 term, 72 supplied-proof and 77 presumption fixtures, including persistent recovery suites. |
+| `python3 test/prior_bytes.py` | Passed: all 318 prior B/H/E/T/GP/PT/PS response strings remain byte-identical to baseline `9dd40b628bfb18e50f10050f3e9300e7f5bfc7c1`. |
+| Four representative Haskell flows | Passed `check`, deterministic double `compile`, `run` and `explain` for independent modules plus penalty, temporal selection, registered presumption and multi-allegation case. |
+| Fourteen retained diagram artifacts | Passed byte-identical regeneration, seven JSON parses, seven SVG XML parses and absolute-path/timestamp scans. No installed SVG raster renderer was available, so no screenshot/raster inspection was claimed. |
+| Outside-checkout, Python-absent `PATH` | Passed Haskell `check`, `compile`, `run`, `explain` and `diagram`; diagram failure left no partial destination and an existing destination was not overwritten. |
+| `test/docs.py`; `verify_capability_claims.py`; Git whitespace checks | Passed structured-document links, bounded public claims and unstaged/staged whitespace gates. |
+
+These checks establish bounded implementation conformance, not a whole-language mechanised proof, evidence assessment, legal correctness, legal currency or a judicial outcome.
+
 ## ModelBundleChangeSet-v1 offline comparison completion
 
 On 13 September 2026, the separate [ModelBundleChangeSet-v1](../../docs/rewrite/MODEL-BUNDLE-CHANGE-IMPACT-PROVISIONAL-SPEC.md) comparator was built with pinned GHC 9.8.4, `-Wall -Werror -O1` and serial offline Cabal. It validates two v1 packages, reports structural changes and exact review non-transfer, and does not add a kernel variant or legal-update inference. No dependency or compiler extension changed.

@@ -25,7 +25,7 @@
 
 ## What is Yuho?
 
-`Yuho` is a [formally verified](https://en.wikipedia.org/wiki/Formal_verification) domain-specific language dedicated to simplifying [legalese](https://www.merriam-webster.com/dictionary/legalese) by providing a programmatic representation of Singapore Law.  
+`Yuho` is a domain-specific language for research representations of law. Its authoritative Haskell research path has a [formally specified bounded Core Yuho language](./docs/rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.1.md), exhaustive finite truth-table tests, property tests and frozen-byte regressions. No whole-project implementation proof or legal-corpus correctness proof is claimed, and Yuho does not determine legal outcomes.
 
 Current applications are focused on Singapore Criminal Law but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute).
 

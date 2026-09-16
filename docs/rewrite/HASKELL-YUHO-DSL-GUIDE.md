@@ -2,7 +2,7 @@
 
 This guide covers the language implemented by `rewrite/haskell`, not the broader Python 5.1.0 product grammar. The Haskell lexer, source-located AST, resolver, checker, lowering, CLI and in-process kernel are authoritative for these examples. The grammar is a bounded research POC: it exposes criminal-law structure and evaluates synthetic supplied classifications, but it does not assess evidence, determine guilt, select legally applicable law, impose a sentence or make a court disposition.
 
-## Build and four normal commands
+## Build and normal commands
 
 From `rewrite/haskell`, use the frozen dependency plan and GHC 9.8.4:
 
@@ -18,6 +18,20 @@ SCENARIO=../../research/singapore/offence-corpus-pilot/scenarios/cheating/01_pro
 ```
 
 `compile --output PATH` creates a new output atomically and refuses an existing path. `run` invokes the Haskell kernel in process. None of these commands invokes Python.
+
+The same checked Core Yuho representation can be rendered as deterministic standalone SVG or semantic-graph JSON without Python, Mermaid or Graphviz:
+
+```sh
+OUT="$(mktemp -d)"
+"$YUHO" diagram "$MODEL" --scenario "$SCENARIO" \
+  --view rule --format svg --output "$OUT/rule.svg"
+"$YUHO" diagram "$MODEL" --scenario "$SCENARIO" \
+  --view trace --format json --output "$OUT/trace.json"
+"$YUHO" diagram ../../research/singapore/research-release/case-person-harm-showcase.yh \
+  --view case --format svg --output "$OUT/case.svg"
+```
+
+Views are `rule`, `modules`, `case` and `trace`; formats are `svg` and `json`. An analysis case accepts `case` or `trace`, and a presumption program accepts `trace`. The output path must not already exist. Publication is atomic: checking or rendering failure leaves no partial destination. SVG uses shapes and border patterns as well as colour, includes citations, statuses, arrowheads, a legend and the no-judicial-outcome notice. JSON uses `yuho.semantic-graph/v0.1` and stable semantic node IDs. Neither format embeds timestamps or absolute checkout paths. See the [Core Yuho language report](CORE-YUHO-LANGUAGE-REPORT-v0.1.md).
 
 ## Models, rules and scenarios
 
@@ -186,7 +200,7 @@ The target, trigger and rebuttal must already be primitive proof facts in the co
 | Multi-allegation case | `analysis-case` | allegation bodies are embedded |
 | Presumption subprogram | `presumption-program` | names a base model and scenario |
 
-The [research-release quick start](../../research/singapore/research-release/README.md) is the recommended entry point. The [capability matrix](HASKELL-RESEARCH-RELEASE-v0.1.md) classifies every major feature as supported, bounded, deferred or out of scope.
+The [research-release quick start](../../research/singapore/research-release/README.md) is the recommended entry point. The [capability matrix](HASKELL-RESEARCH-RELEASE-v0.1.md) classifies every major feature as supported, bounded, deferred or out of scope. The [Core conformance registry](core-yuho-conformance-v0.1.json) maps every public construct to its parser, checker, Core representation, lowering path, kernel boundary, explanation, diagram and test evidence.
 
 ## Runnable corpus
 

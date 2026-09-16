@@ -24,6 +24,13 @@ library
   exposed-modules:
       Yuho.Core.Types
       Yuho.Core.Source
+      Yuho.CoreYuho.Types
+      Yuho.CoreYuho.Semantics
+      Yuho.CoreYuho.Normalize
+      Yuho.CoreYuho.Registry
+      Yuho.Diagram.Types
+      Yuho.Diagram.Build
+      Yuho.Diagram.Encode
       Yuho.Protocol.Json
       Yuho.Protocol.Decode
       Yuho.Protocol.Encode
@@ -116,7 +123,7 @@ test-suite foundation-test
   import: foundation
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks
+  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks
   hs-source-dirs: test
   build-depends:
       yuho-foundation ==0.1.0.0

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" role="img" aria-labelledby="title desc">
+<title id="title">Yuho semantic diagram: case:person-harm-showcase</title>
+<desc id="desc">Technical research statuses only; no guilt, conviction, acquittal, liability or sentence.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:ui-sans-serif,system-ui,sans-serif;fill:#0f172a}.edge{stroke:#475569;stroke-width:1.5;fill:none;marker-end:url(#arrow)}.edge-label{font-size:10px;fill:#475569}.node-label{font-size:12px;font-weight:600}.node-meta{font-size:10px}.legend{font-size:11px}</style>
+<g id="edges">
+<path class="edge" data-kind="contains" d="M 790 78 C 815 78 825 208 850 208"/><text class="edge-label" x="805" y="136">authored order</text>
+<path class="edge" data-kind="contains" d="M 790 78 C 815 78 825 78 850 78"/><text class="edge-label" x="805" y="71">authored order</text>
+<path class="edge" data-kind="role" d="M 250 208 C 275 208 825 208 850 208"/><text class="edge-label" x="535" y="201">role:rash-actor</text>
+<path class="edge" data-kind="role" d="M 250 78 C 275 78 825 78 850 78"/><text class="edge-label" x="535" y="71">role:assault-actor</text>
+<path class="edge" data-kind="defeats" d="M 790 208 C 815 208 825 78 850 78"/><text class="edge-label" x="805" y="136">guard satisfied</text>
+</g><g id="nodes">
+<g id="node-actor-role-assault-actor" data-semantic-id="actor:role:assault-actor" data-kind="actor"><ellipse cx="145" cy="78" rx="105" ry="38" fill="#f8fafc" stroke="#1e3a8a" stroke-width="2"/><text class="node-label" x="52" y="60"><tspan x="52" dy="0">role:assault-actor</tspan><tspan x="52" dy="14">role:assault-actor</tspan></text></g>
+<g id="node-actor-role-rash-actor" data-semantic-id="actor:role:rash-actor" data-kind="actor"><ellipse cx="145" cy="208" rx="105" ry="38" fill="#f8fafc" stroke="#1e3a8a" stroke-width="2"/><text class="node-label" x="52" y="190"><tspan x="52" dy="0">role:rash-actor</tspan><tspan x="52" dy="14">role:rash-actor</tspan></text></g>
+<g id="node-case-case-person-harm-showcase" data-semantic-id="case:case:person-harm-showcase" data-kind="case"><rect x="580" y="40" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="592" y="60"><tspan x="592" dy="0">case:person-harm-showcase</tspan><tspan x="592" dy="14">ordered, independent</tspan><tspan x="592" dy="14">allegations</tspan></text></g>
+<g id="node-trace-a-assault--exception" data-semantic-id="trace:a:assault--exception" data-kind="exception"><rect x="580" y="170" width="210" height="76" rx="8" fill="#fff7ed" stroke="#9a3412" stroke-width="2" stroke-dasharray="6 3"/><text class="node-label" x="592" y="190"><tspan x="592" dy="0">attached exception guard</tspan></text><text class="node-meta" x="592" y="240">status: satisfied</text></g>
+<g id="node-allegation-a-assault" data-semantic-id="allegation:a:assault" data-kind="allegation"><rect x="850" y="40" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="862" y="60"><tspan x="862" dy="0">a:assault</tspan><tspan x="862" dy="14">offence o:assault</tspan><tspan x="862" dy="14">role role:assault-actor</tspan></text><text class="node-meta" x="862" y="110">status: defeated</text></g>
+<g id="node-allegation-a-rash-endangerment" data-semantic-id="allegation:a:rash-endangerment" data-kind="allegation"><rect x="850" y="170" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="862" y="190"><tspan x="862" dy="0">a:rash-endangerment</tspan><tspan x="862" dy="14">offence o:rash-endangerment</tspan><tspan x="862" dy="14">role role:rash-actor</tspan></text><text class="node-meta" x="862" y="240">status: unresolved</text></g>
+</g>
+<g id="legend"><text class="legend" x="24" y="320" font-weight="700">Legend</text><text class="legend" x="24" y="340">ellipse actor; square/dotted input or fact; rounded rule/group; dashed exception; dash-dot penalty. Colours are redundant.</text><text class="legend" x="24" y="360">Statuses are supplied or technical: satisfied, not satisfied, unresolved, defeated, not evaluated.</text></g>
+<text x="24" y="452" font-size="11" fill="#7f1d1d">Technical research statuses only; no guilt, conviction, acquittal, liability or sentence.</text>
+</svg>

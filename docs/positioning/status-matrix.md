@@ -13,6 +13,8 @@ Status labels:
 
 | Surface | Status | Tested by | Notes |
 |---|---|---|---|
+| Haskell Core Yuho v0.1 | stable-bounded | `foundation-test` (`CoreYuhoChecks`, all surface suites) | Normalized typed representation and formal language report cover the authoritative research DSL. Truth tables are exhaustive and properties are tested; surface-to-Core and Core-to-kernel preservation are not mechanically proved. |
+| Haskell semantic diagrams | stable-bounded | `foundation-test` (`DiagramChecks`), retained SVG/JSON fixtures | `yuho diagram` derives rule, module, case and trace graphs from checked Core and emits standalone SVG or semantic-graph JSON without Python or an external renderer. |
 | Parser | partial | `tests/test_*grammar*.py`, `make verify-coverage` | tree-sitter grammar parses the checked-in SG Penal Code corpus, but a comment-before-typed-struct-literal ambiguity remains a release-blocking semantic defect until its generated parser and regression suite are proven current. |
 | AST builder | stable | `tests/test_core_units.py`, `tests/test_new_constructs.py` | Produces Python AST nodes used by analysis, transpilers, and verifiers. |
 | Canonical IR | partial | `tests/test_canonical_ir.py`, `tests/test_runtime_exception_dependencies.py` | Versioned `yuho.canonical-ir` v1.1 has deterministic statute/provision/element representation, explicit exception-guard dependency edges, and consumer capability diagnostics; named AST adapters remain for unmigrated semantics. |
@@ -29,7 +31,7 @@ Status labels:
 | JSON transpiler | stable | `tests/test_transpile_snapshot_matrix.py` | Snapshot-tested over SG Penal Code. |
 | English transpiler | stable | `tests/test_transpile_snapshot_matrix.py` | Controlled English, not legal advice. |
 | LaTeX transpiler | stable | `tests/test_transpile_snapshot_matrix.py` | TeX rendering depends on local TeX packages. |
-| Mermaid transpiler | stable | `tests/test_transpile_snapshot_matrix.py`, `scripts/verify_mermaid_verbose.py` | Text output is snapshot-tested; image rendering depends on Mermaid CLI. |
+| Mermaid transpiler (legacy Python) | stable | `tests/test_transpile_snapshot_matrix.py`, `scripts/verify_mermaid_verbose.py` | Legacy/non-authoritative compatibility exporter. Text output is snapshot-tested; image rendering depends on Mermaid CLI. The Haskell path uses native semantic diagrams instead. |
 | Mermaid mindmap transpiler | stable | `tests/test_transpile_snapshot_matrix.py` | Text output is snapshot-tested. |
 | Akoma Ntoso | stable | `make verify-akn-xsd`, `tests/test_akn_validator.py` | XML round-trips against the vendored OASIS XSD for the SG corpus. |
 | LegalRuleML | stable | `tests/test_transpile_snapshot_matrix.py`, `scripts/lrml_roundtrip.py` | Export surface, not an independent semantics oracle. |
