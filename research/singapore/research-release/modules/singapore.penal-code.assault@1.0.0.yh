@@ -1,0 +1,6 @@
+statutory-module singapore.penal-code.assault version 1.0.0 {
+  export offence o:assault;
+  export candidate-penalty pen:section352;
+  export general-exception x:section81;
+  source-model "assault.yh";
+}

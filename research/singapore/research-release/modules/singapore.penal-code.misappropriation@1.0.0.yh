@@ -1,0 +1,6 @@
+statutory-module singapore.penal-code.misappropriation version 1.0.0 {
+  export offence o:misappropriation;
+  export candidate-penalty pen:section403;
+  export general-exception x:section79;
+  source-model "misappropriation.yh";
+}

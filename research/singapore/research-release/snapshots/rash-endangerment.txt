@@ -1,0 +1,43 @@
+Modular host: SingaporeCriminalLawResearchRelease-v0.1
+Authored module versions select local model identity, not law by conduct date.
+Resolved imports:
+  singapore.penal-code.rash-endangerment@1.0.0 as rash
+  singapore.penal-code.assault@1.0.0 as assault
+  singapore.penal-code.misappropriation@1.0.0 as misappropriation
+  singapore.penal-code.criminal-breach-of-trust@1.0.0 as cbt
+  singapore.penal-code.receiving-property@1.0.0 as receiving
+  singapore.penal-code.criminal-trespass@1.0.0 as trespass
+  singapore.penal-code.wrongful-restraint@1.0.0 as restraint
+Model: SingaporePenalCodeResearchReleaseResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Selected candidate offence: o:rash-endangerment
+Candidate statutory sections: Penal Code ss 336
+General exception: Penal Code s 80
+Attachment: s 80 -> candidate o:rash-endangerment
+Definition instance: shared x:section80
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:bounded-rash-section336-expression
+Selected candidate offence requirements:
+  g:336-rash-requirements — all; technical satisfied
+    f:336-doing-act — supplied proved; technical satisfied
+    f:336-rashness — supplied proved; technical satisfied
+General exception requirements:
+  g:80-requirements — all; technical not_satisfied
+    f:80-accident-or-misfortune — supplied not_proved; technical not_satisfied
+    f:80-lawful-act — supplied not_proved; technical not_satisfied
+    f:80-lawful-manner — supplied not_proved; technical not_satisfied
+    f:80-lawful-means — supplied not_proved; technical not_satisfied
+    f:80-proper-care-caution — supplied not_proved; technical not_satisfied
+General-exception source references:
+  f:80-accident-or-misfortune -> q:80-accident
+  f:80-lawful-act -> q:80-lawful-act
+  f:80-lawful-manner -> q:80-lawful-manner
+  f:80-lawful-means -> q:80-lawful-means
+  f:80-proper-care-caution -> q:80-care
+Candidate penalty presentation (not an imposed sentence):
+  pen:section336-rash — Penal Code s 336; kernel selection: selected
+    one or more of (imprisonment minimum not stated, maximum 6 months; fine SGD minimum not stated, maximum 2500)
+General exception kernel rule: not_satisfied
+Contextual burden annotation: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: satisfied (selected expression requirements technically satisfied)
+No guilt, conviction, acquittal or sentence was determined.

@@ -1,0 +1,98 @@
+// Yuho Haskell Research Language v0.1: bounded saved-text expressions only.
+model SingaporePenalCodeCbtFragmentResearchPrototype-v1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Singapore;
+  purpose research_prototype;
+  request R01;
+  policy 2026-09-13 1024;
+
+  provenance {
+    source src:pc-release source_text "library/penal_code/_raw/act.json and saved section statute.yh files";
+    source src:release-status synthetic_status "research/singapore/research-release/synthetic classifications";
+    quote q:336-act "does any act";
+    quote q:336-rash "so rashly as to endanger human life or the personal safety of others";
+    quote q:351-gesture "makes any gesture or any preparation";
+    quote q:351-intention "intending that such gesture or preparation will cause apprehension of imminent criminal force";
+    quote q:351-knowledge "knowing it to be likely that such gesture or preparation will cause apprehension of imminent criminal force";
+    quote q:351-apprehension "cause any person present to apprehend imminent use of criminal force";
+    quote q:352-no-provocation "otherwise than on grave and sudden provocation given by that person";
+    quote q:403-movable "movable property";
+    quote q:403-dishonestly "dishonestly";
+    quote q:403-misappropriates "misappropriates";
+    quote q:403-converts "converts to his own use";
+    quote q:405-entrusted "entrusted with property, or with any dominion over property";
+    quote q:405-dishonest-misappropriation "dishonestly misappropriates or converts to his own use that property";
+    quote q:405-dishonest-use "dishonestly uses or disposes of that property in violation of a direction of law or legal contract";
+    quote q:405-intentionally-suffers "intentionally suffers any other person to do so";
+    quote q:411-receives "receives or retains any property";
+    quote q:411-property-source "stolen property or property obtained in whole or in part through an offence involving fraud or dishonesty";
+    quote q:411-knowledge "knowing or having reason to believe the property to be such property";
+    quote q:441-entry "enters into or upon property in the possession of another";
+    quote q:441-entry-intent-offence "intent to commit an offence";
+    quote q:441-entry-intent-person "intent to intimidate, insult or annoy a person in possession";
+    quote q:441-lawful-entry "having lawfully entered into or upon such property";
+    quote q:441-remains "unlawfully remains there";
+    quote q:441-remain-intent "intent thereby to intimidate, insult or annoy, or to commit an offence";
+    quote q:339-obstruction "voluntarily obstructs any person";
+    quote q:339-prevention "prevent that person from proceeding in any direction";
+    quote q:339-right "in which that person has a right to proceed";
+    quote q:79-override "unless otherwise provided by written law";
+    quote q:79-act "an act is done by any person";
+    quote q:79-mistake "by reason of a mistake of fact";
+    quote q:79-ignorance "in ignorance of a fact";
+    quote q:79-good-faith "in good faith believes himself bound by law or justified by law";
+    quote q:80-accident "done by accident or misfortune";
+    quote q:80-lawful-act "in the doing of a lawful act";
+    quote q:80-lawful-manner "in a lawful manner";
+    quote q:80-lawful-means "by lawful means";
+    quote q:80-care "with proper care and caution";
+    quote q:81-likely-harm "act likely to cause harm";
+    quote q:81-knowledge "knowledge that it is likely to cause harm";
+    quote q:81-good-faith "done in good faith";
+    quote q:81-purpose "purpose of preventing or avoiding other harm to person or property";
+    quote q:81-risk "harm sufficiently imminent to justify or excuse the risk";
+    quote q:82-act "an act is done";
+    quote q:82-child "child below 10 years of age";
+  }
+
+  annotations { burden section107 defence legal balance_of_probabilities; }
+  scope-assumptions {
+    scope-assumption a:bounded-sections405-406-expression for o:criminal-breach-of-trust;
+  }
+
+  offence o:criminal-breach-of-trust rule r:section406 program p:section406 path sections405-406 sections 405,406 {
+    element circumstance f:405-entrustment-or-dominion quote q:405-entrusted;
+    element conduct f:405-dishonest-misappropriation quote q:405-dishonest-misappropriation;
+    element conduct f:405-dishonest-use-disposal quote q:405-dishonest-use;
+    element conduct f:405-intentionally-suffers quote q:405-intentionally-suffers;
+    any g:405-dealing-route (f:405-dishonest-misappropriation, f:405-dishonest-use-disposal, f:405-intentionally-suffers);
+    all g:405-requirements (f:405-entrustment-or-dominion, g:405-dealing-route);
+  }
+
+  general-exception x:section82 rule r:section82 program p:section82 path section82 sections 82 {
+    element conduct f:82-act-done quote q:82-act;
+    element circumstance f:82-child-below-10 quote q:82-child;
+    all g:82-requirements (f:82-act-done, f:82-child-below-10);
+  }
+
+  attach x:section82 to o:criminal-breach-of-trust;
+
+  outputs {
+    cbt_final r:section406;
+    section_exception_defeat x:section82;
+  }
+
+  candidate-penalties {
+    candidate pen:section406 for offence o:criminal-breach-of-trust source src:pc-release provision 406 { one-or-more-of term:406 { imprisonment term:406-prison minimum not-stated maximum 7 years; fine term:406-fine currency SGD minimum not-stated maximum unbounded; } }
+  }
+
+  limitations {
+    "Saved-text research expressions only; statutory illustrations and judicial interpretation are contextual";
+    "Section 336 is limited to the rash limb; the distinct negligent limb and its lower terms are deferred";
+    "Section 352 is limited to assault under section 351 and the stated absence of grave and sudden provocation";
+    "Section 411 is limited to subsection (1), excludes motor vehicles, and does not execute its reasonable-excuse defence";
+    "Sections 79, 80, 81 and 82 are bounded general-exception expressions, not evidence findings";
+    "Candidate penalty terms are not imposed sentences";
+    "No legal-currency, evidence, guilt, conviction, acquittal, sentence or procedure determination";
+  }
+}

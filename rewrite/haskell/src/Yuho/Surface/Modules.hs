@@ -28,7 +28,8 @@ data AuthoredModel = AuthoredModel
 
 data Import = Import Token Token Token deriving (Eq, Show)
 data ExportKind = ExportModel | ExportDefinition | ExportOffence
-  | ExportException | ExportParticipation | ExportAttempt deriving (Eq, Ord, Show)
+  | ExportException | ExportParticipation | ExportAttempt | ExportPenalty
+  deriving (Eq, Ord, Show)
 data Export = Export ExportKind Token deriving (Eq, Show)
 data StatutoryModule = StatutoryModule Token Token [Import] [Export] Token deriving (Eq, Show)
 data Use = Use ExportKind Token deriving (Eq, Show)
@@ -105,6 +106,7 @@ exportKind token = case tokenText token of
   "general-exception" -> pure ExportException
   "participation" -> pure ExportParticipation
   "attempt" -> pure ExportAttempt
+  "candidate-penalty" -> pure ExportPenalty
   _ -> P $ \path _ -> at "SFM006" path token "unsupported module export kind"
 
 exportDecl :: P Export
@@ -239,8 +241,8 @@ loadHost path bytes = case parseWith hostParser path bytes of
           [] -> at "SFM008" path hostId "modular host must explicitly use one exported model"
           _:second:_ -> at "SFM008" path second "modular host selects multiple models"
         selected <- resolveUse path modules ExportModel selectedRef
-        let model = loadedModel selected
-        mapM_ (validateUse path modules model) uses
+        mapM_ (validateUse path modules) uses
+        model <- composeHost path hostId selected modules uses attachments
         mapM_ (validateAttachment path modules model) attachments
         let records = [(tokenText name,tokenText version,tokenText alias)
               | Import name version alias <- imports]
@@ -339,11 +341,10 @@ resolveUse path modules wanted token = do
     [] -> at "SFM006" path token "private, missing or wrong-kind module reference"
     _ -> at "SFM005" path token "ambiguous duplicate module export"
 
-validateUse :: FilePath -> Map Text Loaded -> Model -> Use -> Either Diagnostic ()
-validateUse path modules model (Use kindValue token) = do
-  loaded <- resolveUse path modules kindValue token
-  if modelIdentifier (loadedModel loaded) == modelIdentifier model then Right ()
-  else at "SFM009" path token "used declarations do not share the selected authored model"
+validateUse :: FilePath -> Map Text Loaded -> Use -> Either Diagnostic ()
+validateUse path modules (Use kindValue token) = do
+  _ <- resolveUse path modules kindValue token
+  pure ()
 
 validateExports :: FilePath -> Model -> [Export] -> Either Diagnostic ()
 validateExports path model exports = do
@@ -364,9 +365,13 @@ modelSymbols model = Map.fromList $ (tokenText (modelIdentifier model),ExportMod
     [(tokenText (definitionId item),ExportDefinition) | item <- definitions]
     ++ [(tokenText (ruleIdentifier item),ExportOffence) | item <- offences]
     ++ [(tokenText (ruleIdentifier item),ExportException) | GeneralException item <- exceptions]
+    ++ [(tokenText (candidatePenaltyId item),ExportPenalty)
+       | item <- modelCandidatePenalties model]
   MultiLegal _ offences exceptions _ _ ->
     [(tokenText (ruleIdentifier item),ExportOffence) | item <- offences]
     ++ [(tokenText (ruleIdentifier item),ExportException) | GeneralException item <- exceptions]
+    ++ [(tokenText (candidatePenaltyId item),ExportPenalty)
+       | item <- modelCandidatePenalties model]
   ActorScopedLegal _ _ _ _ offence (IntentionalAidRoute participation _) attempt
     (ActorExceptionDefinition _ exception) _ _ _ -> actorSymbols offence participation attempt exception
   AbetmentLegal _ _ _ _ offence abetment attempt (ActorExceptionDefinition _ exception) _ _ _ ->
@@ -378,6 +383,174 @@ modelSymbols model = Map.fromList $ (tokenText (modelIdentifier model),ExportMod
       ,(tokenText (ruleIdentifier participation),ExportParticipation)
       ,(tokenText (ruleIdentifier (attemptRule attempt)),ExportAttempt)
       ,(tokenText (ruleIdentifier exception),ExportException)]
+
+composeHost :: FilePath -> Token -> Loaded -> Map Text Loaded -> [Use]
+  -> [Attachment] -> Either Diagnostic Model
+composeHost path hostId selected modules uses attachments
+  | all sameGraph nonModelUses = Right base
+  | any unsupported nonModelUses = at "SFM011" path hostId
+      "cross-module composition supports definitions, offences, general exceptions and candidate penalties"
+  | otherwise = do
+      selectedRows <- mapM selectedUse nonModelUses
+      ensureMetadata selectedRows
+      definitions <- uniqueSelected ExportDefinition definitionIdentity
+        [(token,value) | (ExportDefinition,token,model) <- selectedRows,
+          value <- findDefinitions token model]
+      offences <- uniqueSelected ExportOffence ruleIdentity
+        [(token,value) | (ExportOffence,token,model) <- selectedRows,
+          value <- findOffences token model]
+      exceptions <- uniqueSelected ExportException exceptionIdentity
+        [(token,value) | (ExportException,token,model) <- selectedRows,
+          value <- findExceptions token model]
+      penalties <- uniqueSelected ExportPenalty penaltyIdentity
+        [(token,value) | (ExportPenalty,token,model) <- selectedRows,
+          value <- findPenalties token model]
+      if null offences then at "SFM009" path hostId
+        "composed host must select at least one offence" else pure ()
+      if null exceptions then at "SFM009" path hostId
+        "composed host must select at least one general exception" else pure ()
+      sources <- mergeSources [modelSources model | (_,_,model) <- selectedRows]
+      quotes <- mergeQuotes [modelQuotes model | (_,_,model) <- selectedRows]
+      let scopes = orderedNub scopeKey (concatMap (bodyScopes . third) selectedRows)
+          limits = orderedNub tokenText (concatMap (modelLimitations . third) selectedRows)
+          outputs = zipWith outputFor [1 :: Int ..]
+            (map Left offences ++ map (Right . exceptionRule) exceptions)
+          bodyAttachments = map toBodyAttachment attachments
+          composedBody = if null definitions
+            then MultiLegal scopes offences exceptions bodyAttachments outputs
+            else DefinitionsLegal definitions scopes offences exceptions
+              bodyAttachments outputs
+      pure base { modelSources = sources, modelQuotes = quotes
+        , modelBody = composedBody, modelCandidatePenalties = penalties
+        , modelLimitations = limits }
+  where
+    base = loadedModel selected
+    nonModelUses = [(kindValue,token) | Use kindValue token <- uses,
+      kindValue /= ExportModel]
+    sameGraph (kindValue,token) = case resolveUse path modules kindValue token of
+      Right loaded -> modelIdentifier (loadedModel loaded) == modelIdentifier base
+      Left _ -> False
+    unsupported (kindValue,_) = kindValue `elem` [ExportParticipation,ExportAttempt]
+    selectedUse (kindValue,token) = do
+      loaded <- resolveUse path modules kindValue token
+      pure (kindValue,token,loadedModel loaded)
+    third (_,_,value) = value
+    ensureMetadata rows = mapM_ (sameMetadata . third) rows
+    sameMetadata model
+      | modelVariant model == modelVariant base
+        && modelJurisdiction model == modelJurisdiction base
+        && modelPurpose model == modelPurpose base
+        && modelRequest model == modelRequest base
+        && modelDate model == modelDate base
+        && modelLimit model == modelLimit base
+        && modelBurden model == modelBurden base = Right ()
+      | otherwise = at "SFM009" path (modelIdentifier model)
+          "composed modules have incompatible protocol, policy or burden metadata"
+    uniqueSelected _ identity rows = go Set.empty [] rows
+      where
+        go _ acc [] = Right (reverse acc)
+        go seen acc ((origin,value):rest)
+          | Set.member (identity value) seen = at "SFM012" path origin
+              "modules export colliding legal identities; composition never silently renames them"
+          | otherwise = go (Set.insert (identity value) seen) (value:acc) rest
+    definitionIdentity = tokenText . definitionId
+    ruleIdentity = tokenText . ruleIdentifier
+    exceptionIdentity (GeneralException rule) = ruleIdentity rule
+    penaltyIdentity = tokenText . candidatePenaltyId
+    findDefinitions token model = [item | item <- bodyDefinitions model,
+      tokenText (definitionId item) == referenceItem token]
+    findOffences token model = [item | item <- bodyOffences model,
+      tokenText (ruleIdentifier item) == referenceItem token]
+    findExceptions token model = [item | item@(GeneralException rule) <- bodyExceptions model,
+      tokenText (ruleIdentifier rule) == referenceItem token]
+    findPenalties token model = [item | item <- modelCandidatePenalties model,
+      tokenText (candidatePenaltyId item) == referenceItem token]
+    referenceItem token = either (const "") snd (qualified path token)
+    exceptionRule (GeneralException rule) = rule
+    outputFor index choice =
+      let rule = either id id choice
+          label = (ruleIdentifier rule)
+            { tokenText = "composed_" <> Text.pack (show index) <>
+                either (const "_final") (const "_defeat") choice }
+          target = either ruleId ruleIdentifier choice
+      in TechnicalOutput label target
+    toBodyAttachment declaration = case declaration of
+      SimpleAttachment exception target -> AST.Attachment exception
+        (unqualified exception) (unqualified target)
+      ScopedAttachment exception _ target _ _ _ -> AST.Attachment exception
+        (unqualified exception) (unqualified target)
+    unqualified token = token { tokenText = referenceItem token }
+
+bodyDefinitions :: Model -> [StatutoryDefinition]
+bodyDefinitions model = case modelBody model of
+  DefinitionsLegal values _ _ _ _ _ -> values
+  _ -> []
+
+bodyOffences :: Model -> [Rule]
+bodyOffences model = case modelBody model of
+  DefinitionsLegal _ _ values _ _ _ -> values
+  MultiLegal _ values _ _ _ -> values
+  Legal _ value _ _ -> [value]
+  Synthetic value _ _ -> [value]
+  ParticipationLegal _ _ _ _ _ value _ _ _ -> [value]
+  AttemptLegal _ _ _ value _ _ _ -> [value]
+  ActorScopedLegal _ _ _ _ value _ _ _ _ _ _ -> [value]
+  AbetmentLegal _ _ _ _ value _ _ _ _ _ _ -> [value]
+  Section {} -> []
+
+bodyExceptions :: Model -> [GeneralException]
+bodyExceptions model = case modelBody model of
+  DefinitionsLegal _ _ _ values _ _ -> values
+  MultiLegal _ _ values _ _ -> values
+  Legal _ _ value _ -> [GeneralException value]
+  Synthetic _ value _ -> [GeneralException value]
+  ActorScopedLegal _ _ _ _ _ _ _ (ActorExceptionDefinition _ value) _ _ _ ->
+    [GeneralException value]
+  AbetmentLegal _ _ _ _ _ _ _ (ActorExceptionDefinition _ value) _ _ _ ->
+    [GeneralException value]
+  _ -> []
+
+bodyScopes :: Model -> [ScopeAssumption]
+bodyScopes model = case modelBody model of
+  DefinitionsLegal _ values _ _ _ _ -> values
+  MultiLegal values _ _ _ _ -> values
+  Legal values _ _ _ -> values
+  ParticipationLegal _ _ _ _ values _ _ _ _ -> values
+  AttemptLegal _ _ values _ _ _ _ -> [item | AttemptScopeAssumption item <- values]
+  ActorScopedLegal _ _ _ values _ _ _ _ _ _ _ -> values
+  AbetmentLegal _ _ _ values _ _ _ _ _ _ _ -> values
+  _ -> []
+
+scopeKey :: ScopeAssumption -> Text
+scopeKey (ScopeAssumption item) = tokenText item
+scopeKey (TargetScopeAssumption item target) = tokenText item <> "@" <> tokenText target
+
+orderedNub :: Ord key => (value -> key) -> [value] -> [value]
+orderedNub key = go Set.empty
+  where
+    go _ [] = []
+    go seen (value:rest)
+      | Set.member (key value) seen = go seen rest
+      | otherwise = value : go (Set.insert (key value) seen) rest
+
+mergeSources :: [[SourceDecl]] -> Either Diagnostic [SourceDecl]
+mergeSources = mergeRows sourceId
+  where sourceId (SourceDecl item _ _) = tokenText item
+
+mergeQuotes :: [[(Token,Token)]] -> Either Diagnostic [(Token,Token)]
+mergeQuotes = mergeRows (tokenText . fst)
+
+mergeRows :: Eq value => (value -> Text) -> [[value]]
+  -> Either Diagnostic [value]
+mergeRows key = go Map.empty [] . concat
+  where
+    go _ acc [] = Right (reverse acc)
+    go seen acc (value:rest) = case Map.lookup (key value) seen of
+      Nothing -> go (Map.insert (key value) value seen) (value:acc) rest
+      Just earlier | earlier == value -> go seen acc rest
+      Just _ -> Left (Diagnostic "SFM012" "<module-composition>"
+        (Token EndToken (key value) 1 1)
+        "modules contain structurally inconsistent declarations under one identity" Nothing)
 
 validateAttachment :: FilePath -> Map Text Loaded -> Model -> Attachment -> Either Diagnostic ()
 validateAttachment path modules model declaration = case declaration of

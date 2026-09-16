@@ -1,0 +1,30 @@
+// Two independent person/harm technical allegations with distinct general exceptions.
+analysis-case case:person-harm-showcase model "modular-singapore-criminal-law-release.yh" {
+  bind role:rash-actor to actor:person-3;
+  bind role:assault-actor to actor:person-4;
+
+  allegation a:rash-endangerment analyse offence o:rash-endangerment for role:rash-actor {
+    assume a:bounded-rash-section336-expression;
+    f:336-doing-act = proved;
+    f:336-rashness = proved;
+    f:80-accident-or-misfortune = unresolved(external_decision_pending);
+    f:80-lawful-act = proved;
+    f:80-lawful-manner = proved;
+    f:80-lawful-means = proved;
+    f:80-proper-care-caution = proved;
+  }
+
+  allegation a:assault analyse offence o:assault for role:assault-actor {
+    assume a:bounded-sections351-352-assault-expression;
+    f:351-gesture-or-preparation = proved;
+    f:351-intention = proved;
+    f:351-knowledge = not_proved;
+    f:351-apprehension = proved;
+    f:352-no-grave-sudden-provocation = proved;
+    f:81-act-likely-harm = proved;
+    f:81-knowledge-likely-harm = proved;
+    f:81-good-faith = proved;
+    f:81-preventive-purpose = proved;
+    f:81-justified-risk = proved;
+  }
+}

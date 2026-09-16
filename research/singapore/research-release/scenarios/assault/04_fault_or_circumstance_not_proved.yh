@@ -1,0 +1,15 @@
+// Synthetic supplied-classification decision path; not an evidence finding.
+scenario R01 for SingaporePenalCodeResearchReleaseResearchPrototype-v1 {
+  analyse o:assault;
+  assume a:bounded-sections351-352-assault-expression;
+  f:351-gesture-or-preparation = proved;
+  f:351-intention = not_proved;
+  f:351-knowledge = not_proved;
+  f:351-apprehension = proved;
+  f:352-no-grave-sudden-provocation = proved;
+  f:81-act-likely-harm = not_proved;
+  f:81-knowledge-likely-harm = not_proved;
+  f:81-good-faith = not_proved;
+  f:81-preventive-purpose = not_proved;
+  f:81-justified-risk = not_proved;
+}

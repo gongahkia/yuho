@@ -1,0 +1,18 @@
+scenario A23 for SingaporeIntentionalAidMisappropriationResearchPrototype-v1 {
+  analyse p:aid-misappropriation;
+  bind role:principal to actor:principal-misappropriation;
+  bind role:alleged-abettor to actor:abettor-misappropriation;
+  assume a:only-intentional-aid-route;
+  assume a:principal-misappropriation-separately-supplied;
+  assume a:broader-section108-cases-excluded;
+  assume a:s109-consequence-separately-supplied;
+  f:misappropriation-movable by actor:principal-misappropriation = proved;
+  f:misappropriation-dishonesty by actor:principal-misappropriation = proved;
+  f:misappropriates by actor:principal-misappropriation = proved;
+  f:converts by actor:principal-misappropriation = not_proved;
+  f:intends-aid by actor:abettor-misappropriation = proved;
+  f:aid-by-act by actor:abettor-misappropriation = proved;
+  f:aid-by-illegal-omission by actor:abettor-misappropriation = not_proved;
+  rel:aid from actor:abettor-misappropriation to actor:principal-misappropriation = proved;
+  f:consequence by rel:aid = proved;
+}

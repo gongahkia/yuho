@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.wrongful-restraint version 1.0.0 {
+  export offence o:wrongful-restraint;
+  export candidate-penalty pen:section341;
+  source-model "wrongful-restraint.yh";
+}

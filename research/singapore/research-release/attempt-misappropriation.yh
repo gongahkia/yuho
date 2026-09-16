@@ -1,0 +1,59 @@
+model SingaporeSection511MisappropriationAttemptResearchPrototype-v1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Singapore;
+  purpose research_prototype;
+  request A22;
+  policy 2026-09-13 1024;
+  provenance {
+    source src:pc source_text "saved Penal Code ss 403 and 511";
+    source src:synthetic synthetic_status "research release synthetic classifications";
+    quote q:movable "movable property";
+    quote q:dishonestly "dishonestly";
+    quote q:misappropriates "misappropriates";
+    quote q:converts "converts to own use";
+    quote q:intends-target "with the intention of committing that offence";
+    quote q:substantial-step "takes a substantial step towards the commission of that offence";
+  }
+  annotations { burden none none none not_applicable; }
+  party-roles { party-role role:alleged-attempter; }
+  definitions { }
+  scope-assumptions {
+    scope-assumption a:direct-self-attempt-only;
+    scope-assumption a:target-not-completed;
+    scope-assumption a:no-express-attempt-punishment-provision-modelled;
+    scope-assumption a:punishment-outside-scope;
+    scope-assumption a:statutory-expression-supplied;
+    scope-assumption a:stage-externally-classified;
+    scope-assumption a:impossible-attempts-excluded;
+  }
+  offence o:misappropriation rule r:section403 program p:section403 path section403 sections 403 {
+    element movable-property f:misappropriation-movable quote q:movable;
+    element dishonest-intention f:misappropriation-dishonesty quote q:dishonestly;
+    element conduct f:misappropriates quote q:misappropriates;
+    element conduct f:converts quote q:converts;
+    any g:misappropriation-conduct (f:misappropriates, f:converts);
+    all g:misappropriation-requirements (f:misappropriation-movable, f:misappropriation-dishonesty, g:misappropriation-conduct);
+  }
+  attempt attempt:misappropriation route direct-self actor role:alleged-attempter target o:misappropriation rule r:section511-misappropriation program p:section511-misappropriation path section511-misappropriation sections 511 {
+    mental-state f:intends-misappropriation actor role:alleged-attempter kind intention target o:misappropriation quote q:intends-target;
+    conduct-stage stage:misappropriation-conduct actor role:alleged-attempter output f:misappropriation-substantial-step quote q:substantial-step;
+    all g:attempt-misappropriation-requirements (f:intends-misappropriation, f:misappropriation-substantial-step);
+  }
+  authorities {
+    authority target PenalCode1871 src:pc section 403;
+    authority attempt PenalCode1871 src:pc section 511;
+  }
+  outputs {
+    intended_target f:intends-misappropriation;
+    conduct_stage stage:misappropriation-conduct;
+    act_towards_commission f:misappropriation-substantial-step;
+    section511_requirements g:attempt-misappropriation-requirements;
+    final_rule r:section511-misappropriation;
+  }
+  limitations {
+    "Direct self-attempt against the bounded section 403 candidate only";
+    "Conduct stage and intention are supplied technical classifications";
+    "Attempt punishment and completed-offence adjudication are outside scope";
+    "No evidence assessment, guilt, conviction, acquittal or sentence";
+  }
+}

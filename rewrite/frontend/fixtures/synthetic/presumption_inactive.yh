@@ -1,0 +1,6 @@
+presumption-program FictionalAuthorizationPresumptionInactive-v1 {
+  base-model "restricted_entry.yh";
+  base-scenario "scenario_presumption_inactive.yh";
+  burden bearer fictional-proponent standard supplied-classification note "Fictional context only; no evidence assessment";
+  presumption pres:fictional-authorization target f:no-authorization source src:fictional-rule trigger f:knowledge rebuttal f:rescue-purpose;
+}

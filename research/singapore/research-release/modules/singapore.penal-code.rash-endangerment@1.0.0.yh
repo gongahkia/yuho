@@ -1,0 +1,7 @@
+statutory-module singapore.penal-code.rash-endangerment version 1.0.0 {
+  export model SingaporePenalCodeResearchReleaseResearchPrototype-v1;
+  export offence o:rash-endangerment;
+  export candidate-penalty pen:section336-rash;
+  export general-exception x:section80;
+  source-model "rash.yh";
+}

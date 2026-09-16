@@ -1,0 +1,10 @@
+Presumption technical subprogram: FictionalAuthorizationPresumptionActive-v1
+Kernel fragment: RegisteredPresumptionDerivations-v1
+Burden bearer annotation: fictional-proponent
+Authored standard annotation: supplied-classification
+Context: Fictional context only; no evidence assessment
+Derivations:
+  pres:fictional-authorization: active; target direct not_satisfied, effective satisfied
+Final technical proof status: satisfied
+This subprogram applies supplied classifications; it does not assess evidence or determine that a legal burden was discharged.
+No guilt, conviction, acquittal, liability, punishment or sentence was determined.

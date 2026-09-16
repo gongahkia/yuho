@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.criminal-trespass version 1.0.0 {
+  export offence o:criminal-trespass;
+  export candidate-penalty pen:section447;
+  source-model "criminal-trespass.yh";
+}

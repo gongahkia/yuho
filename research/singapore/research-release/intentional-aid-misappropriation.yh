@@ -1,0 +1,87 @@
+model SingaporeIntentionalAidMisappropriationResearchPrototype-v1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Singapore;
+  purpose research_prototype;
+  request A23;
+  policy 2026-09-13 1024;
+  provenance {
+    source src:pc source_text "saved Penal Code ss 403 and 107-109";
+    source src:synthetic synthetic_status "research release synthetic classifications";
+    source src:ea contextual "bounded Evidence Act s 107 burden context";
+    quote q:movable "movable property";
+    quote q:dishonestly "dishonestly";
+    quote q:misappropriates "misappropriates";
+    quote q:converts "converts to own use";
+    quote q:aid-act "intentionally aids, by any act";
+    quote q:aid-omission "or illegal omission";
+    quote q:intends-aid "intentionally aids";
+    quote q:aid-link "facilitates the commission thereof";
+    quote q:consequence "act abetted is committed in consequence of the abetment";
+  }
+  annotations { burden none none none not_applicable; }
+  party-roles {
+    party-role role:principal;
+    party-role role:alleged-abettor;
+  }
+  definitions { }
+  actor-attributions {
+    fact f:misappropriation-movable to role:principal;
+    mental-state f:misappropriation-dishonesty to role:principal;
+    fact f:misappropriates to role:principal;
+    fact f:converts to role:principal;
+    mental-state f:intends-aid to role:alleged-abettor;
+    fact f:aid-by-act to role:alleged-abettor;
+    fact f:aid-by-illegal-omission to role:alleged-abettor;
+    relation-fact f:aid-link to rel:aid;
+    relation-fact f:consequence to rel:aid;
+  }
+  scope-assumptions {
+    scope-assumption a:only-intentional-aid-route;
+    scope-assumption a:principal-misappropriation-separately-supplied;
+    scope-assumption a:broader-section108-cases-excluded;
+    scope-assumption a:s109-consequence-separately-supplied;
+  }
+  offence o:misappropriation rule r:section403 program p:section403 path section403 sections 403 {
+    element movable-property f:misappropriation-movable quote q:movable;
+    element dishonest-intention f:misappropriation-dishonesty quote q:dishonestly;
+    element conduct f:misappropriates quote q:misappropriates;
+    element conduct f:converts quote q:converts;
+    any g:misappropriation-conduct (f:misappropriates, f:converts);
+    all g:misappropriation-requirements (f:misappropriation-movable, f:misappropriation-dishonesty, g:misappropriation-conduct);
+  }
+  participation p:aid-misappropriation route intentional-aid target o:misappropriation rule r:section109-misappropriation program p:section109-misappropriation path section109-misappropriation sections 107,108,109 {
+    relation rel:aid from role:alleged-abettor to role:principal target o:misappropriation status f:aid-link quote q:aid-link;
+    element intention f:intends-aid quote q:intends-aid;
+    element aid-act f:aid-by-act quote q:aid-act;
+    element illegal-omission f:aid-by-illegal-omission quote q:aid-omission;
+    element consequence f:consequence quote q:consequence;
+    any g:aid-form (f:aid-by-act, f:aid-by-illegal-omission);
+    all g:intentional-aid (f:intends-aid, f:aid-link, g:aid-form);
+    all g:section109 (g:misappropriation-requirements, g:intentional-aid, f:consequence);
+  }
+  authorities {
+    authority target PenalCode1871 src:pc section 403;
+    authority abetment PenalCode1871 src:pc section 107;
+    authority abettor PenalCode1871 src:pc section 108;
+    authority consequence PenalCode1871 src:pc section 109;
+    authority burden-context EvidenceAct1893 src:ea section 107;
+  }
+  outputs {
+    principal_target g:misappropriation-requirements;
+    aid_intention f:intends-aid;
+    aid_by_act f:aid-by-act;
+    aid_illegal_omission f:aid-by-illegal-omission;
+    aid_relationship f:aid-link;
+    aid_form g:aid-form;
+    intentional_aid g:intentional-aid;
+    commission_in_consequence f:consequence;
+    section109_candidate g:section109;
+    final_rule r:section109-misappropriation;
+  }
+  limitations {
+    "Only intentional aid is modelled; instigation, conspiracy and broader s 108 cases are excluded";
+    "The s 107 route and supplied s 109 consequence remain separate technical components";
+    "Actors and classifications are synthetic; no evidence assessment";
+    "No guilt, conviction, acquittal, punishment or sentence";
+  }
+}

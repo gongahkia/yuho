@@ -1,0 +1,62 @@
+model SingaporeSection511AssaultAttemptResearchPrototype-v1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Singapore;
+  purpose research_prototype;
+  request A21;
+  policy 2026-09-13 1024;
+  provenance {
+    source src:pc source_text "saved Penal Code ss 351, 352 and 511";
+    source src:synthetic synthetic_status "research release synthetic classifications";
+    quote q:gesture "makes any gesture or any preparation";
+    quote q:intention "intending that the gesture or preparation will cause apprehension of imminent criminal force";
+    quote q:knowledge "knowing it likely that the gesture or preparation will cause apprehension of imminent criminal force";
+    quote q:apprehension "causes a person present to apprehend imminent criminal force";
+    quote q:no-provocation "otherwise than on grave and sudden provocation given by that person";
+    quote q:intends-target "with the intention of committing that offence";
+    quote q:substantial-step "takes a substantial step towards the commission of that offence";
+  }
+  annotations { burden none none none not_applicable; }
+  party-roles { party-role role:alleged-attempter; }
+  definitions { }
+  scope-assumptions {
+    scope-assumption a:direct-self-attempt-only;
+    scope-assumption a:target-not-completed;
+    scope-assumption a:no-express-attempt-punishment-provision-modelled;
+    scope-assumption a:punishment-outside-scope;
+    scope-assumption a:statutory-expression-supplied;
+    scope-assumption a:stage-externally-classified;
+    scope-assumption a:impossible-attempts-excluded;
+  }
+  offence o:assault rule r:section352-assault program p:section352-assault path sections351-352 sections 351,352 {
+    element conduct f:assault-gesture quote q:gesture;
+    element intention f:assault-intention quote q:intention;
+    element knowledge f:assault-knowledge quote q:knowledge;
+    element circumstance f:assault-apprehension quote q:apprehension;
+    element circumstance f:assault-no-provocation quote q:no-provocation;
+    any g:assault-fault (f:assault-intention, f:assault-knowledge);
+    all g:assault-requirements (f:assault-gesture, g:assault-fault, f:assault-apprehension, f:assault-no-provocation);
+  }
+  attempt attempt:assault route direct-self actor role:alleged-attempter target o:assault rule r:section511-assault program p:section511-assault path section511-assault sections 511 {
+    mental-state f:intends-assault actor role:alleged-attempter kind intention target o:assault quote q:intends-target;
+    conduct-stage stage:assault-conduct actor role:alleged-attempter output f:assault-substantial-step quote q:substantial-step;
+    all g:attempt-assault-requirements (f:intends-assault, f:assault-substantial-step);
+  }
+  authorities {
+    authority target-definition PenalCode1871 src:pc section 351;
+    authority target-penalty PenalCode1871 src:pc section 352;
+    authority attempt PenalCode1871 src:pc section 511;
+  }
+  outputs {
+    intended_target f:intends-assault;
+    conduct_stage stage:assault-conduct;
+    act_towards_commission f:assault-substantial-step;
+    section511_requirements g:attempt-assault-requirements;
+    final_rule r:section511-assault;
+  }
+  limitations {
+    "Direct self-attempt against the bounded assault candidate only";
+    "Conduct stage and intention are supplied technical classifications";
+    "Attempt punishment and completed-offence adjudication are outside scope";
+    "No evidence assessment, guilt, conviction, acquittal or sentence";
+  }
+}

@@ -310,7 +310,8 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
                    <> tokenText (elementQuote item)
                    <> maybe "" (\support -> " + " <> tokenText support) (elementSupport item)
                   | item <- ruleElements shared],
-                 "Selected candidate offence requirements:", True)
+                 "Selected candidate offence requirements:",
+                 tokenText (ruleIdentifier shared) == "x:section84")
               _ -> at "SFE040" path target "selected exception attachment is not unique"
             _ -> at "SFE036" path (modelIdentifier model) "one analysis target required"
           DefinitionsLegal definitions _ offences exceptions attachments _ ->
@@ -348,7 +349,8 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
                        <> tokenText (elementQuote item)
                        <> maybe "" (\support -> " + " <> tokenText support) (elementSupport item)
                       | item <- ruleElements shared],
-                     "Selected candidate offence requirements:", True)
+                     "Selected candidate offence requirements:",
+                     tokenText (ruleIdentifier shared) == "x:section84")
                 _ -> at "SFE040" path target "selected exception attachment is not unique"
               _ -> at "SFE036" path (modelIdentifier model) "one analysis target required"
           _ -> at "SFE013" path (modelIdentifier model)
@@ -384,6 +386,7 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
             [] -> []
             candidates -> ["Candidate penalty presentation (not an imposed sentence):"]
               ++ concatMap (renderCandidatePenalty selectedPenaltyIds) candidates
+          fictionalContext = tokenText (modelJurisdiction model) == "Fictional"
           linesOfText =
             ["Model: " <> tokenText (modelIdentifier model)
             ,"Jurisdiction: " <> tokenText (modelJurisdiction model)
@@ -395,13 +398,17 @@ explainChecked path checked@(Checked model scenario assignments offenceTree exce
             ++ [offenceHeading]
             ++ renderTree 1 supplied offenceValues offenceTree
             ++ [if section84Context then "Section 84 general exception:"
-                else "Fictional exception requirements:"]
+                else if fictionalContext then "Fictional exception requirements:"
+                else "General exception requirements:"]
             ++ renderTree 1 supplied defenceValues defenceTree
             ++ (if null sourceReferences then [] else
-                  "Section 84 source references:" : sourceReferences)
+                  (if section84Context then "Section 84 source references:"
+                   else if fictionalContext then "Fictional exception source references:"
+                   else "General-exception source references:") : sourceReferences)
             ++ candidatePenaltyLines
             ++ [(if section84Context then "Section 84 kernel rule: "
-                  else "Fictional exception kernel rule: ") <>
+                  else if fictionalContext then "Fictional exception kernel rule: "
+                  else "General exception kernel rule: ") <>
                   maybe "not_evaluated" (satisfactionText . proofRuleStatus) defenceResult
                 ,(if section84Context then "Section 107 context: "
                   else "Contextual burden annotation: ") <> tokenText annotation <> "; "

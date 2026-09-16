@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.receiving-property version 1.0.0 {
+  export offence o:receiving-property;
+  export candidate-penalty pen:section411;
+  source-model "receiving-property.yh";
+}

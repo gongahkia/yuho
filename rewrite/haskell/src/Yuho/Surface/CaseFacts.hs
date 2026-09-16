@@ -159,12 +159,12 @@ checkSharedShapes path model actors allegations facts = mapM_ checkFact facts
               "one case fact cannot bind incompatible primitive meanings"
               path firstToken) rest
     lookupInput (allegationId,target) = do
-      CaseAllegation _ kind _ _ raw _ <-
+      CaseAllegation _ kind selectedTarget role raw _ <-
         case [item | item@(CaseAllegation declared _ _ _ _ _) <- allegations,
           tokenText declared == tokenText allegationId] of
           [item] -> pure item
           _ -> at "SFE114" path allegationId "unknown allegation for case fact"
-      descriptions <- inputDescriptors path model actors kind raw
+      descriptions <- inputDescriptors path model actors kind role selectedTarget raw
       case [shape | InputDescriptor candidate _ _ _ shape <- descriptions,
         targetText candidate == targetText target] of
         [shape] -> pure (targetToken target,shape)
@@ -175,8 +175,8 @@ checkSharedShapes path model actors allegations facts = mapM_ checkFact facts
 expandCaseFacts :: FilePath -> Model -> [ActorBinding] -> [CaseFact]
   -> CaseAllegation -> Either Diagnostic Scenario
 expandCaseFacts path model actors facts
-  (CaseAllegation allegationId kind _ _ raw bindings) = do
-  descriptors <- inputDescriptors path model actors kind raw
+  (CaseAllegation allegationId kind allegationTarget role raw bindings) = do
+  descriptors <- inputDescriptors path model actors kind role allegationTarget raw
   let indexed = Map.fromList [(targetText target,descriptor)
         | descriptor@(InputDescriptor target _ _ _ _) <- descriptors]
       declared = Map.fromList [(factIdText fact,fact) | fact <- facts]
@@ -258,12 +258,20 @@ addAssignment path _ (CaseFactBinding _ target) subject relationProxy status cod
             (ScopedExceptionAssignment instanceId item actor context status code : scoped)
             plain scopes)
         _ -> at "SFE114" path item "exception subject unavailable"
+addAssignment path _ (CaseFactBinding _ target) _ _ status code
+  (Scenario request model plain scopes targets) = case target of
+    CasePrimitiveInput item ->
+      if any (\(Assignment key _ _) -> tokenText key == tokenText item) plain
+        then at "SFE115" path item "case fact binding conflicts with a direct classification"
+        else pure (Scenario request model (Assignment item status code : plain) scopes targets)
+    _ -> at "SFE114" path (targetToken target)
+      "simple offence facts bind only primitive inputs"
 addAssignment path item _ _ _ _ _ _ = at "SFE114" path item
   "case fact binding requires an actor-scoped allegation"
 
 inputDescriptors :: FilePath -> Model -> [ActorBinding] -> CaseTargetKind
-  -> Scenario -> Either Diagnostic [InputDescriptor]
-inputDescriptors path model bindings kind raw = case modelBody model of
+  -> Token -> Token -> Scenario -> Either Diagnostic [InputDescriptor]
+inputDescriptors path model bindings kind allegationRole selectedTarget raw = case modelBody model of
   AbetmentLegal _ _ _ _ offence abetment attempt
     (ActorExceptionDefinition _ exception) attachments _ _ -> do
       let actors = Map.fromList [(tokenText role,actor) | ActorBinding role actor <- bindings]
@@ -308,12 +316,38 @@ inputDescriptors path model bindings kind raw = case modelBody model of
             (attachmentContext attachment)) Nothing
           (elementShape element) | element <- ruleElements exception]) active
       pure (mainRows ++ exceptionRows)
+  MultiLegal _ offences exceptions attachments _ ->
+    simpleOffenceDescriptors offences exceptions attachments
+  DefinitionsLegal _ _ offences exceptions attachments _ ->
+    simpleOffenceDescriptors offences exceptions attachments
   _ -> at "SFE106" path (modelIdentifier model)
     "case facts require the bounded typed multi-allegation model"
   where
     actorFor actors role = case Map.lookup (tokenText role) actors of
       Just actor -> pure actor
       Nothing -> at "SFE113" path role "unbound case fact role"
+    simpleOffenceDescriptors offences exceptions attachments = do
+      if kind == CaseOffence then pure () else at "SFE107" path selectedTarget
+        "composed offence model does not expose participation or attempt inputs"
+      actor <- case [value | ActorBinding role value <- bindings,
+        tokenText role == tokenText allegationRole] of
+        [value] -> pure value
+        _ -> at "SFE113" path allegationRole "unbound or ambiguous allegation role"
+      offence <- case [item | item <- offences,
+        tokenText (ruleIdentifier item) == tokenText selectedTarget] of
+        [item] -> pure item
+        _ -> at "SFE107" path selectedTarget "unknown offence target"
+      exception <- case [rule | Attachment _ exceptionId target <- attachments,
+        tokenText target == tokenText selectedTarget,
+        GeneralException rule <- exceptions,
+        tokenText (ruleIdentifier rule) == tokenText exceptionId] of
+        [rule] -> pure rule
+        [] -> at "SFE040" path selectedTarget "selected offence has no attached general exception"
+        _ -> at "SFE041" path selectedTarget "selected offence has ambiguous exception attachments"
+      let descriptor item = InputDescriptor (CasePrimitiveInput (elementId item))
+            (elementFactKind (elementCategory item))
+            (CaseActorSubject actor (Just selectedTarget)) Nothing (elementShape item)
+      pure (map descriptor (ruleElements offence ++ ruleElements exception))
     actorElement actors roleName item = do
       actor <- case Map.lookup roleName actors of
         Just value -> pure value

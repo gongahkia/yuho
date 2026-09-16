@@ -167,7 +167,7 @@ checkModel path model supplied = do
         pure (offence, tree)) offences
       checkedExceptions <- mapM (\(GeneralException exception) -> do
         tree <- checkedLegalRule path quoteIndex exception
-        checkSharedExceptionShape path exception tree
+        checkGeneralExceptionShape path exception
         pure (exception, tree)) exceptions
       checkMultiIdentities path checkedOffences checkedExceptions
       checkAttachments path checkedOffences checkedExceptions attachments
@@ -237,7 +237,7 @@ checkModel path model supplied = do
         pure (offence, tree)) offences
       checkedExceptions <- mapM (\(GeneralException exception) -> do
         tree <- checkedLegalRule path quoteIndex exception
-        checkSharedExceptionShape path exception tree
+        checkGeneralExceptionShape path exception
         pure (exception, tree)) exceptions
       checkMultiIdentities path checkedOffences checkedExceptions
       checkAttachments path checkedOffences checkedExceptions attachments
@@ -315,10 +315,16 @@ checkModel path model supplied = do
       (principalRole, abettorRole) <- checkPartyRoles path roles
       index <- definitionIndex path definitions
       mapM_ (checkDefinition path quoteIndex index) definitions
-      mapM_ (checkElementQuote path quoteIndex) (ruleElements offence)
-      checkSections path (ruleIdentifier offence) (ruleSections offence)
-      offenceTree <- resolveDefinitionRule path index offence
-      checkDefinitionOffence path index offence offenceTree
+      offenceTree <- if null definitions then do
+          tree <- checkedLegalRule path quoteIndex offence
+          checkOffenceShape path offence tree
+          pure tree
+        else do
+          mapM_ (checkElementQuote path quoteIndex) (ruleElements offence)
+          checkSections path (ruleIdentifier offence) (ruleSections offence)
+          tree <- resolveDefinitionRule path index offence
+          checkDefinitionOffence path index offence tree
+          pure tree
       declared <- checkScopeDeclarations path assumptions
       checkParticipationShape path quoteIndex offence offenceTree route relation
       participationTree <- resolveParticipationTree path offenceTree participation
@@ -380,9 +386,15 @@ checkModel path model supplied = do
         [] -> at "SFE083" path (modelIdentifier model) "alleged-attempter role required"
       index <- definitionIndex path definitions
       mapM_ (checkDefinition path quoteIndex index) definitions
-      mapM_ (checkElementQuote path quoteIndex) (ruleElements offence)
-      targetTree <- resolveDefinitionRule path index offence
-      checkDefinitionOffence path index offence targetTree
+      _ <- if null definitions then do
+          tree <- checkedLegalRule path quoteIndex offence
+          checkOffenceShape path offence tree
+          pure tree
+        else do
+          mapM_ (checkElementQuote path quoteIndex) (ruleElements offence)
+          tree <- resolveDefinitionRule path index offence
+          checkDefinitionOffence path index offence tree
+          pure tree
       let AttemptDefinition attemptRuleId (AttemptActor declaredActor)
             (AttemptTarget declaredTarget) intention stage = attempt
           TargetDirectedMentalState mentalId (AttemptActor mentalActor)
@@ -393,12 +405,11 @@ checkModel path model supplied = do
             [tokenText item | StatutorySection item <- definitionSections definition]
       checkDefinitionIds path definitions [offence,attemptRuleId] []
       checkSections path (ruleIdentifier attemptRuleId) (ruleSections attemptRuleId)
-      if tokenText (ruleIdentifier offence) == "o:theft"
-          && sections offence == ["378","379"]
-          && map definitionSectionsText definitions == [["23"],["23"],["24"]]
+      if not (null (sections offence))
+          && (null definitions || map definitionSectionsText definitions == [["23"],["23"],["24"]])
         then pure () else at "SFE075" path (ruleIdentifier offence)
-          "bounded target must be the authored theft candidate and definitions"
-      checkAttemptAuthorities path sourceIndex citations
+          "attempt target needs typed statutory sections and supported definitions"
+      checkAttemptAuthorities path sourceIndex (sections offence) citations
       if tokenText declaredActor == tokenText role
           && tokenText mentalActor == tokenText role
           && tokenText stageActor == tokenText role
@@ -1099,22 +1110,23 @@ checkScopedExceptionInput path actors facts attachments active row = do
   pure (Assignment (scopedToken instanceId fact)
     (scopedAssignmentStatus row) (scopedAssignmentReason row))
 
-checkAttemptAuthorities :: FilePath -> Map.Map Text (Text, Text)
+checkAttemptAuthorities :: FilePath -> Map.Map Text (Text, Text) -> [Text]
   -> [AuthorityReference] -> Either Diagnostic ()
-checkAttemptAuthorities path sources citations = do
+checkAttemptAuthorities path sources targetSections citations = do
   let rows = [(label,(instrument,source,section))
         | AuthorityReference label instrument source section <- citations]
-      expected = Map.fromList
-        [("wrongful-concepts","23"),("dishonesty","24"),
-         ("theft-conduct","378"),("theft-anchor","379"),("attempt","511")]
-  indexed <- unique path "SFE002" rows
-  if Map.keysSet indexed == Map.keysSet expected then pure () else
+      sections = [tokenText section | (_,(_,_,section)) <- rows]
+      attemptRows = [section | (label,(_,_,section)) <- rows,
+        tokenText label == "attempt"]
+  _ <- unique path "SFE002" rows
+  if map tokenText attemptRows == ["511"]
+      && all (`elem` sections) targetSections then pure () else
     at "SFE074" path (Token WordToken "authorities" 1 1)
-      "typed Penal Code authority references required"
+      "typed target-offence and section 511 authority references required"
   mapM_ (\(label,(instrument,source,section)) ->
     if instrument == PenalCode1871
-      && Map.lookup (tokenText label) expected == Just (tokenText section)
       && maybe False ((== "source_text") . fst) (Map.lookup (tokenText source) sources)
+      && (tokenText label /= "attempt" || tokenText section == "511")
     then pure () else at "SFE074" path label "attempt authority has incompatible instrument or section") rows
 
 checkAttemptBinding :: FilePath -> Token -> Token -> [ActorBinding] -> Either Diagnostic Token
@@ -1155,38 +1167,40 @@ checkParticipationSources path sources definitions offence route citations = do
       "participation model needs source, status and contextual authority references"
   let labels = [(label, (instrument, source, section))
         | AuthorityReference label instrument source section <- citations]
-  index <- unique path "SFE002" labels
-  let expected = Map.fromList
-        [("wrongful-concepts", (PenalCode1871,"23","source_text"))
-        ,("dishonesty", (PenalCode1871,"24","source_text"))
-        ,("theft-conduct", (PenalCode1871,"378","source_text"))
-        ,("theft-anchor", (PenalCode1871,"379","source_text"))
-        ,("abetment", (PenalCode1871,"107","source_text"))
+  _ <- unique path "SFE002" labels
+  let expectedCore = Map.fromList
+        [("abetment", (PenalCode1871,"107","source_text"))
         ,("abettor", (PenalCode1871,"108","source_text"))
         ,("consequence", (PenalCode1871,"109","source_text"))
         ,("burden-context", (EvidenceAct1893,"107","contextual"))]
-  if Map.keysSet index == Map.keysSet expected then pure () else
+      actualCore = Map.fromList [(tokenText label,(instrument,tokenText section,
+          maybe "" fst (Map.lookup (tokenText source) sources)))
+        | (label,(instrument,source,section)) <- labels,
+          Map.member (tokenText label) expectedCore]
+      wantedCore = Map.map (\(instrument,section,role) -> (instrument,section,role)) expectedCore
+  if Map.keysSet actualCore == Map.keysSet wantedCore then pure () else
     at "SFE073" path (Token WordToken "authorities" 1 1)
-      "typed statutory-authority references required for each modelled provision"
-  mapM_ (checkOne expected) labels
+      "typed ss 107–109 and Evidence Act s 107 authority references required"
+  if actualCore == wantedCore then pure () else
+    at "SFE074" path (Token WordToken "authorities" 1 1)
+      "statutory authority instrument, section or source role mismatch"
+  mapM_ checkOne labels
   let sections = map (map (tokenText . sectionToken) . definitionSections) definitions
       sectionToken (StatutorySection item) = item
       offenceSections = map (tokenText . sectionToken) (ruleSections offence)
       routeSections = map (tokenText . sectionToken) (ruleSections route)
-  if sections == [["23"],["23"],["24"]]
-      && offenceSections == ["378","379"]
+  let citedSections = [tokenText section | (_,(_,_,section)) <- labels]
+  if (null definitions || sections == [["23"],["23"],["24"]])
+      && not (null offenceSections) && all (`elem` citedSections) offenceSections
       && routeSections == ["107","108","109"] then pure () else
     at "SFE074" path (ruleIdentifier offence)
       "modelled sections must match their typed Penal Code authority references"
   where
-    checkOne expected (label,(instrument,source,section)) =
-      case Map.lookup (tokenText label) expected of
-        Just (wantedInstrument,wantedSection,wantedRole) ->
-          if instrument == wantedInstrument && tokenText section == wantedSection
-            && maybe False ((== wantedRole) . fst) (Map.lookup (tokenText source) sources)
-          then Right () else at "SFE074" path label
-            "authority instrument, source ID or section has the wrong legal role"
-        Nothing -> at "SFE073" path label "unknown statutory authority use"
+    checkOne (label,(instrument,source,_)) =
+      let wantedRole = if instrument == EvidenceAct1893 then "contextual" else "source_text"
+      in if maybe False ((== wantedRole) . fst) (Map.lookup (tokenText source) sources)
+        then Right () else at "SFE074" path label
+          "authority instrument or source ID has the wrong legal role"
 
 checkPartyRoles :: FilePath -> [PartyRole] -> Either Diagnostic (Token, Token)
 checkPartyRoles path rows = do
@@ -1715,6 +1729,13 @@ checkSharedExceptionShape path exception tree = do
     _ -> at "SFE032" path (ruleIdentifier exception)
       "shared section 84 needs unsoundness and the three reviewed causal routes"
 
+checkGeneralExceptionShape :: FilePath -> Rule -> Either Diagnostic ()
+checkGeneralExceptionShape path exception = do
+  if ruleKind exception == ExceptionKind && ruleTarget exception == Nothing
+    then pure () else at "SFE032" path (ruleIdentifier exception)
+      "general exception must be a reusable exception declaration"
+  checkSections path (ruleIdentifier exception) (ruleSections exception)
+
 checkSections :: FilePath -> Token -> [StatutorySection] -> Either Diagnostic ()
 checkSections path declaration sections = do
   if null sections then at "SFE031" path declaration
@@ -1737,9 +1758,9 @@ checkMultiIdentities path offences exceptions = do
         "duplicate general exception" path first
       _ -> at "SFE043" path (Token WordToken "general-exception" 1 1)
         "duplicate general exception"
-  if length offences >= 2 && length exceptions == 1 then pure () else
+  if not (null offences) && not (null exceptions) then pure () else
     at "SFE030" path (Token WordToken "general-exception" 1 1)
-      "bounded composition requires two candidate offences and one general exception"
+      "bounded composition requires at least one offence and one general exception"
   let rules = map fst (offences ++ exceptions)
       ids rule = [ruleIdentifier rule, ruleId rule, ruleProgram rule]
         ++ map elementId (ruleElements rule)
@@ -1791,7 +1812,7 @@ checkMultiOutputs path offences exceptions rows = do
       valid label target
         | "_requirements" `Text.isSuffixOf` label = Set.member target groups
         | "_final" `Text.isSuffixOf` label = Set.member target ruleIds
-        | label == "section84_defeat" = Set.member target exceptionIds
+        | "_defeat" `Text.isSuffixOf` label = Set.member target exceptionIds
         | otherwise = False
   case [item | TechnicalOutput label item <- rows,
        not (valid (tokenText label) (tokenText item))] of

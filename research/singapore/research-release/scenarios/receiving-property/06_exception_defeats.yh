@@ -1,0 +1,13 @@
+// Synthetic supplied-classification decision path; not an evidence finding.
+scenario R01 for SingaporePenalCodeResearchReleaseResearchPrototype-v1 {
+  analyse o:receiving-property;
+  assume a:bounded-section411-subsection1-non-motor-expression;
+  f:411-receives-or-retains = proved;
+  f:411-qualifying-property = proved;
+  f:411-knows-or-reason = proved;
+  f:79-no-written-law-override = proved;
+  f:79-act-done = proved;
+  f:79-mistake-of-fact = proved;
+  f:79-ignorance-of-fact = not_proved;
+  f:79-good-faith-belief = proved;
+}

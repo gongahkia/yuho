@@ -25,6 +25,8 @@ import Yuho.Surface.Modules
   ( AuthoredModel(..), authoredPrefix, loadAuthoredModel
   , validateAuthoredChecked, validateAuthoredTargets )
 import Yuho.Surface.Parser (parseAnalysisCase)
+import Yuho.Surface.Presumption
+  ( PresumptionProgram(..), explainPresumptionProgram, loadPresumptionProgram )
 import Yuho.Surface.Temporal (loadAuthoredInput)
 import Yuho.Surface.Token (Diagnostic(..), Kind(..), Token(..), diagnosticJson)
 
@@ -90,6 +92,8 @@ operate (Options command path scenarioPath output) = do
         Left issue -> report issue
         Right (first:_) | tokenText first == "analysis-case" ->
           operateCase command path bytes scenarioPath output
+        Right (first:_) | tokenText first == "presumption-program" ->
+          operatePresumption command path bytes scenarioPath output
         _ -> do
           (authored,resolvedScenario) <- loadAuthoredInput path bytes supplied
             >>= either report pure
@@ -158,6 +162,24 @@ operateCase command path bytes scenarioPath output = do
     Run -> either report (BS.hPut stdout) (runAnalysisCase checked)
     Explain -> either report (BS.hPut stdout . Encoding.encodeUtf8
       . (authoredPrefix authored <>)) (explainAnalysisCase modelPath checked)
+  where origin = Token EndToken "" 1 1
+
+operatePresumption :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
+  -> Maybe FilePath -> IO ()
+operatePresumption command path bytes scenarioPath output = do
+  case scenarioPath of
+    Just _ -> report (Diagnostic "SFR001" path origin
+      "presumption program names its own base scenario" Nothing)
+    Nothing -> pure ()
+  program <- loadPresumptionProgram path bytes >>= either report pure
+  case command of
+    Check -> BS.hPut stdout "{\"kind\":\"presumption-program\",\"status\":\"valid\"}\n"
+    Compile -> case output of
+      Nothing -> BS.hPut stdout (presumptionRequest program)
+      Just destination -> publish destination (presumptionRequest program)
+    Run -> BS.hPut stdout (presumptionResult program)
+    Explain -> either report (BS.hPut stdout . Encoding.encodeUtf8)
+      (explainPresumptionProgram program)
   where origin = Token EndToken "" 1 1
 
 publish :: FilePath -> BS.ByteString -> IO ()

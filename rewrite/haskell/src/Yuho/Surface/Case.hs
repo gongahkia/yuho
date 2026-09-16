@@ -40,44 +40,37 @@ checkAnalysisCase casePath declaration@(AnalysisCase caseId _ bindings facts all
   if "case:" `Text.isPrefixOf` tokenText caseId then pure () else
     at "SFE106" casePath caseId "typed case identifier required"
   _ <- checkModel modelPath model Nothing
-  (offence, participation, attempt) <- case modelBody model of
-    AbetmentLegal _ _ _ _ candidate abetment attemptDefinition _ _ _ _ ->
-      pure (ruleIdentifier candidate, ruleIdentifier (abetmentRule abetment),
-        ruleIdentifier (attemptRule attemptDefinition))
-    _ -> at "SFE106" casePath caseId
-      "bounded case requires the authored offence, abetment and attempt model"
-  if length allegations == 3 &&
-      Set.fromList [kind | CaseAllegation _ kind _ _ _ _ <- allegations] ==
-        Set.fromList [CaseOffence,CaseParticipation,CaseAttempt]
+  if not (null allegations) && length allegations <= 32
     then pure () else at "SFE106" casePath caseId
-      "one offence, one participation and one attempt allegation required"
+      "analysis case requires between 1 and 32 ordered allegations"
   let ids = [tokenText item | CaseAllegation item _ _ _ _ _ <- allegations]
-  if length (Set.fromList ids) == 3 && all ("a:" `Text.isPrefixOf`) ids then
+  if length (Set.fromList ids) == length ids && all ("a:" `Text.isPrefixOf`) ids then
     pure () else at "SFE106" casePath caseId "duplicate or invalid allegation ID"
-  let ordered = [item | kind <- [CaseOffence,CaseParticipation,CaseAttempt],
-        item@(CaseAllegation _ actual _ _ _ _) <- allegations, actual == kind]
-  resolvedFacts <- validateCaseFacts casePath bindings facts ordered
-  checkSharedShapes casePath model bindings ordered resolvedFacts
-  issues <- mapM (checkIssue offence participation attempt) ordered
+  let boundRoles = Set.fromList [tokenText role | ActorBinding role _ <- bindings]
+  case [role | CaseAllegation _ _ _ role _ _ <- allegations,
+    Set.notMember (tokenText role) boundRoles] of
+    role:_ -> at "SFE107" casePath role "allegation actor role is not bound by the case"
+    [] -> pure ()
+  resolvedFacts <- validateCaseFacts casePath bindings facts allegations
+  checkSharedShapes casePath model bindings allegations resolvedFacts
+  issues <- mapM checkIssue allegations
   pure (CheckedCase casePath caseId model resolvedFacts issues)
   where
-    checkIssue offence participation attempt allegation@(CaseAllegation item kind target role _ _) = do
-      let (wantedTarget,wantedRole) = case kind of
-            CaseOffence -> (offence,"role:principal")
-            CaseParticipation -> (participation,"role:alleged-abettor")
-            CaseAttempt -> (attempt,"role:alleged-attempter")
-      if tokenText target == tokenText wantedTarget && tokenText role == wantedRole
-        then pure () else at "SFE107" casePath target
-          "allegation target or actor role does not match its typed issue"
+    checkIssue allegation@(CaseAllegation item kind target role raw _) = do
+      canonicalRole <- validateTarget kind target
+      actor <- case [value | ActorBinding declared value <- bindings,
+        tokenText declared == tokenText role] of
+        [value] -> pure value
+        _ -> at "SFE107" casePath role "allegation actor role is ambiguous or unbound"
       expanded <- expandCaseFacts casePath model bindings facts allegation
-      scenario <- case expanded of
-        ActorScopedScenario _ _ [] observations [] actorRows relationRows stageRows
-          completions scopedRows [] acknowledgements ->
-            pure (ActorScopedScenario (modelRequest model) (modelIdentifier model)
-              [target] observations bindings actorRows relationRows stageRows completions
-              scopedRows [] acknowledgements)
-        _ -> at "SFE107" casePath item
-          "allegation requires scoped inputs; bindings belong to the case"
+      let localBindings = case canonicalRole of
+            Nothing -> []
+            Just canonical -> ActorBinding canonical actor :
+              [row | row@(ActorBinding declared _) <- bindings,
+                tokenText declared `elem`
+                  ["role:principal","role:alleged-abettor","role:co-conspirator",
+                   "role:alleged-attempter"], tokenText declared /= tokenText canonical]
+      scenario <- normalizeScenario item target localBindings raw expanded
       checked <- case checkModel modelPath model (Just (casePath,scenario)) of
         Left issue | not (null facts) && diagnosticCode issue == "SFE009" ->
           atRelated "SFE118" casePath item
@@ -86,6 +79,44 @@ checkAnalysisCase casePath declaration@(AnalysisCase caseId _ bindings facts all
         result -> result
       request <- lowerChecked checked
       pure (CheckedIssue allegation checked request)
+    validateTarget kind target = case modelBody model of
+      MultiLegal _ offences _ _ _ -> offenceTarget offences
+      DefinitionsLegal _ _ offences _ _ _ -> offenceTarget offences
+      AbetmentLegal _ _ _ _ offence abetment attempt _ _ _ _ ->
+        let expected = case kind of
+              CaseOffence -> (ruleIdentifier offence,"role:principal")
+              CaseParticipation -> (ruleIdentifier (abetmentRule abetment),"role:alleged-abettor")
+              CaseAttempt -> (ruleIdentifier (attemptRule attempt),"role:alleged-attempter")
+        in if tokenText target == tokenText (fst expected)
+          then Right (Just (Token WordToken (snd expected) 1 1))
+          else at "SFE107" casePath target "unknown or wrong-kind allegation target"
+      _ -> at "SFE106" casePath target
+        "model body does not support bounded multi-allegation case analysis"
+      where
+        offenceTarget offences
+          | kind /= CaseOffence = at "SFE107" casePath target
+              "this composed model exposes offence allegations only"
+          | any ((== tokenText target) . tokenText . ruleIdentifier) offences = Right Nothing
+          | otherwise = at "SFE107" casePath target "unknown offence allegation target"
+    normalizeScenario item target localBindings _ expanded = case modelBody model of
+      MultiLegal {} -> simple expanded
+      DefinitionsLegal {} -> simple expanded
+      _ -> case expanded of
+        ActorScopedScenario _ _ [] observations _ actorRows relationRows stageRows
+          completions scopedRows [] acknowledgements ->
+            pure (ActorScopedScenario (modelRequest model) (modelIdentifier model)
+              [target] observations localBindings actorRows relationRows stageRows completions
+              scopedRows [] acknowledgements)
+        _ -> at "SFE107" casePath item
+          "allegation requires scoped inputs; bindings belong to the case"
+      where
+        simple (Scenario _ _ plain acknowledgements _) =
+          pure (Scenario (modelRequest model) (modelIdentifier model) plain acknowledgements [target])
+        simple (ActorScopedScenario _ _ _ _ _ actorRows _ _ _ _ plain acknowledgements) =
+          pure (Scenario (modelRequest model) (modelIdentifier model)
+            (plain ++ [Assignment key status reason
+              | ActorAssignment key _ status reason <- actorRows]) acknowledgements [target])
+        simple _ = at "SFE107" casePath item "offence allegation requires primitive inputs"
 
 issueValue :: CheckedIssue -> (CaseTargetKind, Token, Token)
 issueValue (CheckedIssue (CaseAllegation item kind target _ _ _) _ _) =
@@ -141,7 +172,10 @@ explainAnalysisCase :: FilePath -> CheckedCase -> Either Diagnostic Text
 explainAnalysisCase modelPath (CheckedCase _ caseId _ facts issues) = do
   parts <- mapM explainIssue issues
   pure (Text.unlines (["Analysis case: " <> tokenText caseId,
-    "Three independent technical issues; no aggregate case status."] ++
+    if length issues == 3 then
+      "Three independent technical issues; no aggregate case status."
+    else Text.pack (show (length issues)) <>
+      " independent technical issues in authored order; no aggregate case status."] ++
     (if null facts then [] else [caseFactsExplanation facts]) ++ parts ++
     ["No guilt, conviction, acquittal, liability or sentence was determined."]))
   where

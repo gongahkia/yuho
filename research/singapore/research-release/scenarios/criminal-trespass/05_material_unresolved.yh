@@ -1,0 +1,16 @@
+// Synthetic supplied-classification decision path; not an evidence finding.
+scenario R01 for SingaporePenalCodeResearchReleaseResearchPrototype-v1 {
+  analyse o:criminal-trespass;
+  assume a:bounded-sections441-447-expression;
+  f:441-entry = unresolved(not_determined);
+  f:441-entry-intent-offence = proved;
+  f:441-entry-intent-person = not_proved;
+  f:441-lawful-entry = not_proved;
+  f:441-unlawfully-remains = not_proved;
+  f:441-remain-intent = not_proved;
+  f:80-accident-or-misfortune = not_proved;
+  f:80-lawful-act = not_proved;
+  f:80-lawful-manner = not_proved;
+  f:80-lawful-means = not_proved;
+  f:80-proper-care-caution = not_proved;
+}

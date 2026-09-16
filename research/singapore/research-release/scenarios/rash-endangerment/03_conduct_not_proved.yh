@@ -1,0 +1,12 @@
+// Synthetic supplied-classification decision path; not an evidence finding.
+scenario R01 for SingaporePenalCodeResearchReleaseResearchPrototype-v1 {
+  analyse o:rash-endangerment;
+  assume a:bounded-rash-section336-expression;
+  f:336-doing-act = not_proved;
+  f:336-rashness = proved;
+  f:80-accident-or-misfortune = not_proved;
+  f:80-lawful-act = not_proved;
+  f:80-lawful-manner = not_proved;
+  f:80-lawful-means = not_proved;
+  f:80-proper-care-caution = not_proved;
+}

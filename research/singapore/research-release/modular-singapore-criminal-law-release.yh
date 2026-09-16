@@ -1,0 +1,38 @@
+modular-model SingaporeCriminalLawResearchRelease-v0.1 {
+  module-root "modules";
+  import singapore.penal-code.rash-endangerment version 1.0.0 as rash;
+  import singapore.penal-code.assault version 1.0.0 as assault;
+  import singapore.penal-code.misappropriation version 1.0.0 as misappropriation;
+  import singapore.penal-code.criminal-breach-of-trust version 1.0.0 as cbt;
+  import singapore.penal-code.receiving-property version 1.0.0 as receiving;
+  import singapore.penal-code.criminal-trespass version 1.0.0 as trespass;
+  import singapore.penal-code.wrongful-restraint version 1.0.0 as restraint;
+
+  use model rash::SingaporePenalCodeResearchReleaseResearchPrototype-v1;
+  use offence rash::o:rash-endangerment;
+  use offence assault::o:assault;
+  use offence misappropriation::o:misappropriation;
+  use offence cbt::o:criminal-breach-of-trust;
+  use offence receiving::o:receiving-property;
+  use offence trespass::o:criminal-trespass;
+  use offence restraint::o:wrongful-restraint;
+  use general-exception misappropriation::x:section79;
+  use general-exception rash::x:section80;
+  use general-exception assault::x:section81;
+  use general-exception cbt::x:section82;
+  use candidate-penalty rash::pen:section336-rash;
+  use candidate-penalty assault::pen:section352;
+  use candidate-penalty misappropriation::pen:section403;
+  use candidate-penalty cbt::pen:section406;
+  use candidate-penalty receiving::pen:section411;
+  use candidate-penalty trespass::pen:section447;
+  use candidate-penalty restraint::pen:section341;
+
+  attach rash::x:section80 to offence rash::o:rash-endangerment;
+  attach assault::x:section81 to offence assault::o:assault;
+  attach misappropriation::x:section79 to offence misappropriation::o:misappropriation;
+  attach cbt::x:section82 to offence cbt::o:criminal-breach-of-trust;
+  attach misappropriation::x:section79 to offence receiving::o:receiving-property;
+  attach rash::x:section80 to offence trespass::o:criminal-trespass;
+  attach assault::x:section81 to offence restraint::o:wrongful-restraint;
+}

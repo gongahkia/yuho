@@ -1,0 +1,11 @@
+// Synthetic supplied-classification decision path; not an evidence finding.
+scenario R01 for SingaporePenalCodeResearchReleaseResearchPrototype-v1 {
+  analyse o:criminal-breach-of-trust;
+  assume a:bounded-sections405-406-expression;
+  f:405-entrustment-or-dominion = proved;
+  f:405-dishonest-misappropriation = proved;
+  f:405-dishonest-use-disposal = not_proved;
+  f:405-intentionally-suffers = not_proved;
+  f:82-act-done = proved;
+  f:82-child-below-10 = proved;
+}

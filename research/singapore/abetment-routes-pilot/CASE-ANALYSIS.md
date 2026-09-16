@@ -36,7 +36,7 @@ CASE=../../research/singapore/abetment-routes-pilot/case-warehouse.yh
 "$YUHO" explain "$CASE"
 ```
 
-`compile` emits canonical `yuho.case-input/v0.1` JSON containing three separately checked KernelInput requests. `run` calls the existing Haskell kernel in process for each request and emits canonical `yuho.case-result/v0.1` JSON. Both formats list issues in offence, participation, attempt order regardless of declaration order. Each issue retains its own technical status and trace. There is no case-level status or court outcome.
+`compile` emits canonical `yuho.case-input/v0.1` JSON containing separately checked KernelInput requests. `run` calls the existing Haskell kernel in process for each request and emits canonical `yuho.case-result/v0.1` JSON. Both formats preserve authored allegation order. This historical warehouse fixture authors offence, participation, then attempt, so its frozen bytes are unchanged. Each issue retains its own technical status and trace. There is no case-level status or court outcome.
 
 The [shared-fact case](case-warehouse-shared.yh) supplies synthetic classifications once and binds them explicitly to compatible primitive inputs. It leaves other classifications local to their allegations:
 

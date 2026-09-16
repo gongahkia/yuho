@@ -1,0 +1,44 @@
+// Three ordered offence allegations; one primitive property classification is explicitly shared.
+analysis-case case:property-deception-showcase model "modular-singapore-criminal-law-release.yh" {
+  bind role:property-actor to actor:person-1;
+  bind role:receiver to actor:person-2;
+  supplied-fact fact:movable-property kind circumstance subject actor:person-1 target o:misappropriation status proved reason "synthetic shared property classification";
+
+  allegation a:misappropriation-first analyse offence o:misappropriation for role:property-actor {
+    assume a:bounded-section403-expression;
+    bind-fact fact:movable-property to input f:403-movable-property;
+    f:403-dishonesty = proved;
+    f:403-misappropriates = proved;
+    f:403-converts = not_proved;
+    f:79-no-written-law-override = not_proved;
+    f:79-act-done = not_proved;
+    f:79-mistake-of-fact = not_proved;
+    f:79-ignorance-of-fact = not_proved;
+    f:79-good-faith-belief = not_proved;
+  }
+
+  allegation a:misappropriation-second analyse offence o:misappropriation for role:property-actor {
+    assume a:bounded-section403-expression;
+    bind-fact fact:movable-property to input f:403-movable-property;
+    f:403-dishonesty = proved;
+    f:403-misappropriates = not_proved;
+    f:403-converts = proved;
+    f:79-no-written-law-override = not_proved;
+    f:79-act-done = not_proved;
+    f:79-mistake-of-fact = not_proved;
+    f:79-ignorance-of-fact = not_proved;
+    f:79-good-faith-belief = not_proved;
+  }
+
+  allegation a:receiving analyse offence o:receiving-property for role:receiver {
+    assume a:bounded-section411-subsection1-non-motor-expression;
+    f:411-receives-or-retains = proved;
+    f:411-qualifying-property = proved;
+    f:411-knows-or-reason = unresolved(not_determined);
+    f:79-no-written-law-override = not_proved;
+    f:79-act-done = not_proved;
+    f:79-mistake-of-fact = not_proved;
+    f:79-ignorance-of-fact = not_proved;
+    f:79-good-faith-belief = not_proved;
+  }
+}

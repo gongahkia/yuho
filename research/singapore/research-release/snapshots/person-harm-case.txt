@@ -1,0 +1,89 @@
+Modular host: SingaporeCriminalLawResearchRelease-v0.1
+Authored module versions select local model identity, not law by conduct date.
+Resolved imports:
+  singapore.penal-code.rash-endangerment@1.0.0 as rash
+  singapore.penal-code.assault@1.0.0 as assault
+  singapore.penal-code.misappropriation@1.0.0 as misappropriation
+  singapore.penal-code.criminal-breach-of-trust@1.0.0 as cbt
+  singapore.penal-code.receiving-property@1.0.0 as receiving
+  singapore.penal-code.criminal-trespass@1.0.0 as trespass
+  singapore.penal-code.wrongful-restraint@1.0.0 as restraint
+Analysis case: case:person-harm-showcase
+2 independent technical issues in authored order; no aggregate case status.
+
+Allegation a:rash-endangerment — offence o:rash-endangerment for role:rash-actor
+Model: SingaporePenalCodeResearchReleaseResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Selected candidate offence: o:rash-endangerment
+Candidate statutory sections: Penal Code ss 336
+General exception: Penal Code s 80
+Attachment: s 80 -> candidate o:rash-endangerment
+Definition instance: shared x:section80
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:bounded-rash-section336-expression
+Selected candidate offence requirements:
+  g:336-rash-requirements — all; technical satisfied
+    f:336-doing-act — supplied proved; technical satisfied
+    f:336-rashness — supplied proved; technical satisfied
+General exception requirements:
+  g:80-requirements — all; technical unresolved
+    f:80-accident-or-misfortune — supplied unresolved(external_decision_pending); technical unresolved
+    f:80-lawful-act — supplied proved; technical satisfied
+    f:80-lawful-manner — supplied proved; technical satisfied
+    f:80-lawful-means — supplied proved; technical satisfied
+    f:80-proper-care-caution — supplied proved; technical satisfied
+General-exception source references:
+  f:80-accident-or-misfortune -> q:80-accident
+  f:80-lawful-act -> q:80-lawful-act
+  f:80-lawful-manner -> q:80-lawful-manner
+  f:80-lawful-means -> q:80-lawful-means
+  f:80-proper-care-caution -> q:80-care
+Candidate penalty presentation (not an imposed sentence):
+  pen:section336-rash — Penal Code s 336; kernel selection: not_selected
+    one or more of (imprisonment minimum not stated, maximum 6 months; fine SGD minimum not stated, maximum 2500)
+General exception kernel rule: unresolved
+Contextual burden annotation: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: unresolved (attached exception remained unresolved)
+No guilt, conviction, acquittal or sentence was determined.
+
+
+Allegation a:assault — offence o:assault for role:assault-actor
+Model: SingaporePenalCodeResearchReleaseResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Selected candidate offence: o:assault
+Candidate statutory sections: Penal Code ss 351, 352
+General exception: Penal Code s 81
+Attachment: s 81 -> candidate o:assault
+Definition instance: shared x:section81
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:bounded-sections351-352-assault-expression
+Selected candidate offence requirements:
+  g:352-assault-requirements — all; technical satisfied
+    f:351-gesture-or-preparation — supplied proved; technical satisfied
+    g:351-fault — any; technical satisfied
+      f:351-intention — supplied proved; technical satisfied
+      f:351-knowledge — supplied not_proved; technical not_satisfied
+    f:351-apprehension — supplied proved; technical satisfied
+    f:352-no-grave-sudden-provocation — supplied proved; technical satisfied
+General exception requirements:
+  g:81-requirements — all; technical satisfied
+    f:81-act-likely-harm — supplied proved; technical satisfied
+    f:81-knowledge-likely-harm — supplied proved; technical satisfied
+    f:81-good-faith — supplied proved; technical satisfied
+    f:81-preventive-purpose — supplied proved; technical satisfied
+    f:81-justified-risk — supplied proved; technical satisfied
+General-exception source references:
+  f:81-act-likely-harm -> q:81-likely-harm
+  f:81-knowledge-likely-harm -> q:81-knowledge
+  f:81-good-faith -> q:81-good-faith
+  f:81-preventive-purpose -> q:81-purpose
+  f:81-justified-risk -> q:81-risk
+Candidate penalty presentation (not an imposed sentence):
+  pen:section352 — Penal Code s 352; kernel selection: not_selected
+    one or more of (imprisonment minimum not stated, maximum 3 months; fine SGD minimum not stated, maximum 1500)
+General exception kernel rule: satisfied
+Contextual burden annotation: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: not_satisfied (attached exception technically defeated the branch)
+No guilt, conviction, acquittal or sentence was determined.
+
+No guilt, conviction, acquittal, liability or sentence was determined.

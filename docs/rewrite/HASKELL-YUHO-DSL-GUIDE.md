@@ -21,7 +21,7 @@ SCENARIO=../../research/singapore/offence-corpus-pilot/scenarios/cheating/01_pro
 
 ## Models, rules and scenarios
 
-A checked model declares `variant SuppliedProofStatus-v1`, jurisdiction and research purpose, a request and policy, exactly one source-text source and one synthetic-status source, source quotes, contextual burden metadata, scope assumptions, typed rules and non-executable limitations. Rules use typed `element` leaves and source-ordered `all`/`any` groups. Supported POCs include statutory definitions, multiple candidate offences, general exceptions, actors and roles, s 107 participation routes, s 511 attempt stages, actor-scoped s 84 instances and three-issue analysis cases.
+A checked model declares `variant SuppliedProofStatus-v1`, jurisdiction and research purpose, a request and policy, exactly one source-text source and one synthetic-status source, source quotes, contextual burden metadata, scope assumptions, typed rules and non-executable limitations. Rules use typed `element` leaves and source-ordered `all`/`any` groups. Supported POCs include statutory definitions, multiple candidate offences, general exceptions, actors and roles, s 107 participation routes, s 511 attempt stages, actor-scoped s 84 instances and ordered bounded analysis cases.
 
 A separate scenario selects one candidate and supplies every compatible primitive classification as `proved`, `not_proved` or `unresolved(reason)`. It must acknowledge the selected model's scope assumptions. A classification is an external synthetic input, not a finding. Definitions and group results are derived and cannot be supplied.
 
@@ -50,7 +50,30 @@ modular-model SingaporeModularTheftWithSection84-v1 {
 }
 ```
 
-An import does not execute a model, expose private declarations or attach an exception. All `use` declarations must refer to one checked authored graph. Existing unqualified single-file models remain valid. Module identity describes authored content; it does not select law for a conduct date. Module names, versions and aliases are diagnostic and explanatory metadata and do not enter KernelInput.
+An import does not execute a model, expose private declarations or attach an exception. A host may compose explicitly exported definitions, offences, general exceptions and candidate penalties from independent source graphs. Participation and attempt modules remain specialised whole graphs. Existing compatibility-view modules and unqualified single-file models remain valid. Module identity describes authored content; it does not select law for a conduct date. Module names, versions and aliases are diagnostic and explanatory metadata and do not enter KernelInput.
+
+The release host is the concrete independent-composition example: it imports seven separate source graphs, selects seven offences, four exceptions and seven penalties, then attaches exceptions across module boundaries. For example:
+
+```yh
+import singapore.penal-code.misappropriation version 1.0.0 as misappropriation;
+import singapore.penal-code.receiving-property version 1.0.0 as receiving;
+use offence misappropriation::o:misappropriation;
+use offence receiving::o:receiving-property;
+use general-exception misappropriation::x:section79;
+use candidate-penalty receiving::pen:section411;
+attach misappropriation::x:section79 to offence receiving::o:receiving-property;
+```
+
+See [`modular-singapore-criminal-law-release.yh`](../../research/singapore/research-release/modular-singapore-criminal-law-release.yh) for the complete host. The earlier theft/hurt and cheating/mischief module files remain compatibility views over pre-existing source graphs and are identified as such.
+
+Candidate penalties are exported and selected with the same typed mechanism:
+
+```yh
+export candidate-penalty pen:section403;
+use candidate-penalty misappropriation::pen:section403;
+```
+
+The resolver rejects colliding final legal identities rather than silently prefixing them. See the [composition and lowering note](HASKELL-MODULE-COMPOSITION-AND-LOWERING.md).
 
 The actor-scoped attachment form is:
 
@@ -98,7 +121,28 @@ candidate-penalties {
 
 The existing `SuppliedProofStatus-v1` kernel validates the term and reports the candidate in `selected_penalties` only when its technical offence branch is finally satisfied. The offence/exception result and the penalty selection remain separate response fields. A selected candidate is not an imposed sentence, and the grammar has no syntax for labelling one as such. Conditions, offender eligibility, enhanced provisions, caning, ancillary orders, concurrent or consecutive terms and sentencing discretion are not authored by this surface.
 
-## Multi-issue cases
+## Multi-allegation cases
+
+Cases contain 1–32 allegations in authored order. The target is a closed typed sum: `offence`, `participation` or `attempt`. A broad offence host permits repeated and different offence targets; the specialised participation/attempt host permits its typed targets. Case-level roles may name different actors, and primitive facts are shared only by explicit compatible bindings.
+
+```yh
+analysis-case case:property-deception-showcase
+  model "modular-singapore-criminal-law-release.yh" {
+  bind role:property-actor to actor:person-1;
+  supplied-fact fact:movable kind circumstance
+    subject actor:person-1 target o:misappropriation
+    status proved reason "synthetic classification";
+
+  allegation a:first analyse offence o:misappropriation
+    for role:property-actor {
+      assume a:bounded-section403-expression;
+      bind-fact fact:movable to input f:403-movable-property;
+      // remaining primitive classifications
+    }
+}
+```
+
+Derived definition outputs, rule results, penalty selection and final statuses cannot be bound as case facts. There is no allegation-order inference and no aggregate case result.
 
 [`case-modular-warehouse-shared.yh`](../../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh) loads a modular sibling model and checks principal theft, bounded s 107/s 109 participation and s 511 attempt as three allegations. It binds shared primitive case facts explicitly and keeps each actor's s 84 instance isolated. Run it without `--scenario`:
 
@@ -110,6 +154,39 @@ The existing `SuppliedProofStatus-v1` kernel validates the term and reports the 
 ```
 
 The case result has allegation-specific statuses and no aggregate status, guilt conclusion or sentencing outcome.
+
+## Registered-presumption technical subprograms
+
+`presumption-program` makes the existing registered-derivation kernel boundary authorable without pretending that it is an evidence assessment or folding it into an offence request:
+
+```yh
+presumption-program FictionalAuthorizationPresumptionActive-v1 {
+  base-model "restricted_entry.yh";
+  base-scenario "scenario_presumption_active.yh";
+  burden bearer fictional-proponent standard supplied-classification
+    note "Fictional context only; no evidence assessment";
+  presumption pres:fictional-authorization
+    target f:no-authorization
+    source src:fictional-rule
+    trigger f:knowledge
+    rebuttal f:rescue-purpose;
+}
+```
+
+The target, trigger and rebuttal must already be primitive proof facts in the compiled base. Explanations distinguish `active`, `inactive`, `rebutted` and `unresolved`, as well as direct and effective satisfaction. Burden bearer and standard are authored contextual annotations. Evidence Act s 107 remains the bounded burden context already used by the Singapore exception models; it is not misdescribed as a registered presumption.
+
+## Top-level syntax map
+
+| Construct | Starts with | Separate input |
+|---|---|---|
+| Ordinary research model | `model` | `scenario ... for ...` |
+| Exact statutory module | `statutory-module` | none |
+| Composed host | `modular-model` | ordinary scenario |
+| Temporal expression set | `temporal-model` | `temporal-scenario` |
+| Multi-allegation case | `analysis-case` | allegation bodies are embedded |
+| Presumption subprogram | `presumption-program` | names a base model and scenario |
+
+The [research-release quick start](../../research/singapore/research-release/README.md) is the recommended entry point. The [capability matrix](HASKELL-RESEARCH-RELEASE-v0.1.md) classifies every major feature as supported, bounded, deferred or out of scope.
 
 ## Runnable corpus
 

@@ -59,13 +59,20 @@ runCaseSurfaceChecks root = do
              ("a:abet-theft","satisfied"),
              ("a:attempt-theft","not_satisfied")]
         Left _ -> False
-  check "allegation source order cannot change canonical issue order" $
+  check "case compilation preserves authored allegation order" $
     case parsed of
       AnalysisCase item location bindings facts allegations ->
         case checkAnalysisCase path (AnalysisCase item location bindings facts
           (reverse allegations)) modelPath model of
-          Right reordered -> compileAnalysisCase reordered == Right request
-            && runAnalysisCase reordered == Right result
+          Right reordered -> case runAnalysisCase reordered of
+            Right reorderedResult -> case decodeJson reorderedResult of
+              Right value -> issueStatuses value == Just
+                [("a:attempt-theft","not_satisfied"),
+                 ("a:abet-theft","satisfied"),
+                 ("a:principal-theft","satisfied")]
+                && compileAnalysisCase reordered /= Right request
+              Left _ -> False
+            _ -> False
           Left _ -> False
   check "all requests are separately lowered" $ case checked of
     CheckedCase _ _ _ _ [CheckedIssue _ _ first,CheckedIssue _ _ second,
@@ -138,25 +145,22 @@ runCaseSurfaceChecks root = do
         Right _ -> False
   refusal "wrong typed target" (replace "analyse offence o:theft"
     "analyse offence o:unknown" source) "SFE107"
-  refusal "wrong subject role" (replace "o:theft for role:principal"
-    "o:theft for role:alleged-abettor" source) "SFE107"
+  refusal "unbound subject role" (replace "o:theft for role:principal"
+    "o:theft for role:unbound-principal" source) "SFE107"
   refusal "duplicate allegation ID" (replace "allegation a:abet-theft"
     "allegation a:principal-theft" source) "SFE106"
-  refusal "duplicate allegation kind" (replace
-    "allegation a:attempt-theft analyse attempt attempt:theft"
-    "allegation a:attempt-theft analyse offence o:theft" source) "SFE106"
   refusal "unsafe model path" (replace "\"section107-routes-theft.yh\""
     "\"../section107-routes-theft.yh\"" source) "SFE106"
   refusal "wrong actor-scoped instance" (replace
     "xi:abettor-section84 f:unsoundness-time"
     "xi:principal-section84 f:unsoundness-time" source) "SFE093"
-  check "missing allegation is rejected" $ case parsed of
+  check "zero allegations are rejected" $ case parsed of
     AnalysisCase item location bindings facts allegations ->
       case checkAnalysisCase path (AnalysisCase item location bindings facts
-        (take 2 allegations)) modelPath model of
+        (take 0 allegations)) modelPath model of
         Left issue -> diagnosticCode issue == "SFE106"
         Right _ -> False
-  putStrLn "analysis case: three independent issues, actor isolation and seven refusals passed"
+  putStrLn "analysis case: ordered independent issues, repeated kinds, actor isolation and six refusals passed"
 
 issueStatuses :: J -> Maybe [(Text,Text)]
 issueStatuses value = do

@@ -1,0 +1,144 @@
+Modular host: SingaporeCriminalLawResearchRelease-v0.1
+Authored module versions select local model identity, not law by conduct date.
+Resolved imports:
+  singapore.penal-code.rash-endangerment@1.0.0 as rash
+  singapore.penal-code.assault@1.0.0 as assault
+  singapore.penal-code.misappropriation@1.0.0 as misappropriation
+  singapore.penal-code.criminal-breach-of-trust@1.0.0 as cbt
+  singapore.penal-code.receiving-property@1.0.0 as receiving
+  singapore.penal-code.criminal-trespass@1.0.0 as trespass
+  singapore.penal-code.wrongful-restraint@1.0.0 as restraint
+Analysis case: case:property-deception-showcase
+Three independent technical issues; no aggregate case status.
+Supplied case facts
+
+fact:movable-property
+Kind: circumstance
+Subject: actor:person-1 / o:misappropriation
+Supplied status: proved
+Reason: synthetic shared property classification
+Bound inputs:
+- a:misappropriation-first / f:403-movable-property
+- a:misappropriation-second / f:403-movable-property
+
+Yuho did not assess evidence or determine these facts.
+
+
+Allegation a:misappropriation-first — offence o:misappropriation for role:property-actor
+Model: SingaporePenalCodeResearchReleaseResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Selected candidate offence: o:misappropriation
+Candidate statutory sections: Penal Code ss 403
+General exception: Penal Code s 79
+Attachment: s 79 -> candidate o:misappropriation
+Definition instance: shared x:section79
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:bounded-section403-expression
+Selected candidate offence requirements:
+  g:403-requirements — all; technical satisfied
+    f:403-movable-property — supplied proved; technical satisfied
+    f:403-dishonesty — supplied proved; technical satisfied
+    g:403-conduct — any; technical satisfied
+      f:403-misappropriates — supplied proved; technical satisfied
+      f:403-converts — supplied not_proved; technical not_satisfied
+General exception requirements:
+  g:79-requirements — all; technical not_satisfied
+    f:79-no-written-law-override — supplied not_proved; technical not_satisfied
+    f:79-act-done — supplied not_proved; technical not_satisfied
+    g:79-factual-basis — any; technical not_satisfied
+      f:79-mistake-of-fact — supplied not_proved; technical not_satisfied
+      f:79-ignorance-of-fact — supplied not_proved; technical not_satisfied
+    f:79-good-faith-belief — supplied not_proved; technical not_satisfied
+General-exception source references:
+  f:79-no-written-law-override -> q:79-override
+  f:79-act-done -> q:79-act
+  f:79-mistake-of-fact -> q:79-mistake
+  f:79-ignorance-of-fact -> q:79-ignorance
+  f:79-good-faith-belief -> q:79-good-faith
+Candidate penalty presentation (not an imposed sentence):
+  pen:section403 — Penal Code s 403; kernel selection: selected
+    one or more of (imprisonment minimum not stated, maximum 2 years; fine SGD minimum not stated, maximum unbounded in this authored term)
+General exception kernel rule: not_satisfied
+Contextual burden annotation: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: satisfied (selected expression requirements technically satisfied)
+No guilt, conviction, acquittal or sentence was determined.
+
+
+Allegation a:misappropriation-second — offence o:misappropriation for role:property-actor
+Model: SingaporePenalCodeResearchReleaseResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Selected candidate offence: o:misappropriation
+Candidate statutory sections: Penal Code ss 403
+General exception: Penal Code s 79
+Attachment: s 79 -> candidate o:misappropriation
+Definition instance: shared x:section79
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:bounded-section403-expression
+Selected candidate offence requirements:
+  g:403-requirements — all; technical satisfied
+    f:403-movable-property — supplied proved; technical satisfied
+    f:403-dishonesty — supplied proved; technical satisfied
+    g:403-conduct — any; technical satisfied
+      f:403-misappropriates — supplied not_proved; technical not_satisfied
+      f:403-converts — supplied proved; technical satisfied
+General exception requirements:
+  g:79-requirements — all; technical not_satisfied
+    f:79-no-written-law-override — supplied not_proved; technical not_satisfied
+    f:79-act-done — supplied not_proved; technical not_satisfied
+    g:79-factual-basis — any; technical not_satisfied
+      f:79-mistake-of-fact — supplied not_proved; technical not_satisfied
+      f:79-ignorance-of-fact — supplied not_proved; technical not_satisfied
+    f:79-good-faith-belief — supplied not_proved; technical not_satisfied
+General-exception source references:
+  f:79-no-written-law-override -> q:79-override
+  f:79-act-done -> q:79-act
+  f:79-mistake-of-fact -> q:79-mistake
+  f:79-ignorance-of-fact -> q:79-ignorance
+  f:79-good-faith-belief -> q:79-good-faith
+Candidate penalty presentation (not an imposed sentence):
+  pen:section403 — Penal Code s 403; kernel selection: selected
+    one or more of (imprisonment minimum not stated, maximum 2 years; fine SGD minimum not stated, maximum unbounded in this authored term)
+General exception kernel rule: not_satisfied
+Contextual burden annotation: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: satisfied (selected expression requirements technically satisfied)
+No guilt, conviction, acquittal or sentence was determined.
+
+
+Allegation a:receiving — offence o:receiving-property for role:receiver
+Model: SingaporePenalCodeResearchReleaseResearchPrototype-v1
+Jurisdiction: Singapore — research POC; synthetic classifications only
+Selected candidate offence: o:receiving-property
+Candidate statutory sections: Penal Code ss 410, 411
+General exception: Penal Code s 79
+Attachment: s 79 -> candidate o:receiving-property
+Definition instance: shared x:section79
+Scope assumptions: acknowledged by scenario, not inferred or proved
+  a:bounded-section411-subsection1-non-motor-expression
+Selected candidate offence requirements:
+  g:411-requirements — all; technical unresolved
+    f:411-receives-or-retains — supplied proved; technical satisfied
+    f:411-qualifying-property — supplied proved; technical satisfied
+    f:411-knows-or-reason — supplied unresolved(not_determined); technical unresolved
+General exception requirements:
+  g:79-requirements — all; technical not_evaluated
+    f:79-no-written-law-override — supplied not_proved; technical not_evaluated
+    f:79-act-done — supplied not_proved; technical not_evaluated
+    g:79-factual-basis — any; technical not_evaluated
+      f:79-mistake-of-fact — supplied not_proved; technical not_evaluated
+      f:79-ignorance-of-fact — supplied not_proved; technical not_evaluated
+    f:79-good-faith-belief — supplied not_proved; technical not_evaluated
+General-exception source references:
+  f:79-no-written-law-override -> q:79-override
+  f:79-act-done -> q:79-act
+  f:79-mistake-of-fact -> q:79-mistake
+  f:79-ignorance-of-fact -> q:79-ignorance
+  f:79-good-faith-belief -> q:79-good-faith
+Candidate penalty presentation (not an imposed sentence):
+  pen:section411 — Penal Code s 411; kernel selection: not_selected
+    one or more of (imprisonment minimum not stated, maximum 5 years; fine SGD minimum not stated, maximum unbounded in this authored term)
+General exception kernel rule: not_evaluated
+Contextual burden annotation: section107; defence legal burden; balance_of_probabilities. This annotation does not classify evidence.
+Final technical status: unresolved (selected expression requirements unresolved)
+No guilt, conviction, acquittal or sentence was determined.
+
+No guilt, conviction, acquittal, liability or sentence was determined.
