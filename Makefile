@@ -39,7 +39,7 @@ AUDIT_PYTHON ?= python3
 YUHO ?= yuho
 LOGS = logs
 
-.PHONY: install doctor smoke verify-all verify-core \
+.PHONY: install doctor smoke verify-all verify-core verify-core-yuho-conformance \
         verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
         verify-penalty-verdicts verify-lean-verdicts verify-lean-penalty-footprints \
@@ -265,6 +265,10 @@ verify-mechanisation: $(LOGS)
 		echo "Mechanisation: SKIPPED (Lean toolchain not on PATH; install elan to verify)" \
 			| tee $(LOGS)/mechanisation.log; \
 	fi
+
+verify-core-yuho-conformance:
+	$(PYTHON) scripts/verify_core_yuho_theorems.py
+	$(PYTHON) scripts/verify_core_yuho_conformance.py
 
 $(LOGS):
 	mkdir -p $(LOGS)

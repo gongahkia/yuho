@@ -238,36 +238,29 @@ Evidence classification:
 | Property | Current evidence |
 |---|---|
 | Closed finite syntax, unique name/kind resolution, bounds, acyclicity | Established by checker construction and refusal tests. |
-| Three-valued truth tables and presumption state table | Exhaustively tested over their finite domains. |
-| `all`/`any`/branch/guard order independence | Property-tested plus exhaustive lists through length three. |
+| Three-valued truth tables and presumption state table | Mechanically defined and proved for the finite Core; independently conformance-tested against Haskell. |
+| `all`/`any` order independence | Mechanically proved by finite permutation; branch/guard behavior is bounded-conformance tested. |
 | Kernel memoized/reference agreement, actor/exception isolation, deterministic bytes | Property and regression tested. |
 | Module/temporal determinism and modular/standalone equivalence | Regression tested on retained fixtures. |
 | Historical protocol behavior | Golden byte comparisons. |
-| Whole-Core progress/termination proof | Conjectural from checked finiteness/acyclicity; not mechanised. |
+| Finite requirement totality, determinism, termination and dependency locality | Mechanically proved or established by Lean-accepted structural recursion, conditional on complete inputs. |
+| Exception-instance, allegation and temporal-selection isolation properties | Mechanically proved for the normalized finite representation. |
 | Surface-to-Core type preservation theorem | Precisely stated below; not mechanised. |
 | Core-to-kernel semantic preservation theorem | Tested on supported fixtures; not mechanically proved. |
 | Legal completeness, correctness or current applicability | Intentionally not claimed. |
 
-Proposed mechanisation statements for a later milestone are:
+The remaining refinement statements are:
 
 ```text
 Theorem surface_core_preservation:
   Check(surface) = checked -> Normalize(checked) = core -> WellTyped(core).
 
-Theorem core_progress:
-  WellTyped(core) /\ TotalInputs(core,rho) -> exists result, Eval(core,rho)=result.
-
-Theorem core_termination:
-  WellTyped(core) /\ Acyclic(core) -> Eval(core,rho) terminates.
-
 Theorem lowering_preservation:
   Supported(core,v) -> Kernel_v(Lower_v(core)) = Observe_v(Eval(core)).
 
-Theorem allegation_noninterference:
-  Inputs(q1) disjoint Derived(q2) -> Eval(q1) is invariant under Eval(q2).
 ```
 
-No Lean, Rocq, Agda or other proof assistant establishes these statements in this milestone. Existing Lean material is a separate bounded historical mechanisation.
+Core totality, termination, group algebra, scoped-exception isolation, presumption states, allegation independence and temporal-selection properties are mechanised in Lean 4. The Haskell and Lean evaluators agree on the retained versioned bounded corpus. Surface-to-Core and Core-to-kernel refinement remain testing evidence rather than proof. See the [mechanisation report](CORE-YUHO-MECHANISATION-v0.1.md).
 
 ## 8. Diagram semantics
 

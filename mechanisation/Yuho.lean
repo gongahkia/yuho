@@ -22,3 +22,8 @@ import Yuho.Defeasibility
 import Yuho.Penalty
 import Yuho.Range
 import Yuho.Generator
+import Yuho.CoreYuho.Syntax
+import Yuho.CoreYuho.Semantics
+import Yuho.CoreYuho.Theorems
+import Yuho.CoreYuho.Conformance
+import Yuho.CoreYuho.TheoremRegistry

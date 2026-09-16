@@ -28,6 +28,7 @@ library
       Yuho.CoreYuho.Semantics
       Yuho.CoreYuho.Normalize
       Yuho.CoreYuho.Registry
+      Yuho.CoreYuho.Conformance
       Yuho.Diagram.Types
       Yuho.Diagram.Build
       Yuho.Diagram.Encode
@@ -119,11 +120,17 @@ executable yuho-kernel
   hs-source-dirs: app
   build-depends: yuho-foundation ==0.1.0.0
 
+executable yuho-core-conformance
+  import: foundation
+  main-is: CoreConformanceMain.hs
+  hs-source-dirs: app
+  build-depends: yuho-foundation ==0.1.0.0
+
 test-suite foundation-test
   import: foundation
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks
+  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks
   hs-source-dirs: test
   build-depends:
       yuho-foundation ==0.1.0.0

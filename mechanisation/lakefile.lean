@@ -29,3 +29,6 @@ lean_lib «scripts» where
 
 lean_exe «export_spec» where
   root := `scripts.ExportSpec
+
+lean_exe «core_conformance» where
+  root := `scripts.CoreConformance

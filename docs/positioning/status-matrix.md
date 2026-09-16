@@ -13,7 +13,7 @@ Status labels:
 
 | Surface | Status | Tested by | Notes |
 |---|---|---|---|
-| Haskell Core Yuho v0.1 | stable-bounded | `foundation-test` (`CoreYuhoChecks`, all surface suites) | Normalized typed representation and formal language report cover the authoritative research DSL. Truth tables are exhaustive and properties are tested; surface-to-Core and Core-to-kernel preservation are not mechanically proved. |
+| Haskell Core Yuho v0.1 | stable-bounded | `foundation-test`, `make verify-core-yuho-conformance` | Normalized typed representation and formal language report cover the authoritative research DSL. Its finite technical-status fragment has machine-checked Lean semantics and 95-vector independent Haskell–Lean conformance; surface-to-Core and Core-to-kernel preservation are not mechanically proved. |
 | Haskell semantic diagrams | stable-bounded | `foundation-test` (`DiagramChecks`), retained SVG/JSON fixtures | `yuho diagram` derives rule, module, case and trace graphs from checked Core and emits standalone SVG or semantic-graph JSON without Python or an external renderer. |
 | Parser | partial | `tests/test_*grammar*.py`, `make verify-coverage` | tree-sitter grammar parses the checked-in SG Penal Code corpus, but a comment-before-typed-struct-literal ambiguity remains a release-blocking semantic defect until its generated parser and regression suite are proven current. |
 | AST builder | stable | `tests/test_core_units.py`, `tests/test_new_constructs.py` | Produces Python AST nodes used by analysis, transpilers, and verifiers. |
@@ -27,7 +27,7 @@ Status labels:
 | Reference graph | stable | `tests/test_reference_graph.py`, `tests/test_cli_refs.py` | Corpus graph for statute references and cycles. |
 | Z3 | partial | `tests/test_soundness_sanity.py`, `tests/test_z3_apply_scope.py`, `make verify-runtime-tests` | Conformance-tested SMT backend; registered acyclic exception-guard dependencies using the same fact context are linked to target convictions. Unresolved/cyclic dependencies and fact overrides, plus subsection branches, conditional/multiple penalty blocks, case-law, and typed-burden constructs, are rejected explicitly by consistency checking. |
 | Alloy | secondary-explicit-unsupported | `tests/e2e/test_verify_pipeline.py`, `tests/test_alloy_unsupported.py` | Bounded shape smoke output only; unsupported constructs must be treated explicitly. |
-| Lean | partial | `make verify-mechanisation`, `make verify-structural-diff` | Mechanised spec/smoke evidence, not full corpus proof coverage. |
+| Lean | stable-bounded | `make verify-mechanisation`, `make verify-core-yuho-conformance` | Core Yuho v0.1 has machine-checked finite semantics for its documented technical-status fragment. This is not an end-to-end compiler, corpus or legal-correctness proof. The older Python/Z3 structural mechanisation remains a separate historical boundary. |
 | JSON transpiler | stable | `tests/test_transpile_snapshot_matrix.py` | Snapshot-tested over SG Penal Code. |
 | English transpiler | stable | `tests/test_transpile_snapshot_matrix.py` | Controlled English, not legal advice. |
 | LaTeX transpiler | stable | `tests/test_transpile_snapshot_matrix.py` | TeX rendering depends on local TeX packages. |

@@ -1,0 +1,1837 @@
+{
+  "schema": "yuho.core-conformance-v0.1",
+  "vectors": [
+    {
+      "id": "all-empty",
+      "kind": "all",
+      "values": []
+    },
+    {
+      "id": "all-satisfied-satisfied",
+      "kind": "all",
+      "values": [
+        "satisfied",
+        "satisfied"
+      ]
+    },
+    {
+      "id": "all-satisfied-not_satisfied",
+      "kind": "all",
+      "values": [
+        "satisfied",
+        "not_satisfied"
+      ]
+    },
+    {
+      "id": "all-satisfied-unresolved",
+      "kind": "all",
+      "values": [
+        "satisfied",
+        "unresolved"
+      ]
+    },
+    {
+      "id": "all-not_satisfied-satisfied",
+      "kind": "all",
+      "values": [
+        "not_satisfied",
+        "satisfied"
+      ]
+    },
+    {
+      "id": "all-not_satisfied-not_satisfied",
+      "kind": "all",
+      "values": [
+        "not_satisfied",
+        "not_satisfied"
+      ]
+    },
+    {
+      "id": "all-not_satisfied-unresolved",
+      "kind": "all",
+      "values": [
+        "not_satisfied",
+        "unresolved"
+      ]
+    },
+    {
+      "id": "all-unresolved-satisfied",
+      "kind": "all",
+      "values": [
+        "unresolved",
+        "satisfied"
+      ]
+    },
+    {
+      "id": "all-unresolved-not_satisfied",
+      "kind": "all",
+      "values": [
+        "unresolved",
+        "not_satisfied"
+      ]
+    },
+    {
+      "id": "all-unresolved-unresolved",
+      "kind": "all",
+      "values": [
+        "unresolved",
+        "unresolved"
+      ]
+    },
+    {
+      "id": "any-empty",
+      "kind": "any",
+      "values": []
+    },
+    {
+      "id": "any-satisfied-satisfied",
+      "kind": "any",
+      "values": [
+        "satisfied",
+        "satisfied"
+      ]
+    },
+    {
+      "id": "any-satisfied-not_satisfied",
+      "kind": "any",
+      "values": [
+        "satisfied",
+        "not_satisfied"
+      ]
+    },
+    {
+      "id": "any-satisfied-unresolved",
+      "kind": "any",
+      "values": [
+        "satisfied",
+        "unresolved"
+      ]
+    },
+    {
+      "id": "any-not_satisfied-satisfied",
+      "kind": "any",
+      "values": [
+        "not_satisfied",
+        "satisfied"
+      ]
+    },
+    {
+      "id": "any-not_satisfied-not_satisfied",
+      "kind": "any",
+      "values": [
+        "not_satisfied",
+        "not_satisfied"
+      ]
+    },
+    {
+      "id": "any-not_satisfied-unresolved",
+      "kind": "any",
+      "values": [
+        "not_satisfied",
+        "unresolved"
+      ]
+    },
+    {
+      "id": "any-unresolved-satisfied",
+      "kind": "any",
+      "values": [
+        "unresolved",
+        "satisfied"
+      ]
+    },
+    {
+      "id": "any-unresolved-not_satisfied",
+      "kind": "any",
+      "values": [
+        "unresolved",
+        "not_satisfied"
+      ]
+    },
+    {
+      "id": "any-unresolved-unresolved",
+      "kind": "any",
+      "values": [
+        "unresolved",
+        "unresolved"
+      ]
+    },
+    {
+      "id": "branch-0",
+      "kind": "branch",
+      "values": []
+    },
+    {
+      "id": "branch-1",
+      "kind": "branch",
+      "values": [
+        "not_satisfied"
+      ]
+    },
+    {
+      "id": "branch-2",
+      "kind": "branch",
+      "values": [
+        "unresolved",
+        "not_satisfied"
+      ]
+    },
+    {
+      "id": "branch-3",
+      "kind": "branch",
+      "values": [
+        "satisfied",
+        "unresolved"
+      ]
+    },
+    {
+      "id": "guard-0",
+      "kind": "guard",
+      "values": []
+    },
+    {
+      "id": "guard-1",
+      "kind": "guard",
+      "values": [
+        "not_satisfied"
+      ]
+    },
+    {
+      "id": "guard-2",
+      "kind": "guard",
+      "values": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "guard-3",
+      "kind": "guard",
+      "values": [
+        "satisfied",
+        "unresolved"
+      ]
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "satisfied",
+        "f:c": "satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-00",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "satisfied",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-01",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "satisfied",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-02",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "not_satisfied",
+        "f:c": "satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-03",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "not_satisfied",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-04",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "not_satisfied",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-05",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "unresolved",
+        "f:c": "satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-06",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "unresolved",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-07",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "unresolved",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-08",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "satisfied",
+        "f:c": "satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-09",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "satisfied",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-10",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "satisfied",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-11",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "not_satisfied",
+        "f:c": "satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-12",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "not_satisfied",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-13",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "not_satisfied",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-14",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "unresolved",
+        "f:c": "satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-15",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "unresolved",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-16",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "unresolved",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-17",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "unresolved",
+        "f:b": "satisfied",
+        "f:c": "satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-18",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "unresolved",
+        "f:b": "satisfied",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-19",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "unresolved",
+        "f:b": "satisfied",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-20",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "unresolved",
+        "f:b": "not_satisfied",
+        "f:c": "satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-21",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "unresolved",
+        "f:b": "not_satisfied",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-22",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "unresolved",
+        "f:b": "not_satisfied",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-23",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "unresolved",
+        "f:b": "unresolved",
+        "f:c": "satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-24",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "unresolved",
+        "f:b": "unresolved",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-25",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "unresolved",
+        "f:b": "unresolved",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "g:root",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "g:choice",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:b",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "tree-26",
+      "kind": "requirement",
+      "origin": "synthetic:all(a,any(b,c))"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "satisfied"
+      },
+      "expression": {
+        "id": "d:chain",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "f:b",
+            "kind": "input"
+          }
+        ]
+      },
+      "id": "definition-chain-satisfied",
+      "kind": "definition",
+      "origin": "synthetic:normalized-definition-dag"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "unresolved"
+      },
+      "expression": {
+        "id": "d:chain",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:a",
+            "kind": "input"
+          },
+          {
+            "id": "f:b",
+            "kind": "input"
+          }
+        ]
+      },
+      "id": "definition-chain-unresolved",
+      "kind": "definition",
+      "origin": "synthetic:normalized-definition-dag"
+    },
+    {
+      "assignments": {
+        "f:a": "satisfied",
+        "f:b": "not_satisfied",
+        "f:c": "unresolved"
+      },
+      "expression": {
+        "id": "d:diamond",
+        "kind": "all",
+        "members": [
+          {
+            "id": "d:left",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:a",
+                "kind": "input"
+              },
+              {
+                "id": "f:b",
+                "kind": "input"
+              }
+            ]
+          },
+          {
+            "id": "d:right",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:a",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "definition-diamond-satisfied",
+      "kind": "definition",
+      "origin": "synthetic:normalized-definition-dag"
+    },
+    {
+      "assignments": {
+        "f:a": "not_satisfied",
+        "f:b": "satisfied",
+        "f:c": "not_satisfied"
+      },
+      "expression": {
+        "id": "d:diamond",
+        "kind": "all",
+        "members": [
+          {
+            "id": "d:left",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:a",
+                "kind": "input"
+              },
+              {
+                "id": "f:b",
+                "kind": "input"
+              }
+            ]
+          },
+          {
+            "id": "d:right",
+            "kind": "any",
+            "members": [
+              {
+                "id": "f:a",
+                "kind": "input"
+              },
+              {
+                "id": "f:c",
+                "kind": "input"
+              }
+            ]
+          }
+        ]
+      },
+      "id": "definition-diamond-failed",
+      "kind": "definition",
+      "origin": "synthetic:normalized-definition-dag"
+    },
+    {
+      "assignments": {
+        "f:act": "satisfied",
+        "f:endangerment": "satisfied",
+        "f:rashness": "satisfied"
+      },
+      "expression": {
+        "id": "g:rash",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:act",
+            "kind": "input"
+          },
+          {
+            "id": "f:rashness",
+            "kind": "input"
+          },
+          {
+            "id": "f:endangerment",
+            "kind": "input"
+          }
+        ]
+      },
+      "id": "definition-release-rash",
+      "kind": "definition",
+      "origin": "research/singapore/research-release/scenarios/rash-endangerment/01_satisfied_primary.yh"
+    },
+    {
+      "assignments": {
+        "f:incapacity": "unresolved",
+        "f:unsoundness": "satisfied"
+      },
+      "expression": {
+        "id": "g:s84",
+        "kind": "all",
+        "members": [
+          {
+            "id": "f:unsoundness",
+            "kind": "input"
+          },
+          {
+            "id": "f:incapacity",
+            "kind": "input"
+          }
+        ]
+      },
+      "id": "definition-release-s84",
+      "kind": "definition",
+      "origin": "research/singapore/models/section84-explicit-attachments.yh"
+    },
+    {
+      "guards": [
+        "satisfied"
+      ],
+      "id": "exception-satisfied-satisfied",
+      "kind": "exception",
+      "ordinary": "satisfied"
+    },
+    {
+      "guards": [
+        "not_satisfied"
+      ],
+      "id": "exception-satisfied-not_satisfied",
+      "kind": "exception",
+      "ordinary": "satisfied"
+    },
+    {
+      "guards": [
+        "unresolved"
+      ],
+      "id": "exception-satisfied-unresolved",
+      "kind": "exception",
+      "ordinary": "satisfied"
+    },
+    {
+      "guards": [
+        "satisfied"
+      ],
+      "id": "exception-not_satisfied-satisfied",
+      "kind": "exception",
+      "ordinary": "not_satisfied"
+    },
+    {
+      "guards": [
+        "not_satisfied"
+      ],
+      "id": "exception-not_satisfied-not_satisfied",
+      "kind": "exception",
+      "ordinary": "not_satisfied"
+    },
+    {
+      "guards": [
+        "unresolved"
+      ],
+      "id": "exception-not_satisfied-unresolved",
+      "kind": "exception",
+      "ordinary": "not_satisfied"
+    },
+    {
+      "guards": [
+        "satisfied"
+      ],
+      "id": "exception-unresolved-satisfied",
+      "kind": "exception",
+      "ordinary": "unresolved"
+    },
+    {
+      "guards": [
+        "not_satisfied"
+      ],
+      "id": "exception-unresolved-not_satisfied",
+      "kind": "exception",
+      "ordinary": "unresolved"
+    },
+    {
+      "guards": [
+        "unresolved"
+      ],
+      "id": "exception-unresolved-unresolved",
+      "kind": "exception",
+      "ordinary": "unresolved"
+    },
+    {
+      "guards": [],
+      "id": "exception-no-guard",
+      "kind": "exception",
+      "ordinary": "satisfied"
+    },
+    {
+      "id": "presumption-satisfied-satisfied",
+      "kind": "presumption",
+      "rebuttal": "satisfied",
+      "trigger": "satisfied"
+    },
+    {
+      "id": "presumption-satisfied-not_satisfied",
+      "kind": "presumption",
+      "rebuttal": "not_satisfied",
+      "trigger": "satisfied"
+    },
+    {
+      "id": "presumption-satisfied-unresolved",
+      "kind": "presumption",
+      "rebuttal": "unresolved",
+      "trigger": "satisfied"
+    },
+    {
+      "id": "presumption-not_satisfied-satisfied",
+      "kind": "presumption",
+      "rebuttal": "satisfied",
+      "trigger": "not_satisfied"
+    },
+    {
+      "id": "presumption-not_satisfied-not_satisfied",
+      "kind": "presumption",
+      "rebuttal": "not_satisfied",
+      "trigger": "not_satisfied"
+    },
+    {
+      "id": "presumption-not_satisfied-unresolved",
+      "kind": "presumption",
+      "rebuttal": "unresolved",
+      "trigger": "not_satisfied"
+    },
+    {
+      "id": "presumption-unresolved-satisfied",
+      "kind": "presumption",
+      "rebuttal": "satisfied",
+      "trigger": "unresolved"
+    },
+    {
+      "id": "presumption-unresolved-not_satisfied",
+      "kind": "presumption",
+      "rebuttal": "not_satisfied",
+      "trigger": "unresolved"
+    },
+    {
+      "id": "presumption-unresolved-unresolved",
+      "kind": "presumption",
+      "rebuttal": "unresolved",
+      "trigger": "unresolved"
+    },
+    {
+      "assignments": [
+        {
+          "input": "f:guard",
+          "key": {
+            "actor": "actor:two",
+            "context": "attempt-conduct",
+            "instance": "xi:two",
+            "role": "principal"
+          },
+          "status": "satisfied"
+        },
+        {
+          "input": "f:guard",
+          "key": {
+            "actor": "actor:one",
+            "context": "principal-conduct",
+            "instance": "xi:one",
+            "role": "principal"
+          },
+          "status": "satisfied"
+        }
+      ],
+      "id": "scope-isolation-0",
+      "input": "f:guard",
+      "kind": "scope",
+      "selected": {
+        "actor": "actor:one",
+        "context": "principal-conduct",
+        "instance": "xi:one",
+        "role": "principal"
+      }
+    },
+    {
+      "assignments": [
+        {
+          "input": "f:guard",
+          "key": {
+            "actor": "actor:two",
+            "context": "attempt-conduct",
+            "instance": "xi:two",
+            "role": "principal"
+          },
+          "status": "satisfied"
+        },
+        {
+          "input": "f:guard",
+          "key": {
+            "actor": "actor:one",
+            "context": "principal-conduct",
+            "instance": "xi:one",
+            "role": "principal"
+          },
+          "status": "not_satisfied"
+        }
+      ],
+      "id": "scope-isolation-1",
+      "input": "f:guard",
+      "kind": "scope",
+      "selected": {
+        "actor": "actor:one",
+        "context": "principal-conduct",
+        "instance": "xi:one",
+        "role": "principal"
+      }
+    },
+    {
+      "assignments": [
+        {
+          "input": "f:guard",
+          "key": {
+            "actor": "actor:two",
+            "context": "attempt-conduct",
+            "instance": "xi:two",
+            "role": "principal"
+          },
+          "status": "satisfied"
+        },
+        {
+          "input": "f:guard",
+          "key": {
+            "actor": "actor:one",
+            "context": "principal-conduct",
+            "instance": "xi:one",
+            "role": "principal"
+          },
+          "status": "unresolved"
+        }
+      ],
+      "id": "scope-isolation-2",
+      "input": "f:guard",
+      "kind": "scope",
+      "selected": {
+        "actor": "actor:one",
+        "context": "principal-conduct",
+        "instance": "xi:one",
+        "role": "principal"
+      }
+    },
+    {
+      "assignments": [
+        {
+          "input": "f:guard",
+          "key": {
+            "actor": "actor:one",
+            "context": "principal-conduct",
+            "instance": "xi:one",
+            "role": "principal"
+          },
+          "status": "not_satisfied"
+        },
+        {
+          "input": "f:other",
+          "key": {
+            "actor": "actor:one",
+            "context": "principal-conduct",
+            "instance": "xi:one",
+            "role": "principal"
+          },
+          "status": "satisfied"
+        }
+      ],
+      "id": "scope-input-isolation",
+      "input": "f:guard",
+      "kind": "scope",
+      "selected": {
+        "actor": "actor:one",
+        "context": "principal-conduct",
+        "instance": "xi:one",
+        "role": "principal"
+      }
+    },
+    {
+      "allegations": [
+        {
+          "assignments": {
+            "f:a": "satisfied"
+          },
+          "expression": {
+            "id": "f:a",
+            "kind": "input"
+          },
+          "id": "a:first"
+        },
+        {
+          "assignments": {
+            "f:b": "unresolved"
+          },
+          "expression": {
+            "id": "f:b",
+            "kind": "input"
+          },
+          "id": "a:second"
+        }
+      ],
+      "id": "case-two",
+      "kind": "case"
+    },
+    {
+      "allegations": [
+        {
+          "assignments": {
+            "f:b": "unresolved"
+          },
+          "expression": {
+            "id": "f:b",
+            "kind": "input"
+          },
+          "id": "a:second"
+        },
+        {
+          "assignments": {
+            "f:a": "satisfied"
+          },
+          "expression": {
+            "id": "f:a",
+            "kind": "input"
+          },
+          "id": "a:first"
+        }
+      ],
+      "id": "case-reordered",
+      "kind": "case"
+    },
+    {
+      "allegations": [
+        {
+          "assignments": {
+            "f:a": "satisfied"
+          },
+          "expression": {
+            "id": "f:a",
+            "kind": "input"
+          },
+          "id": "a:first"
+        },
+        {
+          "assignments": {
+            "f:b": "unresolved"
+          },
+          "expression": {
+            "id": "f:b",
+            "kind": "input"
+          },
+          "id": "a:second"
+        },
+        {
+          "assignments": {
+            "f:c": "not_satisfied"
+          },
+          "expression": {
+            "id": "f:c",
+            "kind": "input"
+          },
+          "id": "a:third"
+        }
+      ],
+      "id": "case-three",
+      "kind": "case"
+    },
+    {
+      "date": 10,
+      "id": "temporal-lower",
+      "intervals": [
+        {
+          "expression": "e:old",
+          "from": 10,
+          "supersedes": null,
+          "to": 20,
+          "version": "1.0.0"
+        },
+        {
+          "expression": "e:new",
+          "from": 20,
+          "supersedes": "e:old",
+          "to": null,
+          "version": "9.9.9"
+        }
+      ],
+      "kind": "temporal"
+    },
+    {
+      "date": 19,
+      "id": "temporal-before-boundary",
+      "intervals": [
+        {
+          "expression": "e:old",
+          "from": 10,
+          "supersedes": null,
+          "to": 20,
+          "version": "1.0.0"
+        },
+        {
+          "expression": "e:new",
+          "from": 20,
+          "supersedes": "e:old",
+          "to": null,
+          "version": "9.9.9"
+        }
+      ],
+      "kind": "temporal"
+    },
+    {
+      "date": 20,
+      "id": "temporal-boundary",
+      "intervals": [
+        {
+          "expression": "e:old",
+          "from": 10,
+          "supersedes": null,
+          "to": 20,
+          "version": "1.0.0"
+        },
+        {
+          "expression": "e:new",
+          "from": 20,
+          "supersedes": "e:old",
+          "to": null,
+          "version": "9.9.9"
+        }
+      ],
+      "kind": "temporal"
+    },
+    {
+      "date": 200,
+      "id": "temporal-open-end",
+      "intervals": [
+        {
+          "expression": "e:old",
+          "from": 10,
+          "supersedes": null,
+          "to": 20,
+          "version": "1.0.0"
+        },
+        {
+          "expression": "e:new",
+          "from": 20,
+          "supersedes": "e:old",
+          "to": null,
+          "version": "9.9.9"
+        }
+      ],
+      "kind": "temporal"
+    },
+    {
+      "date": 9,
+      "id": "temporal-before-all",
+      "intervals": [
+        {
+          "expression": "e:old",
+          "from": 10,
+          "supersedes": null,
+          "to": 20,
+          "version": "1.0.0"
+        },
+        {
+          "expression": "e:new",
+          "from": 20,
+          "supersedes": "e:old",
+          "to": null,
+          "version": "9.9.9"
+        }
+      ],
+      "kind": "temporal"
+    },
+    {
+      "date": 25,
+      "id": "temporal-gap",
+      "intervals": [
+        {
+          "expression": "e:left",
+          "from": 10,
+          "supersedes": null,
+          "to": 20,
+          "version": "2.0.0"
+        },
+        {
+          "expression": "e:right",
+          "from": 30,
+          "supersedes": "e:left",
+          "to": 40,
+          "version": "1.0.0"
+        }
+      ],
+      "kind": "temporal"
+    },
+    {
+      "date": 25,
+      "id": "temporal-overlap",
+      "intervals": [
+        {
+          "expression": "e:first",
+          "from": 10,
+          "supersedes": null,
+          "to": 30,
+          "version": "1.0.0"
+        },
+        {
+          "expression": "e:second",
+          "from": 20,
+          "supersedes": "e:first",
+          "to": 40,
+          "version": "99.0.0"
+        }
+      ],
+      "kind": "temporal"
+    },
+    {
+      "date": 20,
+      "id": "temporal-version-ignored",
+      "intervals": [
+        {
+          "expression": "e:old",
+          "from": 10,
+          "supersedes": null,
+          "to": 20,
+          "version": "1.0.0"
+        },
+        {
+          "expression": "e:new",
+          "from": 20,
+          "supersedes": "e:old",
+          "to": null,
+          "version": "9.9.9"
+        }
+      ],
+      "kind": "temporal"
+    }
+  ]
+}

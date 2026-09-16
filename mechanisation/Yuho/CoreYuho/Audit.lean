@@ -1,0 +1,11 @@
+import Yuho.CoreYuho.TheoremRegistry
+
+#print axioms Yuho.CoreYuho.allStatus_permutation_invariant
+#print axioms Yuho.CoreYuho.requirement_dependency_locality
+#print axioms Yuho.CoreYuho.finite_definition_evaluator_total
+#print axioms Yuho.CoreYuho.independent_definition_order_invariant
+#print axioms Yuho.CoreYuho.candidate_branch_exception_isolation
+#print axioms Yuho.CoreYuho.presumption_state_exactly_one
+#print axioms Yuho.CoreYuho.case_reordering_preserves_results
+#print axioms Yuho.CoreYuho.temporal_success_unique
+#print axioms Yuho.CoreYuho.temporal_unique_selection_from_nonoverlap

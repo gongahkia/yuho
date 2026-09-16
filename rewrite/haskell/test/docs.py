@@ -24,6 +24,7 @@ DOCUMENTS = [
     ROOT / "docs/rewrite/HASKELL-RESEARCH-RELEASE-v0.1.md",
     ROOT / "docs/rewrite/HASKELL-RESEARCH-RELEASE-COMPLETION.md",
     ROOT / "docs/rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.1.md",
+    ROOT / "docs/rewrite/CORE-YUHO-MECHANISATION-v0.1.md",
     ROOT / "docs/rewrite/diagram-fixtures/README.md",
     ROOT / "research/singapore/CORPUS-INDEX.md",
     ROOT / "research/singapore/research-release/README.md",

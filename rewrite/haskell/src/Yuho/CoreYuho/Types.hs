@@ -4,7 +4,8 @@ module Yuho.CoreYuho.Types
   , CoreRule(..), CoreDefinition(..), CoreAttachment(..), CorePenaltyTerm(..)
   , CorePenalty(..), CoreActor(..), CoreRelation(..), CoreModule(..)
   , CoreTemporalSelection(..), CorePresumption(..), CoreAllegation(..)
-  , CoreSharedFact(..), CoreProgram(..), CoreCase(..), CorePresumptionProgram(..)
+  , CoreScopeKey(..), CoreInterval(..), CoreSharedFact(..), CoreProgram(..)
+  , CoreCase(..), CorePresumptionProgram(..)
   ) where
 
 import Data.Map.Strict (Map)
@@ -94,6 +95,21 @@ data CoreModule = CoreModule
 data CoreTemporalSelection = CoreTemporalSelection
   { coreTemporalExpression :: Text
   , coreTemporalReason :: Text
+  } deriving (Eq, Show)
+
+data CoreScopeKey = CoreScopeKey
+  { coreScopeActor :: Text
+  , coreScopeRole :: Text
+  , coreScopeContext :: Text
+  , coreScopeInstance :: Text
+  } deriving (Eq, Ord, Show)
+
+data CoreInterval = CoreInterval
+  { coreIntervalExpression :: Text
+  , coreIntervalFrom :: Integer
+  , coreIntervalTo :: Maybe Integer
+  , coreIntervalVersion :: Text
+  , coreIntervalSupersedes :: Maybe Text
   } deriving (Eq, Show)
 
 data CorePresumption = CorePresumption
