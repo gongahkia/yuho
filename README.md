@@ -40,12 +40,13 @@ Getting into the specifics, Yuho provides the following four products.
 > [!TIP]  
 > More transpilation outputs [might be added](https://github.com/gongahkia/yuho/issues) in the future!
 
-| Target | Usage |   
+| Output | Usage |   
 | :--- | :--- |  
-| | | 
-| SVG | Diagrammatic representations of statutory logic *(mindmap, flowchart, etc.)* | 
-| JSON | Semantic-graph representation of the same SVG |
-| Lean | Semantic and logical verification | 
+| KernelInput JSON | Canonical technical request emitted by `yuho compile` |
+| Kernel result JSON | Technical evaluation result emitted by `yuho run` |
+| Human-readable text | Structured technical derivation emitted by `yuho explain` |
+| Standalone SVG | Native semantic diagram in the `rule`, `modules`, `case`, or `trace` view |
+| Semantic-graph JSON | Machine-readable representation underlying the native semantic diagram |
 
 ## Features
 
