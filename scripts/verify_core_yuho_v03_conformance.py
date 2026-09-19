@@ -30,7 +30,7 @@ def main() -> int:
     env["PATH"] = os.pathsep.join([
         str(Path.home() / ".ghcup/bin"), str(Path.home() / ".elan/bin"),
         env.get("PATH", "")])
-    haskell_dir = ROOT / "rewrite/haskell"
+    haskell_dir = ROOT
     run(["cabal", "v2-build", "exe:yuho-core-conformance", "--offline", "-j1"],
         haskell_dir, env)
     executable = run(["cabal", "list-bin", "exe:yuho-core-conformance"],

@@ -265,9 +265,9 @@ def main() -> int:
     env["PATH"] = os.pathsep.join([str(Path.home() / ".ghcup/bin"),
                                    str(Path.home() / ".elan/bin"), env.get("PATH", "")])
     run(["cabal", "v2-build", "exe:yuho-core-conformance", "--offline", "-j1"],
-        ROOT / "rewrite/haskell", env)
+        ROOT, env)
     executable = run(["cabal", "list-bin", "exe:yuho-core-conformance"],
-                     ROOT / "rewrite/haskell", env).decode().strip()
+                     ROOT, env).decode().strip()
     run(["lake", "build", "typed_finite_conformance"], ROOT / "mechanisation", env)
     haskell = run([executable, str(VECTOR_PATH)], ROOT, env)
     lean = run(["lake", "env", "lean", "--run", "scripts/TypedFiniteConformance.lean"],

@@ -5,8 +5,8 @@ import json
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[3]
-SPIKE = ROOT / "experiments/language-spike/fixtures/requests"
+ROOT = HERE.parents[1]
+SPIKE = ROOT / "test/kernel-fixtures/frozen/requests"
 OUT = HERE / "requests"
 OUT.mkdir(exist_ok=True)
 

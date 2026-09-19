@@ -56,8 +56,8 @@ runProofChecks directory = do
   mismatched <- readJson (directory </> "requests/PS37.json")
   invalidSource <- readJson (directory </> "requests/PS45.json")
   invalidCycle <- readJson (directory </> "requests/PS60.json")
-  frozenB01 <- BS.readFile (directory </> "../../../../experiments/language-spike/fixtures/requests/B01.json")
-  frozenB01Expected <- BS.readFile (directory </> "../../../../experiments/language-spike/fixtures/expected/B01.json")
+  frozenB01 <- BS.readFile (directory </> "../kernel-fixtures/frozen/requests/B01.json")
+  frozenB01Expected <- BS.readFile (directory </> "../kernel-fixtures/frozen/expected/B01.json")
   let matrix = [TrueValue, FalseValue, UnresolvedValue]
       allExpected = [TrueValue, FalseValue, UnresolvedValue
         , FalseValue, FalseValue, FalseValue

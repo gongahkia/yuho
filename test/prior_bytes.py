@@ -9,7 +9,7 @@ import tarfile
 import tempfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[1]
 BASELINE = "9dd40b628bfb18e50f10050f3e9300e7f5bfc7c1"
 FAMILIES = [
     ("frozen", ROOT / "test/kernel-fixtures/frozen/requests"),
@@ -62,7 +62,7 @@ def main():
                         f"--with-compiler={GHC}"],
                        cwd=workspace, check=True, capture_output=True)
         original = binary(workspace)
-        current = binary(ROOT / "rewrite/haskell")
+        current = binary(ROOT)
         total = 0
         for label, directory in FAMILIES:
             paths = sorted(path for path in directory.iterdir()

@@ -14,7 +14,7 @@ WORKSPACE = Path(__file__).resolve().parents[1]
 def main() -> None:
     with tempfile.TemporaryDirectory(prefix="yuho-kernel-replay-") as temporary:
         clean = Path(temporary)
-        for name in ("cabal.project", "cabal.project.freeze", "yuho-foundation.cabal"):
+        for name in ("cabal.project", "cabal.project.freeze", "yuho.cabal"):
             shutil.copy2(WORKSPACE / name, clean / name)
         for name in ("src", "app", "test"):
             shutil.copytree(WORKSPACE / name, clean / name, symlinks=True)

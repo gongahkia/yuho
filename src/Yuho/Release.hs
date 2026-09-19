@@ -42,7 +42,7 @@ locateRepository Nothing = do
 
 check :: FilePath -> IO (Either Text FilePath)
 check root = do
-  marker <- doesFileExist (root </> "rewrite/haskell/yuho-foundation.cabal")
+  marker <- doesFileExist (root </> "yuho.cabal")
   pure (if marker then Right root else Left "root does not contain the Haskell Yuho release")
 
 doctorReport :: Maybe FilePath -> IO J

@@ -9,8 +9,8 @@ import subprocess
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[3]
-FROZEN = ROOT / "experiments/language-spike/fixtures"
+ROOT = Path(__file__).resolve().parents[1]
+FROZEN = ROOT / "test/kernel-fixtures/frozen"
 HARDENING = ROOT / "test/fixtures"
 FROZEN_IDS = [
     "B01", "B02", "B03", "B04", "B05", "B06", "B07",

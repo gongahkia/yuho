@@ -315,7 +315,7 @@ def run(command: list[str], cwd: Path, env: dict[str, str]) -> bytes:
 def executable_path(env: dict[str, str]) -> str:
     return run(
         ["cabal", "list-bin", "exe:yuho-core-conformance"],
-        ROOT / "rewrite/haskell",
+        ROOT,
         env,
     ).decode().strip()
 
@@ -343,7 +343,7 @@ def main() -> int:
     env["PATH"] = os.pathsep.join(
         [str(home / ".ghcup/bin"), str(home / ".elan/bin"), env.get("PATH", "")]
     )
-    run(["cabal", "v2-build", "exe:yuho-core-conformance", "--offline", "-j1"], ROOT / "rewrite/haskell", env)
+    run(["cabal", "v2-build", "exe:yuho-core-conformance", "--offline", "-j1"], ROOT, env)
     run(["lake", "build", "core_conformance"], ROOT / "mechanisation", env)
     haskell = run([executable_path(env), str(VECTOR_PATH)], ROOT, env)
     lean = run(["lake", "env", "lean", "--run", "scripts/CoreConformance.lean"], ROOT / "mechanisation", env)

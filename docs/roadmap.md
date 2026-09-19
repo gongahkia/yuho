@@ -1,6 +1,6 @@
 # Core Yuho v0.3 corpus language-gap audit
 
-This is a generated corpus audit against the bounded Core Yuho v0.3 release language. The canonical inputs are the 524 rows in [`../../research/singapore/SINGAPORE-CRIMINAL-LAW-COVERAGE-v0.3.json`](../../research/singapore/SINGAPORE-CRIMINAL-LAW-COVERAGE-v0.3.json). Normative positions, richer candidate sanctions and explicit responsibility routes close representation gaps only where saved material already supports a responsible authored model.
+This is a generated corpus audit against the bounded Core Yuho v0.3 release language. The canonical inputs are the 524 rows in [`../research/singapore/SINGAPORE-CRIMINAL-LAW-COVERAGE-v0.3.json`](../research/singapore/SINGAPORE-CRIMINAL-LAW-COVERAGE-v0.3.json). Normative positions, richer candidate sanctions and explicit responsibility routes close representation gaps only where saved material already supports a responsible authored model.
 
 ## Method and boundary
 

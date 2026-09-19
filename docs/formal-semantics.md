@@ -1,6 +1,6 @@
 # Core Yuho Language Report v0.3 — Release Extensions
 
-Status: normative for the three additive release constructs implemented by the Haskell frontend. This report extends [Core Yuho v0.1](CORE-YUHO-LANGUAGE-REPORT-v0.1.md) and [Core Yuho v0.2](CORE-YUHO-LANGUAGE-REPORT-v0.2.md); it does not replace their syntax, semantics or limitations.
+Status: normative for the three additive release constructs implemented by the Haskell frontend. This report extends [Core Yuho v0.1](formal-semantics.md) and [Core Yuho v0.2](formal-semantics.md); it does not replace their syntax, semantics or limitations.
 
 ## 1. Layers and semantic boundary
 

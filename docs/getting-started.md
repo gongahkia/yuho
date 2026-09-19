@@ -7,7 +7,6 @@ Yuho v1 is a formally founded, executable research DSL and holistic representati
 Build with the pinned compiler and no network access:
 
 ```sh
-cd rewrite/haskell
 cabal v2-build all --offline -j1 --with-compiler=/home/gongahkia/.ghcup/bin/ghc-9.8.4
 YUHO="$(cabal list-bin exe:yuho --offline --with-compiler=/home/gongahkia/.ghcup/bin/ghc-9.8.4)"
 "$YUHO" version
@@ -27,7 +26,7 @@ The normal executable path is Haskell-only. Python, Mermaid, Graphviz, Node, a b
 
 The authoritative pipeline is authored `.yh`, source-located Haskell AST, exact-version module resolution, static checking, normalized Core Yuho, KernelInput v1 lowering, one of eight in-process kernel variants, and technical result/explanation/diagram output.
 
-Core v0.1 covers three-valued requirements, definitions, offences, actor-scoped general exceptions, participation, attempt, presumptions, temporal selection, penalties and independent allegations. Core v0.2 adds nominal entities, typed predicates and exact scalars, explicit negation, finite quantifiers, cardinality and explicit finite rule priority. Core v0.3 adds bounded normative positions, rich candidate-sanction surface forms and explicitly authored responsibility routes. See the [language reports](CORE-YUHO-LANGUAGE-REPORT-v0.1.md), [v0.2](CORE-YUHO-LANGUAGE-REPORT-v0.2.md) and [v0.3](CORE-YUHO-LANGUAGE-REPORT-v0.3.md).
+Core v0.1 covers three-valued requirements, definitions, offences, actor-scoped general exceptions, participation, attempt, presumptions, temporal selection, penalties and independent allegations. Core v0.2 adds nominal entities, typed predicates and exact scalars, explicit negation, finite quantifiers, cardinality and explicit finite rule priority. Core v0.3 adds bounded normative positions, rich candidate-sanction surface forms and explicitly authored responsibility routes. See the [language reports](formal-semantics.md), [v0.2](formal-semantics.md) and [v0.3](formal-semantics.md).
 
 Norms use this bounded form:
 
@@ -93,7 +92,7 @@ yuho corpus show penal-code:84 --corpus-root /path/to/yuho
 yuho corpus check --corpus-root /path/to/yuho
 ```
 
-The defensible release stays below aspirational 30-family, 75-anchor, 350-scenario and 20-case figures. Reaching those numbers from the saved material would require interpretation, procedural semantics or shallow duplication. The generated [gap audit](CORE-YUHO-v0.3-LANGUAGE-GAPS.md) leaves those rows visible.
+The defensible release stays below aspirational 30-family, 75-anchor, 350-scenario and 20-case figures. Reaching those numbers from the saved material would require interpretation, procedural semantics or shallow duplication. The generated [gap audit](roadmap.md) leaves those rows visible.
 
 ## Positioning
 

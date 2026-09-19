@@ -11,7 +11,7 @@ import tempfile
 from jsonschema import Draft202012Validator
 
 WORKSPACE = Path(__file__).resolve().parents[1]
-ROOT = WORKSPACE.parents[1]
+ROOT = WORKSPACE
 FIXTURES = ROOT / "examples/typed-finite"
 INPUT_KEYS = ("input_schema", "fragment", "program", "policy")
 

@@ -1,128 +1,121 @@
 <h1 align="center"><code>Yuho</code></h1>
 
-<p align="center">
-    <img src="./assets/logo/yuho_mascot.png" width=40% height=40%>
-</p>
+<p align="center"><img src="./assets/logo/yuho_mascot.png" width="40%" height="40%" alt="Yuho mascot"></p>
+
+<p align="center"><em>A Haskell research language for reviewable Singapore criminal-law models.</em></p>
 
 <p align="center">
-  <em>Haskell-authoritative finite research DSL for reviewable legal-rule models.</em>
+  <a href="https://github.com/gongahkia/yuho/actions/workflows/ci.yml"><img src="https://github.com/gongahkia/yuho/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <img src="https://img.shields.io/badge/GHC-9.8.4-5e5086.svg" alt="GHC 9.8.4">
 </p>
 
-<p align="center">
-  <a href="https://github.com/gongahkia/yuho/actions/workflows/release.yml"><img src="https://github.com/gongahkia/yuho/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
-  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"/></a>
-  <img src="https://img.shields.io/badge/GHC-9.8.4-5e5086.svg" alt="GHC 9.8.4"/>
-</p>
-
-<p align="center">
-  <a href="./docs/INDEX.md">Docs</a>
-  &nbsp;·&nbsp;
-  <a href="./docs/positioning/status-matrix.md">Status matrix</a>
-  &nbsp;·&nbsp;
-  <a href="./library/penal_code/">Encoded library</a>
-</p>
+<p align="center"><a href="./docs/README.md">Docs</a> · <a href="./docs/assurance.md">Assurance</a> · <a href="./research/singapore/CORPUS-INDEX.md">Corpus</a></p>
 
 ## What is Yuho?
 
-`Yuho` is a domain-specific language for finite research representations of law. The current release is the [Haskell Yuho Research Language v1.0.0](./docs/rewrite/HASKELL-YUHO-RESEARCH-LANGUAGE-v1.0.md). Core v0.1-v0.3 cover typed criminal-law structures, finite rules, normative positions, candidate sanctions and explicitly authored responsibility routes. Their documented finite technical-status fragments have machine-checked Lean semantics and independent bounded Haskell–Lean conformance. No whole-project compiler proof or legal-corpus correctness proof is claimed, and Yuho does not determine legal outcomes.
+Yuho Haskell Research Language v1.0 is a domain-specific language for finite, authored legal-rule models. Its compiler parses and checks `.yh` source, resolves exact-version local modules, normalises the checked program, and lowers it to versioned technical kernel inputs. The same Haskell executable runs those inputs, explains the derivation, queries the research corpus, and emits native SVG or semantic-graph JSON.
 
-Current applications are focused on Singapore Criminal Law but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute).
+Yuho performs deterministic computation over values and proof classifications supplied by an author. Its outputs are technical statuses such as satisfied, not satisfied, unresolved, defeated, or conflict. It does not assess evidence, establish legal currency or correctness, or determine guilt, liability, conviction, acquittal, sentence, or a court disposition.
 
-## Authority boundary
+## For Language Nerds
 
-The default `yuho` documented for v1 is the executable built from `rewrite/haskell`. It performs parsing, checking, lowering, in-process kernel execution, explanations, corpus queries and native SVG/JSON diagrams without Python, Mermaid, Graphviz, Node, a browser or network access.
+The language combines source-located static checking, nominal entity types, typed predicates and scalars, three-valued finite rules, explicit negation, finite quantification and cardinality, statutory definitions, offences, general exceptions, presumptions, attempts, participation, responsibility routes, normative positions, candidate sanctions, temporal selection, modules, and bounded multi-allegation cases.
 
-The older Python/Tree-sitter product and its Mermaid/transpiler surfaces remain archival compatibility code. Their commands and package are not the Haskell v1 authority.
+Core Yuho has machine-checked Lean semantics for its documented finite fragment. Seventy-nine registered theorems and three retained Haskell–Lean conformance corpora support that boundary. This is not a verified parser or compiler, and it is not proof that an authored legal model is correct.
 
 ## Current Capabilities
 
-> [!NOTE]  
-> See the [feature status matrix](./docs/positioning/status-matrix.md) for stable, partial, experimental and presently unsupported surfaces.
-
-### General
-
-| Surface | Capability |
+| Surface | Current support |
 |---|---|
-| Language | Source-located Haskell parser/checker; Core Yuho v0.1-v0.3; exact-version local modules |
+| Authoring | Checked `.yh` models, scenarios, exact-version modules, and cases |
 | Operation | `check`, `compile`, `run`, `explain`, `diagram`, `corpus`, `doctor`, `init`, `version`, `release verify` |
 | Semantics | Eight versioned KernelInput v1 variants evaluated in-process |
-| Formal assurance | 79 registered Lean theorems plus bounded independent Haskell–Lean conformance; not a verified compiler |
-| Corpus | 524 saved Penal Code rows structurally indexed; 26 executable offence families in a broad partial research subset |
-| Diagrams | Native deterministic standalone SVG and semantic-graph JSON |
+| Formal assurance | 79 registered Lean theorems and bounded independent Haskell–Lean conformance |
+| Corpus | 524 saved Penal Code rows; 55 connected to executable research models |
+| Executable research | 26 offence families, 13 general exceptions, 22 candidate penalties, 306 scenarios, 16 cases |
+| Diagrams | Deterministic standalone SVG and semantic-graph JSON generated by Haskell |
 
-### Encoded statues
+### Encoded statutes
 
-One of my gripes with [most Legal DSLs](#references) presently available *(in the current year 2024)* are their lack of examples of the DSL actually in use or application.
+One of my gripes with most legal DSLs is their lack of examples of the language actually in use.
 
-With this specific trauma in mind, `Yuho` provides a structurally indexed saved corpus of 524 Singapore Penal Code provision records at [`library/penal_code/`](./library/penal_code/). The [Haskell research corpus index](./research/singapore/CORPUS-INDEX.md) separately identifies which bounded rules are executable, partial, definition-only or still unmodelled; structural presence is not executable support or a claim of legal currency.
+With this specific trauma in mind, Yuho includes a complete structural index of 524 rows from the saved Singapore Penal Code export. Fifty-five rows connect to executable or executable-partial research models; the rest remain visibly structural, definitional, cross-referential, or unmodelled. Structural presence is not executable support, legal review, or a claim that the saved text is current.
 
-## Build and ten-minute start
+See the [corpus guide](./docs/corpus.md) and [generated index](./research/singapore/CORPUS-INDEX.md).
+
+## Installation
+
+Yuho is built with GHC 9.8.4 and Cabal using the checked-in freeze file. After the pinned dependencies are available in the Cabal cache:
 
 ```console
 $ git clone https://github.com/gongahkia/yuho && cd yuho
-$ cd rewrite/haskell
-$ cabal v2-build all --offline -j1 --with-compiler=/home/gongahkia/.ghcup/bin/ghc-9.8.4
-$ YUHO="$(cabal list-bin exe:yuho --offline --with-compiler=/home/gongahkia/.ghcup/bin/ghc-9.8.4)"
-$ "$YUHO" version
-$ "$YUHO" doctor --root ../..
-$ "$YUHO" init /tmp/yuho-starter
-$ cd /tmp/yuho-starter
-$ "$YUHO" check model.yh --scenario scenario.yh
-$ "$YUHO" run model.yh --scenario scenario.yh
-$ "$YUHO" explain model.yh --scenario scenario.yh
+$ cabal v2-build all --offline -j1 --with-compiler=ghc-9.8.4
+$ cabal list-bin exe:yuho --offline --with-compiler=ghc-9.8.4
 ```
 
-The pinned Cabal plan is retained and the normal workflow is offline. See the [v1 release guide](./docs/rewrite/HASKELL-YUHO-RESEARCH-LANGUAGE-v1.0.md) for modules, cases, diagrams, corpus queries and the complete claim boundary.
+Set `YUHO` to the path printed by the final command, or install the executable with Cabal using your preferred local prefix.
+
+## Ten-minute start
+
+Run this flow from the repository root. `/tmp/yuho-tour` must not already exist because `init` refuses to overwrite a destination.
+
+```console
+$ YUHO_ROOT="$PWD"
+$ YUHO="$(cabal list-bin exe:yuho --offline --with-compiler=ghc-9.8.4)"
+$ "$YUHO" doctor --root "$YUHO_ROOT"
+$ "$YUHO" init /tmp/yuho-tour
+$ sed -n '1,160p' /tmp/yuho-tour/model.yh
+$ sed -n '1,120p' /tmp/yuho-tour/scenario.yh
+$ "$YUHO" check /tmp/yuho-tour/model.yh --scenario /tmp/yuho-tour/scenario.yh
+$ "$YUHO" compile /tmp/yuho-tour/model.yh --scenario /tmp/yuho-tour/scenario.yh --output /tmp/yuho-tour/request.json
+$ "$YUHO" run /tmp/yuho-tour/model.yh --scenario /tmp/yuho-tour/scenario.yh
+$ "$YUHO" explain /tmp/yuho-tour/model.yh --scenario /tmp/yuho-tour/scenario.yh
+$ "$YUHO" diagram /tmp/yuho-tour/case.yh --view case --format svg --output /tmp/yuho-tour/case.svg
+$ "$YUHO" corpus summary --corpus-root "$YUHO_ROOT"
+$ "$YUHO" release verify --root "$YUHO_ROOT"
+```
+
+## Usage
+
+Run `yuho --help` for the compact command surface. Start with the [getting-started guide](./docs/getting-started.md), then use the [language reference](./docs/language-reference.md) and [CLI reference](./docs/cli-reference.md). `compile --output` and `diagram --output` publish atomically and refuse to overwrite an existing file.
+
+## Shell Completion
+
+Yuho v1 does not ship generated shell-completion scripts. The command grammar is deliberately compact and documented by `yuho --help`; Bash, Zsh, and Fish completion are deferred until the CLI exposes one canonical completion generator.
 
 ## Documentation
 
-* [Documentation index](./docs/INDEX.md)
-* [Getting started](./docs/user/getting-started.md)
-* [5-minute tour](./docs/user/5-minutes.md)
-* [Syntax reference](./docs/researcher/syntax.md)
-* [Canonical semantics](./docs/researcher/canonical-semantics.md)
-* [Contributor architecture](./docs/contributor/architecture.md)
+The [documentation index](./docs/README.md) is the single current navigation surface. It links the language reference, formal semantics, mechanisation boundary, architecture, CLI, corpus, diagrams, assurance statement, positioning, and deferred work.
 
 ## Contribute
 
-Yuho is open-source. Contribution guidelines are found at [`CONTRIBUTING.md`](./.github/CONTRIBUTING.md).
+Yuho is open source. See [Contributing](./.github/CONTRIBUTING.md), the [Code of Conduct](./CODE_OF_CONDUCT.md), and the [Security Policy](./SECURITY.md). Semantic changes should include focused Haskell tests and, where the formal boundary changes, corresponding Lean and conformance evidence.
 
 ## References
 
 ### Analogues
 
-`Yuho` takes much inspiration from the following projects.  
+Yuho takes inspiration from the following projects:
 
-* [Natural L4](https://github.com/smucclaw/dsl): Language with an English-like syntax that transpiles to multiple targets, focused on codification of Singapore law at large and Contract Law in specific.
-* [Catala](https://github.com/CatalaLang): Language syntax that explicitly mimicks logical structure of the Law, focused on general Socio-fiscal legislature in most jurisidictions.
-* [Blawx](https://github.com/Lexpedite/blawx): User-friendly web-based tool for Rules as Code, a declarative logic knowledge representation tool for encoding, testing and using rules.
-* [Morphir](https://github.com/finos/morphir): Technology agnostic toolkit for digitisation of business models and their underlying decision logic, enabling automation in fintech.
-* [OpenFisca](https://github.com/openfisca/openfisca-core): Open-source platform for modelling social policies through tax and benefits systems across jurisdictions.
-* [Docassemble](https://docassemble.org/): Document automation system for generating guided interview documents through a question-and-answer interface.
-* [Akoma Ntoso](https://github.com/oasis-open/legaldocml-akomantoso): Standardised XML schema for representing parliamentary, legislative and judiciary documents across jurisdictions.
+* [L4](https://github.com/smucclaw/dsl), an English-like legal DSL with multiple targets.
+* [Catala](https://github.com/CatalaLang), a language reflecting the logical structure of legislation.
+* [Blawx](https://github.com/Lexpedite/blawx), a visual Rules as Code environment.
+* [OpenFisca](https://github.com/openfisca/openfisca-core), a platform for modelling tax and benefit systems.
+* [Docassemble](https://docassemble.org/), a guided legal-document automation system.
+* [Akoma Ntoso](https://github.com/oasis-open/legaldocml-akomantoso), an XML standard for legal documents.
+
+These are related systems, not compatibility targets. See [Positioning](./docs/positioning.md) for a restrained comparison.
 
 ### Research
 
-`Yuho` stands on the shoulders of past research and academia.  
+Yuho stands on the shoulders of past research and academia:
 
-* [A Logic for Statutes](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3088206) by Sarah B Lawsky
-* [An End-to-End Pipeline from Law Text to Logical Formulas](https://ebooks.iospress.nl/volumearticle/62060) by Aarne Ranta, Inari Listenmaa, Jerrold Soh and Meng Weng Wong
-* [Symbolic and automatic differentiation of languages](https://dl.acm.org/doi/10.1145/3473583) by Conal Elliott
-* [Legal Rules, Legal Reasoning, and Nonmonotonic Logic](https://philpapers.org/rec/RIGLRL-2) by Adam W Rigoni
-* [Law and logic: A review from an argumentation perspective](https://www.sciencedirect.com/science/article/pii/S0004370215000910) by Henry Prakken and Giovanni Sartor
-* [Rules as code: Seven levels of digitisation](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=5051&context=sol_research) by Meng Weng Wong
-* [Defeasible semantics for L4](https://ink.library.smu.edu.sg/cclaw/5/) by Guido Governatori and Meng Weng Wong
-* [CLAWs and Effect](https://www.lawsociety.org.sg/publication/claws-and-effect/) by Alexis N Chun
-* [The LKIF Core Ontology of Basic Legal Concepts](https://ceur-ws.org/Vol-321/paper3.pdf) by Rinke Hoekstra, Joost Breuker, Marcello Di Bello and Alexander Boer
-* [ChatGPT, Large Language Models, and Law](https://fordhamlawreview.org/issues/chatgpt-large-language-models-and-law/) by Harry Surden
-* [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) by Jared Kaplan, Sam McCandlish, Tom Henighan, Tom B Brown, Benjamin Chess, Rewon Child, Scott Gray, Alec Radford, Jeffrey Wu and Dario Amodei
-* [Large Language Models in Law: A Survey](https://arxiv.org/pdf/2312.03718) by Jinqi Lai, Wensheng Gan, Jiayang Wu, Zhenlian Qi and Philip S Yu
-* [Automating Defeasible Reasoning in Law with Answer Set Programming](http://platon.etsii.urjc.es/~jarias/GDE-2022/GDE-07.pdf) by Lim How Khang, Avishkar Mahajan, Martin Strecker and Meng Weng Wong
-* [User Guided Abductive Proof Generation for Answer Set Programming Queries](https://dl.acm.org/doi/10.1145/3551357.3551383) by Avishkar Mahajan, Martin Strecker and Meng Weng Wong
-* [Computer-Readable Legislation Project: What might an IDE-like drafting tool look like?](https://osf.io/uk2vy/) by Matthew Waddington, Laurence Diver and Tin San Leon Qiu
-* [Normalized Legal Drafting and the Query Method](https://repository.law.umich.edu/articles/29/) by Layman E Allen and C Rudy Engholm
-* [An IDE-like tool for legislative drafting](https://crlp-jerseyldo.github.io/work/an-ide-for-legislation) by crlp-jerseyldo.github.io
-* [The Grammar And Structure Of Legal Texts](https://academic.oup.com/edited-volume/34877/chapter-abstract/298341735?redirectedFrom=fulltext) by Risto Hiltunen
-* [Does Justice Have a Syntax?](https://www.jstor.org/stable/27073484) by Steven L Winter
-* [The syntax of legal exceptions: how the absence of proof is a proof of absence thereof](https://www.tandfonline.com/doi/abs/10.1080/20414005.2017.1283567) by Kyriakos N Kotsoglou
-* [The British Nationality Act as a logic program](https://www.semanticscholar.org/paper/The-British-Nationality-Act-as-a-logic-program-Sergot-Sadri/16d480717a1d233ae94b09e3b983d8cc96437644) by M Sergot, F Sadri, R Kowalski, F Kriwaczek, P Hammond and H T Cory
+* Sarah B Lawsky, [A Logic for Statutes](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3088206).
+* Aarne Ranta et al., [An End-to-End Pipeline from Law Text to Logical Formulas](https://ebooks.iospress.nl/volumearticle/62060).
+* Adam W Rigoni, [Legal Rules, Legal Reasoning, and Nonmonotonic Logic](https://philpapers.org/rec/RIGLRL-2).
+* Henry Prakken and Giovanni Sartor, [Law and logic: A review from an argumentation perspective](https://www.sciencedirect.com/science/article/pii/S0004370215000910).
+* Meng Weng Wong, [Rules as code: Seven levels of digitisation](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=5051&context=sol_research).
+* Guido Governatori and Meng Weng Wong, [Defeasible semantics for L4](https://ink.library.smu.edu.sg/cclaw/5/).
+* Rinke Hoekstra et al., [The LKIF Core Ontology of Basic Legal Concepts](https://ceur-ws.org/Vol-321/paper3.pdf).
+* Layman E Allen and C Rudy Engholm, [Normalized Legal Drafting and the Query Method](https://repository.law.umich.edu/articles/29/).

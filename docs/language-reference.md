@@ -1,16 +1,16 @@
 # Authoring with the Haskell Yuho research DSL
 
-This guide covers the language implemented by `rewrite/haskell`, not the broader Python 5.1.0 product grammar. The Haskell lexer, source-located AST, resolver, checker, lowering, CLI and in-process kernel are authoritative for these examples. The grammar is a bounded research POC: it exposes criminal-law structure and evaluates synthetic supplied classifications, but it does not assess evidence, determine guilt, select legally applicable law, impose a sentence or make a court disposition.
+This guide covers the language implemented by the root Haskell project, not the broader Python 5.1.0 product grammar. The Haskell lexer, source-located AST, resolver, checker, lowering, CLI and in-process kernel are authoritative for these examples. The grammar is a bounded research POC: it exposes criminal-law structure and evaluates synthetic supplied classifications, but it does not assess evidence, determine guilt, select legally applicable law, impose a sentence or make a court disposition.
 
 ## Build and normal commands
 
-From `rewrite/haskell`, use the frozen dependency plan and GHC 9.8.4:
+From the root Haskell project, use the frozen dependency plan and GHC 9.8.4:
 
 ```sh
 PATH=/home/gongahkia/.ghcup/bin:/usr/bin:/bin cabal v2-build all --offline --jobs=1
 YUHO="$(PATH=/home/gongahkia/.ghcup/bin:/usr/bin:/bin cabal list-bin exe:yuho)"
-MODEL=../../research/singapore/offence-corpus-pilot/modular-cheating-mischief.yh
-SCENARIO=../../research/singapore/offence-corpus-pilot/scenarios/cheating/01_property_form_satisfied.yh
+MODEL=../research/singapore/offence-corpus-pilot/modular-cheating-mischief.yh
+SCENARIO=../research/singapore/offence-corpus-pilot/scenarios/cheating/01_property_form_satisfied.yh
 "$YUHO" check "$MODEL" --scenario "$SCENARIO"
 "$YUHO" compile "$MODEL" --scenario "$SCENARIO"
 "$YUHO" run "$MODEL" --scenario "$SCENARIO"
@@ -27,11 +27,11 @@ OUT="$(mktemp -d)"
   --view rule --format svg --output "$OUT/rule.svg"
 "$YUHO" diagram "$MODEL" --scenario "$SCENARIO" \
   --view trace --format json --output "$OUT/trace.json"
-"$YUHO" diagram ../../research/singapore/research-release/case-person-harm-showcase.yh \
+"$YUHO" diagram ../research/singapore/research-release/case-person-harm-showcase.yh \
   --view case --format svg --output "$OUT/case.svg"
 ```
 
-Views are `rule`, `modules`, `case` and `trace`; formats are `svg` and `json`. An analysis case accepts `case` or `trace`, and a presumption program accepts `trace`. The output path must not already exist. Publication is atomic: checking or rendering failure leaves no partial destination. SVG uses shapes and border patterns as well as colour, includes citations, statuses, arrowheads, a legend and the no-judicial-outcome notice. JSON uses `yuho.semantic-graph/v0.1` and stable semantic node IDs. Neither format embeds timestamps or absolute checkout paths. See the [Core Yuho language report](CORE-YUHO-LANGUAGE-REPORT-v0.1.md).
+Views are `rule`, `modules`, `case` and `trace`; formats are `svg` and `json`. An analysis case accepts `case` or `trace`, and a presumption program accepts `trace`. The output path must not already exist. Publication is atomic: checking or rendering failure leaves no partial destination. SVG uses shapes and border patterns as well as colour, includes citations, statuses, arrowheads, a legend and the no-judicial-outcome notice. JSON uses `yuho.semantic-graph/v0.1` and stable semantic node IDs. Neither format embeds timestamps or absolute checkout paths. See the [Core Yuho language report](formal-semantics.md).
 
 ## Models, rules and scenarios
 
@@ -80,7 +80,7 @@ typed-rules-scenario TFR01 for FictionalTypedFiniteRules-v0.2 {
 
 Scalar declarations are `integer`, `date`, `enum NAME` or `money SGD`. Values are exact integers, ISO dates, declared enum members, or integer minor units. `value ID = unresolved reason "...";` is explicit and propagates `unresolved`. Comparisons are `eq`, `neq`, `lt`, `lte`, `gt`, `gte` and the three-operand `in-half-open`. Cross-currency money comparisons and unrelated scalar types are rejected; Yuho performs no conversion or general arithmetic.
 
-`forall` and `exists` enumerate declared entities of the named nominal type. Empty `forall` is satisfied and empty `exists` is not satisfied. Variables are lexical, cannot shadow, and may appear only in compatible predicate positions. `not` is strong three-valued negation. `at-least`, `at-most` and `exactly` use the satisfied/unresolved count interval specified in the [v0.2 report](CORE-YUHO-LANGUAGE-REPORT-v0.2.md).
+`forall` and `exists` enumerate declared entities of the named nominal type. Empty `forall` is satisfied and empty `exists` is not satisfied. Variables are lexical, cannot shadow, and may appear only in compatible predicate positions. `not` is strong three-valued negation. `at-least`, `at-most` and `exactly` use the satisfied/unresolved count interval specified in the [v0.2 report](formal-semantics.md).
 
 Rules conclude named technical propositions. Priority is explicit and acyclic; source order has no priority meaning. A satisfied higher opposite-polarity rule blocks the lower rule, an unresolved higher rule keeps the proposition unresolved, and incomparable satisfied opposite rules produce `conflict`. None of these states is guilt, liability or a sentence.
 
@@ -130,7 +130,7 @@ SCENARIO=../frontend/fixtures/typed-finite/fictional-typed-rules-satisfied.yh
   --format svg --output "$OUT/typed-trace.svg"
 ```
 
-The new fragment lowers to the single additional `TypedFiniteRules-v1` variant because scalar, cardinality, witness and conflict observations cannot be losslessly represented in the seven historical variants. See the [formal language report](CORE-YUHO-LANGUAGE-REPORT-v0.2.md), [mechanisation report](CORE-YUHO-MECHANISATION-v0.2.md) and [construct registry](core-yuho-conformance-v0.2.json).
+The new fragment lowers to the single additional `TypedFiniteRules-v1` variant because scalar, cardinality, witness and conflict observations cannot be losslessly represented in the seven historical variants. See the [formal language report](formal-semantics.md), [mechanisation report](mechanisation.md) and [construct registry](../schema/core-yuho-conformance-v0.2.json).
 
 ## Core Yuho v0.3 release constructs
 
@@ -158,7 +158,7 @@ life-imprisonment term:life;
 caning term:caning minimum 3 maximum 6 strokes;
 ```
 
-They can occur inside existing `all-of`, `exactly-one-of` and `one-or-more-of` trees. Every such term is a candidate statutory presentation, not a sentence. See the [v0.3 report](CORE-YUHO-LANGUAGE-REPORT-v0.3.md) and [v1 release guide](HASKELL-YUHO-RESEARCH-LANGUAGE-v1.0.md).
+They can occur inside existing `all-of`, `exactly-one-of` and `one-or-more-of` trees. Every such term is a candidate statutory presentation, not a sentence. See the [v0.3 report](formal-semantics.md) and [v1 release guide](getting-started.md).
 
 The stable Haskell command surface is `check`, `compile`, `run`, `explain`, `diagram`, `corpus`, `doctor`, `init`, `version` and `release verify`. A v1 `fmt` command is deliberately absent: the current lexer does not retain comments, so it cannot yet meet the complete-grammar comment-preservation guarantee.
 
@@ -201,7 +201,7 @@ use candidate-penalty receiving::pen:section411;
 attach misappropriation::x:section79 to offence receiving::o:receiving-property;
 ```
 
-See [`modular-singapore-criminal-law-release.yh`](../../research/singapore/research-release/modular-singapore-criminal-law-release.yh) for the complete host. The earlier theft/hurt and cheating/mischief module files remain compatibility views over pre-existing source graphs and are identified as such.
+See [`modular-singapore-criminal-law-release.yh`](../research/singapore/research-release/modular-singapore-criminal-law-release.yh) for the complete host. The earlier theft/hurt and cheating/mischief module files remain compatibility views over pre-existing source graphs and are identified as such.
 
 Candidate penalties are exported and selected with the same typed mechanism:
 
@@ -281,13 +281,13 @@ analysis-case case:property-deception-showcase
 
 Derived definition outputs, rule results, penalty selection and final statuses cannot be bound as case facts. There is no allegation-order inference and no aggregate case result.
 
-[`case-modular-warehouse-shared.yh`](../../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh) loads a modular sibling model and checks principal theft, bounded s 107/s 109 participation and s 511 attempt as three allegations. It binds shared primitive case facts explicitly and keeps each actor's s 84 instance isolated. Run it without `--scenario`:
+[`case-modular-warehouse-shared.yh`](../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh) loads a modular sibling model and checks principal theft, bounded s 107/s 109 participation and s 511 attempt as three allegations. It binds shared primitive case facts explicitly and keeps each actor's s 84 instance isolated. Run it without `--scenario`:
 
 ```sh
-"$YUHO" check ../../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
-"$YUHO" compile ../../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
-"$YUHO" run ../../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
-"$YUHO" explain ../../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
+"$YUHO" check ../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
+"$YUHO" compile ../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
+"$YUHO" run ../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
+"$YUHO" explain ../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
 ```
 
 The case result has allegation-specific statuses and no aggregate status, guilt conclusion or sentencing outcome.
@@ -326,11 +326,11 @@ The target, trigger and rebuttal must already be primitive proof facts in the co
 | Typed finite module | `typed-rules-module` | none |
 | Typed finite case | `typed-rules-case` | named scenarios are embedded |
 
-The [research-release quick start](../../research/singapore/research-release/README.md) is the recommended entry point. The [capability matrix](HASKELL-RESEARCH-RELEASE-v0.1.md) classifies every major feature as supported, bounded, deferred or out of scope. The [Core conformance registry](core-yuho-conformance-v0.1.json) maps every public construct to its parser, checker, Core representation, lowering path, kernel boundary, explanation, diagram and test evidence.
+The [research-release quick start](../research/singapore/research-release/README.md) is the recommended entry point. The [capability matrix](assurance.md) classifies every major feature as supported, bounded, deferred or out of scope. The [Core conformance registry](../schema/core-yuho-conformance-v0.1.json) maps every public construct to its parser, checker, Core representation, lowering path, kernel boundary, explanation, diagram and test evidence.
 
 ## Runnable corpus
 
-The canonical structural/executable inventory and limits are in the [Singapore corpus index](../../research/singapore/CORPUS-INDEX.md). Corpus v0.3 contains 524 structurally indexed saved Penal Code provision rows, 26 executable offence families and 306 valid Singapore scenario files. Structural indexing is not executable support or legal review.
+The canonical structural/executable inventory and limits are in the [Singapore corpus index](../research/singapore/CORPUS-INDEX.md). Corpus v0.3 contains 524 structurally indexed saved Penal Code provision rows, 26 executable offence families and 306 valid Singapore scenario files. Structural indexing is not executable support or legal review.
 
 The native Haskell corpus query surface reads the canonical checked-in artifact without network access:
 
