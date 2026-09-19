@@ -14,10 +14,11 @@ import System.IO (IOMode(ReadMode), hClose, openBinaryTempFile, stderr, stdout, 
 import System.Posix.Files (createLink, fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.Kernel.Run (runLine)
 import Yuho.CoreYuho.Normalize (normalizeCase, normalizeChecked, normalizePresumption)
-import Yuho.Diagram.Build (caseGraph, presumptionGraph, programGraph)
+import Yuho.Diagram.Build
+  ( caseGraph, presumptionGraph, programGraph, typedFiniteGraph, typedFiniteCaseGraph )
 import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg)
 import Yuho.Diagram.Types (DiagramFormat(..), DiagramView(..), SemanticGraph)
-import Yuho.Protocol.Json (decodeJson, encodeJson, lookupField, textValue)
+import Yuho.Protocol.Json (J(..), decodeJson, encodeJson, lookupField, textValue)
 import Yuho.Surface.Compile (checkParsed, compileParsed)
 import Yuho.Surface.AST (AnalysisCase(..), CaseAllegation(..))
 import Yuho.Surface.Case
@@ -31,6 +32,11 @@ import Yuho.Surface.Modules
 import Yuho.Surface.Parser (parseAnalysisCase)
 import Yuho.Surface.Presumption
   ( PresumptionProgram(..), explainPresumptionProgram, loadPresumptionProgram )
+import Yuho.Surface.TypedFinite
+  ( TypedFiniteCase(..), TypedFiniteAllegation(..), loadTypedFiniteProgram
+  , loadTypedFiniteCase, encodeTypedFiniteRequest, encodeTypedFiniteCase
+  , explainTypedFinite, explainTypedFiniteCase )
+import Yuho.CoreYuho.TypedFinite (evaluateTypedFinite, finiteProgramId)
 import Yuho.Surface.Temporal (loadAuthoredInput)
 import Yuho.Surface.Token (Diagnostic(..), Kind(..), Token(..), diagnosticJson)
 
@@ -125,6 +131,10 @@ operate (Options command path scenarioPath output) = do
           operateCase command path bytes scenarioPath output
         Right (first:_) | tokenText first == "presumption-program" ->
           operatePresumption command path bytes scenarioPath output
+        Right (first:_) | tokenText first == "typed-rules-model" ->
+          operateTypedFinite command path bytes supplied output
+        Right (first:_) | tokenText first == "typed-rules-case" ->
+          operateTypedFiniteCase command path bytes scenarioPath output
         _ -> do
           (authored,resolvedScenario) <- loadAuthoredInput path bytes supplied
             >>= either report pure
@@ -225,6 +235,64 @@ operatePresumption command path bytes scenarioPath output = do
       else emitDiagram output format
         (presumptionGraph (normalizePresumption program))
   where origin = Token EndToken "" 1 1
+
+operateTypedFinite :: Command -> FilePath -> BS.ByteString
+  -> Maybe (FilePath,BS.ByteString) -> Maybe FilePath -> IO ()
+operateTypedFinite command path bytes scenario output = do
+  program <- loadTypedFiniteProgram path bytes scenario >>= either report pure
+  result <- either (report . issue) pure (evaluateTypedFinite program)
+  let request = encodeTypedFiniteRequest (finiteProgramId program <> "-request") program
+  case command of
+    Check -> BS.hPut stdout "{\"kind\":\"typed-finite-rules\",\"status\":\"valid\"}\n"
+    Compile -> case output of
+      Nothing -> BS.hPut stdout request
+      Just destination -> publish destination request
+    Run -> case decodeJson (runLine request) of
+      Right value | (lookupField "status" value >>= textValue) == Just "evaluated" ->
+        BS.hPut stdout (runLine request)
+      _ -> report (issue "typed finite request was rejected by the Haskell kernel")
+    Explain -> BS.hPut stdout (Encoding.encodeUtf8 (explainTypedFinite program result))
+    Diagram view format -> if view `notElem` [RuleView,TraceView]
+      then report (Diagnostic "SFD001" path origin
+        "typed-rules model requires --view rule or trace" Nothing)
+      else emitDiagram output format (typedFiniteGraph view program result)
+  where
+    origin = Token EndToken "" 1 1
+    issue message = Diagnostic "SFT011" path origin message Nothing
+
+operateTypedFiniteCase :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
+  -> Maybe FilePath -> IO ()
+operateTypedFiniteCase command path bytes scenario output = do
+  case scenario of
+    Just _ -> report (issue "typed-rules case contains its own allegation scenarios")
+    Nothing -> pure ()
+  declaration <- loadTypedFiniteCase path bytes >>= either report pure
+  let encoded = encodeTypedFiniteCase declaration
+      results = [(typedAllegationId item,typedAllegationResult item)
+        | item <- typedCaseAllegations declaration]
+  case command of
+    Check -> BS.hPut stdout "{\"kind\":\"typed-finite-case\",\"status\":\"valid\"}\n"
+    Compile -> case output of
+      Nothing -> BS.hPut stdout encoded
+      Just destination -> publish destination encoded
+    Run -> do
+      rows <- traverse runAllegation (typedCaseAllegations declaration)
+      BS.hPut stdout (encodeJson (JObj
+        [("kind",JStr "typed-finite-case-result"),("id",JStr (typedCaseId declaration))
+        ,("allegations",JArr rows),("aggregate_status",JNull)]) <> "\n")
+    Explain -> BS.hPut stdout (Encoding.encodeUtf8 (explainTypedFiniteCase declaration))
+    Diagram view format -> if view `notElem` [CaseView,TraceView]
+      then report (issue "typed-rules case requires --view case or trace")
+      else emitDiagram output format (typedFiniteCaseGraph view (typedCaseId declaration)
+        results (typedCaseShared declaration))
+  where
+    origin = Token EndToken "" 1 1
+    issue message = Diagnostic "SFT011" path origin message Nothing
+    runAllegation allegation = case decodeJson (runLine (encodeTypedFiniteRequest
+        (typedAllegationId allegation <> "-request") (typedAllegationProgram allegation))) of
+      Right value | (lookupField "status" value >>= textValue) == Just "evaluated" ->
+        pure (JObj [("id",JStr (typedAllegationId allegation)),("result",value)])
+      _ -> report (issue "typed finite allegation was rejected by the Haskell kernel")
 
 publish :: FilePath -> BS.ByteString -> IO ()
 publish destination bytes = do

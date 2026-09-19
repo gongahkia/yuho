@@ -1,0 +1,25 @@
+import Yuho.CoreYuho.TypedFinite
+
+open Yuho.CoreYuho.TypedFinite
+
+#check comparison_deterministic
+#check comparison_total
+#check negation_involution
+#check forall_deterministic
+#check exists_deterministic
+#check forall_expansion_agrees
+#check exists_expansion_agrees
+#check forall_permutation_invariant
+#check exists_permutation_invariant
+#check substitution_preserves_well_typed_application
+#check cardinality_permutation_invariant
+#check cardinality_deterministic
+#check cardinality_total
+#check cardinality_mutually_exclusive
+#check atLeast_satisfied_boundary
+#check atMost_satisfied_boundary
+#check priority_resolution_deterministic
+#check higher_satisfied_defeat_wins
+#check unresolved_higher_blocks_lower
+#check incomparable_satisfied_conflict
+#check unrelated_proposition_is_irrelevant

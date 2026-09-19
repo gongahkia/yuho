@@ -27,3 +27,6 @@ import Yuho.CoreYuho.Semantics
 import Yuho.CoreYuho.Theorems
 import Yuho.CoreYuho.Conformance
 import Yuho.CoreYuho.TheoremRegistry
+import Yuho.CoreYuho.TypedFinite
+import Yuho.CoreYuho.TypedFiniteTheoremRegistry
+import Yuho.CoreYuho.TypedFiniteConformance

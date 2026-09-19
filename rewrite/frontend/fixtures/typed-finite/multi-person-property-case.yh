@@ -1,0 +1,5 @@
+typed-rules-case case:multi-person-property model "multi-person-property.yh" {
+  shared-classification shared:one-controls-camera controls(actor:one,item:camera) as proved reason "explicit shared synthetic classification";
+  allegation a:actor-one scenario "case-scenario-one.yh" use shared:one-controls-camera;
+  allegation a:actor-two scenario "case-scenario-two.yh" use shared:one-controls-camera;
+}

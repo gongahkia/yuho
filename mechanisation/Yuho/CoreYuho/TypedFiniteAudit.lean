@@ -1,0 +1,9 @@
+import Yuho.CoreYuho.TypedFiniteTheoremRegistry
+
+#print axioms Yuho.CoreYuho.TypedFinite.negation_involution
+#print axioms Yuho.CoreYuho.TypedFinite.forall_permutation_invariant
+#print axioms Yuho.CoreYuho.TypedFinite.substitution_preserves_well_typed_application
+#print axioms Yuho.CoreYuho.TypedFinite.cardinality_permutation_invariant
+#print axioms Yuho.CoreYuho.TypedFinite.cardinality_mutually_exclusive
+#print axioms Yuho.CoreYuho.TypedFinite.higher_satisfied_defeat_wins
+#print axioms Yuho.CoreYuho.TypedFinite.incomparable_satisfied_conflict

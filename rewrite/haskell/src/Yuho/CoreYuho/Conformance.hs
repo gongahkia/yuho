@@ -9,8 +9,10 @@ import Data.Map.Strict (Map)
 import Data.Maybe (listToMaybe)
 import Data.Text (Text)
 import qualified Data.Text as Text
+import Data.Time.Calendar (Day(..))
 import Yuho.CoreYuho.Semantics
 import Yuho.CoreYuho.Types
+import qualified Yuho.CoreYuho.TypedFinite as Finite
 import Yuho.Exception.Types (Truth(..))
 import Yuho.Presumption.Types (DerivationState(..))
 import Yuho.Protocol.Json
@@ -32,16 +34,131 @@ evaluateConformanceBytes bytes = do
   value <- decodeJson bytes
   root <- exactObject "" ["schema","vectors"] value
   schema <- requiredText "/schema" "schema" root
-  if schema /= "yuho.core-conformance-v0.1"
-    then Left "unsupported conformance schema"
-    else pure ()
   rawVectors <- requiredArray "/vectors" "vectors" root
-  vectors <- traverse (uncurry parseVector) (zip [0 :: Int ..] rawVectors)
-  results <- traverse evaluateVector vectors
-  pure (encodeJson (JObj
-    [ ("results",JArr results)
-    , ("schema",JStr "yuho.core-conformance-results-v0.1")
-    ]))
+  case schema of
+    "yuho.core-conformance-v0.1" -> do
+      vectors <- traverse (uncurry parseVector) (zip [0 :: Int ..] rawVectors)
+      results <- traverse evaluateVector vectors
+      pure (encodeJson (JObj
+        [("results",JArr results),("schema",JStr "yuho.core-conformance-results-v0.1")]))
+    "yuho.core-conformance-v0.2" -> do
+      results <- traverse (uncurry evaluateV02) (zip [0 :: Int ..] rawVectors)
+      pure (encodeJson (JObj
+        [("results",JArr results),("schema",JStr "yuho.core-conformance-results-v0.2")]))
+    _ -> Left "unsupported conformance schema"
+
+evaluateV02 :: Int -> J -> Either Text J
+evaluateV02 index value = do
+  fields <- objectFields value `orElse` (path <> ": expected object")
+  kind <- fieldText path "kind" fields
+  identifier <- fieldText path "id" fields
+  result <- case kind of
+    "negation" -> do
+      exactFields path ["id","kind","status"] fields
+      status <- fieldStatus path "status" fields
+      pure (finiteTruth (Finite.negateTruth status))
+    "quantifier" -> do
+      exactFields path ["id","kind","operation","values"] fields
+      operation <- fieldText path "operation" fields
+      values <- statusArrayUnchecked path fields "values"
+      case operation of
+        "forall" -> pure (finiteTruth (allTruth values))
+        "exists" -> pure (finiteTruth (anyTruth values))
+        _ -> Left (path <> ": unsupported quantifier")
+    "cardinality" -> do
+      exactFields path ["id","kind","operation","threshold","values"] fields
+      operation <- fieldText path "operation" fields >>= finiteCardinality path
+      threshold <- fieldInteger path "threshold" fields
+      if threshold < 0 then Left (path <> ": negative threshold")
+      else finiteTruth . Finite.cardinalityTruth operation (fromInteger threshold)
+        <$> statusArrayUnchecked path fields "values"
+    "comparison" -> do
+      exactFields path ["id","kind","left","operation","right"] fields
+      operation <- fieldText path "operation" fields >>= finiteComparison path
+      left <- field path "left" fields >>= finiteScalar path
+      right <- field path "right" fields >>= finiteScalar path
+      finiteTruth <$> Finite.compareScalar operation left right Nothing
+    "priority" -> do
+      exactFields path ["higher","id","kind","lower","ordered"] fields
+      high <- field path "higher" fields >>= finiteRule path
+      low <- field path "lower" fields >>= finiteRule path
+      ordered <- field path "ordered" fields >>= \item -> boolValue item
+        `orElse` (path <> ": ordered must be boolean")
+      let priorities = if ordered then [Finite.PriorityDecl
+            (Finite.observedRule high) (Finite.observedRule low)] else []
+      observation <- Finite.resolveProposition priorities [high,low]
+        (Finite.observedProposition high)
+      pure (finiteTruth (Finite.propositionStatus observation) <> "/" <>
+        Finite.propositionState observation)
+    "substitution" -> do
+      exactFields path ["binding","id","kind","term"] fields
+      binding <- field path "binding" fields >>= exactObject (path <> "/binding") ["entity","variable"]
+      termFields <- field path "term" fields >>= exactObject (path <> "/term") ["id","kind"]
+      variable <- fieldText path "variable" binding
+      entity <- fieldText path "entity" binding
+      termKind <- fieldText path "kind" termFields
+      termId <- fieldText path "id" termFields
+      let term = if termKind == "variable" then Finite.VariableTerm termId else Finite.EntityTerm termId
+          environment = Map.singleton variable entity
+      Finite.substituteTerm environment term
+    "isolation" -> do
+      exactFields path ["assignments","id","kind","selected"] fields
+      selected <- fieldText path "selected" fields
+      assignments <- field path "assignments" fields >>= parseAssignments (path <> "/assignments")
+      maybe (Left (path <> ": selected assignment missing")) (Right . finiteTruth)
+        (Map.lookup selected assignments)
+    _ -> Left (path <> ": unsupported v0.2 construct kind " <> kind)
+  pure (JObj [("id",JStr identifier),("result",JStr result)])
+  where
+    path = "/vectors/" <> Text.pack (show index)
+
+finiteTruth :: Truth -> Text
+finiteTruth TrueValue = "satisfied"
+finiteTruth FalseValue = "not_satisfied"
+finiteTruth UnresolvedValue = "unresolved"
+
+finiteCardinality :: Text -> Text -> Either Text Finite.CardinalityKind
+finiteCardinality _ "at-least" = Right Finite.AtLeast
+finiteCardinality _ "at-most" = Right Finite.AtMost
+finiteCardinality _ "exactly" = Right Finite.Exactly
+finiteCardinality path _ = Left (path <> ": unsupported cardinality")
+
+finiteComparison :: Text -> Text -> Either Text Finite.Comparison
+finiteComparison _ "eq" = Right Finite.Equal
+finiteComparison _ "neq" = Right Finite.NotEqual
+finiteComparison _ "lt" = Right Finite.LessThan
+finiteComparison _ "lte" = Right Finite.LessEqual
+finiteComparison _ "gt" = Right Finite.GreaterThan
+finiteComparison _ "gte" = Right Finite.GreaterEqual
+finiteComparison path _ = Left (path <> ": unsupported comparison")
+
+finiteScalar :: Text -> J -> Either Text Finite.ScalarValue
+finiteScalar path value = do
+  fields <- objectFields value `orElse` (path <> ": scalar must be object")
+  kind <- fieldText path "kind" fields
+  case kind of
+    "integer" -> exactFields path ["kind","value"] fields >>
+      (Finite.IntegerValue <$> fieldInteger path "value" fields)
+    "date" -> exactFields path ["kind","value"] fields >>
+      (Finite.DateValue . ModifiedJulianDay <$> fieldInteger path "value" fields)
+    "enum" -> exactFields path ["kind","type","value"] fields >>
+      (Finite.EnumValue <$> fieldText path "type" fields <*> fieldText path "value" fields)
+    "money" -> exactFields path ["currency","kind","value"] fields >>
+      (Finite.MoneyValue <$> fieldText path "currency" fields <*> fieldInteger path "value" fields)
+    "unresolved" -> exactFields path ["kind"] fields >>
+      pure (Finite.ScalarUnresolved "vector" Finite.IntegerType)
+    _ -> Left (path <> ": unsupported scalar")
+
+finiteRule :: Text -> J -> Either Text Finite.RuleObservation
+finiteRule path value = do
+  fields <- exactObject path ["id","polarity","proposition","status"] value
+  polarity <- fieldText path "polarity" fields >>= \item -> case item of
+    "establish" -> Right Finite.Establish
+    "defeat" -> Right Finite.Defeat
+    _ -> Left (path <> ": unsupported polarity")
+  status <- fieldStatus path "status" fields
+  Finite.RuleObservation <$> fieldText path "id" fields <*> pure polarity
+    <*> fieldText path "proposition" fields <*> pure status <*> pure [] <*> pure []
 
 parseVector :: Int -> J -> Either Text Vector
 parseVector index value = do

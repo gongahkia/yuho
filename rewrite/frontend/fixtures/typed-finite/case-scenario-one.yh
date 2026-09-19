@@ -1,0 +1,10 @@
+typed-rules-scenario TFCA01 for FictionalMultiPersonProperty-v0.2 {
+  classify controls(actor:one,item:watch) as not_proved reason "allegation-local synthetic";
+  classify transfers(actor:one,item:camera) as proved reason "allegation-local synthetic";
+  classify transfers(actor:one,item:watch) as not_proved reason "allegation-local synthetic";
+  classify controls(actor:two,item:camera) as not_proved reason "allegation-local synthetic";
+  classify controls(actor:two,item:watch) as proved reason "allegation-local synthetic";
+  classify transfers(actor:two,item:camera) as not_proved reason "allegation-local synthetic";
+  classify transfers(actor:two,item:watch) as unresolved reason "allegation-local unresolved";
+  classify assists(actor:helper,actor:one) as proved reason "allegation-local synthetic";
+}

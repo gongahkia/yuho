@@ -32,3 +32,6 @@ lean_exe «export_spec» where
 
 lean_exe «core_conformance» where
   root := `scripts.CoreConformance
+
+lean_exe «typed_finite_conformance» where
+  root := `scripts.TypedFiniteConformance

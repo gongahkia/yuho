@@ -1,0 +1,3 @@
+typed-rules-scenario TFR03 for FictionalModularTypedRules-v0.2 {
+  classify possesses(actor:modular-person,item:modular-item) as proved reason "synthetic supplied classification";
+}

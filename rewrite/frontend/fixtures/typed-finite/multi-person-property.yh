@@ -1,0 +1,22 @@
+typed-rules-model FictionalMultiPersonProperty-v0.2 {
+  limit 2048;
+  entity-type person;
+  entity-type property;
+  entity actor:one as person;
+  entity actor:two as person;
+  entity actor:helper as person;
+  entity item:camera as property;
+  entity item:watch as property;
+  predicate controls(person,property) kind circumstance;
+  predicate transfers(person,property) kind conduct;
+  predicate assists(person,person) kind relationship;
+  proposition p:actor-one-route;
+  proposition p:actor-two-route;
+  requirement q:one = exists var:item as property (all(controls(actor:one,var:item),transfers(actor:one,var:item)));
+  requirement q:two = exists var:item as property (all(controls(actor:two,var:item),transfers(actor:two,var:item)));
+  requirement q:help = assists(actor:helper,actor:one);
+  rule r:one establishes proposition p:actor-one-route when all(q:one,q:help);
+  rule r:two establishes proposition p:actor-two-route when q:two;
+  limitation "Synthetic multi-person and multi-property isolation fixture.";
+  limitation "No result transfers between actors and no judicial outcome is produced.";
+}

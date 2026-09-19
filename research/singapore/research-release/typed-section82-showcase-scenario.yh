@@ -1,0 +1,5 @@
+typed-rules-scenario SG82T01 for SingaporeSection82TypedAgeResearch-v0.2 {
+  classify applicable-to-conduct(actor:child) as proved reason "synthetic supplied applicability";
+  value value:age-years = integer 9;
+  value value:section82-threshold = integer 10;
+}

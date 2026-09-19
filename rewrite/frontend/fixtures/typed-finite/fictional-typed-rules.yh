@@ -1,0 +1,53 @@
+typed-rules-model FictionalTypedFiniteRules-v0.2 {
+  limit 2048;
+
+  entity-type person;
+  entity-type property;
+  entity-type location;
+  entity actor:alex as person;
+  entity actor:blair as person;
+  entity item:laptop as property;
+  entity item:phone as property;
+  entity place:warehouse as location;
+
+  enum-type access-level values low,medium,high;
+  scalar value:age type integer;
+  scalar value:adult-threshold type integer;
+  scalar value:incident-date type date;
+  scalar value:interval-start type date;
+  scalar value:interval-end type date;
+  scalar value:risk type enum access-level;
+  scalar value:amount type money SGD;
+  scalar value:amount-limit type money SGD;
+
+  predicate takes(person,property) kind conduct;
+  predicate located-at(property,location) kind circumstance;
+  predicate intends-gain(person,property) kind mental-state;
+  predicate assists(person,person) kind relationship;
+
+  proposition p:candidate-status;
+  proposition p:any-property;
+  proposition p:technical-conflict;
+
+  requirement q:exists-taking = exists var:item as property (all(takes(actor:alex,var:item),intends-gain(actor:alex,var:item)));
+  requirement q:all-located = forall var:item as property (located-at(var:item,place:warehouse));
+  requirement q:minor = compare(value:age,lt,value:adult-threshold);
+  requirement q:not-minor = not(q:minor);
+  requirement q:date-applicable = compare(value:incident-date,in-half-open,value:interval-start,value:interval-end);
+  requirement q:money-within = compare(value:amount,lte,value:amount-limit);
+  requirement q:risk-high = compare(value:risk,eq,value:risk);
+  requirement q:cardinality = at-least 3 (q:exists-taking,q:all-located,q:date-applicable,q:money-within);
+  requirement q:at-most = at-most 1 (q:minor,q:not-minor);
+  requirement q:exactly = exactly 1 (q:minor,q:not-minor);
+  requirement q:assistance = assists(actor:blair,actor:alex);
+
+  rule r:general establishes proposition p:candidate-status when q:cardinality citation "fictional general rule";
+  rule r:minor-exception defeats proposition p:candidate-status when q:minor citation "fictional priority rule";
+  priority r:minor-exception over r:general;
+  rule r:parameterised(var:item as property) establishes proposition p:any-property when takes(actor:alex,var:item);
+  rule r:conflict-establish establishes proposition p:technical-conflict when q:assistance;
+  rule r:conflict-defeat defeats proposition p:technical-conflict when q:assistance;
+
+  limitation "Wholly fictional technical fixture; classifications and scalar values are supplied.";
+  limitation "No evidence, guilt, conviction, sentence or court disposition is determined.";
+}

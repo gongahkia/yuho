@@ -1,17 +1,155 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.Diagram.Build
-  ( programGraph, caseGraph, presumptionGraph ) where
+  ( programGraph, caseGraph, presumptionGraph, typedFiniteGraph
+  , typedFiniteCaseGraph ) where
 
 import qualified Data.Map.Strict as Map
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Yuho.CoreYuho.Semantics (evaluateRequirement)
 import Yuho.CoreYuho.Types
+import Yuho.CoreYuho.TypedFinite
 import Yuho.Diagram.Types
 import Yuho.Exception.Types (Truth(..))
 
 notice :: Text
 notice = "Technical research statuses only; no guilt, conviction, acquittal, liability or sentence."
+
+typedFiniteGraph :: DiagramView -> TypedFiniteProgram -> TypedFiniteResult -> SemanticGraph
+typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) view
+  (distinctNodes nodes) (distinctEdges edges) notice
+  where
+    root = GraphNode (nodeId "program" (finiteProgramId program)) "program"
+      (finiteProgramId program <> "\nCore Yuho v0.2") Nothing Nothing Nothing
+    moduleNodes = [GraphNode (nodeId "module" (finiteModuleAlias item)) "module"
+      (finiteModuleAlias item <> " = " <> finiteModuleName item <> "@" <>
+        finiteModuleVersion item) Nothing Nothing (Just (finiteModuleAlias item))
+      | item <- finiteModules program]
+    typeNodes = [GraphNode (nodeId "entity-type" name) "entity-type" name Nothing Nothing Nothing
+      | EntityTypeDecl name <- finiteEntityTypes program]
+    entityNodes = [GraphNode (nodeId "entity" identifier) "entity"
+      (identifier <> " : " <> kindValue) Nothing Nothing (Just kindValue)
+      | EntityDecl identifier kindValue <- finiteEntities program]
+    predicateNodes = [GraphNode (nodeId "predicate" (predicateName item)) "predicate"
+      (predicateName item <> "(" <> Text.intercalate ", " (predicateArguments item) <> ")")
+      Nothing Nothing Nothing | item <- finitePredicates program]
+    scalarNodes = [GraphNode (nodeId "scalar" (scalarName item)) "scalar"
+      (scalarName item <> " : " <> scalarTypeLabel (scalarType item)) Nothing
+      (scalarStatus <$> Map.lookup (scalarName item) (finiteValues program)) Nothing
+      | item <- finiteScalars program]
+    factNodes = [GraphNode (nodeId "ground-fact" key) "ground-fact"
+      key Nothing (Just (truthName (groundStatus item))) Nothing
+      | item <- finiteFacts program,
+        let key = groundKey (groundPredicate item) (groundArguments item)]
+    requirementNodes = [GraphNode (nodeId "finite-requirement" (expressionLabel item))
+      (expressionKind expression) (expressionLabel item <> "\n" <> expressionDetail item)
+      Nothing (Just (truthName (expressionStatus item))) Nothing
+      | item <- finiteResultExpressions result,
+        Just expression <- [lookup (expressionLabel item) (finiteRequirements program)]]
+    ruleNodes = [GraphNode (nodeId "finite-rule" (observedRule item)) "finite-rule"
+      (observedRule item <> "\n" <> polarityLabel (observedPolarity item))
+      (ruleCitation =<< findRule (observedRule item))
+      (Just (truthName (observedStatus item))) Nothing
+      | item <- finiteResultRules result]
+    propositionNodes = [GraphNode (nodeId "proposition" (observedPropositionId item))
+      (if propositionState item == "conflict" then "conflict" else "proposition")
+      (observedPropositionId item <> "\n" <> propositionState item) Nothing
+      (Just (truthName (propositionStatus item))) Nothing
+      | item <- finiteResultPropositions result]
+    nodes = root : moduleNodes ++ typeNodes ++ entityNodes ++ predicateNodes ++ scalarNodes
+      ++ factNodes ++ requirementNodes ++ ruleNodes ++ propositionNodes
+    entityEdges = [GraphEdge (nodeId "entity-type" kindValue) (nodeId "entity" identifier)
+      "instance" "nominal member" | EntityDecl identifier kindValue <- finiteEntities program]
+    predicateEdges = [GraphEdge (nodeId "entity-type" kindValue)
+      (nodeId "predicate" (predicateName predicate)) "argument-type"
+      (Text.pack (show position)) | predicate <- finitePredicates program,
+      (position,kindValue) <- zip [1 :: Int ..] (predicateArguments predicate)]
+    factEdges = concat
+      [[GraphEdge (nodeId "entity" argument) (nodeId "ground-fact" key)
+          "ground-argument" (Text.pack (show position))
+        | (position,argument) <- zip [1 :: Int ..] (groundArguments item)]
+       ++ [GraphEdge (nodeId "predicate" (groundPredicate item)) (nodeId "ground-fact" key)
+          "application" "classified application"]
+      | item <- finiteFacts program,
+        let key = groundKey (groundPredicate item) (groundArguments item)]
+    ruleEdges = [GraphEdge (nodeId "finite-rule" (observedRule item))
+      (nodeId "proposition" (observedProposition item)) "concludes"
+      (polarityLabel (observedPolarity item)) | item <- finiteResultRules result]
+    priorityEdges = [GraphEdge (nodeId "finite-rule" high) (nodeId "finite-rule" low)
+      "priority" "explicitly over" | PriorityDecl high low <- finitePriorities program]
+    moduleEdges = concat
+      [[GraphEdge (nodeId "module" (finiteModuleAlias item))
+          (nodeId "program" (finiteProgramId program)) "import" "exact-version import"]
+       ++ [GraphEdge (nodeId "module" (finiteModuleAlias item))
+          (nodeId (exportNodeKind kindValue) identifier) "export" kindValue
+          | (kindValue,identifier) <- finiteModuleExports item]
+      | item <- finiteModules program]
+    rootEdges = [GraphEdge (nodeId "proposition" proposition)
+      (graphNodeId root) "technical-result" "independent proposition"
+      | proposition <- finitePropositions program]
+    edges = moduleEdges ++ entityEdges ++ predicateEdges ++ factEdges ++ ruleEdges
+      ++ priorityEdges ++ rootEdges
+    findRule identifier = case filter ((== identifier) . ruleName) (finiteRules program) of
+      item:_ -> Just item
+      [] -> Nothing
+    exportNodeKind kindValue = case kindValue of
+      "entity-type" -> "entity-type"; "entity" -> "entity"; "predicate" -> "predicate"
+      "scalar" -> "scalar"; "proposition" -> "proposition"
+      "requirement" -> "finite-requirement"; "rule" -> "finite-rule"
+      _ -> "export"
+
+typedFiniteCaseGraph :: DiagramView -> Text -> [(Text,TypedFiniteResult)]
+  -> [(Text,GroundFact,[Text])] -> SemanticGraph
+typedFiniteCaseGraph view caseId results shared = SemanticGraph caseId view
+  (distinctNodes nodes) (distinctEdges edges) notice
+  where
+    root = GraphNode (nodeId "case" caseId) "case"
+      (caseId <> "\nindependent typed allegations") Nothing Nothing Nothing
+    allegationNodes = [GraphNode (nodeId "allegation" identifier) "allegation"
+      identifier Nothing Nothing Nothing | (identifier,_) <- results]
+    sharedNodes = [GraphNode (nodeId "shared-ground-fact" identifier) "shared-fact"
+      (identifier <> "\n" <> groundKey (groundPredicate fact) (groundArguments fact))
+      Nothing (Just (truthName (groundStatus fact))) Nothing | (identifier,fact,_) <- shared]
+    propositionNodes = [GraphNode (nodeId "case-proposition" (allegation <> "--" <> observedPropositionId row))
+      (if propositionState row == "conflict" then "conflict" else "proposition")
+      (observedPropositionId row <> "\n" <> propositionState row) Nothing
+      (Just (truthName (propositionStatus row))) (Just allegation)
+      | (allegation,result) <- results, row <- finiteResultPropositions result]
+    nodes = root : allegationNodes ++ sharedNodes ++ propositionNodes
+    edges = [GraphEdge (graphNodeId root) (nodeId "allegation" identifier)
+        "contains" "independent allegation" | (identifier,_) <- results]
+      ++ [GraphEdge (nodeId "shared-ground-fact" sharedId) (nodeId "allegation" allegation)
+          "fact-binding" "explicit shared classification"
+        | (sharedId,_,destinations) <- shared, allegation <- destinations]
+      ++ [GraphEdge (nodeId "case-proposition" (allegation <> "--" <> observedPropositionId row))
+          (nodeId "allegation" allegation) "technical-result" "no aggregate status"
+        | (allegation,result) <- results, row <- finiteResultPropositions result]
+
+scalarTypeLabel :: ScalarType -> Text
+scalarTypeLabel IntegerType = "integer"
+scalarTypeLabel DateType = "date"
+scalarTypeLabel (EnumType name _) = "enum " <> name
+scalarTypeLabel (MoneyType currency) = "money " <> currency
+
+scalarStatus :: ScalarValue -> Text
+scalarStatus (ScalarUnresolved _ _) = "unresolved"
+scalarStatus _ = "known"
+
+expressionKind :: FiniteExpr -> Text
+expressionKind expression = case expression of
+  PredicateExpr _ _ -> "predicate-application"
+  ComparisonExpr _ _ _ _ -> "comparison"
+  AllExpr _ -> "all"
+  AnyExpr _ -> "any"
+  NotExpr _ -> "negation"
+  ForallExpr _ _ _ -> "forall"
+  ExistsExpr _ _ _ -> "exists"
+  CardinalityExpr _ _ _ -> "cardinality"
+  ReferenceExpr _ -> "requirement-reference"
+
+polarityLabel :: RulePolarity -> Text
+polarityLabel Establish = "establishes"
+polarityLabel Defeat = "defeats"
 
 programGraph :: DiagramView -> CoreProgram -> SemanticGraph
 programGraph view program = SemanticGraph (coreProgramId program) view nodes edges notice

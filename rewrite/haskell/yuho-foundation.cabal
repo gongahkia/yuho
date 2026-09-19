@@ -29,6 +29,7 @@ library
       Yuho.CoreYuho.Normalize
       Yuho.CoreYuho.Registry
       Yuho.CoreYuho.Conformance
+      Yuho.CoreYuho.TypedFinite
       Yuho.Diagram.Types
       Yuho.Diagram.Build
       Yuho.Diagram.Encode
@@ -74,6 +75,7 @@ library
       Yuho.Presumption.Evaluate
       Yuho.Presumption.Encode
       Yuho.Presumption.Run
+      Yuho.TypedFiniteRules.Run
       Yuho.ModelBundle.Types
       Yuho.ModelBundle.Json
       Yuho.ModelBundle.Validate
@@ -100,6 +102,7 @@ library
       Yuho.Surface.Modules
       Yuho.Surface.Temporal
       Yuho.Surface.Presumption
+      Yuho.Surface.TypedFinite
       Yuho.CLI
 
 executable yuho

@@ -1,0 +1,14 @@
+typed-rules-module fictional.typed-vocabulary version 1.0.0 {
+  export entity-type person;
+  export entity-type property;
+  export entity actor:modular-person;
+  export entity item:modular-item;
+  export predicate possesses;
+  export proposition p:modular-status;
+  entity-type person;
+  entity-type property;
+  entity actor:modular-person as person;
+  entity item:modular-item as property;
+  predicate possesses(person,property) kind circumstance;
+  proposition p:modular-status;
+}

@@ -95,9 +95,9 @@ shape :: Text -> Double -> Double -> Text
 shape kindValue x y
   | kindValue == "actor" = Text.concat ["<ellipse cx=\"",number (x+105),"\" cy=\"",
       number (y+38),"\" rx=\"105\" ry=\"38\" fill=\"#f8fafc\" stroke=\"#1e3a8a\" stroke-width=\"2\"/>"]
-  | kindValue `elem` ["exception","attachment","presumption"] = rect "8" "6 3" "#fff7ed" "#9a3412"
-  | kindValue `elem` ["input","shared-fact"] = rect "0" "3 2" "#f0fdf4" "#166534"
-  | kindValue `elem` ["all","any"] = rect "22" "" "#f5f3ff" "#6d28d9"
+  | kindValue `elem` ["exception","attachment","presumption","conflict"] = rect "8" "6 3" "#fff7ed" "#9a3412"
+  | kindValue `elem` ["input","shared-fact","ground-fact","scalar"] = rect "0" "3 2" "#f0fdf4" "#166534"
+  | kindValue `elem` ["all","any","forall","exists","cardinality","negation"] = rect "22" "" "#f5f3ff" "#6d28d9"
   | kindValue == "penalty" = rect "0" "8 3 2 3" "#fefce8" "#854d0e"
   | otherwise = rect "8" "" "#eff6ff" "#1d4ed8"
   where
@@ -139,10 +139,10 @@ legendSvg y = Text.concat
 
 nodeLayer :: Text -> Int
 nodeLayer kindValue
-  | kindValue `elem` ["module","temporal","actor","input","shared-fact"] = 0
-  | kindValue `elem` ["all","any","element","relation","presumption"] = 1
+  | kindValue `elem` ["module","temporal","actor","input","shared-fact","entity-type","entity","scalar"] = 0
+  | kindValue `elem` ["all","any","element","relation","presumption","predicate","ground-fact","comparison","forall","exists","cardinality","negation"] = 1
   | kindValue `elem` ["definition","exception","attachment"] = 2
-  | kindValue `elem` ["offence","participation","attempt","rule","allegation"] = 3
+  | kindValue `elem` ["offence","participation","attempt","rule","allegation","finite-rule","proposition","conflict"] = 3
   | kindValue == "penalty" = 4
   | otherwise = 2
 

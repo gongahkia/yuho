@@ -1,0 +1,6 @@
+typed-rules-module fictional.typed-rules version 1.0.0 {
+  export requirement q:modular-possession;
+  export rule r:modular-establish;
+  requirement q:modular-possession = possesses(actor:modular-person,item:modular-item);
+  rule r:modular-establish establishes proposition p:modular-status when q:modular-possession citation "fictional module rule";
+}

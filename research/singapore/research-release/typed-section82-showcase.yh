@@ -1,0 +1,16 @@
+typed-rules-model SingaporeSection82TypedAgeResearch-v0.2 {
+  limit 512;
+  entity-type person;
+  entity actor:child as person;
+  scalar value:age-years type integer;
+  scalar value:section82-threshold type integer;
+  predicate applicable-to-conduct(person) kind circumstance;
+  proposition p:section82-technical-route;
+  requirement q:age-below-threshold = compare(value:age-years,lt,value:section82-threshold);
+  requirement q:applicability-supplied = applicable-to-conduct(actor:child);
+  requirement q:section82-bounded = all(q:age-below-threshold,q:applicability-supplied);
+  rule r:section82-bounded establishes proposition p:section82-technical-route when q:section82-bounded citation "Penal Code 1871 s 82 saved authored research material";
+  limitation "Bounded reuse of the repository's existing s 82 research annotation; no new doctrine is added.";
+  limitation "Age, applicability and proof classifications are supplied; comparison is technical.";
+  limitation "Yuho does not assess evidence or determine guilt, conviction, sentence or court disposition.";
+}

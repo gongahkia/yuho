@@ -34,6 +34,9 @@ inputDigest root =
               Just "RegisteredPresumptionDerivations-v1" ->
           ["input_schema", "fragment", "sources", "registry", "root_rule"
           , "facts", "policy", "presumptions"]
+        _ | (lookupField "fragment" root >>= textValue) ==
+              Just "TypedFiniteRules-v1" ->
+          ["input_schema", "fragment", "program", "policy"]
         _ -> ["input_schema", "fragment", "source", "program", "facts", "policy"]
       fields = traverse (\key -> (,) key <$> lookupField key root) keys
   in maybe (sha256Text BS.empty) (sha256Text . encodeJson . JObj) fields

@@ -1,0 +1,16 @@
+typed-rules-model FictionalModularTypedRules-v0.2 {
+  limit 512;
+  module-root "modules";
+  import fictional.typed-vocabulary version 1.0.0 as vocab;
+  import fictional.typed-rules version 1.0.0 as rules;
+  use entity-type vocab::person;
+  use entity-type vocab::property;
+  use entity vocab::actor:modular-person;
+  use entity vocab::item:modular-item;
+  use predicate vocab::possesses;
+  use proposition vocab::p:modular-status;
+  use requirement rules::q:modular-possession;
+  use rule rules::r:modular-establish;
+  limitation "Explicit exact-version composition of independently authored typed declarations.";
+  limitation "Fictional technical fixture only; no judicial outcome.";
+}
