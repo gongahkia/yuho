@@ -1,6 +1,6 @@
 # Authoring with the Haskell Yuho research DSL
 
-This guide covers the language implemented by the root Haskell project, not the broader Python 5.1.0 product grammar. The Haskell lexer, source-located AST, resolver, checker, lowering, CLI and in-process kernel are authoritative for these examples. The grammar is a bounded research POC: it exposes criminal-law structure and evaluates synthetic supplied classifications, but it does not assess evidence, determine guilt, select legally applicable law, impose a sentence or make a court disposition.
+This guide covers Yuho Haskell Research Language v1.0. The Haskell lexer, source-located AST, resolver, checker, normalized Core, lowering, CLI and in-process kernel are authoritative. The language exposes criminal-law structure and evaluates supplied classifications, but it does not assess evidence, determine guilt, select legally applicable law, impose a sentence or make a court disposition.
 
 ## Build and normal commands
 
@@ -19,7 +19,7 @@ SCENARIO=../research/singapore/offence-corpus-pilot/scenarios/cheating/01_proper
 
 `compile --output PATH` creates a new output atomically and refuses an existing path. `run` invokes the Haskell kernel in process. None of these commands invokes Python.
 
-The same checked Core Yuho representation can be rendered as deterministic standalone SVG or semantic-graph JSON without Python, Mermaid or Graphviz:
+The same checked Core Yuho representation can be rendered as deterministic standalone SVG or semantic-graph JSON directly by Haskell:
 
 ```sh
 OUT="$(mktemp -d)"
@@ -35,11 +35,11 @@ Views are `rule`, `modules`, `case` and `trace`; formats are `svg` and `json`. A
 
 ## Models, rules and scenarios
 
-A checked model declares `variant SuppliedProofStatus-v1`, jurisdiction and research purpose, a request and policy, exactly one source-text source and one synthetic-status source, source quotes, contextual burden metadata, scope assumptions, typed rules and non-executable limitations. Rules use typed `element` leaves and source-ordered `all`/`any` groups. Supported POCs include statutory definitions, multiple candidate offences, general exceptions, actors and roles, s 107 participation routes, s 511 attempt stages, actor-scoped s 84 instances and ordered bounded analysis cases.
+A checked model declares `variant SuppliedProofStatus-v1`, jurisdiction and research purpose, a request and policy, exactly one source-text source and one synthetic-status source, source quotes, contextual burden metadata, scope assumptions, typed rules and non-executable limitations. Rules use typed `element` leaves and source-ordered `all`/`any` groups. Supported models include statutory definitions, multiple candidate offences, general exceptions, actors and roles, s 107 participation routes, s 511 attempt stages, actor-scoped s 84 instances and ordered bounded analysis cases.
 
 A separate scenario selects one candidate and supplies every compatible primitive classification as `proved`, `not_proved` or `unresolved(reason)`. It must acknowledge the selected model's scope assumptions. A classification is an external synthetic input, not a finding. Definitions and group results are derived and cannot be supplied.
 
-## Core Yuho v0.2 typed finite rules
+## Typed finite rules
 
 The additive `typed-rules-model` surface supplies a general finite vocabulary without changing existing offence, exception, participation, attempt, presumption or penalty syntax. It has nominal entity types, fixed-arity predicates, exact scalars, explicit negation, finite quantifiers, cardinalities and named establish/defeat rules:
 
@@ -80,7 +80,7 @@ typed-rules-scenario TFR01 for FictionalTypedFiniteRules-v0.2 {
 
 Scalar declarations are `integer`, `date`, `enum NAME` or `money SGD`. Values are exact integers, ISO dates, declared enum members, or integer minor units. `value ID = unresolved reason "...";` is explicit and propagates `unresolved`. Comparisons are `eq`, `neq`, `lt`, `lte`, `gt`, `gte` and the three-operand `in-half-open`. Cross-currency money comparisons and unrelated scalar types are rejected; Yuho performs no conversion or general arithmetic.
 
-`forall` and `exists` enumerate declared entities of the named nominal type. Empty `forall` is satisfied and empty `exists` is not satisfied. Variables are lexical, cannot shadow, and may appear only in compatible predicate positions. `not` is strong three-valued negation. `at-least`, `at-most` and `exactly` use the satisfied/unresolved count interval specified in the [v0.2 report](formal-semantics.md).
+`forall` and `exists` enumerate declared entities of the named nominal type. Empty `forall` is satisfied and empty `exists` is not satisfied. Variables are lexical, cannot shadow, and may appear only in compatible predicate positions. `not` is strong three-valued negation. `at-least`, `at-most` and `exactly` use the satisfied/unresolved count interval specified in the [formal semantics](formal-semantics.md).
 
 Rules conclude named technical propositions. Priority is explicit and acyclic; source order has no priority meaning. A satisfied higher opposite-polarity rule blocks the lower rule, an unresolved higher rule keeps the proposition unresolved, and incomparable satisfied opposite rules produce `conflict`. None of these states is guilt, liability or a sentence.
 
@@ -130,9 +130,9 @@ SCENARIO=../frontend/fixtures/typed-finite/fictional-typed-rules-satisfied.yh
   --format svg --output "$OUT/typed-trace.svg"
 ```
 
-The new fragment lowers to the single additional `TypedFiniteRules-v1` variant because scalar, cardinality, witness and conflict observations cannot be losslessly represented in the seven historical variants. See the [formal language report](formal-semantics.md), [mechanisation report](mechanisation.md) and [construct registry](../schema/core-yuho-conformance-v0.2.json).
+Typed finite rules lower to `TypedFiniteRules-v1` because scalar, cardinality, witness and conflict observations cannot be losslessly represented in the seven specialised variants. See the [formal semantics](formal-semantics.md), [mechanisation](mechanisation.md) and [construct registry](../schema/core-yuho-conformance-v0.2.json).
 
-## Core Yuho v0.3 release constructs
+## Normative positions, responsibility routes and rich sanctions
 
 Core v0.3 adds three bounded source forms while retaining the eight existing kernel variants. Normative positions and responsibility routes elaborate into named `TypedFiniteRules-v1` rules; richer candidate sanctions use `PenaltyTerms-v1`.
 
@@ -158,7 +158,7 @@ life-imprisonment term:life;
 caning term:caning minimum 3 maximum 6 strokes;
 ```
 
-They can occur inside existing `all-of`, `exactly-one-of` and `one-or-more-of` trees. Every such term is a candidate statutory presentation, not a sentence. See the [v0.3 report](formal-semantics.md) and [v1 release guide](getting-started.md).
+They can occur inside existing `all-of`, `exactly-one-of` and `one-or-more-of` trees. Every such term is a candidate statutory presentation, not a sentence. See the [formal semantics](formal-semantics.md) and [getting-started guide](getting-started.md).
 
 The stable Haskell command surface is `check`, `compile`, `run`, `explain`, `diagram`, `corpus`, `doctor`, `init`, `version` and `release verify`. A v1 `fmt` command is deliberately absent: the current lexer does not retain comments, so it cannot yet meet the complete-grammar comment-preservation guarantee.
 
@@ -210,7 +210,7 @@ export candidate-penalty pen:section403;
 use candidate-penalty misappropriation::pen:section403;
 ```
 
-The resolver rejects colliding final legal identities rather than silently prefixing them. See the [composition and lowering note](HASKELL-MODULE-COMPOSITION-AND-LOWERING.md).
+The resolver rejects colliding final legal identities rather than silently prefixing them. See [Architecture](architecture.md).
 
 The actor-scoped attachment form is:
 
