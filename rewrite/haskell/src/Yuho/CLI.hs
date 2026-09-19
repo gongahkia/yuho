@@ -252,9 +252,9 @@ operateTypedFinite command path bytes scenario output = do
         BS.hPut stdout (runLine request)
       _ -> report (issue "typed finite request was rejected by the Haskell kernel")
     Explain -> BS.hPut stdout (Encoding.encodeUtf8 (explainTypedFinite program result))
-    Diagram view format -> if view `notElem` [RuleView,TraceView]
+    Diagram view format -> if view `notElem` [RuleView,ModulesView,TraceView]
       then report (Diagnostic "SFD001" path origin
-        "typed-rules model requires --view rule or trace" Nothing)
+        "typed-rules model requires --view rule, modules or trace" Nothing)
       else emitDiagram output format (typedFiniteGraph view program result)
   where
     origin = Token EndToken "" 1 1
