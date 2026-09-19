@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/typed-finite-rules-result-v1.json",
+  "title": "Yuho TypedFiniteRules-v1 result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["protocol", "request_id", "result_schema", "fragment", "input_digest", "status", "expressions", "rules", "propositions", "diagnostics"],
+  "properties": {
+    "protocol": {"const": "yuho.kernel-protocol/v1"},
+    "request_id": {"type": "string"},
+    "result_schema": {"const": "yuho.kernel-result/v1"},
+    "fragment": {"const": "TypedFiniteRules-v1"},
+    "input_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["evaluated", "rejected"]},
+    "expressions": {"type": "array", "items": {"type": "object"}},
+    "rules": {"type": "array", "items": {"type": "object"}},
+    "propositions": {"type": "array", "items": {"type": "object"}},
+    "diagnostics": {"type": "array", "items": {"type": "object"}}
+  }
+}
