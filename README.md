@@ -8,6 +8,7 @@
   <a href="https://github.com/gongahkia/yuho/actions/workflows/ci.yml"><img src="https://github.com/gongahkia/yuho/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/GHC-9.8.4-5e5086.svg" alt="GHC 9.8.4">
+  <a href="https://github.com/gongahkia/yuho/releases/tag/1.0.0"><img src="https://img.shields.io/badge/yuho_1.0.0-passing-light_green"></a>
 </p>
 
 <p align="center"><a href="./docs/README.md">Docs</a> · <a href="./docs/assurance.md">Assurance</a> · <a href="./research/singapore/CORPUS-INDEX.md">Corpus</a></p>
@@ -40,13 +41,14 @@ Getting into the specifics, Yuho provides the following four products.
 > [!TIP]  
 > More transpilation outputs [might be added](https://github.com/gongahkia/yuho/issues) in the future!
 
-| Output | Usage |   
+| Output | Usage |
 | :--- | :--- |  
-| KernelInput JSON | Canonical technical request emitted by `yuho compile` |
-| Kernel result JSON | Technical evaluation result emitted by `yuho run` |
+| Validation JSON | Machine-readable validation status emitted by `yuho check` |
 | Human-readable text | Structured technical derivation emitted by `yuho explain` |
 | Standalone SVG | Native semantic diagram in the `rule`, `modules`, `case`, or `trace` view |
 | Semantic-graph JSON | Machine-readable representation underlying the native semantic diagram |
+| Technical request JSON | Canonical KernelInput or case request emitted by `yuho compile` |
+| Technical result JSON | Per-program or per-allegation evaluation result emitted by `yuho run` |
 
 ## Features
 
