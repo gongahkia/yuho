@@ -466,9 +466,10 @@ theorem temporal_unique_selection_from_nonoverlap
     SuccessfulSelection intervals date selected := by
   refine ⟨selectedIn, selectedContains, ?_⟩
   intro candidate candidateIn candidateContains
-  by_contra different
-  exact nonoverlap candidate candidateIn selected selectedIn different date
-    ⟨candidateContains, selectedContains⟩
+  by_cases equal : candidate = selected
+  · exact equal
+  · exact False.elim (nonoverlap candidate candidateIn selected selectedIn equal date
+      ⟨candidateContains, selectedContains⟩)
 
 theorem temporal_boundary_half_open
     (interval : TemporalInterval) (upper : Nat)
