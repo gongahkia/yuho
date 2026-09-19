@@ -6,7 +6,13 @@
 <rect width="100%" height="100%" fill="#ffffff"/>
 <style>text{font-family:ui-sans-serif,system-ui,sans-serif;fill:#0f172a}.edge{stroke:#475569;stroke-width:1.5;fill:none;marker-end:url(#arrow)}.edge-label{font-size:10px;fill:#475569}.node-label{font-size:12px;font-weight:600}.node-meta{font-size:10px}.legend{font-size:11px}</style>
 <g id="edges">
+<path class="edge" data-kind="statutory-reference" d="M 790 468 C 815 468 555 988 580 988"/><text class="edge-label" x="670" y="721">section 148</text>
+<path class="edge" data-kind="statutory-reference" d="M 790 468 C 815 468 555 2288 580 2288"/><text class="edge-label" x="670" y="1371">section 158</text>
+<path class="edge" data-kind="statutory-reference" d="M 790 988 C 815 988 555 468 580 468"/><text class="edge-label" x="670" y="721">section 144</text>
+<path class="edge" data-kind="statutory-reference" d="M 790 1378 C 815 1378 555 78 580 78"/><text class="edge-label" x="670" y="721">section 141</text>
+<path class="edge" data-kind="statutory-reference" d="M 790 1378 C 815 1378 555 598 580 598"/><text class="edge-label" x="670" y="981">section 145</text>
 <path class="edge" data-kind="statutory-reference" d="M 790 2288 C 815 2288 555 78 580 78"/><text class="edge-label" x="670" y="1176">section 141</text>
+<path class="edge" data-kind="statutory-reference" d="M 790 2288 C 815 2288 555 468 580 468"/><text class="edge-label" x="670" y="1371">section 144</text>
 </g><g id="nodes">
 <g id="node-penal-code-141" data-semantic-id="penal-code:141" data-kind="provision"><rect x="580" y="40" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="592" y="60"><tspan x="592" dy="0">penal-code:141</tspan><tspan x="592" dy="14">Unlawful assembly</tspan><tspan x="592" dy="14">executable_partial</tspan></text><text class="node-meta" x="592" y="98">citation: library/penal_code/_raw/act.json#pr141-</text><text class="node-meta" x="592" y="110">status: authored_research_unreviewed</text></g>
 <g id="node-penal-code-142" data-semantic-id="penal-code:142" data-kind="provision"><rect x="580" y="170" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="592" y="190"><tspan x="592" dy="0">penal-code:142</tspan><tspan x="592" dy="14">Being a member of an unlawful</tspan><tspan x="592" dy="14">assembly</tspan></text><text class="node-meta" x="592" y="228">citation: library/penal_code/_raw/act.json#pr142-</text><text class="node-meta" x="592" y="240">status: authored_research_unreviewed</text></g>

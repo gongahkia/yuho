@@ -370,6 +370,8 @@ summaryText summary = Encoding.encodeUtf8 . Text.unlines $
   ++ ["  " <> key <> ": " <> number value | (key,value) <- Map.toAscList (summaryByClassification summary)]
   ++ ["Subject categories:"]
   ++ ["  " <> key <> ": " <> number value | (key,value) <- Map.toAscList (summaryByCategory summary)]
+  ++ ["Structural parents:"]
+  ++ ["  " <> key <> ": " <> number value | (key,value) <- Map.toAscList (summaryByChapter summary)]
   ++ ["Structural coverage is not executable support or legal review."]
   where number = Text.pack . show
 

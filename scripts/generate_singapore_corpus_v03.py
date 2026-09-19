@@ -692,14 +692,16 @@ def existing_mapping(number: str) -> tuple[list[str], list[str]]:
 def cross_references(text: str, valid: set[str]) -> list[dict]:
     values = []
     seen = set()
-    for match in re.finditer(r"\bsections?\s+([0-9]{1,3}[A-Z]?)", text, flags=re.IGNORECASE):
-        target = match.group(1).upper()
-        if target in seen:
-            continue
-        seen.add(target)
-        values.append({"kind": "statutory_reference", "raw": match.group(0),
-            "target": f"penal-code:{target}" if target in valid else None,
-            "resolution": "resolved" if target in valid else "unresolved"})
+    pattern = r"\bsections?\s+([0-9]{1,3}[A-Z]?(?:\s*(?:,|and|or|to)\s*[0-9]{1,3}[A-Z]?)*)"
+    for match in re.finditer(pattern, text, flags=re.IGNORECASE):
+        for raw_target in re.findall(r"[0-9]{1,3}[A-Z]?", match.group(1), flags=re.IGNORECASE):
+            target = raw_target.upper()
+            if target in seen:
+                continue
+            seen.add(target)
+            values.append({"kind": "statutory_reference", "raw": f"section {raw_target}",
+                "target": f"penal-code:{target}" if target in valid else None,
+                "resolution": "resolved" if target in valid else "unresolved"})
     return values
 
 
@@ -758,7 +760,8 @@ def generate_coverage() -> dict:
             "structural_state": state,
             "source_reference": f"library/penal_code/_raw/act.json#{section.get('anchor_id', '')}",
             "quotation_reference": next((f"library/penal_code/{path.name}/statute.yh" for path in ROOT.glob(f"library/penal_code/s{section['number']}_*") if path.is_dir()), None),
-            "cross_references": cross_references(section.get("text", ""), valid),
+            "cross_references": cross_references(" ".join(
+                [section.get("text", "")] + [item.get("text", "") for item in section.get("sub_items", [])]), valid),
             "subject_category": category,
             "coverage_classification": classification,
             "executable_model_ids": models,
@@ -814,6 +817,8 @@ def render_index(coverage: dict) -> str:
         f"| `{name}` | {count} |" for name, count in summary["by_classification"].items())
     categories = "\n".join(
         f"| `{name}` | {count} |" for name, count in summary["by_category"].items())
+    chapters = "\n".join(
+        f"| `{name}` | {count} |" for name, count in summary["by_chapter"].items())
     return f"""# Singapore Criminal Law Research Corpus v0.3
 
 This index is generated from [`SINGAPORE-CRIMINAL-LAW-COVERAGE-v0.3.json`](SINGAPORE-CRIMINAL-LAW-COVERAGE-v0.3.json) by `scripts/generate_singapore_corpus_v03.py`. Edit the generator and canonical coverage inputs, not the counts below.
@@ -843,7 +848,13 @@ Counts use distinct authored family identities, file-based valid scenarios, dist
 |---|---:|
 {categories}
 
-Chapter counts are available through `yuho corpus summary` and the canonical JSON. Chapter assignments are bounded section-range classifications because the saved export omits chapter-heading records.
+### Structural parent
+
+| Bounded chapter/range classification | Provisions |
+|---|---:|
+{chapters}
+
+Chapter assignments are bounded section-range classifications because the saved export omits chapter-heading records.
 
 ## New executable families
 

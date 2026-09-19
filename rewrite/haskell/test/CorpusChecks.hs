@@ -12,6 +12,7 @@ import System.FilePath ((</>))
 import Yuho.Corpus
 import Yuho.CoreYuho.TypedFinite (evaluateTypedFinite)
 import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg)
+import Yuho.Diagram.Types (SemanticGraph)
 import Yuho.Kernel.Run (runLine)
 import Yuho.Protocol.Json (decodeJson, lookupField, textValue)
 import Yuho.Surface.Case
@@ -48,13 +49,13 @@ coverageChecks root = do
     (either (const False) (const True) (decodeJson first))
   expectedInventory <- BS.readFile (root </> "research/singapore/corpus-v0.3/graphs/penal-code-inventory.json")
   check "retained complete inventory graph" (first == expectedInventory)
-  retainedSvg root coverage "category-public-order.svg"
+  retainedSvg root "category-public-order.svg"
     (coverageGraph (Just "public-order") Nothing Nothing coverage)
-  retainedSvg root coverage "category-documents-records-and-identity.svg"
+  retainedSvg root "category-documents-records-and-identity.svg"
     (coverageGraph (Just "documents-records-and-identity") Nothing Nothing coverage)
-  retainedSvg root coverage "chapter-8-public-tranquillity.svg"
+  retainedSvg root "chapter-8-public-tranquillity.svg"
     (coverageGraph Nothing (Just "chapter-8-public-tranquillity") Nothing coverage)
-  retainedSvg root coverage "chapter-18-documents-and-records.svg"
+  retainedSvg root "chapter-18-documents-and-records.svg"
     (coverageGraph Nothing (Just "chapter-18-documents-and-records") Nothing coverage)
 
 scenarioChecks :: FilePath -> IO ()
@@ -82,19 +83,16 @@ scenarioChecks root = do
     explanation <- either (const (failed "corpus explanation")) pure
       (explainChecked modelPath checked)
     check "corpus explanation retains the no-outcome boundary"
-      ("No guilt, conviction, acquittal, liability or sentence was determined."
+      ("No guilt, conviction, acquittal or sentence was determined."
         `Text.isInfixOf` explanation)
   where
     scenarioPaths directory family = do
       names <- sort <$> listDirectory (directory </> family)
       pure [directory </> family </> name | name <- names, ".yh" `Text.isSuffixOf` Text.pack name]
 
-retainedSvg :: FilePath -> Coverage -> FilePath -> Either Text.Text a -> IO ()
-retainedSvg root _ name selected = do
-  graph <- either (const (failed ("retained graph " <> name))) (const (pure ())) selected
-  case graph of
-    () -> pure ()
-  let selectedGraph = case selected of Right value -> value; Left _ -> error "checked above"
+retainedSvg :: FilePath -> FilePath -> Either Text.Text SemanticGraph -> IO ()
+retainedSvg root name selected = do
+  selectedGraph <- either (const (failed ("retained graph " <> name))) pure selected
   expected <- BS.readFile (root </> "research/singapore/corpus-v0.3/graphs" </> name)
   check ("retained deterministic SVG " <> name) (encodeSvg selectedGraph == expected)
 
@@ -147,7 +145,8 @@ refusalChecks root = do
   source <- BS.readFile path
   let invalid = Encoding.encodeUtf8
         (Text.replace "sections 204A" "sections 204a" (Encoding.decodeUtf8 source))
-  result <- loadAuthoredModel path invalid
+  parsed <- loadAuthoredModel path invalid
+  let result = parsed >>= \authored -> checkParsed path (authoredModel authored) Nothing
   check "lowercase statutory suffix is rejected with the stable section diagnostic" $ case result of
     Left issue -> diagnosticCode issue == "SFE031"
     Right _ -> False

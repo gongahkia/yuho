@@ -44,7 +44,29 @@ Counts use distinct authored family identities, file-based valid scenarios, dist
 | `punishments` | 10 |
 | `state-and-armed-forces` | 31 |
 
-Chapter counts are available through `yuho corpus summary` and the canonical JSON. Chapter assignments are bounded section-range classifications because the saved export omits chapter-heading records.
+### Structural parent
+
+| Bounded chapter/range classification | Provisions |
+|---|---:|
+| `chapter-1-preliminary` | 7 |
+| `chapter-11-false-evidence-and-public-justice` | 43 |
+| `chapter-16-human-body` | 122 |
+| `chapter-17-property` | 76 |
+| `chapter-18-documents-and-records` | 28 |
+| `chapter-2-general-explanations` | 54 |
+| `chapter-22-intimidation-insult-and-annoyance` | 5 |
+| `chapter-23-attempts` | 2 |
+| `chapter-3-punishments` | 10 |
+| `chapter-4-general-exceptions` | 33 |
+| `chapter-5-abetment-and-conspiracy` | 18 |
+| `chapter-8-public-tranquillity` | 18 |
+| `chapters-12-and-13-coins-stamps-weights` | 12 |
+| `chapters-14-and-15-public-health-and-religion` | 31 |
+| `chapters-19-to-21-contract-marriage-defamation` | 4 |
+| `chapters-6-and-7-state-and-armed-forces` | 31 |
+| `chapters-9-and-10-public-servants-and-lawful-authority` | 30 |
+
+Chapter assignments are bounded section-range classifications because the saved export omits chapter-heading records.
 
 ## New executable families
 
