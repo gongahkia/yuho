@@ -2,6 +2,8 @@
 
 import io
 import json
+import os
+import shutil
 import subprocess
 import tarfile
 import tempfile
@@ -18,6 +20,8 @@ FAMILIES = [
     ("PT", ROOT / "rewrite/haskell/test/term-fixtures/requests"),
     ("PS", ROOT / "rewrite/haskell/test/proof-fixtures/requests"),
 ]
+GHC = (os.environ.get("YUHO_GHC") or shutil.which("ghc-9.8.4")
+       or str(Path.home() / ".ghcup/bin/ghc-9.8.4"))
 
 
 def request_bytes(path):
@@ -29,7 +33,8 @@ def request_bytes(path):
 
 
 def binary(workspace):
-    return subprocess.check_output(["cabal", "list-bin", "exe:yuho-kernel"],
+    return subprocess.check_output(["cabal", "list-bin", "exe:yuho-kernel",
+                                    f"--with-compiler={GHC}"],
                                    cwd=workspace, text=True).strip()
 
 
@@ -43,6 +48,9 @@ def responses(executable, requests):
 
 
 def main():
+    version = subprocess.check_output([GHC, "--numeric-version"], text=True).strip()
+    if version != "9.8.4":
+        raise SystemExit(f"prior-byte comparison requires GHC 9.8.4, found {version}")
     archive = subprocess.run(["git", "archive", BASELINE, "rewrite/haskell"],
                              cwd=ROOT, capture_output=True, check=True).stdout
     with tempfile.TemporaryDirectory(prefix="yuho-six-variant-baseline-") as folder:
@@ -50,7 +58,8 @@ def main():
         with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
             tar.extractall(target, filter="data")
         workspace = target / "rewrite/haskell"
-        subprocess.run(["cabal", "v2-build", "exe:yuho-kernel", "--offline", "--jobs=1"],
+        subprocess.run(["cabal", "v2-build", "exe:yuho-kernel", "--offline", "--jobs=1",
+                        f"--with-compiler={GHC}"],
                        cwd=workspace, check=True, capture_output=True)
         original = binary(workspace)
         current = binary(ROOT / "rewrite/haskell")
