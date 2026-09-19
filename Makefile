@@ -25,7 +25,7 @@ protocols: build
 	$(PYTHON) test/terms_protocol.py $(KERNEL)
 	$(PYTHON) test/proof_protocol.py $(KERNEL)
 	$(PYTHON) test/presumption_protocol.py $(KERNEL)
-	$(PYTHON) test/typed_finite_protocol.py $(YUHO)
+	$(PYTHON) test/typed_finite_protocol.py $(YUHO) $(KERNEL)
 
 conformance: build
 	$(PYTHON) scripts/verify_core_yuho_conformance.py

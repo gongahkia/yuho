@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -12,6 +13,12 @@ WORKSPACE = Path(__file__).resolve().parents[1]
 
 
 def main() -> None:
+    configured = os.environ.get("GHC")
+    ghc = (Path(configured) if configured else
+           Path(shutil.which("ghc-9.8.4") or Path.home() / ".ghcup/bin/ghc-9.8.4"))
+    if not ghc.is_file():
+        raise SystemExit("GHC 9.8.4 not found; set GHC to the pinned compiler path")
+    compiler = f"--with-compiler={ghc}"
     with tempfile.TemporaryDirectory(prefix="yuho-kernel-replay-") as temporary:
         clean = Path(temporary)
         for name in ("cabal.project", "cabal.project.freeze", "yuho.cabal"):
@@ -21,15 +28,15 @@ def main() -> None:
         binary_dir = clean / "bin"
         binary_dir.mkdir()
         subprocess.run(["cabal", "v2-build", "exe:yuho-kernel", "exe:yuho-model-bundle",
-                        "--offline", "--jobs=1"],
+                        "--offline", "--jobs=1", compiler],
                        cwd=clean, check=True)
         subprocess.run(["cabal", "v2-install", "exe:yuho-kernel", "--offline",
                         "--jobs=1", f"--installdir={binary_dir}",
-                        "--overwrite-policy=always"], cwd=clean, check=True)
+                        "--overwrite-policy=always", compiler], cwd=clean, check=True)
         binary = binary_dir / "yuho-kernel"
         subprocess.run(["cabal", "v2-install", "exe:yuho-model-bundle", "--offline",
                         "--jobs=1", f"--installdir={binary_dir}",
-                        "--overwrite-policy=always"], cwd=clean, check=True)
+                        "--overwrite-policy=always", compiler], cwd=clean, check=True)
         bundle_binary = binary_dir / "yuho-model-bundle"
         bundle_fixtures = WORKSPACE / "test/model-bundle-fixtures/bundles"
         for name, expected_exit, status in (

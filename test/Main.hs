@@ -90,7 +90,7 @@ main = do
   property "fact insertion order cannot change declaration trace" (factOrderProperty b06)
   property "canonical bytes independent of input object-key order" (canonicalProperty b06)
   property "out-of-source spans reject" sourceSpanProperty
-  putStrLn "foundation: golden, hardening, and semantic properties passed"
+  putStrLn "yuho: golden, hardening, and semantic properties passed"
 
 repositoryRoot :: IO FilePath
 repositoryRoot = do
