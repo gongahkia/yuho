@@ -13,6 +13,6 @@ yuho corpus coverage --format json
 yuho corpus graph --chapter chapter-xvii --format svg --output chapter-xvii.svg
 ```
 
-From another working directory, append `--corpus-root /path/to/yuho`. The complete inventory graph is retained as JSON under [`research/singapore/coverage-graphs/`](../research/singapore/coverage-graphs/); bounded native SVG views avoid an unreadable 524-node drawing.
+From another working directory, append `--corpus-root /path/to/yuho`. The complete inventory graph is retained as JSON under [`research/singapore/corpus-v0.3/graphs/`](../research/singapore/corpus-v0.3/graphs/); bounded native SVG views avoid an unreadable 524-node drawing.
 
 The generated [corpus index](../research/singapore/CORPUS-INDEX.md) lists categories, modules, scenarios, cases, review status and limitations. A row can be structurally indexed without being executable or legally reviewed. Open-textured propositions remain supplied classifications; Yuho does not assess their evidence.

@@ -14,7 +14,7 @@ validSourcePath path =
          (Text.splitOn "/" path)
 
 -- Display columns in v1 are one-based UTF-8 byte columns, matching the
--- existing Tree-sitter source-location convention. Offsets are half-open.
+-- Source offsets are half-open.
 validateSpan :: Source -> Span -> Bool
 validateSpan source sourceSpan =
   let bytes = sourceBytes source

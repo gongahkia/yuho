@@ -122,4 +122,4 @@ From another working directory, append `--corpus-root /path/to/yuho`. Complete i
 - `saved_source_unmodelled`: saved text indexed but not executable.
 - `repealed_or_reserved`: only used when the saved structure expressly marks that state.
 
-Review status is a separate field. A saved or executable row is not automatically qualified-reviewed. See [`../../docs/rewrite/CORE-YUHO-v0.3-LANGUAGE-GAPS.md`](../../docs/rewrite/CORE-YUHO-v0.3-LANGUAGE-GAPS.md) for the coarse language-gap audit.
+Review status is a separate field. A saved or executable row is not automatically qualified-reviewed. See [`../../docs/roadmap.md`](../../docs/roadmap.md) for the coarse language-gap audit.

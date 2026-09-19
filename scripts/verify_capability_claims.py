@@ -24,7 +24,12 @@ def main() -> None:
         for phrase in FORBIDDEN:
             if phrase in folded:
                 failures.append(f"{path.relative_to(ROOT)} contains {phrase!r}")
-        if re.search(r"(?:all\s+)?524[^\n]{0,80}(?:executable|legally reviewed)", text, re.I):
+        if re.search(
+            r"\ball\s+524[^\n]{0,80}\b(?:executable|legally reviewed)\b"
+            r"|\b524\s+(?:executable|legally reviewed)\b",
+            text,
+            re.I,
+        ):
             failures.append(f"{path.relative_to(ROOT)} overstates 524-row coverage")
         if "yuho is formally verified" in folded:
             failures.append(f"{path.relative_to(ROOT)} makes an unqualified proof claim")

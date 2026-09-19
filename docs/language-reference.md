@@ -326,7 +326,7 @@ The target, trigger and rebuttal must already be primitive proof facts in the co
 | Typed finite module | `typed-rules-module` | none |
 | Typed finite case | `typed-rules-case` | named scenarios are embedded |
 
-The [research-release quick start](../research/singapore/research-release/README.md) is the recommended entry point. The [capability matrix](assurance.md) classifies every major feature as supported, bounded, deferred or out of scope. The [Core conformance registry](../schema/core-yuho-conformance-v0.1.json) maps every public construct to its parser, checker, Core representation, lowering path, kernel boundary, explanation, diagram and test evidence.
+The [getting-started guide](getting-started.md) is the recommended entry point. The [capability matrix](assurance.md) classifies every major feature as supported, bounded, deferred or out of scope. The [Core conformance registry](../schema/core-yuho-conformance-v0.1.json) maps every public construct to its parser, checker, Core representation, lowering path, kernel boundary, explanation, diagram and test evidence.
 
 ## Runnable corpus
 

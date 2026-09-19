@@ -110,7 +110,7 @@ def main() -> int:
     if args.check:
         if not MANIFEST.is_file() or MANIFEST.read_bytes() != expected:
             raise SystemExit("release manifest is stale; run generator without --check")
-        print(f"Haskell Yuho v1 release manifest: {len(paths())} artifacts verified")
+        print(f"Yuho Haskell v1 release manifest: {len(paths())} artifacts verified")
     else:
         MANIFEST.parent.mkdir(parents=True, exist_ok=True)
         MANIFEST.write_bytes(expected)
