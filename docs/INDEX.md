@@ -48,6 +48,9 @@ Audience: reviewers, researchers, and contributors tracing the design.
 - [Grammar quirks](grammar-quirks.md)
 - [Decision-service OpenAPI contract](researcher/openapi.yaml)
 - [Retrospective](retrospective.md)
+- [Authoritative Haskell DSL guide](rewrite/HASKELL-YUHO-DSL-GUIDE.md)
+- [Core Yuho v0.2 typed finite rules](rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.2.md)
+- [Core Yuho v0.2 mechanisation and conformance](rewrite/CORE-YUHO-MECHANISATION-v0.2.md)
 
 ### Archive
 

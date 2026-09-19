@@ -207,8 +207,10 @@ evaluateTypedFinite :: TypedFiniteProgram -> Either Text TypedFiniteResult
 evaluateTypedFinite program = do
   let facts = Map.fromList [(groundKey (groundPredicate item) (groundArguments item), groundStatus item)
         | item <- finiteFacts program]
-      domains = Map.fromListWith (++) [(kindValue,[identifier])
-        | EntityDecl identifier kindValue <- finiteEntities program]
+      domains = Map.unionWith (++)
+        (Map.fromListWith (++) [(kindValue,[identifier])
+          | EntityDecl identifier kindValue <- finiteEntities program])
+        (Map.fromList [(kindValue,[]) | EntityTypeDecl kindValue <- finiteEntityTypes program])
       requirements = Map.fromList (finiteRequirements program)
       evaluator bindings seen expression = evaluateExpr program facts domains requirements bindings seen expression
   requirementRows <- traverse (\(identifier,expression) -> do

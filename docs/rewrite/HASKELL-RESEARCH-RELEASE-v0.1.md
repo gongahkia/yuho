@@ -25,8 +25,11 @@ This is a bounded research release, not a production legal system. It is coheren
 | Judicial guilt, sentence or CPC outcome | Intentionally out of scope | No aggregate liability or court disposition |
 | All Singapore legislation and doctrine | Explicitly deferred | Only indexed authored expressions execute |
 | Production package registry, deployment and full LSP parity | Optional expansion | Not required for the research language |
+| Core Yuho v0.2 typed finite rules | Supported in bounded form | Additive nominal entities, predicates/scalars, finite quantifiers, cardinality and explicit priority; one host module layer and finite domains only |
 
-## Seven kernel variants
+## Kernel variants
+
+These are the seven preserved v0.1 boundaries. Core Yuho v0.2 adds `TypedFiniteRules-v1` as an eighth, additive variant because scalar, cardinality, witness and conflict observations cannot be represented losslessly by the historical seven.
 
 | Kernel fragment | Haskell surface status |
 |---|---|
@@ -37,6 +40,7 @@ This is a bounded research release, not a production legal system. It is coheren
 | `ClosedBooleanBranches-v1` | Low-level compatibility boundary |
 | `AcyclicGuardedExceptions-v1` | Low-level compatibility boundary underlying checked exception behavior |
 | `TypedBooleanFacts-v1` | Low-level compatibility boundary underlying typed facts |
+| `TypedFiniteRules-v1` | Directly authored by `typed-rules-model`/`typed-rules-scenario`; additive v0.2 boundary |
 
 ## Release corpus
 

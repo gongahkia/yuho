@@ -740,6 +740,10 @@ validateModel path scenarioPath model scenario = do
         scalarDecls (map tokenText (rawPropositions model))
         [(tokenText identifier,expression) | (identifier,expression) <- rawRequirements model]
         rules priorities facts valueMap [] (map tokenText (rawLimitations model))
+  estimated <- either (at "SFT010" path (rawLimit model)) Right
+    (expandedNodeEstimate program)
+  when (estimated > fromInteger limit) (at "SFT010" path (rawLimit model)
+    "generated-node limit exceeded before evaluation")
   expanded <- either (at "SFT011" scenarioPath (scenarioIdentifier scenario)) Right
     (evaluateTypedFinite program)
   let nodeCount = length (finiteResultExpressions expanded) + length (finiteResultRules expanded)
@@ -876,6 +880,8 @@ ruleDeclaration :: FilePath -> Set Text -> Set Text -> Map Text Text
   -> Either Diagnostic RuleDecl
 ruleDeclaration path types propositions entities predicates scalars requirements
     (identifier,parameters,polarityToken,conclusion,body,citation) = do
+  when (length parameters > 4) (at "SFT010" path identifier
+    "rule parameter count exceeds 4")
   uniqueTokens path "SFT002" "duplicate rule parameter" (map fst parameters)
   mapM_ (\(_,kindValue) -> unless (Set.member (tokenText kindValue) types)
     (at "SFT003" path kindValue "unknown rule parameter type")) parameters
@@ -979,6 +985,47 @@ expressionNodes program = sum (map (count . snd) (finiteRequirements program))
       ExistsExpr _ _ member -> count member
       CardinalityExpr _ _ members -> sum (map count members)
       _ -> 0
+
+expandedNodeEstimate :: TypedFiniteProgram -> Either Text Integer
+expandedNodeEstimate program = do
+  let domains = Map.unionWith (+)
+        (Map.fromListWith (+)
+          [(kindValue,1 :: Integer) | EntityDecl _ kindValue <- finiteEntities program])
+        (Map.fromList [(kindValue,0) | EntityTypeDecl kindValue <- finiteEntityTypes program])
+      requirements = Map.fromList (finiteRequirements program)
+      expression active item = case item of
+        AllExpr members -> aggregate active members
+        AnyExpr members -> aggregate active members
+        NotExpr member -> (1 +) <$> expression active member
+        ForallExpr _ kindValue member -> quantified active kindValue member
+        ExistsExpr _ kindValue member -> quantified active kindValue member
+        CardinalityExpr _ _ members -> aggregate active members
+        ReferenceExpr identifier
+          | Set.member identifier active -> Left "cyclic requirement expansion"
+          | otherwise -> maybe (Left "unknown requirement expansion")
+              (\target -> (1 +) <$> expression (Set.insert identifier active) target)
+              (Map.lookup identifier requirements)
+        _ -> Right 1
+      aggregate active members = (1 +) . sum <$> traverse (expression active) members
+      quantified active kindValue member = do
+        count <- maybe (Left "unknown quantified domain") Right (Map.lookup kindValue domains)
+        size <- expression active member
+        pure (1 + count * size)
+      parameterCount declaration = product <$> traverse
+        (\(_,kindValue) -> maybe (Left "unknown rule parameter domain") Right
+          (Map.lookup kindValue domains)) (ruleParameters declaration)
+      ruleSize declaration = do
+        bindings <- parameterCount declaration
+        body <- expression Set.empty (ruleBody declaration)
+        pure (1 + bindings * body)
+  requirementsSize <- sum <$> traverse
+    (\(identifier,item) -> expression (Set.singleton identifier) item)
+    (finiteRequirements program)
+  rulesSize <- sum <$> traverse ruleSize (finiteRules program)
+  pure (fromIntegral (length (finiteEntityTypes program) + length (finiteEntities program)
+    + length (finitePredicates program) + length (finiteScalars program)
+    + length (finitePropositions program) + length (finiteFacts program))
+    + requirementsSize + rulesSize)
 
 encodeTypedFiniteRequest :: Text -> TypedFiniteProgram -> BS.ByteString
 encodeTypedFiniteRequest requestId program = encodeJson (JObj
@@ -1119,7 +1166,8 @@ explainTypedFinite program result = Text.unlines $
       <> " — " <> expressionDetail row | row <- finiteResultExpressions result]
   ++ ["Rule " <> observedRule row <> " " <> polarityText (observedPolarity row)
       <> " " <> observedProposition row <> ": " <> truthName (observedStatus row)
-      <> bindingText (observedBindings row) | row <- finiteResultRules result]
+      <> bindingText (observedBindings row) <> blockedText (observedDefeatedBy row)
+      | row <- finiteResultRules result]
   ++ ["Proposition " <> observedPropositionId row <> ": " <> truthName (propositionStatus row)
       <> " (" <> propositionState row <> ")" | row <- finiteResultPropositions result]
   ++ ["Limitations:"] ++ map ("- " <>) (finiteLimitations program)
@@ -1127,6 +1175,7 @@ explainTypedFinite program result = Text.unlines $
   where
     polarityText Establish = "establishes"; polarityText Defeat = "defeats"
     bindingText [] = ""; bindingText bindings = " bindings=" <> Text.pack (show bindings)
+    blockedText [] = ""; blockedText rules = " blocked-by=" <> Text.intercalate "," rules
 
 explainTypedFiniteCase :: TypedFiniteCase -> Text
 explainTypedFiniteCase declaration = Text.unlines $
@@ -1137,6 +1186,14 @@ explainTypedFiniteCase declaration = Text.unlines $
       | (identifier,fact,destinations) <- typedCaseShared declaration]
   ++ concat
     [["Allegation " <> typedAllegationId allegation <> ":"]
+      ++ ["- requirement " <> expressionLabel row <> " = "
+          <> truthName (expressionStatus row) <> " — " <> expressionDetail row
+        | row <- finiteResultExpressions (typedAllegationResult allegation)]
+      ++ ["- rule " <> observedRule row <> " = " <> truthName (observedStatus row)
+          <> case observedDefeatedBy row of
+            [] -> ""
+            blockers -> " blocked-by=" <> Text.intercalate "," blockers
+        | row <- finiteResultRules (typedAllegationResult allegation)]
       ++ ["- proposition " <> observedPropositionId row <> " = "
           <> truthName (propositionStatus row) <> " (" <> propositionState row <> ")"
         | row <- finiteResultPropositions (typedAllegationResult allegation)]

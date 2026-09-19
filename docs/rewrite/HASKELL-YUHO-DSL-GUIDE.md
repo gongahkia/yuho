@@ -39,6 +39,99 @@ A checked model declares `variant SuppliedProofStatus-v1`, jurisdiction and rese
 
 A separate scenario selects one candidate and supplies every compatible primitive classification as `proved`, `not_proved` or `unresolved(reason)`. It must acknowledge the selected model's scope assumptions. A classification is an external synthetic input, not a finding. Definitions and group results are derived and cannot be supplied.
 
+## Core Yuho v0.2 typed finite rules
+
+The additive `typed-rules-model` surface supplies a general finite vocabulary without changing existing offence, exception, participation, attempt, presumption or penalty syntax. It has nominal entity types, fixed-arity predicates, exact scalars, explicit negation, finite quantifiers, cardinalities and named establish/defeat rules:
+
+```yh
+typed-rules-model FictionalTypedFiniteRules-v0.2 {
+  limit 2048;
+  entity-type person;
+  entity-type property;
+  entity actor:alex as person;
+  entity item:laptop as property;
+
+  scalar value:age type integer;
+  scalar value:threshold type integer;
+  predicate takes(person,property) kind conduct;
+  proposition p:candidate-status;
+
+  requirement q:some-taking = exists var:item as property (takes(actor:alex,var:item));
+  requirement q:adult = compare(value:age,gte,value:threshold);
+  requirement q:not-adult = not(q:adult);
+  requirement q:bounded = at-least 1 (q:some-taking,q:adult);
+
+  rule r:general establishes proposition p:candidate-status when q:bounded;
+  rule r:specific defeats proposition p:candidate-status when q:not-adult;
+  priority r:specific over r:general;
+  limitation "Fictional supplied-input technical model; no judicial outcome.";
+}
+```
+
+Its scenario supplies every required ground application and scalar. Missing facts are errors, never false:
+
+```yh
+typed-rules-scenario TFR01 for FictionalTypedFiniteRules-v0.2 {
+  classify takes(actor:alex,item:laptop) as proved reason "synthetic classification";
+  value value:age = integer 17;
+  value value:threshold = integer 18;
+}
+```
+
+Scalar declarations are `integer`, `date`, `enum NAME` or `money SGD`. Values are exact integers, ISO dates, declared enum members, or integer minor units. `value ID = unresolved reason "...";` is explicit and propagates `unresolved`. Comparisons are `eq`, `neq`, `lt`, `lte`, `gt`, `gte` and the three-operand `in-half-open`. Cross-currency money comparisons and unrelated scalar types are rejected; Yuho performs no conversion or general arithmetic.
+
+`forall` and `exists` enumerate declared entities of the named nominal type. Empty `forall` is satisfied and empty `exists` is not satisfied. Variables are lexical, cannot shadow, and may appear only in compatible predicate positions. `not` is strong three-valued negation. `at-least`, `at-most` and `exactly` use the satisfied/unresolved count interval specified in the [v0.2 report](CORE-YUHO-LANGUAGE-REPORT-v0.2.md).
+
+Rules conclude named technical propositions. Priority is explicit and acyclic; source order has no priority meaning. A satisfied higher opposite-polarity rule blocks the lower rule, an unresolved higher rule keeps the proposition unresolved, and incomparable satisfied opposite rules produce `conflict`. None of these states is guilt, liability or a sentence.
+
+Typed declarations can be independently authored and explicitly selected from exact-version local modules:
+
+```yh
+typed-rules-module fictional.vocabulary version 1.0.0 {
+  export entity-type person;
+  export predicate takes;
+  entity-type person;
+  predicate takes(person,person) kind conduct;
+}
+
+typed-rules-model FictionalHost-v0.2 {
+  limit 512;
+  module-root "modules";
+  import fictional.vocabulary version 1.0.0 as vocab;
+  use entity-type vocab::person;
+  use predicate vocab::takes;
+  // host declarations, rules and at least one limitation
+}
+```
+
+Exports may name `entity-type`, `entity`, `enum-type`, `scalar`, `predicate`, `proposition`, `requirement`, `rule` or `priority`. For a priority export, the exported identifier is its higher rule ID. The v0.2 typed resolver has one explicit host-composition layer and rejects nested typed-module imports. Imports alone do not select declarations or execute rules.
+
+A typed case lists 1–32 independent scenarios and shares only explicitly named compatible ground classifications:
+
+```yh
+typed-rules-case case:two-actors model "multi-person-property.yh" {
+  shared-classification shared:location located-at(item:laptop,place:warehouse)
+    as proved reason "synthetic shared classification";
+  allegation a:one scenario "case-scenario-one.yh" use shared:location;
+  allegation a:two scenario "case-scenario-two.yh" use shared:location;
+}
+```
+
+Run a typed model with the normal commands and a scenario; run a typed case without `--scenario`:
+
+```sh
+MODEL=../frontend/fixtures/typed-finite/fictional-typed-rules.yh
+SCENARIO=../frontend/fixtures/typed-finite/fictional-typed-rules-satisfied.yh
+"$YUHO" check "$MODEL" --scenario "$SCENARIO"
+"$YUHO" compile "$MODEL" --scenario "$SCENARIO"
+"$YUHO" run "$MODEL" --scenario "$SCENARIO"
+"$YUHO" explain "$MODEL" --scenario "$SCENARIO"
+"$YUHO" diagram "$MODEL" --scenario "$SCENARIO" --view trace \
+  --format svg --output "$OUT/typed-trace.svg"
+```
+
+The new fragment lowers to the single additional `TypedFiniteRules-v1` variant because scalar, cardinality, witness and conflict observations cannot be losslessly represented in the seven historical variants. See the [formal language report](CORE-YUHO-LANGUAGE-REPORT-v0.2.md), [mechanisation report](CORE-YUHO-MECHANISATION-v0.2.md) and [construct registry](core-yuho-conformance-v0.2.json).
+
 ## Exactly versioned local modules
 
 A module file has the deterministic name `<module-name>@<major.minor.patch>.yh` under the host's explicit local `module-root`. Names contain lowercase letters, digits, dots and hyphens. Versions are exact numeric triples. The current bounded resolver accepts only regular `.yh` files of at most 65,536 bytes, refuses absolute or parent-traversing paths, resolves imports in source order, and rejects cycles, duplicate identities or aliases and more than 32 modules.
@@ -199,6 +292,9 @@ The target, trigger and rebuttal must already be primitive proof facts in the co
 | Temporal expression set | `temporal-model` | `temporal-scenario` |
 | Multi-allegation case | `analysis-case` | allegation bodies are embedded |
 | Presumption subprogram | `presumption-program` | names a base model and scenario |
+| Typed finite rule model | `typed-rules-model` | `typed-rules-scenario ... for ...` |
+| Typed finite module | `typed-rules-module` | none |
+| Typed finite case | `typed-rules-case` | named scenarios are embedded |
 
 The [research-release quick start](../../research/singapore/research-release/README.md) is the recommended entry point. The [capability matrix](HASKELL-RESEARCH-RELEASE-v0.1.md) classifies every major feature as supported, bounded, deferred or out of scope. The [Core conformance registry](core-yuho-conformance-v0.1.json) maps every public construct to its parser, checker, Core representation, lowering path, kernel boundary, explanation, diagram and test evidence.
 

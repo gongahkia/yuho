@@ -23,7 +23,7 @@
     {
       "id": "lean-covered-fragment",
       "status": "stable",
-      "public_wording": "Core Yuho v0.1 has machine-checked finite semantics for its documented technical-status fragment, with independent bounded conformance testing against the authoritative Haskell implementation.",
+      "public_wording": "Core Yuho v0.1 and the additive Core Yuho v0.2 typed finite operations have machine-checked semantics for their documented technical-status fragments, with independent bounded conformance testing against the authoritative Haskell implementation.",
       "evidence": ["make verify-mechanisation", "make verify-core-yuho-conformance"],
       "limits": ["There is no end-to-end refinement proof for the parser, checker, complete compiler, full DSL or legal corpus.", "The proof does not establish legal interpretation, evidence or factual truth."]
     },

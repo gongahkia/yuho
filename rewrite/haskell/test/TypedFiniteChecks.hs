@@ -14,13 +14,14 @@ import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg)
 import Yuho.Diagram.Types (DiagramView(..))
 import Yuho.Exception.Types (Truth(..))
 import Yuho.Kernel.Run (runLine)
-import Yuho.Protocol.Json (decodeJson, lookupField, textValue)
+import Yuho.Protocol.Json (arrayValue, decodeJson, lookupField, textValue)
 import Yuho.Surface.Token (Diagnostic(..))
 import Yuho.Surface.TypedFinite
 
 runTypedFiniteChecks :: FilePath -> IO ()
 runTypedFiniteChecks root = do
   semanticMatrices
+  registryCheck root
   fixtureChecks root
   diagramChecks root
   refusalChecks root
@@ -60,6 +61,36 @@ semanticMatrices = do
   check "capture-free variable substitution"
     (substituteTerm (Map.singleton "var:item" "item:laptop") (VariableTerm "var:item")
       == Right "item:laptop")
+  let emptyProgram = TypedFiniteProgram "empty-domain"
+        [EntityTypeDecl "empty"] [] [PredicateDecl "holds" ["empty"] PredicateCircumstance]
+        [] []
+        [("q:forall-empty",ForallExpr "var:item" "empty"
+            (PredicateExpr "holds" [VariableTerm "var:item"]))
+        ,("q:exists-empty",ExistsExpr "var:item" "empty"
+            (PredicateExpr "holds" [VariableTerm "var:item"]))]
+        [] [] [] Map.empty [] ["fictional empty-domain identity fixture"]
+      emptyStatuses = evaluateTypedFinite emptyProgram >>= \result ->
+        Right (map expressionStatus (finiteResultExpressions result))
+  check "empty-domain quantifier identities"
+    (emptyStatuses == Right [TrueValue,FalseValue])
+
+registryCheck :: FilePath -> IO ()
+registryCheck root = do
+  bytes <- BS.readFile (root </> "docs/rewrite/core-yuho-conformance-v0.2.json")
+  value <- either (const (failed "typed construct registry JSON")) pure (decodeJson bytes)
+  check "typed construct registry schema"
+    ((lookupField "schema" value >>= textValue) == Just "yuho.core-conformance/v0.2")
+  let registered = case lookupField "constructs" value >>= arrayValue of
+        Nothing -> []
+        Just rows -> [name | row <- rows,
+          Just name <- [lookupField "construct" row >>= textValue]]
+      publicConstructs =
+        ["typed-rules-model","entity-type","entity","predicate","ground-classification"
+        ,"typed-scalar","comparison","technical-negation","finite-quantifier","cardinality"
+        ,"technical-proposition","named-rule","rule-priority","typed-rules-module"
+        ,"typed-rules-case","limitation"]
+  check "every typed public construct has one conformance entry"
+    (registered == publicConstructs)
 
 fixtureChecks :: FilePath -> IO ()
 fixtureChecks root = do
@@ -147,12 +178,30 @@ refusalChecks root = do
         "  priority r:minor-exception over r:general;"
         "  priority r:minor-exception over r:general;\n  priority r:general over r:minor-exception;"
         (Encoding.decodeUtf8 model))
+      lowLimit = Encoding.encodeUtf8 (Text.replace "  limit 2048;" "  limit 1;"
+        (Encoding.decodeUtf8 model))
+      tooManyParameters = Encoding.encodeUtf8 (Text.replace
+        "rule r:general establishes"
+        "rule r:general(var:a as person,var:b as person,var:c as person,var:d as person,var:e as person) establishes"
+        (Encoding.decodeUtf8 model))
   assertDiagnostic "missing ground fact refuses" "SFT011" =<<
     loadTypedFiniteProgram modelPath model (Just (scenarioPath,missing))
   assertDiagnostic "wrong nominal type refuses" "SFT005" =<<
     loadTypedFiniteProgram modelPath model (Just (scenarioPath,wrongType))
   assertDiagnostic "priority cycle refuses" "SFT007" =<<
     loadTypedFiniteProgram modelPath priorityCycle (Just (scenarioPath,scenario))
+  assertDiagnostic "generated-node limit refuses before evaluation" "SFT010" =<<
+    loadTypedFiniteProgram modelPath lowLimit (Just (scenarioPath,scenario))
+  assertDiagnostic "rule parameter limit refuses" "SFT010" =<<
+    loadTypedFiniteProgram modelPath tooManyParameters (Just (scenarioPath,scenario))
+  modular <- BS.readFile (base </> "modular-typed-rules.yh")
+  modularScenario <- BS.readFile (base </> "modular-typed-rules-scenario.yh")
+  let privateUse = Encoding.encodeUtf8 (Text.replace
+        "  use entity vocab::item:modular-item;"
+        "  use entity vocab::item:private;" (Encoding.decodeUtf8 modular))
+  assertDiagnostic "private module declaration refuses" "SFT014" =<<
+    loadTypedFiniteProgram (base </> "modular-typed-rules.yh") privateUse
+      (Just (base </> "modular-typed-rules-scenario.yh",modularScenario))
 
 status :: BS.ByteString -> Maybe Text.Text
 status bytes = either (const Nothing) (\value -> lookupField "status" value >>= textValue)

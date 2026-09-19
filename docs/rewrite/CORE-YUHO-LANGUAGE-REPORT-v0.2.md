@@ -49,7 +49,7 @@ ScalarValue ::= integer Z | date ISODate | enum EnumId Member
               | money Currency MinorUnits | unresolved(reason, ScalarType)
 ```
 
-Money uses signed integer minor units and a three-uppercase-letter authored currency code. It never uses binary floating point or currency conversion. Dates are parsed ISO `YYYY-MM-DD` calendar days; the language does not infer a legal timezone or commencement rule.
+Money uses non-negative integer minor units and a three-uppercase-letter authored currency code. It never uses binary floating point or currency conversion. Dates are parsed ISO `YYYY-MM-DD` calendar days; the language does not infer a legal timezone or commencement rule.
 
 ## 3. Normalized syntax
 
