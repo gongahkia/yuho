@@ -12,8 +12,11 @@ Structural indexing, executable research coverage and legal review are separate.
 - Executable general-exception families: **13**.
 - Candidate-penalty declarations: **21**.
 - Analysis cases: **16**.
+- Distinct Penal Code provision rows connected to executable models: **55**; with the contextual Evidence Act s 107 anchor, the authored instrument/provision total is **56**.
 
 Counts use distinct authored family identities, file-based valid scenarios, distinct exception definitions and distinct candidate declarations. Repeated statuses, parser refusals, raw statute files and contextual citations do not increase these totals.
+
+The requested 100-authored-anchor target is therefore short by **44**. The remaining saved rows were not promoted merely to meet a quota: 55 are structurally recognised definitions or General Part concepts without standalone Haskell execution, and 414 remain saved-source-unmodelled.
 
 ### Coverage classification
 

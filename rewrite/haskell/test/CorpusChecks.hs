@@ -69,6 +69,15 @@ scenarioChecks root = do
   paths <- fmap concat $ mapM (scenarioPaths scenariosRoot) families
   check "15 new offence-family scenario matrices" (length families == 15)
   check "120 generated decision-covering scenarios" (length paths == 120)
+  forM_ families $ \family -> do
+    let scenarioPath = scenariosRoot </> family </> "01_satisfied_primary.yh"
+    scenario <- BS.readFile scenarioPath
+    let missing = Encoding.encodeUtf8 . Text.unlines . dropFirstAssignment . Text.lines $
+          Encoding.decodeUtf8 scenario
+    case checkParsed modelPath (authoredModel authored) (Just (scenarioPath,missing)) of
+      Left issue -> check ("missing primitive classification is refused for " <> family
+        <> " with " <> Text.unpack (diagnosticCode issue)) (diagnosticCode issue == "SFE042")
+      Right _ -> failed ("missing primitive classification accepted for " <> family)
   forM_ paths $ \scenarioPath -> do
     scenario <- BS.readFile scenarioPath
     checked <- either (const (failed ("check " <> scenarioPath))) pure
@@ -89,6 +98,9 @@ scenarioChecks root = do
     scenarioPaths directory family = do
       names <- sort <$> listDirectory (directory </> family)
       pure [directory </> family </> name | name <- names, ".yh" `Text.isSuffixOf` Text.pack name]
+    dropFirstAssignment rows = case break (Text.isPrefixOf "  f:") rows of
+      (before,_:after) -> before ++ after
+      _ -> rows
 
 retainedSvg :: FilePath -> FilePath -> Either Text.Text SemanticGraph -> IO ()
 retainedSvg root name selected = do
@@ -130,6 +142,8 @@ showcaseChecks root = forM_ showcases $ \(modelName,scenarioNames) ->
     _ <- either (const (failed "typed corpus showcase evaluation")) pure
       (evaluateTypedFinite program)
     let request = encodeTypedFiniteRequest "singapore-corpus-v0.3-showcase" program
+        second = encodeTypedFiniteRequest "singapore-corpus-v0.3-showcase" program
+    check "typed corpus showcase compilation is deterministic" (request == second)
     check "typed corpus showcase runs"
       (status (runLine request) == Just "evaluated")
   where
