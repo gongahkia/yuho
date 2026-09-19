@@ -145,8 +145,8 @@ FAMILIES = [
             element("146-force-or-violence", "conduct", "force or violence is used"),
             element("146-common-object-prosecution", "purpose", "used in prosecution of the common object of the assembly"),
             element("146-member", "circumstance", "person is a member of the assembly"),
-        ], "alternatives": [], "penalty": None,
-        "limitation": "Caning stated by section 147 is contextual because the candidate-term fragment does not encode caning.",
+        ], "alternatives": [], "penalty": ("147", 7, "years", "caning:24"),
+        "limitation": "The section 147 imprisonment-and-caning terms are presented as a candidate statutory penalty, not an imposed sentence.",
     },
     {
         "slug": "false-information-public-servant", "offence": "false-information-public-servant", "rule": "section182",
@@ -482,10 +482,13 @@ def render_family_model(family: dict, include_exceptions: bool) -> str:
         terms = []
         if prison is not None:
             terms.append(f"imprisonment term:{family['slug']}-prison minimum not-stated maximum {prison} {unit};")
-        if fine is not None:
+        if isinstance(fine, str) and fine.startswith("caning:"):
+            terms.append(f"caning term:{family['slug']}-caning minimum not-stated maximum {fine.split(':', 1)[1]} strokes;")
+        elif fine is not None:
             terms.append(f"fine term:{family['slug']}-fine currency SGD minimum not-stated maximum {fine};")
+        combination = "all-of" if isinstance(fine, str) and fine.startswith("caning:") else "one-or-more-of"
         term_expression = (terms[0] if len(terms) == 1 else
-            f"one-or-more-of term:{family['slug']} {{ {' '.join(terms)} }}")
+            f"{combination} term:{family['slug']} {{ {' '.join(terms)} }}")
         lines.extend(["", "  candidate-penalties {",
             f"    candidate pen:section{provision}-{family['slug']} for offence o:{family['offence']} source src:pc-v03 provision {provision} {{ {term_expression} }}",
             "  }"])
@@ -656,7 +659,7 @@ def structural_state(section: dict) -> str:
 def language_gap(number: str, category: str, classification: str) -> str | None:
     if classification in {"executable_research", "definition_only"}:
         return None
-    if number in {"147", "201", "304"}:
+    if number in {"201", "304"}:
         return "missing_penalty_form"
     if classification == "executable_partial":
         return "requires_judicial_interpretation"
