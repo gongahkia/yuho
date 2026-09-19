@@ -48,8 +48,8 @@ def evaluateVector : Vector → Except String (Identifier × String)
   | .comparison identifier operation left right =>
       pure (identifier,truthName (compareScalar operation left right))
   | .priority identifier higher lower ordered =>
-      let priority := if ordered then some { higher := higher.identifier,
-        lower := lower.identifier } else none
+      let edge : Priority := { higher := higher.identifier, lower := lower.identifier }
+      let priority := if ordered then some edge else none
       let result := resolveCompetingRules higher lower priority
       pure (identifier,truthName result.1 ++ "/" ++ propositionStateName result.2)
   | .substitution identifier binder entity term =>
