@@ -84,7 +84,7 @@ caseChecks root = do
 
 presumptionChecks :: FilePath -> IO ()
 presumptionChecks root = do
-  let path = root </> "rewrite/frontend/fixtures/synthetic/presumption_active.yh"
+  let path = root </> "examples/synthetic/presumption_active.yh"
   source <- BS.readFile path
   program <- loadPresumptionProgram path source >>= right "presumption load"
   let json = encodeSemanticGraph (presumptionGraph (normalizePresumption program))

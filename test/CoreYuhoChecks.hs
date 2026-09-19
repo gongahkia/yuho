@@ -75,7 +75,7 @@ properties = do
 
 registryCheck :: FilePath -> IO ()
 registryCheck root = do
-  bytes <- BS.readFile (root </> "docs/rewrite/core-yuho-conformance-v0.1.json")
+  bytes <- BS.readFile (root </> "schema/core-yuho-conformance-v0.1.json")
   value <- either (const (failed "registry is valid JSON")) pure (decodeJson bytes)
   rows <- maybe (failed "registry has constructs") pure
     (lookupField "constructs" value >>= arrayValue)

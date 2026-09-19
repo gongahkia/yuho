@@ -47,18 +47,18 @@ import Yuho.Protocol.Json (J(..), decodeJson, encodeJson, lookupField, textValue
 main :: IO ()
 main = do
   root <- repositoryRoot
-  let frozen = root </> "experiments/language-spike/fixtures"
-      hardening = root </> "rewrite/haskell/test/fixtures"
+  let frozen = root </> "test/kernel-fixtures/frozen"
+      hardening = root </> "test/fixtures"
   golden frozen
   hardeningCases hardening
-  runExceptionChecks (root </> "rewrite/haskell/test/exception-fixtures")
-  runTypedChecks (root </> "rewrite/haskell/test/typed-fixtures")
-  runPenaltyChecks (root </> "rewrite/haskell/test/penalty-fixtures")
-  runTermsChecks (root </> "rewrite/haskell/test/term-fixtures")
-  runProofChecks (root </> "rewrite/haskell/test/proof-fixtures")
-  runPresumptionChecks (root </> "rewrite/haskell/test/presumption-fixtures")
-  runModelBundleChecks (root </> "rewrite/haskell/test/model-bundle-fixtures")
-  runChangeSetChecks (root </> "rewrite/haskell/test/model-bundle-diff-fixtures")
+  runExceptionChecks (root </> "test/exception-fixtures")
+  runTypedChecks (root </> "test/typed-fixtures")
+  runPenaltyChecks (root </> "test/penalty-fixtures")
+  runTermsChecks (root </> "test/term-fixtures")
+  runProofChecks (root </> "test/proof-fixtures")
+  runPresumptionChecks (root </> "test/presumption-fixtures")
+  runModelBundleChecks (root </> "test/model-bundle-fixtures")
+  runChangeSetChecks (root </> "test/model-bundle-diff-fixtures")
   runSurfaceChecks root
   runLegalSurfaceChecks root
   runMultiOffenceChecks root
@@ -100,7 +100,7 @@ repositoryRoot = do
   where
     locate [] = putStrLn "repository root not found" >> exitFailure
     locate (candidate:rest) = do
-      present <- doesFileExist (candidate </> "experiments/language-spike/fixtures/MANIFEST.json")
+      present <- doesFileExist (candidate </> "test/kernel-fixtures/frozen/MANIFEST.json")
       if present then pure candidate else locate rest
 
 golden :: FilePath -> IO ()

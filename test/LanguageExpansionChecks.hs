@@ -89,7 +89,7 @@ moduleChecks root = do
 
 temporalChecks :: FilePath -> IO ()
 temporalChecks root = do
-  let base = root </> "rewrite/frontend/fixtures/synthetic"
+  let base = root </> "examples/synthetic"
       modelPath = base </> "temporal_restricted_entry.yh"
       beforePath = base </> "temporal_before_boundary.yh"
       boundaryPath = base </> "temporal_at_boundary.yh"

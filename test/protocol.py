@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 FROZEN = ROOT / "experiments/language-spike/fixtures"
-HARDENING = ROOT / "rewrite/haskell/test/fixtures"
+HARDENING = ROOT / "test/fixtures"
 FROZEN_IDS = [
     "B01", "B02", "B03", "B04", "B05", "B06", "B07",
     "P01", "P02", "P03", "P04", "R01", "R02", "R03", "R04",

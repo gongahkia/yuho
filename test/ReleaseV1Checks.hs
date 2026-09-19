@@ -15,7 +15,7 @@ import Yuho.Surface.TypedFinite
 
 runReleaseV1Checks :: FilePath -> IO ()
 runReleaseV1Checks root = do
-  let typed = root </> "rewrite/frontend/fixtures/typed-finite-v0.3"
+  let typed = root </> "examples/typed-finite-v0.3"
       modelPath = typed </> "normative-responsibility.yh"
       scenarioPath = typed </> "normative-responsibility-satisfied.yh"
   model <- BS.readFile modelPath
@@ -50,7 +50,7 @@ runReleaseV1Checks root = do
       && length (finiteNorms modularProgram) == 2
       && length (finiteRoutes modularProgram) == 1)
 
-  let synthetic = root </> "rewrite/frontend/fixtures/synthetic"
+  let synthetic = root </> "examples/synthetic"
       penaltyModel = synthetic </> "rich-candidate-sanctions.yh"
       penaltyScenario = synthetic </> "scenario-rich-candidate-sanctions.yh"
   penaltySource <- BS.readFile penaltyModel

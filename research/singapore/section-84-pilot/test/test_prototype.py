@@ -352,7 +352,7 @@ class PrototypeArtifactTests(unittest.TestCase):
                     json.loads(
                         (
                             PILOT.parents[2]
-                            / "rewrite/haskell/test/model-bundle-fixtures/bundles/MB02-review"
+                            / "test/model-bundle-fixtures/bundles/MB02-review"
                             / "reviews/review:1.json"
                         ).read_bytes()
                     )
@@ -368,7 +368,7 @@ class PrototypeArtifactTests(unittest.TestCase):
             stale_review = json.loads(
                 (
                     PILOT.parents[2]
-                    / "rewrite/haskell/test/model-bundle-fixtures/bundles/MB02-review"
+                    / "test/model-bundle-fixtures/bundles/MB02-review"
                     / "reviews/review:1.json"
                 ).read_bytes()
             )

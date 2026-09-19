@@ -27,13 +27,13 @@ DOCUMENTS = [
     ROOT / "docs/rewrite/CORE-YUHO-MECHANISATION-v0.1.md",
     ROOT / "docs/rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.2.md",
     ROOT / "docs/rewrite/CORE-YUHO-MECHANISATION-v0.2.md",
-    ROOT / "docs/rewrite/diagram-fixtures/README.md",
-    ROOT / "docs/rewrite/typed-finite-diagram-fixtures/README.md",
+    ROOT / "docs/artifacts/core-diagrams/README.md",
+    ROOT / "docs/artifacts/typed-finite-diagrams/README.md",
     ROOT / "research/singapore/CORPUS-INDEX.md",
     ROOT / "research/singapore/research-release/README.md",
     ROOT / "research/singapore/offence-corpus-pilot/README.md",
     ROOT / "rewrite/haskell/README.md",
-    ROOT / "rewrite/haskell/schema/README.md",
+    ROOT / "schema/README.md",
     ROOT / "rewrite/haskell/TEST-RESULTS.md",
 ]
 LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")

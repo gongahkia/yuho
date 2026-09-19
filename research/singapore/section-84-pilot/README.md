@@ -34,7 +34,7 @@ YUHO_S84_INPUT_DIR="$INTAKE_SOURCE_DIR" \
 
 The external packet contains the receipt, manifest, span map, representability map, scope declaration and three extracted text files. The committed [representability summary](REPRESENTABILITY-SUMMARY.json) describes that original packet and has no fact assignments. The packet alone is not a ModelBundle; the separate prototype recipe adds the required executable artifact into a fresh, closed bundle. No source HTML, complete extracted statute or companion asset is committed.
 
-The same focused test command also validates research JSON structure, unique IDs, cross-references, source classifications, review-status and temporal-date discipline. Set `YUHO_S84_INPUT_DIR` as above to include read-only external source-lock verification. Run `python3 rewrite/haskell/test/docs.py` and `python3 scripts/verify_capability_claims.py` from the repository root for documentation and capability-claim checks. The temporary official PDFs used to research the authority report are not distributed with this repository.
+The same focused test command also validates research JSON structure, unique IDs, cross-references, source classifications, review-status and temporal-date discipline. Set `YUHO_S84_INPUT_DIR` as above to include read-only external source-lock verification. Run `python3 test/docs.py` and `python3 scripts/verify_capability_claims.py` from the repository root for documentation and capability-claim checks. The temporary official PDFs used to research the authority report are not distributed with this repository.
 
 ## Reproduce the executable research prototype
 

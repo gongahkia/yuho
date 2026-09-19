@@ -19,9 +19,9 @@ runSurfaceChecks :: FilePath -> IO ()
 runSurfaceChecks root = do
   let sectionPath = root </> "research/singapore/section-84-pilot/surface/section84.yh"
       sectionFixture = root </> "research/singapore/section-84-pilot/prototype"
-      syntheticPath = root </> "rewrite/frontend/fixtures/synthetic/restricted_entry.yh"
-      scenarioPath = root </> "rewrite/frontend/fixtures/synthetic/scenario_all_proved.yh"
-      syntheticFixture = root </> "rewrite/frontend/fixtures/synthetic"
+      syntheticPath = root </> "examples/synthetic/restricted_entry.yh"
+      scenarioPath = root </> "examples/synthetic/scenario_all_proved.yh"
+      syntheticFixture = root </> "examples/synthetic"
   sectionSource <- BS.readFile sectionPath
   syntheticSource <- BS.readFile syntheticPath
   scenario <- BS.readFile scenarioPath

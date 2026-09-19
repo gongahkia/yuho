@@ -105,7 +105,7 @@ caseChecks root = do
 
 presumptionChecks :: FilePath -> IO ()
 presumptionChecks root = do
-  let base = root </> "rewrite/frontend/fixtures/synthetic"
+  let base = root </> "examples/synthetic"
       rows = [("active","active"),("inactive","inactive"),
         ("rebutted","rebutted"),("unresolved","unresolved")]
   forM_ rows $ \(name,wanted) -> do

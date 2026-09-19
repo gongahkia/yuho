@@ -12,13 +12,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = "9dd40b628bfb18e50f10050f3e9300e7f5bfc7c1"
 FAMILIES = [
-    ("frozen", ROOT / "experiments/language-spike/fixtures/requests"),
-    ("H", ROOT / "rewrite/haskell/test/fixtures/requests"),
-    ("E", ROOT / "rewrite/haskell/test/exception-fixtures/requests"),
-    ("T", ROOT / "rewrite/haskell/test/typed-fixtures/requests"),
-    ("GP", ROOT / "rewrite/haskell/test/penalty-fixtures/requests"),
-    ("PT", ROOT / "rewrite/haskell/test/term-fixtures/requests"),
-    ("PS", ROOT / "rewrite/haskell/test/proof-fixtures/requests"),
+    ("frozen", ROOT / "test/kernel-fixtures/frozen/requests"),
+    ("H", ROOT / "test/fixtures/requests"),
+    ("E", ROOT / "test/exception-fixtures/requests"),
+    ("T", ROOT / "test/typed-fixtures/requests"),
+    ("GP", ROOT / "test/penalty-fixtures/requests"),
+    ("PT", ROOT / "test/term-fixtures/requests"),
+    ("PS", ROOT / "test/proof-fixtures/requests"),
 ]
 GHC = (os.environ.get("YUHO_GHC") or shutil.which("ghc-9.8.4")
        or str(Path.home() / ".ghcup/bin/ghc-9.8.4"))

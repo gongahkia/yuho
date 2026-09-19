@@ -76,7 +76,7 @@ semanticMatrices = do
 
 registryCheck :: FilePath -> IO ()
 registryCheck root = do
-  bytes <- BS.readFile (root </> "docs/rewrite/core-yuho-conformance-v0.2.json")
+  bytes <- BS.readFile (root </> "schema/core-yuho-conformance-v0.2.json")
   value <- either (const (failed "typed construct registry JSON")) pure (decodeJson bytes)
   check "typed construct registry schema"
     ((lookupField "schema" value >>= textValue) == Just "yuho.core-conformance/v0.2")
@@ -94,7 +94,7 @@ registryCheck root = do
 
 fixtureChecks :: FilePath -> IO ()
 fixtureChecks root = do
-  let base = root </> "rewrite/frontend/fixtures/typed-finite"
+  let base = root </> "examples/typed-finite"
       fixtures =
         [(base </> "fictional-typed-rules.yh",base </> "fictional-typed-rules-satisfied.yh")
         ,(base </> "multi-person-property.yh",base </> "multi-person-property-scenario.yh")
@@ -123,8 +123,8 @@ fixtureChecks root = do
 
 diagramChecks :: FilePath -> IO ()
 diagramChecks root = do
-  let base = root </> "rewrite/frontend/fixtures/typed-finite"
-      retained = root </> "docs/rewrite/typed-finite-diagram-fixtures"
+  let base = root </> "examples/typed-finite"
+      retained = root </> "docs/artifacts/typed-finite-diagrams"
       fictionalModel = base </> "fictional-typed-rules.yh"
       fictionalScenario = base </> "fictional-typed-rules-satisfied.yh"
       modularModel = base </> "modular-typed-rules.yh"
@@ -163,7 +163,7 @@ diagramChecks root = do
 
 refusalChecks :: FilePath -> IO ()
 refusalChecks root = do
-  let base = root </> "rewrite/frontend/fixtures/typed-finite"
+  let base = root </> "examples/typed-finite"
       modelPath = base </> "fictional-typed-rules.yh"
       scenarioPath = base </> "fictional-typed-rules-satisfied.yh"
   model <- BS.readFile modelPath
