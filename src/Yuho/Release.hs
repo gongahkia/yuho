@@ -22,7 +22,7 @@ import Yuho.Protocol.Json
   ( J(..), arrayValue, decodeJson, lookupField, objectFields, textValue )
 
 releaseName :: Text
-releaseName = "Haskell Yuho Research Language"
+releaseName = "Yuho Haskell Research Language"
 
 releaseVersion :: Text
 releaseVersion = "1.0.0"
@@ -157,4 +157,4 @@ moduleSource = "typed-rules-module starter.rules version 1.0.0 {\n  export entit
 modelSource = "typed-rules-model StarterResearchModel {\n  limit 256;\n  module-root \"modules\";\n  import starter.rules version 1.0.0 as base;\n  use entity-type base::person;\n  use predicate base::acts;\n  use proposition base::p:candidate;\n  use requirement base::q:acts;\n  use rule base::r:candidate;\n  entity actor:researcher as person;\n  limitation \"Synthetic research example; supplied classifications are not evidence findings.\";\n}\n"
 scenarioSource = "typed-rules-scenario StarterScenario for StarterResearchModel {\n  classify acts(actor:researcher) as proved reason \"synthetic supplied classification\";\n}\n"
 caseSource = "typed-rules-case StarterCase model \"model.yh\" {\n  allegation a:starter scenario \"scenario.yh\";\n}\n"
-readmeSource = "# Yuho starter\n\nThis relocatable project uses the Haskell Yuho Research Language. From this directory, set `YUHO` to the built executable and run:\n\n```sh\n$YUHO check model.yh --scenario scenario.yh\n$YUHO compile model.yh --scenario scenario.yh\n$YUHO run model.yh --scenario scenario.yh\n$YUHO explain model.yh --scenario scenario.yh\n$YUHO check case.yh\n$YUHO diagram case.yh --view case --format svg --output case.svg\n```\n\nAll facts are supplied classifications. No evidence or judicial outcome is determined.\n"
+readmeSource = "# Yuho starter\n\nThis relocatable project uses the Yuho Haskell Research Language. From this directory, set `YUHO` to the built executable and run:\n\n```sh\n$YUHO check model.yh --scenario scenario.yh\n$YUHO compile model.yh --scenario scenario.yh\n$YUHO run model.yh --scenario scenario.yh\n$YUHO explain model.yh --scenario scenario.yh\n$YUHO check case.yh\n$YUHO diagram case.yh --view case --format svg --output case.svg\n```\n\nAll facts are supplied classifications. No evidence or judicial outcome is determined.\n"

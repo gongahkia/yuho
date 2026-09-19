@@ -27,7 +27,7 @@ DISPOSITIONS = {
     'blocked_pending_qualified_review',
 }
 DOCUMENTS = (
-    ROOT / 'docs/rewrite/SINGAPORE-SECTION-84-AUTHORITY-AND-TEMPORAL-RESEARCH.md',
+    ROOT / 'research/singapore/section-84-pilot/records/authority-and-temporal.md',
     HERE / 'QUALIFIED-REVIEW-BRIEF.md', HERE / 'README.md',
 )
 

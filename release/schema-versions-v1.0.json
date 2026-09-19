@@ -1,6 +1,6 @@
 {
   "schema": "yuho.schema-index/v1.0",
-  "release": "Haskell Yuho Research Language v1.0.0",
+  "release": "Yuho Haskell Research Language v1.0.0",
   "schemas": [
     {"name":"KernelInput","version":"v1","status":"frozen"},
     {"name":"KernelResult","version":"v1","status":"frozen"},

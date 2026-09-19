@@ -110,7 +110,7 @@ class ImplementationConformanceTests(unittest.TestCase):
         self.assertEqual(
             set(paths),
             {
-                "docs/rewrite/SINGAPORE-SECTION-84-EXECUTABLE-RESEARCH-PROTOTYPE.md",
+                "research/singapore/section-84-pilot/records/executable-model.md",
                 "research/singapore/section-84-pilot/prototype/fixtures/CASES.json",
                 "research/singapore/section-84-pilot/prototype/mapping.json",
                 "research/singapore/section-84-pilot/prototype/pilot.py",
@@ -176,7 +176,7 @@ class ImplementationConformanceTests(unittest.TestCase):
         self.assertEqual(
             record["limitations_incorporated_by_reference"],
             [
-                "docs/rewrite/SINGAPORE-SECTION-84-EXECUTABLE-RESEARCH-PROTOTYPE.md",
+                "research/singapore/section-84-pilot/records/executable-model.md",
                 "research/singapore/section-84-pilot/prototype/scope.json",
             ],
         )

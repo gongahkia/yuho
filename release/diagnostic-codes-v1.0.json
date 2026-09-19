@@ -1,6 +1,6 @@
 {
   "schema": "yuho.diagnostic-index/v1.0",
-  "release": "Haskell Yuho Research Language v1.0.0",
+  "release": "Yuho Haskell Research Language v1.0.0",
   "families": [
     {"prefix":"SFE","scope":"authoritative surface parsing, checking, cases and I/O","stability":"existing meanings are frozen; new meanings require a new unused code"},
     {"prefix":"SFM","scope":"exact-version statutory module resolution and composition","stability":"frozen"},

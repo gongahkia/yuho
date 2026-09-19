@@ -1,6 +1,6 @@
 {
   "schema": "yuho.capabilities/v1.0",
-  "release": "Haskell Yuho Research Language v1.0.0",
+  "release": "Yuho Haskell Research Language v1.0.0",
   "capabilities": [
     {"id":"check","status":"supported","boundary":"source-located parsing, resolution and static checking"},
     {"id":"compile","status":"supported","boundary":"deterministic KernelInput v1 for the eight registered variants"},
