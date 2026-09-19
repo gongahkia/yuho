@@ -18,6 +18,8 @@ The Lean namespace `Yuho.CoreYuho.TypedFinite` contains:
 
 The formal model intentionally excludes UTF-8 parsing, source locations, filesystem module loading, JSON/SVG layout, legal sources, narrative evidence and legal interpretation.
 
+The Lean comparison function is total over its raw constructor domain: mismatched scalar constructors, enum types or money currencies return `unresolved`. This is not an accepted surface meaning. The Haskell checker and kernel reject those ill-typed combinations, and the Haskell–Lean comparison claim is restricted to well-typed inputs. Date half-open membership is checked in Haskell as the documented composition of `>=`, `<` and three-valued `all`; it is covered by surface and protocol fixtures but is not a separate Lean comparison constructor in v0.2.
+
 ## Theorem inventory
 
 [`core-yuho-theorems-v0.2.json`](../../mechanisation/core-yuho-theorems-v0.2.json) registers 25 mechanically proved properties. [`TypedFiniteTheoremRegistry.lean`](../../mechanisation/Yuho/CoreYuho/TypedFiniteTheoremRegistry.lean) names every registered declaration and is compiled by `scripts/verify_core_yuho_theorems.py`.

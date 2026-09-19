@@ -117,7 +117,7 @@ Namespaces must be unique at their declaration kind. An entity argument checks o
 
 `all` and `any` use the v0.1 three-valued operations. Their empty identities are `all([])=T` and `any([])=F`. Quantifiers inherit those identities, so `forall` over an empty nominal domain is `T` and `exists` is `F`. Cardinality source forms require at least one member.
 
-`eq` and `neq` accept equal scalar types. Ordered comparisons accept integer, date, a single enum type, or one money currency. `in-half-open(value,lower,upper)` requires three values of the same ordered type. Unknown scalar IDs, mismatched enum types or currencies, missing assignments and malformed dates are rejected. An explicitly unresolved compatible operand evaluates to `U`.
+`eq` and `neq` accept equal scalar types. Ordered comparisons accept integer, date or one money currency; enums support only equality and inequality. `in-half-open(value,lower,upper)` requires three dates. Unknown scalar IDs, mismatched enum types or currencies, missing assignments and malformed dates are rejected. An explicitly unresolved compatible operand evaluates to `U`.
 
 Requirement references must resolve and be acyclic. Rule parameters are finite nominal domains. Conclusions must name declared technical propositions. Priority endpoints must name rules, priorities are explicit, and the priority graph must be acyclic. Source order never creates priority.
 
@@ -216,7 +216,7 @@ The surface rejects before publishing a request or diagram when any bound is exc
 
 | Property | Evidence |
 |---|---|
-| Comparison, negation, finite quantifier and cardinality totality/determinism | Lean definitions and theorem registry v0.2 |
+| Six binary comparison operations, negation, finite quantifier and cardinality totality/determinism | Lean definitions and theorem registry v0.2; date half-open membership is the checked Haskell composition of `>=`, `<` and `all` and is fixture-tested rather than a separate Lean constructor |
 | Negation involution; quantifier/cardinality permutation invariance | Mechanically proved in Lean |
 | Typed substitution preservation | Mechanically proved for normalized typed applications |
 | Quantifier expansion agrees with v0.1 `all`/`any` | Mechanically proved |
