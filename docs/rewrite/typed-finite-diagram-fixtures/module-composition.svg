@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="990" viewBox="0 0 1160 990" role="img" aria-labelledby="title desc">
+<title id="title">Yuho semantic diagram: FictionalModularTypedRules-v0.2</title>
+<desc id="desc">Technical research statuses only; no guilt, conviction, acquittal, liability or sentence.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:ui-sans-serif,system-ui,sans-serif;fill:#0f172a}.edge{stroke:#475569;stroke-width:1.5;fill:none;marker-end:url(#arrow)}.edge-label{font-size:10px;fill:#475569}.node-label{font-size:12px;font-weight:600}.node-meta{font-size:10px}.legend{font-size:11px}</style>
+<g id="edges">
+<path class="edge" data-kind="import" d="M 250 728 C 275 728 555 208 580 208"/><text class="edge-label" x="400" y="461">exact-version import</text>
+<path class="edge" data-kind="export" d="M 250 728 C 275 728 15 78 40 78"/><text class="edge-label" x="130" y="396">entity-type</text>
+<path class="edge" data-kind="export" d="M 250 728 C 275 728 15 208 40 208"/><text class="edge-label" x="130" y="461">entity-type</text>
+<path class="edge" data-kind="export" d="M 250 728 C 275 728 15 338 40 338"/><text class="edge-label" x="130" y="526">entity</text>
+<path class="edge" data-kind="export" d="M 250 728 C 275 728 15 468 40 468"/><text class="edge-label" x="130" y="591">entity</text>
+<path class="edge" data-kind="export" d="M 250 728 C 275 728 285 208 310 208"/><text class="edge-label" x="265" y="461">predicate</text>
+<path class="edge" data-kind="export" d="M 250 728 C 275 728 825 208 850 208"/><text class="edge-label" x="535" y="461">proposition</text>
+<path class="edge" data-kind="import" d="M 250 598 C 275 598 555 208 580 208"/><text class="edge-label" x="400" y="396">exact-version import</text>
+<path class="edge" data-kind="export" d="M 250 598 C 275 598 555 78 580 78"/><text class="edge-label" x="400" y="331">requirement</text>
+<path class="edge" data-kind="export" d="M 250 598 C 275 598 825 78 850 78"/><text class="edge-label" x="535" y="331">rule</text>
+<path class="edge" data-kind="instance" d="M 250 78 C 275 78 15 338 40 338"/><text class="edge-label" x="130" y="201">nominal member</text>
+<path class="edge" data-kind="instance" d="M 250 208 C 275 208 15 468 40 468"/><text class="edge-label" x="130" y="331">nominal member</text>
+<path class="edge" data-kind="argument-type" d="M 250 78 C 275 78 285 208 310 208"/><text class="edge-label" x="265" y="136">1</text>
+<path class="edge" data-kind="argument-type" d="M 250 208 C 275 208 285 208 310 208"/><text class="edge-label" x="265" y="201">2</text>
+<path class="edge" data-kind="ground-argument" d="M 250 338 C 275 338 285 78 310 78"/><text class="edge-label" x="265" y="201">1</text>
+<path class="edge" data-kind="ground-argument" d="M 250 468 C 275 468 285 78 310 78"/><text class="edge-label" x="265" y="266">2</text>
+<path class="edge" data-kind="application" d="M 520 208 C 545 208 285 78 310 78"/><text class="edge-label" x="400" y="136">classified application</text>
+<path class="edge" data-kind="concludes" d="M 1060 78 C 1085 78 825 208 850 208"/><text class="edge-label" x="940" y="136">establishes</text>
+<path class="edge" data-kind="technical-result" d="M 1060 208 C 1085 208 555 208 580 208"/><text class="edge-label" x="805" y="201">independent proposition</text>
+</g><g id="nodes">
+<g id="node-entity-type-person" data-semantic-id="entity-type:person" data-kind="entity-type"><rect x="40" y="40" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="52" y="60"><tspan x="52" dy="0">person</tspan></text></g>
+<g id="node-entity-type-property" data-semantic-id="entity-type:property" data-kind="entity-type"><rect x="40" y="170" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="52" y="190"><tspan x="52" dy="0">property</tspan></text></g>
+<g id="node-entity-actor-modular-person" data-semantic-id="entity:actor:modular-person" data-kind="entity"><rect x="40" y="300" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="52" y="320"><tspan x="52" dy="0">actor:modular-person : person</tspan></text></g>
+<g id="node-entity-item-modular-item" data-semantic-id="entity:item:modular-item" data-kind="entity"><rect x="40" y="430" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="52" y="450"><tspan x="52" dy="0">item:modular-item : property</tspan></text></g>
+<g id="node-module-rules" data-semantic-id="module:rules" data-kind="module"><rect x="40" y="560" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="52" y="580"><tspan x="52" dy="0">rules =</tspan><tspan x="52" dy="14">fictional.typed-rules@1.0.0</tspan></text></g>
+<g id="node-module-vocab" data-semantic-id="module:vocab" data-kind="module"><rect x="40" y="690" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="52" y="710"><tspan x="52" dy="0">vocab =</tspan><tspan x="52" dy="14">fictional.typed-vocabulary@1.0.0</tspan></text></g>
+<g id="node-ground-fact-possesses-actor-modular-person-item-modular-item-" data-semantic-id="ground-fact:possesses(actor:modular-person,item:modular-item)" data-kind="ground-fact"><rect x="310" y="40" width="210" height="76" rx="0" fill="#f0fdf4" stroke="#166534" stroke-width="2" stroke-dasharray="3 2"/><text class="node-label" x="322" y="60"><tspan x="322" dy="0">possesses(actor:modular-person,item:modular-item)</tspan></text><text class="node-meta" x="322" y="110">status: satisfied</text></g>
+<g id="node-predicate-possesses" data-semantic-id="predicate:possesses" data-kind="predicate"><rect x="310" y="170" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="322" y="190"><tspan x="322" dy="0">possesses(person, property)</tspan></text></g>
+<g id="node-finite-requirement-q-modular-possession" data-semantic-id="finite-requirement:q:modular-possession" data-kind="predicate-application"><rect x="580" y="40" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="592" y="60"><tspan x="592" dy="0">q:modular-possession</tspan><tspan x="592" dy="14">possesses(actor:modular-person,item:modular-item)</tspan></text><text class="node-meta" x="592" y="110">status: satisfied</text></g>
+<g id="node-program-FictionalModularTypedRules-v0.2" data-semantic-id="program:FictionalModularTypedRules-v0.2" data-kind="program"><rect x="580" y="170" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="592" y="190"><tspan x="592" dy="0">FictionalModularTypedRules-v0.2</tspan><tspan x="592" dy="14">Core Yuho v0.2</tspan></text></g>
+<g id="node-finite-rule-r-modular-establish" data-semantic-id="finite-rule:r:modular-establish" data-kind="finite-rule"><rect x="850" y="40" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="862" y="60"><tspan x="862" dy="0">r:modular-establish</tspan><tspan x="862" dy="14">establishes</tspan></text><text class="node-meta" x="862" y="98">citation: fictional module rule</text><text class="node-meta" x="862" y="110">status: satisfied</text></g>
+<g id="node-proposition-p-modular-status" data-semantic-id="proposition:p:modular-status" data-kind="proposition"><rect x="850" y="170" width="210" height="76" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text class="node-label" x="862" y="190"><tspan x="862" dy="0">p:modular-status</tspan><tspan x="862" dy="14">established</tspan></text><text class="node-meta" x="862" y="240">status: satisfied</text></g>
+</g>
+<g id="legend"><text class="legend" x="24" y="840" font-weight="700">Legend</text><text class="legend" x="24" y="860">ellipse actor; square/dotted input or fact; rounded rule/group; dashed exception; dash-dot penalty. Colours are redundant.</text><text class="legend" x="24" y="880">Statuses are supplied or technical: satisfied, not satisfied, unresolved, defeated, not evaluated.</text></g>
+<text x="24" y="972" font-size="11" fill="#7f1d1d">Technical research statuses only; no guilt, conviction, acquittal, liability or sentence.</text>
+</svg>
