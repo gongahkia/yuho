@@ -6,4 +6,5 @@ import Yuho.CoreYuho.TypedFiniteTheoremRegistry
 #print axioms Yuho.CoreYuho.TypedFinite.cardinality_permutation_invariant
 #print axioms Yuho.CoreYuho.TypedFinite.cardinality_mutually_exclusive
 #print axioms Yuho.CoreYuho.TypedFinite.higher_satisfied_defeat_wins
+#print axioms Yuho.CoreYuho.TypedFinite.acyclic_priority_graph_resolution_deterministic
 #print axioms Yuho.CoreYuho.TypedFinite.incomparable_satisfied_conflict

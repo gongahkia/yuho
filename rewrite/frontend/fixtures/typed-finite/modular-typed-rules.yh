@@ -11,6 +11,8 @@ typed-rules-model FictionalModularTypedRules-v0.2 {
   use proposition vocab::p:modular-status;
   use requirement rules::q:modular-possession;
   use rule rules::r:modular-establish;
+  use rule rules::r:modular-defeat;
+  use priority rules::r:modular-defeat;
   limitation "Explicit exact-version composition of independently authored typed declarations.";
   limitation "Fictional technical fixture only; no judicial outcome.";
 }

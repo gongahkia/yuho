@@ -1,0 +1,30 @@
+{
+  "schema": "yuho.core-theorem-coverage-v0.2",
+  "properties": [
+    {"evidence":"mechanically_proved","property":"comparison_determinism","theorem":"Yuho.CoreYuho.TypedFinite.comparison_deterministic"},
+    {"evidence":"mechanically_proved","property":"comparison_totality","theorem":"Yuho.CoreYuho.TypedFinite.comparison_total"},
+    {"evidence":"mechanically_proved","property":"negation_involution","theorem":"Yuho.CoreYuho.TypedFinite.negation_involution"},
+    {"evidence":"mechanically_proved","property":"forall_determinism","theorem":"Yuho.CoreYuho.TypedFinite.forall_deterministic"},
+    {"evidence":"mechanically_proved","property":"exists_determinism","theorem":"Yuho.CoreYuho.TypedFinite.exists_deterministic"},
+    {"evidence":"mechanically_proved","property":"forall_expansion","theorem":"Yuho.CoreYuho.TypedFinite.forall_expansion_agrees"},
+    {"evidence":"mechanically_proved","property":"exists_expansion","theorem":"Yuho.CoreYuho.TypedFinite.exists_expansion_agrees"},
+    {"evidence":"mechanically_proved","property":"forall_permutation_invariance","theorem":"Yuho.CoreYuho.TypedFinite.forall_permutation_invariant"},
+    {"evidence":"mechanically_proved","property":"exists_permutation_invariance","theorem":"Yuho.CoreYuho.TypedFinite.exists_permutation_invariant"},
+    {"evidence":"mechanically_proved","property":"typed_substitution_preservation","theorem":"Yuho.CoreYuho.TypedFinite.substitution_preserves_well_typed_application"},
+    {"evidence":"mechanically_proved","property":"status_count_permutation_invariance","theorem":"Yuho.CoreYuho.TypedFinite.countStatus_permutation_invariant"},
+    {"evidence":"mechanically_proved","property":"cardinality_permutation_invariance","theorem":"Yuho.CoreYuho.TypedFinite.cardinality_permutation_invariant"},
+    {"evidence":"mechanically_proved","property":"cardinality_determinism","theorem":"Yuho.CoreYuho.TypedFinite.cardinality_deterministic"},
+    {"evidence":"mechanically_proved","property":"cardinality_totality","theorem":"Yuho.CoreYuho.TypedFinite.cardinality_total"},
+    {"evidence":"mechanically_proved","property":"cardinality_result_exclusivity","theorem":"Yuho.CoreYuho.TypedFinite.cardinality_mutually_exclusive"},
+    {"evidence":"mechanically_proved","property":"at_least_satisfied_boundary","theorem":"Yuho.CoreYuho.TypedFinite.atLeast_satisfied_boundary"},
+    {"evidence":"mechanically_proved","property":"at_most_satisfied_boundary","theorem":"Yuho.CoreYuho.TypedFinite.atMost_satisfied_boundary"},
+    {"evidence":"mechanically_proved","property":"pair_priority_determinism","theorem":"Yuho.CoreYuho.TypedFinite.priority_resolution_deterministic"},
+    {"evidence":"mechanically_proved","property":"acyclic_priority_graph_determinism","theorem":"Yuho.CoreYuho.TypedFinite.acyclic_priority_graph_resolution_deterministic"},
+    {"evidence":"mechanically_proved","property":"higher_satisfied_defeat_wins","theorem":"Yuho.CoreYuho.TypedFinite.higher_satisfied_defeat_wins"},
+    {"evidence":"mechanically_proved","property":"unresolved_higher_blocks_lower","theorem":"Yuho.CoreYuho.TypedFinite.unresolved_higher_blocks_lower"},
+    {"evidence":"mechanically_proved","property":"incomparable_satisfied_conflict","theorem":"Yuho.CoreYuho.TypedFinite.incomparable_satisfied_conflict"},
+    {"evidence":"mechanically_proved","property":"unrelated_proposition_irrelevance","theorem":"Yuho.CoreYuho.TypedFinite.unrelated_proposition_is_irrelevant"},
+    {"evidence":"mechanically_proved","property":"actor_exception_instance_isolation","theorem":"Yuho.CoreYuho.exception_instance_isolation"},
+    {"evidence":"mechanically_proved","property":"allegation_private_input_isolation","theorem":"Yuho.CoreYuho.allegation_private_input_isolation"}
+  ]
+}

@@ -16,6 +16,8 @@ inductive Vector where
   | comparison (identifier : Identifier) (operation : Comparison)
       (left right : ScalarValue)
   | priority (identifier : Identifier) (higher lower : RuleResult) (ordered : Bool)
+  | priorityGraph (identifier proposition : Identifier) (rules : List RuleResult)
+      (priorities : List Priority)
   | substitution (identifier binder entity : Identifier) (term : TypedTerm)
   | isolation (identifier selected : Identifier)
       (assignments : List (Identifier × Status))
@@ -51,6 +53,9 @@ def evaluateVector : Vector → Except String (Identifier × String)
       let edge : Priority := { higher := higher.identifier, lower := lower.identifier }
       let priority := if ordered then some edge else none
       let result := resolveCompetingRules higher lower priority
+      pure (identifier,truthName result.1 ++ "/" ++ propositionStateName result.2)
+  | .priorityGraph identifier proposition rules priorities =>
+      let result := resolveRuleGraph rules priorities proposition
       pure (identifier,truthName result.1 ++ "/" ++ propositionStateName result.2)
   | .substitution identifier binder entity term =>
       let replacement : TypedTerm := { identifier := entity, typeName := term.typeName }

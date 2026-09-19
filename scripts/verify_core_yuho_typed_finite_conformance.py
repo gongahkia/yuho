@@ -93,6 +93,31 @@ def vectors() -> list[dict[str, object]]:
         rows.append({"id": f"priority-{identifier}", "kind": "priority",
                      "higher": higher, "lower": lower, "ordered": ordered})
 
+    priority_graphs = [
+        {"id": "priority-graph-chain", "kind": "priority-graph", "proposition": "p:target",
+         "rules": [rule("r:top", "defeat", "satisfied"),
+                   rule("r:middle", "establish", "satisfied"),
+                   rule("r:bottom", "defeat", "satisfied")],
+         "priorities": [{"higher": "r:top", "lower": "r:middle"},
+                        {"higher": "r:middle", "lower": "r:bottom"}]},
+        {"id": "priority-graph-diamond", "kind": "priority-graph", "proposition": "p:target",
+         "rules": [rule("r:left", "defeat", "satisfied"),
+                   rule("r:right", "defeat", "unresolved"),
+                   rule("r:base", "establish", "satisfied")],
+         "priorities": [{"higher": "r:left", "lower": "r:base"},
+                        {"higher": "r:right", "lower": "r:base"}]},
+        {"id": "priority-graph-unresolved-higher", "kind": "priority-graph",
+         "proposition": "p:target",
+         "rules": [rule("r:high", "defeat", "unresolved"),
+                   rule("r:low", "establish", "satisfied")],
+         "priorities": [{"higher": "r:high", "lower": "r:low"}]},
+        {"id": "priority-graph-incomparable-conflict", "kind": "priority-graph",
+         "proposition": "p:target",
+         "rules": [rule("r:left", "establish", "satisfied"),
+                   rule("r:right", "defeat", "satisfied")], "priorities": []},
+    ]
+    rows.extend(priority_graphs)
+
     for term_kind, term_id in (("variable", "var:item"), ("entity", "item:fixed")):
         rows.append({"id": f"substitution-{term_kind}", "kind": "substitution",
                      "binding": {"variable": "var:item", "entity": "item:laptop"},
@@ -168,6 +193,14 @@ def lean_vector(value: dict[str, object]) -> str:
     if kind == "priority":
         ordered = "true" if value["ordered"] else "false"
         return f".priority {identifier} ({lean_rule(value['higher'])}) ({lean_rule(value['lower'])}) {ordered}"
+    if kind == "priority-graph":
+        rules = ", ".join(lean_rule(item) for item in value["rules"])
+        priorities = ", ".join(
+            "{ higher := " + lean_string(str(item["higher"]))
+            + ", lower := " + lean_string(str(item["lower"])) + " }"
+            for item in value["priorities"])
+        return (f".priorityGraph {identifier} {lean_string(str(value['proposition']))} "
+                f"[{rules}] [{priorities}]")
     if kind == "substitution":
         binding = value["binding"]
         term = value["term"]

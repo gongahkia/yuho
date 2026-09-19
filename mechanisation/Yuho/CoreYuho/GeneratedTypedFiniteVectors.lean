@@ -2980,15 +2980,19 @@ def vectorChunk156 : List Vector := [
   .priority "priority-diamond-right-edge" ({ identifier := "r:top-right", proposition := "p:target", polarity := .defeat, status := .unresolved }) ({ identifier := "r:base", proposition := "p:target", polarity := .establish, status := .satisfied }) true,
   .priority "priority-chain-top-edge" ({ identifier := "r:top", proposition := "p:target", polarity := .defeat, status := .satisfied }) ({ identifier := "r:middle", proposition := "p:target", polarity := .establish, status := .satisfied }) true,
   .priority "priority-chain-middle-edge" ({ identifier := "r:middle", proposition := "p:target", polarity := .establish, status := .satisfied }) ({ identifier := "r:bottom", proposition := "p:target", polarity := .defeat, status := .satisfied }) true,
+  .priorityGraph "priority-graph-chain" "p:target" [{ identifier := "r:top", proposition := "p:target", polarity := .defeat, status := .satisfied }, { identifier := "r:middle", proposition := "p:target", polarity := .establish, status := .satisfied }, { identifier := "r:bottom", proposition := "p:target", polarity := .defeat, status := .satisfied }] [{ higher := "r:top", lower := "r:middle" }, { higher := "r:middle", lower := "r:bottom" }],
+  .priorityGraph "priority-graph-diamond" "p:target" [{ identifier := "r:left", proposition := "p:target", polarity := .defeat, status := .satisfied }, { identifier := "r:right", proposition := "p:target", polarity := .defeat, status := .unresolved }, { identifier := "r:base", proposition := "p:target", polarity := .establish, status := .satisfied }] [{ higher := "r:left", lower := "r:base" }, { higher := "r:right", lower := "r:base" }],
+  .priorityGraph "priority-graph-unresolved-higher" "p:target" [{ identifier := "r:high", proposition := "p:target", polarity := .defeat, status := .unresolved }, { identifier := "r:low", proposition := "p:target", polarity := .establish, status := .satisfied }] [{ higher := "r:high", lower := "r:low" }],
+  .priorityGraph "priority-graph-incomparable-conflict" "p:target" [{ identifier := "r:left", proposition := "p:target", polarity := .establish, status := .satisfied }, { identifier := "r:right", proposition := "p:target", polarity := .defeat, status := .satisfied }] [],
   .substitution "substitution-variable" "var:item" "item:laptop" { identifier := "var:item", typeName := "property" },
-  .substitution "substitution-entity" "var:item" "item:laptop" { identifier := "item:fixed", typeName := "property" },
-  .isolation "actor-isolation-satisfied" "actor:one/p:fact" [("actor:one/p:fact", .satisfied), ("actor:two/p:fact", .satisfied)],
-  .isolation "allegation-isolation-satisfied" "a:one/p:fact" [("a:one/p:fact", .satisfied), ("a:two/p:fact", .notSatisfied)],
-  .isolation "actor-isolation-not_satisfied" "actor:one/p:fact" [("actor:one/p:fact", .notSatisfied), ("actor:two/p:fact", .satisfied)],
-  .isolation "allegation-isolation-not_satisfied" "a:one/p:fact" [("a:one/p:fact", .notSatisfied), ("a:two/p:fact", .notSatisfied)]
+  .substitution "substitution-entity" "var:item" "item:laptop" { identifier := "item:fixed", typeName := "property" }
 ]
 
 def vectorChunk157 : List Vector := [
+  .isolation "actor-isolation-satisfied" "actor:one/p:fact" [("actor:one/p:fact", .satisfied), ("actor:two/p:fact", .satisfied)],
+  .isolation "allegation-isolation-satisfied" "a:one/p:fact" [("a:one/p:fact", .satisfied), ("a:two/p:fact", .notSatisfied)],
+  .isolation "actor-isolation-not_satisfied" "actor:one/p:fact" [("actor:one/p:fact", .notSatisfied), ("actor:two/p:fact", .satisfied)],
+  .isolation "allegation-isolation-not_satisfied" "a:one/p:fact" [("a:one/p:fact", .notSatisfied), ("a:two/p:fact", .notSatisfied)],
   .isolation "actor-isolation-unresolved" "actor:one/p:fact" [("actor:one/p:fact", .unresolved), ("actor:two/p:fact", .satisfied)],
   .isolation "allegation-isolation-unresolved" "a:one/p:fact" [("a:one/p:fact", .unresolved), ("a:two/p:fact", .notSatisfied)]
 ]

@@ -269,6 +269,7 @@ verify-mechanisation: $(LOGS)
 verify-core-yuho-conformance:
 	$(PYTHON) scripts/verify_core_yuho_theorems.py
 	$(PYTHON) scripts/verify_core_yuho_conformance.py
+	$(PYTHON) scripts/verify_core_yuho_typed_finite_conformance.py
 
 $(LOGS):
 	mkdir -p $(LOGS)

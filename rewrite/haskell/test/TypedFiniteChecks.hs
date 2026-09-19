@@ -9,6 +9,9 @@ import qualified Data.Text.Encoding as Encoding
 import System.Exit (exitFailure)
 import System.FilePath ((</>))
 import Yuho.CoreYuho.TypedFinite
+import Yuho.Diagram.Build (typedFiniteCaseGraph, typedFiniteGraph)
+import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg)
+import Yuho.Diagram.Types (DiagramView(..))
 import Yuho.Exception.Types (Truth(..))
 import Yuho.Kernel.Run (runLine)
 import Yuho.Protocol.Json (decodeJson, lookupField, textValue)
@@ -19,6 +22,7 @@ runTypedFiniteChecks :: FilePath -> IO ()
 runTypedFiniteChecks root = do
   semanticMatrices
   fixtureChecks root
+  diagramChecks root
   refusalChecks root
   putStrLn "typed finite rules: exhaustive bounded semantics, fixtures and refusals passed"
 
@@ -85,6 +89,46 @@ fixtureChecks root = do
     (length (typedCaseAllegations declaration) == 2)
   check "typed finite case retains one explicit shared fact"
     (length (typedCaseShared declaration) == 1)
+
+diagramChecks :: FilePath -> IO ()
+diagramChecks root = do
+  let base = root </> "rewrite/frontend/fixtures/typed-finite"
+      retained = root </> "docs/rewrite/typed-finite-diagram-fixtures"
+      fictionalModel = base </> "fictional-typed-rules.yh"
+      fictionalScenario = base </> "fictional-typed-rules-satisfied.yh"
+      modularModel = base </> "modular-typed-rules.yh"
+      modularScenario = base </> "modular-typed-rules-scenario.yh"
+  fictional <- load "fictional graph" fictionalModel fictionalScenario
+  modular <- load "module graph" modularModel modularScenario
+  caseSource <- BS.readFile (base </> "multi-person-property-case.yh")
+  declaration <- loadTypedFiniteCase (base </> "multi-person-property-case.yh") caseSource
+    >>= either (const (failed "typed case graph")) pure
+  let fictionalResult = evaluated "fictional graph" fictional
+      modularResult = evaluated "module graph" modular
+      caseResults = [(typedAllegationId item,typedAllegationResult item)
+        | item <- typedCaseAllegations declaration]
+      artifacts =
+        [("fictional-rule",typedFiniteGraph RuleView fictional fictionalResult)
+        ,("module-composition",typedFiniteGraph ModulesView modular modularResult)
+        ,("multi-allegation-case",typedFiniteCaseGraph CaseView (typedCaseId declaration)
+            caseResults (typedCaseShared declaration))
+        ,("conflict-trace",typedFiniteGraph TraceView fictional fictionalResult)]
+  forM_ artifacts $ \(name,graph) -> do
+    expectedJson <- BS.readFile (retained </> name <> ".json")
+    expectedSvg <- BS.readFile (retained </> name <> ".svg")
+    check (name <> " retained JSON") (encodeSemanticGraph graph == expectedJson)
+    check (name <> " retained SVG") (encodeSvg graph == expectedSvg)
+  check "typed diagram exposes conflict and priority"
+    (all (`BS.isInfixOf` encodeSemanticGraph (typedFiniteGraph TraceView fictional fictionalResult))
+      ["\"kind\":\"conflict\"","\"kind\":\"priority\""])
+  where
+    load label modelPath scenarioPath = do
+      model <- BS.readFile modelPath
+      scenario <- BS.readFile scenarioPath
+      loadTypedFiniteProgram modelPath model (Just (scenarioPath,scenario))
+        >>= either (const (failed label)) pure
+    evaluated label program = either (const (error (label <> " evaluation failed"))) id
+      (evaluateTypedFinite program)
 
 refusalChecks :: FilePath -> IO ()
 refusalChecks root = do

@@ -123,6 +123,18 @@ structure Priority where
   lower : Identifier
   deriving Repr, DecidableEq
 
+def priorityHigherAux (priorities : List Priority) (higher current : Identifier) : Nat → Bool
+  | 0 => false
+  | fuel + 1 => priorities.any fun edge =>
+      edge.lower = current &&
+        (edge.higher = higher || priorityHigherAux priorities higher edge.higher fuel)
+
+def priorityHigher (priorities : List Priority) (higher lower : Identifier) : Bool :=
+  priorityHigherAux priorities higher lower priorities.length
+
+def priorityGraphAcyclic (priorities : List Priority) : Prop :=
+  ∀ identifier, priorityHigher priorities identifier identifier = false
+
 inductive PropositionState where
   | established | defeated | conflict | unresolved | notEstablished
   deriving Repr, DecidableEq
@@ -160,6 +172,23 @@ def resolveCompetingRules (higher lower : RuleResult)
         if lower.polarity = .establish then (.satisfied,.established)
         else (.notSatisfied,.defeated)
       else (.notSatisfied,.notEstablished)
+
+def resolveRuleGraph (rules : List RuleResult) (priorities : List Priority)
+    (proposition : Identifier) : Status × PropositionState :=
+  let relevant := rules.filter (fun rule => rule.proposition = proposition)
+  let blocked := fun rule => relevant.any fun other =>
+    other.polarity != rule.polarity && other.status != .notSatisfied &&
+      priorityHigher priorities other.identifier rule.identifier
+  let active := fun rule => rule.status = .satisfied && !blocked rule
+  let establishes := relevant.any fun rule => active rule && rule.polarity = .establish
+  let defeats := relevant.any fun rule => active rule && rule.polarity = .defeat
+  let unresolvedBlock := relevant.any fun rule => rule.status = .unresolved ||
+    (rule.status = .satisfied && blocked rule)
+  if establishes && defeats then (.unresolved,.conflict)
+  else if establishes then (.satisfied,.established)
+  else if defeats then (.notSatisfied,.defeated)
+  else if unresolvedBlock then (.unresolved,.unresolved)
+  else (.notSatisfied,.notEstablished)
 
 theorem comparison_deterministic (operation : Comparison) (left right : ScalarValue) :
     compareScalar operation left right = compareScalar operation left right := rfl
@@ -271,6 +300,12 @@ theorem priority_resolution_deterministic (higher lower : RuleResult)
     (priority : Option Priority) :
     resolveCompetingRules higher lower priority =
       resolveCompetingRules higher lower priority := rfl
+
+theorem acyclic_priority_graph_resolution_deterministic
+    (rules : List RuleResult) (priorities : List Priority) (proposition : Identifier)
+    (_acyclic : priorityGraphAcyclic priorities) :
+    resolveRuleGraph rules priorities proposition =
+      resolveRuleGraph rules priorities proposition := rfl
 
 theorem higher_satisfied_defeat_wins
     (highId lowId proposition : Identifier) :

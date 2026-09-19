@@ -28760,6 +28760,121 @@
       "ordered": true
     },
     {
+      "id": "priority-graph-chain",
+      "kind": "priority-graph",
+      "priorities": [
+        {
+          "higher": "r:top",
+          "lower": "r:middle"
+        },
+        {
+          "higher": "r:middle",
+          "lower": "r:bottom"
+        }
+      ],
+      "proposition": "p:target",
+      "rules": [
+        {
+          "id": "r:top",
+          "polarity": "defeat",
+          "proposition": "p:target",
+          "status": "satisfied"
+        },
+        {
+          "id": "r:middle",
+          "polarity": "establish",
+          "proposition": "p:target",
+          "status": "satisfied"
+        },
+        {
+          "id": "r:bottom",
+          "polarity": "defeat",
+          "proposition": "p:target",
+          "status": "satisfied"
+        }
+      ]
+    },
+    {
+      "id": "priority-graph-diamond",
+      "kind": "priority-graph",
+      "priorities": [
+        {
+          "higher": "r:left",
+          "lower": "r:base"
+        },
+        {
+          "higher": "r:right",
+          "lower": "r:base"
+        }
+      ],
+      "proposition": "p:target",
+      "rules": [
+        {
+          "id": "r:left",
+          "polarity": "defeat",
+          "proposition": "p:target",
+          "status": "satisfied"
+        },
+        {
+          "id": "r:right",
+          "polarity": "defeat",
+          "proposition": "p:target",
+          "status": "unresolved"
+        },
+        {
+          "id": "r:base",
+          "polarity": "establish",
+          "proposition": "p:target",
+          "status": "satisfied"
+        }
+      ]
+    },
+    {
+      "id": "priority-graph-unresolved-higher",
+      "kind": "priority-graph",
+      "priorities": [
+        {
+          "higher": "r:high",
+          "lower": "r:low"
+        }
+      ],
+      "proposition": "p:target",
+      "rules": [
+        {
+          "id": "r:high",
+          "polarity": "defeat",
+          "proposition": "p:target",
+          "status": "unresolved"
+        },
+        {
+          "id": "r:low",
+          "polarity": "establish",
+          "proposition": "p:target",
+          "status": "satisfied"
+        }
+      ]
+    },
+    {
+      "id": "priority-graph-incomparable-conflict",
+      "kind": "priority-graph",
+      "priorities": [],
+      "proposition": "p:target",
+      "rules": [
+        {
+          "id": "r:left",
+          "polarity": "establish",
+          "proposition": "p:target",
+          "status": "satisfied"
+        },
+        {
+          "id": "r:right",
+          "polarity": "defeat",
+          "proposition": "p:target",
+          "status": "satisfied"
+        }
+      ]
+    },
+    {
       "binding": {
         "entity": "item:laptop",
         "variable": "var:item"

@@ -90,6 +90,14 @@ evaluateV02 index value = do
         (Finite.observedProposition high)
       pure (finiteTruth (Finite.propositionStatus observation) <> "/" <>
         Finite.propositionState observation)
+    "priority-graph" -> do
+      exactFields path ["id","kind","priorities","proposition","rules"] fields
+      proposition <- fieldText path "proposition" fields
+      rules <- fieldArray path "rules" fields >>= traverse (finiteRule path)
+      priorities <- fieldArray path "priorities" fields >>= traverse (finitePriority path)
+      observation <- Finite.resolveProposition priorities rules proposition
+      pure (finiteTruth (Finite.propositionStatus observation) <> "/" <>
+        Finite.propositionState observation)
     "substitution" -> do
       exactFields path ["binding","id","kind","term"] fields
       binding <- field path "binding" fields >>= exactObject (path <> "/binding") ["entity","variable"]
@@ -159,6 +167,11 @@ finiteRule path value = do
   status <- fieldStatus path "status" fields
   Finite.RuleObservation <$> fieldText path "id" fields <*> pure polarity
     <*> fieldText path "proposition" fields <*> pure status <*> pure [] <*> pure []
+
+finitePriority :: Text -> J -> Either Text Finite.PriorityDecl
+finitePriority path value = do
+  fields <- exactObject path ["higher","lower"] value
+  Finite.PriorityDecl <$> fieldText path "higher" fields <*> fieldText path "lower" fields
 
 parseVector :: Int -> J -> Either Text Vector
 parseVector index value = do
