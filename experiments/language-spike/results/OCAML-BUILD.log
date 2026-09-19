@@ -1,7 +1,0 @@
-cwd: clean temporary copy of ocaml/
-command: make all
-exit: 0
-stdout:
-ocamlopt -w +a-4-42-70 -warn-error +a-4-42-70 -O3 -I src -o yuho-kernel-ocaml src/json.ml src/sha256.ml src/kernel.ml src/main.ml
-
-stderr:

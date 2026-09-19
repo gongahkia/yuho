@@ -1,4 +1,0 @@
-packages: .
-with-compiler: ghc-9.8.4
-offline: True
-jobs: 1
