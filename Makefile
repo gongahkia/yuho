@@ -1,292 +1,52 @@
-# Top-level verification targets for the Yuho corpus and toolchain.
-#
-# Targets:
-#
-#   make verify-core
-#       Run the retained project checks end-to-end:
-#       parser smoke check, AKN OASIS-XSD round-trip, runtime tests,
-#       structural diff, and mechanisation.
-#       Writes a one-page summary at logs/verify-core-summary.txt.
-#
-#   make verify-coverage
-#       Re-run the per-section L1+L2 sanity check against the entire
-#       library (524 sections).
-#
-#   make verify-akn-xsd
-#       Re-run AKN round-trip against the vendored OASIS XSD.
-#       Requires xmllint (`apt-get install libxml2-utils` on Debian).
-#
-# Heavy targets (full corpus build, SVG rendering) live under scripts/.
-
-# PYTHON defaults to `python3` (works on a clean install / Docker
-# image). Override on hosts where `python3` is broken (e.g. Homebrew
-# Python 3.14 with a stale pyexpat ABI):
-#   make verify-all PYTHON=.venv-test/bin/python
-#
-# Verification output is intentionally piped to ``tee`` in a few targets so
-# release evidence is retained.  Keep Bash's pipeline failure semantics for
-# every recipe: a failing verifier must fail its Make target even when logging
-# succeeds.  ``SHELL`` is deliberately resolved from PATH for Linux, macOS,
-# and container environments.
 SHELL := bash
 .SHELLFLAGS := -euo pipefail -c
 .DELETE_ON_ERROR:
 
+GHC ?= ghc-9.8.4
+CABAL ?= cabal
 PYTHON ?= python3
-AUDIT_PYTHON ?= python3
-# `yuho` console-script lives on PATH after `pip install -e .[dev]`;
-# fall back to it when `python -m yuho` doesn't expose __main__.
-YUHO ?= yuho
-LOGS = logs
+YUHO := $(shell $(CABAL) list-bin exe:yuho --offline --with-compiler=$(GHC) 2>/dev/null)
+KERNEL := $(shell $(CABAL) list-bin exe:yuho-kernel --offline --with-compiler=$(GHC) 2>/dev/null)
+BUNDLE := $(shell $(CABAL) list-bin exe:yuho-model-bundle --offline --with-compiler=$(GHC) 2>/dev/null)
 
-.PHONY: install doctor smoke verify-all verify-core verify-core-yuho-conformance verify-core-yuho-v03-conformance verify-yuho-haskell-release verify-typed-finite-protocol \
-        verify-coverage verify-akn-xsd verify-mechanisation \
-        verify-structural-diff verify-runtime-tests \
-        verify-penalty-verdicts verify-lean-verdicts verify-lean-penalty-footprints \
-        verify-source-maps verify-backend-parity verify-mermaid-verbose \
-        verify-literate-alignment verify-dsl-spec verify-action-pins \
-		verify-corpus-provenance verify-reproducible-build verify-release-hardening \
-		verify-control-plane verify-grammar-generated verify-capability-claims \
-        release-audit \
-        clean-reproduce
+.PHONY: build test protocols conformance lean corpus docs release-verify verify
 
-verify-yuho-haskell-release:
-	$(PYTHON) scripts/generate_singapore_corpus_v03.py --check
-	$(PYTHON) scripts/verify_core_yuho_theorems.py
-	$(PYTHON) scripts/generate_yuho_release_manifest.py --check
+build:
+	$(CABAL) v2-build all --offline -j1 --with-compiler=$(GHC)
 
-install:
-	./install.sh --dev
+test: build
+	$(CABAL) v2-test yuho-test --offline -j1 --with-compiler=$(GHC) --test-show-details=direct
 
-doctor:
-	$(YUHO) doctor
+protocols: build
+	$(PYTHON) test/protocol.py $(KERNEL)
+	$(PYTHON) test/exception_protocol.py $(KERNEL)
+	$(PYTHON) test/typed_protocol.py $(KERNEL)
+	$(PYTHON) test/penalty_protocol.py $(KERNEL)
+	$(PYTHON) test/terms_protocol.py $(KERNEL)
+	$(PYTHON) test/proof_protocol.py $(KERNEL)
+	$(PYTHON) test/presumption_protocol.py $(KERNEL)
+	$(PYTHON) test/typed_finite_protocol.py $(YUHO)
 
-smoke: doctor
-	$(YUHO) --version
-	$(YUHO) init /tmp/yuho-starter --force
-	$(YUHO) check library/penal_code/s415_cheating/statute.yh
-	$(YUHO) lint library/penal_code/s415_cheating/statute.yh
-	$(YUHO) transpile -t english library/penal_code/s415_cheating/statute.yh \
-		-o /tmp/yuho-smoke-s415.txt
-	$(YUHO) verify --capabilities
-
-verify-all: verify-core
-
-verify-core: $(LOGS)
-	@echo "=== Yuho verification ==="
-	@echo ""
-	$(MAKE) verify-control-plane
-	$(MAKE) verify-coverage
-	$(MAKE) verify-akn-xsd
-	$(MAKE) verify-runtime-tests
-	$(MAKE) verify-penalty-verdicts
-	$(MAKE) verify-source-maps
-	$(MAKE) verify-dsl-spec
-	$(MAKE) verify-action-pins
-	$(MAKE) verify-corpus-provenance
-	$(MAKE) verify-capability-claims
-	$(MAKE) verify-literate-alignment
-	$(MAKE) verify-backend-parity
-	$(MAKE) verify-structural-diff
-	$(MAKE) verify-lean-verdicts
-	$(MAKE) verify-lean-penalty-footprints
-	$(MAKE) verify-mechanisation-coverage
-	$(MAKE) verify-mechanisation
-	@echo ""
-	@echo "=== summary ==="
-	@printf "Coverage         : %s\n" "$$(tail -n 1 $(LOGS)/coverage.log)" \
-		| tee $(LOGS)/verify-core-summary.txt
-	@printf "AKN XSD          : %s\n" "$$(grep -E 'AKN round-trip:' $(LOGS)/akn-xsd.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Runtime tests    : %s\n" "$$(grep -E 'runtime sweep:' $(LOGS)/runtime-tests.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Penalty verdicts : %s\n" "$$(grep -E '^penalty verdicts:' $(LOGS)/penalty-verdicts.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Source maps      : %s\n" "$$(grep -E '^  [a-z]+:' $(LOGS)/source-maps.log | tr '\n' '; ' | sed 's/; $$//')" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "DSL spec         : %s\n" "$$(tail -n 1 $(LOGS)/dsl-spec.log)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Action pins      : %s\n" "$$(tail -n 1 $(LOGS)/action-pins.log)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Corpus prov      : %s\n" "$$(tail -n 1 $(LOGS)/corpus-provenance.log)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Literate align   : %s\n" "$$(tail -n 1 $(LOGS)/literate-alignment.log)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Backend parity   : %s\n" "$$(tail -n 1 $(LOGS)/backend-parity.log)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Structural diff  : %s\n" "$$(tail -n 1 $(LOGS)/structural-diff.log)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Lean verdicts    : %s\n" "$$(grep -E '^lean expected verdicts:' $(LOGS)/lean-verdicts.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Lean penalties   : %s\n" "$$(grep -E '^lean penalty footprints:' $(LOGS)/lean-penalty-footprints.log | tail -n 1)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Mech coverage    : %s\n" "$$(tail -n 1 $(LOGS)/mechanisation-coverage.log)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@printf "Mechanisation    : %s\n" "$$(tail -n 1 $(LOGS)/mechanisation.log)" \
-		| tee -a $(LOGS)/verify-core-summary.txt
-	@echo ""
-	@echo "Wrote: $(LOGS)/verify-core-summary.txt"
-
-verify-coverage: $(LOGS)
-	@echo ">>> verifying L1+L2 coverage on 524 SG PC statute.yh files…"
-	@n=0; ok=0; fail=0; \
-	for f in library/penal_code/*/statute.yh; do \
-		n=$$((n+1)); \
-		if $(YUHO) check "$$f" >/dev/null 2>&1; then \
-			ok=$$((ok+1)); \
-		else \
-			fail=$$((fail+1)); \
-			echo "  FAIL: $$f"; \
-		fi; \
-	done; \
-	echo "$${ok}/$${n} sections pass yuho check (failures: $${fail})" \
-		| tee $(LOGS)/coverage.log; \
-	test "$$fail" -eq 0
-
-verify-akn-xsd: $(LOGS)
-	@echo ">>> verifying AKN OASIS-XSD round-trip (524/524)…"
-	$(PYTHON) scripts/akn_roundtrip.py --xsd 2>&1 | tee $(LOGS)/akn-xsd.log
-
-verify-structural-diff: $(LOGS)
-	@echo ">>> running Lean spec ↔ Python Z3Generator structural diff (smoke fixtures, --strict)…"
-	@if command -v lake >/dev/null 2>&1; then \
-		$(PYTHON) scripts/verify_structural_diff.py --strict 2>&1 \
-			| tee $(LOGS)/structural-diff.log; \
-	else \
-		echo "Structural diff: SKIPPED (Lean toolchain not on PATH)" \
-			| tee $(LOGS)/structural-diff.log; \
-	fi
-
-# Full-corpus structural diff: regenerates the Lean fixture file
-# from the live `library/penal_code/*/statute.yh` corpus, then runs
-# the structural diff against all 524 sections. Slow (~30s including
-# fixture rebuild) — keep `verify-structural-diff` as the smoke gate
-# and run this on demand before releases.
-verify-structural-diff-full: $(LOGS)
-	@echo ">>> regenerating Lean corpus fixtures…"
-	@$(PYTHON) mechanisation/scripts/generate_fixtures.py 2>&1 \
-		| tee $(LOGS)/fixtures-gen.log
-	@echo ">>> running full-corpus Lean spec ↔ Python Z3Generator structural diff (--strict)…"
-	@if command -v lake >/dev/null 2>&1; then \
-		$(PYTHON) scripts/verify_structural_diff.py --full --strict --summary-only 2>&1 \
-			| tee $(LOGS)/structural-diff-full.log; \
-	else \
-		echo "Full structural diff: SKIPPED (Lean toolchain not on PATH)" \
-			| tee $(LOGS)/structural-diff-full.log; \
-	fi
-
-verify-lean-verdicts: $(LOGS)
-	@echo ">>> comparing Lean expected verdict fixtures with Python runtime…"
-	@if command -v lake >/dev/null 2>&1; then \
-		$(PYTHON) scripts/verify_lean_expected_verdicts.py 2>&1 \
-			| tee $(LOGS)/lean-verdicts.log; \
-	else \
-		echo "lean expected verdicts: SKIPPED (Lean toolchain not on PATH)" \
-			| tee $(LOGS)/lean-verdicts.log; \
-	fi
-
-verify-lean-penalty-footprints: $(LOGS)
-	@echo ">>> comparing Lean penalty footprint rows with Python Z3 constraints…"
-	@if command -v lake >/dev/null 2>&1; then \
-		$(PYTHON) scripts/verify_lean_penalty_footprints.py 2>&1 \
-			| tee $(LOGS)/lean-penalty-footprints.log; \
-	else \
-		echo "lean penalty footprints: SKIPPED (Lean toolchain not on PATH)" \
-			| tee $(LOGS)/lean-penalty-footprints.log; \
-	fi
-
-verify-runtime-tests: $(LOGS)
-	@echo ">>> verifying runtime-eval sweep across rich test fixtures…"
-	$(PYTHON) scripts/verify_runtime_tests.py 2>&1 | tee $(LOGS)/runtime-tests.log
-
-verify-penalty-verdicts: $(LOGS)
-	@echo ">>> comparing penalty-bearing runtime verdicts with Z3 model verdicts…"
-	$(PYTHON) scripts/verify_penalty_verdicts.py 2>&1 | tee $(LOGS)/penalty-verdicts.log
-
-verify-source-maps: $(LOGS)
-	@echo ">>> verifying source-map coverage for legal export targets…"
-	$(PYTHON) scripts/verify_source_maps.py 2>&1 | tee $(LOGS)/source-maps.log
-
-verify-dsl-spec: $(LOGS)
-	@echo ">>> verifying executable DSL spec v1 conformance…"
-	$(PYTHON) scripts/verify_dsl_spec.py 2>&1 | tee $(LOGS)/dsl-spec.log
-
-verify-action-pins: $(LOGS)
-	@echo ">>> verifying GitHub Actions immutable SHA pins…"
-	$(PYTHON) scripts/verify_action_pins.py 2>&1 | tee $(LOGS)/action-pins.log
-
-verify-corpus-provenance: $(LOGS)
-	@echo ">>> verifying corpus provenance ledger completeness…"
-	$(PYTHON) scripts/verify_corpus_provenance.py 2>&1 | tee $(LOGS)/corpus-provenance.log
-
-verify-capability-claims: $(LOGS)
-	@echo ">>> verifying public capability and corpus-review claim boundaries…"
-	$(PYTHON) scripts/verify_capability_claims.py 2>&1 | tee $(LOGS)/capability-claims.log
-
-verify-reproducible-build: $(LOGS)
-	@echo ">>> verifying reproducible Python artifacts…"
-	$(PYTHON) scripts/verify_reproducible_build.py 2>&1 | tee $(LOGS)/reproducible-build.log
-
-verify-release-hardening: verify-action-pins verify-corpus-provenance verify-capability-claims verify-reproducible-build
-
-verify-control-plane:
-	@echo ">>> verifying failure propagation and release-gate wiring…"
-	$(PYTHON) scripts/verify_control_plane.py
-
-verify-grammar-generated:
-	@echo ">>> verifying generated tree-sitter parser is current…"
-	$(PYTHON) scripts/verify_generated_grammar.py
-
-release-audit:
-	$(AUDIT_PYTHON) scripts/release_audit.py --full --python $(AUDIT_PYTHON)
-
-verify-literate-alignment: $(LOGS)
-	@echo ">>> validating literate paragraph alignment confidence over corpus…"
-	$(PYTHON) scripts/verify_literate_alignment.py 2>&1 | tee $(LOGS)/literate-alignment.log
-
-verify-backend-parity: $(LOGS)
-	@echo ">>> summarizing backend parity and unsupported features…"
-	$(PYTHON) scripts/verify_backend_parity.py 2>&1 | tee $(LOGS)/backend-parity.log
-
-verify-mechanisation-coverage: $(LOGS)
-	@echo ">>> reporting Lean mechanisation feature coverage…"
-	$(PYTHON) scripts/verify_mechanisation_coverage.py 2>&1 | tee $(LOGS)/mechanisation-coverage.log
-
-verify-mermaid-verbose: $(LOGS)
-	@echo ">>> verifying verbose-shape Mermaid render across 524 sections…"
-	$(PYTHON) scripts/verify_mermaid_verbose.py 2>&1 | tee $(LOGS)/mermaid-verbose.log
-
-verify-mechanisation: $(LOGS)
-	@echo ">>> verifying Lean 4 mechanisation kernel-checks…"
-	@if command -v lake >/dev/null 2>&1; then \
-		(cd mechanisation && lake build 2>&1 && lake build Tests 2>&1) \
-			| tee $(LOGS)/mechanisation.log; \
-		grep -qE 'Build completed successfully|✔' $(LOGS)/mechanisation.log \
-			&& echo "Mechanisation: lake build OK" \
-			   | tee -a $(LOGS)/mechanisation.log \
-			|| (echo "Mechanisation: lake build FAILED — see $(LOGS)/mechanisation.log" \
-			    | tee -a $(LOGS)/mechanisation.log; exit 1); \
-	else \
-		echo "Mechanisation: SKIPPED (Lean toolchain not on PATH; install elan to verify)" \
-			| tee $(LOGS)/mechanisation.log; \
-	fi
-
-verify-core-yuho-conformance:
-	$(PYTHON) scripts/verify_core_yuho_theorems.py
+conformance: build
 	$(PYTHON) scripts/verify_core_yuho_conformance.py
 	$(PYTHON) scripts/verify_core_yuho_typed_finite_conformance.py
-
-verify-core-yuho-v03-conformance:
 	$(PYTHON) scripts/verify_core_yuho_v03_conformance.py
 
-verify-typed-finite-protocol:
-	cd rewrite/haskell && \
-		yuho_bin="$$(cabal list-bin exe:yuho)" && \
-		kernel_bin="$$(cabal list-bin exe:yuho-kernel)" && \
-		$(PYTHON) test/typed_finite_protocol.py "$$yuho_bin" "$$kernel_bin"
+lean:
+	cd mechanisation && lake build
+	$(PYTHON) scripts/verify_core_yuho_theorems.py
 
-$(LOGS):
-	mkdir -p $(LOGS)
+corpus: build
+	$(PYTHON) scripts/generate_singapore_corpus_v03.py --check
+	$(YUHO) corpus check --corpus-root .
 
-clean-reproduce:
-	rm -rf $(LOGS)
+docs:
+	$(PYTHON) test/docs.py
+	$(PYTHON) scripts/verify_capability_claims.py
+
+release-verify: build
+	$(PYTHON) scripts/generate_yuho_release_manifest.py --check
+	$(YUHO) release verify --root .
+
+verify: test protocols conformance lean corpus docs release-verify
+	$(PYTHON) test/prior_bytes.py

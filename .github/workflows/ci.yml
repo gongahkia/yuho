@@ -1,4 +1,4 @@
-name: Yuho CI/CD on push
+name: Yuho CI
 
 on:
   push:
@@ -7,225 +7,39 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read
-
-defaults:
-  run:
-    shell: bash --noprofile --norc -euo pipefail {0}
-
 jobs:
-  lint:
-    name: Lint & Type Check
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-
-      - name: Create logs directory
-        run: mkdir -p logs
-
-      - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.12"
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-        with:
-          version: "0.11.14"
-
-      - name: Synchronize locked dependencies
-        run: uv sync --locked --all-extras 2>&1 | tee logs/install-yuho.log
-
-      - name: Check formatting with Black
-        run: uv run --locked black --check --diff --config pyproject.toml src/yuho tests 2>&1 | tee logs/black.log
-
-      - name: Type check with mypy
-        run: uv run --locked mypy src/yuho --ignore-missing-imports 2>&1 | tee logs/mypy.log
-
-      - name: Verify CLI reference is up-to-date
-        run: uv run --locked python scripts/gen_cli_reference.py --check 2>&1 | tee logs/cli-reference.log
-
-      - name: Upload lint logs
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: lint-logs
-          path: logs/
-          retention-days: 7
-
-  test:
-    name: Test (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
-
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-
-      - name: Create logs directory
-        run: mkdir -p logs
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-        with:
-          version: "0.11.14"
-
-      - name: Synchronize locked dependencies
-        run: |
-          uv sync --locked --all-extras 2>&1 | tee logs/install-yuho.log
-          uv pip list 2>&1 | tee logs/pip-list.log
-
-      - name: Smoke test parser CLI
-        run: uv run --locked yuho check examples/simple_statute.yh 2>&1 | tee logs/smoke-check.log
-
-      - name: Run tests
-        run: |
-          uv run --locked pytest tests/ -v --tb=long 2>&1 | tee logs/pytest.log
-
-      - name: Upload test logs
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: test-logs-py${{ matrix.python-version }}
-          path: logs/
-          retention-days: 7
-
-  akn-xsd:
-    name: Akoma Ntoso XSD round-trip
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-
-      - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.12"
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-        with:
-          version: "0.11.14"
-
-      - name: Install xmllint
-        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
-
-      - name: Synchronize locked dependencies
-        run: uv sync --locked --all-extras
-
-      - name: Round-trip every section through AKN + xmllint --schema
-        run: |
-          uv run --locked python scripts/akn_roundtrip.py --xsd | tee akn-xsd.log
-          grep -q "524/524 validate clean" akn-xsd.log
-
-      - name: Upload AKN XSD log
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: akn-xsd-log
-          path: akn-xsd.log
-          retention-days: 7
-
-  grammar:
-    name: Generated Tree-sitter Grammar
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-
-      - name: Set up Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: "20"
-
-      - name: Install locked grammar tooling
-        working-directory: src/tree-sitter-yuho
-        run: npm ci
-
-      - name: Verify generated parser is current
-        run: python3 scripts/verify_generated_grammar.py
-
-  release-audit:
-    name: Clean Release Gate
+  verify:
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-
-      - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      - uses: haskell-actions/setup@v2
+        with:
+          ghc-version: "9.8.4"
+          cabal-version: "3.12"
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.12"
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-        with:
-          version: "0.11.14"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: "20"
-
-      - name: Install locked grammar tooling
-        working-directory: src/tree-sitter-yuho
-        run: npm ci
-
-      - name: Set up pinned Lean toolchain
-        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9 # v1.5.0
+      - uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
         with:
           lake-package-directory: mechanisation
           build: true
           test: false
           lint: false
           use-github-cache: false
-
-      - name: Install XML validation tool
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libxml2-utils
-
-      - name: Verify the lockfile is current
-        run: uv lock --check
-
-      - name: Run the clean release audit
-        run: uv run --locked python scripts/release_audit.py --full
-
-  build:
-    name: Build Package
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [lint, test, akn-xsd, grammar, release-audit]
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-
-      - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      - name: Install test-only schema validator
+        run: python3 -m pip install 'jsonschema==4.25.1'
+      - name: Restore Cabal cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
-          python-version: "3.12"
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-        with:
-          version: "0.11.14"
-
-      - name: Build package
-        run: uv build --out-dir dist --clear
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: dist
-          path: dist/
+          path: ~/.cabal
+          key: cabal-${{ runner.os }}-${{ hashFiles('cabal.project.freeze') }}
+      - name: Build and verify
+        run: make verify GHC=ghc-9.8.4
