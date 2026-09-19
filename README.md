@@ -5,13 +5,10 @@
 <p align="center"><em>A Research Language for modelling & evaluating Singapore Criminal Law </em></p>
 
 <p align="center">
-  <a href="https://github.com/gongahkia/yuho/actions/workflows/ci.yml"><img src="https://github.com/gongahkia/yuho/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
-  <img src="https://img.shields.io/badge/GHC-9.8.4-5e5086.svg" alt="GHC 9.8.4">
   <a href="https://github.com/gongahkia/yuho/releases/tag/1.0.0"><img src="https://img.shields.io/badge/yuho_1.0.0-passing-light_green"></a>
+  <a href="https://github.com/gongahkia/yuho/actions/workflows/ci.yml"><img src="https://github.com/gongahkia/yuho/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/GHC-9.8.4-5e5086.svg" alt="GHC 9.8.4">
 </p>
-
-<p align="center"><a href="./docs/README.md">Docs</a> · <a href="./docs/assurance.md">Assurance</a> · <a href="./research/singapore/CORPUS-INDEX.md">Corpus</a></p>
 
 ## What is Yuho?
 
