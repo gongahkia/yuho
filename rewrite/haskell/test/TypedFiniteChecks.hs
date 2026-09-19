@@ -68,7 +68,7 @@ semanticMatrices = do
             (PredicateExpr "holds" [VariableTerm "var:item"]))
         ,("q:exists-empty",ExistsExpr "var:item" "empty"
             (PredicateExpr "holds" [VariableTerm "var:item"]))]
-        [] [] [] Map.empty [] ["fictional empty-domain identity fixture"]
+        [] [] [] [] [] Map.empty [] ["fictional empty-domain identity fixture"]
       emptyStatuses = evaluateTypedFinite emptyProgram >>= \result ->
         Right (map expressionStatus (finiteResultExpressions result))
   check "empty-domain quantifier identities"

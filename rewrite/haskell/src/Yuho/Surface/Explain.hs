@@ -439,6 +439,10 @@ renderPenaltyTerm term = case term of
     "imprisonment " <> endpoints minimumValue maximumValue <> " " <> tokenText unit
   FineTerm _ currency minimumValue maximumValue ->
     "fine " <> tokenText currency <> " " <> endpoints minimumValue maximumValue
+  LifeImprisonmentTerm _ -> "life imprisonment"
+  CaningTerm _ minimumValue maximumValue ->
+    "caning " <> endpoints minimumValue maximumValue <> " strokes"
+  DeathTerm _ -> "death"
   PenaltyAllOf _ children -> "all of (" <> joined children <> ")"
   PenaltyExactlyOneOf _ children -> "exactly one of (" <> joined children <> ")"
   PenaltyOneOrMoreOf _ children -> "one or more of (" <> joined children <> ")"

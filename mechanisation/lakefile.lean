@@ -35,3 +35,6 @@ lean_exe «core_conformance» where
 
 lean_exe «typed_finite_conformance» where
   root := `scripts.TypedFiniteConformance
+
+lean_exe «release_v03_conformance» where
+  root := `scripts.ReleaseV03Conformance

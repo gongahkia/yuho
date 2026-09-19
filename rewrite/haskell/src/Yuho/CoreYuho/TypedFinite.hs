@@ -3,6 +3,7 @@ module Yuho.CoreYuho.TypedFinite
   ( EntityTypeDecl(..), EntityDecl(..), PredicateDecl(..), PredicateKind(..)
   , ScalarType(..), ScalarDecl(..), ScalarValue(..), Term(..), Comparison(..)
   , FiniteExpr(..), CardinalityKind(..), RulePolarity(..), RuleDecl(..)
+  , NormModality(..), NormDecl(..), ResponsibilityKind(..), ResponsibilityRoute(..)
   , PriorityDecl(..), GroundFact(..), TypedFiniteProgram(..)
   , FiniteModule(..)
   , ExprObservation(..), RuleObservation(..), PropositionObservation(..)
@@ -82,6 +83,31 @@ data RuleDecl = RuleDecl
   , ruleCitation :: Maybe Text
   } deriving (Eq, Ord, Show)
 
+data NormModality = Required | Prohibited | Permitted
+  deriving (Eq, Ord, Show)
+
+data NormDecl = NormDecl
+  { normName :: Text
+  , normSubject :: Text
+  , normModality :: NormModality
+  , normAction :: Text
+  , normApplicability :: FiniteExpr
+  , normCitation :: Maybe Text
+  } deriving (Eq, Ord, Show)
+
+data ResponsibilityKind = PrincipalConduct | JointConduct | Instigation
+  | Conspiracy | IntentionalAid | AttemptRoute | AuthoredContribution Text
+  deriving (Eq, Ord, Show)
+
+data ResponsibilityRoute = ResponsibilityRoute
+  { routeName :: Text
+  , routeSubject :: Text
+  , routeKind :: ResponsibilityKind
+  , routeTarget :: Text
+  , routeRequirements :: FiniteExpr
+  , routeCitation :: Maybe Text
+  } deriving (Eq, Ord, Show)
+
 data PriorityDecl = PriorityDecl Text Text deriving (Eq, Ord, Show)
 
 data GroundFact = GroundFact
@@ -107,6 +133,8 @@ data TypedFiniteProgram = TypedFiniteProgram
   , finitePropositions :: [Text]
   , finiteRequirements :: [(Text, FiniteExpr)]
   , finiteRules :: [RuleDecl]
+  , finiteNorms :: [NormDecl]
+  , finiteRoutes :: [ResponsibilityRoute]
   , finitePriorities :: [PriorityDecl]
   , finiteFacts :: [GroundFact]
   , finiteValues :: Map Text ScalarValue

@@ -45,7 +45,66 @@ evaluateConformanceBytes bytes = do
       results <- traverse (uncurry evaluateV02) (zip [0 :: Int ..] rawVectors)
       pure (encodeJson (JObj
         [("results",JArr results),("schema",JStr "yuho.core-conformance-results-v0.2")]))
+    "yuho.core-conformance-v0.3" -> do
+      results <- traverse (uncurry evaluateV03) (zip [0 :: Int ..] rawVectors)
+      pure (encodeJson (JObj
+        [("results",JArr results),("schema",JStr "yuho.core-conformance-results-v0.3")]))
     _ -> Left "unsupported conformance schema"
+
+evaluateV03 :: Int -> J -> Either Text J
+evaluateV03 index value = do
+  fields <- objectFields value `orElse` (path <> ": expected object")
+  kind <- fieldText path "kind" fields
+  identifier <- fieldText path "id" fields
+  result <- case kind of
+    "norm-applicability" -> do
+      exactFields path ["id","kind","status"] fields
+      finiteTruth <$> fieldStatus path "status" fields
+    "norm-conflict" -> do
+      exactFields path ["id","kind","left","right"] fields
+      left <- fieldText path "left" fields
+      right <- fieldText path "right" fields
+      leftModality <- modality left
+      rightModality <- modality right
+      pure (if normConflict leftModality rightModality then "true" else "false")
+    "sanction-bounds" -> do
+      exactFields path ["id","kind","maximum","minimum"] fields
+      minimumValue <- fieldText path "minimum" fields >>= bound
+      maximumValue <- fieldText path "maximum" fields >>= bound
+      pure (if validBounds minimumValue maximumValue then "valid" else "invalid")
+    "sanction-shape" -> do
+      exactFields path ["id","kind","shape"] fields
+      fieldText path "shape" fields
+    "responsibility-route" -> do
+      exactFields path ["id","kind","status"] fields
+      finiteTruth <$> fieldStatus path "status" fields
+    "missing-route" -> do
+      exactFields path ["id","kind"] fields
+      pure "not_satisfied"
+    "priority" -> do
+      row <- evaluateV02 index value
+      case row of
+        JObj pairs -> maybe (Left (path <> ": v0.3 priority result missing")) Right
+          (lookup "result" pairs >>= textValue)
+        _ -> Left (path <> ": invalid v0.3 priority result")
+    _ -> Left (path <> ": unsupported v0.3 construct kind " <> kind)
+  pure (JObj [("id",JStr identifier),("result",JStr result)])
+  where
+    path = "/vectors/" <> Text.pack (show index)
+    modality "required" = Right (0 :: Int)
+    modality "prohibited" = Right 1
+    modality "permitted" = Right 2
+    modality _ = Left (path <> ": unsupported norm modality")
+    normConflict left right = (left == 1 && right /= 1) || (right == 1 && left /= 1)
+    bound "not_stated" = Right Nothing
+    bound "unbounded" = Right (Just Nothing)
+    bound item = case reads (Text.unpack item) of
+      [(number,"")] | number >= (0 :: Integer) -> Right (Just (Just number))
+      _ -> Left (path <> ": invalid sanction bound")
+    validBounds (Just Nothing) _ = False
+    validBounds (Just (Just minimumValue)) (Just (Just maximumValue)) =
+      minimumValue <= maximumValue
+    validBounds _ _ = True
 
 evaluateV02 :: Int -> J -> Either Text J
 evaluateV02 index value = do

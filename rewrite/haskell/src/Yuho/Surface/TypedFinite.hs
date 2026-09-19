@@ -41,6 +41,8 @@ data RawModel = RawModel
   , rawPropositions :: [Token]
   , rawRequirements :: [(Token,FiniteExpr)]
   , rawRules :: [(Token,[(Token,Token)],Token,Token,FiniteExpr,Maybe Token)]
+  , rawNorms :: [(Token,Token,Token,Token,FiniteExpr,Maybe Token)]
+  , rawRoutes :: [(Token,Token,Token,Token,FiniteExpr,Maybe Token)]
   , rawPriorities :: [(Token,Token)]
   , rawModuleRoot :: Maybe Token
   , rawImports :: [(Token,Token,Token)]
@@ -320,6 +322,38 @@ parseModelDeclaration = do
       _ <- takeText ";"
       pure (\model -> model { rawRules = rawRules model
         ++ [(identifier,parameters,polarity,conclusion,body,citation)] })
+    "norm" -> do
+      identifier <- word
+      _ <- takeText "subject"
+      subject <- word
+      _ <- takeText "modality"
+      modality <- word
+      _ <- takeText "action"
+      _ <- takeText "proposition"
+      action <- word
+      _ <- takeText "when"
+      body <- parseExpression
+      hasCitation <- optionalText "citation"
+      citation <- if hasCitation then Just <$> string else pure Nothing
+      _ <- takeText ";"
+      pure (\model -> model { rawNorms = rawNorms model
+        ++ [(identifier,subject,modality,action,body,citation)] })
+    "responsibility-route" -> do
+      identifier <- word
+      _ <- takeText "subject"
+      subject <- word
+      _ <- takeText "kind"
+      kindValue <- word
+      _ <- takeText "target"
+      _ <- takeText "proposition"
+      target <- word
+      _ <- takeText "when"
+      body <- parseExpression
+      hasCitation <- optionalText "citation"
+      citation <- if hasCitation then Just <$> string else pure Nothing
+      _ <- takeText ";"
+      pure (\model -> model { rawRoutes = rawRoutes model
+        ++ [(identifier,subject,kindValue,target,body,citation)] })
     "priority" -> do
       higher <- word
       _ <- takeText "over"
@@ -364,7 +398,7 @@ parseTypedFiniteModel path bytes = do
 
 emptyRawModel :: Token -> RawModel
 emptyRawModel identifier = RawModel identifier (Token WordToken "2048" 1 1)
-  [] [] [] [] [] [] [] [] [] Nothing [] [] []
+  [] [] [] [] [] [] [] [] [] [] [] Nothing [] [] []
 
 parseTypedFiniteModule :: FilePath -> BS.ByteString -> Either Diagnostic RawModule
 parseTypedFiniteModule path bytes = do
@@ -673,6 +707,10 @@ mergeSelection host (kindValue,identifier,moduleModel) = case kindValue of
       ++ selected rawRequirements (\(item,_) -> tokenText item == tokenText identifier) }
   "rule" -> host { rawRules = rawRules host
       ++ selected rawRules (\(item,_,_,_,_,_) -> tokenText item == tokenText identifier) }
+  "norm" -> host { rawNorms = rawNorms host
+      ++ selected rawNorms (\(item,_,_,_,_,_) -> tokenText item == tokenText identifier) }
+  "responsibility-route" -> host { rawRoutes = rawRoutes host
+      ++ selected rawRoutes (\(item,_,_,_,_,_) -> tokenText item == tokenText identifier) }
   "priority" -> host { rawPriorities = rawPriorities host
       ++ selected rawPriorities (\(item,_) -> tokenText item == tokenText identifier) }
   _ -> host
@@ -690,6 +728,9 @@ validateModel path scenarioPath model scenario = do
   enforceLimit path "scalars" 256 (map fst (rawScalars model))
   enforceLimit path "ground applications" 1024 [token | (token,_,_,_) <- scenarioFacts scenario]
   enforceLimit path "rules" 128 [token | (token,_,_,_,_,_) <- rawRules model]
+  enforceLimit path "norms" 64 [token | (token,_,_,_,_,_) <- rawNorms model]
+  enforceLimit path "responsibility routes" 64
+    [token | (token,_,_,_,_,_) <- rawRoutes model]
   enforceLimit path "priority edges" 256 (map fst (rawPriorities model))
   mapM_ (identifierLength path) (allIdentifiers model)
   uniqueTokens path "SFT002" "duplicate entity type" (rawEntityTypes model)
@@ -700,6 +741,9 @@ validateModel path scenarioPath model scenario = do
   uniqueTokens path "SFT002" "duplicate proposition" (rawPropositions model)
   uniqueTokens path "SFT002" "duplicate requirement" (map fst (rawRequirements model))
   uniqueTokens path "SFT002" "duplicate rule" [token | (token,_,_,_,_,_) <- rawRules model]
+  uniqueTokens path "SFT002" "duplicate norm" [token | (token,_,_,_,_,_) <- rawNorms model]
+  uniqueTokens path "SFT002" "duplicate responsibility route"
+    [token | (token,_,_,_,_,_) <- rawRoutes model]
   let typeNames = Set.fromList (map tokenText (rawEntityTypes model))
       enumMap = Map.fromList [(tokenText name,map tokenText values) | (name,values) <- rawEnums model]
   mapM_ (validateEntity path typeNames) (rawEntities model)
@@ -719,8 +763,20 @@ validateModel path scenarioPath model scenario = do
       >> pure identifier) (rawRequirements model)
   rules <- traverse (ruleDeclaration path typeNames propositionSet entityIndex
     predicateIndex scalarIndex requirementIndex) (rawRules model)
-  priorities <- traverse (priorityDeclaration path (Set.fromList (map ruleName rules)))
-    (rawPriorities model)
+  norms <- traverse (normDeclaration path propositionSet entityIndex typeNames
+    predicateIndex scalarIndex requirementIndex) (rawNorms model)
+  routes <- traverse (routeDeclaration path propositionSet entityIndex typeNames
+    predicateIndex scalarIndex requirementIndex) (rawRoutes model)
+  let elaborated = rules ++ map normRule norms ++ map routeRule routes
+      normNames = Map.fromList [(normName item,ruleName (normRule item)) | item <- norms]
+      routeNames = Map.fromList [(routeName item,ruleName (routeRule item)) | item <- routes]
+      normalizeEndpoint token = token { tokenText = Map.findWithDefault
+        (Map.findWithDefault (tokenText token) (tokenText token) routeNames)
+        (tokenText token) normNames }
+      normalizedPriorities = [(normalizeEndpoint higher,normalizeEndpoint lower)
+        | (higher,lower) <- rawPriorities model]
+  priorities <- traverse (priorityDeclaration path (Set.fromList (map ruleName elaborated)))
+    normalizedPriorities
   validatePriorityAcyclic path priorities
   facts <- traverse (groundFact scenarioPath entityIndex predicateIndex) (scenarioFacts scenario)
   uniqueGroundFacts scenarioPath facts
@@ -739,7 +795,7 @@ validateModel path scenarioPath model scenario = do
         (map (EntityTypeDecl . tokenText) (rawEntityTypes model)) entities predicates
         scalarDecls (map tokenText (rawPropositions model))
         [(tokenText identifier,expression) | (identifier,expression) <- rawRequirements model]
-        rules priorities facts valueMap [] (map tokenText (rawLimitations model))
+        elaborated norms routes priorities facts valueMap [] (map tokenText (rawLimitations model))
   estimated <- either (at "SFT010" path (rawLimit model)) Right
     (expandedNodeEstimate program)
   when (estimated > fromInteger limit) (at "SFT010" path (rawLimit model)
@@ -774,6 +830,8 @@ allIdentifiers model = rawEntityTypes model ++ map fst (rawEntities model)
   ++ map fst (rawEnums model) ++ map fst (rawScalars model)
   ++ [token | (token,_,_) <- rawPredicates model] ++ rawPropositions model
   ++ map fst (rawRequirements model) ++ [token | (token,_,_,_,_,_) <- rawRules model]
+  ++ [token | (token,_,_,_,_,_) <- rawNorms model]
+  ++ [token | (token,_,_,_,_,_) <- rawRoutes model]
 
 uniqueTokens :: FilePath -> Text -> Text -> [Token] -> Either Diagnostic ()
 uniqueTokens path code message = go Set.empty
@@ -897,6 +955,90 @@ ruleDeclaration path types propositions entities predicates scalars requirements
   pure (RuleDecl (tokenText identifier)
     [(tokenText variable,tokenText kindValue) | (variable,kindValue) <- parameters]
     polarity (tokenText conclusion) body (tokenText <$> citation))
+
+normDeclaration :: FilePath -> Set Text -> Map Text Text -> Set Text
+  -> Map Text PredicateDecl -> Map Text ScalarType -> Map Text FiniteExpr
+  -> (Token,Token,Token,Token,FiniteExpr,Maybe Token)
+  -> Either Diagnostic NormDecl
+normDeclaration path propositions entities types predicates scalars requirements
+    (identifier,subject,modalityToken,action,body,citation) = do
+  unless ("n:" `Text.isPrefixOf` tokenText identifier)
+    (at "SFT015" path identifier "norm requires n: identifier")
+  unless (Map.member (tokenText subject) entities)
+    (at "SFT003" path subject "norm subject must be a declared entity")
+  unless (Set.member (tokenText action) propositions)
+    (at "SFT003" path action "norm action must be a declared proposition")
+  modality <- case tokenText modalityToken of
+    "required" -> Right Required
+    "prohibited" -> Right Prohibited
+    "permitted" -> Right Permitted
+    _ -> at "SFT015" path modalityToken
+      "norm modality must be required, prohibited or permitted"
+  validateExpression path types entities predicates scalars requirements Set.empty 0 body
+  pure (NormDecl (tokenText identifier) (tokenText subject) modality
+    (tokenText action) body (tokenText <$> citation))
+
+routeDeclaration :: FilePath -> Set Text -> Map Text Text -> Set Text
+  -> Map Text PredicateDecl -> Map Text ScalarType -> Map Text FiniteExpr
+  -> (Token,Token,Token,Token,FiniteExpr,Maybe Token)
+  -> Either Diagnostic ResponsibilityRoute
+routeDeclaration path propositions entities types predicates scalars requirements
+    (identifier,subject,kindToken,target,body,citation) = do
+  unless ("route:" `Text.isPrefixOf` tokenText identifier)
+    (at "SFT016" path identifier "responsibility route requires route: identifier")
+  unless (Map.member (tokenText subject) entities)
+    (at "SFT003" path subject "responsibility route subject must be a declared entity")
+  unless (Set.member (tokenText target) propositions)
+    (at "SFT003" path target "responsibility route target must be a declared proposition")
+  kindValue <- case tokenText kindToken of
+    "principal-conduct" -> Right PrincipalConduct
+    "joint-conduct" -> Right JointConduct
+    "instigation" -> Right Instigation
+    "conspiracy" -> Right Conspiracy
+    "intentional-aid" -> Right IntentionalAid
+    "attempt" -> Right AttemptRoute
+    value | "other:" `Text.isPrefixOf` value && Text.length value > 6 ->
+      Right (AuthoredContribution (Text.drop 6 value))
+    _ -> at "SFT016" path kindToken "unsupported responsibility route kind"
+  validateExpression path types entities predicates scalars requirements Set.empty 0 body
+  unless (expressionMentions (tokenText subject) requirements body)
+    (at "SFT016" path subject
+      "responsibility route requirements must explicitly mention its subject actor")
+  pure (ResponsibilityRoute (tokenText identifier) (tokenText subject) kindValue
+    (tokenText target) body (tokenText <$> citation))
+
+normRule :: NormDecl -> RuleDecl
+normRule item = RuleDecl ("r:norm:" <> normName item) [] polarity
+  (normAction item) (normApplicability item) (normCitation item)
+  where
+    polarity = case normModality item of
+      Prohibited -> Defeat
+      Required -> Establish
+      Permitted -> Establish
+
+routeRule :: ResponsibilityRoute -> RuleDecl
+routeRule item = RuleDecl ("r:route:" <> routeName item) [] Establish
+  (routeTarget item) (routeRequirements item) (routeCitation item)
+
+expressionMentions :: Text -> Map Text FiniteExpr -> FiniteExpr -> Bool
+expressionMentions wanted requirements = go Set.empty
+  where
+    go seen expression = case expression of
+      PredicateExpr _ terms -> any ((== wanted) . entityName) terms
+      AllExpr members -> any (go seen) members
+      AnyExpr members -> any (go seen) members
+      NotExpr member -> go seen member
+      ForallExpr _ _ member -> go seen member
+      ExistsExpr _ _ member -> go seen member
+      CardinalityExpr _ _ members -> any (go seen) members
+      ReferenceExpr identifier
+        | Set.member identifier seen -> False
+        | otherwise -> maybe False (go (Set.insert identifier seen))
+            (Map.lookup identifier requirements)
+      _ -> False
+    entityName term = case term of
+      EntityTerm identifier -> identifier
+      VariableTerm _ -> ""
 
 priorityDeclaration :: FilePath -> Set Text -> (Token,Token)
   -> Either Diagnostic PriorityDecl
@@ -1154,7 +1296,7 @@ cardinalityText Exactly = "exactly"
 
 explainTypedFinite :: TypedFiniteProgram -> TypedFiniteResult -> Text
 explainTypedFinite program result = Text.unlines $
-  ["Core Yuho v0.2 typed finite rules", "Model: " <> finiteProgramId program
+  [coreVersion <> " typed finite rules", "Model: " <> finiteProgramId program
   ,"Exact-version modules:"]
   ++ ["- " <> finiteModuleAlias item <> " = " <> finiteModuleName item <> "@"
       <> finiteModuleVersion item | item <- finiteModules program]
@@ -1168,14 +1310,44 @@ explainTypedFinite program result = Text.unlines $
       <> " " <> observedProposition row <> ": " <> truthName (observedStatus row)
       <> bindingText (observedBindings row) <> blockedText (observedDefeatedBy row)
       | row <- finiteResultRules result]
+  ++ ["Norm " <> normName item <> " — subject " <> normSubject item
+      <> ", modality " <> modalityText (normModality item) <> ", action "
+      <> normAction item <> ": " <> ruleStatus ("r:norm:" <> normName item)
+      | item <- finiteNorms program]
+  ++ ["Responsibility route " <> routeName item <> " — subject " <> routeSubject item
+      <> ", kind " <> routeKindText (routeKind item) <> ", target " <> routeTarget item
+      <> ": " <> ruleStatus ("r:route:" <> routeName item)
+      | item <- finiteRoutes program]
   ++ ["Proposition " <> observedPropositionId row <> ": " <> truthName (propositionStatus row)
       <> " (" <> propositionState row <> ")" | row <- finiteResultPropositions result]
   ++ ["Limitations:"] ++ map ("- " <>) (finiteLimitations program)
   ++ ["Technical classifications and scalar values are supplied. Yuho does not assess evidence, determine guilt, conviction, sentence or court disposition."]
   where
+    coreVersion | null (finiteNorms program) && null (finiteRoutes program) = "Core Yuho v0.2"
+                | otherwise = "Core Yuho v0.3"
     polarityText Establish = "establishes"; polarityText Defeat = "defeats"
     bindingText [] = ""; bindingText bindings = " bindings=" <> Text.pack (show bindings)
     blockedText [] = ""; blockedText rules = " blocked-by=" <> Text.intercalate "," rules
+    ruleStatus identifier = case filter ((== identifier) . observedRule)
+        (finiteResultRules result) of
+      row:_ -> truthName (observedStatus row)
+        <> if null (observedDefeatedBy row) then ""
+           else " blocked-by=" <> Text.intercalate "," (observedDefeatedBy row)
+      [] -> "not evaluated"
+
+modalityText :: NormModality -> Text
+modalityText Required = "required"
+modalityText Prohibited = "prohibited"
+modalityText Permitted = "permitted"
+
+routeKindText :: ResponsibilityKind -> Text
+routeKindText PrincipalConduct = "principal-conduct"
+routeKindText JointConduct = "joint-conduct"
+routeKindText Instigation = "instigation"
+routeKindText Conspiracy = "conspiracy"
+routeKindText IntentionalAid = "intentional-aid"
+routeKindText AttemptRoute = "attempt"
+routeKindText (AuthoredContribution value) = "other:" <> value
 
 explainTypedFiniteCase :: TypedFiniteCase -> Text
 explainTypedFiniteCase declaration = Text.unlines $

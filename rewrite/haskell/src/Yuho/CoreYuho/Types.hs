@@ -60,6 +60,9 @@ data CoreAttachment = CoreAttachment
 data CorePenaltyTerm
   = CoreImprisonment Text Text Text Text
   | CoreFine Text Text Text Text
+  | CoreLifeImprisonment Text
+  | CoreCaning Text Text Text
+  | CoreDeath Text
   | CoreAllTerms Text [CorePenaltyTerm]
   | CoreExactlyOneTerm Text [CorePenaltyTerm]
   | CoreOneOrMoreTerms Text [CorePenaltyTerm]

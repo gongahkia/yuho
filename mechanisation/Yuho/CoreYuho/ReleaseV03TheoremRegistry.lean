@@ -1,0 +1,13 @@
+import Yuho.CoreYuho.ReleaseV03
+
+#check Yuho.CoreYuho.ReleaseV03.normative_applicability_deterministic
+#check Yuho.CoreYuho.ReleaseV03.normative_applicability_total
+#check Yuho.CoreYuho.ReleaseV03.explicit_normative_conflict_symmetric
+#check Yuho.CoreYuho.ReleaseV03.no_norm_inference_from_missing_declarations
+#check Yuho.CoreYuho.ReleaseV03.specified_bounds_valid_when_ordered
+#check Yuho.CoreYuho.ReleaseV03.candidate_sanction_structure_preserved
+#check Yuho.CoreYuho.ReleaseV03.actor_route_isolation
+#check Yuho.CoreYuho.ReleaseV03.irrelevant_actor_environment_extension
+#check Yuho.CoreYuho.ReleaseV03.explicit_route_required_for_cross_actor_effect
+#check Yuho.CoreYuho.ReleaseV03.legacy_participation_elaboration_compatible
+#check Yuho.CoreYuho.ReleaseV03.legacy_attempt_elaboration_compatible

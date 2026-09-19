@@ -1,6 +1,6 @@
 cabal-version: 3.0
 name: yuho-foundation
-version: 0.1.0.0
+version: 1.0.0.0
 build-type: Simple
 
 common foundation
@@ -31,6 +31,7 @@ library
       Yuho.CoreYuho.Conformance
       Yuho.CoreYuho.TypedFinite
       Yuho.Corpus
+      Yuho.Release
       Yuho.Diagram.Types
       Yuho.Diagram.Build
       Yuho.Diagram.Encode
@@ -110,34 +111,34 @@ executable yuho
   import: foundation
   main-is: YuhoMain.hs
   hs-source-dirs: app
-  build-depends: yuho-foundation ==0.1.0.0
+  build-depends: yuho-foundation ==1.0.0.0
 
 executable yuho-model-bundle
   import: foundation
   main-is: ModelBundleMain.hs
   hs-source-dirs: app
-  build-depends: yuho-foundation ==0.1.0.0
+  build-depends: yuho-foundation ==1.0.0.0
 
 executable yuho-kernel
   import: foundation
   main-is: Main.hs
   hs-source-dirs: app
-  build-depends: yuho-foundation ==0.1.0.0
+  build-depends: yuho-foundation ==1.0.0.0
 
 executable yuho-core-conformance
   import: foundation
   main-is: CoreConformanceMain.hs
   hs-source-dirs: app
-  build-depends: yuho-foundation ==0.1.0.0
+  build-depends: yuho-foundation ==1.0.0.0
 
 test-suite foundation-test
   import: foundation
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks
+  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
   hs-source-dirs: test
   build-depends:
-      yuho-foundation ==0.1.0.0
+      yuho-foundation ==1.0.0.0
     , QuickCheck ==2.18.0.0
     , directory ==1.3.8.5
     , filepath ==1.4.301.0

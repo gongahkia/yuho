@@ -249,6 +249,10 @@ penaltyTerm term = case term of
   FineTerm item currency minimumValue maximumValue ->
     CoreFine (tokenText item) (tokenText currency) (endpoint minimumValue)
       (endpoint maximumValue)
+  LifeImprisonmentTerm item -> CoreLifeImprisonment (tokenText item)
+  CaningTerm item minimumValue maximumValue ->
+    CoreCaning (tokenText item) (endpoint minimumValue) (endpoint maximumValue)
+  DeathTerm item -> CoreDeath (tokenText item)
   PenaltyAllOf item children -> CoreAllTerms (tokenText item) (map penaltyTerm children)
   PenaltyExactlyOneOf item children ->
     CoreExactlyOneTerm (tokenText item) (map penaltyTerm children)

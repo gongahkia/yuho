@@ -52,6 +52,9 @@ data PenaltyEndpoint = PenaltyNotStated Token | PenaltyUnbounded Token
 data PenaltyTerm
   = ImprisonmentTerm Token PenaltyEndpoint PenaltyEndpoint Token
   | FineTerm Token Token PenaltyEndpoint PenaltyEndpoint
+  | LifeImprisonmentTerm Token
+  | CaningTerm Token PenaltyEndpoint PenaltyEndpoint
+  | DeathTerm Token
   | PenaltyAllOf Token [PenaltyTerm]
   | PenaltyExactlyOneOf Token [PenaltyTerm]
   | PenaltyOneOrMoreOf Token [PenaltyTerm]

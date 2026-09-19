@@ -1,0 +1,8 @@
+// Fictional externally supplied proof classifications; no evidence is assessed.
+scenario S00 for FictionalRestrictedAreaEntry-v0.1 {
+  f:entry = proved;
+  f:no-authorization = proved;
+  f:knowledge = proved;
+  f:immediate-danger = not_proved;
+  f:rescue-purpose = proved;
+}

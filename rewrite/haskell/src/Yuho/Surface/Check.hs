@@ -1675,6 +1675,9 @@ checkCandidatePenalties path model sources = do
       FineTerm item currency minimumValue maximumValue -> do
         expect path "SFP004" currency "SGD"
         checkBounds item minimumValue maximumValue
+      LifeImprisonmentTerm _ -> pure ()
+      CaningTerm item minimumValue maximumValue -> checkBounds item minimumValue maximumValue
+      DeathTerm _ -> pure ()
       PenaltyAllOf item children -> checkChildren item children
       PenaltyExactlyOneOf item children -> checkChildren item children
       PenaltyOneOrMoreOf item children -> checkChildren item children
@@ -1700,6 +1703,9 @@ checkCandidatePenalties path model sources = do
     termTokens term = case term of
       ImprisonmentTerm item _ _ _ -> [item]
       FineTerm item _ _ _ -> [item]
+      LifeImprisonmentTerm item -> [item]
+      CaningTerm item _ _ -> [item]
+      DeathTerm item -> [item]
       PenaltyAllOf item children -> item : concatMap termTokens children
       PenaltyExactlyOneOf item children -> item : concatMap termTokens children
       PenaltyOneOrMoreOf item children -> item : concatMap termTokens children

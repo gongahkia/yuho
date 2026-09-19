@@ -1,0 +1,17 @@
+typed-rules-model FictionalNormativeResponsibility-v0.3 {
+  limit 512;
+  entity-type person;
+  entity actor:alex as person;
+  entity actor:blair as person;
+  predicate acts(person) kind conduct;
+  predicate assists(person, person) kind relationship;
+  proposition p:specified-action;
+  proposition p:responsibility-route;
+  requirement q:acts = acts(actor:alex);
+  requirement q:aid = all(assists(actor:blair, actor:alex), acts(actor:alex));
+  norm n:prohibition subject actor:alex modality prohibited action proposition p:specified-action when q:acts citation "fictional prohibition";
+  norm n:permission subject actor:alex modality permitted action proposition p:specified-action when q:acts citation "fictional permission";
+  priority n:prohibition over n:permission;
+  responsibility-route route:aid subject actor:blair kind intentional-aid target proposition p:responsibility-route when q:aid citation "fictional contribution route";
+  limitation "Wholly fictional technical fixture; no legal duty or responsibility is asserted.";
+}

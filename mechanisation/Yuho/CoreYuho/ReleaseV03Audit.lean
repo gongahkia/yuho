@@ -1,0 +1,7 @@
+import Yuho.CoreYuho.ReleaseV03TheoremRegistry
+
+#print axioms Yuho.CoreYuho.ReleaseV03.explicit_normative_conflict_symmetric
+#print axioms Yuho.CoreYuho.ReleaseV03.no_norm_inference_from_missing_declarations
+#print axioms Yuho.CoreYuho.ReleaseV03.specified_bounds_valid_when_ordered
+#print axioms Yuho.CoreYuho.ReleaseV03.explicit_route_required_for_cross_actor_effect
+#print axioms Yuho.CoreYuho.ReleaseV03.legacy_participation_elaboration_compatible

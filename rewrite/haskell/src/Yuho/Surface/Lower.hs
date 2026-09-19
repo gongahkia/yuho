@@ -136,6 +136,15 @@ termValue text term = case term of
     [("term_id",tokenValue item),("span",wholeSpan text),("kind",string "fine")
     ,("currency",tokenValue currency),("minimum",endpointValue True minimumValue)
     ,("maximum",endpointValue True maximumValue)]
+  LifeImprisonmentTerm item -> object
+    [("term_id",tokenValue item),("span",wholeSpan text)
+    ,("kind",string "life_imprisonment")]
+  CaningTerm item minimumValue maximumValue -> object
+    [("term_id",tokenValue item),("span",wholeSpan text),("kind",string "caning")
+    ,("minimum",endpointValue False minimumValue)
+    ,("maximum",endpointValue False maximumValue)]
+  DeathTerm item -> object
+    [("term_id",tokenValue item),("span",wholeSpan text),("kind",string "death")]
   PenaltyAllOf item children -> combination "all_of" item children
   PenaltyExactlyOneOf item children -> combination "exactly_one_of" item children
   PenaltyOneOrMoreOf item children -> combination "one_or_more_of" item children

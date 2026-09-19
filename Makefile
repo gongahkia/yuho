@@ -39,7 +39,7 @@ AUDIT_PYTHON ?= python3
 YUHO ?= yuho
 LOGS = logs
 
-.PHONY: install doctor smoke verify-all verify-core verify-core-yuho-conformance verify-typed-finite-protocol \
+.PHONY: install doctor smoke verify-all verify-core verify-core-yuho-conformance verify-core-yuho-v03-conformance verify-typed-finite-protocol \
         verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
         verify-penalty-verdicts verify-lean-verdicts verify-lean-penalty-footprints \
@@ -270,6 +270,9 @@ verify-core-yuho-conformance:
 	$(PYTHON) scripts/verify_core_yuho_theorems.py
 	$(PYTHON) scripts/verify_core_yuho_conformance.py
 	$(PYTHON) scripts/verify_core_yuho_typed_finite_conformance.py
+
+verify-core-yuho-v03-conformance:
+	$(PYTHON) scripts/verify_core_yuho_v03_conformance.py
 
 verify-typed-finite-protocol:
 	cd rewrite/haskell && \

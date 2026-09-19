@@ -30,3 +30,6 @@ import Yuho.CoreYuho.TheoremRegistry
 import Yuho.CoreYuho.TypedFinite
 import Yuho.CoreYuho.TypedFiniteTheoremRegistry
 import Yuho.CoreYuho.TypedFiniteConformance
+import Yuho.CoreYuho.ReleaseV03
+import Yuho.CoreYuho.ReleaseV03TheoremRegistry
+import Yuho.CoreYuho.ReleaseV03Conformance

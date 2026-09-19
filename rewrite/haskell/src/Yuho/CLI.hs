@@ -20,6 +20,9 @@ import Yuho.Diagram.Build
 import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg)
 import Yuho.Diagram.Types (DiagramFormat(..), DiagramView(..), SemanticGraph)
 import Yuho.Protocol.Json (J(..), decodeJson, encodeJson, lookupField, textValue)
+import Yuho.Release
+  ( doctorReport, initialiseProject, locateRepository, releaseName, releaseVersion
+  , verifyReleaseManifest )
 import Yuho.Surface.Compile (checkParsed, compileParsed)
 import Yuho.Surface.AST (AnalysisCase(..), CaseAllegation(..))
 import Yuho.Surface.Case
@@ -50,10 +53,35 @@ main = do
   arguments <- getArgs
   case arguments of
     "corpus":rest -> Corpus.runCorpus rest
+    ["version"] -> BS.hPut stdout (Encoding.encodeUtf8
+      (releaseName <> " v" <> releaseVersion <> "\n"))
+    "doctor":rest -> case rootFlag rest of
+      Left message -> releaseIssue message
+      Right root -> doctorReport root >>= BS.hPut stdout . (<> "\n") . encodeJson
+    ["init",destination] -> initialiseProject destination >>= either releaseIssue
+      (const (BS.hPut stdout "{\"status\":\"created\"}\n"))
+    "release":"verify":rest -> case rootFlag rest of
+      Left message -> releaseIssue message
+      Right rootOption -> do
+        root <- locateRepository rootOption >>= either releaseIssue pure
+        verified <- verifyReleaseManifest root >>= either releaseIssue pure
+        let (count,digest) = verified
+        BS.hPut stdout (encodeJson (JObj
+          [("status",JStr "verified"),("artifact_count",JNum (toInteger count))
+          ,("manifest_sha256",JStr digest)]) <> "\n")
     _ -> case options arguments of
       Left message -> report (Diagnostic "SFE001" "<command>" origin message Nothing)
       Right selected -> operate selected
   where origin = Token EndToken "" 1 1
+
+rootFlag :: [String] -> Either Text (Maybe FilePath)
+rootFlag [] = Right Nothing
+rootFlag ["--root",path] = Right (Just path)
+rootFlag _ = Left "expected optional --root <path>"
+
+releaseIssue :: Text -> IO a
+releaseIssue message = report (Diagnostic "SFRL001" "<release>"
+  (Token EndToken "" 1 1) message Nothing)
 
 options :: [String] -> Either Text Options
 options arguments = case arguments of
@@ -69,12 +97,12 @@ options arguments = case arguments of
       "compile" -> Right Compile
       "run" -> Right Run
       "explain" -> Right Explain
-      _ -> Left "expected check, compile, run, explain or diagram"
+      _ -> Left "expected check, compile, run, explain, diagram, corpus, doctor, init, version or release verify"
     (scenario, output) <- flags rest Nothing Nothing
     if operation /= Compile && output /= Nothing
       then Left "--output applies only to compile"
       else Right (Options operation path scenario output)
-  _ -> Left "usage: yuho check|compile|run|explain <source.yh> [--scenario <path>] [--output <path>]; yuho diagram <source.yh> --view rule|modules|case|trace --format svg|json --output <path> [--scenario <path>]"
+  _ -> Left "usage: yuho check|compile|run|explain <source.yh> [--scenario <path>] [--output <path>]; yuho diagram <source.yh> --view rule|modules|case|trace --format svg|json --output <path> [--scenario <path>]; yuho corpus ...; yuho doctor [--root <path>]; yuho init <directory>; yuho version; yuho release verify [--root <path>]"
   where
     flags [] scenario output = Right (scenario, output)
     flags ("--scenario":path:rest) Nothing output = flags rest (Just path) output

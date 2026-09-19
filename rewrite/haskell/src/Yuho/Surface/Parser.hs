@@ -715,6 +715,16 @@ penaltyTerm = do
       maximumValue <- penaltyEndpoint
       _ <- need ";"
       pure (FineTerm termId currency minimumValue maximumValue)
+    "life-imprisonment" -> need ";" >> pure (LifeImprisonmentTerm termId)
+    "caning" -> do
+      _ <- need "minimum"
+      minimumValue <- penaltyEndpoint
+      _ <- need "maximum"
+      maximumValue <- penaltyEndpoint
+      _ <- need "strokes"
+      _ <- need ";"
+      pure (CaningTerm termId minimumValue maximumValue)
+    "death" -> need ";" >> pure (DeathTerm termId)
     "all-of" -> PenaltyAllOf termId <$> penaltyChildren
     "exactly-one-of" -> PenaltyExactlyOneOf termId <$> penaltyChildren
     "one-or-more-of" -> PenaltyOneOrMoreOf termId <$> penaltyChildren

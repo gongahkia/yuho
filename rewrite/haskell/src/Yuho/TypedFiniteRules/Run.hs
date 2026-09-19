@@ -116,7 +116,7 @@ decodeProgram value = do
     (Left "duplicate scalar assignment")
   limitations <- arrayField value "limitations" >>= traverse asText
   pure (TypedFiniteProgram identifier entityTypes entities predicates scalars propositions
-    requirements rules priorities facts (Map.fromList values) [] limitations)
+    requirements rules [] [] priorities facts (Map.fromList values) [] limitations)
 
 decodeEntityType :: J -> Either Text EntityTypeDecl
 decodeEntityType value = EntityTypeDecl <$> asText value

@@ -20,7 +20,7 @@ typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) v
   (distinctNodes nodes) (distinctEdges edges) notice
   where
     root = GraphNode (nodeId "program" (finiteProgramId program)) "program"
-      (finiteProgramId program <> "\nCore Yuho v0.2") Nothing Nothing Nothing
+      (finiteProgramId program <> "\n" <> coreVersion) Nothing Nothing Nothing
     moduleNodes = [GraphNode (nodeId "module" (finiteModuleAlias item)) "module"
       (finiteModuleAlias item <> " = " <> finiteModuleName item <> "@" <>
         finiteModuleVersion item) Nothing Nothing (Just (finiteModuleAlias item))
@@ -56,8 +56,18 @@ typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) v
       (observedPropositionId item <> "\n" <> propositionState item) Nothing
       (Just (truthName (propositionStatus item))) Nothing
       | item <- finiteResultPropositions result]
+    normNodes = [GraphNode (nodeId "norm" (normName item)) "norm"
+      (normName item <> "\n" <> normModalityLabel (normModality item)
+        <> " — " <> normSubject item) (normCitation item)
+      (ruleObservationStatus ("r:norm:" <> normName item)) (Just (normSubject item))
+      | item <- finiteNorms program]
+    routeNodes = [GraphNode (nodeId "responsibility-route" (routeName item))
+      "responsibility-route" (routeName item <> "\n" <> responsibilityKindLabel (routeKind item)
+        <> " — " <> routeSubject item) (routeCitation item)
+      (ruleObservationStatus ("r:route:" <> routeName item)) (Just (routeSubject item))
+      | item <- finiteRoutes program]
     nodes = root : moduleNodes ++ typeNodes ++ entityNodes ++ predicateNodes ++ scalarNodes
-      ++ factNodes ++ requirementNodes ++ ruleNodes ++ propositionNodes
+      ++ factNodes ++ requirementNodes ++ ruleNodes ++ normNodes ++ routeNodes ++ propositionNodes
     entityEdges = [GraphEdge (nodeId "entity-type" kindValue) (nodeId "entity" identifier)
       "instance" "nominal member" | EntityDecl identifier kindValue <- finiteEntities program]
     predicateEdges = [GraphEdge (nodeId "entity-type" kindValue)
@@ -87,8 +97,14 @@ typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) v
     rootEdges = [GraphEdge (nodeId "proposition" proposition)
       (graphNodeId root) "technical-result" "independent proposition"
       | proposition <- finitePropositions program]
+    normEdges = [GraphEdge (nodeId "norm" (normName item))
+      (nodeId "proposition" (normAction item)) "normative-position"
+      (normModalityLabel (normModality item)) | item <- finiteNorms program]
+    routeEdges = [GraphEdge (nodeId "responsibility-route" (routeName item))
+      (nodeId "proposition" (routeTarget item)) "responsibility-target"
+      "explicit authored route" | item <- finiteRoutes program]
     edges = moduleEdges ++ entityEdges ++ predicateEdges ++ factEdges ++ ruleEdges
-      ++ priorityEdges ++ rootEdges
+      ++ priorityEdges ++ normEdges ++ routeEdges ++ rootEdges
     findRule identifier = case filter ((== identifier) . ruleName) (finiteRules program) of
       item:_ -> Just item
       [] -> Nothing
@@ -97,6 +113,13 @@ typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) v
       "scalar" -> "scalar"; "proposition" -> "proposition"
       "requirement" -> "finite-requirement"; "rule" -> "finite-rule"
       _ -> "export"
+    coreVersion | null (finiteNorms program) && null (finiteRoutes program) = "Core Yuho v0.2"
+                | otherwise = "Core Yuho v0.3"
+    ruleObservationStatus identifier = case
+        [truthName (observedStatus item) | item <- finiteResultRules result,
+          observedRule item == identifier] of
+      value:_ -> Just value
+      [] -> Nothing
 
 typedFiniteCaseGraph :: DiagramView -> Text -> [(Text,TypedFiniteResult)]
   -> [(Text,GroundFact,[Text])] -> SemanticGraph
@@ -150,6 +173,20 @@ expressionKind expression = case expression of
 polarityLabel :: RulePolarity -> Text
 polarityLabel Establish = "establishes"
 polarityLabel Defeat = "defeats"
+
+normModalityLabel :: NormModality -> Text
+normModalityLabel Required = "required"
+normModalityLabel Prohibited = "prohibited"
+normModalityLabel Permitted = "permitted"
+
+responsibilityKindLabel :: ResponsibilityKind -> Text
+responsibilityKindLabel PrincipalConduct = "principal-conduct"
+responsibilityKindLabel JointConduct = "joint-conduct"
+responsibilityKindLabel Instigation = "instigation"
+responsibilityKindLabel Conspiracy = "conspiracy"
+responsibilityKindLabel IntentionalAid = "intentional-aid"
+responsibilityKindLabel AttemptRoute = "attempt"
+responsibilityKindLabel (AuthoredContribution value) = "other:" <> value
 
 programGraph :: DiagramView -> CoreProgram -> SemanticGraph
 programGraph view program = SemanticGraph (coreProgramId program) view nodes edges notice
@@ -376,6 +413,9 @@ termLabel :: CorePenaltyTerm -> Text
 termLabel term = case term of
   CoreImprisonment _ low high unit -> "imprisonment " <> low <> ".." <> high <> " " <> unit
   CoreFine _ currency low high -> "fine " <> currency <> " " <> low <> ".." <> high
+  CoreLifeImprisonment _ -> "life imprisonment"
+  CoreCaning _ low high -> "caning " <> low <> ".." <> high <> " strokes"
+  CoreDeath _ -> "death"
   CoreAllTerms _ values -> "all of: " <> Text.intercalate ", " (map termLabel values)
   CoreExactlyOneTerm _ values -> "exactly one: " <> Text.intercalate ", " (map termLabel values)
   CoreOneOrMoreTerms _ values -> "one or more: " <> Text.intercalate ", " (map termLabel values)
