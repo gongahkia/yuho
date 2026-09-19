@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.false-information-public-servant version 1.0.0 {
+  export offence o:false-information-public-servant;
+  export candidate-penalty pen:section182-false-information-public-servant;
+  source-model "false-information-public-servant.yh";
+}

@@ -1,0 +1,12 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:criminal-intimidation;
+  assume a:bounded-sections503-506-base-expression;
+  f:503-threat-injury = unresolved(not_determined);
+  f:503-intent-alarm = proved;
+  f:503-compel-act = not_proved;
+  f:503-compel-omission = not_proved;
+  f:94-not-excluded-offence = proved;
+  f:94-compelled-by-threats = not_proved;
+  f:94-instant-death-apprehension = proved;
+}

@@ -1,0 +1,14 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:forgery;
+  assume a:bounded-sections463-465-expression;
+  f:463-false-document-record = proved;
+  f:463-damage-injury-intent = not_proved;
+  f:463-claim-title-intent = not_proved;
+  f:463-part-property-contract-intent = not_proved;
+  f:463-fraud-intent = not_proved;
+  f:78-order-in-force = proved;
+  f:78-good-faith-jurisdiction = not_proved;
+  f:78-pursuant-judgment = not_proved;
+  f:78-warranted-order = not_proved;
+}

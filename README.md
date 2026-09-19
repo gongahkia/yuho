@@ -57,8 +57,7 @@ This means you can run syntax, semantic and lint checks on `.yh` code.
 
 One of my gripes with [most Legal DSLs](#references) presently available *(in the current year 2024)* are their lack of examples of the DSL actually in use or application.
 
-With this specific trauma in mind, `Yuho` provides a thoroughly encoded corpus of all 524 sections of the
-Singapore Penal Code 1871 are encoded at [`library/penal_code/`](./library/penal_code/).
+With this specific trauma in mind, `Yuho` provides a structurally indexed saved corpus of 524 Singapore Penal Code provision records at [`library/penal_code/`](./library/penal_code/). The [Haskell research corpus index](./research/singapore/CORPUS-INDEX.md) separately identifies which bounded rules are executable, partial, definition-only or still unmodelled; structural presence is not executable support or a claim of legal currency.
 
 ## Installation
 

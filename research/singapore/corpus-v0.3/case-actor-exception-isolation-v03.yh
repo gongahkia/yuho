@@ -1,0 +1,50 @@
+// Ordered independent technical allegations; no aggregate judicial status.
+analysis-case case:case-actor-exception-isolation-v03 model "modular-singapore-criminal-law-corpus-v0.3.yh" {
+  bind role:actor-1 to actor:person-1;
+  bind role:actor-2 to actor:person-2;
+  bind role:actor-3 to actor:person-3;
+  bind role:actor-4 to actor:person-4;
+
+  allegation a:public-nuisance-1 analyse offence o:public-nuisance for role:actor-1 {
+    assume a:bounded-sections268-290-base-expression;
+    f:268-common-impact = proved;
+    f:290-not-otherwise-punishable = proved;
+    f:268-does-act = proved;
+    f:268-illegal-omission = not_proved;
+    f:83-age-10-to-under-12 = not_proved;
+    f:83-insufficient-maturity = proved;
+  }
+
+  allegation a:rash-causing-death-2 analyse offence o:rash-causing-death for role:actor-2 {
+    assume a:bounded-section304A-rash-expression;
+    f:304A-causes-death = proved;
+    f:304A-rash-act = proved;
+    f:304A-not-culpable-homicide = proved;
+    f:85-intoxication = proved;
+    f:85-did-not-know-conduct = not_proved;
+    f:85-without-knowledge = not_proved;
+    f:85-against-will = not_proved;
+  }
+
+  allegation a:culpable-homicide-3 analyse offence o:culpable-homicide for role:actor-3 {
+    assume a:bounded-sections299-304-knowledge-expression;
+    f:299-causes-death = proved;
+    f:299-intent-death = proved;
+    f:299-intent-likely-fatal-injury = not_proved;
+    f:299-knowledge-likely-death = not_proved;
+    f:96-exercise-private-defence = proved;
+    f:97-protected-body-or-property = proved;
+    f:98-no-more-harm-than-necessary = not_proved;
+    f:98-no-reasonable-public-authority-opportunity = proved;
+  }
+
+  allegation a:obstructing-public-servant-4 analyse offence o:obstructing-public-servant for role:actor-4 {
+    assume a:bounded-section186-individual-expression;
+    f:186-voluntary-obstruction = proved;
+    f:186-public-servant = proved;
+    f:186-public-functions = proved;
+    f:186-individual = proved;
+    f:76-bound-by-law = not_proved;
+    f:76-justified-by-law = not_proved;
+  }
+}

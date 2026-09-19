@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.obstructing-public-servant version 1.0.0 {
+  export offence o:obstructing-public-servant;
+  export candidate-penalty pen:section186-obstructing-public-servant;
+  source-model "obstructing-public-servant.yh";
+}

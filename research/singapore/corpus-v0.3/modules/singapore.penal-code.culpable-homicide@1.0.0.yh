@@ -1,0 +1,4 @@
+statutory-module singapore.penal-code.culpable-homicide version 1.0.0 {
+  export offence o:culpable-homicide;
+  source-model "culpable-homicide.yh";
+}

@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.forgery version 1.0.0 {
+  export offence o:forgery;
+  export candidate-penalty pen:section465-forgery;
+  source-model "forgery.yh";
+}

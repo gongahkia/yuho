@@ -1,0 +1,4 @@
+statutory-module singapore.penal-code.disappearance-of-evidence version 1.0.0 {
+  export offence o:disappearance-of-evidence;
+  source-model "disappearance-of-evidence.yh";
+}

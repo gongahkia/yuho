@@ -1,0 +1,138 @@
+// Generated from the checked-in Penal Code act.json; bounded research expressions only.
+model SingaporePenalCodeCorpusV03ObstructingPublicServantResearchPrototype-v1 {
+  variant SuppliedProofStatus-v1;
+  jurisdiction Singapore;
+  purpose research_prototype;
+  request C03;
+  policy 2026-09-13 1024;
+
+  provenance {
+    source src:pc-v03 source_text "library/penal_code/_raw/act.json and corresponding saved statute.yh";
+    source src:corpus-v03 synthetic_status "research/singapore/corpus-v0.3 synthetic classifications";
+    quote q:141-five-or-more "assembly of 5 or more persons";
+    quote q:141-qualifying-common-object "common object is one of the objects in paragraphs (a) to (e)";
+    quote q:142-aware-unlawful-facts "aware of facts which render the assembly unlawful";
+    quote q:142-intentionally-joins "intentionally joins that assembly";
+    quote q:142-intentionally-continues "intentionally continues in that assembly";
+    quote q:146-unlawful-assembly "force or violence is used by an unlawful assembly or a member";
+    quote q:146-force-or-violence "force or violence is used";
+    quote q:146-common-object-prosecution "used in prosecution of the common object of the assembly";
+    quote q:146-member "person is a member of the assembly";
+    quote q:182-gives-information "gives to a public servant any information";
+    quote q:182-knows-or-believes-false "knows or believes the information to be false";
+    quote q:182-intended-or-likely-use "intending or knowing it likely to cause use of lawful power";
+    quote q:182-injury-or-improper-action "use of power to injury or annoyance, or an act or omission that would differ if true facts were known";
+    quote q:186-voluntary-obstruction "voluntarily obstructs";
+    quote q:186-public-servant "a public servant";
+    quote q:186-public-functions "in discharge of the public servant's public functions";
+    quote q:186-individual "offender is an individual";
+    quote q:201-offence-committed "knowing or having reason to believe that an offence has been committed";
+    quote q:201-screening-intent "intention of screening the offender from legal punishment";
+    quote q:201-causes-evidence-disappear "causes evidence of commission of the offence to disappear";
+    quote q:201-gives-false-information "gives information respecting the offence which the person knows or believes to be false";
+    quote q:204A-act-tendency "does an act that has a tendency to obstruct, prevent, pervert or defeat the course of justice";
+    quote q:204A-knowledge "knowing that the act is likely to obstruct, prevent, pervert or defeat the course of justice";
+    quote q:204A-intention "intending to obstruct, prevent, pervert or defeat the course of justice";
+    quote q:268-common-impact "common injury, danger or annoyance to the public or qualifying obstruction, danger or annoyance to users of a public right";
+    quote q:290-not-otherwise-punishable "case is not otherwise punishable by the Code";
+    quote q:268-does-act "does any act";
+    quote q:268-illegal-omission "is guilty of an illegal omission";
+    quote q:299-causes-death "causes death by doing an act";
+    quote q:299-intent-death "intention of causing death";
+    quote q:299-intent-likely-fatal-injury "intention of causing bodily injury likely to cause death";
+    quote q:299-knowledge-likely-death "knowledge that the act is likely to cause death";
+    quote q:304A-causes-death "causes the death of a person";
+    quote q:304A-rash-act "doing a rash act";
+    quote q:304A-not-culpable-homicide "act does not amount to culpable homicide";
+    quote q:354-assault-or-criminal-force "assaults or uses criminal force to a person";
+    quote q:354-outrage-modesty "thereby outrages the modesty of that person";
+    quote q:354-victim-not-under-14-branch "base subsection (1) branch rather than subsection (2) child-victim branch";
+    quote q:354-intention "intending to outrage modesty";
+    quote q:354-knowledge "knowing it likely that modesty will be outraged";
+    quote q:416-cheats "cheats";
+    quote q:416-pretends-other-person "pretending to be some other person";
+    quote q:416-substitutes-person "knowingly substituting one person for another";
+    quote q:416-represents-other-identity "representing a person as someone other than that person really is";
+    quote q:463-false-document-record "makes a false document or electronic record or part thereof";
+    quote q:463-damage-injury-intent "intent to cause damage or injury to the public or any person";
+    quote q:463-claim-title-intent "intent to support any claim or title";
+    quote q:463-part-property-contract-intent "intent to cause a person to part with property or enter a contract";
+    quote q:463-fraud-intent "intent to commit fraud or that fraud may be committed";
+    quote q:471-uses-as-genuine "uses as genuine a document or electronic record";
+    quote q:471-forged-status "document or electronic record is forged";
+    quote q:471-fraudulently "fraudulently uses as genuine";
+    quote q:471-dishonestly "dishonestly uses as genuine";
+    quote q:471-knows-forged "knows the document or record to be forged";
+    quote q:471-reason-believe-forged "has reason to believe the document or record to be forged";
+    quote q:503-threat-injury "threatens another with qualifying injury to person, reputation or property";
+    quote q:503-intent-alarm "intent to cause alarm to that person";
+    quote q:503-compel-act "intent to cause an act not legally bound to be done as the means of avoiding the threat";
+    quote q:503-compel-omission "intent to cause omission of an act legally entitled to be done as the means of avoiding the threat";
+    quote q:499-makes-publishes-imputation "makes or publishes an imputation concerning a person";
+    quote q:499-reputation-harm "imputation harms the reputation of that person";
+    quote q:499-no-statutory-exception "none of section 499's statutory exceptions applies";
+    quote q:499-intends-harm "intending to harm reputation";
+    quote q:499-knows-harm "knowing the imputation will harm reputation";
+    quote q:499-reason-believe-harm "having reason to believe the imputation will harm reputation";
+    quote q:76-bound-by-law "bound by law to do it";
+    quote q:76-justified-by-law "justified by law in doing it";
+    quote q:77-judge "done by a judge when acting judicially";
+    quote q:77-lawful-power "power which is given to the judge by law";
+    quote q:77-good-faith-power "in good faith believes the power is given by law";
+    quote q:78-order-in-force "judgment or order remains in force";
+    quote q:78-good-faith-jurisdiction "in good faith believes that the court had jurisdiction";
+    quote q:78-pursuant-judgment "done in pursuance of the judgment or order";
+    quote q:78-warranted-order "warranted by the judgment or order";
+    quote q:83-age-10-to-under-12 "child of or above 10 years and below 12";
+    quote q:83-insufficient-maturity "not attained sufficient maturity of understanding to judge the nature and consequence of the conduct on that occasion";
+    quote q:85-intoxication "by reason of the intoxication at the time of the act or omission";
+    quote q:85-did-not-know-conduct "did not know what the person was doing";
+    quote q:85-without-knowledge "state of intoxication was caused without the knowledge of the person";
+    quote q:85-against-will "state of intoxication was caused against the will of the person";
+    quote q:87-no-intent-death-grievous-hurt "not intended to cause death or grievous hurt";
+    quote q:87-no-knowledge-likely-death-grievous-hurt "not known to be likely to cause death or grievous hurt";
+    quote q:87-person-above-18 "person above 18 years of age";
+    quote q:87-consent "given consent, whether express or implied, to suffer or risk the harm";
+    quote q:94-not-excluded-offence "offence is not murder or an offence against the State punishable with death";
+    quote q:94-compelled-by-threats "person is compelled to do it by threats";
+    quote q:94-instant-death-apprehension "threats reasonably cause apprehension that instant death will otherwise be the consequence";
+    quote q:96-exercise-private-defence "done in the exercise of the right of private defence";
+    quote q:97-protected-body-or-property "defence of a body or qualifying property against a listed offence or attempt";
+    quote q:98-no-more-harm-than-necessary "does not inflict more harm than reasonably necessary in the circumstances";
+    quote q:98-no-reasonable-public-authority-opportunity "no reasonable opportunity to have recourse to protection of a public authority";
+  }
+
+  annotations { burden section107 defence legal balance_of_probabilities; }
+  scope-assumptions {
+    scope-assumption a:bounded-section186-individual-expression for o:obstructing-public-servant;
+  }
+
+  offence o:obstructing-public-servant rule r:section186-individual program p:section186-individual path section186-individual sections 186 {
+    element conduct f:186-voluntary-obstruction quote q:186-voluntary-obstruction;
+    element circumstance f:186-public-servant quote q:186-public-servant;
+    element circumstance f:186-public-functions quote q:186-public-functions;
+    element circumstance f:186-individual quote q:186-individual;
+    all g:section186-individual-requirements (f:186-voluntary-obstruction, f:186-public-servant, f:186-public-functions, f:186-individual);
+  }
+
+  general-exception x:section76 rule r:section76 program p:section76 path section76 sections 76 {
+    element circumstance f:76-bound-by-law quote q:76-bound-by-law;
+    element circumstance f:76-justified-by-law quote q:76-justified-by-law;
+    any g:section76-alternatives (f:76-bound-by-law, f:76-justified-by-law);
+  }
+
+  outputs {
+    obstructing_public_servant_final r:section186-individual;
+  }
+
+  candidate-penalties {
+    candidate pen:section186-obstructing-public-servant for offence o:obstructing-public-servant source src:pc-v03 provision 186 { one-or-more-of term:obstructing-public-servant { imprisonment term:obstructing-public-servant-prison minimum not-stated maximum 6 months; fine term:obstructing-public-servant-fine currency SGD minimum not-stated maximum 2500; } }
+  }
+
+  limitations {
+    "All classifications and applicability assumptions are externally supplied";
+    "This branch is limited to section 186(1)(a), concerning an individual.";
+    "Candidate penalty terms are contextual candidates, not imposed sentences";
+    "No evidence, guilt, conviction, acquittal, liability, sentence or court disposition is determined";
+  }
+}

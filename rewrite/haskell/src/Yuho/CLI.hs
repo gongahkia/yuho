@@ -13,6 +13,7 @@ import System.FilePath (takeDirectory)
 import System.IO (IOMode(ReadMode), hClose, openBinaryTempFile, stderr, stdout, withBinaryFile)
 import System.Posix.Files (createLink, fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.Kernel.Run (runLine)
+import qualified Yuho.Corpus as Corpus
 import Yuho.CoreYuho.Normalize (normalizeCase, normalizeChecked, normalizePresumption)
 import Yuho.Diagram.Build
   ( caseGraph, presumptionGraph, programGraph, typedFiniteGraph, typedFiniteCaseGraph )
@@ -47,9 +48,11 @@ data Options = Options Command FilePath (Maybe FilePath) (Maybe FilePath)
 main :: IO ()
 main = do
   arguments <- getArgs
-  case options arguments of
-    Left message -> report (Diagnostic "SFE001" "<command>" origin message Nothing)
-    Right selected -> operate selected
+  case arguments of
+    "corpus":rest -> Corpus.runCorpus rest
+    _ -> case options arguments of
+      Left message -> report (Diagnostic "SFE001" "<command>" origin message Nothing)
+      Right selected -> operate selected
   where origin = Token EndToken "" 1 1
 
 options :: [String] -> Either Text Options

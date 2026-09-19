@@ -1,0 +1,12 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:unlawful-assembly-membership;
+  assume a:bounded-sections141-143-expression;
+  f:141-five-or-more = proved;
+  f:141-qualifying-common-object = proved;
+  f:142-aware-unlawful-facts = proved;
+  f:142-intentionally-joins = proved;
+  f:142-intentionally-continues = not_proved;
+  f:76-bound-by-law = not_proved;
+  f:76-justified-by-law = not_proved;
+}

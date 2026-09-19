@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "yuho.singapore-criminal-law-coverage/v0.3",
+  "title": "Yuho Singapore criminal-law structural and executable coverage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "instrument", "closed_classifications", "closed_language_gaps", "summary", "provisions"],
+  "properties": {
+    "schema": {"const": "yuho.singapore-criminal-law-coverage/v0.3"},
+    "instrument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "saved_source", "saved_source_sha256", "chapter_assignment_basis", "legal_currency"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "saved_source": {"type": "string", "minLength": 1},
+        "saved_source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "chapter_assignment_basis": {"type": "string", "minLength": 1},
+        "legal_currency": {"const": "not_determined"}
+      }
+    },
+    "closed_classifications": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/classification"}
+    },
+    "closed_language_gaps": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/languageGap"}
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provisions", "by_classification", "by_chapter", "by_category", "new_offence_families", "total_offence_families", "new_scenarios", "total_singapore_scenarios", "total_general_exceptions", "total_candidate_penalties", "total_cases"],
+      "properties": {
+        "provisions": {"type": "integer", "minimum": 1},
+        "by_classification": {"$ref": "#/$defs/countMap"},
+        "by_chapter": {"$ref": "#/$defs/countMap"},
+        "by_category": {"$ref": "#/$defs/countMap"},
+        "new_offence_families": {"type": "integer", "minimum": 0},
+        "total_offence_families": {"type": "integer", "minimum": 0},
+        "new_scenarios": {"type": "integer", "minimum": 0},
+        "total_singapore_scenarios": {"type": "integer", "minimum": 0},
+        "total_general_exceptions": {"type": "integer", "minimum": 0},
+        "total_candidate_penalties": {"type": "integer", "minimum": 0},
+        "total_cases": {"type": "integer", "minimum": 0}
+      }
+    },
+    "provisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/provision"}
+    }
+  },
+  "$defs": {
+    "countMap": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "classification": {
+      "enum": ["executable_research", "executable_partial", "structural_only", "definition_only", "cross_reference_only", "saved_source_unmodelled", "repealed_or_reserved", "outside_current_scope", "unknown"]
+    },
+    "languageGap": {
+      "enum": ["missing_normative_or_deontic_construct", "missing_aggregate_or_sequence_construct", "missing_temporal_or_transitional_construct", "missing_participation_form", "missing_penalty_form", "missing_procedural_construct", "requires_evidential_assessment", "requires_judicial_interpretation", "source_unavailable_or_ambiguous", "outside_substantive_penal_code_scope"]
+    },
+    "path": {"type": "string", "minLength": 1, "not": {"pattern": "(^/|(^|/)\\.\\.(/|$))"}},
+    "crossReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "raw", "target", "resolution"],
+      "properties": {
+        "kind": {"const": "statutory_reference"},
+        "raw": {"type": "string", "minLength": 1},
+        "target": {"type": ["string", "null"]},
+        "resolution": {"enum": ["resolved", "unresolved", "ambiguous"]}
+      }
+    },
+    "provision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["instrument_id", "structural_parent", "provision_path", "provision_id", "heading", "structural_state", "source_reference", "quotation_reference", "cross_references", "subject_category", "coverage_classification", "executable_model_ids", "core_constructs", "scenario_paths", "scenario_count", "case_paths", "case_count", "definitions_consumed", "definitions_exported", "general_exceptions_attached", "participation_support", "attempt_support", "candidate_penalties", "temporal_support", "review_status", "language_gap", "limitations"],
+      "properties": {
+        "instrument_id": {"type": "string", "minLength": 1},
+        "structural_parent": {"type": "string", "minLength": 1},
+        "provision_path": {"type": "string", "pattern": "^[0-9]+[A-Z]*$"},
+        "provision_id": {"type": "string", "pattern": "^penal-code:[0-9]+[A-Z]*$"},
+        "heading": {"type": "string"},
+        "structural_state": {"enum": ["active", "repealed_or_reserved", "unknown"]},
+        "source_reference": {"type": "string", "minLength": 1},
+        "quotation_reference": {"oneOf": [{"$ref": "#/$defs/path"}, {"type": "null"}]},
+        "cross_references": {"type": "array", "items": {"$ref": "#/$defs/crossReference"}},
+        "subject_category": {"type": "string", "minLength": 1},
+        "coverage_classification": {"$ref": "#/$defs/classification"},
+        "executable_model_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+        "core_constructs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "scenario_paths": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+        "scenario_count": {"type": "integer", "minimum": 0},
+        "case_paths": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+        "case_count": {"type": "integer", "minimum": 0},
+        "definitions_consumed": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "definitions_exported": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "general_exceptions_attached": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "participation_support": {"type": "boolean"},
+        "attempt_support": {"type": "boolean"},
+        "candidate_penalties": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "temporal_support": {"enum": ["none", "authored_applicability_only"]},
+        "review_status": {"type": "string", "minLength": 1},
+        "language_gap": {"oneOf": [{"$ref": "#/$defs/languageGap"}, {"type": "null"}]},
+        "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:disappearance-of-evidence;
+  assume a:bounded-section201-expression;
+  f:201-offence-committed = proved;
+  f:201-screening-intent = proved;
+  f:201-causes-evidence-disappear = proved;
+  f:201-gives-false-information = not_proved;
+  f:78-order-in-force = not_proved;
+  f:78-good-faith-jurisdiction = proved;
+  f:78-pursuant-judgment = not_proved;
+  f:78-warranted-order = not_proved;
+}

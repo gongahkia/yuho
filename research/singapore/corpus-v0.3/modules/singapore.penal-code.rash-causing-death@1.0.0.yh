@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.rash-causing-death version 1.0.0 {
+  export offence o:rash-causing-death;
+  export candidate-penalty pen:section304A-rash-causing-death;
+  source-model "rash-causing-death.yh";
+}

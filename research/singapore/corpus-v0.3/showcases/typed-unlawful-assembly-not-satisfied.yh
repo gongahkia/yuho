@@ -1,0 +1,8 @@
+typed-rules-scenario SG141-02 for SingaporeUnlawfulAssemblyCardinalityResearch-v0.3 {
+  classify member-of(actor:one,group:assembly) as proved reason "synthetic supplied classification";
+  classify member-of(actor:two,group:assembly) as proved reason "synthetic supplied classification";
+  classify member-of(actor:three,group:assembly) as proved reason "synthetic supplied classification";
+  classify member-of(actor:four,group:assembly) as proved reason "synthetic supplied classification";
+  classify member-of(actor:five,group:assembly) as not_proved reason "synthetic supplied classification";
+  classify qualifying-common-object(group:assembly) as proved reason "synthetic supplied classification";
+}

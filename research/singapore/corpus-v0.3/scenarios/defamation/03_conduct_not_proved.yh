@@ -1,0 +1,14 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:defamation;
+  assume a:bounded-sections499-500-bounded-expression;
+  f:499-makes-publishes-imputation = not_proved;
+  f:499-reputation-harm = proved;
+  f:499-no-statutory-exception = proved;
+  f:499-intends-harm = proved;
+  f:499-knows-harm = not_proved;
+  f:499-reason-believe-harm = not_proved;
+  f:94-not-excluded-offence = proved;
+  f:94-compelled-by-threats = proved;
+  f:94-instant-death-apprehension = not_proved;
+}

@@ -1,0 +1,24 @@
+// Section 141 group-size showcase; common-object status remains supplied.
+typed-rules-model SingaporeUnlawfulAssemblyCardinalityResearch-v0.3 {
+  limit 256;
+  entity-type person;
+  entity-type assembly;
+  entity actor:one as person;
+  entity actor:two as person;
+  entity actor:three as person;
+  entity actor:four as person;
+  entity actor:five as person;
+  entity group:assembly as assembly;
+  predicate member-of(person,assembly) kind relationship;
+  predicate qualifying-common-object(assembly) kind mental-state;
+  proposition p:section141-technical-route;
+  requirement q:five-members = at-least 5 (
+    member-of(actor:one,group:assembly),member-of(actor:two,group:assembly),
+    member-of(actor:three,group:assembly),member-of(actor:four,group:assembly),
+    member-of(actor:five,group:assembly));
+  requirement q:common-object = qualifying-common-object(group:assembly);
+  requirement q:section141 = all(q:five-members,q:common-object);
+  rule r:section141 establishes proposition p:section141-technical-route when q:section141 citation "Penal Code 1871 s 141 saved text";
+  limitation "Membership and common-object classifications are supplied; cardinality does not infer group purpose.";
+  limitation "No evidence, guilt, conviction, acquittal, liability, sentence or court disposition is determined.";
+}

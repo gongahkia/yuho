@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.using-forged-record version 1.0.0 {
+  export offence o:using-forged-record;
+  export candidate-penalty pen:section465-using-forged-record;
+  source-model "using-forged-record.yh";
+}

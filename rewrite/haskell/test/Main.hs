@@ -37,6 +37,7 @@ import CoreYuhoChecks (runCoreYuhoChecks)
 import DiagramChecks (runDiagramChecks)
 import ConformanceChecks (runConformanceChecks)
 import TypedFiniteChecks (runTypedFiniteChecks)
+import CorpusChecks (runCorpusChecks)
 import Yuho.Core.Source (validateSpan)
 import Yuho.Core.Types (Source(..), Span(..))
 import Yuho.Kernel.Run (runLine)
@@ -73,6 +74,7 @@ main = do
   runDiagramChecks root
   runConformanceChecks root
   runTypedFiniteChecks root
+  runCorpusChecks root
   b06 <- readJson (frozen </> "requests/B06.json")
   b01 <- readJson (frozen </> "requests/B01.json")
   b03 <- readJson (frozen </> "requests/B03.json")

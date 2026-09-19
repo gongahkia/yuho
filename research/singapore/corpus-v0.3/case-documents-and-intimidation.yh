@@ -1,0 +1,57 @@
+// Ordered independent technical allegations; no aggregate judicial status.
+analysis-case case:case-documents-and-intimidation model "modular-singapore-criminal-law-corpus-v0.3.yh" {
+  bind role:actor-1 to actor:person-1;
+  bind role:actor-2 to actor:person-2;
+  bind role:actor-3 to actor:person-3;
+  bind role:actor-4 to actor:person-4;
+  supplied-fact fact:shared-forgery kind conduct subject actor:person-1 target o:forgery status proved reason "synthetic explicitly shared primitive classification";
+
+  allegation a:forgery-1 analyse offence o:forgery for role:actor-1 {
+    assume a:bounded-sections463-465-expression;
+    bind-fact fact:shared-forgery to input f:463-false-document-record;
+    f:463-damage-injury-intent = proved;
+    f:463-claim-title-intent = not_proved;
+    f:463-part-property-contract-intent = not_proved;
+    f:463-fraud-intent = not_proved;
+    f:78-order-in-force = not_proved;
+    f:78-good-faith-jurisdiction = proved;
+    f:78-pursuant-judgment = not_proved;
+    f:78-warranted-order = not_proved;
+  }
+
+  allegation a:forgery-2 analyse offence o:forgery for role:actor-1 {
+    assume a:bounded-sections463-465-expression;
+    bind-fact fact:shared-forgery to input f:463-false-document-record;
+    f:463-damage-injury-intent = proved;
+    f:463-claim-title-intent = not_proved;
+    f:463-part-property-contract-intent = not_proved;
+    f:463-fraud-intent = not_proved;
+    f:78-order-in-force = proved;
+    f:78-good-faith-jurisdiction = not_proved;
+    f:78-pursuant-judgment = not_proved;
+    f:78-warranted-order = not_proved;
+  }
+
+  allegation a:using-forged-record-3 analyse offence o:using-forged-record for role:actor-3 {
+    assume a:bounded-section471-expression;
+    f:471-uses-as-genuine = proved;
+    f:471-forged-status = proved;
+    f:471-fraudulently = proved;
+    f:471-dishonestly = not_proved;
+    f:471-knows-forged = proved;
+    f:471-reason-believe-forged = not_proved;
+    f:76-bound-by-law = not_proved;
+    f:76-justified-by-law = not_proved;
+  }
+
+  allegation a:criminal-intimidation-4 analyse offence o:criminal-intimidation for role:actor-4 {
+    assume a:bounded-sections503-506-base-expression;
+    f:503-threat-injury = proved;
+    f:503-intent-alarm = proved;
+    f:503-compel-act = not_proved;
+    f:503-compel-omission = not_proved;
+    f:94-not-excluded-offence = not_proved;
+    f:94-compelled-by-threats = proved;
+    f:94-instant-death-apprehension = proved;
+  }
+}

@@ -1,0 +1,12 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:rash-causing-death;
+  assume a:bounded-section304A-rash-expression;
+  f:304A-causes-death = proved;
+  f:304A-rash-act = proved;
+  f:304A-not-culpable-homicide = proved;
+  f:85-intoxication = not_proved;
+  f:85-did-not-know-conduct = proved;
+  f:85-without-knowledge = not_proved;
+  f:85-against-will = not_proved;
+}

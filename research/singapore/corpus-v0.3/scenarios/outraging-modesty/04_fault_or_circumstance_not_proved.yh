@@ -1,0 +1,14 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:outraging-modesty;
+  assume a:bounded-section354-subsection1-expression;
+  f:354-assault-or-criminal-force = proved;
+  f:354-outrage-modesty = proved;
+  f:354-victim-not-under-14-branch = proved;
+  f:354-intention = not_proved;
+  f:354-knowledge = not_proved;
+  f:87-no-intent-death-grievous-hurt = proved;
+  f:87-no-knowledge-likely-death-grievous-hurt = proved;
+  f:87-person-above-18 = proved;
+  f:87-consent = not_proved;
+}

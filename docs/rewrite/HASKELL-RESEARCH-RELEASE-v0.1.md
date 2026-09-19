@@ -44,9 +44,11 @@ These are the seven preserved v0.1 boundaries. Core Yuho v0.2 adds `TypedFiniteR
 
 ## Release corpus
 
-The authored corpus has 11 distinct offence families: hurt, theft, cheating, mischief, rash endangerment, assault, dishonest misappropriation, criminal breach of trust, receiving/retaining qualifying property, criminal trespass and wrongful restraint. Four new general-exception families—ss 79, 80, 81 and 82—join s 84.
+The v0.3 corpus expands the authored release from 11 to 26 distinct offence families and from 177 to 306 valid Singapore scenario files. It retains the earlier hurt, theft, cheating, mischief, rash endangerment, assault, dishonest misappropriation, criminal breach of trust, receiving/retaining qualifying property, criminal trespass and wrongful restraint families.
 
-Seven new families have 56 substantive scenario files. Each family includes satisfied, ordinary not-satisfied, material unresolved, exception-defeat and exception-unresolved paths. Separate demonstrations apply s 511 attempt to assault and misappropriation and intentional-aid participation to misappropriation.
+Fifteen v0.3 families add public-order, public-servant/justice, public nuisance, person/harm, documents/records and intimidation/reputation examples. Their 120 offence scenarios cover satisfied, alternative, not-proved, unresolved and exception interactions. Nine typed-rule scenarios demonstrate supplied age comparison, group cardinality and quantified property relations. The release now has 13 bounded general-exception families, 21 candidate-penalty declarations and 16 cases.
+
+The [canonical v0.3 coverage artifact](../../research/singapore/SINGAPORE-CRIMINAL-LAW-COVERAGE-v0.3.json) indexes all 524 provision records discoverable from the checked-in saved Penal Code export. Only 55 are classified as executable research and 55 as definition-only; 414 remain saved-source-unmodelled. These row counts overlap offence-family graphs and must not be read as 55 complete offences. Review status is independent from executable classification.
 
 ## Known bounded defects and omissions
 

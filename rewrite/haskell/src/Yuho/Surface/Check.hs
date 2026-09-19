@@ -1663,10 +1663,9 @@ checkCandidatePenalties path model sources = do
         Just ("source_text",_) -> pure ()
         _ -> at "SFP003" path (candidatePenaltySource item)
           "candidate penalty needs a declared source-text reference"
-      if not (Text.null (tokenText (candidatePenaltyProvision item)))
-          && Text.all (`elem` ['0'..'9']) (tokenText (candidatePenaltyProvision item))
+      if validStatutorySection (tokenText (candidatePenaltyProvision item))
         then pure () else at "SFP003" path (candidatePenaltyProvision item)
-          "candidate penalty provision must be a numeric section reference"
+          "candidate penalty provision must be a section number with an optional uppercase suffix"
       checkTerm (candidatePenaltyTerm item)
     checkTerm term = case term of
       ImprisonmentTerm item minimumValue maximumValue unit -> do
@@ -1742,11 +1741,17 @@ checkSections path declaration sections = do
     "authored statutory section references required" else pure ()
   let tokens = [item | StatutorySection item <- sections]
   case [item | item <- tokens,
-        Text.null (tokenText item) || not (Text.all (`elem` ['0'..'9']) (tokenText item))] of
-    item:_ -> at "SFE031" path item "statutory section reference must be numeric"
+        not (validStatutorySection (tokenText item))] of
+    item:_ -> at "SFE031" path item
+      "statutory section reference must be a number with an optional uppercase suffix"
     [] -> pure ()
   _ <- unique path "SFE002" [(item, ()) | item <- tokens]
   pure ()
+
+validStatutorySection :: Text -> Bool
+validStatutorySection value = case Text.span (`elem` ['0'..'9']) value of
+  (digits,suffix) -> not (Text.null digits)
+    && Text.all (`elem` ['A'..'Z']) suffix
 
 checkMultiIdentities :: FilePath -> [(Rule, Resolved)] -> [(Rule, Resolved)]
   -> Either Diagnostic ()

@@ -1,0 +1,12 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:false-information-public-servant;
+  assume a:bounded-section182-expression;
+  f:182-gives-information = not_proved;
+  f:182-knows-or-believes-false = proved;
+  f:182-intended-or-likely-use = proved;
+  f:182-injury-or-improper-action = proved;
+  f:77-judge = not_proved;
+  f:77-lawful-power = not_proved;
+  f:77-good-faith-power = not_proved;
+}

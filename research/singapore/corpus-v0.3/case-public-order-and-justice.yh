@@ -1,0 +1,50 @@
+// Ordered independent technical allegations; no aggregate judicial status.
+analysis-case case:case-public-order-and-justice model "modular-singapore-criminal-law-corpus-v0.3.yh" {
+  bind role:actor-1 to actor:person-1;
+  bind role:actor-2 to actor:person-2;
+  bind role:actor-3 to actor:person-3;
+  bind role:actor-4 to actor:person-4;
+  supplied-fact fact:shared-unlawful-assembly-membership kind circumstance subject actor:person-1 target o:unlawful-assembly-membership status proved reason "synthetic explicitly shared primitive classification";
+
+  allegation a:unlawful-assembly-membership-1 analyse offence o:unlawful-assembly-membership for role:actor-1 {
+    assume a:bounded-sections141-143-expression;
+    bind-fact fact:shared-unlawful-assembly-membership to input f:141-five-or-more;
+    f:141-qualifying-common-object = proved;
+    f:142-aware-unlawful-facts = proved;
+    f:142-intentionally-joins = proved;
+    f:142-intentionally-continues = not_proved;
+    f:76-bound-by-law = not_proved;
+    f:76-justified-by-law = not_proved;
+  }
+
+  allegation a:unlawful-assembly-membership-2 analyse offence o:unlawful-assembly-membership for role:actor-1 {
+    assume a:bounded-sections141-143-expression;
+    bind-fact fact:shared-unlawful-assembly-membership to input f:141-five-or-more;
+    f:141-qualifying-common-object = proved;
+    f:142-aware-unlawful-facts = proved;
+    f:142-intentionally-joins = proved;
+    f:142-intentionally-continues = not_proved;
+    f:76-bound-by-law = not_proved;
+    f:76-justified-by-law = not_proved;
+  }
+
+  allegation a:rioting-3 analyse offence o:rioting for role:actor-3 {
+    assume a:bounded-sections141-147-expression;
+    f:146-unlawful-assembly = proved;
+    f:146-force-or-violence = proved;
+    f:146-common-object-prosecution = proved;
+    f:146-member = proved;
+    f:76-bound-by-law = not_proved;
+    f:76-justified-by-law = not_proved;
+  }
+
+  allegation a:obstruction-of-justice-4 analyse offence o:obstruction-of-justice for role:actor-4 {
+    assume a:bounded-section204A-expression;
+    f:204A-act-tendency = proved;
+    f:204A-knowledge = proved;
+    f:204A-intention = not_proved;
+    f:77-judge = not_proved;
+    f:77-lawful-power = not_proved;
+    f:77-good-faith-power = not_proved;
+  }
+}

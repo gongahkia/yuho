@@ -1,0 +1,6 @@
+typed-rules-scenario SG83-02 for SingaporeSection83TypedAgeResearch-v0.3 {
+  classify insufficient-maturity(actor:child) as proved reason "synthetic supplied classification";
+  value value:age = integer 12;
+  value value:lower-bound = integer 10;
+  value value:upper-bound = integer 12;
+}

@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.criminal-intimidation version 1.0.0 {
+  export offence o:criminal-intimidation;
+  export candidate-penalty pen:section506-criminal-intimidation;
+  source-model "criminal-intimidation.yh";
+}

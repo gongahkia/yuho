@@ -1,0 +1,21 @@
+// Quantified property relationship plus exact section 186(1)(a) fine candidate bound.
+typed-rules-model SingaporePropertyAndFineResearch-v0.3 {
+  limit 256;
+  entity-type person;
+  entity-type property;
+  entity actor:person as person;
+  entity item:laptop as property;
+  entity item:phone as property;
+  scalar value:candidate-fine type money SGD;
+  scalar value:section186-fine-cap type money SGD;
+  predicate possesses(person,property) kind relationship;
+  predicate qualifying-property(property) kind circumstance;
+  proposition p:quantified-property-route;
+  proposition p:candidate-fine-within-cap;
+  requirement q:property = exists var:item as property (all(possesses(actor:person,var:item),qualifying-property(var:item)));
+  requirement q:fine = compare(value:candidate-fine,lte,value:section186-fine-cap);
+  rule r:property establishes proposition p:quantified-property-route when q:property citation "synthetic typed application of saved property vocabulary";
+  rule r:fine establishes proposition p:candidate-fine-within-cap when q:fine citation "Penal Code 1871 s 186(1)(a) saved maximum fine";
+  limitation "Property relations and candidate amount are externally supplied; the amount is not an imposed sentence.";
+  limitation "No evidence, guilt, conviction, acquittal, liability, sentence or court disposition is determined.";
+}

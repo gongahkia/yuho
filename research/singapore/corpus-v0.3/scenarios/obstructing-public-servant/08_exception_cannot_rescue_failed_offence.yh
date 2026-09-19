@@ -1,0 +1,11 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:obstructing-public-servant;
+  assume a:bounded-section186-individual-expression;
+  f:186-voluntary-obstruction = not_proved;
+  f:186-public-servant = proved;
+  f:186-public-functions = proved;
+  f:186-individual = proved;
+  f:76-bound-by-law = proved;
+  f:76-justified-by-law = proved;
+}

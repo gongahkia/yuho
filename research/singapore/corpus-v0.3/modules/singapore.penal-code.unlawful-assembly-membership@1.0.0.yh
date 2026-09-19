@@ -1,0 +1,14 @@
+statutory-module singapore.penal-code.unlawful-assembly-membership version 1.0.0 {
+  export model SingaporePenalCodeCorpusV03ResearchPrototype-v1;
+  export general-exception x:section76;
+  export general-exception x:section77;
+  export general-exception x:section78;
+  export general-exception x:section83;
+  export general-exception x:section85-involuntary-nature-route;
+  export general-exception x:section87;
+  export general-exception x:section94;
+  export general-exception x:sections96-98-private-defence;
+  export offence o:unlawful-assembly-membership;
+  export candidate-penalty pen:section143-unlawful-assembly-membership;
+  source-model "unlawful-assembly-membership.yh";
+}

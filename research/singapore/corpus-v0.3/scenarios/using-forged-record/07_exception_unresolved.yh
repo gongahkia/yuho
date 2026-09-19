@@ -1,0 +1,13 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:using-forged-record;
+  assume a:bounded-section471-expression;
+  f:471-uses-as-genuine = proved;
+  f:471-forged-status = proved;
+  f:471-fraudulently = proved;
+  f:471-dishonestly = not_proved;
+  f:471-knows-forged = proved;
+  f:471-reason-believe-forged = not_proved;
+  f:76-bound-by-law = unresolved(not_determined);
+  f:76-justified-by-law = proved;
+}

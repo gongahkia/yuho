@@ -1,0 +1,18 @@
+// Bounded section 83 age/maturity computation over supplied values and classifications.
+typed-rules-model SingaporeSection83TypedAgeResearch-v0.3 {
+  limit 256;
+  entity-type person;
+  entity actor:child as person;
+  scalar value:age type integer;
+  scalar value:lower-bound type integer;
+  scalar value:upper-bound type integer;
+  predicate insufficient-maturity(person) kind circumstance;
+  proposition p:section83-technical-route;
+  requirement q:at-least-10 = compare(value:age,gte,value:lower-bound);
+  requirement q:below-12 = compare(value:age,lt,value:upper-bound);
+  requirement q:insufficient-maturity = insufficient-maturity(actor:child);
+  requirement q:section83 = all(q:at-least-10,q:below-12,q:insufficient-maturity);
+  rule r:section83 establishes proposition p:section83-technical-route when q:section83 citation "Penal Code 1871 s 83 saved text";
+  limitation "Age, maturity and applicability are externally supplied; comparison is deterministic technical computation.";
+  limitation "No evidence, guilt, conviction, acquittal, liability, sentence or court disposition is determined.";
+}

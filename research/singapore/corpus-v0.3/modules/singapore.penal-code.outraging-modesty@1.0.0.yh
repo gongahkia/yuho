@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.outraging-modesty version 1.0.0 {
+  export offence o:outraging-modesty;
+  export candidate-penalty pen:section354-outraging-modesty;
+  source-model "outraging-modesty.yh";
+}

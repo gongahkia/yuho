@@ -1,0 +1,13 @@
+// Synthetic supplied classifications; no evidence or judicial outcome is determined.
+scenario C03 for SingaporePenalCodeCorpusV03ResearchPrototype-v1 {
+  analyse o:culpable-homicide;
+  assume a:bounded-sections299-304-knowledge-expression;
+  f:299-causes-death = proved;
+  f:299-intent-death = not_proved;
+  f:299-intent-likely-fatal-injury = not_proved;
+  f:299-knowledge-likely-death = not_proved;
+  f:96-exercise-private-defence = proved;
+  f:97-protected-body-or-property = proved;
+  f:98-no-more-harm-than-necessary = proved;
+  f:98-no-reasonable-public-authority-opportunity = not_proved;
+}

@@ -1,0 +1,5 @@
+statutory-module singapore.penal-code.obstruction-of-justice version 1.0.0 {
+  export offence o:obstruction-of-justice;
+  export candidate-penalty pen:section204A-obstruction-of-justice;
+  source-model "obstruction-of-justice.yh";
+}

@@ -1,0 +1,8 @@
+typed-rules-scenario SGPROP-03 for SingaporePropertyAndFineResearch-v0.3 {
+  classify possesses(actor:person,item:laptop) as unresolved reason "synthetic unresolved possession classification";
+  classify possesses(actor:person,item:phone) as not_proved reason "synthetic supplied classification";
+  classify qualifying-property(item:laptop) as proved reason "synthetic supplied classification";
+  classify qualifying-property(item:phone) as proved reason "synthetic supplied classification";
+  value value:candidate-fine = unresolved reason "synthetic unresolved candidate amount";
+  value value:section186-fine-cap = money SGD 250000;
+}

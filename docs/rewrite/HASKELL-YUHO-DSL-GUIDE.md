@@ -213,7 +213,7 @@ Selection is only `effective_from <= conduct_date < effective_to`. Missing or in
 
 ## Candidate penalties and terms
 
-Candidate penalties attach to a declared offence and cite a numeric provision plus a declared source. The Haskell surface currently supports positive integer imprisonment endpoints in days, weeks, months or years; SGD fine endpoints; `not-stated` and maximum `unbounded` endpoints; and `all-of`, `exactly-one-of` and `one-or-more-of` term trees with at least two children.
+Candidate penalties attach to a declared offence and cite a numeric provision, optionally followed by uppercase letters such as `204A`, plus a declared source. The Haskell surface currently supports positive integer imprisonment endpoints in days, weeks, months or years; SGD fine endpoints; `not-stated` and maximum `unbounded` endpoints; and `all-of`, `exactly-one-of` and `one-or-more-of` term trees with at least two children.
 
 ```yh
 candidate-penalties {
@@ -300,4 +300,18 @@ The [research-release quick start](../../research/singapore/research-release/REA
 
 ## Runnable corpus
 
-The discoverable inventory and limits are in the [Singapore corpus index](../../research/singapore/CORPUS-INDEX.md). The new [cheating and mischief model](../../research/singapore/offence-corpus-pilot/modular-cheating-mischief.yh) has 20 synthetic decision paths and representative explanation snapshots. Existing hurt, theft, definitions, participation, attempt and actor-scoped exception models remain compatibility fixtures.
+The canonical structural/executable inventory and limits are in the [Singapore corpus index](../../research/singapore/CORPUS-INDEX.md). Corpus v0.3 contains 524 structurally indexed saved Penal Code provision rows, 26 executable offence families and 306 valid Singapore scenario files. Structural indexing is not executable support or legal review.
+
+The native Haskell corpus query surface reads the canonical checked-in artifact without network access:
+
+```sh
+"$YUHO" corpus summary --corpus-root ../..
+"$YUHO" corpus list --category property-and-deception --corpus-root ../..
+"$YUHO" corpus show penal-code:84 --corpus-root ../..
+"$YUHO" corpus check --corpus-root ../..
+"$YUHO" corpus coverage --format json --corpus-root ../..
+"$YUHO" corpus graph --category human-body --format svg \
+  --output "$OUT/human-body.svg" --corpus-root ../..
+```
+
+`corpus graph` emits deterministic native semantic-graph JSON or standalone SVG. A complete 524-node graph is available as JSON; SVG is refused above 120 provisions and should be filtered by chapter, category or bounded provision neighbourhood. The Haskell validator checks summary counts, closed classifications, model/scenario paths and typed cross-reference targets. The retained Python generator is a repository maintenance tool only and is not part of the production CLI path.

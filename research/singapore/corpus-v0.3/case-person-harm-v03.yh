@@ -1,0 +1,42 @@
+// Ordered independent technical allegations; no aggregate judicial status.
+analysis-case case:case-person-harm-v03 model "modular-singapore-criminal-law-corpus-v0.3.yh" {
+  bind role:actor-1 to actor:person-1;
+  bind role:actor-2 to actor:person-2;
+  bind role:actor-3 to actor:person-3;
+
+  allegation a:culpable-homicide-1 analyse offence o:culpable-homicide for role:actor-1 {
+    assume a:bounded-sections299-304-knowledge-expression;
+    f:299-causes-death = proved;
+    f:299-intent-death = proved;
+    f:299-intent-likely-fatal-injury = not_proved;
+    f:299-knowledge-likely-death = not_proved;
+    f:96-exercise-private-defence = not_proved;
+    f:97-protected-body-or-property = proved;
+    f:98-no-more-harm-than-necessary = proved;
+    f:98-no-reasonable-public-authority-opportunity = proved;
+  }
+
+  allegation a:rash-causing-death-2 analyse offence o:rash-causing-death for role:actor-2 {
+    assume a:bounded-section304A-rash-expression;
+    f:304A-causes-death = proved;
+    f:304A-rash-act = proved;
+    f:304A-not-culpable-homicide = proved;
+    f:85-intoxication = proved;
+    f:85-did-not-know-conduct = not_proved;
+    f:85-without-knowledge = not_proved;
+    f:85-against-will = not_proved;
+  }
+
+  allegation a:outraging-modesty-3 analyse offence o:outraging-modesty for role:actor-3 {
+    assume a:bounded-section354-subsection1-expression;
+    f:354-assault-or-criminal-force = proved;
+    f:354-outrage-modesty = proved;
+    f:354-victim-not-under-14-branch = proved;
+    f:354-intention = proved;
+    f:354-knowledge = not_proved;
+    f:87-no-intent-death-grievous-hurt = proved;
+    f:87-no-knowledge-likely-death-grievous-hurt = proved;
+    f:87-person-above-18 = not_proved;
+    f:87-consent = proved;
+  }
+}
