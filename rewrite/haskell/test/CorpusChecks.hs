@@ -41,6 +41,9 @@ coverageChecks root = do
   check "complete saved Penal Code inventory" (length (coverageProvisions coverage) == 524)
   check "coverage summary is derived from the inventory"
     (summaryProvisions (coverageSummary coverage) == length (coverageProvisions coverage))
+  check "coverage registers no negative scenario fixture"
+    (all (\row -> all (\path -> not (any (`Text.isInfixOf` Text.pack path) negativeNames))
+      (provisionScenarios row)) (coverageProvisions coverage))
   graph <- either (const (failed "coverage graph")) pure
     (coverageGraph Nothing Nothing Nothing coverage)
   let first = encodeSemanticGraph graph
@@ -57,6 +60,9 @@ coverageChecks root = do
     (coverageGraph Nothing (Just "chapter-8-public-tranquillity") Nothing coverage)
   retainedSvg root "chapter-18-documents-and-records.svg"
     (coverageGraph Nothing (Just "chapter-18-documents-and-records") Nothing coverage)
+  where
+    negativeNames = ["missing_section334","missing_post2022","missing_section323a",
+      "derived_assignment","unreachable_assignment","missing_reachable"]
 
 scenarioChecks :: FilePath -> IO ()
 scenarioChecks root = do

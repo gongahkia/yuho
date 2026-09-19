@@ -371,6 +371,17 @@ EXISTING_SCENARIO_DIRS = {
 }
 
 
+EXISTING_INVALID_SCENARIOS = {
+    "research/singapore/section-84-pilot/hurt-offence/scenarios/12_missing_section334.yh",
+    "research/singapore/section-84-pilot/hurt-offence/scenarios/13_missing_post2022.yh",
+    "research/singapore/section-84-pilot/hurt-offence/scenarios/15_missing_section323a.yh",
+    "research/singapore/section-84-pilot/statutory-definitions/scenarios/09_hurt_derived_assignment.yh",
+    "research/singapore/section-84-pilot/statutory-definitions/scenarios/15_theft_derived_assignment.yh",
+    "research/singapore/section-84-pilot/statutory-definitions/scenarios/21_unreachable_assignment.yh",
+    "research/singapore/section-84-pilot/statutory-definitions/scenarios/22_missing_reachable.yh",
+}
+
+
 DEFINITION_ONLY = {
     "6", "7", "8", "9", "10", "11", "12", "17", "19", "20", "21", "22", "22A", "25",
     "26", "26A", "26B", "26C", "26D", "26E", "26F", "26G", "26H", "27", "28", "29", "29A",
@@ -685,7 +696,8 @@ def executable_mapping() -> dict[str, dict]:
 def existing_mapping(number: str) -> tuple[list[str], list[str]]:
     model = EXISTING_MODELS[number]
     directory = ROOT / EXISTING_SCENARIO_DIRS[number]
-    scenarios = [path.relative_to(ROOT).as_posix() for path in sorted(directory.glob("*.yh"))]
+    scenarios = [relative for path in sorted(directory.glob("*.yh"))
+        if (relative := path.relative_to(ROOT).as_posix()) not in EXISTING_INVALID_SCENARIOS]
     return [model], scenarios
 
 
