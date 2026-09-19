@@ -18,6 +18,9 @@ REGISTRIES = (
     (ROOT / "mechanisation/core-yuho-theorems-v0.2.json",
      ROOT / "mechanisation/Yuho/CoreYuho/TypedFiniteTheoremRegistry.lean",
      "yuho.core-theorem-coverage-v0.2"),
+    (ROOT / "mechanisation/core-yuho-theorems-v0.3.json",
+     ROOT / "mechanisation/Yuho/CoreYuho/ReleaseV03TheoremRegistry.lean",
+     "yuho.core-theorem-coverage-v0.3"),
 )
 CORE_FILES = tuple((ROOT / "mechanisation/Yuho/CoreYuho").glob("*.lean"))
 

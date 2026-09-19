@@ -10,11 +10,13 @@ import Control.Monad (forM, unless)
 import qualified Data.ByteString as BS
 import Data.Text (Text)
 import qualified Data.Text as Text
+import Data.Version (showVersion)
 import System.Directory
   ( createDirectory, doesDirectoryExist, doesFileExist
   , doesPathExist, findExecutable, getCurrentDirectory, listDirectory
   , removePathForcibly, renameDirectory )
 import System.FilePath ((</>), isAbsolute, takeDirectory)
+import System.Info (compilerName, compilerVersion)
 import Yuho.Protocol.Decode (sha256Text)
 import Yuho.Protocol.Json
   ( J(..), arrayValue, decodeJson, lookupField, objectFields, textValue )
@@ -33,8 +35,10 @@ locateRepository Nothing = do
   where
     search [] = pure (Left "repository root not found; pass --root <path>")
     search (candidate:rest) = do
-      found <- doesFileExist (candidate </> "cabal.project")
-      if found then check candidate else search rest
+      found <- check candidate
+      case found of
+        Right root -> pure (Right root)
+        Left _ -> search rest
 
 check :: FilePath -> IO (Either Text FilePath)
 check root = do
@@ -48,6 +52,7 @@ doctorReport selected = do
   case rootResult of
     Left message -> pure (JObj
       [("release",JStr releaseName),("version",JStr releaseVersion)
+      ,("implementation",JStr "haskell"),("compiler",JStr compilerIdentity)
       ,("status",JStr "incomplete"),("repository",JNull)
       ,("corpus_available",JBool False),("modules_available",JBool False)
       ,("lean_optional",JBool (lean /= Nothing)),("message",JStr message)
@@ -57,6 +62,7 @@ doctorReport selected = do
       modules <- doesDirectoryExist (root </> "research/singapore/corpus-v0.3/modules")
       pure (JObj
         [("release",JStr releaseName),("version",JStr releaseVersion)
+        ,("implementation",JStr "haskell"),("compiler",JStr compilerIdentity)
         ,("status",JStr (if corpus && modules then "ready" else "incomplete"))
         ,("repository",JStr (Text.pack root))
         ,("corpus_available",JBool corpus),("modules_available",JBool modules)
@@ -66,6 +72,9 @@ doctorReport selected = do
           ,"yuho.core-conformance-v0.3","yuho.release-manifest/v1.0"]))
         ,("lean_optional",JBool (lean /= Nothing)),("python_required",JBool False)
         ,("external_renderer_required",JBool False)])
+
+compilerIdentity :: Text
+compilerIdentity = Text.pack (compilerName <> "-" <> showVersion compilerVersion)
 
 initialiseProject :: FilePath -> IO (Either Text ())
 initialiseProject destination = do

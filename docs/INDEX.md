@@ -2,6 +2,8 @@
 
 Docs are grouped by audience.
 
+For the current authoritative research release, start with [Haskell Yuho Research Language v1.0.0](rewrite/HASKELL-YUHO-RESEARCH-LANGUAGE-v1.0.md) and the [Haskell DSL guide](rewrite/HASKELL-YUHO-DSL-GUIDE.md). The older user/contributor pages describe the archival Python 5.1 product unless they explicitly say otherwise.
+
 ## Use Yuho
 
 Audience: people running the local `yuho` CLI, encoding statutes, or
@@ -51,6 +53,8 @@ Audience: reviewers, researchers, and contributors tracing the design.
 - [Authoritative Haskell DSL guide](rewrite/HASKELL-YUHO-DSL-GUIDE.md)
 - [Core Yuho v0.2 typed finite rules](rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.2.md)
 - [Core Yuho v0.2 mechanisation and conformance](rewrite/CORE-YUHO-MECHANISATION-v0.2.md)
+- [Core Yuho v0.3 release semantics](rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.3.md)
+- [Core Yuho v0.3 mechanisation and conformance](rewrite/CORE-YUHO-MECHANISATION-v0.3.md)
 
 ### Archive
 

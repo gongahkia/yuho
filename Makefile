@@ -39,7 +39,7 @@ AUDIT_PYTHON ?= python3
 YUHO ?= yuho
 LOGS = logs
 
-.PHONY: install doctor smoke verify-all verify-core verify-core-yuho-conformance verify-core-yuho-v03-conformance verify-typed-finite-protocol \
+.PHONY: install doctor smoke verify-all verify-core verify-core-yuho-conformance verify-core-yuho-v03-conformance verify-yuho-haskell-release verify-typed-finite-protocol \
         verify-coverage verify-akn-xsd verify-mechanisation \
         verify-structural-diff verify-runtime-tests \
         verify-penalty-verdicts verify-lean-verdicts verify-lean-penalty-footprints \
@@ -49,6 +49,11 @@ LOGS = logs
 		verify-control-plane verify-grammar-generated verify-capability-claims \
         release-audit \
         clean-reproduce
+
+verify-yuho-haskell-release:
+	$(PYTHON) scripts/generate_singapore_corpus_v03.py --check
+	$(PYTHON) scripts/verify_core_yuho_theorems.py
+	$(PYTHON) scripts/generate_yuho_release_manifest.py --check
 
 install:
 	./install.sh --dev

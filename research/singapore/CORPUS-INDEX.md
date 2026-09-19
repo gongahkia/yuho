@@ -10,7 +10,7 @@ Structural indexing, executable research coverage and legal review are separate.
 - Executable offence families: **26** (15 added in v0.3).
 - Valid Singapore scenario files: **306** (129 added in v0.3: 120 offence scenarios and 9 typed-rule showcases).
 - Executable general-exception families: **13**.
-- Candidate-penalty declarations: **21**.
+- Candidate-penalty declarations: **22**.
 - Analysis cases: **16**.
 - Distinct Penal Code provision rows connected to executable models: **55**; with the contextual Evidence Act s 107 anchor, the authored instrument/provision total is **56**.
 
@@ -76,7 +76,7 @@ Chapter assignments are bounded section-range classifications because the saved 
 | Family | Provision anchors | Scenarios | Attached exception | Candidate penalty | Executable boundary |
 |---|---|---:|---|---|---|
 | unlawful-assembly-membership | s 141, s 142, s 143 | 8 | section76 | s 143 candidate | The qualifying common object is externally supplied; Yuho does not infer it from group conduct. |
-| rioting | s 141, s 146, s 147 | 8 | section76 | none (unsupported form) | Caning stated by section 147 is contextual because the candidate-term fragment does not encode caning. |
+| rioting | s 141, s 146, s 147 | 8 | section76 | s 147 candidate | The section 147 imprisonment-and-caning terms are presented as a candidate statutory penalty, not an imposed sentence. |
 | false-information-public-servant | s 182 | 8 | section77 | s 182 candidate | The causal and public-servant power classifications are supplied rather than inferred. |
 | obstructing-public-servant | s 186 | 8 | section76 | s 186 candidate | This branch is limited to section 186(1)(a), concerning an individual. |
 | disappearance-of-evidence | s 201 | 8 | section78 | none (unsupported form) | Section 201's tiered penalty depends on the predicate offence and is not represented by the current candidate-term form. |

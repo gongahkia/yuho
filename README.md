@@ -5,14 +5,13 @@
 </p>
 
 <p align="center">
-  <em>Domain-specific language for encoding statutes as executable bytes.</em>
+  <em>Haskell-authoritative finite research DSL for reviewable legal-rule models.</em>
 </p>
 
 <p align="center">
   <a href="https://github.com/gongahkia/yuho/actions/workflows/release.yml"><img src="https://github.com/gongahkia/yuho/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
-  <a href="https://pypi.org/project/yuho/"><img src="https://img.shields.io/pypi/v/yuho" alt="PyPI"/></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"/></a>
-  <img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python 3.10+"/>
+  <img src="https://img.shields.io/badge/GHC-9.8.4-5e5086.svg" alt="GHC 9.8.4"/>
 </p>
 
 <p align="center">
@@ -25,17 +24,15 @@
 
 ## What is Yuho?
 
-`Yuho` is a domain-specific language for research representations of law. [Core Yuho v0.2](./docs/rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.2.md) adds nominal entities, typed finite predicates and scalars, quantification, cardinality, explicit negation and explicit rule priority. Its documented finite technical-status operations have [machine-checked Lean semantics and independent bounded Haskell–Lean conformance](./docs/rewrite/CORE-YUHO-MECHANISATION-v0.2.md). No whole-project implementation proof or legal-corpus correctness proof is claimed, and Yuho does not determine legal outcomes.
+`Yuho` is a domain-specific language for finite research representations of law. The current release is the [Haskell Yuho Research Language v1.0.0](./docs/rewrite/HASKELL-YUHO-RESEARCH-LANGUAGE-v1.0.md). Core v0.1-v0.3 cover typed criminal-law structures, finite rules, normative positions, candidate sanctions and explicitly authored responsibility routes. Their documented finite technical-status fragments have machine-checked Lean semantics and independent bounded Haskell–Lean conformance. No whole-project compiler proof or legal-corpus correctness proof is claimed, and Yuho does not determine legal outcomes.
 
 Current applications are focused on Singapore Criminal Law but really can be applied to any jurisdiction that relies on [statutes](https://www.merriam-webster.com/dictionary/statute).
 
-## For Language Nerds
+## Authority boundary
 
-In specific, `Yuho` mainly comprises a statute DSL compiler that transpiles `.yh` statute encodings *(specified in `Yuho`'s grammer spec)* into a typed AST.
+The default `yuho` documented for v1 is the executable built from `rewrite/haskell`. It performs parsing, checking, lowering, in-process kernel execution, explanations, corpus queries and native SVG/JSON diagrams without Python, Mermaid, Graphviz, Node, a browser or network access.
 
-This means you can run syntax, semantic and lint checks on `.yh` code.
-
-`Yuho` also additionally emits reviewable artefacts in JSON, Plaintext English, $LaTeX$, Mermaid, Alloy, DOCX, Akoma Ntoso, and LegalRuleML.
+The older Python/Tree-sitter product and its Mermaid/transpiler surfaces remain archival compatibility code. Their commands and package are not the Haskell v1 authority.
 
 ## Current Capabilities
 
@@ -46,12 +43,12 @@ This means you can run syntax, semantic and lint checks on `.yh` code.
 
 | Surface | Capability |
 |---|---|
-| Grammar | Tree-sitter grammar for statute blocks, structs, functions, tests, imports, cross-section predicates, penalty combinators, and exception priority |
-| Analysis | `yuho check`, `yuho lint`, formatting, AST visualization, source diagnostics |
-| Transpilers | JSON, English, LaTeX, Mermaid, Alloy, DOCX, Akoma Ntoso, LegalRuleML |
-| Verification | Z3/Alloy backends via `yuho verify`, plus Lean structural-diff checks |
-| Corpus tools | AKN round-trip, runtime test sweep, reference graph via `yuho refs` |
-| Corpora | `library/penal_code` Singapore canonical corpus, `library/bharatiya_nyaya_sanhita` BNS 2023 replacement corpus for IPC, `library/indian_penal_code` raw IPC snapshot, `library/malaysia_penal_code` and `library/pakistan_penal_code` IPC-lineage proof-of-concept corpora |
+| Language | Source-located Haskell parser/checker; Core Yuho v0.1-v0.3; exact-version local modules |
+| Operation | `check`, `compile`, `run`, `explain`, `diagram`, `corpus`, `doctor`, `init`, `version`, `release verify` |
+| Semantics | Eight versioned KernelInput v1 variants evaluated in-process |
+| Formal assurance | 79 registered Lean theorems plus bounded independent Haskell–Lean conformance; not a verified compiler |
+| Corpus | 524 saved Penal Code rows structurally indexed; 26 executable offence families in a broad partial research subset |
+| Diagrams | Native deterministic standalone SVG and semantic-graph JSON |
 
 ### Encoded statues
 
@@ -59,54 +56,23 @@ One of my gripes with [most Legal DSLs](#references) presently available *(in th
 
 With this specific trauma in mind, `Yuho` provides a structurally indexed saved corpus of 524 Singapore Penal Code provision records at [`library/penal_code/`](./library/penal_code/). The [Haskell research corpus index](./research/singapore/CORPUS-INDEX.md) separately identifies which bounded rules are executable, partial, definition-only or still unmodelled; structural presence is not executable support or a claim of legal currency.
 
-## Installation
-
-### PyPI
-
-The easiest way to get started with `Yuho` is via PyPI installation from the CLI.
-
-```console
-$ uv tool install 'yuho[dev]'
-$ yuho doctor
-$ yuho init yuho-starter
-```
-
-### Direct GitHub Repo
-
-Alternatively run the below.
+## Build and ten-minute start
 
 ```console
 $ git clone https://github.com/gongahkia/yuho && cd yuho
-$ ./install.sh --dev
+$ cd rewrite/haskell
+$ cabal v2-build all --offline -j1 --with-compiler=/home/gongahkia/.ghcup/bin/ghc-9.8.4
+$ YUHO="$(cabal list-bin exe:yuho --offline --with-compiler=/home/gongahkia/.ghcup/bin/ghc-9.8.4)"
+$ "$YUHO" version
+$ "$YUHO" doctor --root ../..
+$ "$YUHO" init /tmp/yuho-starter
+$ cd /tmp/yuho-starter
+$ "$YUHO" check model.yh --scenario scenario.yh
+$ "$YUHO" run model.yh --scenario scenario.yh
+$ "$YUHO" explain model.yh --scenario scenario.yh
 ```
 
-## Usage
-
-The below instructions are for locally using and running `Yuho`.
-
-```console
-$ uv venv --python 3.13 .venv
-$ source .venv/bin/activate
-$ uv pip install -e '.[dev]'
-$ yuho doctor
-$ yuho --help
-$ yuho doctor
-$ yuho init yuho-starter
-$ yuho check library/penal_code/s415_cheating/statute.yh
-$ yuho lint library/penal_code/s415_cheating/statute.yh
-$ yuho ast library/penal_code/s415_cheating/statute.yh --stats --depth 3
-$ yuho verify --capabilities
-```
-
-## Shell Completion
-
-`Yuho` optionally provides shell completion for most popular shells.
-
-```console
-$ yuho completion zsh --install
-$ yuho completion bash --install
-$ yuho completion fish --install
-```
+The pinned Cabal plan is retained and the normal workflow is offline. See the [v1 release guide](./docs/rewrite/HASKELL-YUHO-RESEARCH-LANGUAGE-v1.0.md) for modules, cases, diagrams, corpus queries and the complete claim boundary.
 
 ## Documentation
 

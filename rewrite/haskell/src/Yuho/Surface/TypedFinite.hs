@@ -1312,11 +1312,11 @@ explainTypedFinite program result = Text.unlines $
       | row <- finiteResultRules result]
   ++ ["Norm " <> normName item <> " — subject " <> normSubject item
       <> ", modality " <> modalityText (normModality item) <> ", action "
-      <> normAction item <> ": " <> ruleStatus ("r:norm:" <> normName item)
+      <> normAction item <> ": applicability " <> ruleStatus ("r:norm:" <> normName item)
       | item <- finiteNorms program]
   ++ ["Responsibility route " <> routeName item <> " — subject " <> routeSubject item
       <> ", kind " <> routeKindText (routeKind item) <> ", target " <> routeTarget item
-      <> ": " <> ruleStatus ("r:route:" <> routeName item)
+      <> ": requirements " <> ruleStatus ("r:route:" <> routeName item)
       | item <- finiteRoutes program]
   ++ ["Proposition " <> observedPropositionId row <> ": " <> truthName (propositionStatus row)
       <> " (" <> propositionState row <> ")" | row <- finiteResultPropositions result]

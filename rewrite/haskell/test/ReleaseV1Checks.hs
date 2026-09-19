@@ -38,6 +38,18 @@ runReleaseV1Checks root = do
   check "v0.3 explanation retains legal boundary"
     ("does not assess evidence" `Text.isInfixOf` explainTypedFinite program result)
 
+  let modularModelPath = typed </> "modular-normative-responsibility.yh"
+      modularScenarioPath = typed </> "modular-normative-responsibility-satisfied.yh"
+  modularModel <- BS.readFile modularModelPath
+  modularScenario <- BS.readFile modularScenarioPath
+  modularProgram <- loadTypedFiniteProgram modularModelPath modularModel
+      (Just (modularScenarioPath,modularScenario))
+    >>= either (const (failed "v0.3 norm/route module composition")) pure
+  check "norms and routes survive exact-version module composition"
+    (length (finiteModules modularProgram) == 1
+      && length (finiteNorms modularProgram) == 2
+      && length (finiteRoutes modularProgram) == 1)
+
   let synthetic = root </> "rewrite/frontend/fixtures/synthetic"
       penaltyModel = synthetic </> "rich-candidate-sanctions.yh"
       penaltyScenario = synthetic </> "scenario-rich-candidate-sanctions.yh"

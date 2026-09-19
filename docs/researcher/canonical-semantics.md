@@ -1,5 +1,7 @@
 # Yuho Canonical Semantics
 
+> This page specifies the legacy Python Canonical IR v1.1 boundary. The Haskell authority retains Canonical IR v1.2 evidence and is specified by the [Core Yuho reports](../rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.1.md), [v0.2](../rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.2.md) and [v0.3](../rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.3.md).
+
 This page defines the contract between Yuho syntax, AST construction, type
 checking, runtime evaluation, verifiers, and transpilers.
 

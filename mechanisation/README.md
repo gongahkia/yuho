@@ -6,7 +6,8 @@ covers three-valued groups, finite requirements and definitions, scoped
 exceptions, presumptions, independent allegations and temporal selection. The
 additive Core v0.2 artefact covers typed scalar comparison, explicit negation,
 finite quantifiers, typed substitution, cardinality intervals and explicit
-finite priority resolution. The
+finite priority resolution. Core v0.3 adds bounded normative applicability,
+candidate-sanction shapes and actor-attributed responsibility routes. The
 historical v9 artefact covers element, element-graph,
 exception, cross-section, and penalty correspondence, plus
 generator/canonical-model lemmas and cross-reference/apply-scope smoke
@@ -34,7 +35,7 @@ mechanisation/
 │   ├── Generator.lean   (verified Z3-generator spec + canonical
 │   │                     models — discharges the conviction-layer
 │   │                     oracle assumption, v5)
-│   └── CoreYuho/        (Core v0.1/v0.2 syntax, semantics, proofs,
+│   └── CoreYuho/        (Core v0.1/v0.2/v0.3 syntax, semantics, proofs,
 │                         conformance evaluators and theorem registries)
 └── Tests/
     └── Smoke.lean       (executable examples on s299-shaped fixtures)
@@ -48,6 +49,7 @@ elan default leanprover/lean4:v4.10.0   # one-time, if not pinned
 lake build         # typechecks the Yuho lib modules + theorems
 lake build Tests   # typechecks the smoke tests with native_decide
 cd .. && make verify-core-yuho-conformance
+make verify-core-yuho-v03-conformance
 ```
 
 **Verified status as of 2026-04-28:** both `lake build` and
@@ -60,6 +62,7 @@ linter warnings.
 |---|---|---|---|
 | Proved | Core Yuho v0.1 finite technical-status algebra, total checked-tree evaluation, scoped isolation, presumption states, pointwise cases and bounded temporal selection. | `make verify-core-yuho-conformance`, `Yuho/CoreYuho/TheoremRegistry.lean`. | Does not cover parsing, filesystem module lookup, SVG layout, legal interpretation or general lowering refinement. |
 | Proved | Core Yuho v0.2 typed finite comparison, negation, quantifier, substitution, cardinality and bounded priority properties. | `make verify-core-yuho-conformance`, `Yuho/CoreYuho/TypedFiniteTheoremRegistry.lean`. | Full surface/compiler refinement and arbitrary-graph outcome characterization beyond the registered theorems remain unproved. |
+| Proved | Core Yuho v0.3 bounded norm, candidate-sanction and responsibility-route properties. | `make verify-core-yuho-v03-conformance`, `Yuho/CoreYuho/ReleaseV03TheoremRegistry.lean`. | The eleven registered properties do not prove parser/elaboration refinement, diagram layout or legal correctness. |
 | Proved | Element, element-graph, exception, cross-section, and penalty correspondence for the Lean-modeled fragment. | `lake build`, `lake build Tests`, theorem rows below. | Applies to the abstractions encoded in `mechanisation/Yuho/*.lean`, not every parser construct. |
 | Tested | Python `Z3Generator` shape matches Lean-side fixtures for retained smoke/full-corpus structural checks. | `make verify-structural-diff`, `make verify-structural-diff-full` when run. | Differential evidence, not a certified compiler proof. |
 | Trusted | Lean 4.10 kernel, stdlib axioms, Python AST/Z3 encoder, fixture generator, and corpus selection. | `lean-toolchain`, `scripts/verify_structural_diff.py`, `mechanisation/scripts/generate_fixtures.py`. | Bugs in these layers can invalidate conclusions. |
@@ -75,6 +78,8 @@ evidence rather than the authoritative Haskell Core conformance boundary.
 
 The additive v0.2 inventory is in the [v0.2 report](../docs/rewrite/CORE-YUHO-MECHANISATION-v0.2.md)
 and [`core-yuho-theorems-v0.2.json`](core-yuho-theorems-v0.2.json).
+The additive v0.3 inventory is in the [v0.3 report](../docs/rewrite/CORE-YUHO-MECHANISATION-v0.3.md)
+and [`core-yuho-theorems-v0.3.json`](core-yuho-theorems-v0.3.json).
 
 | Mechanised claim | File | Theorem name | Proof technique |
 |---|---|---|---|

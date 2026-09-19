@@ -1,0 +1,19 @@
+{
+  "schema": "yuho.core-theorem-coverage-v0.3",
+  "properties": [
+    {"evidence":"mechanically_proved","property":"normative_applicability_determinism","theorem":"Yuho.CoreYuho.ReleaseV03.normative_applicability_deterministic"},
+    {"evidence":"mechanically_proved","property":"normative_applicability_totality","theorem":"Yuho.CoreYuho.ReleaseV03.normative_applicability_total"},
+    {"evidence":"mechanically_proved","property":"explicit_normative_conflict_symmetry","theorem":"Yuho.CoreYuho.ReleaseV03.explicit_normative_conflict_symmetric"},
+    {"evidence":"mechanically_proved","property":"no_norm_inference_from_absence","theorem":"Yuho.CoreYuho.ReleaseV03.no_norm_inference_from_missing_declarations"},
+    {"evidence":"mechanically_proved","property":"candidate_sanction_bounds_validity","theorem":"Yuho.CoreYuho.ReleaseV03.specified_bounds_valid_when_ordered"},
+    {"evidence":"mechanically_proved","property":"candidate_sanction_shape_preservation","theorem":"Yuho.CoreYuho.ReleaseV03.candidate_sanction_structure_preserved"},
+    {"evidence":"mechanically_proved","property":"actor_route_isolation","theorem":"Yuho.CoreYuho.ReleaseV03.actor_route_isolation"},
+    {"evidence":"mechanically_proved","property":"irrelevant_actor_environment_extension","theorem":"Yuho.CoreYuho.ReleaseV03.irrelevant_actor_environment_extension"},
+    {"evidence":"mechanically_proved","property":"explicit_route_required_for_cross_actor_effect","theorem":"Yuho.CoreYuho.ReleaseV03.explicit_route_required_for_cross_actor_effect"},
+    {"evidence":"mechanically_proved","property":"legacy_participation_elaboration_compatibility","theorem":"Yuho.CoreYuho.ReleaseV03.legacy_participation_elaboration_compatible"},
+    {"evidence":"mechanically_proved","property":"legacy_attempt_elaboration_compatibility","theorem":"Yuho.CoreYuho.ReleaseV03.legacy_attempt_elaboration_compatible"},
+    {"evidence":"tested","property":"haskell_lean_bounded_conformance","test":"verify_core_yuho_v03_conformance.py"},
+    {"evidence":"deferred","property":"surface_to_core_type_preservation"},
+    {"evidence":"deferred","property":"core_to_kernel_refinement"}
+  ]
+}

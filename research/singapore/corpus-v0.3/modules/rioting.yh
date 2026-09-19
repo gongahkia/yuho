@@ -125,9 +125,13 @@ model SingaporePenalCodeCorpusV03RiotingResearchPrototype-v1 {
     rioting_final r:sections141-147;
   }
 
+  candidate-penalties {
+    candidate pen:section147-rioting for offence o:rioting source src:pc-v03 provision 147 { all-of term:rioting { imprisonment term:rioting-prison minimum not-stated maximum 7 years; caning term:rioting-caning minimum not-stated maximum 24 strokes; } }
+  }
+
   limitations {
     "All classifications and applicability assumptions are externally supplied";
-    "Caning stated by section 147 is contextual because the candidate-term fragment does not encode caning.";
+    "The section 147 imprisonment-and-caning terms are presented as a candidate statutory penalty, not an imposed sentence.";
     "Candidate penalty terms are contextual candidates, not imposed sentences";
     "No evidence, guilt, conviction, acquittal, liability, sentence or court disposition is determined";
   }

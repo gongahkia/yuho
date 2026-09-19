@@ -1,5 +1,7 @@
 # Yuho Haskell Research Language v0.1
 
+> Historical release record. The current authority is [Haskell Yuho Research Language v1.0.0](HASKELL-YUHO-RESEARCH-LANGUAGE-v1.0.md); counts and limitations below describe the earlier v0.1 boundary.
+
 This is a bounded research release, not a production legal system. It is coherent for authoring, checking, compiling, running and explaining the included Singapore criminal-law models. It does not claim exhaustive Penal Code coverage or legally current advice.
 
 ## Capability matrix

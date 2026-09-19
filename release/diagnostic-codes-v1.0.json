@@ -1,0 +1,15 @@
+{
+  "schema": "yuho.diagnostic-index/v1.0",
+  "release": "Haskell Yuho Research Language v1.0.0",
+  "families": [
+    {"prefix":"SFE","scope":"authoritative surface parsing, checking, cases and I/O","stability":"existing meanings are frozen; new meanings require a new unused code"},
+    {"prefix":"SFM","scope":"exact-version statutory module resolution and composition","stability":"frozen"},
+    {"prefix":"SFP","scope":"registered-presumption surface","stability":"frozen"},
+    {"prefix":"SFR","scope":"typed supplied facts and presumption/refusal boundaries","stability":"frozen"},
+    {"prefix":"SFT","scope":"typed finite rules, modules and cases","stability":"frozen"},
+    {"prefix":"SFD","scope":"native semantic diagrams","stability":"frozen"},
+    {"prefix":"SFRL","scope":"release, doctor, init and manifest operations","stability":"frozen"},
+    {"prefix":"SFC","scope":"offline Singapore corpus queries and validation","stability":"frozen","codes":["SFC001"]}
+  ],
+  "v1_codes": ["SFD001","SFE001","SFE002","SFE003","SFE004","SFE005","SFE006","SFE007","SFE008","SFE009","SFE010","SFE011","SFE012","SFE013","SFE014","SFE015","SFE016","SFE017","SFE018","SFE020","SFE022","SFE023","SFE024","SFE025","SFE026","SFE027","SFE028","SFE030","SFE031","SFE032","SFE033","SFE034","SFE035","SFE036","SFE037","SFE038","SFE039","SFE040","SFE041","SFE042","SFE043","SFE044","SFE051","SFE052","SFE053","SFE054","SFE055","SFE056","SFE057","SFE058","SFE059","SFE060","SFE061","SFE062","SFE063","SFE064","SFE065","SFE067","SFE068","SFE069","SFE070","SFE072","SFE073","SFE074","SFE075","SFE076","SFE077","SFE078","SFE079","SFE080","SFE081","SFE082","SFE083","SFE084","SFE085","SFE086","SFE087","SFE088","SFE089","SFE090","SFE091","SFE092","SFE093","SFE095","SFE100","SFE101","SFE102","SFE103","SFE104","SFE105","SFE106","SFE107","SFE108","SFE109","SFE110","SFE111","SFE112","SFE113","SFE114","SFE115","SFE116","SFM001","SFM002","SFM003","SFM004","SFM005","SFM006","SFM007","SFM008","SFM009","SFM010","SFM011","SFM012","SFP001","SFP002","SFP003","SFP004","SFR001","SFR002","SFR003","SFR004","SFR005","SFRL001","SFT001","SFT002","SFT003","SFT004","SFT005","SFT006","SFT007","SFT008","SFT009","SFT010","SFT011","SFT012","SFT013","SFT014","SFT015","SFT016"]
+}

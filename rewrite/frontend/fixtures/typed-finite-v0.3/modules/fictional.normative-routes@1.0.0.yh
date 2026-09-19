@@ -1,0 +1,28 @@
+typed-rules-module fictional.normative-routes version 1.0.0 {
+  export entity-type person;
+  export entity actor:alex;
+  export entity actor:blair;
+  export predicate acts;
+  export predicate assists;
+  export proposition p:specified-action;
+  export proposition p:responsibility-route;
+  export requirement q:acts;
+  export requirement q:aid;
+  export norm n:prohibition;
+  export norm n:permission;
+  export responsibility-route route:aid;
+  export priority n:prohibition;
+  entity-type person;
+  entity actor:alex as person;
+  entity actor:blair as person;
+  predicate acts(person) kind conduct;
+  predicate assists(person, person) kind relationship;
+  proposition p:specified-action;
+  proposition p:responsibility-route;
+  requirement q:acts = acts(actor:alex);
+  requirement q:aid = all(assists(actor:blair, actor:alex), acts(actor:alex));
+  norm n:prohibition subject actor:alex modality prohibited action proposition p:specified-action when q:acts citation "fictional modular prohibition";
+  norm n:permission subject actor:alex modality permitted action proposition p:specified-action when q:acts citation "fictional modular permission";
+  priority n:prohibition over n:permission;
+  responsibility-route route:aid subject actor:blair kind intentional-aid target proposition p:responsibility-route when q:aid citation "fictional modular contribution route";
+}

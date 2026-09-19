@@ -1,0 +1,4 @@
+typed-rules-scenario FictionalModularNormativeResponsibilitySatisfied for FictionalModularNormativeResponsibility-v0.3 {
+  classify acts(actor:alex) as proved reason "synthetic supplied classification";
+  classify assists(actor:blair, actor:alex) as proved reason "synthetic supplied classification";
+}

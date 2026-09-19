@@ -1,0 +1,21 @@
+{
+  "schema": "yuho.capabilities/v1.0",
+  "release": "Haskell Yuho Research Language v1.0.0",
+  "capabilities": [
+    {"id":"check","status":"supported","boundary":"source-located parsing, resolution and static checking"},
+    {"id":"compile","status":"supported","boundary":"deterministic KernelInput v1 for the eight registered variants"},
+    {"id":"run","status":"supported","boundary":"in-process technical evaluation; no judicial outcome"},
+    {"id":"explain","status":"supported","boundary":"structured technical derivations and limitations"},
+    {"id":"diagram","status":"supported","boundary":"native deterministic SVG and semantic-graph JSON"},
+    {"id":"corpus","status":"supported","boundary":"offline queries over the saved 524-row structural inventory"},
+    {"id":"doctor","status":"supported","boundary":"release, schema, corpus, module and optional Lean availability"},
+    {"id":"init","status":"supported","boundary":"atomic relocatable Haskell-authoritative starter project"},
+    {"id":"version","status":"supported","boundary":"research release identity"},
+    {"id":"release-verify","status":"supported","boundary":"offline SHA-256 verification of retained release artifacts"},
+    {"id":"fmt","status":"deferred","boundary":"the current lexer discards comments, so a comment-preserving complete-v1 formatter cannot be shipped responsibly"},
+    {"id":"formal-semantics","status":"bounded","boundary":"79 registered Lean theorems across Core v0.1-v0.3; not a verified compiler"},
+    {"id":"singapore-corpus","status":"bounded","boundary":"complete structural indexing of the saved Penal Code export and broad partial executable coverage"},
+    {"id":"evidence-assessment","status":"unsupported","boundary":"classifications and scalar values are externally supplied"},
+    {"id":"judicial-outcome","status":"unsupported","boundary":"no guilt, liability, conviction, acquittal, sentence or procedure disposition"}
+  ]
+}

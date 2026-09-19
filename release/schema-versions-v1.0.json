@@ -1,0 +1,18 @@
+{
+  "schema": "yuho.schema-index/v1.0",
+  "release": "Haskell Yuho Research Language v1.0.0",
+  "schemas": [
+    {"name":"KernelInput","version":"v1","status":"frozen"},
+    {"name":"KernelResult","version":"v1","status":"frozen"},
+    {"name":"Canonical IR","version":"v1.2","status":"frozen"},
+    {"name":"Core Yuho","version":"v0.1","status":"retained"},
+    {"name":"Core Yuho Typed Finite Rules","version":"v0.2","status":"retained"},
+    {"name":"Core Yuho Release Extensions","version":"v0.3","status":"frozen"},
+    {"name":"semantic graph","version":"yuho.semantic-graph/v0.1","status":"frozen"},
+    {"name":"coverage artifact","version":"yuho.singapore-criminal-law-coverage/v0.3","status":"frozen"},
+    {"name":"Core conformance","version":"yuho.core-conformance-v0.1","status":"retained"},
+    {"name":"Core conformance","version":"yuho.core-conformance-v0.2","status":"retained"},
+    {"name":"Core conformance","version":"yuho.core-conformance-v0.3","status":"frozen"},
+    {"name":"release manifest","version":"yuho.release-manifest/v1.0","status":"frozen"}
+  ]
+}

@@ -1,5 +1,7 @@
 # Getting Started
 
+> Legacy Python 5.1 guide. For the authoritative Haskell research executable, use the [v1 ten-minute tour](../rewrite/HASKELL-YUHO-RESEARCH-LANGUAGE-v1.0.md#ten-minute-tour). The commands and Mermaid outputs below are not the Haskell v1 surface.
+
 Yuho ships as a local CLI and Python package for parsing, checking,
 transpiling, verifying, and inspecting statute encodings.
 

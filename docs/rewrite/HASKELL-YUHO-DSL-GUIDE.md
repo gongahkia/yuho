@@ -132,6 +132,36 @@ SCENARIO=../frontend/fixtures/typed-finite/fictional-typed-rules-satisfied.yh
 
 The new fragment lowers to the single additional `TypedFiniteRules-v1` variant because scalar, cardinality, witness and conflict observations cannot be losslessly represented in the seven historical variants. See the [formal language report](CORE-YUHO-LANGUAGE-REPORT-v0.2.md), [mechanisation report](CORE-YUHO-MECHANISATION-v0.2.md) and [construct registry](core-yuho-conformance-v0.2.json).
 
+## Core Yuho v0.3 release constructs
+
+Core v0.3 adds three bounded source forms while retaining the eight existing kernel variants. Normative positions and responsibility routes elaborate into named `TypedFiniteRules-v1` rules; richer candidate sanctions use `PenaltyTerms-v1`.
+
+```yh
+norm n:prohibition subject actor:alex modality prohibited
+  action proposition p:specified-action when q:acts
+  citation "fictional prohibition";
+
+responsibility-route route:aid subject actor:blair kind intentional-aid
+  target proposition p:responsibility-route when q:aid
+  citation "fictional contribution route";
+
+priority n:prohibition over n:permission;
+```
+
+Modalities are `required`, `prohibited` and `permitted`. A permission has no automatic priority over a prohibition; all resolution is explicit and acyclic. Routes may be `principal-conduct`, `joint-conduct`, `instigation`, `conspiracy`, `intentional-aid`, `attempt` or an explicitly named `other:<identifier>` contribution. These are author-declared finite contribution tags, not inferred liability rules.
+
+Candidate penalty bodies additionally accept:
+
+```yh
+death term:death;
+life-imprisonment term:life;
+caning term:caning minimum 3 maximum 6 strokes;
+```
+
+They can occur inside existing `all-of`, `exactly-one-of` and `one-or-more-of` trees. Every such term is a candidate statutory presentation, not a sentence. See the [v0.3 report](CORE-YUHO-LANGUAGE-REPORT-v0.3.md) and [v1 release guide](HASKELL-YUHO-RESEARCH-LANGUAGE-v1.0.md).
+
+The stable Haskell command surface is `check`, `compile`, `run`, `explain`, `diagram`, `corpus`, `doctor`, `init`, `version` and `release verify`. A v1 `fmt` command is deliberately absent: the current lexer does not retain comments, so it cannot yet meet the complete-grammar comment-preservation guarantee.
+
 ## Exactly versioned local modules
 
 A module file has the deterministic name `<module-name>@<major.minor.patch>.yh` under the host's explicit local `module-root`. Names contain lowercase letters, digits, dots and hyphens. Versions are exact numeric triples. The current bounded resolver accepts only regular `.yh` files of at most 65,536 bytes, refuses absolute or parent-traversing paths, resolves imports in source order, and rejects cycles, duplicate identities or aliases and more than 32 modules.

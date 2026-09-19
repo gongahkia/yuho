@@ -1,4 +1,5 @@
 statutory-module singapore.penal-code.rioting version 1.0.0 {
   export offence o:rioting;
+  export candidate-penalty pen:section147-rioting;
   source-model "rioting.yh";
 }

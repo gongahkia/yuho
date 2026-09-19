@@ -1,0 +1,19 @@
+typed-rules-model FictionalModularNormativeResponsibility-v0.3 {
+  limit 512;
+  module-root "modules";
+  import fictional.normative-routes version 1.0.0 as legal;
+  use entity-type legal::person;
+  use entity legal::actor:alex;
+  use entity legal::actor:blair;
+  use predicate legal::acts;
+  use predicate legal::assists;
+  use proposition legal::p:specified-action;
+  use proposition legal::p:responsibility-route;
+  use requirement legal::q:acts;
+  use requirement legal::q:aid;
+  use norm legal::n:prohibition;
+  use norm legal::n:permission;
+  use responsibility-route legal::route:aid;
+  use priority legal::n:prohibition;
+  limitation "Wholly fictional exact-version module fixture; no legal duty or responsibility is asserted.";
+}

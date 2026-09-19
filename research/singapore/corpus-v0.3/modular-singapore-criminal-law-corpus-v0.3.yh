@@ -20,6 +20,7 @@ modular-model SingaporeCriminalLawCorpus-v0.3 {
   use offence unlawful_assembly_membership::o:unlawful-assembly-membership;
   use candidate-penalty unlawful_assembly_membership::pen:section143-unlawful-assembly-membership;
   use offence rioting::o:rioting;
+  use candidate-penalty rioting::pen:section147-rioting;
   use offence false_information_public_servant::o:false-information-public-servant;
   use candidate-penalty false_information_public_servant::pen:section182-false-information-public-servant;
   use offence obstructing_public_servant::o:obstructing-public-servant;

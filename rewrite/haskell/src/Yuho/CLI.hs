@@ -52,6 +52,12 @@ main :: IO ()
 main = do
   arguments <- getArgs
   case arguments of
+    ["help"] -> BS.hPut stdout usage
+    ["--help"] -> BS.hPut stdout usage
+    ["--version"] -> BS.hPut stdout (Encoding.encodeUtf8
+      (releaseName <> " v" <> releaseVersion <> "\n"))
+    "fmt":_ -> releaseIssue
+      "fmt is not available in v1 because the authoritative lexer does not preserve comments"
     "corpus":rest -> Corpus.runCorpus rest
     ["version"] -> BS.hPut stdout (Encoding.encodeUtf8
       (releaseName <> " v" <> releaseVersion <> "\n"))
@@ -102,7 +108,7 @@ options arguments = case arguments of
     if operation /= Compile && output /= Nothing
       then Left "--output applies only to compile"
       else Right (Options operation path scenario output)
-  _ -> Left "usage: yuho check|compile|run|explain <source.yh> [--scenario <path>] [--output <path>]; yuho diagram <source.yh> --view rule|modules|case|trace --format svg|json --output <path> [--scenario <path>]; yuho corpus ...; yuho doctor [--root <path>]; yuho init <directory>; yuho version; yuho release verify [--root <path>]"
+  _ -> Left (Encoding.decodeUtf8 (BS.init usage))
   where
     flags [] scenario output = Right (scenario, output)
     flags ("--scenario":path:rest) Nothing output = flags rest (Just path) output
@@ -128,6 +134,9 @@ options arguments = case arguments of
         _ -> Left "unknown diagram format"
       diagramFlags rest scenario output view (Just selected)
     diagramFlags _ _ _ _ _ = Left "unknown or duplicate diagram option"
+
+usage :: BS.ByteString
+usage = "usage: yuho check|compile|run|explain <source.yh> [--scenario <path>] [--output <path>]; yuho diagram <source.yh> --view rule|modules|case|trace --format svg|json --output <path> [--scenario <path>]; yuho corpus ...; yuho doctor [--root <path>]; yuho init <directory>; yuho version; yuho release verify [--root <path>]\n"
 
 readSource :: FilePath -> IO (Either Diagnostic BS.ByteString)
 readSource path = do
