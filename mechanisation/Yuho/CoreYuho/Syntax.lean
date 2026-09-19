@@ -3,7 +3,7 @@ Finite syntax and semantic domains for Core Yuho v0.1.
 
 This namespace is deliberately separate from the older Boolean Yuho
 mechanisation.  It models the normalized, three-valued Haskell Core described
-in docs/rewrite/CORE-YUHO-LANGUAGE-REPORT-v0.1.md.
+in docs/formal-semantics.md.
 -/
 
 import Std

@@ -12,23 +12,12 @@ package «yuho-mech» where
 
 @[default_target]
 lean_lib «Yuho» where
-  -- Public surface — re-exported by the top-level Yuho.lean.
+  -- Public finite Core surface re-exported by Yuho.lean.
   roots := #[`Yuho]
 
-lean_lib «Tests» where
-  globs := #[.submodules `Tests]
-
--- Python-side faithfulness — emits Generator.encodeStatute as JSON for
--- the smoke fixtures. Driven by
--- scripts/verify_structural_diff.py from the repo root.
--- The full-corpus fixture file (`scripts/Fixtures.lean`) is
--- auto-generated; it has to be declared as a lib so lake can
--- elaborate the import in ExportSpec.lean.
+-- Independent conformance runners.
 lean_lib «scripts» where
   globs := #[.submodules `scripts]
-
-lean_exe «export_spec» where
-  root := `scripts.ExportSpec
 
 lean_exe «core_conformance» where
   root := `scripts.CoreConformance
