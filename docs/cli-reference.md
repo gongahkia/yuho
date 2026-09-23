@@ -5,7 +5,7 @@ Build at the repository root with GHC 9.8.4, then obtain the executable path wit
 | Command | Purpose |
 |---|---|
 | `yuho check MODEL [--scenario SCENARIO]` | Parse, resolve and statically check a model, scenario, presumption program or case. |
-| `yuho compile MODEL [--scenario SCENARIO] [--output FILE]` | Emit canonical KernelInput or case input. Output publication is atomic and refuses an existing file. |
+| `yuho compile MODEL [--scenario SCENARIO] [--output FILE] [--format json\|xml]` | Emit canonical KernelInput or case input as JSON (default) or generic technical XML. Output publication is atomic and refuses an existing file. |
 | `yuho run MODEL [--scenario SCENARIO]` | Compile and evaluate with the in-process Haskell kernel. |
 | `yuho explain MODEL [--scenario SCENARIO]` | Render a structured technical derivation and limitations. |
 | `yuho diagram INPUT --view VIEW --format FORMAT --output FILE [--scenario SCENARIO]` | Emit native `svg` or semantic-graph `json`; views are `rule`, `modules`, `case`, and `trace`. |
@@ -18,3 +18,5 @@ Build at the repository root with GHC 9.8.4, then obtain the executable path wit
 `yuho fmt` intentionally returns diagnostic `SFRL001`: the lexer does not preserve comments, so a safe complete formatter is not provided. Diagnostics go to standard error and failures return a non-zero exit status. `yuho --help` prints the compact grammar.
 
 No production command requires a network connection, an external renderer, or a non-Haskell runtime.
+
+`compile --format xml` is a deterministic XML tree encoding of the canonical compiled JSON request. It is not Akoma Ntoso or an authoritative legal-document representation; see [XML output](xml.md).

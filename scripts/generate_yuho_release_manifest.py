@@ -25,6 +25,7 @@ EXACT = [
     "docs/cli-reference.md",
     "docs/corpus.md",
     "docs/diagrams.md",
+    "docs/xml.md",
     "docs/assurance.md",
     "docs/positioning.md",
     "docs/roadmap.md",

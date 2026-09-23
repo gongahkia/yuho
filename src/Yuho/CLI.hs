@@ -20,6 +20,7 @@ import Yuho.Diagram.Build
 import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg)
 import Yuho.Diagram.Types (DiagramFormat(..), DiagramView(..), SemanticGraph)
 import Yuho.Protocol.Json (J(..), decodeJson, encodeJson, lookupField, textValue)
+import Yuho.Protocol.Xml (encodeXml)
 import Yuho.Release
   ( doctorReport, initialiseProject, locateRepository, releaseName, releaseVersion
   , verifyReleaseManifest )
@@ -46,7 +47,8 @@ import Yuho.Surface.Token (Diagnostic(..), Kind(..), Token(..), diagnosticJson)
 
 data Command = Check | Compile | Run | Explain | Diagram DiagramView DiagramFormat
   deriving (Eq)
-data Options = Options Command FilePath (Maybe FilePath) (Maybe FilePath)
+data CompileFormat = JsonCompile | XmlCompile deriving (Eq)
+data Options = Options Command FilePath (Maybe FilePath) (Maybe FilePath) CompileFormat
 
 main :: IO ()
 main = do
@@ -96,7 +98,7 @@ options arguments = case arguments of
     selectedView <- maybe (Left "diagram requires --view rule|modules|case|trace") Right view
     selectedFormat <- maybe (Left "diagram requires --format svg|json") Right format
     destination <- maybe (Left "diagram requires --output <path>") (Right . Just) output
-    Right (Options (Diagram selectedView selectedFormat) path scenario destination)
+    Right (Options (Diagram selectedView selectedFormat) path scenario destination JsonCompile)
   command:path:rest -> do
     operation <- case command of
       "check" -> Right Check
@@ -104,16 +106,25 @@ options arguments = case arguments of
       "run" -> Right Run
       "explain" -> Right Explain
       _ -> Left "expected check, compile, run, explain, diagram, corpus, doctor, init, version or release verify"
-    (scenario, output) <- flags rest Nothing Nothing
-    if operation /= Compile && output /= Nothing
-      then Left "--output applies only to compile"
-      else Right (Options operation path scenario output)
+    (scenario, output, format) <- flags rest Nothing Nothing Nothing
+    selectedFormat <- case format of
+      Nothing -> Right JsonCompile
+      Just "json" -> Right JsonCompile
+      Just "xml" -> Right XmlCompile
+      Just _ -> Left "compile format must be json or xml"
+    if operation /= Compile && (output /= Nothing || format /= Nothing)
+      then Left "--output and --format apply only to compile"
+      else Right (Options operation path scenario output selectedFormat)
   _ -> Left (Encoding.decodeUtf8 (BS.init usage))
   where
-    flags [] scenario output = Right (scenario, output)
-    flags ("--scenario":path:rest) Nothing output = flags rest (Just path) output
-    flags ("--output":path:rest) scenario Nothing = flags rest scenario (Just path)
-    flags _ _ _ = Left "unknown or duplicate option"
+    flags [] scenario output format = Right (scenario, output, format)
+    flags ("--scenario":path:rest) Nothing output format =
+      flags rest (Just path) output format
+    flags ("--output":path:rest) scenario Nothing format =
+      flags rest scenario (Just path) format
+    flags ("--format":value:rest) scenario output Nothing =
+      flags rest scenario output (Just value)
+    flags _ _ _ _ = Left "unknown or duplicate option"
     diagramFlags [] scenario output view format = Right (scenario,output,view,format)
     diagramFlags ("--scenario":path:rest) Nothing output view format =
       diagramFlags rest (Just path) output view format
@@ -136,7 +147,7 @@ options arguments = case arguments of
     diagramFlags _ _ _ _ _ = Left "unknown or duplicate diagram option"
 
 usage :: BS.ByteString
-usage = "usage: yuho check|compile|run|explain <source.yh> [--scenario <path>] [--output <path>]; yuho diagram <source.yh> --view rule|modules|case|trace --format svg|json --output <path> [--scenario <path>]; yuho corpus ...; yuho doctor [--root <path>]; yuho init <directory>; yuho version; yuho release verify [--root <path>]\n"
+usage = "usage: yuho check|compile|run|explain <source.yh> [--scenario <path>] [--output <path>] [--format json|xml]; yuho diagram <source.yh> --view rule|modules|case|trace --format svg|json --output <path> [--scenario <path>]; yuho corpus ...; yuho doctor [--root <path>]; yuho init <directory>; yuho version; yuho release verify [--root <path>]\n"
 
 readSource :: FilePath -> IO (Either Diagnostic BS.ByteString)
 readSource path = do
@@ -153,7 +164,7 @@ readSource path = do
   where origin = Token EndToken "" 1 1
 
 operate :: Options -> IO ()
-operate (Options command path scenarioPath output) = do
+operate (Options command path scenarioPath output compileFormat) = do
   source <- readSource path
   scenario <- traverse (\item -> do
     result <- readSource item
@@ -168,13 +179,13 @@ operate (Options command path scenarioPath output) = do
       case lexSource path bytes of
         Left issue -> report issue
         Right (first:_) | tokenText first == "analysis-case" ->
-          operateCase command path bytes scenarioPath output
+          operateCase command path bytes scenarioPath output compileFormat
         Right (first:_) | tokenText first == "presumption-program" ->
-          operatePresumption command path bytes scenarioPath output
+          operatePresumption command path bytes scenarioPath output compileFormat
         Right (first:_) | tokenText first == "typed-rules-model" ->
-          operateTypedFinite command path bytes supplied output
+          operateTypedFinite command path bytes supplied output compileFormat
         Right (first:_) | tokenText first == "typed-rules-case" ->
-          operateTypedFiniteCase command path bytes scenarioPath output
+          operateTypedFiniteCase command path bytes scenarioPath output compileFormat
         _ -> do
           (authored,resolvedScenario) <- loadAuthoredInput path bytes supplied
             >>= either report pure
@@ -192,9 +203,7 @@ operate (Options command path scenarioPath output) = do
               Right request -> case checkParsed path model resolvedScenario
                   >>= validateAuthoredChecked validationPath authored of
                 Left issue -> report issue
-                Right () -> case output of
-                  Nothing -> BS.hPut stdout request
-                  Just destination -> publish destination request
+                Right () -> emitCompile compileFormat output request
             Run -> case compiled of
               Left issue -> report issue
               Right request -> do
@@ -224,8 +233,8 @@ operate (Options command path scenarioPath output) = do
                   (programGraph view (normalizeChecked authored checked))
 
 operateCase :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
-  -> Maybe FilePath -> IO ()
-operateCase command path bytes scenarioPath output = do
+  -> Maybe FilePath -> CompileFormat -> IO ()
+operateCase command path bytes scenarioPath output compileFormat = do
   case scenarioPath of
     Just _ -> report (Diagnostic "SFE106" path origin
       "analysis case contains its own allegation inputs" Nothing)
@@ -243,9 +252,7 @@ operateCase command path bytes scenarioPath output = do
     Check -> BS.hPut stdout "{\"kind\":\"analysis-case\",\"status\":\"valid\"}\n"
     Compile -> do
       request <- either report pure (compileAnalysisCase checked)
-      case output of
-        Nothing -> BS.hPut stdout request
-        Just destination -> publish destination request
+      emitCompile compileFormat output request
     Run -> either report (BS.hPut stdout) (runAnalysisCase checked)
     Explain -> either report (BS.hPut stdout . Encoding.encodeUtf8
       . (authoredPrefix authored <>)) (explainAnalysisCase modelPath checked)
@@ -255,8 +262,8 @@ operateCase command path bytes scenarioPath output = do
   where origin = Token EndToken "" 1 1
 
 operatePresumption :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
-  -> Maybe FilePath -> IO ()
-operatePresumption command path bytes scenarioPath output = do
+  -> Maybe FilePath -> CompileFormat -> IO ()
+operatePresumption command path bytes scenarioPath output compileFormat = do
   case scenarioPath of
     Just _ -> report (Diagnostic "SFR001" path origin
       "presumption program names its own base scenario" Nothing)
@@ -264,9 +271,7 @@ operatePresumption command path bytes scenarioPath output = do
   program <- loadPresumptionProgram path bytes >>= either report pure
   case command of
     Check -> BS.hPut stdout "{\"kind\":\"presumption-program\",\"status\":\"valid\"}\n"
-    Compile -> case output of
-      Nothing -> BS.hPut stdout (presumptionRequest program)
-      Just destination -> publish destination (presumptionRequest program)
+    Compile -> emitCompile compileFormat output (presumptionRequest program)
     Run -> BS.hPut stdout (presumptionResult program)
     Explain -> either report (BS.hPut stdout . Encoding.encodeUtf8)
       (explainPresumptionProgram program)
@@ -277,16 +282,14 @@ operatePresumption command path bytes scenarioPath output = do
   where origin = Token EndToken "" 1 1
 
 operateTypedFinite :: Command -> FilePath -> BS.ByteString
-  -> Maybe (FilePath,BS.ByteString) -> Maybe FilePath -> IO ()
-operateTypedFinite command path bytes scenario output = do
+  -> Maybe (FilePath,BS.ByteString) -> Maybe FilePath -> CompileFormat -> IO ()
+operateTypedFinite command path bytes scenario output compileFormat = do
   program <- loadTypedFiniteProgram path bytes scenario >>= either report pure
   result <- either (report . issue) pure (evaluateTypedFinite program)
   let request = encodeTypedFiniteRequest (finiteProgramId program <> "-request") program
   case command of
     Check -> BS.hPut stdout "{\"kind\":\"typed-finite-rules\",\"status\":\"valid\"}\n"
-    Compile -> case output of
-      Nothing -> BS.hPut stdout request
-      Just destination -> publish destination request
+    Compile -> emitCompile compileFormat output request
     Run -> case decodeJson (runLine request) of
       Right value | (lookupField "status" value >>= textValue) == Just "evaluated" ->
         BS.hPut stdout (runLine request)
@@ -301,8 +304,8 @@ operateTypedFinite command path bytes scenario output = do
     issue message = Diagnostic "SFT011" path origin message Nothing
 
 operateTypedFiniteCase :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
-  -> Maybe FilePath -> IO ()
-operateTypedFiniteCase command path bytes scenario output = do
+  -> Maybe FilePath -> CompileFormat -> IO ()
+operateTypedFiniteCase command path bytes scenario output compileFormat = do
   case scenario of
     Just _ -> report (issue "typed-rules case contains its own allegation scenarios")
     Nothing -> pure ()
@@ -312,9 +315,7 @@ operateTypedFiniteCase command path bytes scenario output = do
         | item <- typedCaseAllegations declaration]
   case command of
     Check -> BS.hPut stdout "{\"kind\":\"typed-finite-case\",\"status\":\"valid\"}\n"
-    Compile -> case output of
-      Nothing -> BS.hPut stdout encoded
-      Just destination -> publish destination encoded
+    Compile -> emitCompile compileFormat output encoded
     Run -> do
       rows <- traverse runAllegation (typedCaseAllegations declaration)
       BS.hPut stdout (encodeJson (JObj
@@ -333,6 +334,26 @@ operateTypedFiniteCase command path bytes scenario output = do
       Right value | (lookupField "status" value >>= textValue) == Just "evaluated" ->
         pure (JObj [("id",JStr (typedAllegationId allegation)),("result",value)])
       _ -> report (issue "typed finite allegation was rejected by the Haskell kernel")
+
+emitCompile :: CompileFormat -> Maybe FilePath -> BS.ByteString -> IO ()
+emitCompile format destination request = do
+  output <- either report pure (formatCompile format request)
+  case destination of
+    Nothing -> BS.hPut stdout output
+    Just path -> publish path output
+
+formatCompile :: CompileFormat -> BS.ByteString -> Either Diagnostic BS.ByteString
+formatCompile JsonCompile request = Right request
+formatCompile XmlCompile request = do
+  value <- case decodeJson request of
+    Left _ -> Left (compileIssue "compiled request is invalid JSON")
+    Right item -> Right item
+  case encodeXml value of
+    Left message -> Left (compileIssue message)
+    Right output -> Right output
+  where
+    compileIssue message = Diagnostic "SFE014" "<compile>" origin message Nothing
+    origin = Token EndToken "" 1 1
 
 publish :: FilePath -> BS.ByteString -> IO ()
 publish destination bytes = do
