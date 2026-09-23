@@ -50,7 +50,7 @@ The starter contains an exact-version module, a typed model, a scenario, a case 
   --view case --format svg --output /tmp/yuho-starter/case.svg
 ```
 
-Use `--format json` for the deterministic semantic graph. The [diagram guide](diagrams.md) covers all four views.
+Use `--format json` or `--format xml` for the deterministic semantic graph. The [diagram guide](diagrams.md) covers all four views.
 
 ## Explore the Singapore corpus
 

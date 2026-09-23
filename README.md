@@ -45,7 +45,7 @@ Getting into the specifics, Yuho provides the following four products.
 | Standalone SVG | Native semantic diagram in the `rule`, `modules`, `case`, or `trace` view |
 | Semantic-graph JSON | Machine-readable representation underlying the native semantic diagram |
 | Technical request JSON | Canonical KernelInput or case request emitted by `yuho compile` |
-| Technical request XML | Generic XML representation of the canonical compiled request emitted by `yuho compile --format xml` |
+| Semantic-graph XML | Machine-readable XML representation of the native semantic diagram emitted by `yuho diagram --format xml` |
 | Technical result JSON | Per-program or per-allegation evaluation result emitted by `yuho run` |
 
 ## Features

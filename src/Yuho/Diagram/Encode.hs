@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg) where
+module Yuho.Diagram.Encode (encodeSemanticGraph, encodeSemanticGraphXml, encodeSvg) where
 
 import qualified Data.ByteString as BS
 import Data.List (sortOn)
@@ -19,6 +19,71 @@ encodeSemanticGraph graph = encodeJson (JObj
   , ("edges",JArr (map edgeJson (semanticGraphEdges graph)))
   , ("notice",JStr (semanticGraphNotice graph))
   ]) <> "\n"
+
+encodeSemanticGraphXml :: SemanticGraph -> Either Text BS.ByteString
+encodeSemanticGraphXml graph
+  | all xmlCharacter graphTexts = Right (Encoding.encodeUtf8 (Text.unlines
+      (["<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+       ,"<yuho:semantic-graph xmlns:yuho=\"urn:yuho:semantic-graph:v0.1\" format=\"yuho.semantic-graph/v0.1\""
+          <> attribute "graph-id" (semanticGraphId graph)
+          <> attribute "view" (viewText (semanticGraphView graph)) <> ">"
+       ,"  <yuho:nodes>"]
+       ++ map ("    " <>) (map nodeXml (semanticGraphNodes graph))
+       ++ ["  </yuho:nodes>","  <yuho:edges>"]
+       ++ map ("    " <>) (map edgeXml (semanticGraphEdges graph))
+       ++ ["  </yuho:edges>","  <yuho:notice>" <> xmlEscape (semanticGraphNotice graph)
+            <> "</yuho:notice>","</yuho:semantic-graph>"])))
+  | otherwise = Left "XML 1.0 forbids a control character in semantic graph output"
+  where
+    graphTexts = [semanticGraphId graph,semanticGraphNotice graph]
+      ++ concatMap nodeTexts (semanticGraphNodes graph)
+      ++ concatMap edgeTexts (semanticGraphEdges graph)
+
+nodeXml :: GraphNode -> Text
+nodeXml item = "<yuho:node" <> attribute "id" (graphNodeId item)
+  <> attribute "kind" (graphNodeKind item) <> attribute "label" (graphNodeLabel item)
+  <> optionalAttribute "citation" (graphNodeCitation item)
+  <> optionalAttribute "status" (graphNodeStatus item)
+  <> optionalAttribute "boundary" (graphNodeBoundary item) <> "/>"
+
+edgeXml :: GraphEdge -> Text
+edgeXml item = "<yuho:edge" <> attribute "from" (graphEdgeFrom item)
+  <> attribute "to" (graphEdgeTo item) <> attribute "kind" (graphEdgeKind item)
+  <> attribute "label" (graphEdgeLabel item) <> "/>"
+
+nodeTexts :: GraphNode -> [Text]
+nodeTexts item = [graphNodeId item,graphNodeKind item,graphNodeLabel item]
+  ++ maybe [] pure (graphNodeCitation item) ++ maybe [] pure (graphNodeStatus item)
+  ++ maybe [] pure (graphNodeBoundary item)
+
+edgeTexts :: GraphEdge -> [Text]
+edgeTexts item = [graphEdgeFrom item,graphEdgeTo item,graphEdgeKind item,graphEdgeLabel item]
+
+attribute :: Text -> Text -> Text
+attribute name value = " " <> name <> "=\"" <> xmlEscape value <> "\""
+
+optionalAttribute :: Text -> Maybe Text -> Text
+optionalAttribute _ Nothing = ""
+optionalAttribute name (Just value) = attribute name value
+
+xmlCharacter :: Char -> Bool
+xmlCharacter value = value == '\t' || value == '\n' || value == '\r'
+  || (value >= '\x20' && value <= '\xD7FF')
+  || (value >= '\xE000' && value <= '\xFFFD')
+  || (value >= '\x10000' && value <= '\x10FFFF')
+
+xmlEscape :: Text -> Text
+xmlEscape = Text.concatMap character
+  where
+    character '&' = "&amp;"
+    character '<' = "&lt;"
+    character '>' = "&gt;"
+    character '\t' = "&#x9;"
+    character '\n' = "&#xA;"
+    character '\r' = "&#xD;"
+    character '\"' = "&quot;"
+    character '\'' = "&apos;"
+    character value = Text.singleton value
 
 nodeJson :: GraphNode -> J
 nodeJson item = JObj

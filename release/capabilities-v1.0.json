@@ -3,10 +3,10 @@
   "release": "Yuho Haskell Research Language v1.0.0",
   "capabilities": [
     {"id":"check","status":"supported","boundary":"source-located parsing, resolution and static checking"},
-    {"id":"compile","status":"supported","boundary":"deterministic KernelInput v1 JSON, with opt-in generic technical XML for compiled requests"},
+    {"id":"compile","status":"supported","boundary":"deterministic KernelInput v1 for the eight registered variants"},
     {"id":"run","status":"supported","boundary":"in-process technical evaluation; no judicial outcome"},
     {"id":"explain","status":"supported","boundary":"structured technical derivations and limitations"},
-    {"id":"diagram","status":"supported","boundary":"native deterministic SVG and semantic-graph JSON"},
+    {"id":"diagram","status":"supported","boundary":"native deterministic SVG and equivalent semantic-graph JSON or XML"},
     {"id":"corpus","status":"supported","boundary":"offline queries over the saved 524-row structural inventory"},
     {"id":"doctor","status":"supported","boundary":"release, schema, corpus, module and optional Lean availability"},
     {"id":"init","status":"supported","boundary":"atomic relocatable Haskell-authoritative starter project"},

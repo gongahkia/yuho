@@ -8,8 +8,8 @@ Yuho Haskell Research Language v1.0 has one supported documentation surface:
 - [Architecture](architecture.md): checked frontend, Core, lowering and kernel boundaries.
 - [Formal semantics](formal-semantics.md): the current cumulative Core Yuho specification.
 - [Mechanisation](mechanisation.md): Lean theorem and Haskell–Lean conformance boundaries.
-- [Diagrams](diagrams.md): native semantic-graph JSON and SVG.
-- [XML output](xml.md): generic XML representation of compiled technical requests.
+- [Diagrams](diagrams.md): native semantic-graph JSON, XML and SVG.
+- [XML output](xml.md): XML representation of native semantic graphs.
 - [Singapore corpus](corpus.md): structural inventory and executable research subset.
 - [Assurance](assurance.md): proof, testing and legal claim boundaries.
 - [Positioning](positioning.md): restrained comparison with related legal systems.

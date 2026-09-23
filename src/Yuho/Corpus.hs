@@ -21,7 +21,7 @@ import System.Exit (exitFailure)
 import System.FilePath (isAbsolute, normalise, splitDirectories, takeDirectory, (</>))
 import System.IO (IOMode(ReadMode), hClose, openBinaryTempFile, stderr, stdout, withBinaryFile)
 import System.Posix.Files (createLink, fileSize, getSymbolicLinkStatus, isRegularFile)
-import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg)
+import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSemanticGraphXml, encodeSvg)
 import Yuho.Diagram.Types
   ( DiagramFormat(..), DiagramView(..), GraphEdge(..), GraphNode(..), SemanticGraph(..) )
 import Yuho.Protocol.Json (J(..), encodeJson)
@@ -288,7 +288,7 @@ parseCorpus arguments = case arguments of
   "coverage":"--format":"json":rest -> CorpusCoverage <$> rootFlags rest "."
   "graph":rest -> do
     (root,format,output,category,chapter,provision) <- graphFlags rest "." Nothing Nothing Nothing Nothing Nothing
-    selectedFormat <- maybe (Left "corpus graph requires --format json|svg") Right format
+    selectedFormat <- maybe (Left "corpus graph requires --format json|svg|xml") Right format
     destination <- maybe (Left "corpus graph requires --output <path>") Right output
     pure (CorpusGraph root selectedFormat destination category chapter provision)
   _ -> Left "usage: yuho corpus summary|list|show|check|coverage|graph [options]"
@@ -308,6 +308,8 @@ parseCorpus arguments = case arguments of
       graphFlags rest root (Just JsonFormat) output category chapter provision
     graphFlags ("--format":"svg":rest) root Nothing output category chapter provision =
       graphFlags rest root (Just SvgFormat) output category chapter provision
+    graphFlags ("--format":"xml":rest) root Nothing output category chapter provision =
+      graphFlags rest root (Just XmlFormat) output category chapter provision
     graphFlags ("--output":value:rest) root format Nothing category chapter provision =
       graphFlags rest root format (Just value) category chapter provision
     graphFlags ("--category":value:rest) root format output Nothing chapter provision =
@@ -345,8 +347,12 @@ execute command = do
     CorpusGraph _ format output category chapter provision -> do
       graph <- either corpusFailure pure (coverageGraph category chapter provision coverage)
       when (format == SvgFormat && length (semanticGraphNodes graph) > 120)
-        (corpusFailure "SVG graph filter exceeds 120 provisions; use JSON or a narrower filter")
-      publish output (case format of JsonFormat -> encodeSemanticGraph graph; SvgFormat -> encodeSvg graph)
+        (corpusFailure "SVG graph filter exceeds 120 provisions; use JSON, XML or a narrower filter")
+      bytes <- case format of
+        JsonFormat -> pure (encodeSemanticGraph graph)
+        SvgFormat -> pure (encodeSvg graph)
+        XmlFormat -> either corpusFailure pure (encodeSemanticGraphXml graph)
+      publish output bytes
 
 commandRoot :: CorpusCommand -> FilePath
 commandRoot command = case command of

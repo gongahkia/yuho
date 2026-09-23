@@ -9,8 +9,9 @@ import System.Exit (exitFailure)
 import System.FilePath ((</>))
 import Yuho.CoreYuho.Normalize (normalizeCase, normalizeChecked, normalizePresumption)
 import Yuho.Diagram.Build (caseGraph, presumptionGraph, programGraph)
-import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSvg)
-import Yuho.Diagram.Types (DiagramView(..), GraphNode(..), semanticGraphNodes)
+import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSemanticGraphXml, encodeSvg)
+import Yuho.Diagram.Types
+  ( DiagramView(..), GraphEdge(..), GraphNode(..), SemanticGraph(..), semanticGraphNodes )
 import Yuho.Protocol.Json (decodeJson)
 import Yuho.Surface.Case (caseModelFile, checkAnalysisCase)
 import Yuho.Surface.Compile (checkParsed)
@@ -23,7 +24,8 @@ runDiagramChecks root = do
   programChecks root
   caseChecks root
   presumptionChecks root
-  putStrLn "diagrams: deterministic Core-derived JSON/SVG views passed"
+  xmlChecks
+  putStrLn "diagrams: deterministic Core-derived JSON/XML/SVG views passed"
 
 programChecks :: FilePath -> IO ()
 programChecks root = do
@@ -38,9 +40,16 @@ programChecks root = do
   let core = normalizeChecked authored checked
       graph = programGraph TraceView core
       json = encodeSemanticGraph graph
+  xml <- either (const (failed "semantic graph XML encoding")) pure
+    (encodeSemanticGraphXml graph)
+  let
       svg = encodeSvg graph
   check "semantic graph JSON decodes" (either (const False) (const True) (decodeJson json))
   check "JSON generation deterministic" (json == encodeSemanticGraph graph)
+  check "XML generation deterministic" (Right xml == encodeSemanticGraphXml graph)
+  check "XML is a standalone semantic graph"
+    ("<?xml" `BS.isPrefixOf` xml && "<yuho:semantic-graph " `BS.isInfixOf` xml
+      && "<yuho:nodes>" `BS.isInfixOf` xml && "<yuho:edges>" `BS.isInfixOf` xml)
   check "SVG generation deterministic" (svg == encodeSvg graph)
   check "SVG is standalone XML-shaped output"
     ("<?xml" `BS.isPrefixOf` svg && "<svg xmlns=" `BS.isInfixOf` svg
@@ -50,6 +59,7 @@ programChecks root = do
   check "rule trace includes satisfied and unresolved technical states"
     (all (`BS.isInfixOf` json) ["\"satisfied\"","\"unresolved\""])
   artifactSafety root json
+  artifactSafety root xml
   artifactSafety root svg
 
 caseChecks :: FilePath -> IO ()
@@ -91,6 +101,24 @@ presumptionChecks root = do
   check "presumption graph retains active derivation"
     ("\"kind\":\"presumption\"" `BS.isInfixOf` json
       && "\"status\":\"active\"" `BS.isInfixOf` json)
+
+xmlChecks :: IO ()
+xmlChecks = do
+  let graph = SemanticGraph "graph&one" RuleView
+        [GraphNode "n:one" "input" "A<&\"" (Just "source'one")
+          (Just "satisfied") (Just "scope")]
+        [GraphEdge "n:one" "n:two" "requires" "then &"] "notice & <"
+  xml <- either (const (failed "small semantic graph XML encoding")) pure
+    (encodeSemanticGraphXml graph)
+  check "XML graph retains and escapes semantic fields" (all (`BS.isInfixOf` xml)
+    ["graph-id=\"graph&amp;one\"","view=\"rule\""
+    ,"<yuho:node id=\"n:one\" kind=\"input\" label=\"A&lt;&amp;&quot;\" citation=\"source&apos;one\" status=\"satisfied\" boundary=\"scope\"/>"
+    ,"<yuho:edge from=\"n:one\" to=\"n:two\" kind=\"requires\" label=\"then &amp;\"/>"
+    ,"<yuho:notice>notice &amp; &lt;</yuho:notice>"])
+  check "XML graph rejects XML 1.0 control characters" $ case encodeSemanticGraphXml
+    (SemanticGraph "bad\x1f" RuleView [] [] "notice") of
+      Left _ -> True
+      Right _ -> False
 
 artifactSafety :: FilePath -> BS.ByteString -> IO ()
 artifactSafety root bytes = do

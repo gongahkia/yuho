@@ -1,10 +1,11 @@
 # Native semantic diagrams
 
-`yuho diagram` derives a checked semantic graph from normalized Core Yuho and writes deterministic standalone SVG or canonical JSON directly from Haskell.
+`yuho diagram` derives a checked semantic graph from normalized Core Yuho and writes deterministic standalone SVG, canonical JSON, or equivalent XML directly from Haskell.
 
 ```sh
 yuho diagram model.yh --scenario scenario.yh --view rule --format svg --output rule.svg
 yuho diagram case.yh --view case --format json --output case.json
+yuho diagram case.yh --view case --format xml --output case.xml
 yuho diagram case.yh --view trace --format svg --output trace.svg
 yuho diagram model.yh --scenario scenario.yh --view modules --format svg --output modules.svg
 ```

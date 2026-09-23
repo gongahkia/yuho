@@ -31,7 +31,7 @@ OUT="$(mktemp -d)"
   --view case --format svg --output "$OUT/case.svg"
 ```
 
-Views are `rule`, `modules`, `case` and `trace`; formats are `svg` and `json`. An analysis case accepts `case` or `trace`, and a presumption program accepts `trace`. The output path must not already exist. Publication is atomic: checking or rendering failure leaves no partial destination. SVG uses shapes and border patterns as well as colour, includes citations, statuses, arrowheads, a legend and the no-judicial-outcome notice. JSON uses `yuho.semantic-graph/v0.1` and stable semantic node IDs. Neither format embeds timestamps or absolute checkout paths. See the [Core Yuho language report](formal-semantics.md).
+Views are `rule`, `modules`, `case` and `trace`; formats are `svg`, `json` and `xml`. An analysis case accepts `case` or `trace`, and a presumption program accepts `trace`. The output path must not already exist. Publication is atomic: checking or rendering failure leaves no partial destination. SVG uses shapes and border patterns as well as colour, includes citations, statuses, arrowheads, a legend and the no-judicial-outcome notice. JSON and XML use the same `yuho.semantic-graph/v0.1` data and stable semantic node IDs. Neither format embeds timestamps or absolute checkout paths. See the [Core Yuho language report](formal-semantics.md).
 
 ## Models, rules and scenarios
 
@@ -344,4 +344,4 @@ The native Haskell corpus query surface reads the canonical checked-in artifact 
   --output "$OUT/human-body.svg" --corpus-root ../..
 ```
 
-`corpus graph` emits deterministic native semantic-graph JSON or standalone SVG. A complete 524-node graph is available as JSON; SVG is refused above 120 provisions and should be filtered by chapter, category or bounded provision neighbourhood. The Haskell validator checks summary counts, closed classifications, model/scenario paths and typed cross-reference targets. The retained Python generator is a repository maintenance tool only and is not part of the production CLI path.
+`corpus graph` emits deterministic native semantic-graph JSON, XML or standalone SVG. A complete 524-node graph is available as JSON or XML; SVG is refused above 120 provisions and should be filtered by chapter, category or bounded provision neighbourhood. The Haskell validator checks summary counts, closed classifications, model/scenario paths and typed cross-reference targets. The retained Python generator is a repository maintenance tool only and is not part of the production CLI path.

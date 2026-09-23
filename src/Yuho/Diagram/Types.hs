@@ -8,7 +8,7 @@ import Data.Text (Text)
 data DiagramView = RuleView | ModulesView | CaseView | TraceView
   deriving (Eq, Show)
 
-data DiagramFormat = SvgFormat | JsonFormat deriving (Eq, Show)
+data DiagramFormat = SvgFormat | JsonFormat | XmlFormat deriving (Eq, Show)
 
 data GraphNode = GraphNode
   { graphNodeId :: Text

@@ -1,13 +1,13 @@
 # XML output
 
-`yuho compile` emits canonical KernelInput or case-request JSON by default. Add `--format xml` to emit the same checked, compiled technical value as deterministic XML:
+`yuho diagram` emits a deterministic native semantic graph from checked Core Yuho. Add `--format xml` to emit the same graph as XML:
 
 ```sh
-yuho compile model.yh --scenario scenario.yh --format xml --output request.xml
+yuho diagram model.yh --scenario scenario.yh --view rule --format xml --output rule.xml
 ```
 
-The XML declaration is UTF-8. Its root is `yuho:document` in the `urn:yuho:xml:v1` namespace. JSON values are represented recursively as `yuho:null`, `yuho:boolean`, `yuho:number`, `yuho:string`, `yuho:array`, and `yuho:object`; object fields become named `yuho:member` elements and array entries retain their zero-based index. Object members are ordered by their field name, so equivalent compiled requests produce identical XML bytes.
+The XML declaration is UTF-8. Its root is `yuho:semantic-graph` in the `urn:yuho:semantic-graph:v0.1` namespace. The root records the graph ID, view and `yuho.semantic-graph/v0.1` format; `yuho:nodes` contains `yuho:node` elements and `yuho:edges` contains `yuho:edge` elements. Node IDs, kinds, labels, citations, statuses and module boundaries, as well as edge endpoints, kinds and labels, use the same values as the JSON semantic graph.
 
-This output is a generic technical interchange representation of Yuho's canonical compiled request. It is not Akoma Ntoso, an authoritative statute, a source-text preservation format, or a new kernel protocol. `--format json` remains the default and the kernel accepts JSON only. XML generation rejects XML 1.0 control characters rather than silently changing compiled values.
+This output is an XML representation of Yuho's native semantic graph, not an XML encoding of KernelInput. It is not Akoma Ntoso, an authoritative statute, a source-text preservation format, or a new kernel protocol. JSON remains the canonical graph output. XML generation rejects XML 1.0 control characters rather than silently changing graph values.
 
-The normal `compile --output` safety rules still apply: the parent directory must exist, an existing target is refused, and successful output publication is atomic.
+The normal `diagram --output` safety rules apply: the parent directory must exist, an existing target is refused, and successful output publication is atomic.
