@@ -20,6 +20,8 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          fetch-depth: 0
       - uses: haskell-actions/setup@v2
         with:
           ghc-version: "9.8.4"
