@@ -37,11 +37,18 @@ jobs:
       - name: Install test-only schema validator
         run: python3 -m pip install 'jsonschema==4.25.1'
       - name: Restore Cabal cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        id: cabal-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
           path: ~/.cabal
           key: cabal-${{ runner.os }}-${{ hashFiles('cabal.project.freeze') }}
       - name: Bootstrap Cabal dependencies
         run: cabal v2-build all --only-dependencies -j1 --with-compiler=ghc-9.8.4
+      - name: Save Cabal cache
+        if: steps.cabal-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: ~/.cabal
+          key: cabal-${{ runner.os }}-${{ hashFiles('cabal.project.freeze') }}
       - name: Build and verify
         run: make verify GHC=ghc-9.8.4

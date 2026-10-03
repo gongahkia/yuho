@@ -348,11 +348,11 @@ execute command = do
       graph <- either corpusFailure pure (coverageGraph category chapter provision coverage)
       when (format == SvgFormat && length (semanticGraphNodes graph) > 120)
         (corpusFailure "SVG graph filter exceeds 120 provisions; use JSON, XML or a narrower filter")
-      bytes <- case format of
+      graphBytes <- case format of
         JsonFormat -> pure (encodeSemanticGraph graph)
         SvgFormat -> pure (encodeSvg graph)
         XmlFormat -> either corpusFailure pure (encodeSemanticGraphXml graph)
-      publish output bytes
+      publish output graphBytes
 
 commandRoot :: CorpusCommand -> FilePath
 commandRoot command = case command of
