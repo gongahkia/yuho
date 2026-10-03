@@ -22,7 +22,7 @@ encodeSemanticGraph graph = encodeJson (JObj
 
 encodeSemanticGraphXml :: SemanticGraph -> Either Text BS.ByteString
 encodeSemanticGraphXml graph
-  | all xmlCharacter graphTexts = Right (Encoding.encodeUtf8 (Text.unlines
+  | all (Text.all xmlCharacter) graphTexts = Right (Encoding.encodeUtf8 (Text.unlines
       (["<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
        ,"<yuho:semantic-graph xmlns:yuho=\"urn:yuho:semantic-graph:v0.1\" format=\"yuho.semantic-graph/v0.1\""
           <> attribute "graph-id" (semanticGraphId graph)
