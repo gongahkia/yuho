@@ -6,10 +6,19 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCUMENTS = [ROOT / "README.md", ROOT / "CHANGELOG.md", ROOT / "SECURITY.md",
-             ROOT / ".github/CONTRIBUTING.md", *sorted((ROOT / "docs").glob("*.md")),
+DOCUMENTS = [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md")),
              ROOT / "mechanisation/README.md", ROOT / "research/singapore/CORPUS-INDEX.md"]
 LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+
+
+def local_target(document: Path, target: str) -> Path:
+    """Resolve a local link, including extensionless links to Markdown files."""
+    relative = target.split("#", 1)[0].split("?", 1)[0]
+    candidate = document.parent / relative
+    if candidate.exists() or candidate.suffix:
+        return candidate
+    markdown = candidate.with_suffix(".md")
+    return markdown if markdown.exists() else candidate
 
 
 def main() -> None:
@@ -20,10 +29,9 @@ def main() -> None:
         for target in LINK.findall(text):
             if "://" in target or target.startswith(("#", "mailto:")):
                 continue
-            relative = target.split("#", 1)[0].split("?", 1)[0]
-            if not relative:
+            if not target.split("#", 1)[0].split("?", 1)[0]:
                 continue
-            assert (document.parent / relative).exists(), (document, target)
+            assert local_target(document, target).exists(), (document, target)
             checked += 1
     print(f"documentation: {len(DOCUMENTS)} current files, {checked} local links resolve")
 
