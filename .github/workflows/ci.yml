@@ -41,5 +41,7 @@ jobs:
         with:
           path: ~/.cabal
           key: cabal-${{ runner.os }}-${{ hashFiles('cabal.project.freeze') }}
+      - name: Bootstrap Cabal dependencies
+        run: cabal v2-build all --only-dependencies -j1 --with-compiler=ghc-9.8.4
       - name: Build and verify
         run: make verify GHC=ghc-9.8.4

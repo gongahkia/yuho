@@ -7,7 +7,6 @@ dist-newstyle/
 # Lean / Lake build products
 mechanisation/.lake/
 mechanisation/lake-packages/
-mechanisation/lake-manifest.json
 mechanisation/build/
 
 # Python test-tooling caches and local environments
