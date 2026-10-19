@@ -44,12 +44,13 @@ number :: Int -> Text
 number = Text.pack . show
 
 wrap :: Int -> Text -> [Text]
-wrap limit = foldr add [] . Text.words
+wrap limit = build [] "" . Text.words
   where
-    add word [] = [word]
-    add word (line:rest)
-      | Text.length word + 1 + Text.length line <= limit = (word <> " " <> line):rest
-      | otherwise = word:line:rest
+    build result line [] = reverse (if Text.null line then result else line:result)
+    build result line (word:rest)
+      | Text.null line = build result word rest
+      | Text.length line + 1 + Text.length word <= limit = build result (line <> " " <> word) rest
+      | otherwise = build (line:result) word rest
 
 xmlCharacter :: Char -> Bool
 xmlCharacter c = c `elem` ['\t','\n','\r'] || c >= '\x20' && c <= '\xD7FF'

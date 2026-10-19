@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 -- Ordinary consumer-authored updates over the retained cheating example.
 module CaseApplication
-  ( caseDocument, caseDraft, revisedCase, pendingCase, runCaseApplicationDemo ) where
+  ( caseDocument, caseDraft, revisedCase, pendingCase, caseNoteAnchor, runCaseApplicationDemo ) where
 
 import Control.Monad (unless)
 import qualified Data.ByteString as BS
@@ -12,11 +12,17 @@ import qualified Data.Text as Text
 import Cheating
 import Yuho.Authoring
 
-caseDocument :: AuthoringDocument
-caseDocument = cheatingDocument
+caseNoteSource :: SourceRecord
+caseNoteSource = SourceRecord "source:case-note" "synthetic" (Just "supplied synthetic note")
+  (Just "Note: 猫 item.\nDelivery reported.")
+
+caseNoteAnchor :: Either [AuthoringDiagnostic] SourceRef
+caseNoteAnchor = sourceAnchorCodePoints caseNoteSource 6 13
+
+caseDocument :: SourceRef -> AuthoringDocument
+caseDocument noteAnchor = cheatingDocument
   { documentSources = documentSources cheatingDocument ++
-      [SourceRecord "source:case-note" "synthetic" (Just "supplied synthetic note")
-        (Just "Note: 猫 item.\nDelivery reported."),
+      [caseNoteSource,
        SourceRecord "source:registry" "other" (Just "https://example.invalid/record") Nothing]
   , documentAssertions = [case assertionId a of
         "assertion:description" -> a {assertionSources=assertionSources a ++ [noteAnchor]}
@@ -43,46 +49,51 @@ caseDocument = cheatingDocument
   }
   where
     scope = Scope "actor:seller" "context:transaction-1"
-    noteAnchor = SourceRef "source:case-note" (Just (TextSpan 6 15 1 7 1 16))
 
-caseDraft :: AuthoringDocument
-caseDraft = caseDocument {documentAnalyses=[a {analysisAssessments=[]} | a <- documentAnalyses caseDocument]}
+caseDraft :: SourceRef -> AuthoringDocument
+caseDraft ref = let doc = caseDocument ref in
+  doc {documentAnalyses=[a {analysisAssessments=[]} | a <- documentAnalyses doc]}
 
-revisedCase :: AuthoringDocument
-revisedCase = caseDocument {documentAssertions=
+revisedCase :: SourceRef -> AuthoringDocument
+revisedCase ref = let doc = caseDocument ref in doc {documentAssertions=
   [if assertionId a == "assertion:description"
     then a {assertionDescription="The seller described the item as valuable; the buyer records this as an estimate."}
-    else a | a <- documentAssertions caseDocument]}
+    else a | a <- documentAssertions doc]}
 
-pendingCase :: AuthoringDocument
-pendingCase = revisedCase {documentAnalyses=[a {analysisAssessments=
+pendingCase :: SourceRef -> AuthoringDocument
+pendingCase ref = let doc = revisedCase ref in doc {documentAnalyses=[a {analysisAssessments=
   [if key == assessmentFor "f:property-fraudulent-or-dishonest"
     then "assessment:property-fault-pending" else key | key <- analysisAssessments a]}
-  | a <- documentAnalyses revisedCase]}
+  | a <- documentAnalyses doc]}
 
 runCaseApplicationDemo :: IO [(FilePath,BS.ByteString)]
 runCaseApplicationDemo = do
-  decoded <- require (decodeDocument (encodeDocument caseDocument))
-  unless (decoded == caseDocument) (fail "case authorship round-trip changed content")
-  before <- require (projectAuthored caseDraft "analysis:cheating")
+  anchor <- require caseNoteAnchor
+  let caseDoc = caseDocument anchor
+      draftDoc = caseDraft anchor
+      revisedDoc = revisedCase anchor
+      pendingDoc = pendingCase anchor
+  decoded <- require (decodeDocument (encodeDocument caseDoc))
+  unless (decoded == caseDoc) (fail "case authorship round-trip changed content")
+  before <- require (projectAuthored draftDoc "analysis:cheating")
   beforeView <- require (caseView before)
-  original <- run caseDocument
+  original <- run caseDoc
   applied <- require (projectEvaluation original)
   appliedView <- require (applicationView applied (FocusInput "f:deception"))
-  stale <- case projectEvaluationOn revisedCase original of
+  stale <- case projectEvaluationOn revisedDoc original of
     Left diagnostics | any ((== "PSTALE") . diagnosticCode) diagnostics -> pure diagnostics
     _ -> fail "old evaluation accepted revised narrative"
-  revised <- run revisedCase
+  revised <- run revisedDoc
   revisedProjection <- require (projectEvaluation revised)
   revisedView <- require (applicationView revisedProjection (FocusInput "f:deception"))
   narrativeComparison <- require (projectComparison original revised)
   unless (not (projectedConclusionChanged narrativeComparison)
     && null (projectedChangedObservations narrativeComparison)
     && any (changeReferencedMaterial . assessmentChange) (projectedAssessmentChanges narrativeComparison)
-    && documentAssessments caseDocument == documentAssessments revisedCase
-    && snapshotDocument (evaluationSnapshot original) == caseDocument)
+    && documentAssessments caseDoc == documentAssessments revisedDoc
+    && snapshotDocument (evaluationSnapshot original) == caseDoc)
     (fail "narrative edit silently changed classification or computation")
-  pending <- run pendingCase
+  pending <- run pendingDoc
   pendingProjection <- require (projectEvaluation pending)
   pendingView <- require (applicationView pendingProjection (FocusInput "f:property-fraudulent-or-dishonest"))
   skippedView <- require (applicationView pendingProjection (FocusInput "f:unsoundness-time"))
@@ -91,7 +102,7 @@ runCaseApplicationDemo = do
   detail <- require (inspectAssessment applied (assessmentFor "f:deception"))
   alternative <- require (inspectAssessment applied "assessment:deception-alternative")
   skipped <- require (inspectAssessment pendingProjection (assessmentFor "f:unsoundness-time"))
-  links <- traverse (require . caseAssertionLinks before . assertionId) (documentAssertions caseDraft)
+  links <- traverse (require . caseAssertionLinks before . assertionId) (documentAssertions draftDoc)
   rendered <- concat <$> mapM (\(name,projection,view) -> viewFiles name projection view)
     [("case-before",before,beforeView),("application-selected",applied,appliedView),
      ("application-revised",revisedProjection,revisedView),("application-pending",pendingProjection,pendingView),
@@ -108,7 +119,7 @@ runCaseApplicationDemo = do
         [("oldSnapshot" :: Text,snapshotId (evaluationSnapshot original)),
          ("newSnapshot",snapshotId (evaluationSnapshot revised)),
          ("authoredAssertion","assertion:description"),
-         ("oldDescription",description caseDocument),("newDescription",description revisedCase),
+         ("oldDescription",description caseDoc),("newDescription",description revisedDoc),
          ("assessmentSelectionChanged","false"),("suppliedClassificationsChanged","false"),
          ("referencedMaterialChanges",count (filter (changeReferencedMaterial . assessmentChange) (projectedAssessmentChanges narrativeComparison))),
          ("computedObservationChanges",count (projectedChangedObservations narrativeComparison)),

@@ -84,91 +84,102 @@ conciseLabel n = case projectedNodeOccurrence n of
       _ -> projectedNodeLabel n)
   _ -> projectedNodeLabel n
 
--- The legacy SVG's fixed 76px boxes and truncated labels cannot express these
--- separate state fields. This reference renderer is confined to the new format.
+-- Reference presentation only. IDs, observations and view partitions are
+-- unchanged; row height follows the visible text so skip reasons are not clipped.
 encodeProjectionSvg :: Projection -> Either [AuthoringDiagnostic] BS.ByteString
 encodeProjectionSvg projection = do
   value <- ensureValid projection
   view <- lawOccurrenceView projection
   let nodes = [n | key <- viewIncludedNodes view, n <- projectionNodes value, projectedNodeId n == key]
-      edges = [e | e <- projectionEdges value, projectedEdgeId e `elem` viewIncludedEdges view]
-      snapshot = projectionSnapshot value
-      analysis = snapshotAnalysis snapshot
-      texts = analysisId analysis : scopeActor (analysisScope analysis) : scopeContext (analysisScope analysis)
-        : concat [[projectedNodeLabel n,maybe "" occurrenceAuthoredNode (projectedNodeOccurrence n),
-           maybe "" id (projectedNodeSkipReason n),maybe "" id (projectedNodeBranchReason n)] | n <- nodes]
-  if all (Text.all xmlCharacter) texts then pure () else Left [issue "PXML" "/projectionNodes"
-    [key | n <- nodes, let key = projectedNodeId n, not (Text.all xmlCharacter (projectedNodeLabel n))]
-    "XML 1.0 forbids a character in the reference view"]
-  let rowHeight = 124 :: Int
-      top = 172 :: Int
-      width = 1460 :: Int
-      height = top + length nodes * rowHeight + 90
-      positions = Map.fromList [(projectedNodeId n,(64 + 34 * depth n,top + i*rowHeight))
-        | (i,n) <- zip [0..] nodes]
+      edges = [e | e <- projectionEdges value, elem (projectedEdgeId e) (viewIncludedEdges view)]
+      analysis = snapshotAnalysis (projectionSnapshot value)
       depth n = maybe 0 (length . occurrenceEdges) (projectedNodeOccurrence n)
-      text x y size weight content = "<text x=\"" <> number x <> "\" y=\"" <> number y <>
-        "\" font-size=\"" <> number size <> "\" font-weight=\"" <> weight <> "\">" <> escape content <> "</text>"
+      leftX n = 64 + 34 * depth n
+      titleLines n = wrap (max 20 (div (692-leftX n-32) 8)) (conciseLabel n)
+      referenceLines n = maybe [] (wrap 48 . ("Provision: " <>)) (provisionFor value n)
+      suppliedLines :: ProjectionNode -> [Text]
+      suppliedLines n = case projectedNodeBinding n of
+        Just b -> case bindingSupplied b of
+          Just (Classification status) ->
+            (if bindingState b == "selected" then "Selected assessment" else "Unselected assessment")
+            : case status of
+              Proved -> ["proved"]
+              NotProved -> ["not_proved"]
+              Unresolved reason -> ["unresolved",case reason of
+                NotDetermined -> "not_determined"
+                ExternalDecisionPending -> "external_decision_pending"]
+          Nothing -> ["Missing assessment"]
+        Nothing -> ["—"]
+      notes n = maybe [] (wrap 34 . ("Skip reason: " <>) . skipLabel) (projectedNodeSkipReason n)
+        ++ maybe [] (wrap 34 . ("Branch: " <>) . Text.replace "_" " ") (projectedNodeBranchReason n)
+      rowHeight n = max 96 (maximum
+        [42 + 19 * length (titleLines n) + 17 * length (referenceLines n) + 12,
+         42 + 19 * length (suppliedLines n) + 12,
+         42 + 18 * length (notes n) + 24])
+      labelled = [(n,rowHeight n) | n <- nodes]
+      starts = scanl (\y (_,h) -> y+h+12) 172 labelled
+      positions = Map.fromList [(projectedNodeId n,(leftX n,y,h)) | ((n,h),y) <- zip labelled starts]
+      width = 1460 :: Int
+      height = 172 + sum [h+12 | (_,h) <- labelled] + 80
+      visible = concat [titleLines n ++ referenceLines n ++ suppliedLines n
+          ++ [computedLabel (projectedNodeComputed n),evaluationLabel (projectedNodeEvaluation n)] ++ notes n | n <- nodes]
+        ++ [analysisId analysis,scopeActor (analysisScope analysis),scopeContext (analysisScope analysis)]
+  if all (Text.all xmlCharacter) visible then pure () else
+    Left [issue "PXML" "/projectionNodes" [] "XML 1.0 forbids a character in the reference view"]
+  let text x y size weight content = "<text x=\"" <> number x <> "\" y=\"" <> number y
+        <> "\" font-size=\"" <> number size <> "\" font-weight=\"" <> weight <> "\">" <> escape content <> "</text>"
       renderEdge edge = case (Map.lookup (projectedEdgeFrom edge) positions,Map.lookup (projectedEdgeTo edge) positions) of
-        (Just (x1,y1),Just (x2,y2)) ->
-          "<path id=\"edge-" <> projectedEdgeId edge <> "\" data-projection-edge=\"" <> projectedEdgeId edge <>
-          "\" data-kind=\"" <> projectedEdgeKind edge <> "\" d=\"M " <> number (x1+12) <> " " <> number (y1+108) <>
-          " V " <> number (y2+26) <> " H " <> number (x2-4) <>
-          "\" fill=\"none\" stroke=\"" <> (if projectedEdgeKind edge == "exception" then "#9a3412" else "#64748b") <>
-          "\" stroke-width=\"1.5\" marker-end=\"url(#arrow)\"" <>
-          (if projectedEdgeKind edge == "exception" then " stroke-dasharray=\"5 4\"" else "") <>
-          "><title>" <> escape (projectedEdgeKind edge <> " — authored relationship " <>
-            Text.intercalate ", " (originAuthoredObjects (projectedEdgeOrigin edge))) <> "</title></path>"
-        _ -> "" -- unreachable after projection and view validation
+        (Just (x1,y1,h1),Just (x2,y2,_)) ->
+          "<path id=\"edge-" <> projectedEdgeId edge <> "\" data-projection-edge=\"" <> projectedEdgeId edge
+          <> "\" data-kind=\"" <> projectedEdgeKind edge <> "\" d=\"M " <> number (x1+12) <> " " <> number (y1+h1)
+          <> " V " <> number (y2+26) <> " H " <> number (x2-4)
+          <> "\" fill=\"none\" stroke=\"" <> (if projectedEdgeKind edge == "exception" then "#9a3412" else "#64748b")
+          <> "\" stroke-width=\"1.5\" marker-end=\"url(#arrow)\""
+          <> (if projectedEdgeKind edge == "exception" then " stroke-dasharray=\"5 4\"" else "")
+          <> "><title>" <> escape (projectedEdgeKind edge <> " — authored relationship "
+            <> Text.intercalate ", " (originAuthoredObjects (projectedEdgeOrigin edge))) <> "</title></path>"
+        _ -> ""
       renderNode n = case Map.lookup (projectedNodeId n) positions of
         Nothing -> ""
-        Just (x,y) ->
-          let titleLines = wrap 43 (conciseLabel n)
-              shownTitle = if length titleLines <= 3 then titleLines else take 2 titleLines ++ ["… full label in metadata"]
-              suppliedLines = case projectedNodeBinding n of
-                Just b -> case bindingSupplied b of
-                  Just (Classification status) -> case status of
-                    Proved -> ["proved","selected assessment"]
-                    NotProved -> ["not_proved","selected assessment"]
-                    Unresolved reason -> ["unresolved",case reason of NotDetermined -> "not_determined"; ExternalDecisionPending -> "external_decision_pending"]
-                  Nothing -> ["MISSING ASSESSMENT"]
-                Nothing -> ["— " <> projectedNodeRole n]
-              computed = maybe "absent" id (projectedNodeComputed n)
-              skip = maybe [] (wrap 30 . Text.replace "_" " " . Text.replace
-                "exception guard skipped because main branch: " "Skip: ") (projectedNodeSkipReason n)
-              branch = maybe [] (wrap 30 . ("Branch: " <>)) (projectedNodeBranchReason n)
-              guardLabel = if projectedNodeRole n == "rule" && depth n > 0 then "EXCEPTION GUARD" else Text.toUpper (projectedNodeRole n)
-              rowText xpos offset size weight linesValue = Text.concat
-                [text xpos (y+offset+i*16) size weight line | (i,line) <- zip [0..] linesValue]
+        Just (x,y,h) ->
+          let kind = case projectedNodeRole n of
+                "all" -> "All required (ALL)"
+                "any" -> "At least one required (ANY)"
+                "rule" | depth n > 0 -> "Exception guard"
+                       | otherwise -> "Main rule"
+                _ -> "Legal input"
+              rowText xpos offset size weight spacing linesValue = Text.concat
+                [text xpos (y+offset+i*spacing) size weight line | (i,line) <- zip [0..] linesValue]
               authored = maybe "" occurrenceAuthoredNode (projectedNodeOccurrence n)
-          in "<g id=\"node-" <> projectedNodeId n <> "\" data-projection-node=\"" <> projectedNodeId n <>
-            "\" data-authored-id=\"" <> escape authored <> "\">" <>
-            "<title>" <> escape (Encoding.decodeUtf8 (encodeRecord n)) <> "</title>" <>
-            "<rect x=\"" <> number x <> "\" y=\"" <> number y <> "\" width=\"" <> number (width-x-28) <>
-            "\" height=\"108\" rx=\"6\" fill=\"#ffffff\" stroke=\"#cbd5e1\"/>" <>
-            text (x+16) (y+19) 10 "600" guardLabel <>
-            rowText (x+16) 43 14 "500" shownTitle <>
-            rowText 718 39 13 "500" suppliedLines <>
-            rowText 964 39 13 "500" [computed] <>
-            rowText 1178 39 13 "500" [projectedNodeEvaluation n] <>
-            rowText 1178 61 11 "400" (skip ++ branch) <> "</g>"
+          in "<g id=\"node-" <> projectedNodeId n <> "\" data-projection-node=\"" <> projectedNodeId n
+            <> "\" data-authored-id=\"" <> escape authored <> "\"><title>"
+            <> escape (Encoding.decodeUtf8 (encodeRecord n)) <> "</title><rect x=\"" <> number x <> "\" y=\""
+            <> number y <> "\" width=\"" <> number (width-x-28) <> "\" height=\"" <> number h
+            <> "\" rx=\"6\" fill=\"#ffffff\" stroke=\"#cbd5e1\"/>"
+            <> text (x+16) (y+20) 12 "600" kind
+            <> rowText (x+16) 43 16 "500" 19 (titleLines n)
+            <> rowText (x+16) (47+19*length (titleLines n)) 13 "400" 17 (referenceLines n)
+            <> rowText 718 43 16 "500" 19 (suppliedLines n)
+            <> text 964 (y+43) 16 "500" (computedLabel (projectedNodeComputed n))
+            <> text 1178 (y+43) 16 "500" (evaluationLabel (projectedNodeEvaluation n))
+            <> rowText 1178 65 13 "400" 18 (notes n) <> "</g>"
       svg = Text.unlines
         (["<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <> number width <> "\" height=\"" <> number height <>
-            "\" viewBox=\"0 0 " <> number width <> " " <> number height <> "\" role=\"img\" aria-labelledby=\"title desc\">",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <> number width <> "\" height=\"" <> number height
+            <> "\" viewBox=\"0 0 " <> number width <> " " <> number height <> "\" role=\"img\" aria-labelledby=\"title desc\">",
           "<title id=\"title\">Authored analysis — " <> escape (analysisId analysis) <> "</title>",
-          "<desc id=\"desc\">Selected connected law occurrence tree. Supplied classifications, computed results and evaluation states are separate. Full context is in the companion projection.</desc>",
+          "<desc id=\"desc\">Selected law tree and guard. Selection, supplied classification, computation and evaluation are separate.</desc>",
           "<metadata id=\"projection-view\">" <> escape (Encoding.decodeUtf8 (encodeRecord view)) <> "</metadata>",
           "<style>text{font-family:system-ui,-apple-system,sans-serif;fill:#0f172a;font-variant-numeric:tabular-nums}path{stroke-linejoin:round}</style>",
           "<defs><marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#64748b\"/></marker></defs>",
           "<rect width=\"100%\" height=\"100%\" fill=\"#f8fafc\"/>",
           text 28 36 22 "600" ("Analysis: " <> analysisId analysis <> " · " <> projectionMode value),
-          text 28 62 13 "400" ("Actor: " <> scopeActor (analysisScope analysis) <> " · Context: " <> scopeContext (analysisScope analysis)),
-          text 28 87 12 "400" "View: selected law occurrence tree and guard. Assertions, alternatives, sources and annotations remain in the complete projection.",
-          text 28 111 12 "400" "Solid connectors: explicit requirement structure. Dashed connector: exception attachment. No evidence-strength or causal inference.",
-          text 80 151 11 "600" "AUTHORED REQUIREMENT / GROUP",text 718 151 11 "600" "SUPPLIED CLASSIFICATION",
-          text 964 151 11 "600" "COMPUTED RESULT",text 1178 151 11 "600" "EVALUATION STATE",
+          text 28 62 14 "400" ("Scope actor: " <> scopeActor (analysisScope analysis) <> " · Context: " <> scopeContext (analysisScope analysis)),
+          text 28 87 13 "400" "Selected law tree and guard. Assertions, alternatives, sources and annotations remain in the complete projection.",
+          text 28 111 13 "400" "Solid: explicit requirement structure. Dashed: exception attachment. No evidence-strength or causal inference.",
+          text 80 151 12 "600" "AUTHORED REQUIREMENT / GROUP",text 718 151 12 "600" "SUPPLIED CLASSIFICATION",
+          text 964 151 12 "600" "COMPUTED RESULT",text 1178 151 12 "600" "EVALUATION STATE",
           "<g id=\"connections\">"] ++ map renderEdge edges ++ ["</g><g id=\"occurrences\">"] ++ map renderNode nodes ++
-          ["</g>",text 28 (height-52) 12 "400" "Absent computed result is distinct from not_satisfied. not_proved remains supplied information, without a factual-falsity finding.",
-           text 28 (height-29) 12 "400" ("Full projection: " <> projectionId value),"</svg>"])
+          ["</g>",text 28 (height-49) 13 "400" "No computed result differs from not_satisfied. Supplied not_proved does not establish factual falsity.",
+           text 28 (height-27) 12 "400" ("Full projection: " <> projectionId value),"</svg>"])
   pure (Encoding.encodeUtf8 svg)

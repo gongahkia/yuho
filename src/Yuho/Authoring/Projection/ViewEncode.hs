@@ -4,7 +4,7 @@ module Yuho.Authoring.Projection.ViewEncode
   ( encodeViewJson, encodeViewXml, encodeViewSvg ) where
 
 import qualified Data.ByteString as BS
-import Data.List (find, nub)
+import Data.List (elemIndex, find, nub)
 import qualified Data.Map.Strict as Map
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -43,15 +43,15 @@ encodeViewXml projection view = do
   either (\message -> Left [issue "PXML" "/projectionView" [] message]) Right
     (Legacy.encodeSemanticGraphXml (legacyView projection view))
 
-classification :: Classification -> Text
+classification :: Classification -> [Text]
 classification (Classification status) = case status of
-  Proved -> "proved"
-  NotProved -> "not_proved"
-  Unresolved NotDetermined -> "unresolved(not_determined)"
-  Unresolved ExternalDecisionPending -> "unresolved(external_decision_pending)"
+  Proved -> ["Supplied: proved"]
+  NotProved -> ["Supplied: not_proved"]
+  Unresolved NotDetermined -> ["Supplied: unresolved","Unresolved reason: not_determined"]
+  Unresolved ExternalDecisionPending -> ["Supplied: unresolved","Unresolved reason: external_decision_pending"]
 
 scopeText :: Scope -> Text
-scopeText scope = "Actor: " <> scopeActor scope <> " | Context: " <> scopeContext scope
+scopeText scope = "Scope actor: " <> scopeActor scope <> " | Context: " <> scopeContext scope
 
 -- Separate cards retain each object's actual state. Assertions and sources
 -- deliberately have no computed-status line. Only selected applications can
@@ -69,8 +69,8 @@ nodeLines projection view n = case projectedNodeRole n of
     Nothing -> []
   "assessment" -> case inspectAssessment projection original of
     Right detail -> let a = inspectionAssessment detail
-      in [if inspectionSelected detail then "SELECTED for this analysis" else "UNSELECTED alternative; no run observation attributed",
-          "Supplied: " <> classification (assessmentClassification a),scopeText (assessmentScope a),
+      in [if inspectionSelected detail then "SELECTED for this analysis" else "UNSELECTED alternative; no run observation attributed"]
+        ++ classification (assessmentClassification a) ++ [scopeText (assessmentScope a),
           "Basis: " <> assessmentBasis a <> " | Origin: " <> assessmentOrigin a,
           "Issuer: " <> assessmentIssuer a,"Reason: " <> assessmentReason a]
         ++ ["Authored assumption; no case assertion cited." | assessmentBasis a == "assumption", null (assessmentAssertions a)]
@@ -86,9 +86,9 @@ nodeLines projection view n = case projectedNodeRole n of
     Just a -> [Text.toUpper (annotationState a) <> " annotation",annotationText a]
     Nothing -> []
   _ | projectedNodeKind n == "occurrence" -> ["Legal occurrence: " <> readable (projectedNodeLabel n)]
-        ++ evaluationLines n
-    | projectedNodeKind n == "observation" -> ["Existing run observation"] ++ evaluationLines n
-    | otherwise -> [readable (projectedNodeLabel n),"Authored " <> projectedNodeRole n]
+        ++ references ++ evaluationLines n
+    | projectedNodeKind n == "observation" -> ["Existing run observation"] ++ references ++ evaluationLines n
+    | otherwise -> [readable (projectedNodeLabel n),"Authored " <> projectedNodeRole n] ++ references
   where
     value = projectionData projection
     doc = snapshotDocument (projectionSnapshot value)
@@ -105,11 +105,12 @@ nodeLines projection view n = case projectedNodeRole n of
       referenceSource ref == key, elem (projectedEdgeId e) sourceEdges]
     -- Restrict visible source excerpts to references from the selected cards.
     sourceEdges = viewIncludedEdges view
+    references = maybe [] (\ref -> ["Provision: " <> ref]) (provisionFor value n)
     evaluationLines node =
-      ["Evaluation: " <> projectedNodeEvaluation node,
-       "Computed: " <> maybe "absent" id (projectedNodeComputed node)]
+      [evaluationLabel (projectedNodeEvaluation node),
+       "Computed: " <> computedLabel (projectedNodeComputed node)]
       ++ maybe [] (\b -> ["Current selected assessment: " <> maybe "MISSING" id (bindingAssessment b)]) (projectedNodeBinding node)
-      ++ maybe [] (\why -> ["Skip reason: " <> Text.replace "_" " " why]) (projectedNodeSkipReason node)
+      ++ maybe [] (\why -> ["Skip reason: " <> skipLabel why]) (projectedNodeSkipReason node)
 
 -- Connected card list with numbered, explicitly typed relationships. Each
 -- relationship has its own gutter lane and legend row; no edge deduplication.
@@ -131,7 +132,7 @@ encodeViewSvg projection view = do
   let gutter = 120 + 7 * length edges
       cardX = gutter + 44
       width = cardX + 1000
-      cardHeight linesValue = 76 + 20 * length linesValue
+      cardHeight linesValue = 52 + 21 * length linesValue
       starts = scanl (\y (_,linesValue) -> y + cardHeight linesValue + 20) 170 labelled
       positions = Map.fromList [(projectedNodeId n,(y,cardHeight linesValue)) | ((n,linesValue),y) <- zip labelled starts]
       edgeTop = 170 + sum [cardHeight linesValue + 20 | (_,linesValue) <- labelled] + 30
@@ -149,16 +150,20 @@ encodeViewSvg projection view = do
         Just n -> let label = original n
           in (if Text.length label <= 60 then label else Text.take 57 label <> "…") <> " [" <> role n <> "]"
         Nothing -> key
-      legendRows = [wrap (max 80 (div (width-56) 7))
+      legendRows = [wrap (max 80 (div (width-56) 8))
           ("E" <> number (i+1) <> " · " <> projectedEdgeKind e <> " [" <> projectedEdgeSemantics e <> "] · "
             <> name (projectedEdgeFrom e) <> " → " <> name (projectedEdgeTo e))
         | (i,e) <- zip [0..] edges]
-      legendStarts = scanl (\y linesValue -> y + 17 * length linesValue + 14) edgeTop legendRows
-      height = edgeTop + sum [17 * length linesValue + 14 | linesValue <- legendRows] + 90
-      endpoint key index = do
+      legendStarts = scanl (\y linesValue -> y + 21 * length linesValue + 12) edgeTop legendRows
+      height = edgeTop + sum [21 * length linesValue + 12 | linesValue <- legendRows] + 90
+      endpoint key edgeIdentifier outgoing = do
         (y,h) <- Map.lookup key positions
-        pure (y + 30 + mod (index*17) (max 17 (h-46)))
-      edgeMarkup (i,e) = case (endpoint (projectedEdgeFrom e) i,endpoint (projectedEdgeTo e) i) of
+        let ports = concat [[(projectedEdgeId e,True) | projectedEdgeFrom e == key]
+              ++ [(projectedEdgeId e,False) | projectedEdgeTo e == key] | e <- edges]
+        index <- elemIndex (edgeIdentifier,outgoing) ports
+        pure (y + 12 + div ((index+1)*(h-24)) (length ports+1))
+      edgeMarkup (i,e) = case (endpoint (projectedEdgeFrom e) (projectedEdgeId e) True,
+          endpoint (projectedEdgeTo e) (projectedEdgeId e) False) of
         (Just fromY,Just toY) ->
           let lane = gutter - i*7
               badge = "E" <> number (i+1)
@@ -168,7 +173,7 @@ encodeViewSvg projection view = do
             <> "\" fill=\"none\" stroke=\"#64748b\" stroke-width=\"1.2\" marker-end=\"url(#arrow)\""
             <> (if elem (projectedEdgeSemantics e) ["descriptive","provenance"] then " stroke-dasharray=\"4 3\"" else "")
             <> "><title>" <> escape (Encoding.decodeUtf8 (encodeRecord e)) <> "</title></path>"
-            <> text (cardX-34) (fromY-4) 10 "600" badge <> "</g>"
+            <> text (cardX-36) (fromY-5) 12 "600" badge <> "</g>"
         _ -> ""
       card ((n,linesValue),y) =
         "<g id=\"node-" <> projectedNodeId n <> "\" data-projection-node=\"" <> projectedNodeId n
@@ -176,11 +181,13 @@ encodeViewSvg projection view = do
         <> escape (Encoding.decodeUtf8 (encodeRecord n)) <> "</title><rect x=\"" <> number cardX
         <> "\" y=\"" <> number y <> "\" width=\"968\" height=\"" <> number (cardHeight linesValue)
         <> "\" rx=\"5\" fill=\"white\" stroke=\"#cbd5e1\"/>"
-        <> text (cardX+16) (y+22) 11 "600" (Text.toUpper (role n) <> " · " <> original n)
-        <> Text.concat [text (cardX+16) (y+49+j*20) 13 "400" line | (j,line) <- zip [0..] linesValue]
+        <> text (cardX+16) (y+22) 12 "600" (Text.toUpper (role n) <> " · " <> original n)
+        <> Text.concat [text (cardX+16) (y+47+j*21) 15
+          (if projectedNodeRole n == "assessment" && j == 0 then "600" else "400") line
+          | (j,line) <- zip [0..] linesValue]
         <> "</g>"
       legend (linesValue,y) = Text.concat
-        [text 28 (y+i*17) 12 "400" line | (i,line) <- zip [0..] linesValue]
+        [text 28 (y+i*21) 14 "400" line | (i,line) <- zip [0..] linesValue]
       markup = Text.unlines
         ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <> number width <> "\" height=\"" <> number height

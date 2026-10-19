@@ -11,11 +11,22 @@ import System.Environment (getArgs)
 import System.FilePath ((</>))
 import Cheating
 import CaseApplication (runCaseApplicationDemo)
+import Hurt (runHurtConsumer)
+import Editing (runEditingConsumer)
+import SourceAnchors (runSourceAnchorsConsumer)
 import Yuho.Authoring
 
 main :: IO ()
 main = do
   args <- getArgs
+  case args of
+    "--anchors-demo":rest -> runSourceAnchorsConsumer rest
+    "--edit-demo":rest -> runEditingConsumer rest
+    "--model":"hurt":rest -> runHurtConsumer rest
+    _ -> runCheatingConsumer args
+
+runCheatingConsumer :: [String] -> IO ()
+runCheatingConsumer args = do
   document <- require (decodeDocument (encodeDocument cheatingDocument))
   unless (document == cheatingDocument) (fail "authoring round-trip changed content")
   -- These projections precede compilation and evaluation, including a draft.

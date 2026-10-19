@@ -136,12 +136,31 @@ def verify_projections(directory):
         if name in ["pending", "pending-authored"]:
             guard = next(node for node in rendered_nodes if node.attrib["data-authored-id"] == "f:unsoundness-time")
             visible = " ".join(text.text or "" for text in guard.findall("s:text", svg_ns))
-            assert "not_proved" in visible and "absent" in visible
-            assert ("not_evaluated" if name == "pending" else "not_requested") in visible
+            assert "not_proved" in visible and "No computed result" in visible
+            assert ("Not evaluated" if name == "pending" else "Evaluation not requested") in visible
             if name == "pending":
                 assert "requirements unresolved" in visible
+        if name not in new_views:
+            for node in rendered_nodes:
+                key = node.attrib["data-authored-id"]
+                visible_text = " ".join(text.text or "" for text in node.findall("s:text", svg_ns))
+                rich = next(row for row in projection["projectionNodes"]
+                            if row["projectedNodeId"] == node.attrib["data-projection-node"])
+                if rich["projectedNodeBinding"] and rich["projectedNodeBinding"]["bindingState"] == "selected":
+                    assert "Selected assessment" in visible_text
+                if rich["projectedNodeRole"] == "all":
+                    assert "All required (ALL)" in visible_text
+                if rich["projectedNodeRole"] == "any":
+                    assert "At least one required (ANY)" in visible_text
+                if key in ["f:nature-causation", "f:wrong-causation", "f:control-causation"]:
+                    assert "By reason of unsoundness of mind" in visible_text
+                    assert "Provision: Penal Code s 84" in visible_text
+                if key == "x:section84":
+                    assert "Unsoundness of mind exception" in visible_text and "Provision: Penal Code s 84" in visible_text
+                if key == "f:deception":
+                    assert "Provision: Penal Code s 415" in visible_text
         if name == "draft-authored":
-            assert any("MISSING ASSESSMENT" in (text.text or "") for text in svg.findall(".//s:text", svg_ns))
+            assert any("Missing assessment" in (text.text or "") for text in svg.findall(".//s:text", svg_ns))
         if name in new_views:
             def visible(authored_id):
                 return " ".join(text.text or "" for node in rendered_nodes
@@ -168,7 +187,7 @@ def verify_projections(directory):
                 assert "assessment:deception-other-context" not in {node.attrib["data-authored-id"] for node in rendered_nodes}
             if name == "application-pending":
                 text = visible("assessment:property-fault-pending")
-                assert "SELECTED" in text and "unresolved(not_determined)" in text
+                assert "SELECTED" in text and "Supplied: unresolved" in text and "Unresolved reason: not_determined" in text
                 assert "Authored assumption; no case assertion cited." in text
                 assert "UNSELECTED" in visible("assessment:property-fraudulent-or-dishonest")
                 assert not any(node["projectedNodeRole"] == "assertion" for node in projection["projectionNodes"]
@@ -177,7 +196,7 @@ def verify_projections(directory):
                 assert "SELECTED" in visible("assessment:unsoundness-time")
                 assert "Supplied: not_proved" in visible("assessment:unsoundness-time")
                 text = visible("f:unsoundness-time")
-                assert "Computed: absent" in text and "Evaluation: not_evaluated" in text
+                assert "Computed: No computed result" in text and "Not evaluated" in text
                 assert "requirements unresolved" in text
 
     comparison = load("comparison-projection.json")

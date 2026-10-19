@@ -1,0 +1,18 @@
+cabal-version: 3.0
+name: yuho-sdk-quickstart
+version: 0.1.0.0
+build-type: Simple
+
+executable yuho-sdk-quickstart
+  main-is: Main.hs
+  hs-source-dirs: .
+  default-language: Haskell2010
+  ghc-options: -Wall -Werror
+  build-depends:
+      base ==4.19.2.0
+    , yuho ==1.0.0.0
+    , bytestring ==0.12.1.0
+    , text ==2.1.1
+    , containers ==0.6.8
+    , directory ==1.3.8.5
+    , filepath ==1.4.301.0

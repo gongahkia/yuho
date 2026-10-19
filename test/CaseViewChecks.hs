@@ -11,12 +11,17 @@ import Yuho.Authoring
 
 runCaseViewChecks :: IO ()
 runCaseViewChecks = do
-  draft <- require (projectAuthored caseDraft "analysis:cheating")
+  anchor <- require caseNoteAnchor
+  let caseDoc = caseDocument anchor
+      draftDoc = caseDraft anchor
+      revisedDoc = revisedCase anchor
+      pendingDoc = pendingCase anchor
+  draft <- require (projectAuthored draftDoc "analysis:cheating")
   view <- require (caseView draft)
   let includes key = elem (objectProjectionId key) (viewIncludedNodes view)
   check "case view includes unmapped material and relevant draft"
     (includes "assertion:weather" && includes "annotation:case-draft"
-      && all (includes . assertionId) (documentAssertions caseDraft)
+      && all (includes . assertionId) (documentAssertions draftDoc)
       && any ((== "AMISSING") . diagnosticCode) (projectionDiagnostics (projectionData draft)))
   unmapped <- require (caseAssertionLinks draft "assertion:weather")
   linked <- require (caseAssertionLinks draft "assertion:description")
@@ -34,7 +39,7 @@ runCaseViewChecks = do
   missing <- require (applicationView draft (FocusInput "f:deception"))
   check "application view also accepts missing binding" (not (null (viewIncludedNodes missing))
     && null [n | n <- includedNodes draft missing, projectedNodeKind n == "observation"])
-  base <- evaluateDoc caseDocument
+  base <- evaluateDoc caseDoc
   projection <- require (projectEvaluation base)
   focused <- require (applicationView projection (FocusInput "f:deception"))
   sameOccurrence <- case [n | n <- includedNodes projection focused, projectedNodeKind n == "occurrence"] of
@@ -73,7 +78,7 @@ runCaseViewChecks = do
      applicationView projection (FocusOccurrence "absent"),
      applicationView projection (FocusAssessments ["unknown"]),
      applicationView projection (FocusAssessments ["assessment:deception-alternative","assessment:deception-alternative"]),
-     applicationView projection (FocusAssessments (map assessmentId (take 5 (documentAssessments caseDocument))))])
+     applicationView projection (FocusAssessments (map assessmentId (take 5 (documentAssessments caseDoc))))])
   check "partition and snapshot bindings validated before encoding"
     (hasError (encodeViewSvg projection focused {viewProjectionId="other-projection"})
       && hasError (encodeViewJson projection focused {viewIncludedNodes=[]})
@@ -88,7 +93,7 @@ runCaseViewChecks = do
       && hasError (recoverOriginalSource projection (SourceRef "source:case-note" (Just (TextSpan 7 15 1 8 1 16)))))
   check "compiler spans stay separate from original excerpts" (not (null (resolvedGeneratedSpans (inspectionResolution selected)))
     && all ((/= "source:case-note") . sourceMappingSource) (resolvedGeneratedSpans (inspectionResolution selected)))
-  pending <- evaluateDoc pendingCase
+  pending <- evaluateDoc pendingDoc
   pendingProjection <- require (projectEvaluation pending)
   unresolved <- require (inspectAssessment pendingProjection "assessment:property-fault-pending")
   skipped <- require (inspectAssessment pendingProjection (assessmentFor "f:unsoundness-time"))
@@ -105,13 +110,13 @@ runCaseViewChecks = do
   check "assumptions have no fabricated case assertions"
     (null [n | n <- includedNodes pendingProjection assumptionView, projectedNodeRole n == "assertion"]
       && BS.isInfixOf "Authored assumption; no case assertion cited." svg)
-  revised <- evaluateDoc revisedCase
+  revised <- evaluateDoc revisedDoc
   let oldSnapshot = evaluationSnapshot base
   check "narrative revision preserves original snapshot, selection and classifications"
-    (snapshotDocument oldSnapshot == caseDocument && documentAssessments caseDocument == documentAssessments revisedCase
-      && documentAnalyses caseDocument == documentAnalyses revisedCase
+    (snapshotDocument oldSnapshot == caseDoc && documentAssessments caseDoc == documentAssessments revisedDoc
+      && documentAnalyses caseDoc == documentAnalyses revisedDoc
       && snapshotId oldSnapshot /= snapshotId (evaluationSnapshot revised)
-      && hasError (projectEvaluationOn revisedCase base))
+      && hasError (projectEvaluationOn revisedDoc base))
   comparison <- require (projectComparison base revised)
   check "narrative edit changes provenance without changing computation"
     (null (projectedChangedObservations comparison) && length (projectedUnchangedObservations comparison) == 26

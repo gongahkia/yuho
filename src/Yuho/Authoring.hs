@@ -5,11 +5,15 @@ module Yuho.Authoring
   , module Yuho.Authoring.Projection, module Yuho.Authoring.Projection.Encode
   , module Yuho.Authoring.Projection.Inspect, module Yuho.Authoring.Projection.Views
   , module Yuho.Authoring.Projection.ViewEncode
+  , module Yuho.Authoring.Edit
+  , module Yuho.Authoring.Source
   , validateDocument, validateAnalysis
   , SuppliedStatus(..), UnresolvedReason(..)
   ) where
 
 import Yuho.Authoring.Types
+import Yuho.Authoring.Edit
+import Yuho.Authoring.Source
 import Yuho.Authoring.Codec
 import Yuho.Authoring.Compile
 import Yuho.Authoring.Report

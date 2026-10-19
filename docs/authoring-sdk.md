@@ -6,6 +6,9 @@ bounded fragment to the unchanged `SuppliedProofStatus-v1` backend and returns
 object-linked application reports and scenario comparisons. No CLI, renderer,
 research-directory lookup, or lexer-token construction is required.
 
+Start with the [tested Haskell quickstart](authoring-quickstart.md) for one
+recommended setup and lifecycle. This guide is the detailed contract reference.
+
 Both the API and `yuho.authoring/v0.1-experimental` JSON format are experimental.
 There is no migration or long-term compatibility promise. Unsupported format
 versions are rejected at `/documentFormat`. The
@@ -575,5 +578,449 @@ legend. It is a reference navigation view, not an interactive layout engine.
 Dense gutter routes and long unbroken identifiers can reduce readability; focus
 more narrowly or use the complete contract in a downstream renderer. Full
 identities and metadata remain in the complete projection and DOM bindings.
-The next validation should use a materially different legal model; no additional
-model or further reference-view family is implemented here.
+Tranche 03 added no further legal model or reference-view family. The second-model
+validation below uses these existing operations.
+
+## Second-model validation: voluntary hurt — Tranche 04
+
+[Hurt.hs](../examples/authoring-consumer/Hurt.hs) is an independently authored
+public-library example of the retained
+[hurt research model](../research/singapore/section-84-pilot/hurt-offence/section323-with-section84.yh).
+It constructs ordinary `LawNode`, `LawEdge`, `CaseAssertion`, `Assessment` and
+`Analysis` records. It never reads the checkout, constructs Surface tokens/ASTs,
+or calls the legacy lowerer. The executable includes all its resources.
+The default consumer still runs the cheating workflow; `--model hurt` selects
+this separate example.
+
+The hurt rule requires an act, hurt, act-to-hurt causation, and **either** intention
+or knowledge. Cheating instead combines deception with an alternative between
+two conjunctive forms. Both attach the bounded, acyclic section 84 guard.
+No new evaluator semantics or public formats are needed. The saved hurt model
+and scenarios are unchanged from `bf29ba84b10448479ae364ab4d4d95db557abc4e`.
+
+### Scope and source boundaries
+
+This is a bounded research model with synthetic supplied classifications, not a
+statement of complete or currently applicable criminal law. Three exact scope
+assumption IDs are retained as annotations about the selected rule and analysis:
+
+| Retained acknowledgement | Meaning |
+| --- | --- |
+| `a:outside-section-323A` | Assume the case is outside section 323A. |
+| `a:outside-section-334` | Assume the case is outside section 334. |
+| `a:post-2022-section-84-expression-applicable` | Assume applicability of the represented post-2022 section 84 expression. |
+
+`lawScope` retains these meanings and the explicit omissions. An annotation also
+retains the saved section 323 exception wording; another retains the section 107
+burden annotation. None is a computed legal conclusion, temporal selection,
+proof-standard assessment, or implementation of section 323A/334 doctrine.
+
+The **legacy** checker requires all declared acknowledgements, rejecting missing
+ones with `SFE022`. Native checks execute all three retained missing-acknowledgement
+scenarios. The **SDK** checks annotation identities/references and ordinary
+structural/binding invariants; it does not interpret free-text scope or require
+these model-specific acknowledgement IDs. A focused test establishes that boundary
+explicitly. A caller needing a mandatory acknowledgement gate must supply that
+policy; copying retained context alone is not such a check.
+
+Law quotations copy only saved excerpts from the retained model. The associated
+source record is locator-only, with no invented original statute span or fetched
+text. The synthetic case note retains its own original text and an explicit UTF-8
+anchor: bytes `[11,60)` recover `Mei reports pain (痛) in her arm after the push.`
+Generated kernel text/spans remain in the existing compiler-provenance fields.
+
+### Public workflow and observations
+
+For example, using the data exported by `Hurt`:
+
+```haskell
+anchor <- hurtNoteAnchor
+let document = hurtDocument anchor
+    draftDocument = hurtDraft anchor
+-- Missing bindings do not prevent authored case projection.
+before <- projectAuthored draftDocument hurtAnalysis
+caseDiagram <- caseView before
+-- Compilation of draftDocument separately reports thirteen AMISSING diagnostics.
+
+compiled <- compileAnalysis document hurtAnalysis
+evaluated <- evaluateAnalysis compiled
+projection <- projectEvaluation evaluated
+focused <- applicationView projection (FocusInput "f:hurt-caused-by-act")
+detail <- inspectAssessment projection
+  (hurtAssessmentId "f:hurt-caused-by-act" Proved)
+excerpt <- recoverOriginalSource projection anchor
+```
+
+These lines describe an `Either [AuthoringDiagnostic]` flow. The consumer uses a
+small IO helper to display any diagnostics and write exports. Explicit immutable
+document updates select different assessment IDs; all alternatives remain retained.
+The causation assessment references three assertions, including Mei's clinic-note
+scope as provenance within Alex's incident analysis. No actor relation, evidence
+weight or causal inference follows from that reference. A separate weather assertion
+has no application link. The draft shows retained-but-unselected links separately
+from this unmapped assertion; neither receives a computed status.
+
+Each scenario selects thirteen assessments, including all guard inputs. Unselected
+`proved` alternatives keep their classification and provenance without receiving
+the selected run's observation. Section 84 assessments are expressly synthetic
+assumptions, without fabricated case evidence. The example also revises the case
+narrative: stale attachment fails with `PSTALE`, explicit reevaluation preserves
+the supplied classifications and computation, and comparison flags referenced
+material rather than computed change.
+
+| Scenario | Legacy and SDK conclusion | Main branch reason | Guard |
+| --- | --- | --- | --- |
+| 01 intention | `satisfied` | `satisfied` | evaluated, `not_satisfied` |
+| 02 knowledge | `satisfied` | `satisfied` | evaluated, `not_satisfied` |
+| 03 hurt not proved | `not_satisfied` | `requirements_not_satisfied` | skipped |
+| 05 ordinary causation unresolved | `unresolved` | `requirements_unresolved` | skipped |
+| 06 nature route | `not_satisfied` | `defeated` | evaluated, `satisfied` |
+| 11 section 84 unresolved | `unresolved` | `exception_unresolved` | evaluated, `unresolved` |
+
+Native `HurtChecks` independently parses/checks/lowers the unchanged `.yh` model
+and each scenario, decodes and validates that request, then evaluates it. An explicit
+20-requirement mapping and two-rule mapping compare all input/group statuses,
+supplied classifications and unresolved reasons, execution states, branch reasons,
+and exception attachment/firing/skip behaviour against the separately constructed
+SDK document. Generated IDs, request digests and offsets are not aligned as legal
+identities. Handwritten expectations additionally check the table above.
+
+Scenarios **01 → 02** change two selected assessments/classifications and two
+input observations; 21 observations, including the overall satisfied conclusion,
+remain unchanged. Scenarios **05 → 11** change four selected assessments, with
+18 changed and five unchanged observations despite the same unresolved conclusion:
+two ordinary observations become satisfied; thirteen guard requirements, its rule
+and attachment become evaluated (15); the main rule's reason changes (one).
+These are overlapping structural consequences, not 18 independently changed facts.
+Original run identities remain separate from stable occurrence alignment.
+
+Repeated `f:unsoundness-time` identifiers are document-local. Pass the correct
+projection to inspection, and use snapshot plus occurrence identity for run context.
+Native checks resolve this input in both models with distinct scope/occurrences,
+and reject a hurt-versus-cheating comparison with `AINCOMPATIBLE`.
+
+### Build, run and review
+
+From the checkout (pinned GHC 9.8.4 and frozen dependencies):
+
+```sh
+cabal v2-build all --offline -j1 --with-compiler=ghc-9.8.4
+cabal v2-test yuho-test --offline -j1 --with-compiler=ghc-9.8.4 --test-show-details=direct
+consumer_bin=$(cabal list-bin exe:yuho-authoring-consumer --offline --with-compiler=ghc-9.8.4)
+python3 test/authoring_consumer.py "$consumer_bin"
+python3 test/hurt_consumer.py "$consumer_bin"
+make protocols docs
+cd /tmp
+"$consumer_bin" --model hurt --artifacts /Users/gabrielongtemasek/Downloads/yuho-review/tranche04
+```
+
+The two Python checks each execute the consumer in a temporary directory outside
+the checkout. The hurt check validates authored/kernel/projection/helper schemas,
+all nine JSON/XML/SVG exports, endpoint and inclusion/omission bindings, canonical
+states, comparisons and recovery. To verify saved review artifacts as well, add
+`--existing-artifacts /Users/gabrielongtemasek/Downloads/yuho-review/tranche04`
+to `test/hurt_consumer.py`.
+
+`INDEX.md` in the artifact directory explains the outputs. Six
+`hurt-NN_SCENARIO.svg` files show the existing law-occurrence table; the case view
+is `hurt-case-before.svg`. `hurt-05-application.svg` focuses on ordinary causation,
+including selected unresolved and unselected alternatives with their provenance.
+`hurt-11-application.svg` focuses narrowly on the selected unresolved nature-incapacity
+assumption; other guard prerequisites remain explicit omissions in its view bindings.
+The complete context is retained in `data/*.projection.json`. All six documents,
+application reports, kernel requests/results, both comparisons, inspection/excerpt,
+revision and diagnostic records are also under `data/`.
+
+Render PNG previews outside the checkout:
+
+```sh
+cd /Users/gabrielongtemasek/Downloads/yuho-review/tranche04
+for svg in *.svg; do rsvg-convert --output "${svg%.svg}.png" "$svg"; done
+```
+
+Use `encodeProjectionSvg` for the law table and `encodeViewSvg` for case/application
+cards, with their respective bindings. The complete projection is the full contract;
+the legacy JSON/XML view remains a presentation subset. No version change is made.
+The SVG actor caption now reads **Scope actor**, preserving its underlying value.
+Long reference tables require scrolling; provenance gutters become dense when several
+alternatives share sources. Existing focus limits (four assessments, 64 nodes,
+128 relationships) remain explicit errors, never truncation.
+
+Concrete remaining authoring friction is repeated record/edge/assessment construction,
+manual byte anchors, separate export helpers, and untyped scope acknowledgements.
+The second model revealed no need for law-specific library branches or a builder
+redesign. Tranche 05 below adds an explicit consumer acknowledgement check; the
+omitted doctrines remain out of scope.
+
+## Editing and explicit caller acknowledgement — Tranche 05
+
+The independent consumer now has a third invocation, `--edit-demo`, implemented
+in [Editing.hs](../examples/authoring-consumer/Editing.hs). The cheating default
+and `--model hurt` remain available. This is an immutable record-editing workflow,
+not an editor, patch language, revision service or undo framework.
+
+### Small ID-addressed operations
+
+`Yuho.Authoring` now re-exports [Yuho.Authoring.Edit](../src/Yuho/Authoring/Edit.hs):
+
+```haskell
+editLawNode :: Text -> (LawNode -> LawNode) -> AuthoringDocument
+            -> Either [AuthoringDiagnostic] AuthoringDocument
+editLawEdge :: Text -> (LawEdge -> LawEdge) -> AuthoringDocument
+            -> Either [AuthoringDiagnostic] AuthoringDocument
+editCaseAssertion :: Text -> (CaseAssertion -> CaseAssertion) -> AuthoringDocument
+                  -> Either [AuthoringDiagnostic] AuthoringDocument
+selectAssessment :: Text -> Text -> AuthoringDocument
+                 -> Either [AuthoringDiagnostic] AuthoringDocument
+-- selectAssessment analysisId assessmentId document
+```
+
+The three edit helpers locate exactly one typed record, call the supplied update,
+and replace it at its existing list position. They preserve the original authored
+ID and all other document records. This replaces repeated list scans whose
+unknown-ID case could silently do nothing. `ENOTFOUND`, `ETYPE`, `EDUPLICATE` and
+`EIDENTITY` identify absent IDs, the wrong record collection, duplicate identities
+in the document-wide namespace, and an attempted ID change. Callbacks can change a
+node's executable kind or an edge endpoint; **successful addressing is not validation**.
+An invalid edited candidate remains available for diagnostics and repair.
+
+`selectAssessment` explicitly replaces the single current binding for that legal
+input, preserving its position; if missing, it appends the requested binding.
+It retains every alternative assessment. It rejects unknown/wrong-kind IDs,
+wrong scope (`ESCOPE`), non-input or out-of-slice targets (`ETARGET`), dangling
+existing selections, and multiple existing bindings for that input (`EAMBIGUOUS`).
+It never selects by recency, array order or classification. Other missing bindings
+can remain in a draft. Neither selection nor editing invokes evaluation.
+
+The helpers do not validate unrelated malformed material, repair it, rename IDs,
+or cascade deletion. No deletion helper is introduced. A caller performing direct
+record removal must run validation; existing diagnostics identify dangling law,
+assessment, annotation or source references. Compilation still rejects invalid drafts.
+Appending a new assessment is an ordinary record update followed by
+`validateDocument`, whose existing `ADUPLICATE`/reference checks cover conflicts.
+Updating the law revision and presentation remains an ordinary record update.
+
+All four helpers are demonstrated for **both hurt and cheating** in the editing
+consumer and native checks, including preservation of cheating presentation metadata.
+No public serialized format, strict decoder or evaluator protocol changes.
+
+### The structural session
+
+The consumer starts with the unchanged hurt intention scenario. It edits a display
+label while retaining `f:act-performed`; fresh evaluation preserves the input/group,
+rule and exception computations. The exact snapshot and law fingerprint change.
+`compareAnalyses` conservatively rejects this changed law record with `AINCOMPATIBLE`.
+`projectEvaluationOn` rejects attaching the old result with `PSTALE`; the old result
+remains inspectable using its own snapshot.
+
+A separate copy is prominently labelled **SDK EXPERIMENT**, with revision
+`sdk-experiment-any-to-all-v1`. It changes `g:section321-fault` from `any` to `all`.
+This deliberately hypothetical exercise is not a proposed interpretation of the
+retained law. Intention remains supplied proved and knowledge not proved: the fault
+group and ordinary requirements become `not_satisfied`, the main branch reports
+`requirements_not_satisfied`, and the exception guard is skipped with no computed
+value. Each law version is evaluated independently; no law-version comparison
+semantics are added.
+
+```haskell
+candidate <- editLawEdge "edge:g:section321-fault/f:knowledge-hurt-likely"
+  (\e -> e {edgeTo="draft:disconnected-knowledge"}) experiment
+-- validateAnalysis candidate hurtAnalysis exposes the edge/endpoint errors.
+-- compileAnalysis candidate hurtAnalysis returns diagnostics, not an artifact.
+repaired <- editLawEdge "edge:g:section321-fault/f:knowledge-hurt-likely"
+  (\e -> e {edgeTo="f:knowledge-hurt-likely"}) candidate
+-- Caller checks analysisReady (validateAnalysis repaired hurtAnalysis).
+compiled <- compileAnalysis repaired hurtAnalysis
+result <- evaluateAnalysis compiled
+projection <- projectEvaluation result
+```
+
+The repair exactly restores the preceding experimental document, including list
+order and retained authorship. Encoding/strict decoding preserves the repaired
+record; reevaluation produces the same kernel response. Invalid drafts are saved
+with validation/compile/projection diagnostics and **no evaluated result**.
+Authored IDs remain stable through these edits; derived occurrence IDs may change
+with the law fingerprint. Stable authored identity is not a guarantee of stable
+projection identity across incompatible revisions.
+
+### Case edits, alternative addition and explicit selection
+
+The case branch starts independently from the original law. `editCaseAssertion`
+revises `assertion:pain`, retaining its declared Mei/clinic scope and source anchor.
+Existing assessment classifications and selections remain untouched. The compatible
+comparison flags referenced material, with no changed computed observations.
+
+A record append adds `assessment:hurt:causation-review-v2` as an unresolved
+`case_material` assessment with three explicit assertion references. Validation
+checks its new identity and references. It is initially unselected: a fresh run
+and comparison show no selected-assessment or computed changes. Only a subsequent
+`selectAssessment` call activates it. The ordinary causation input becomes unresolved,
+the conclusion becomes unresolved, and the guard is selected but skipped.
+The focused application view includes this selected assessment and the retained
+proved alternative, which has no attributed run observation. A separate authored
+draft removes the new binding: its inventory says `missing`, with no computation.
+No narrative edit automatically revises a supplied legal classification.
+
+### Consumer acknowledgement guarantee
+
+[Acknowledgements.hs](../examples/authoring-consumer/Acknowledgements.hs) is a small
+**consumer-only** admission check. Its explicit inputs are a policy containing
+required IDs and a context, and a separate caller acknowledgement list/context.
+The hurt workflow passes the three retained scope-assumption IDs explicitly.
+`hurtRequiredAssumptions` and `hurtExampleAcknowledgements` are separate explicit
+lists; adding a requirement does not automatically acknowledge it for the caller.
+It does not derive acceptance from annotations, `retained` state, `lawScope`,
+or legal classifications. Acknowledgement accepts a modelling assumption; it does
+not establish that assumption's truth or legal adequacy.
+
+`evaluateAcknowledged policy supplied document analysisId` checks the current inputs
+before calling the unchanged `compileAnalysis`/`evaluateAnalysis`. Its context
+includes law ID, revision and existing law/source fingerprint, analysis ID, selected
+target, actor/context scope and reference date. It rejects:
+
+- Each omitted requirement with `ACKMISSING`.
+- Entries outside the explicit required set with `ACKUNKNOWN`.
+- Repeated acknowledgements with `ACKDUPLICATE`.
+- Inapplicable policy/acknowledgement context with `ACKCONTEXT`.
+- Empty, duplicate or blank requirement sets with `ACKPOLICY`.
+
+Failure returns separate acknowledgement and SDK diagnostic lists, with no evaluation
+or success receipt. Missing acknowledgement never becomes a legal status or graph
+node. Successful admission returns an evaluation plus a separate receipt containing
+the requirements, supplied acknowledgements, analysis and exact resulting snapshot.
+That receipt is not accepted as an input token: every invocation rechecks current
+inputs. Narrative revisions can use the same applicable policy but receive new
+snapshot receipts; law edits cannot reuse the original law-fingerprint context.
+The experimental structural copy is evaluated through bare SDK operations, not
+presented as admitted by the retained-model acknowledgement policy.
+
+`--model hurt` now uses this checked operation for all six completed scenarios.
+Native checks establish byte-identical kernel requests and responses between bare
+SDK and admitted evaluation for all six. The legacy tests separately establish
+`SFE022` for the three retained missing-acknowledgement scenarios; this is a specific
+acknowledgement-presence comparison, not general frontend acceptance parity.
+**Bare `compileAnalysis` retains its previous contract** and does not enforce this
+consumer policy. The Tranche 04 description of that SDK boundary still applies.
+
+### Commands and review set
+
+From the checkout:
+
+```sh
+cabal v2-build all --offline -j1 --with-compiler=ghc-9.8.4
+cabal v2-test yuho-test --offline -j1 --with-compiler=ghc-9.8.4 --test-show-details=direct
+consumer_bin=$(cabal list-bin exe:yuho-authoring-consumer --offline --with-compiler=ghc-9.8.4)
+python3 test/authoring_consumer.py "$consumer_bin"
+python3 test/hurt_consumer.py "$consumer_bin"
+python3 test/editing_consumer.py "$consumer_bin"
+make protocols docs
+cd /tmp
+"$consumer_bin" --edit-demo --artifacts /Users/gabrielongtemasek/Downloads/yuho-review/tranche05
+```
+
+The Python editing checker also runs outside the checkout, validates existing
+authored/kernel/projection/helper schemas and all six JSON/XML/SVG exports, and
+checks the session, rejection examples and snapshot/selection distinctions. Add
+`--existing-artifacts /Users/gabrielongtemasek/Downloads/yuho-review/tranche05`
+to validate the saved review set too. Generate PNGs using the previously documented
+`rsvg-convert` loop. `INDEX.md` describes the six named views; `data/` retains every
+stage document, valid evaluation, complete projection, inclusion/omission binding,
+compatible comparison, diagnostic, acknowledgement input/receipt and inspection.
+`editing-session.json` is the compact stage trace. Existing focus limits apply.
+
+The exercise resolves repeated ID-addressed updates and explicit binding replacement.
+Separate export helpers remain a specific follow-up. Tranche 06 below replaces
+representative manual source anchors. There is no new legal-model ontology,
+general policy subsystem or graph-editing framework.
+
+## Validated original-source anchors — Tranche 06
+
+`Yuho.Authoring` re-exports `Yuho.Authoring.Source`:
+
+```haskell
+sourceAnchorBytes :: SourceRecord -> Integer -> Integer
+                  -> Either [AuthoringDiagnostic] SourceRef
+sourceAnchorCodePoints :: SourceRecord -> Integer -> Integer
+                       -> Either [AuthoringDiagnostic] SourceRef
+```
+
+Both use zero-based, half-open ranges in the exact supplied retained text. The
+first accepts UTF-8 byte offsets; the second accepts Unicode code-point offsets,
+not UTF-16 code units, grapheme clusters or display columns. For example:
+
+```haskell
+let source = SourceRecord "source:note" "synthetic" Nothing (Just "é猫\nx")
+sourceAnchorCodePoints source 1 2
+-- Right (SourceRef "source:note" (Just (TextSpan 2 5 1 3 1 6)))
+-- sourceAnchorBytes source 2 5 produces the identical reference.
+```
+
+The result is the existing serialized `SourceRef`/`TextSpan`, without a format
+change. Lines and columns are one-based; columns count UTF-8 bytes. LF increments
+the line and resets the column; CR counts as one byte. Empty ranges, empty retained
+text and EOF positions are accepted when otherwise valid. Unicode, whitespace,
+combining sequences and line endings are neither normalized nor searched.
+
+External offsets use unbounded `Integer`. Bounds and ordering are checked before
+conversion to `Int`; invalid ranges are never clamped, reordered or moved to a
+nearby selection. `AANCHORRANGE` identifies the supplied source and input unit
+location. `AANCHORBOUNDARY` rejects a byte endpoint within a multibyte code point.
+`AANCHORTEXT` rejects a source without retained text, including locator-only
+sources. Constructor errors propagate as ordinary source-linked SDK diagnostics.
+
+The code-point path converts exact retained-text prefixes to bytes, then calls
+the byte path. Both reuse the current `Compile.byteSpan` coordinate calculation
+and `Core.Source.validateSpan` through the existing original-source span adapter.
+The exported `byteSpan :: Text -> Int -> Int -> TextSpan` remains unchanged and
+**does not validate** its inputs; it is not the recommended original-source constructor.
+Original anchors remain separate from generated kernel-source spans.
+
+These constructors require no document, legal model, analysis or projection.
+They establish coordinate validity only for the provided source. Document validation
+still checks source existence, identities, metadata and graph/binding completeness.
+An anchored excerpt is obtained with the existing `recoverOriginalSource` on an
+authored/evaluated projection, without URL fetching.
+
+The independent cheating and hurt consumers now construct their original anchors
+through `sourceAnchorCodePoints` and handle the `Either` before building their
+documents. Their fixture builders accept that reference explicitly; no partial
+pattern, unchecked fallback or fabricated anchor conceals a failure. Native checks
+compare the resulting stored references with the previous literal values:
+cheating `[6,15)` / `TextSpan 6 15 1 7 1 16`, and hurt `[11,60)` /
+`TextSpan 11 60 1 12 1 61`. Existing kernel conformance stays unchanged.
+
+### Source replacement is not anchor tracking
+
+The source demo retains `é猫\nx` and an anchor selecting `猫`. Replacing it with
+`é犬\nx` leaves that same reference structurally valid and selects `犬`. The older
+projection still recovers `猫` from its own snapshot. Attaching its evaluation to
+the changed document returns `PSTALE`. Explicit reevaluation preserves supplied
+classifications and computed results; comparison flags the changed source material.
+
+Inserting `!` before the original text does not relocate the reference: its old
+offsets now split a code point and document validation reports `ASPAN`. A new,
+explicit code-point selection can construct a new valid reference. Other source
+changes can leave old coordinates valid while selecting unintended text. There is
+no quotation-identity, stale-anchor or meaning guarantee, content-addressed anchor,
+automatic reanchoring or text search in this tranche.
+
+### Executed setup and compact review artifacts
+
+The [quickstart](authoring-quickstart.md) uses the existing hurt graph as explicitly
+supplied authored JSON. Its standalone package imports only `Yuho.Authoring` from
+Yuho and is built in an external project with an explicit local package path,
+GHC 9.8.4, copied unchanged freeze and the available cache. It attaches a checked
+anchor, supplies/selects an assessment, validates/evaluates, inspects/exports,
+edits and reevaluates narrative, and actually saves/reloads the authored revision.
+
+```sh
+consumer_bin=$(cabal list-bin exe:yuho-authoring-consumer --offline --with-compiler=ghc-9.8.4)
+python3 test/authoring_quickstart.py "$consumer_bin" --review-dir /Users/gabrielongtemasek/Downloads/yuho-review/tranche06
+```
+
+The checker records the exact external build/run commands and logs. It also
+generates the anchor demo (`--anchors-demo`), verifies its literal numeric examples,
+schemas and source-revision records, and retains representative regenerated views
+from both existing consumers. `INDEX.md` identifies the external project, explicit
+input, lifecycle outputs and `anchors/` examples. Existing cheating, hurt and
+editing checks still apply; no new view family or renderer changes are introduced.
