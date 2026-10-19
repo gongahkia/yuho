@@ -94,7 +94,9 @@ def verify_projections(directory):
 
     svg_ns = {"s": "http://www.w3.org/2000/svg"}
     graph_ns = {"g": "urn:yuho:semantic-graph:v0.1"}
-    for name in ["pending-authored", "draft-authored", "satisfied", "pending", "defeated"]:
+    new_views = ["case-before", "application-selected", "application-revised",
+                 "application-pending", "application-skipped"]
+    for name in ["pending-authored", "draft-authored", "satisfied", "pending", "defeated"] + new_views:
         projection = projections[name]
         view = load(name + ".view-bindings.json")
         validate_definition("view", view)
@@ -107,6 +109,7 @@ def verify_projections(directory):
             edge["projectedEdgeId"] for edge in projection["projectionEdges"]}
         legacy = load(name + ".view.json")
         validate_definition("legacyView", legacy)
+        assert legacy["view"] == ("case" if name in new_views else "rule")
         xml = ET.parse(directory / (name + ".view.xml")).getroot()
         svg = ET.parse(directory / (name + ".svg")).getroot()
         assert xml.tag == "{urn:yuho:semantic-graph:v0.1}semantic-graph"
@@ -115,8 +118,9 @@ def verify_projections(directory):
         assert len(all_svg_ids) == len(set(all_svg_ids)), "SVG identity collision"
         assert {node["id"] for node in legacy["nodes"]} == set(view["viewIncludedNodes"])
         assert {node.attrib["id"] for node in xml.findall("g:nodes/g:node", graph_ns)} == set(view["viewIncludedNodes"])
-        rendered_nodes = svg.findall("s:g[@id='occurrences']/s:g", svg_ns)
-        rendered_edges = svg.findall("s:g[@id='connections']/s:path", svg_ns)
+        group = "objects" if name in new_views else "occurrences"
+        rendered_nodes = svg.findall(f"s:g[@id='{group}']/s:g", svg_ns)
+        rendered_edges = svg.find("s:g[@id='connections']", svg_ns).findall(".//s:path", svg_ns)
         assert {node.attrib["id"] for node in rendered_nodes} == {
             binding["viewBindingRenderedId"] for binding in view["viewNodeBindings"]}
         assert {edge.attrib["id"] for edge in rendered_edges} == {
@@ -138,6 +142,43 @@ def verify_projections(directory):
                 assert "requirements unresolved" in visible
         if name == "draft-authored":
             assert any("MISSING ASSESSMENT" in (text.text or "") for text in svg.findall(".//s:text", svg_ns))
+        if name in new_views:
+            def visible(authored_id):
+                return " ".join(text.text or "" for node in rendered_nodes
+                                if node.attrib["data-authored-id"] == authored_id
+                                for text in node.findall("s:text", svg_ns))
+
+            for node in projection["projectionNodes"]:
+                if node["projectedNodeRole"] in ["assertion", "original_source"]:
+                    assert node["projectedNodeComputed"] is None
+                    assert node["projectedNodeEvaluation"] == "not_applicable"
+            if name == "case-before":
+                assert "No assessment link in document" in visible("assertion:weather")
+                assert "actor:observer" in visible("assertion:weather")
+                assert "none selected for this analysis" in visible("assertion:description")
+                assert "DRAFT" in visible("annotation:case-draft")
+                assert "no excerpt or precise location invented" in visible("source:registry")
+                assert all(node["projectedNodeComputed"] is None for node in projection["projectionNodes"])
+            if name == "application-selected":
+                assert "SELECTED for this analysis" in visible("assessment:deception")
+                alternative_text = visible("assessment:deception-alternative")
+                assert "UNSELECTED alternative" in alternative_text and "Supplied: proved" in alternative_text
+                assert "actor:buyer" in visible("assertion:message") and "context:message-exchange" in visible("assertion:message")
+                assert "Anchored excerpt: 猫 item." in visible("source:case-note")
+                assert "assessment:deception-other-context" not in {node.attrib["data-authored-id"] for node in rendered_nodes}
+            if name == "application-pending":
+                text = visible("assessment:property-fault-pending")
+                assert "SELECTED" in text and "unresolved(not_determined)" in text
+                assert "Authored assumption; no case assertion cited." in text
+                assert "UNSELECTED" in visible("assessment:property-fraudulent-or-dishonest")
+                assert not any(node["projectedNodeRole"] == "assertion" for node in projection["projectionNodes"]
+                               if node["projectedNodeId"] in view["viewIncludedNodes"])
+            if name == "application-skipped":
+                assert "SELECTED" in visible("assessment:unsoundness-time")
+                assert "Supplied: not_proved" in visible("assessment:unsoundness-time")
+                text = visible("f:unsoundness-time")
+                assert "Computed: absent" in text and "Evaluation: not_evaluated" in text
+                assert "requirements unresolved" in text
 
     comparison = load("comparison-projection.json")
     validate_definition("comparison", comparison)
@@ -170,6 +211,51 @@ def verify_projections(directory):
         validate_definition("resolution", load(filename))
     assert len(load("recovered-deception.json")["resolvedAssertions"]) == 2
     assert load("recovered-law-context.json")["resolvedAnnotations"][0]["annotationState"] == "draft"
+    for filename in ["assessment-resolution.json", "alternative-resolution.json", "skipped-resolution.json"]:
+        validate_definition("assessmentInspection", load(filename))
+    selected = load("assessment-resolution.json")
+    assert selected["inspectionSelected"]
+    assert len(selected["inspectionResolution"]["resolvedAssertions"]) == 2
+    assert any(row["assertionScope"]["scopeActor"] == "actor:buyer"
+               for row in selected["inspectionResolution"]["resolvedAssertions"])
+    for recovered in selected["inspectionOriginalSources"]:
+        validate_definition("originalSourceExcerpt", recovered)
+        if recovered["excerptState"] == "anchored":
+            anchor = recovered["excerptReference"]["referenceSpan"]
+            original = recovered["excerptSource"]["sourceText"].encode("utf-8")
+            assert original[anchor["start"]:anchor["end"]].decode("utf-8") == recovered["excerptText"] == "猫 item."
+    alternative = load("alternative-resolution.json")
+    assert not alternative["inspectionSelected"]
+    assert alternative["inspectionAssessment"]["assessmentClassification"] == {"kind": "proved"}
+    assert all(row["applicationComputed"] is None and row["applicationObservation"] is None
+               and not row["applicationSelected"] for row in alternative["inspectionApplications"])
+    links = load("case-assertion-links.json")
+    for row in links:
+        validate_definition("assertionLinks", row)
+    assert next(row for row in links if row["linkedAssertion"] == "assertion:weather")["linkedAssessments"] == []
+    original = projections["application-selected"]["projectionSnapshot"]
+    revised = projections["application-revised"]["projectionSnapshot"]
+    assert original["snapshotId"] != revised["snapshotId"]
+    assert original["snapshotDocument"]["documentAssessments"] == revised["snapshotDocument"]["documentAssessments"]
+    def description(snapshot):
+        return next(row["assertionDescription"] for row in snapshot["snapshotDocument"]["documentAssertions"]
+                    if row["assertionId"] == "assertion:description")
+    assert description(original) != description(revised)
+    assert any(row["diagnosticCode"] == "PSTALE" for row in load("revision-stale-diagnostics.json"))
+    narrative = load("narrative.comparison-projection.json")
+    explicit = load("explicit-selection.comparison-projection.json")
+    validate_definition("comparison", narrative)
+    validate_definition("comparison", explicit)
+    assert not narrative["projectedChangedObservations"] and len(narrative["projectedUnchangedObservations"]) == 26
+    assert not narrative["projectedConclusionChanged"]
+    assert len(narrative["projectedAssessmentChanges"]) == 1
+    change = narrative["projectedAssessmentChanges"][0]["assessmentChange"]
+    assert change["changeReferencedMaterial"] and not any(change[key] for key in
+                                                        ["changeSelection", "changeClassification", "changeAuthorship"])
+    assert len(explicit["projectedChangedObservations"]) == 20 and explicit["projectedConclusionChanged"]
+    assert load("revision-excerpt.json")["computedObservationChanges"] == "0"
+    assert load("resolution-excerpt.json")["originalExcerpt"] == "猫 item."
+    print("case/application consumer: drafts, scoped provenance, selected alternatives, exact original excerpts, narrative revision and exports passed")
     print("projection consumer: complete contract, XML/SVG connections and IDs, view bindings, status labels, comparison audit and recovery passed")
 
 

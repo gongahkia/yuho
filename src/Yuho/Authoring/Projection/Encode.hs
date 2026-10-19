@@ -12,6 +12,7 @@ import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Encoding
 import Yuho.Authoring.Codec (encodeRecord)
 import Yuho.Authoring.Projection
+import Yuho.Authoring.Projection.Render
 import Yuho.Authoring.Types
 import Yuho.Authoring.Validate (issue)
 import Yuho.SuppliedProofStatus.Types (SuppliedStatus(..), UnresolvedReason(..))
@@ -171,23 +172,3 @@ encodeProjectionSvg projection = do
           ["</g>",text 28 (height-52) 12 "400" "Absent computed result is distinct from not_satisfied. not_proved remains supplied information, without a factual-falsity finding.",
            text 28 (height-29) 12 "400" ("Full projection: " <> projectionId value),"</svg>"])
   pure (Encoding.encodeUtf8 svg)
-
-number :: Int -> Text
-number = Text.pack . show
-
-wrap :: Int -> Text -> [Text]
-wrap limit = foldr add [] . Text.words
-  where
-    add word [] = [word]
-    add word (line:rest)
-      | Text.length word + 1 + Text.length line <= limit = (word <> " " <> line):rest
-      | otherwise = word:line:rest
-
-xmlCharacter :: Char -> Bool
-xmlCharacter c = c `elem` ['\t','\n','\r'] || c >= '\x20' && c <= '\xD7FF'
-  || c >= '\xE000' && c <= '\xFFFD' || c >= '\x10000' && c <= '\x10FFFF'
-
-escape :: Text -> Text
-escape = Text.concatMap (\c -> case c of
-  '&' -> "&amp;"; '<' -> "&lt;"; '>' -> "&gt;"; '"' -> "&quot;"; '\'' -> "&apos;"
-  '\t' -> "&#x9;"; '\n' -> "&#xA;"; '\r' -> "&#xD;"; _ -> Text.singleton c)

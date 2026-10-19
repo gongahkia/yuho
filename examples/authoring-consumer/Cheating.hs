@@ -40,10 +40,36 @@ cheatingDocument = AuthoringDocument authoringFormat "document:cheating-demo" la
       (ruleEdges ++ memberEdges) ["Bounded s 415 alternatives and represented s 84 guard only.",
         "No claim of complete legal coverage; ss 24/25 interpretation and aggravated forms omitted."]
     rules = [node "o:cheating" "rule" "Cheating" Nothing (Just "Penal Code s 415"),
-      node "x:section84" "rule" "Represented exception" Nothing (Just "Penal Code s 84")]
-    node key kind label quote citation = LawNode key kind label quote citation [SourceRef "source:law" Nothing]
+      node "x:section84" "rule" "Unsoundness of mind exception" Nothing (Just "Penal Code s 84")]
+    node key kind label quote citation = LawNode key kind (maybe label id (lookup key labels)) quote citation [SourceRef "source:law" Nothing]
     leaves = [node key "input" key (Just quote) Nothing | (key,quote) <- quotations]
     groups = [node key kind key Nothing Nothing | (key,kind,_) <- structures]
+    -- Display labels restate the retained quotations and represented grouping.
+    -- IDs, relationship kinds, quotations and classifications remain unchanged.
+    labels =
+      [("f:deception","Deceiving a person"),
+       ("f:property-fraudulent-or-dishonest","Fraudulent or dishonest inducement"),
+       ("f:property-delivery-or-retention","Delivery of property or consent to retention"),
+       ("f:intentional-inducement","Intentional inducement"),
+       ("f:induced-act-or-omission","Induced act or omission"),
+       ("f:damage-or-harm","Actual or likely damage or harm"),
+       ("f:unsoundness-time","Unsoundness of mind at the time of the act"),
+       ("f:nature-causation","By reason of unsoundness of mind (nature route)"),
+       ("f:nature-incapacity","Incapable of knowing the nature of the act"),
+       ("f:wrong-causation","By reason of unsoundness of mind (wrongfulness route)"),
+       ("f:ordinary-wrongfulness-incapacity","Wrong by ordinary standards of reasonable and honest persons"),
+       ("f:contrary-law-incapacity","Wrong as contrary to law"),
+       ("f:control-causation","By reason of unsoundness of mind (control route)"),
+       ("f:control-incapacity","Completely deprived of power to control actions"),
+       ("g:cheating-requirements","Requirements for cheating"),
+       ("g:cheating-forms","Alternative forms of cheating"),
+       ("g:cheating-property-form","Property delivery or retention form"),
+       ("g:cheating-act-harm-form","Act or omission with damage or harm"),
+       ("g:section84-requirements","Requirements of the represented s 84 exception"),
+       ("g:section84-routes","Alternative incapacity routes"),
+       ("g:nature","Incapacity to know the nature of the act"),
+       ("g:wrongfulness","Incapacity to know that the act is wrong"),
+       ("g:control","Complete loss of control over actions")]
     ruleEdges = [LawEdge "edge:cheating-root" "o:cheating" "g:cheating-requirements" "requires",
       LawEdge "edge:exception-root" "x:section84" "g:section84-requirements" "requires",
       LawEdge "edge:section84-attachment" "o:cheating" "x:section84" "exception"]

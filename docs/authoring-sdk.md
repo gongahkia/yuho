@@ -405,3 +405,175 @@ and metadata-only comparison changes. Projection supports the existing bounded
 tree fragment; no renderer layout guarantee is made for arbitrary deep or very
 long labelled documents. Interactive layout, authoring imports from projections,
 shared-graph execution and additional diagram views remain deferred.
+
+## Case information and focused application — Tranche 03
+
+The case remains independently authored information. Assertions are not reconstructed
+from evaluated inputs. An absent application link makes no finding of irrelevance,
+falsity, uncertainty or rejection. These additional public operations are exposed
+from `Yuho.Authoring`:
+
+```haskell
+caseView :: Projection -> Either [AuthoringDiagnostic] ProjectionView
+applicationView :: Projection -> ApplicationFocus
+                -> Either [AuthoringDiagnostic] ProjectionView
+-- FocusInput authoredInputId
+-- FocusOccurrence projectedOccurrenceId
+-- FocusAssessments [authoredAssessmentId]
+validateProjectionView :: Projection -> ProjectionView -> [AuthoringDiagnostic]
+encodeViewJson, encodeViewXml, encodeViewSvg
+  :: Projection -> ProjectionView -> Either [AuthoringDiagnostic] ByteString
+caseAssertionLinks :: Projection -> Text
+                   -> Either [AuthoringDiagnostic] AssertionLinks
+inspectAssessment :: Projection -> Text
+                  -> Either [AuthoringDiagnostic] AssessmentInspection
+recoverOriginalSource :: Projection -> SourceRef
+                      -> Either [AuthoringDiagnostic] OriginalSourceExcerpt
+```
+
+Start with `projectAuthored document analysisId` for case information before
+completed application. A selected analysis is still required to establish the
+snapshot and selection context; complete bindings and evaluation are not required.
+The existing projection validation rules still apply. Neither selecting a view
+nor inspecting an object performs compilation, evaluation or external URL fetching.
+
+### Deterministic inclusion and omissions
+
+`caseView` includes **every case assertion**, their directly referenced original
+sources, descriptive relationships incident on these assertions/sources and both
+endpoints of those relationships. This one-hop rule retains, for example, an
+assertion's challenge to an assessment without expanding the assessment's whole
+application context. Directly relevant draft/retained annotations are included.
+An annotated descriptive relationship also retains its object handle. Remaining
+annotation targets stay explicitly omitted rather than causing recursive expansion.
+A case view can include an assessment as a descriptive endpoint; that does not
+create a selected application or associate a computed result with it.
+
+`FocusInput` and `FocusOccurrence` select one input occurrence in the selected
+analysis and include its selected assessment plus retained alternatives for that
+input **in the analysis's actor/context scope**. An occurrence focus takes the
+stable projected occurrence ID, not a kernel ID. `FocusAssessments` takes one to
+four distinct authored assessment IDs and includes exactly those assessments;
+only selected bindings add structural occurrences and run observations. An
+explicitly requested unselected or differently scoped assessment retains its
+legal input definition and provenance without acquiring a computation. Invalid,
+ambiguous or oversized focus requests return `PFOCUS` diagnostics.
+
+Both application selections include the assessments' referenced assertions and
+sources, the assertions' sources, target law definitions and original law sources,
+and directly relevant annotations. Cross-context assertion references are retained
+with their recorded scope: they are provenance, not inferred actor relationships.
+Chronology/support/challenge edges are included when their endpoints are selected;
+they do not expand an application focus. Shared objects keep one projected identity
+and distinct relationships are retained.
+
+These reference views are limited to 64 nodes and 128 relationships. Exceeding a
+bound returns `PVIEWLIMIT`; nothing is silently truncated. Existing included/omitted
+partitions, safe IDs, SVG DOM bindings and legacy edge-index bindings are reused.
+Before encoding, the SDK checks snapshot/projection matching, exact partitions,
+endpoint closure and bindings. The complete projection and existing format versions
+are unchanged. The schema adds only `$defs` for the new inspection/helper records.
+The old law-occurrence operations retain their behaviour.
+The new JSON/XML reference exports use the legacy format's existing `case` view
+category; their complete state and identity contract remains the full projection.
+
+### Inspection, selection and original sources
+
+`caseAssertionLinks projection "assertion:description"` separately returns all
+assessment IDs referencing that assertion and those selected for this analysis.
+Empty all-links means no assessment link in the document. Non-empty all-links with
+empty selected-links means none selected. Neither describes whether an object is
+rendered; use view bindings for that distinction.
+
+`inspectAssessment projection "assessment:deception"` returns the original
+assessment (scope, supplied status/reason, issuer, origin, basis and references),
+its selection state, the existing resolver's assertion/source/context records,
+eligible occurrence links and associated observations. For an unselected
+alternative, application links have `applicationSelected = False`,
+`applicationEvaluation = "not_applicable"`, and no computed value or attributed
+observation. The legal occurrence's actual selected result is never copied onto
+an alternative. A selected assessment can instead have `not_requested` in an
+authored projection, `evaluated`, or `not_evaluated` with the original skip reason.
+Selection alone establishes no evaluator visit or reliance.
+
+The pending guard preserves all four dimensions: `assessment:unsoundness-time`
+is selected, supplied `not_proved`, has absent computed value, and is
+`not_evaluated` because the main requirements were unresolved. An assumption is
+labelled with its authored basis and reason; no assertion/source is invented.
+Assertion and source cards have no computed legal statuses.
+
+For an original anchored reference:
+
+```haskell
+recoverOriginalSource projection
+  (SourceRef "source:case-note" (Just (TextSpan 6 15 1 7 1 16)))
+-- excerptState = "anchored", excerptText = Just "猫 item."
+```
+
+The supplied source text is `Note: 猫 item.\nDelivery reported.`. Offsets are
+half-open UTF-8 bytes and columns are one-based UTF-8 byte columns. The existing
+span validator checks boundaries and positions before extraction. Invalid anchors
+return `PSOURCE`. Unanchored retained text returns `retained_unanchored` without an
+excerpt; locator-only sources return `locator_only`, also without an excerpt.
+Original source records/anchors and generated compiler mappings occupy separate
+fields. None of these links establishes reliability, weight, admissibility or a
+legal proof standard.
+
+### Ordinary revision workflow and consumer outputs
+
+[CaseApplication.hs](../examples/authoring-consumer/CaseApplication.hs) is a public
+library consumer extending the same cheating model, not another legal model:
+
+1. Clear assessment selections in an immutable document copy and create a case
+   view, including an unmapped weather assertion, descriptive relationships,
+   original references and a draft annotation.
+2. Select the existing assessments, evaluate explicitly, and focus on deception.
+   Its selected assessment cites two assertions, including one about another
+   actor/context, alongside an unselected proved alternative and shared source.
+3. Change only the description of `assertion:description`. Keep the old snapshot
+   and evaluation. `projectEvaluationOn revisedDocument oldEvaluation` rejects
+   the stale attachment. Compile/evaluate the revised document explicitly: the
+   classifications and selected conclusion remain unchanged. The comparison has
+   one referenced-material change, no selection/classification/assessment-metadata
+   changes, zero changed computed observations and 26 unchanged observations.
+4. Explicitly select the pending property-fault assessment. Its supplied status
+   is unresolved; the guard is skipped. This separate change has one selected
+   assessment transition and 20 changed observations, as explained above.
+
+The comparison's assessment-change rows include `changeReferencedMaterial` even
+when the assessment record itself is unchanged. Consumers should read these flags,
+rather than treating the number of rows as a count of changed classifications.
+Narrative editing does not automatically revise classifications or their reasons;
+a caller must decide whether to revise those authored assessments.
+
+Build and run the same separately packaged consumer outside the checkout:
+
+```sh
+cabal v2-build all --offline -j1 --with-compiler=ghc-9.8.4
+consumer_bin=$(cabal list-bin exe:yuho-authoring-consumer --offline --with-compiler=ghc-9.8.4)
+cd /tmp
+"$consumer_bin" --artifacts /tmp/yuho-authoring-tranche03
+```
+
+New output stems are `case-before`, `application-selected`, `application-revised`,
+`application-pending` and `application-skipped`. Each has a complete
+`.projection.json`, `.view-bindings.json`, `.view.json`, `.view.xml` and `.svg`.
+`assessment-resolution.json`, `alternative-resolution.json` and
+`skipped-resolution.json` demonstrate inspection; `resolution-excerpt.json` is a
+compact recovery example. `revision-excerpt.json`,
+`narrative.comparison-projection.json`, `explicit-selection.comparison-projection.json`
+and stale-attachment diagnostics retain the revision evidence and prior snapshots.
+The established native, protocol, docs and independent-consumer checks cover these
+outputs too. Optional PNG previews can be created with:
+
+```sh
+rsvg-convert --output /tmp/yuho-authoring-tranche03/application-selected.png /tmp/yuho-authoring-tranche03/application-selected.svg
+```
+
+The SVG uses readable cards and numbered, typed connections with a relationship
+legend. It is a reference navigation view, not an interactive layout engine.
+Dense gutter routes and long unbroken identifiers can reduce readability; focus
+more narrowly or use the complete contract in a downstream renderer. Full
+identities and metadata remain in the complete projection and DOM bindings.
+The next validation should use a materially different legal model; no additional
+model or further reference-view family is implemented here.

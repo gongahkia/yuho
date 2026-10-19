@@ -2239,6 +2239,251 @@
           }
         }
       }
+    },
+    "assertionLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "linkedAssertion",
+        "linkedAssessments",
+        "linkedSelectedAssessments"
+      ],
+      "properties": {
+        "linkedAssertion": {
+          "type": "string"
+        },
+        "linkedAssessments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "linkedSelectedAssessments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "originalSourceExcerpt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "excerptSource",
+        "excerptReference",
+        "excerptState",
+        "excerptText"
+      ],
+      "properties": {
+        "excerptSource": {
+          "$ref": "#/$defs/source"
+        },
+        "excerptReference": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "excerptState": {
+          "enum": [
+            "anchored",
+            "retained_unanchored",
+            "locator_only",
+            "reference_only"
+          ]
+        },
+        "excerptText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "excerptState": {
+                "const": "anchored"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "excerptText": {
+                "type": "string"
+              },
+              "excerptReference": {
+                "properties": {
+                  "referenceSpan": {
+                    "$ref": "#/$defs/span"
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "excerptText": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "assessmentApplication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicationOccurrence",
+        "applicationSelected",
+        "applicationObservation",
+        "applicationEvaluation",
+        "applicationComputed",
+        "applicationSkipReason"
+      ],
+      "properties": {
+        "applicationOccurrence": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "applicationSelected": {
+          "type": "boolean"
+        },
+        "applicationObservation": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "applicationEvaluation": {
+          "enum": [
+            "evaluated",
+            "not_evaluated",
+            "not_requested",
+            "not_applicable"
+          ]
+        },
+        "applicationComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "applicationSkipReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "applicationSelected": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "applicationComputed": {
+                "type": "null"
+              },
+              "applicationObservation": {
+                "type": "null"
+              },
+              "applicationEvaluation": {
+                "const": "not_applicable"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "applicationEvaluation": {
+                "enum": [
+                  "not_evaluated",
+                  "not_requested"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "applicationComputed": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "assessmentInspection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inspectionSnapshot",
+        "inspectionProjectedAssessment",
+        "inspectionAssessment",
+        "inspectionSelected",
+        "inspectionResolution",
+        "inspectionApplications",
+        "inspectionOriginalSources"
+      ],
+      "properties": {
+        "inspectionSnapshot": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "inspectionProjectedAssessment": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "inspectionAssessment": {
+          "$ref": "#/$defs/assessment"
+        },
+        "inspectionSelected": {
+          "type": "boolean"
+        },
+        "inspectionResolution": {
+          "$ref": "#/$defs/resolution"
+        },
+        "inspectionApplications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assessmentApplication"
+          }
+        },
+        "inspectionOriginalSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/originalSourceExcerpt"
+          }
+        }
+      }
     }
   }
 }

@@ -10,6 +10,7 @@ import System.Directory (createDirectoryIfMissing)
 import System.Environment (getArgs)
 import System.FilePath ((</>))
 import Cheating
+import CaseApplication (runCaseApplicationDemo)
 import Yuho.Authoring
 
 main :: IO ()
@@ -56,6 +57,7 @@ main = do
   projectionRecords <- concat <$> mapM (uncurry projectionFiles)
     [("pending-authored",authoredPending),("draft-authored",authoredDraft),
      ("satisfied",satisfiedProjection),("pending",pendingProjection),("defeated",defeated)]
+  caseRecords <- runCaseApplicationDemo
   let application = evaluationReport original
       records = [("document.json",encodeDocument document),
         ("pending-document.json",encodeDocument pendingDocument),
@@ -76,7 +78,7 @@ main = do
         ("alternative-before.projection.json",alternativeBeforeProjection),
         ("alternative-after.projection.json",alternativeAfterProjection),
         ("recovered-deception.json",encodeRecord recovered),
-        ("recovered-law-context.json",encodeRecord rootContext)] ++ projectionRecords
+        ("recovered-law-context.json",encodeRecord rootContext)] ++ projectionRecords ++ caseRecords
   case args of
     [] -> pure ()
     ["--artifacts",directory] -> do
