@@ -39,6 +39,7 @@ import ConformanceChecks (runConformanceChecks)
 import TypedFiniteChecks (runTypedFiniteChecks)
 import CorpusChecks (runCorpusChecks)
 import ReleaseV1Checks (runReleaseV1Checks)
+import AuthoringChecks (runAuthoringChecks)
 import Yuho.Core.Source (validateSpan)
 import Yuho.Core.Types (Source(..), Span(..))
 import Yuho.Kernel.Run (runLine)
@@ -51,6 +52,7 @@ main = do
       hardening = root </> "test/fixtures"
   golden frozen
   hardeningCases hardening
+  runAuthoringChecks root
   runExceptionChecks (root </> "test/exception-fixtures")
   runTypedChecks (root </> "test/typed-fixtures")
   runPenaltyChecks (root </> "test/penalty-fixtures")

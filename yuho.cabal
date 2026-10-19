@@ -22,6 +22,12 @@ library
   import: yuho-common
   hs-source-dirs: src
   exposed-modules:
+      Yuho.Authoring
+      Yuho.Authoring.Types
+      Yuho.Authoring.Codec
+      Yuho.Authoring.Validate
+      Yuho.Authoring.Compile
+      Yuho.Authoring.Report
       Yuho.Core.Types
       Yuho.Core.Source
       Yuho.CoreYuho.Types
@@ -135,8 +141,8 @@ test-suite yuho-test
   import: yuho-common
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
-  hs-source-dirs: test
+  other-modules: AuthoringChecks, Cheating, ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
+  hs-source-dirs: test examples/authoring-consumer
   build-depends:
       yuho ==1.0.0.0
     , QuickCheck ==2.18.0.0
