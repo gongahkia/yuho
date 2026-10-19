@@ -2,6 +2,7 @@
 module Yuho.Authoring
   ( module Yuho.Authoring.Types, module Yuho.Authoring.Codec
   , module Yuho.Authoring.Compile, module Yuho.Authoring.Report
+  , module Yuho.Authoring.Projection, module Yuho.Authoring.Projection.Encode
   , validateDocument, validateAnalysis
   , SuppliedStatus(..), UnresolvedReason(..)
   ) where
@@ -10,6 +11,8 @@ import Yuho.Authoring.Types
 import Yuho.Authoring.Codec
 import Yuho.Authoring.Compile
 import Yuho.Authoring.Report
+import Yuho.Authoring.Projection
+import Yuho.Authoring.Projection.Encode
 import Data.Text (Text)
 import Yuho.Authoring.Validate (validateDocument, validateBindings)
 import Yuho.SuppliedProofStatus.Types (SuppliedStatus(..), UnresolvedReason(..))

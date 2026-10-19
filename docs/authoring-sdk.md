@@ -1,4 +1,4 @@
-# Experimental graph-authoring SDK — Tranche 01
+# Experimental graph-authoring and diagram-projection SDK
 
 The `Yuho.Authoring` Haskell library accepts authored semantic graphs, independent
 case assertions, and explicitly selected application assessments. It compiles a
@@ -224,6 +224,184 @@ unchanged conclusions, missing/skipped/unresolved distinctions, malformed graphs
 and bindings, serialization, snapshots and multibyte anchors/generated offsets.
 
 Existing evaluator proofs do not establish correctness of this translator.
-Editors, rendering changes, shared-graph execution, additional backends,
+Editors, shared-graph execution, additional backends,
 evidence weighing, penalty authoring, sensitivity and broader model comparison
-remain outside this tranche.
+remain outside this SDK fragment.
+
+## Derived diagram projections — Tranche 02
+
+Import `Yuho.Authoring` for the projection operations as well as the authoring
+API. A `Projection` has a hidden constructor; `projectionData` exposes its
+inspectable records. Projection consumes authorship and observations directly,
+without converting through the legacy display graph and without running the
+compiler or evaluator:
+
+```haskell
+projectAuthored :: AuthoringDocument -> Text
+                -> Either [AuthoringDiagnostic] Projection
+projectEvaluation :: Evaluation -> Either [AuthoringDiagnostic] Projection
+projectEvaluationOn :: AuthoringDocument -> Evaluation
+                    -> Either [AuthoringDiagnostic] Projection
+projectComparison :: Evaluation -> Evaluation
+                  -> Either [AuthoringDiagnostic] ProjectionComparison
+resolveProjectedObject :: Projection -> Text -> Maybe ProjectionResolution
+encodeProjection :: Projection -> Either [AuthoringDiagnostic] ByteString
+lawOccurrenceView :: Projection -> Either [AuthoringDiagnostic] ProjectionView
+encodeProjectionLegacyJson :: Projection -> Either [AuthoringDiagnostic] ByteString
+encodeProjectionLegacyXml :: Projection -> Either [AuthoringDiagnostic] ByteString
+encodeProjectionSvg :: Projection -> Either [AuthoringDiagnostic] ByteString
+```
+
+`projectAuthored document analysisId` checks structure, references and binding
+ambiguity, but accepts missing assessments. These are retained as `AMISSING`
+diagnostics and open inputs. Selected unresolved assessments are separate open
+inputs. No computed statuses are manufactured: occurrence evaluation is
+`not_requested`. Backend compilation budgets do not determine whether an
+otherwise supported draft can be projected. The projection is bounded to 1024
+requirement occurrences; traversal overflow is an error rather than truncation.
+Structurally ambiguous or invalid documents return object-linked diagnostics.
+
+`projectEvaluation` uses the opaque evaluation's exact immutable snapshot and
+existing application report. It retains compiler identities, generated sources
+and generated spans without recompilation. `projectEvaluationOn` additionally
+requires record equality with a separately supplied document; changes to reasons,
+sources, alternatives, drafts or presentation reject the attachment with `PSTALE`.
+Use the original snapshot to view an older result alongside newer work. None of
+these APIs invokes evaluation implicitly.
+
+### Complete output and identity
+
+The complete derived format is `yuho.analysis-projection/v0.1-experimental`,
+specified by the [projection JSON schema](../schema/analysis-projection-v0.1-experimental.schema.json).
+It embeds the selected analysis, entire authored snapshot, optional application
+report and compiler mappings, projected objects and relationships, diagnostics,
+and open-input inventory. It is output, not a complete authoring import format.
+Use `encodeDocument`/`decodeDocument` for authorship. A legacy diagram cannot be
+imported as a lossless authored analysis.
+
+The identity layers are explicit:
+
+| Layer | Identity and alignment |
+| --- | --- |
+| Authored object | Original ID retained in the snapshot and `originAuthoredObjects`; `objectProjectionId` gives its projected handle. Law/descriptive relationships also have object handles so annotations can reference them. |
+| Structural occurrence | Law fingerprint, selected target, actor/context, authored rule/node and path of authored edges. Assessment selection and generated kernel numbering do not enter this identity. |
+| Supplied assessment | Independently projected authored object; `selected` and `bindingState` distinguish selected from retained alternatives. |
+| Run observation | Snapshot, profile, category, authored object/path, original kernel and branch IDs. An `observes` link attaches it to a stable occurrence or exception relationship handle. |
+| Generated material | Explicit `projection_generated` origin, authored origins, and separate compiler provenance records. Generated source spans are never original anchors. |
+
+Projected IDs are deterministic SHA-256 handles with category prefixes. Distinct
+original IDs such as `f:deception` and `f/deception` do not collapse through XML
+sanitization. SVG DOM IDs prefix these safe handles with `node-` or `edge-`.
+Every encoder validates uniqueness, origins and edge endpoints before encoding;
+it cannot silently omit a connection to a missing endpoint. Distinct authored
+relationships retain distinct IDs even with identical endpoints and labels.
+Hashes use the pinned encoding configuration, not a cross-version canonicalization
+promise. The projection API and all three new format versions are experimental.
+
+Each edge separates its `kind` from `semantics`: `law_structure`,
+`occurrence_structure`, `assessment_selection`, `assessment_binding`,
+`provenance`, `descriptive`, `observation`, `generated_provenance`, or `projection`.
+Provenance is not evidence aggregation; chronology/support/challenge remain
+descriptive. Selected occurrence nodes reference definitions via `instance_of`.
+Sources, original optional anchors, citations, assessment reasons/issuers,
+presentation and unfinished annotations remain recoverable through the snapshot.
+`resolveProjectedObject` joins an emitted node/edge to applicable law objects,
+selected assessment, referenced assertions, original sources/anchors, related
+descriptive material and generated mappings in separate fields.
+
+### Supplied, computed and evaluation information
+
+`projectedNodeBinding` retains the assessment ID, supplied classification and
+reason. `projectedNodeComputed`, `projectedNodeEvaluation`,
+`projectedNodeSkipReason` and `projectedNodeBranchReason` are independent fields.
+Groups have dependencies and computed observations, without supplied assessments.
+
+| View/state | Binding | Computed | Evaluation |
+| --- | --- | --- | --- |
+| Missing draft input | `missing` | absent | `not_requested` |
+| Authored unresolved input | selected `unresolved(not_determined)` | absent | `not_requested` |
+| Evaluated unresolved input | same supplied classification/reason | `unresolved` | `evaluated` |
+| Evaluated `not_proved` input | selected `not_proved` | `not_satisfied` | `evaluated` |
+| Skipped exception input | selected assessment retained | absent | `not_evaluated`, with skip reason |
+
+In the pending cheating example, `f:unsoundness-time` remains supplied
+`not_proved`, with no computed value and `not_evaluated`: main requirements were
+unresolved. An evaluated, satisfied guard instead defeats the main rule. Neither
+presentation nor projection changes those evaluator policies or establishes
+factual falsity, evidence strength, legal completeness or a proof standard.
+
+### Rendered views and bindings
+
+The reference exports show **only the selected law occurrence tree, including
+its exception guard**. Assertions, assessment alternatives, sources, other law
+material and annotations remain in the complete projection. The companion
+`yuho.projection-view/v0.1-experimental` record enumerates included and omitted
+node/edge IDs, SVG DOM bindings, and each legacy edge's array index and rich edge
+ID. These are explicit view omissions, not missing projected context. The SVG
+embeds this view record in metadata and the occurrence records in node titles.
+
+JSON and XML reference views reuse the unchanged `yuho.semantic-graph/v0.1`
+encoders. That legacy contract has neither separate state fields nor edge IDs;
+its `status` is left absent to avoid conflating supplied and computed values.
+Use the **complete projection plus view bindings** as the machine-readable
+contract, rather than relying on a rendered label. An isolated SVG renderer for
+the new view prints supplied classification, computed value and evaluation
+state in separate columns, with explicit skip/branch explanations. Its readable
+labels may abbreviate descriptive titles; full IDs and text remain in the
+complete output. Existing legacy entry points and rendering are unchanged.
+
+### Projecting comparisons
+
+`projectComparison` calls `compareAnalyses` and attaches its rows to projected
+occurrences/assessment objects. It does not introduce a comparison engine or
+infer causal counterfactuals. Each row retains both original run observation
+identities and a stable `observationChangeAlignment` handle. It distinguishes a
+changed computed field (including becoming absent) from a changed computed value
+when both runs evaluated the object, evaluation-state changes and reason changes.
+Metadata-only edits can change assessment authorship without changing computed
+observations. Unchanged rows remain addressable even though their run IDs differ.
+
+The consumer's proved-to-pending transition has **one assessment change, 20
+changed observations and six unchanged**. Four main requirements and the main
+rule change computed value (five). Thirteen guard requirements, the guard rule
+and the exception attachment become unevaluated (15); their old computed values
+are withdrawn. Two rule branch reasons also change; these are overlapping
+attributes of those same rows. This is propagation through the represented
+structure, not twenty independently changed facts. Another consumer scenario
+keeps both alternatives satisfied, then changes the property fault to
+`not_proved`: the selected conclusion remains satisfied via the other route.
+
+### Consumer artifacts and verification
+
+The consumer now projects pending authorship and a missing-assessment draft
+before evaluating, projects satisfied/pending/defeated runs, maps comparisons,
+and recovers the deception assessment's two assertions and retained draft
+annotation. Run it outside the checkout with an explicit output path:
+
+```sh
+cabal v2-build all --offline -j1 --with-compiler=ghc-9.8.4
+consumer_bin=$(cabal list-bin exe:yuho-authoring-consumer --offline --with-compiler=ghc-9.8.4)
+cd /tmp
+"$consumer_bin" --artifacts /tmp/yuho-authoring-tranche02
+```
+
+Each of `pending-authored`, `draft-authored`, `satisfied`, `pending` and `defeated`
+produces `.projection.json` (complete), `.view-bindings.json`, `.view.json`,
+`.view.xml` and `.svg`. `comparison-projection.json` and
+`alternative-route.comparison-projection.json` retain projected comparison
+bindings; `comparison-excerpt.json` is a consumer-selected three-row excerpt with
+full projected IDs, original authored IDs and supplied/computed/evaluation states.
+Recovery records demonstrate metadata access. The previously documented
+native test, protocol and Python consumer commands apply. The consumer checker
+validates complete outputs and companion artifacts against the schema's local
+`$defs`, parses XML/SVG, verifies every rendered connection/DOM binding, checks
+the supplied/computed/skip labels and audits the comparison counts.
+
+Native projection tests additionally cover missing drafts, a bound tree exceeding
+the backend compilation budget, stale snapshot rejection, exception defeat,
+collision-prone original IDs, parallel relationships, bad emitted endpoints,
+multibyte original anchors versus generated spans, stable occurrence alignment,
+and metadata-only comparison changes. Projection supports the existing bounded
+tree fragment; no renderer layout guarantee is made for arbitrary deep or very
+long labelled documents. Interactive layout, authoring imports from projections,
+shared-graph execution and additional diagram views remain deferred.

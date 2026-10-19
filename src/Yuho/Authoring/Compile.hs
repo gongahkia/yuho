@@ -12,6 +12,7 @@ import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Encoding
 import Yuho.Authoring.Codec (encodeRecord)
 import Yuho.Authoring.Types
+import Yuho.Authoring.Snapshot (makeSnapshot)
 import Yuho.Authoring.Validate
 import qualified Yuho.Core.Types as Core
 import Yuho.Protocol.Decode (sha256Text)
@@ -152,11 +153,7 @@ compileAnalysis doc key = do
           | r <- rules, generatedId <- [ruleIdFor r,branchIdFor r]]
         ++ [SourceMapping (guardId e) (generatedSourceId lawSource) whole
           [edgeId e,edgeFrom e,edgeTo e] [] | e <- guards]
-      lawSourceIds = nub [referenceSource ref | n <- lawNodes law, ref <- nodeSources n]
-      lawFingerprint = sha256Text (encodeRecord (law,
-        [s | s <- documentSources doc, sourceId s `elem` lawSourceIds]))
-      snapshot = Snapshot (sha256Text (encodeRecord (doc,analysis,evaluatorProfile))) lawFingerprint
-        evaluatorProfile analysis doc
+      snapshot = makeSnapshot doc analysis
       kernelFailure d = Left [issue ("AKERNEL/" <> Core.diagCode d) "/documentAnalyses"
         (nub (key : concat [identityAuthoredIds i | i <- identities,
           identityKernelId i `elem` (Text.splitOn "/" (Core.diagPath d) ++ map snd (Core.diagParameters d))]))
