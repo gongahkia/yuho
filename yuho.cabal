@@ -21,7 +21,7 @@ common yuho-common
 library
   import: yuho-common
   hs-source-dirs: src
-  other-modules: Yuho.Authoring.Projection.Render
+  other-modules: Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON
   exposed-modules:
       Yuho.Authoring
       Yuho.Authoring.Types
@@ -158,7 +158,7 @@ test-suite yuho-test
   import: yuho-common
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: TypedAuthoringChecks, TypedExamples, IndependentLinkedRegressions, LinkedDefinitionChecks, LinkedExample, InteractionChecks, SourceAnchorChecks, SourceAnchors, EditingChecks, Editing, Acknowledgements, HurtChecks, Hurt, CaseViewChecks, ProjectionChecks, AuthoringChecks, Cheating, CaseApplication, ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
+  other-modules: TypedBoundaryChecks, TypedAuthoringChecks, TypedExamples, IndependentLinkedRegressions, LinkedDefinitionChecks, LinkedExample, InteractionChecks, SourceAnchorChecks, SourceAnchors, EditingChecks, Editing, Acknowledgements, HurtChecks, Hurt, CaseViewChecks, ProjectionChecks, AuthoringChecks, Cheating, CaseApplication, ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
   hs-source-dirs: test examples/authoring-consumer examples/linked-definitions-consumer examples/typed-authoring-consumer
   build-depends:
       yuho ==1.0.0.0

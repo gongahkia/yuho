@@ -45,6 +45,7 @@ import CaseViewChecks (runCaseViewChecks)
 import HurtChecks (runHurtChecks)
 import EditingChecks (runEditingChecks)
 import SourceAnchorChecks (runSourceAnchorChecks)
+import TypedBoundaryChecks (runTypedBoundaryChecks)
 import TypedAuthoringChecks (runTypedAuthoringChecks)
 import IndependentLinkedRegressions (runIndependentLinkedRegressions)
 import LinkedDefinitionChecks (runLinkedDefinitionChecks)
@@ -71,6 +72,7 @@ main = do
   runLinkedDefinitionChecks root
   runIndependentLinkedRegressions
   runTypedAuthoringChecks root
+  runTypedBoundaryChecks root
   runExceptionChecks (root </> "test/exception-fixtures")
   runTypedChecks (root </> "test/typed-fixtures")
   runPenaltyChecks (root </> "test/penalty-fixtures")

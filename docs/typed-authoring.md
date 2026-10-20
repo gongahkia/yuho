@@ -10,6 +10,24 @@ The typed document is a separate closed record and has its own decoder. `decodeD
 
 Each selected `TypedAnalysis` names one unparameterised establish rule, one matching proposition, concrete actor/context scope, explicitly selected assessment IDs and scalar-value IDs. Actor must identify a declared concrete entity. Unrelated draft bindings are not required for a selected analysis. Missing selected input is an error (`TMISSING`), not an inferred false or unresolved value. `projectTypedAuthored` can display a structurally valid incomplete draft, without compilation or evaluation, and returns its open-input inventory.
 
+## Closed JSON constructor fields
+
+Closure applies inside nested tagged constructors as well as ordinary records.
+`GroundApplication`, `IntegerComparison`, `ExactInteger`, `UnknownInteger` and
+`TechnicalUnresolved` admit exactly `tag` and `contents`. Nullary `TypedAll`,
+`TypedAny`, `TechnicalTrue` and `TechnicalFalse` admit only `tag`; even an extra
+`contents` field is rejected. A misspelling such as `negated` on
+`GroundApplication` is an error, not an ignored extension or a negation operation.
+The public `decodeTypedDocument` returns `TJSON` with the nested JSON path and
+unexpected field in its diagnostic message. Missing required contents, incorrect
+payload types and unsupported constructor tags remain distinct decode errors.
+The v0.3 schemas already close these objects with `additionalProperties: false`.
+
+`presentationProperties` is the documented open string-to-string map: arbitrary
+presentation keys remain permitted there. Opening that map does not open its
+containing record or any executable constructor. The v0.1/v0.2 decoders retain
+their existing contracts.
+
 ## Declarations, tuples and supplied information
 
 `TypedEntityType` declares a nominal type; `TypedEntity` names a concrete entity of that type. `TypedPredicate` contains one to four ordered `TypedArgument` roles. Roles are displayable names with nominal types; array positions determine application argument positions. `TypedApplication` retains one `GroundTuple` (predicate ID and concrete entity IDs).
@@ -64,6 +82,24 @@ Here `require = either (fail . show) pure` in an `IO` consumer. Original anchors
 ## Projection and exports
 
 `projectTypedAuthored`, `projectTypedEvaluation`, `inspectTypedExpression`, `typedReferenceView`, and `recoverTypedSource` compose the headless workflow. Focus by authored expression ID or projected occurrence ID; foreign/unselected occurrence targets fail with object-linked diagnostics. `TypedExpressionFocus id` selects the occurrence, application/operands, selected supplied information, concrete argument entities and immediate assertions. `TypedRuleFocus` includes all selected expression dependencies and the rule/proposition. Original source IDs are an explicit third argument for expansion; default views do not expand source documents.
+
+Reference arrays preserve their authored entries. Repeating an assertion ID in
+one assessment's `typedAssertionRefs`, or a target in one annotation's
+`annotationAbout`, is permitted non-executable material. Projection emits one
+relationship per entry with deterministic, distinct IDs; it does not duplicate
+the target object, discard entries, or calculate additional evidential strength.
+The first occurrence keeps its existing edge ID. Later occurrences of the same
+owner/target pair receive an occurrence discriminator. IDs for documents without
+these repetitions remain unchanged. Identical source references within one
+object already use positional edge identities, including distinct original
+anchors; shared sources across separate objects remain supported.
+
+This rule does not admit executable structural sharing, duplicate object IDs or
+ambiguous active assessment selections. Those remain validation errors. For
+otherwise valid documents within the documented limits, these reference arrays
+can progress through authored/evaluated projection without a late identity
+collision. Focused views retain or explicitly omit each distinct edge through
+their bindings; their separate 64-object/128-connection limits still apply.
 
 The full contract is `yuho.typed-analysis-projection/v0.3-experimental`, with [authoring schema](../schema/authoring-v0.3-experimental.schema.json) and [projection schema](../schema/typed-analysis-projection-v0.3-experimental.schema.json). It retains the complete typed snapshot, original declarations/tuples/values/sources, typed records, structural operands, ordered argument edges, selected assessments, real observations and mappings. `typedNodeObservation` is absent on assertions, sources, applications, values and assessments. Computed expression information belongs to occurrences and observations.
 

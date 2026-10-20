@@ -6,6 +6,7 @@ module Yuho.Authoring.Typed.Types where
 import Data.Aeson
 import Data.Text (Text)
 import GHC.Generics (Generic)
+import Yuho.Authoring.Typed.JSON (closedTaggedJSON)
 import Yuho.Authoring.Types
 
 typedAuthoringFormat, typedEvaluatorProfile, typedProjectionFormat :: Text
@@ -133,15 +134,20 @@ instance FromJSON TypedApplication where parseJSON = genericParseJSON jsonOption
 instance ToJSON TypedScalar where toJSON = genericToJSON jsonOptions
 instance FromJSON TypedScalar where parseJSON = genericParseJSON jsonOptions
 instance ToJSON ExactScalar where toJSON = genericToJSON jsonOptions
-instance FromJSON ExactScalar where parseJSON = genericParseJSON jsonOptions
+instance FromJSON ExactScalar where
+  parseJSON = closedTaggedJSON "ExactScalar" [("ExactInteger",True),("UnknownInteger",True)] (genericParseJSON jsonOptions)
 instance ToJSON TechnicalClassification where toJSON = genericToJSON jsonOptions
-instance FromJSON TechnicalClassification where parseJSON = genericParseJSON jsonOptions
+instance FromJSON TechnicalClassification where
+  parseJSON = closedTaggedJSON "TechnicalClassification"
+    [("TechnicalTrue",False),("TechnicalFalse",False),("TechnicalUnresolved",True)] (genericParseJSON jsonOptions)
 instance ToJSON TypedAssessment where toJSON = genericToJSON jsonOptions
 instance FromJSON TypedAssessment where parseJSON = genericParseJSON jsonOptions
 instance ToJSON TypedValue where toJSON = genericToJSON jsonOptions
 instance FromJSON TypedValue where parseJSON = genericParseJSON jsonOptions
 instance ToJSON TypedForm where toJSON = genericToJSON jsonOptions
-instance FromJSON TypedForm where parseJSON = genericParseJSON jsonOptions
+instance FromJSON TypedForm where
+  parseJSON = closedTaggedJSON "TypedForm"
+    [("GroundApplication",True),("IntegerComparison",True),("TypedAll",False),("TypedAny",False)] (genericParseJSON jsonOptions)
 instance ToJSON TypedExpression where toJSON = genericToJSON jsonOptions
 instance FromJSON TypedExpression where parseJSON = genericParseJSON jsonOptions
 instance ToJSON TypedLink where toJSON = genericToJSON jsonOptions

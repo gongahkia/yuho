@@ -9,7 +9,7 @@ module Yuho.Authoring.Typed.Projection
 
 import Data.Aeson (ToJSON(..), Value, genericToJSON)
 import qualified Data.ByteString as BS
-import Data.List (find, nub, sort)
+import Data.List (find, mapAccumL, nub, sort)
 import qualified Data.Map.Strict as Map
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -118,6 +118,13 @@ buildProjection snapshot report mappings validation = do
       edge kind from to originals position role anchor discriminator = TypedProjectedEdge
         (projectionIdentity "typed-edge" (kind,from,to,discriminator)) from to kind originals position role anchor
       ref kind owner target discriminator = edge kind (obj owner) (obj target) [owner,target] Nothing Nothing Nothing discriminator
+      -- Reference arrays are authored provenance, not set-valued evidence.
+      -- Keep the legacy ID for the first entry; disambiguate later occurrences
+      -- of the same target without changing any previously successful output.
+      references kind owner = snd . mapAccumL (\seen target ->
+        let occurrence = Map.findWithDefault (0 :: Int) target seen
+            suffix = if occurrence == 0 then [] else ["reference-occurrence",T.pack (show occurrence)]
+        in (Map.insert target (occurrence+1) seen,ref kind owner target ([owner,target] ++ suffix))) Map.empty
       direct = [edge (typedLinkKind e) (obj (typedLinkFrom e)) (obj (typedLinkTo e)) [typedLinkId e]
           Nothing Nothing Nothing [typedLinkId e] | e <- typedLinks d]
       instanceEdges = [edge "instance_of" (occurrenceId (occ x path)) (obj (typedId (expressionMeta x)))
@@ -146,7 +153,7 @@ buildProjection snapshot report mappings validation = do
       operands = concat [[ref "left_operand" key l [key,l],ref "right_operand" key r [key,r]]
         | x <- typedExpressions d, let key = typedId (expressionMeta x), IntegerComparison _ l r <- [expressionForm x]]
       assessmentEdges = concat [[ref "assessment_tuple" key (assessedApplication x) [key]]
-          ++ [ref "assessment_assertion" key target [key,target] | target <- typedAssertionRefs x]
+          ++ references "assessment_assertion" key (typedAssertionRefs x)
         | x <- typedAssessments d, let key = typedId (typedAssessmentMeta x)]
       selected = [edge "selected_assessment" (obj (typedId (typedAssessmentMeta x))) (occurrenceId (occ e path))
           [typedId (typedAssessmentMeta x),app] Nothing Nothing Nothing path
@@ -162,8 +169,9 @@ buildProjection snapshot report mappings validation = do
       observationEdges = [edge "observes" (typedObservationId o)
         (maybe (obj (typedObservedObject o)) occurrenceId (typedObservationOccurrence o)) [typedObservedObject o]
         Nothing Nothing Nothing [typedObservationId o] | o <- observations]
-      annotations = [ref "annotation_about" (annotationId x) target [annotationId x,target]
-        | x <- typedAnnotations d, target <- annotationAbout x, any ((== target) . typedNodeAuthoredId) ordinary]
+      annotations = concat [references "annotation_about" (annotationId x)
+        [target | target <- annotationAbout x, any ((== target) . typedNodeAuthoredId) ordinary]
+        | x <- typedAnnotations d]
       value = TypedProjectionData typedProjectionFormat (projectionIdentity "typed-projection" (typedSnapshotId snapshot,maybe False (const True) report))
         (maybe "authored" (const "evaluated") report) snapshot report mappings (ordinary ++ occurrenceNodes ++ observationNodes)
         (direct ++ instanceEdges ++ occurrenceEdges ++ appEdges ++ argumentEdges ++ nominal ++ operands ++ assessmentEdges

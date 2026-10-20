@@ -165,7 +165,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "Ordered annotation target references. Repeated IDs are retained as distinct projected relationships; these links are non-executable."
         },
         "annotationText": {
           "type": "string"
@@ -575,7 +576,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "Ordered provenance references. Repeated IDs are permitted and project as distinct non-executable relationships, without duplicating assertion identities or aggregating evidence."
         }
       }
     },
