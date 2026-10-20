@@ -14,12 +14,14 @@ import CaseApplication (runCaseApplicationDemo)
 import Hurt (runHurtConsumer)
 import Editing (runEditingConsumer)
 import SourceAnchors (runSourceAnchorsConsumer)
+import InteractionDemo (runInteractionConsumer)
 import Yuho.Authoring
 
 main :: IO ()
 main = do
   args <- getArgs
   case args of
+    "--interact":rest -> runInteractionConsumer rest
     "--anchors-demo":rest -> runSourceAnchorsConsumer rest
     "--edit-demo":rest -> runEditingConsumer rest
     "--model":"hurt":rest -> runHurtConsumer rest

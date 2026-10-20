@@ -7,6 +7,7 @@ module Yuho.Authoring
   , module Yuho.Authoring.Projection.ViewEncode
   , module Yuho.Authoring.Edit
   , module Yuho.Authoring.Source
+  , module Yuho.Authoring.Interaction
   , validateDocument, validateAnalysis
   , SuppliedStatus(..), UnresolvedReason(..)
   ) where
@@ -14,6 +15,7 @@ module Yuho.Authoring
 import Yuho.Authoring.Types
 import Yuho.Authoring.Edit
 import Yuho.Authoring.Source
+import Yuho.Authoring.Interaction
 import Yuho.Authoring.Codec
 import Yuho.Authoring.Compile
 import Yuho.Authoring.Report

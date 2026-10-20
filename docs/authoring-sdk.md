@@ -6,14 +6,302 @@ bounded fragment to the unchanged `SuppliedProofStatus-v1` backend and returns
 object-linked application reports and scenario comparisons. No CLI, renderer,
 research-directory lookup, or lexer-token construction is required.
 
-Start with the [tested Haskell quickstart](authoring-quickstart.md) for one
-recommended setup and lifecycle. This guide is the detailed contract reference.
+## Recommended reading path
+
+1. Start with the [tested Haskell quickstart](authoring-quickstart.md): local Cabal
+   dependency, pinned compiler, and a complete load → anchor → select → validate →
+   evaluate → inspect/export → edit → save/reload workflow.
+2. Use the [current API map](#current-api-map) below to find operations and record
+   accessors, then the [export recipe](#export-recipe) for named output files.
+   For a cohesive diagram interaction, follow [focus, reveal and revise](#focus-reveal-and-revise).
+3. Consult this guide's detailed contracts as needed: [authored fragment](#supported-graph-and-authored-information),
+   [projection identities and snapshots](#derived-diagram-projections--tranche-02),
+   [case/application views](#case-information-and-focused-application--tranche-03), and
+   [validated source anchors](#validated-original-source-anchors--tranche-06).
+
+The tranche headings retain implementation history and detailed contracts; they
+are not a required sequential tutorial. Manual original-source coordinate
+construction has been superseded by the checked anchor constructors. Repeated
+export calls are handled in the local example below, without a new public SDK
+export abstraction. The foundational experimental SDK implementation phase is closed.
 
 Both the API and `yuho.authoring/v0.1-experimental` JSON format are experimental.
 There is no migration or long-term compatibility promise. Unsupported format
 versions are rejected at `/documentFormat`. The
 [JSON schema](../schema/authoring-v0.1-experimental.schema.json) specifies the
 supported serialized fields; semantic validation is performed by the SDK.
+
+## Current API map
+
+Import **`Yuho.Authoring`** for all entries below. The public record accessors are
+available from that facade; no implementation imports or lexer tokens are needed.
+
+| Caller task | Operations and accessors |
+| --- | --- |
+| Construct or load editable input | `AuthoringDocument`, `LawDefinition`, `LawNode`, `LawEdge`, `CaseAssertion`, `Assessment`, `Analysis`; `decodeDocument` / `encodeDocument` |
+| Attach original sources | `SourceRecord`, `sourceAnchorCodePoints` / `sourceAnchorBytes`, `SourceRef`; `sourceText`, `assertionSources`, `assessmentSources` |
+| Select explicitly and edit | `selectAssessment`, `editLawNode`, `editLawEdge`, `editCaseAssertion`; `documentAnalyses`, `analysisId`, `analysisAssessments`, `assessmentId`; add retained alternatives by updating `documentAssessments` with explicit distinct IDs, then validate |
+| Check draft/readiness | `validateDocument`, `validateAnalysis`; `documentValid`, `analysisReady`, `validationDiagnostics`, `openInputs`; diagnostic `diagnosticCode`, `diagnosticObjects`, `diagnosticLocation` |
+| Compile and evaluate | `compileAnalysis`, `evaluateAnalysis`; `compiledSnapshot`, `compiledRequirements`, `evaluationCompilation`, `evaluationReport`, `evaluationSnapshot` |
+| Inspect selected input results | `reportRequirements`; `observationNode`, `observationRule`, `observationOccurrence`, `observationAssessment`; `assessmentClassification`, `assessmentReason`; `observationComputed`, `observationEvaluation`, `observationSkipReason` |
+| Inspect conclusions and guard behaviour | `reportConclusion`, `reportRules`, `reportExceptions`; `ruleBranchReason`, `exceptionEvaluation`, `exceptionComputed`, `exceptionSkipReason` |
+| Retain context and project | `snapshotId`, `snapshotDocument`, `snapshotAnalysis`; `projectAuthored`, `projectEvaluation`, `projectEvaluationOn`, `projectionData`, `projectionSnapshot` |
+| Recover provenance | `inspectAssessment`, `inspectionAssessment`, `inspectionSelected`, `inspectionApplications`, `inspectionResolution`, `resolvedAssertions`; `resolveProjectedObject`, `recoverOriginalSource`, `excerptText` |
+| Compare compatible runs | `compareAnalyses`, `projectComparison`; `comparisonAssessments`, `comparisonChanged`, `comparisonUnchanged`, `comparisonConclusionChanged` |
+| Select and export a view | `lawOccurrenceView`, `caseView`, `applicationView`; `viewIncludedNodes`, `viewOmittedNodes`, `viewIncludedEdges`, `viewOmittedEdges`, `viewNodeBindings`, `viewEdgeBindings`; encoders below |
+| Explain a requirement without graph joins | `focusRequirement`, `AuthoredRequirement`, `RequirementOccurrence`; `explanationSelected`, `explanationAlternatives`, `explanationDependencies`, `explanationAncestors`, `explanationRules`, `explanationExceptions`; `explanationView`, `defaultExplanationOptions` |
+
+An authored input definition, its structural occurrence, a selected assessment,
+and a run observation have separate identities. Supplied classification,
+selection, computed consequence and evaluation/skip state are separate fields.
+`observationAssessment` gives the selected assessment for that occurrence; array
+order among `documentAssessments` does not select anything. A selected guard can
+still be skipped. Narrative edits do not revise supplied classifications.
+Law-record edits can make comparisons incompatible, even when only a label changed.
+
+## Export recipe
+
+These outputs serve different purposes; keep their filenames distinct:
+
+| Artifact | API | Role |
+| --- | --- | --- |
+| `pending.document.json` | `encodeDocument` | Editable authored interchange; reload with `decodeDocument`. |
+| `pending.application-report.json` | `encodeRecord (evaluationReport result)` | Object-linked results, not a diagram-view JSON file. |
+| `pending.projection.json` | `encodeProjection` | Complete derived snapshot, authorship, observations and mappings. |
+| `pending.law.bindings.json`, `pending.case.bindings.json`, `pending.application.bindings.json` | `encodeRecord view` | Included/omitted objects, rendered IDs and edge-index mappings for that particular view. |
+| `pending.law.view.json`, `.view.xml`, `.svg` | `encodeProjectionLegacyJson`, `encodeProjectionLegacyXml`, `encodeProjectionSvg` | Dedicated law-occurrence reference exports, including the represented guard. |
+| `pending.case.view.json`, `pending.application.view.json` (and `.view.xml`, `.svg`) | `encodeViewJson`, `encodeViewXml`, `encodeViewSvg` | Generic encoders for an explicitly constructed case or application view. |
+
+The JSON/XML views use the legacy semantic-graph format, whose single status
+field cannot carry the complete state distinctions. The complete projection and
+bindings supply that contract. SVG is a readable reference view. None is a
+lossless substitute for the authored document. Original source anchors and
+generated kernel spans stay separate in the complete projection.
+
+Here is a **caller-local** recipe using only the public facade. It consumes one
+existing evaluation; projecting and exporting do not rerun the evaluator. The
+independent [hurt consumer](../examples/authoring-consumer/Hurt.hs) uses the same
+two encoder paths in its local `exportLaw` / `exportView` helpers.
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+module ExportRecipe (exportRun) where
+
+import Control.Monad (forM_, unless)
+import qualified Data.ByteString as BS
+import System.Directory (createDirectoryIfMissing)
+import System.FilePath (takeDirectory)
+import Yuho.Authoring
+
+require :: Show e => Either e a -> IO a
+require = either (fail . show) pure
+
+exportRun :: FilePath -> Evaluation -> ApplicationFocus -> IO ()
+exportRun stem result focus = do
+  createDirectoryIfMissing True (takeDirectory stem)
+  let snapshot = evaluationSnapshot result
+  BS.writeFile (stem ++ ".document.json") (encodeDocument (snapshotDocument snapshot))
+  BS.writeFile (stem ++ ".application-report.json") (encodeRecord (evaluationReport result))
+  p <- require (projectEvaluation result)
+  require (encodeProjection p) >>= BS.writeFile (stem ++ ".projection.json")
+  law <- require (lawOccurrenceView p)
+  cases <- require (caseView p)
+  application <- require (applicationView p focus)
+  let writeView name view encodings = do
+        unless (null (validateProjectionView p view)) (fail "invalid view bindings")
+        BS.writeFile (stem ++ "." ++ name ++ ".bindings.json") (encodeRecord view)
+        forM_ (zip ["view.json", "view.xml", "svg"] encodings) $ \(suffix, bytes) ->
+          require bytes >>= BS.writeFile (stem ++ "." ++ name ++ "." ++ suffix)
+  writeView "law" law
+    [encodeProjectionLegacyJson p, encodeProjectionLegacyXml p, encodeProjectionSvg p]
+  writeView "case" cases
+    [encodeViewJson p cases, encodeViewXml p cases, encodeViewSvg p cases]
+  writeView "application" application
+    [encodeViewJson p application, encodeViewXml p application, encodeViewSvg p application]
+```
+
+### Two application questions from the same result
+
+For the hurt scenario `05_offence_causation_unresolved`, resolve the selected
+causation assessment from the **actual report**, checking that there is exactly
+one occurrence in this bounded model. A caller with several occurrences must
+also disambiguate by `observationRule` / `observationOccurrence`.
+
+```haskell
+let inputId = "f:hurt-caused-by-act"
+selected <- case [r | r <- reportRequirements (evaluationReport result),
+                     observationNode r == inputId] of
+  [r] -> maybe (fail "missing selected assessment") pure (observationAssessment r)
+  _ -> fail "expected exactly one causation occurrence"
+exportRun "out/pending-selected" result (FocusAssessments [assessmentId selected])
+exportRun "out/pending-input" result (FocusInput inputId)
+```
+
+`FocusAssessments` answers “why this supplied assessment?” with its cited
+assertions/sources, legal target and associated selected-run observation.
+`FocusInput` answers “what assessments were retained for this input?” and adds
+the unselected alternatives in the analysis scope. Alternatives keep their own
+supplied classifications and receive no selected-run computation. Both exports
+retain the same complete projection and have separate omission bindings. A
+provenance edge does not mean that case material automatically proves an input.
+Assertion-card assessment-link counts describe the whole document/current
+analysis, not just the assessments included in this focus.
+
+Generate the existing consumer's two views with the pinned setup, then run from
+outside the checkout (replace the output directory if desired):
+
+```sh
+cabal v2-build all --offline -j1 --with-compiler=ghc-9.8.4
+consumer_bin=$(cabal list-bin exe:yuho-authoring-consumer --offline --with-compiler=ghc-9.8.4)
+cd /tmp
+"$consumer_bin" --model hurt --artifacts "$HOME/Downloads/yuho-review/consumer-trial-follow-up/hurt"
+```
+
+`hurt-05-selected-application.svg` explains the report-selected assessment;
+`hurt-05-application.svg` includes the retained alternatives. Their complete
+projections, JSON/XML views and `*.view-bindings.json` companions are under
+`data/`. Convert either SVG with `rsvg-convert --output FILE.png FILE.svg`.
+The separate `data/hurt-05_offence_causation_unresolved.application.json` is an
+evaluation report, while `data/hurt-05-application.view.json` is a diagram view.
+Shared provenance can still make the gutter and numbered legend dense; choose
+the focus for the question, rather than treating fewer objects as a readability guarantee.
+
+## Focus, reveal and revise
+
+`Yuho.Authoring` re-exports the small `Yuho.Authoring.Interaction` adapter:
+
+```haskell
+focusRequirement :: Projection -> RequirementFocus
+                 -> Either [AuthoringDiagnostic] RequirementExplanation
+explanationView :: Projection -> RequirementFocus -> ExplanationOptions
+                -> Either [AuthoringDiagnostic] ProjectionView
+```
+
+`AuthoredRequirement inputOrGroupId` resolves within the projection's selected
+analysis and actor/context scope. `RequirementOccurrence projectedOccurrenceId`
+uses its structural handle; a definition handle or run-observation ID is rejected.
+Unknown/out-of-scope focus requests return `IFOCUS` with the request and analysis
+IDs. The adapter supports inputs, all/any groups and rules, including identifiable
+drafts projected before bindings are complete. It never compiles or evaluates.
+
+The explanation joins the focused `LawNode`, definition handle, occurrence and
+optional run observation. It retains citation/source references, the selected
+`AssessmentContext`, compatible unselected alternatives, immediate dependencies,
+parents and ancestor connections with their original law-edge records. It also
+returns the existing selected-analysis rule and exception observations. Exception
+attachments stay typed attachments, not extra conjunctive requirements; structural
+ancestry is not a claim of causal influence. A group has child dependencies and
+computed information, without a supplied assessment.
+
+`contextAssessment` preserves classification, complete reason, issuer, origin,
+basis and scope. `contextAssertions` and `contextAssertionLinks` provide case
+material and reverse links to its assessments; cross-context provenance is
+retained. `contextApplications` distinguishes selection from actual evaluation.
+Alternatives retain their supplied classifications and have no attributed run
+observation or computed value. Missing bindings, selected unresolved assessments,
+evaluated `not_proved`, and selected-but-skipped guards remain distinct.
+
+`contextSourceReferences` / `explanationSourceReferences` contain original
+references, not expanded source documents. Use `recoverOriginalSource` with the
+same projection to reveal an explicitly chosen reference. It returns the retained
+source and an excerpt only for a valid original anchor. Locator-only and unanchored
+references remain so; no URL is fetched and no source reliability is inferred.
+Generated kernel mappings remain separately accessible in the complete projection.
+
+This is a compact sequence over the supplied section 441 example (in an `IO`
+consumer, `require = either (fail . show) pure`):
+
+```haskell
+p <- require (projectEvaluation original)
+let focus = AuthoredRequirement "remain:unlawful"
+explanation <- require (focusRequirement p focus)
+view <- require (explanationView p focus defaultExplanationOptions)
+-- Inspect contextAssessment / contextAssertions / contextApplications in
+-- explanationSelected; list explanationAlternatives without selecting one.
+let requestRefs = [ref | ref <- explanationSourceReferences explanation,
+                        referenceSource ref == "source:B"]
+revealed <- traverse (require . recoverOriginalSource p) requestRefs
+-- Opening sources and changing view options leave original's snapshot intact.
+expanded <- require (explanationView p focus (ExplanationOptions False ["source:B"]))
+alternatives <- require (explanationView p focus (ExplanationOptions True []))
+let snapshot = evaluationSnapshot original
+    analysisKey = analysisId (snapshotAnalysis snapshot)
+candidate <- require (selectAssessment analysisKey "position:E" (snapshotDocument snapshot))
+let validation = validateAnalysis candidate analysisKey
+unless (analysisReady validation) (fail (show validation))
+revised <- require (compileAnalysis candidate analysisKey >>= evaluateAnalysis)
+aligned <- require (projectComparison original revised)
+-- Encode views using encodeViewJson/Xml/Svg with p, alongside encodeProjection
+-- and encodeRecord view. Keep revised exports paired with projectEvaluation revised.
+```
+
+This uses the existing edit, validation, evaluation and comparison APIs; there is
+no implicit commit, mutable session, background evaluation or new comparison
+engine. `projectComparison` retains both observation identities and stable
+occurrence alignments for changed **and unchanged** rows, separate flags for
+computed/evaluation/reason changes, and assessment-selection/classification
+changes. Consumers can highlight those handles on any compatible view. A changed
+input need not change the selected conclusion. Incompatible law comparisons and
+stale `projectEvaluationOn` attachments retain their existing rejections.
+
+The default `explanationView` begins with the requirement occurrence and result,
+then the selected assessment and its reason, then immediate case assertions.
+Group views include immediate requirement dependencies. Sources are omitted until
+their IDs are explicitly requested in `expandedOriginalSources`; alternatives are
+omitted unless `includeAlternativeAssessments` is true. Options are **view state**,
+not fields in an authored document. Sources/alternatives never disappear from the
+complete projection. Each selection records all inclusion/omission and DOM/index
+bindings using the existing view format. Definition and observation objects may
+be omitted from this compact rendering while remaining separately identified in
+the explanation and complete projection. Limits of four assessments, 64 nodes
+and 128 relationships return errors, never truncation. All compatible alternatives
+remain available in the explanation even if an expanded reference view exceeds
+those limits. Expanded alternatives bind to the separate authored definition;
+only the selected assessment links to the evaluated occurrence. Source expansion
+must name sources referenced by the focused law or the assessments/case material
+included in that view; unrelated or duplicate requests return `ISOURCE`.
+
+No existing format version changes. Explanation records can be inspected or
+encoded with `encodeRecord`; they are reports, not a new authoring import format.
+The reference driver's interaction trace and highlight overlay are caller-local
+records, not a new serialized SDK protocol.
+
+### Run the headless reference interaction
+
+The [driver](../examples/authoring-consumer/InteractionDemo.hs) uses an unchanged
+[section 441 authored document](../examples/authoring-consumer/fixtures/section441.document.json)
+copied verbatim from the independent original-authoring exercise, SHA-256
+`4f9d42f57931a2af80f51f02b9417fa442530452cd23dd734139d36fccddcf9b`.
+It retains the published 2020 Revised Edition, bounded modelling scope, synthetic
+packet and original P/E/N reasons; no current legal-completeness claim is made.
+The same operations run over hurt, retaining the consumer's explicit scope-
+acknowledgement gate. Bare SDK compilation has no new admission policy.
+
+```sh
+cabal v2-build all --offline -j1 --with-compiler=ghc-9.8.4
+yuho_checkout=$(pwd)
+consumer_bin=$(cabal list-bin exe:yuho-authoring-consumer --offline --with-compiler=ghc-9.8.4)
+cd /tmp
+"$consumer_bin" --interact "$yuho_checkout/examples/authoring-consumer/fixtures/section441.document.json" "$HOME/Downloads/yuho-review/tranche07"
+```
+
+The file argument is explicit; the executable does not discover checkout files
+at runtime. `data/*.interaction.json` records focus, on-demand source recovery,
+alternatives, explicit selection, validation, both snapshots and aligned changes.
+`s441-focus.svg` starts with the unresolved requirement and P assessment, rather
+than the stipulation packet. Expanded-source and alternative views use the same
+snapshot. The revised focused output and existing law-occurrence view use
+comparison-derived dashed outlines to mark changed observations; unchanged law
+rows retain plain outlines. This overlay is local reference presentation only.
+Complete projections, exact view bindings, JSON/XML views and all original data
+are retained beside the SVGs. The diagrams remain scrolling reference outputs;
+applications own canvas layout, controls and navigation.
+
+From the checkout, verify the driver and its saved outputs with:
+
+```sh
+python3 test/interaction_consumer.py "$consumer_bin" --existing-artifacts "$HOME/Downloads/yuho-review/tranche07"
+```
 
 ## Library flow
 
@@ -335,9 +623,11 @@ factual falsity, evidence strength, legal completeness or a proof standard.
 
 ### Rendered views and bindings
 
-The reference exports show **only the selected law occurrence tree, including
-its exception guard**. Assertions, assessment alternatives, sources, other law
-material and annotations remain in the complete projection. The companion
+The law-occurrence reference exports introduced in Tranche 02 show **only the
+selected law occurrence tree, including its exception guard**. The later
+[case/application views](#case-information-and-focused-application--tranche-03)
+provide other selections. Assertions, assessment alternatives, sources, other
+law material and annotations remain in the complete projection. The companion
 `yuho.projection-view/v0.1-experimental` record enumerates included and omitted
 node/edge IDs, SVG DOM bindings, and each legacy edge's array index and rich edge
 ID. These are explicit view omissions, not missing projected context. The SVG
@@ -746,11 +1036,14 @@ Long reference tables require scrolling; provenance gutters become dense when se
 alternatives share sources. Existing focus limits (four assessments, 64 nodes,
 128 relationships) remain explicit errors, never truncation.
 
-Concrete remaining authoring friction is repeated record/edge/assessment construction,
-manual byte anchors, separate export helpers, and untyped scope acknowledgements.
-The second model revealed no need for law-specific library branches or a builder
-redesign. Tranche 05 below adds an explicit consumer acknowledgement check; the
-omitted doctrines remain out of scope.
+At the end of Tranche 04, observed friction included repeated record/edge/assessment
+construction, manual byte anchors, separate export helpers and caller scope
+acknowledgements. Subsequent work added the [ID-addressed editing operations](#editing-and-explicit-caller-acknowledgement--tranche-05),
+an explicit consumer acknowledgement check, and [validated anchor constructors](#validated-original-source-anchors--tranche-06).
+Manual original-source coordinate construction is no longer required. Repeated
+model construction and explicit export calls remain caller work; the current
+[export recipe](#export-recipe) shows a local helper. The second model required no
+law-specific library branch or builder redesign; omitted doctrines remain out of scope.
 
 ## Editing and explicit caller acknowledgement — Tranche 05
 
@@ -928,10 +1221,11 @@ stage document, valid evaluation, complete projection, inclusion/omission bindin
 compatible comparison, diagnostic, acknowledgement input/receipt and inspection.
 `editing-session.json` is the compact stage trace. Existing focus limits apply.
 
-The exercise resolves repeated ID-addressed updates and explicit binding replacement.
-Separate export helpers remain a specific follow-up. Tranche 06 below replaces
-representative manual source anchors. There is no new legal-model ontology,
-general policy subsystem or graph-editing framework.
+The exercise resolved repeated ID-addressed updates and explicit binding replacement.
+The later [validated anchor constructors](#validated-original-source-anchors--tranche-06)
+replace representative manual source anchors. Export orchestration stays local to
+the consumer, as shown in the current [recipe](#export-recipe). There is no new
+legal-model ontology, general policy subsystem or graph-editing framework.
 
 ## Validated original-source anchors — Tranche 06
 

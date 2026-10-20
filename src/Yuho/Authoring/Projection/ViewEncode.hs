@@ -86,7 +86,8 @@ nodeLines projection view n = case projectedNodeRole n of
     Just a -> [Text.toUpper (annotationState a) <> " annotation",annotationText a]
     Nothing -> []
   _ | projectedNodeKind n == "occurrence" -> ["Legal occurrence: " <> readable (projectedNodeLabel n)]
-        ++ references ++ evaluationLines n
+        ++ [meaning | (kind,meaning) <- [("all","All required"),("any","At least one required")],
+            projectedNodeRole n == kind] ++ references ++ evaluationLines n
     | projectedNodeKind n == "observation" -> ["Existing run observation"] ++ references ++ evaluationLines n
     | otherwise -> [readable (projectedNodeLabel n),"Authored " <> projectedNodeRole n] ++ references
   where
@@ -111,6 +112,7 @@ nodeLines projection view n = case projectedNodeRole n of
        "Computed: " <> computedLabel (projectedNodeComputed node)]
       ++ maybe [] (\b -> ["Current selected assessment: " <> maybe "MISSING" id (bindingAssessment b)]) (projectedNodeBinding node)
       ++ maybe [] (\why -> ["Skip reason: " <> skipLabel why]) (projectedNodeSkipReason node)
+      ++ maybe [] (\why -> ["Branch reason: " <> Text.replace "_" " " why]) (projectedNodeBranchReason node)
 
 -- Connected card list with numbered, explicitly typed relationships. Each
 -- relationship has its own gutter lane and legend row; no edge deduplication.

@@ -233,13 +233,22 @@ runHurtConsumer args = do
   (guardPending,guardP) <- get "11_section84_unresolved"
   routes <- require (projectComparison intention knowledge)
   uncertainties <- require (projectComparison ordinaryPending guardPending)
+  -- Resolve the selected binding from this run, not from retained array order.
+  selected <- case [row | row <- reportRequirements (evaluationReport ordinaryPending),
+      observationNode row == "f:hurt-caused-by-act"] of
+    [row] -> maybe (fail "causation observation has no selected assessment") pure
+      (observationAssessment row)
+    _ -> fail "expected exactly one causation occurrence in the hurt analysis"
+  selectedView <- require (applicationView ordinaryP (FocusAssessments [assessmentId selected]))
   ordinaryView <- require (applicationView ordinaryP (FocusInput "f:hurt-caused-by-act"))
   -- A narrow assumption focus avoids expanding every satisfied guard prerequisite.
   guardView <- require (applicationView guardP (FocusAssessments
     [hurtAssessmentId "f:nature-incapacity" (Unresolved NotDetermined)]))
-  focused <- (++) <$> exportView "hurt-05-application" ordinaryP ordinaryView
-    <*> exportView "hurt-11-application" guardP guardView
-  detail <- require (inspectAssessment ordinaryP (hurtAssessmentId "f:hurt-caused-by-act" (Unresolved NotDetermined)))
+  focused <- concat <$> sequence
+    [exportView "hurt-05-application" ordinaryP ordinaryView,
+     exportView "hurt-05-selected-application" ordinaryP selectedView,
+     exportView "hurt-11-application" guardP guardView]
+  detail <- require (inspectAssessment ordinaryP (assessmentId selected))
   alternative <- require (inspectAssessment ordinaryP (hurtAssessmentId "f:hurt-caused-by-act" Proved))
   skipped <- require (inspectAssessment ordinaryP (hurtAssessmentId "f:unsoundness-time" NotProved))
   assumption <- require (inspectAssessment guardP (hurtAssessmentId "f:nature-incapacity" (Unresolved NotDetermined)))
@@ -341,7 +350,9 @@ artifactIndex = Text.unlines
    "01: intention route satisfied; 02: knowledge route, same conclusion; 03: hurt not proved, guard skipped;",
    "05: ordinary causation unresolved, guard skipped; 06: evaluated exception defeat; 11: evaluated unresolved exception.",
    "hurt-case-before.svg: independent case before completed bindings, with unmapped assertion and draft.",
-   "hurt-05-application.svg: selected unresolved causation plus unselected alternatives and cross-context provenance.",
+   "hurt-05-selected-application.svg: FocusAssessments of the selected causation assessment, resolved from the existing application report; explains that assessment and its cross-context provenance.",
+   "hurt-05-application.svg: FocusInput of causation; includes that selected unresolved assessment plus retained unselected alternatives.",
+   "Both 05 views use the same evaluation and complete projection; each has its own included/omitted view bindings.",
    "hurt-11-application.svg: the selected unresolved assumption in the evaluated section 84 nature route; other prerequisites are explicitly omitted from this focus.",
    "", "data/ contains complete authored documents, application reports, validated kernel requests/results,",
    "complete projections and explicit included/omitted view bindings, JSON/XML views, two comparisons,",

@@ -45,6 +45,7 @@ import CaseViewChecks (runCaseViewChecks)
 import HurtChecks (runHurtChecks)
 import EditingChecks (runEditingChecks)
 import SourceAnchorChecks (runSourceAnchorChecks)
+import InteractionChecks (runInteractionChecks)
 import Yuho.Core.Source (validateSpan)
 import Yuho.Core.Types (Source(..), Span(..))
 import Yuho.Kernel.Run (runLine)
@@ -63,6 +64,7 @@ main = do
   runHurtChecks root
   runEditingChecks
   runSourceAnchorChecks
+  runInteractionChecks root
   runExceptionChecks (root </> "test/exception-fixtures")
   runTypedChecks (root </> "test/typed-fixtures")
   runPenaltyChecks (root </> "test/penalty-fixtures")

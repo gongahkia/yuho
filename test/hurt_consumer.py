@@ -142,6 +142,36 @@ def verify(directory):
     assert next(x for x in links if x["linkedAssertion"] == "assertion:weather")["linkedAssessments"] == []
     assert all(x["linkedSelectedAssessments"] == [] for x in links)
 
+    # Two questions over one existing run: selected explanation vs input alternatives.
+    selected_name, input_name = "hurt-05-selected-application", "hurt-05-application"
+    selected_projection = projections[selected_name]
+    assert selected_projection == projections[input_name] == projections["hurt-05_offence_causation_unresolved"]
+    application = load("hurt-05_offence_causation_unresolved.application.json")
+    observation, = [r for r in application["reportRequirements"] if r["observationNode"] == "f:hurt-caused-by-act"]
+    selected_id = observation["observationAssessment"]["assessmentId"]
+    nodes = {n["projectedNodeId"]: n for n in selected_projection["projectionNodes"]}
+    views = [load(name + ".view-bindings.json") for name in [selected_name, input_name]]
+    selected_nodes, input_nodes = [[nodes[key] for key in v["viewIncludedNodes"]] for v in views]
+    selected_assessments = [n for n in selected_nodes if n["projectedNodeRole"] == "assessment"]
+    assessment, = selected_assessments
+    assert assessment["projectedNodeSelected"]
+    assert assessment["projectedNodeOrigin"]["originAuthoredObjects"] == [selected_id]
+    assert assessment["projectedNodeBinding"]["bindingSupplied"] == {"kind": "unresolved", "reason": "not_determined"}
+    alternatives = [n for n in input_nodes if n["projectedNodeRole"] == "assessment" and not n["projectedNodeSelected"]]
+    assert len(alternatives) == 2
+    assert all(n["projectedNodeId"] in views[0]["viewOmittedNodes"] for n in alternatives)
+    assert all(n["projectedNodeComputed"] is None and n["projectedNodeObservation"] is None for n in alternatives)
+    for kind in ["occurrence", "observation"]:
+        one, = [n for n in selected_nodes if n["projectedNodeKind"] == kind]
+        other, = [n for n in input_nodes if n["projectedNodeKind"] == kind]
+        assert one == other  # definition, occurrence and observation are never merged
+        assert one["projectedNodeId"] != assessment["projectedNodeId"]
+        assert one["projectedNodeComputed"] == "unresolved" and one["projectedNodeEvaluation"] == "evaluated"
+    for role, count in [("assertion", 3), ("original_source", 3), ("input", 1)]:
+        before = {n["projectedNodeId"] for n in selected_nodes if n["projectedNodeRole"] == role and n["projectedNodeKind"] == "authored"}
+        after = {n["projectedNodeId"] for n in input_nodes if n["projectedNodeRole"] == role and n["projectedNodeKind"] == "authored"}
+        assert before == after and len(before) == count
+
     detail = load("hurt-05.assessment-inspection.json")
     assert detail["inspectionSelected"] and detail["inspectionAssessment"]["assessmentClassification"] == {
         "kind": "unresolved", "reason": "not_determined"}
@@ -193,7 +223,7 @@ def main():
         verify(directory)
     if args.existing_artifacts:
         verify(args.existing_artifacts)
-    print("hurt consumer: outside-checkout execution, six scenarios, schemas, all nine JSON/XML/SVG views, comparisons and recovery passed")
+    print("hurt consumer: outside-checkout execution, six scenarios, schemas, all ten JSON/XML/SVG views, both causation focuses, comparisons and recovery passed")
 
 
 if __name__ == "__main__":

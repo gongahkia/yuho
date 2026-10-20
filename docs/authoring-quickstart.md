@@ -5,6 +5,19 @@ supplied assessments and one represented acyclic exception guard. It does not
 weigh evidence or determine legal completeness. The API and serialized formats
 are experimental. Use the [SDK guide](authoring-sdk.md) for the full contract.
 
+## Recommended reading order
+
+Start here and run the lifecycle below. Then use the SDK guide's
+[current API/accessor map](authoring-sdk.md#current-api-map) to navigate the public
+records, and its [export recipe](authoring-sdk.md#export-recipe) for complete
+projections, view bindings and distinct JSON/XML/SVG filenames. Consult the
+detailed contracts and historical tranche sections only as needed; they are not
+prerequisites to this quickstart. Checked original-source anchors are available now.
+For a cohesive requirement → assessment → source → explicit revision interaction,
+use [focus, reveal and revise](authoring-sdk.md#focus-reveal-and-revise) after the
+lifecycle below. It uses the same public facade and leaves view state separate
+from authored selections.
+
 ## Build a real consumer outside the checkout
 
 Yuho is used here as an **explicit local Cabal package**, not an assumed Hackage
@@ -65,6 +78,9 @@ It does the following:
 5. Calls `projectEvaluation`, `inspectAssessment` and `recoverOriginalSource`.
    It creates a focused `applicationView` and exports JSON/XML/SVG using the
    existing encoders, alongside the complete projection and omission bindings.
+   The [export recipe](authoring-sdk.md#export-recipe) also covers the dedicated
+   law-occurrence encoders and generic case/application encoders, and demonstrates
+   selected-assessment focus versus input focus with retained alternatives.
 6. Edits the case narrative through `editCaseAssertion`, validates and explicitly
    evaluates the candidate. The supplied classifications remain unchanged; the
    compatible comparison reports changed provenance without computed changes.
