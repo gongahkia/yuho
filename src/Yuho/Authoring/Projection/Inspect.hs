@@ -4,7 +4,7 @@
 module Yuho.Authoring.Projection.Inspect
   ( AssertionLinks(..), AssessmentApplication(..), AssessmentInspection(..)
   , OriginalSourceExcerpt(..), caseAssertionLinks, inspectAssessment
-  , recoverOriginalSource ) where
+  , recoverOriginalSource, recoverSourceReference ) where
 
 import Data.Aeson (ToJSON(..), genericToJSON)
 import qualified Data.ByteString as BS
@@ -57,11 +57,16 @@ caseAssertionLinks projection key = do
 -- | A missing anchor is never converted into an invented original location.
 -- Arbitrary caller-supplied anchors are checked with the existing UTF-8 rules.
 recoverOriginalSource :: Projection -> SourceRef -> Either [AuthoringDiagnostic] OriginalSourceExcerpt
-recoverOriginalSource projection ref = do
-  let doc = snapshotDocument (projectionSnapshot (projectionData projection))
-      invalid message = Left [issue "PSOURCE" "/originalSourceReference" [referenceSource ref] message]
+recoverOriginalSource projection = recoverSourceReference
+  (documentSources (snapshotDocument (projectionSnapshot (projectionData projection))))
+
+-- | Recover against explicitly supplied original records, without a projection
+-- or network access. Both authoring profiles share the same UTF-8 convention.
+recoverSourceReference :: [SourceRecord] -> SourceRef -> Either [AuthoringDiagnostic] OriginalSourceExcerpt
+recoverSourceReference sources ref = do
+  let invalid message = Left [issue "PSOURCE" "/originalSourceReference" [referenceSource ref] message]
   source <- maybe (invalid "original source does not exist") Right
-    (find ((== referenceSource ref) . sourceId) (documentSources doc))
+    (find ((== referenceSource ref) . sourceId) sources)
   case (sourceText source, referenceSpan ref) of
     (Just content, Just anchor) ->
       let bytes = Encoding.encodeUtf8 content

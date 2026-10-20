@@ -10,8 +10,11 @@ import Data.Time.Calendar (Day)
 import GHC.Generics (Generic)
 import qualified Yuho.SuppliedProofStatus.Types as Proof
 
-authoringFormat, evaluatorProfile :: Text
+authoringFormat, linkedAuthoringFormat, evaluatorProfile :: Text
 authoringFormat = "yuho.authoring/v0.1-experimental"
+-- | Explicit opt-in: definition nodes, defines bodies and use references.
+-- Existing records and v0.1 interpretation remain unchanged.
+linkedAuthoringFormat = "yuho.authoring/v0.2-experimental"
 evaluatorProfile = "SuppliedProofStatus-v1"
 
 -- | Half-open UTF-8 byte offsets and one-based UTF-8 byte columns.

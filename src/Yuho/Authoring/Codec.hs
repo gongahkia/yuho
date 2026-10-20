@@ -21,7 +21,7 @@ decodeDocument bytes = do
   -- Also rejects duplicate JSON keys, excessive depth, and oversized documents.
   value <- either (Left . problem "AJSON" "/") Right (decodeJson bytes)
   case lookupField "documentFormat" value of
-    Just (JStr version) | version == authoringFormat -> pure ()
+    Just (JStr version) | version `elem` [authoringFormat,linkedAuthoringFormat] -> pure ()
     _ -> Left (problem "AVERSION" "/documentFormat" "unsupported authoring format")
   either (Left . problem "AJSON" "/" . Text.pack) Right
     (Aeson.eitherDecodeStrict' bytes)

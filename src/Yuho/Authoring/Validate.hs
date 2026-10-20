@@ -1,9 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.Authoring.Validate
   ( validateDocument, validateBindings, Occurrence(..), selectedOccurrences
-  , findAnalysis, toCoreSpan, issue ) where
+  , findAnalysis, toCoreSpan, issue, parentOccurrence, occurrenceDefinitions ) where
 
-import Data.List (find, group, sort)
+import Data.List (find, group, sort, isPrefixOf, sortOn, nub)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (mapMaybe)
 import Data.Text (Text)
@@ -29,6 +29,21 @@ data Occurrence = Occurrence
   { occurrenceNode :: LawNode, occurrencePath :: [Text], occurrenceRule :: Text }
   deriving (Eq, Show)
 
+-- Transparent definition/use segments remain in paths but do not become
+-- executable requirements. The nearest executable prefix is the tree parent.
+parentOccurrence :: [Occurrence] -> Occurrence -> Maybe Occurrence
+parentOccurrence occurrences child = case reverse (sortOn (length . occurrencePath)
+  [p | p <- occurrences, occurrenceRule p == occurrenceRule child,
+    occurrencePath p /= occurrencePath child,
+    occurrencePath p `isPrefixOf` occurrencePath child]) of
+  p:_ -> Just p
+  [] -> Nothing
+
+occurrenceDefinitions :: AuthoringDocument -> [Text] -> [LawNode]
+occurrenceDefinitions doc path = nub
+  [n | key <- path, e <- lawEdges (documentLaw doc), edgeId e == key, edgeKind e == "use",
+    n <- lawNodes (documentLaw doc), nodeId n == edgeTo e, nodeKind n == "definition"]
+
 findAnalysis :: AuthoringDocument -> Text -> Maybe Analysis
 findAnalysis doc key = find ((== key) . analysisId) (documentAnalyses doc)
 
@@ -49,7 +64,7 @@ selectedOccurrences doc analysis = take 1025 (walk Set.empty [] (analysisTarget 
                 children kind = [e | e <- outgoing key, edgeKind e == kind]
                 follow rule e = descend next (path ++ [edgeId e]) rule (edgeTo e)
             in if nodeKind n == "rule"
-              then concatMap (follow key) (children "requires") ++
+              then concatMap (follow key) (children "requires" ++ children "use") ++
                 concat [walk next (path ++ [edgeId e]) (edgeTo e)
                   | e <- children "exception"]
               else []
@@ -57,9 +72,11 @@ selectedOccurrences doc analysis = take 1025 (walk Set.empty [] (analysisTarget 
       | Set.member key seen = []
       | otherwise = case Map.lookup key nodes of
           Nothing -> []
-          Just n -> Occurrence n path rule : concat
-            [descend (Set.insert key seen) (path ++ [edgeId e]) rule (edgeTo e)
-              | e <- outgoing key, edgeKind e == "member"]
+          Just n ->
+            let children = concat
+                  [descend (Set.insert key seen) (path ++ [edgeId e]) rule (edgeTo e)
+                    | e <- outgoing key, edgeKind e `elem` ["member","use","defines"]]
+            in if nodeKind n == "definition" then children else Occurrence n path rule : children
 
 validateDocument :: AuthoringDocument -> [AuthoringDiagnostic]
 validateDocument doc = versionErrors ++ sizeErrors ++ identities ++ nodeErrors
@@ -67,6 +84,7 @@ validateDocument doc = versionErrors ++ sizeErrors ++ identities ++ nodeErrors
   ++ assessmentErrors ++ analysisErrors ++ retainedErrors
   where
     law = documentLaw doc
+    linked = documentFormat doc == linkedAuthoringFormat
     nodes = lawNodes law
     edges = lawEdges law
     nodeMap = Map.fromList [(nodeId n,n) | n <- nodes]
@@ -86,7 +104,7 @@ validateDocument doc = versionErrors ++ sizeErrors ++ identities ++ nodeErrors
     objectLocation owner = maybe "/" id (lookup owner named)
     duplicateIds = [key | (key:_:_) <- group (sort (map fst named))]
     versionErrors = [issue "AVERSION" "/documentFormat" [] "unsupported authoring format"
-      | documentFormat doc /= authoringFormat]
+      | documentFormat doc `notElem` [authoringFormat,linkedAuthoringFormat]]
     sizeErrors = [issue "ALIMIT" "/" [] "document exceeds one MiB or 4096 objects"
       | BS.length (encodeDocument doc) > 1048576 || length named > 4096]
     identities = [issue "AID" path [key] "ID must be nonempty and at most 128 UTF-8 bytes"
@@ -100,15 +118,17 @@ validateDocument doc = versionErrors ++ sizeErrors ++ identities ++ nodeErrors
       let key = nodeId n
           kind = nodeKind n
           bad message = issue "ASHAPE" "/documentLaw/lawNodes" [key] message
-          requirements = outgoing key "requires"
-          members = outgoing key "member"
+          requirements = outgoing key "requires" ++ outgoing key "use"
+          members = outgoing key "member" ++ outgoing key "use"
           guards = outgoing key "exception"
       in [issue "AUNSUPPORTED" "/documentLaw/lawNodes" [key] "unsupported executable node kind"
-         | kind `notElem` ["rule","input","all","any"]]
+         | kind `notElem` (["rule","input","all","any"] ++ ["definition" | linked])]
         ++ [bad "a rule needs exactly one requires edge and at most one exception"
            | kind == "rule", length requirements /= 1 || length guards > 1]
         ++ [bad "all/any needs at least two explicitly connected members"
            | kind `elem` ["all","any"], length members < 2]
+        ++ [bad "a named definition needs exactly one defines edge and a nonempty name"
+           | linked, kind == "definition", length (outgoing key "defines") /= 1 || Text.null (Text.strip (nodeLabel n))]
         ++ refs key (nodeSources n)
     edgeErrors = concatMap checkEdge edges
     checkEdge e =
@@ -120,22 +140,25 @@ validateDocument doc = versionErrors ++ sizeErrors ++ identities ++ nodeErrors
             "requires" -> fromKind == Just "rule" && toKind `elem` map Just ["input","all","any"]
             "member" -> fromKind `elem` map Just ["all","any"] && toKind `elem` map Just ["input","all","any"]
             "exception" -> fromKind == Just "rule" && toKind == Just "rule"
+            "defines" -> linked && fromKind == Just "definition" && toKind `elem` map Just ["input","all","any"]
+            "use" -> linked && fromKind `elem` map Just ["rule","all","any"] && toKind == Just "definition"
             _ -> False
+          kinds = ["requires","member","exception"] ++ [k | linked, k <- ["defines","use"]]
       in [issue "AREFERENCE" "/documentLaw/lawEdges" [key,ref] "dangling law endpoint"
           | ref <- [edgeFrom e,edgeTo e], Map.notMember ref nodeMap]
         ++ [issue "AUNSUPPORTED" "/documentLaw/lawEdges" [key] "unsupported executable relationship kind"
-          | kind `notElem` ["requires","member","exception"]]
+          | kind `notElem` kinds]
         ++ [issue "ASHAPE" "/documentLaw/lawEdges" [key,edgeFrom e,edgeTo e]
           "relationship endpoints have incompatible executable kinds"
-          | kind `elem` ["requires","member","exception"], not correct]
+          | kind `elem` kinds, not correct]
         ++ [issue "AUNSUPPORTED" "/documentLaw/lawEdges" [key,edgeTo e]
           "nested exception guards are outside this fragment"
           | kind == "exception", not (null (outgoing (edgeTo e) "exception"))]
     sharingErrors = [issue "ASHARING" "/documentLaw/lawEdges"
         (nodeId n : map edgeId incoming) "shared requirement structures are unsupported"
-      | n <- nodes, nodeKind n /= "rule",
+      | n <- nodes, nodeKind n `notElem` ["rule","definition"],
         let incoming = [e | e <- edges, edgeTo e == nodeId n,
-              edgeKind e `elem` ["requires","member"]], length incoming > 1]
+              edgeKind e `elem` ["requires","member","defines"]], length incoming > 1]
     -- Global DFS covers unrelated malformed executable material too.
     cycleErrors = case cyclePath Set.empty Set.empty (map nodeId nodes) of
       Just path -> [issue "ACYCLE" "/documentLaw/lawEdges" path "executable cycle"]
@@ -243,6 +266,22 @@ validateBindings doc key = case findAnalysis doc key of
               "selected assessment is outside the executable slice"
              | assessmentInput a `notElem` map (nodeId . occurrenceNode) leaves]
           | a <- selected]
-        diagnostics = errors ++ missing ++ ambiguous ++ bindingErrors
+        repeated = [issue "AREUSE" "/documentAnalyses" (key : input : concatMap occurrencePath uses)
+          "a primitive input occurs more than once in this analysis; occurrence-qualified assessment selection is unsupported"
+          | input <- Set.toList (Set.fromList (map (nodeId . occurrenceNode) leaves)),
+            let uses = filter ((== input) . nodeId . occurrenceNode) leaves, length uses > 1]
+        expansion = [issue "AEXPANSION" "/documentAnalyses" [key,analysisTarget analysis]
+          "expanded requirement tree exceeds 1024 occurrences (distinct from authored document size)"
+          | length occurrences >= 1025]
+          ++ [issue "AEXPANSION" "/documentAnalyses" [key,analysisTarget analysis]
+            "expanded kernel semantic identities exceed 1024 (requirements, assignments, rules, branches, sources and guards)"
+            | documentFormat doc == linkedAuthoringFormat,
+              let rules = nub (analysisTarget analysis : map occurrenceRule occurrences),
+              length occurrences + length leaves + 2 * length rules + 2 + length
+                [e | e <- lawEdges (documentLaw doc), edgeFrom e == analysisTarget analysis, edgeKind e == "exception"] > 1024]
+          ++ [issue "ADEPTH" "/documentAnalyses" (key : occurrencePath o)
+            "expanded reference path exceeds 64 relationships" | o <- take 1
+              (filter ((> 64) . length . occurrencePath) occurrences)]
+        diagnostics = errors ++ expansion ++ repeated ++ missing ++ ambiguous ++ bindingErrors
     in ValidationReport (null errors) (null diagnostics) diagnostics (concatMap inventory leaves)
   where errors = validateDocument doc

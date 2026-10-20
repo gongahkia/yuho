@@ -1,0 +1,4 @@
+typed-rules-scenario ThresholdInputs for ThresholdReference {
+ value value:measurement = integer 36;
+ value value:threshold = integer 35;
+}

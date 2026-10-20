@@ -9,7 +9,7 @@ module Yuho.Authoring.Projection
 
 import Data.Aeson (ToJSON)
 import Data.Char (isAsciiLower, isDigit)
-import Data.List (find, group, nub, sort)
+import Data.List (find, group, nub, sort, isPrefixOf, sortOn)
 import Data.Maybe (mapMaybe)
 import qualified Data.Set as Set
 import Data.Text (Text)
@@ -96,7 +96,8 @@ projectAuthored doc key = do
         | (identifier,role,label) <- authoredObjects doc]
       occurrenceNodes = [let occurrence = identity n path rule
         in (plainNode (occurrenceProjectionId occurrence) "occurrence" (nodeKind n) (nodeLabel n)
-          (origin "projection_generated" "structural_occurrence" (nodeId n : rule : path)))
+          (origin "projection_generated" "structural_occurrence" (nodeId n : rule : path
+            ++ map nodeId (occurrenceDefinitions doc path))))
           { projectedNodeOccurrence = Just occurrence, projectedNodeEvaluation = "not_requested",
             projectedNodeBinding = if nodeKind n == "input" then Just (binding (active (nodeId n))) else Nothing }
         | (n,path,rule) <- allOccurrences]
@@ -108,14 +109,24 @@ projectAuthored doc key = do
       lawEdgesProjected = [authoredEdge (edgeId e) (edgeFrom e) (edgeTo e) (edgeKind e) "law_structure" | e <- lawEdges law]
       descriptive = [authoredEdge (relationshipId r) (relationshipFrom r) (relationshipTo r)
         (relationshipKind r) "descriptive" | r <- documentRelationships doc]
-      membership = [makeEdge (edgeKind edge) "occurrence_structure"
+      parentOf path = case reverse (sortOn (length . middle)
+        [row | row@(_,p,_) <- allOccurrences, p /= path, p `isPrefixOf` path]) of
+          row:_ -> [row]
+          [] -> []
+      middle (_,p,_) = p
+      membership = [makeEdge (if any ((== "use") . edgeKind) connecting then "use" else edgeKind edge) "occurrence_structure"
           (occurrenceProjectionId (identity parent parentPath parentRule))
           (occurrenceProjectionId (identity n path rule))
-          (origin "projection_generated" "structural_connection" [edgeId edge]) Nothing path
+          (origin "projection_generated" "structural_connection" (map edgeId connecting)) Nothing path
         | (n,path,rule) <- allOccurrences, not (null path),
           edge <- lawEdges law, edgeId edge == last path,
-          (parent,parentPath,parentRule) <- allOccurrences,
-          parentPath == init path, nodeId parent == edgeFrom edge]
+          (parent,parentPath,parentRule) <- parentOf path,
+          let connecting = [e | k <- drop (length parentPath) path,
+                e <- lawEdges law, edgeId e == k]]
+      useLinks = [makeEdge "definition_use" "projection"
+        (occurrenceProjectionId (identity n path rule)) (objectProjectionId (nodeId d))
+        (origin "projection_generated" "linked_definition_occurrence" (nodeId d : path)) Nothing (path ++ [nodeId d])
+        | (n,path,rule) <- allOccurrences, d <- occurrenceDefinitions doc path]
       definitionLinks = [makeEdge "instance_of" "projection"
         (occurrenceProjectionId (identity n path rule)) (objectProjectionId (nodeId n))
         (origin "projection_generated" "definition_reference" [nodeId n]) Nothing path
@@ -150,9 +161,10 @@ projectAuthored doc key = do
             ++ [(relationshipId r,relationshipFrom r,relationshipTo r) | r <- documentRelationships doc]]
       contents = [reference "contains" "projection" (documentId doc) identifier i Nothing
         | (i,(identifier,_,_)) <- indexed (authoredObjects doc), identifier /= documentId doc]
-      result = ProjectionData projectionFormat (projectionIdentity "analysis" (snapshotId snapshot,"authored" :: Text))
+      version = if documentFormat doc == linkedAuthoringFormat then linkedProjectionFormat else projectionFormat
+      result = ProjectionData version (projectionIdentity "analysis" (snapshotId snapshot,"authored" :: Text))
         "authored" snapshot Nothing Nothing (objects ++ occurrenceNodes)
-        (lawEdgesProjected ++ descriptive ++ membership ++ definitionLinks ++ selectionLinks ++ assessmentLinks
+        (lawEdgesProjected ++ descriptive ++ membership ++ definitionLinks ++ useLinks ++ selectionLinks ++ assessmentLinks
           ++ sourceLinks ++ annotationLinks ++ analysisLinks ++ relationshipLinks ++ contents)
         (validationDiagnostics validation) (openInputs validation)
         "Derived projection, not an authoring import. Law connections, supplied assessments, provenance and descriptive relationships have separate meanings."
@@ -292,7 +304,7 @@ validateProjection value = version ++ duplicates ++ endpoints ++ origins ++ iden
     allIds = map projectedNodeId nodes ++ map projectedEdgeId edges
     authored = Set.fromList [key | (key,_,_) <- authoredObjects (snapshotDocument (projectionSnapshot value))]
     version = [issue "PVERSION" "/projectionVersion" [] "unsupported projection version"
-      | projectionVersion value /= projectionFormat]
+      | projectionVersion value `notElem` [projectionFormat,linkedProjectionFormat]]
     duplicates = [issue "PDUPLICATE" "/" [key] "duplicate projected identity"
       | (key:_:_) <- group (sort allIds)]
     endpoints = [issue "PENDPOINT" "/projectionEdges" [projectedEdgeId e,target] "projected endpoint is absent"

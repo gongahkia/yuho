@@ -8,8 +8,9 @@ import GHC.Generics (Generic)
 import Yuho.Authoring.Types
 import Yuho.Authoring.Report (ApplicationReport, AssessmentChange, ObservationChange)
 
-projectionFormat, projectionComparisonFormat, projectionViewFormat :: Text
+projectionFormat, linkedProjectionFormat, projectionComparisonFormat, projectionViewFormat :: Text
 projectionFormat = "yuho.analysis-projection/v0.1-experimental"
+linkedProjectionFormat = "yuho.analysis-projection/v0.2-experimental"
 projectionComparisonFormat = "yuho.projection-comparison/v0.1-experimental"
 projectionViewFormat = "yuho.projection-view/v0.1-experimental"
 

@@ -68,15 +68,17 @@ compileAnalysis doc key = do
         a <- documentAssessments doc, assessmentId a == ref]
       rules = nub (analysisTarget analysis : map occurrenceRule occurrences)
       indexedRules = zip rules [0 :: Int ..]
-      ruleIds = Map.fromList [(r,"rule:" <> decimal i) | (r,i) <- indexedRules]
-      branchIds = Map.fromList [(r,"branch:" <> decimal i) | (r,i) <- indexedRules]
+      namespace = if documentFormat doc == linkedAuthoringFormat
+        then "linked-" <> Text.take 20 (snapshotId snapshot) <> "-" else ""
+      ruleIds = Map.fromList [(r,namespace <> "rule:" <> decimal i) | (r,i) <- indexedRules]
+      branchIds = Map.fromList [(r,namespace <> "branch:" <> decimal i) | (r,i) <- indexedRules]
       ruleIdFor r = Map.findWithDefault "invalid:rule" r ruleIds
       branchIdFor r = Map.findWithDefault "invalid:branch" r branchIds
       selectedFor o = find ((== nodeId (occurrenceNode o)) . assessmentInput) selected
       mappings = [RequirementMapping (nodeId (occurrenceNode o)) (occurrencePath o)
-        (occurrenceRule o) ("requirement:" <> decimal i) (ruleIdFor (occurrenceRule o))
+        (occurrenceRule o) (namespace <> "requirement:" <> decimal i) (ruleIdFor (occurrenceRule o))
         (branchIdFor (occurrenceRule o)) (assessmentId <$> selectedFor o)
-        ((const ("assignment:" <> decimal i)) <$> selectedFor o)
+        ((const (namespace <> "assignment:" <> decimal i)) <$> selectedFor o)
         | (o,i) <- zip occurrences [0 :: Int ..]]
       -- Each record is generated compiler material. Original anchors are only
       -- in the sidecar; none are claimed as positions in these generated texts.
@@ -101,7 +103,7 @@ compileAnalysis doc key = do
             kind = if nodeKind n == "input" then "leaf" else nodeKind n
             children = [(child,m) | (child,m) <- paired,
               occurrenceRule child == occurrenceRule o,
-              initSafe (occurrencePath child) == occurrencePath o]
+              parentOccurrence occurrences child == Just o]
         in JObj ([("id",JStr (mappedKernelRequirement mapping)),("kind",JStr kind),
           ("path",JArr [JStr (branchIdFor (occurrenceRule o))]),
           ("span",spanJson (if kind == "leaf" then lawSpanFor o else whole))]
@@ -109,20 +111,19 @@ compileAnalysis doc key = do
             [("members",JArr [requirementValue child m | (child,m) <- children])])
       guards = [e | e <- lawEdges law, edgeFrom e == analysisTarget analysis,
         edgeKind e == "exception"]
-      guardId e = "guard:" <> sha256Text (Encoding.encodeUtf8 (edgeId e))
+      guardId e = namespace <> "guard:" <> sha256Text (Encoding.encodeUtf8 (edgeId e))
       registry = [JObj [("id",JStr (ruleIdFor r)),("source_id",JStr (generatedSourceId lawSource)),
         ("program",JObj [("id",JStr (branchIdFor r)),
           ("path",JArr [JStr (branchIdFor r)]),("span",spanJson whole),
           ("definitions",JBool False),("children",JArr []),("penalties",JArr []),
           ("requirements",JArr [requirementValue o m | (o,m) <- paired,
-            occurrenceRule o == r, length (occurrencePath o) == rootDepth r])]),
+            occurrenceRule o == r, parentOccurrence occurrences o == Nothing])]),
         ("exceptions",JArr [JObj [("id",JStr (guardId e)),
           ("branch_id",JStr (branchIdFor r)),("source_id",JStr (generatedSourceId lawSource)),
           ("span",spanJson whole),("effect",JStr "defeat"),
           ("guard",JObj [("kind",JStr "is_infringed"),("target",JStr (ruleIdFor (edgeTo e)))])]
           | e <- guards, edgeFrom e == r])]
         | r <- rules]
-      rootDepth r = if r == analysisTarget analysis then 1 else 2
       facts = JObj [(mappedKernelRequirement m,JObj
         [("proof_status",suppliedStatusJson (classificationStatus (assessmentClassification a))),
          ("status_source",JObj [("assignment_id",JStr assignment),
@@ -137,14 +138,17 @@ compileAnalysis doc key = do
         ("sources",JArr (map sourceValue generated)),("registry",JArr registry),("facts",facts)]
       identities = concat
         [[IdentityMapping (ruleIdFor r) "rule" [r],IdentityMapping (branchIdFor r) "branch" [r]] | r <- rules]
-        ++ [IdentityMapping (mappedKernelRequirement m) "requirement" (mappedNode m : mappedOccurrence m) | m <- mappings]
+        ++ [IdentityMapping (mappedKernelRequirement m) "requirement"
+          (mappedNode m : mappedOccurrence m ++ map nodeId (occurrenceDefinitions doc (mappedOccurrence m))) | m <- mappings]
         ++ [IdentityMapping assignment "assignment" [a] | m <- mappings,
              Just assignment <- [mappedAssignment m], Just a <- [mappedAssessment m]]
         ++ [IdentityMapping (guardId e) "exception" [edgeId e,edgeFrom e,edgeTo e] | e <- guards]
         ++ [IdentityMapping (generatedSourceId s) "source" (generatedSourceObjects s) | s <- generated]
       sourceMappings = [SourceMapping (mappedKernelRequirement m) (generatedSourceId lawSource)
         (if nodeKind (occurrenceNode o) == "input" then lawSpanFor o else whole)
-        [mappedNode m] (nodeSources (occurrenceNode o)) | (o,m) <- paired]
+        (mappedNode m : map nodeId (occurrenceDefinitions doc (mappedOccurrence m)))
+        (nodeSources (occurrenceNode o) ++ concatMap nodeSources
+          (occurrenceDefinitions doc (mappedOccurrence m))) | (o,m) <- paired]
         ++ [SourceMapping assignment (generatedSourceId statusSource) (statusSpanFor a)
           [assessmentId a] (assessmentSources a) | (o,m) <- paired,
           Just a <- [selectedFor o], Just assignment <- [mappedAssignment m]]
@@ -167,8 +171,6 @@ compileAnalysis doc key = do
   pure (CompiledAnalysis bytes snapshot mappings identities generated sourceMappings validated)
   where
     decimal = Text.pack . show
-    initSafe [] = []
-    initSafe xs = take (length xs - 1) xs
 
 chunkSpans :: Text -> [(Text,a)] -> ((Text,a) -> Text) -> Map.Map Text TextSpan
 chunkSpans content chunks key = Map.fromList (snd (foldl add (0,[]) chunks))

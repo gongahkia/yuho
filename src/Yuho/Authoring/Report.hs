@@ -14,7 +14,7 @@ import Data.Text (Text)
 import GHC.Generics (Generic)
 import Yuho.Authoring.Compile
 import Yuho.Authoring.Types
-import Yuho.Authoring.Validate (issue, validateBindings)
+import Yuho.Authoring.Validate (issue, validateBindings, occurrenceDefinitions)
 import Yuho.Protocol.Decode (inputDigest)
 import Yuho.Protocol.Json (decodeJson)
 import Yuho.SuppliedProofStatus.Encode (encodeProofResult)
@@ -94,13 +94,14 @@ evaluateAnalysis compiled = do
             assertions = [a | a <- documentAssertions doc,
               assertionId a `elem` maybe [] assessmentAssertions assessment]
             originalSourceIds = nub (map referenceSource
-              (maybe [] nodeSources n ++ maybe [] assessmentSources assessment
+              (maybe [] nodeSources n ++ concatMap nodeSources (occurrenceDefinitions doc (mappedOccurrence m))
+                ++ maybe [] assessmentSources assessment
                 ++ concatMap assertionSources assertions))
             trace = ruleFor (mappedKernelRule m) >>= \r ->
               find ((== mappedKernelRequirement m) . Proof.proofTraceId) (Proof.proofRuleTrace r)
         in RequirementObservation (mappedNode m) (mappedOccurrence m) (mappedRule m)
           (maybe "unknown" nodeKind n) n
-          [edgeId e | e <- lawEdges law, edgeFrom e == mappedNode m, edgeKind e == "member"]
+          [edgeId e | e <- lawEdges law, edgeFrom e == mappedNode m, edgeKind e `elem` ["member","use"]]
           (mappedKernelRequirement m) (mappedKernelBranch m) assessment assertions
           [s | s <- documentSources doc, sourceId s `elem` originalSourceIds]
           (Proof.satisfactionText . Proof.proofTraceStatus <$> trace)

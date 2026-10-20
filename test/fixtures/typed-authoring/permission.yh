@@ -1,0 +1,19 @@
+// Independently written typed-finite reference; no authoring adapter involved.
+typed-rules-model PermissionReference {
+ limit 2048;
+ entity-type actor;
+ entity-type resource;
+ entity-type access-kind;
+ entity actor:ada as actor;
+ entity actor:ben as actor;
+ entity resource:r as resource;
+ entity kind:read as access-kind;
+ entity kind:write as access-kind;
+ predicate permission(actor,resource,access-kind) kind relationship;
+ proposition p:permission;
+ requirement q:ada = permission(actor:ada,resource:r,kind:read);
+ requirement q:ben = permission(actor:ben,resource:r,kind:read);
+ rule rule:ada establishes proposition p:permission when q:ada;
+ rule rule:ben establishes proposition p:permission when q:ben;
+ limitation "CMA 2007 RE s2(5) positive permission research relationship only, not complete offence or unauthorised-access inference.";
+}

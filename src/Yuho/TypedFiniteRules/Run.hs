@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.TypedFiniteRules.Run (runTypedFiniteLine, encodeTypedFiniteResult) where
+module Yuho.TypedFiniteRules.Run (runTypedFiniteLine, encodeTypedFiniteResult, decodeTypedFiniteRequest) where
 
 import Control.Monad (unless, when)
 import qualified Data.ByteString as BS
@@ -78,6 +78,10 @@ propositionResult row = JObj
   ,("status",JStr (truthName (propositionStatus row)))
   ,("state",JStr (propositionState row))
   ,("rules",JArr (map JStr (propositionRules row)))]
+
+-- | Reuse the exact closed protocol validator without executing evaluation.
+decodeTypedFiniteRequest :: J -> Either Text TypedFiniteProgram
+decodeTypedFiniteRequest = decodeRequest
 
 decodeRequest :: J -> Either Text TypedFiniteProgram
 decodeRequest value = do

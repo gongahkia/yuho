@@ -18,6 +18,12 @@ use [focus, reveal and revise](authoring-sdk.md#focus-reveal-and-revise) after t
 lifecycle below. It uses the same public facade and leaves view state separate
 from authored selections.
 
+After this lifecycle, [linked definitions](linked-definitions.md) documents the
+optional v0.2 profile for explicit expression reuse across scoped analyses. The
+quickstart itself retains the existing v0.1 example.
+For concrete typed relationships and exact integer comparisons, the separate
+[typed-authoring guide](typed-authoring.md) provides the opt-in v0.3 lifecycle.
+
 ## Build a real consumer outside the checkout
 
 Yuho is used here as an **explicit local Cabal package**, not an assumed Hackage

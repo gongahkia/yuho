@@ -1,0 +1,559 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/authoring-v0.2-experimental.json",
+  "title": "Experimental linked Yuho authored document v0.2",
+  "description": "Structural format only. SDK validation additionally checks global identities, references, original UTF-8 anchors, executable trees, assessment bindings and readiness. Presentation and retained relationships are non-executable.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "documentFormat",
+    "documentId",
+    "documentLaw",
+    "documentSources",
+    "documentAssertions",
+    "documentAssessments",
+    "documentAnalyses",
+    "documentRelationships",
+    "documentAnnotations",
+    "documentPresentation"
+  ],
+  "properties": {
+    "documentFormat": {
+      "const": "yuho.authoring/v0.2-experimental"
+    },
+    "documentId": {
+      "type": "string"
+    },
+    "documentLaw": {
+      "$ref": "#/$defs/law"
+    },
+    "documentSources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "documentAssertions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/assertion"
+      }
+    },
+    "documentAssessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/assessment"
+      }
+    },
+    "documentAnalyses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/analysis"
+      }
+    },
+    "documentRelationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relationship"
+      }
+    },
+    "documentAnnotations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/annotation"
+      }
+    },
+    "documentPresentation": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/presentation"
+      }
+    }
+  },
+  "$defs": {
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end",
+        "startLine",
+        "startColumn",
+        "endLine",
+        "endColumn"
+      ],
+      "properties": {
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "startLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "startColumn": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "endLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "endColumn": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "sourceKind"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string"
+        },
+        "sourceKind": {
+          "enum": [
+            "law",
+            "case",
+            "other",
+            "synthetic"
+          ]
+        },
+        "sourceLocator": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "referenceSource"
+      ],
+      "properties": {
+        "referenceSource": {
+          "type": "string"
+        },
+        "referenceSpan": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nodeId",
+        "nodeKind",
+        "nodeLabel",
+        "nodeSources"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string"
+        },
+        "nodeKind": {
+          "enum": [
+            "rule",
+            "input",
+            "all",
+            "any",
+            "definition"
+          ]
+        },
+        "nodeLabel": {
+          "type": "string"
+        },
+        "nodeQuotation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nodeCitation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nodeSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edgeId",
+        "edgeFrom",
+        "edgeTo",
+        "edgeKind"
+      ],
+      "properties": {
+        "edgeId": {
+          "type": "string"
+        },
+        "edgeFrom": {
+          "type": "string"
+        },
+        "edgeTo": {
+          "type": "string"
+        },
+        "edgeKind": {
+          "enum": [
+            "requires",
+            "member",
+            "exception",
+            "defines",
+            "use"
+          ]
+        }
+      }
+    },
+    "law": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lawId",
+        "lawRevision",
+        "lawNodes",
+        "lawEdges",
+        "lawScope"
+      ],
+      "properties": {
+        "lawId": {
+          "type": "string"
+        },
+        "lawRevision": {
+          "type": "string"
+        },
+        "lawNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "lawEdges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/edge"
+          }
+        },
+        "lawScope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopeActor",
+        "scopeContext"
+      ],
+      "properties": {
+        "scopeActor": {
+          "type": "string"
+        },
+        "scopeContext": {
+          "type": "string"
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assertionId",
+        "assertionDescription",
+        "assertionScope",
+        "assertionSources"
+      ],
+      "properties": {
+        "assertionId": {
+          "type": "string"
+        },
+        "assertionDescription": {
+          "type": "string"
+        },
+        "assertionScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "assertionSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "classification": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "proved"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "not_proved"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "reason"
+          ],
+          "properties": {
+            "kind": {
+              "const": "unresolved"
+            },
+            "reason": {
+              "enum": [
+                "not_determined",
+                "external_decision_pending"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assessmentId",
+        "assessmentInput",
+        "assessmentScope",
+        "assessmentClassification",
+        "assessmentReason",
+        "assessmentIssuer",
+        "assessmentOrigin",
+        "assessmentBasis",
+        "assessmentAssertions",
+        "assessmentSources"
+      ],
+      "properties": {
+        "assessmentId": {
+          "type": "string"
+        },
+        "assessmentInput": {
+          "type": "string"
+        },
+        "assessmentScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "assessmentClassification": {
+          "$ref": "#/$defs/classification"
+        },
+        "assessmentReason": {
+          "type": "string"
+        },
+        "assessmentIssuer": {
+          "type": "string"
+        },
+        "assessmentOrigin": {
+          "enum": [
+            "external_assertion",
+            "synthetic_fixture"
+          ]
+        },
+        "assessmentBasis": {
+          "enum": [
+            "case_material",
+            "assumption"
+          ]
+        },
+        "assessmentAssertions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "assessmentSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "analysisId",
+        "analysisTarget",
+        "analysisScope",
+        "analysisAssessments",
+        "analysisReferenceDate"
+      ],
+      "properties": {
+        "analysisId": {
+          "type": "string"
+        },
+        "analysisTarget": {
+          "type": "string"
+        },
+        "analysisScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "analysisAssessments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "analysisReferenceDate": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationshipId",
+        "relationshipKind",
+        "relationshipFrom",
+        "relationshipTo",
+        "relationshipComment"
+      ],
+      "properties": {
+        "relationshipId": {
+          "type": "string"
+        },
+        "relationshipKind": {
+          "enum": [
+            "chronology",
+            "support",
+            "challenge"
+          ]
+        },
+        "relationshipFrom": {
+          "type": "string"
+        },
+        "relationshipTo": {
+          "type": "string"
+        },
+        "relationshipComment": {
+          "type": "string"
+        }
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "annotationId",
+        "annotationAbout",
+        "annotationText",
+        "annotationState"
+      ],
+      "properties": {
+        "annotationId": {
+          "type": "string"
+        },
+        "annotationAbout": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "annotationText": {
+          "type": "string"
+        },
+        "annotationState": {
+          "enum": [
+            "draft",
+            "retained"
+          ]
+        }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "presentationObject",
+        "presentationProperties"
+      ],
+      "properties": {
+        "presentationObject": {
+          "type": "string"
+        },
+        "presentationProperties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

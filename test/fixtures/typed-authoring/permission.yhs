@@ -1,0 +1,4 @@
+typed-rules-scenario PermissionInputs for PermissionReference {
+ classify permission(actor:ada,resource:r,kind:read) as proved reason "Independent positive tuple";
+ classify permission(actor:ben,resource:r,kind:read) as unresolved reason "not_determined";
+}

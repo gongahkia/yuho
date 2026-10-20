@@ -1,0 +1,867 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.dev/schema/authoring-v0.3-experimental.schema.json",
+  "title": "Experimental grounded typed authoring (not proof or linked profile)",
+  "$ref": "#/$defs/document",
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopeActor",
+        "scopeContext"
+      ],
+      "properties": {
+        "scopeActor": {
+          "type": "string"
+        },
+        "scopeContext": {
+          "type": "string"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "sourceKind"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string"
+        },
+        "sourceKind": {
+          "enum": [
+            "law",
+            "case",
+            "other",
+            "synthetic"
+          ]
+        },
+        "sourceLocator": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "referenceSource"
+      ],
+      "properties": {
+        "referenceSource": {
+          "type": "string"
+        },
+        "referenceSpan": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end",
+        "startLine",
+        "startColumn",
+        "endLine",
+        "endColumn"
+      ],
+      "properties": {
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "startLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "startColumn": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "endLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "endColumn": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assertionId",
+        "assertionDescription",
+        "assertionScope",
+        "assertionSources"
+      ],
+      "properties": {
+        "assertionId": {
+          "type": "string"
+        },
+        "assertionDescription": {
+          "type": "string"
+        },
+        "assertionScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "assertionSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "annotationId",
+        "annotationAbout",
+        "annotationText",
+        "annotationState"
+      ],
+      "properties": {
+        "annotationId": {
+          "type": "string"
+        },
+        "annotationAbout": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "annotationText": {
+          "type": "string"
+        },
+        "annotationState": {
+          "enum": [
+            "draft",
+            "retained"
+          ]
+        }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "presentationObject",
+        "presentationProperties"
+      ],
+      "properties": {
+        "presentationObject": {
+          "type": "string"
+        },
+        "presentationProperties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "typedMeta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "typedId",
+        "typedLabel",
+        "typedCitation",
+        "typedSources"
+      ],
+      "properties": {
+        "typedId": {
+          "type": "string"
+        },
+        "typedLabel": {
+          "type": "string"
+        },
+        "typedCitation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "typedSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "entityType": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entityTypeMeta"
+      ],
+      "properties": {
+        "entityTypeMeta": {
+          "$ref": "#/$defs/typedMeta"
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entityMeta",
+        "entityNominalType"
+      ],
+      "properties": {
+        "entityMeta": {
+          "$ref": "#/$defs/typedMeta"
+        },
+        "entityNominalType": {
+          "type": "string"
+        }
+      }
+    },
+    "argument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "argumentRole",
+        "argumentType"
+      ],
+      "properties": {
+        "argumentRole": {
+          "type": "string"
+        },
+        "argumentType": {
+          "type": "string"
+        }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predicateMeta",
+        "predicateRoles"
+      ],
+      "properties": {
+        "predicateMeta": {
+          "$ref": "#/$defs/typedMeta"
+        },
+        "predicateRoles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/argument"
+          }
+        }
+      }
+    },
+    "tuple": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tuplePredicate",
+        "tupleArguments"
+      ],
+      "properties": {
+        "tuplePredicate": {
+          "type": "string"
+        },
+        "tupleArguments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicationMeta",
+        "applicationTuple"
+      ],
+      "properties": {
+        "applicationMeta": {
+          "$ref": "#/$defs/typedMeta"
+        },
+        "applicationTuple": {
+          "$ref": "#/$defs/tuple"
+        }
+      }
+    },
+    "scalar": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scalarMeta",
+        "scalarDeclaredType",
+        "scalarNormalisation"
+      ],
+      "properties": {
+        "scalarMeta": {
+          "$ref": "#/$defs/typedMeta"
+        },
+        "scalarDeclaredType": {
+          "const": "integer"
+        },
+        "scalarNormalisation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "classification": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag"
+          ],
+          "properties": {
+            "tag": {
+              "const": "TechnicalTrue"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag"
+          ],
+          "properties": {
+            "tag": {
+              "const": "TechnicalFalse"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag",
+            "contents"
+          ],
+          "properties": {
+            "tag": {
+              "const": "TechnicalUnresolved"
+            },
+            "contents": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "exact": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag",
+            "contents"
+          ],
+          "properties": {
+            "tag": {
+              "const": "ExactInteger"
+            },
+            "contents": {
+              "type": "integer"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag",
+            "contents"
+          ],
+          "properties": {
+            "tag": {
+              "const": "UnknownInteger"
+            },
+            "contents": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        }
+      ]
+    },
+    "form": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag",
+            "contents"
+          ],
+          "properties": {
+            "tag": {
+              "const": "GroundApplication"
+            },
+            "contents": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag",
+            "contents"
+          ],
+          "properties": {
+            "tag": {
+              "const": "IntegerComparison"
+            },
+            "contents": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "enum": [
+                    "gt",
+                    "eq"
+                  ]
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "minItems": 3,
+              "maxItems": 3
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag"
+          ],
+          "properties": {
+            "tag": {
+              "const": "TypedAll"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag"
+          ],
+          "properties": {
+            "tag": {
+              "const": "TypedAny"
+            }
+          }
+        }
+      ]
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "typedAssessmentMeta",
+        "assessedApplication",
+        "assessedTuple",
+        "typedAssessmentScope",
+        "typedClassification",
+        "typedAssessmentReason",
+        "typedIssuer",
+        "typedOrigin",
+        "typedBasis",
+        "typedAssertionRefs"
+      ],
+      "properties": {
+        "typedAssessmentMeta": {
+          "$ref": "#/$defs/typedMeta"
+        },
+        "assessedApplication": {
+          "type": "string"
+        },
+        "assessedTuple": {
+          "$ref": "#/$defs/tuple"
+        },
+        "typedAssessmentScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "typedClassification": {
+          "$ref": "#/$defs/classification"
+        },
+        "typedAssessmentReason": {
+          "type": "string"
+        },
+        "typedIssuer": {
+          "type": "string"
+        },
+        "typedOrigin": {
+          "enum": [
+            "synthetic_fixture",
+            "external_assertion"
+          ]
+        },
+        "typedBasis": {
+          "enum": [
+            "assumption",
+            "case_material"
+          ]
+        },
+        "typedAssertionRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "valueMeta",
+        "valueScalar",
+        "valueScope",
+        "valueExact",
+        "valueReason",
+        "valueIssuer"
+      ],
+      "properties": {
+        "valueMeta": {
+          "$ref": "#/$defs/typedMeta"
+        },
+        "valueScalar": {
+          "type": "string"
+        },
+        "valueScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "valueExact": {
+          "$ref": "#/$defs/exact"
+        },
+        "valueReason": {
+          "type": "string"
+        },
+        "valueIssuer": {
+          "type": "string"
+        }
+      }
+    },
+    "expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expressionMeta",
+        "expressionForm"
+      ],
+      "properties": {
+        "expressionMeta": {
+          "$ref": "#/$defs/typedMeta"
+        },
+        "expressionForm": {
+          "$ref": "#/$defs/form"
+        }
+      }
+    },
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "typedLinkId",
+        "typedLinkFrom",
+        "typedLinkTo",
+        "typedLinkKind"
+      ],
+      "properties": {
+        "typedLinkId": {
+          "type": "string"
+        },
+        "typedLinkFrom": {
+          "type": "string"
+        },
+        "typedLinkTo": {
+          "type": "string"
+        },
+        "typedLinkKind": {
+          "enum": [
+            "typed_body",
+            "typed_member"
+          ]
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "typedRuleMeta",
+        "typedRuleConclusion"
+      ],
+      "properties": {
+        "typedRuleMeta": {
+          "$ref": "#/$defs/typedMeta"
+        },
+        "typedRuleConclusion": {
+          "type": "string"
+        }
+      }
+    },
+    "proposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "propositionMeta"
+      ],
+      "properties": {
+        "propositionMeta": {
+          "$ref": "#/$defs/typedMeta"
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "typedAnalysisId",
+        "typedAnalysisRule",
+        "typedAnalysisProposition",
+        "typedAnalysisScope",
+        "selectedTypedAssessments",
+        "selectedTypedValues"
+      ],
+      "properties": {
+        "typedAnalysisId": {
+          "type": "string"
+        },
+        "typedAnalysisRule": {
+          "type": "string"
+        },
+        "typedAnalysisProposition": {
+          "type": "string"
+        },
+        "typedAnalysisScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "selectedTypedAssessments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "selectedTypedValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "typedDocumentFormat",
+        "typedDocumentId",
+        "typedLawId",
+        "typedLawRevision",
+        "typedEntityTypes",
+        "typedEntities",
+        "typedPredicates",
+        "typedApplications",
+        "typedScalars",
+        "typedExpressions",
+        "typedLinks",
+        "typedRules",
+        "typedPropositions",
+        "typedAssessments",
+        "typedValues",
+        "typedAnalyses",
+        "typedOriginalSources",
+        "typedCaseAssertions",
+        "typedAnnotations",
+        "typedPresentation",
+        "typedLimitations"
+      ],
+      "properties": {
+        "typedDocumentFormat": {
+          "const": "yuho.authoring/v0.3-experimental"
+        },
+        "typedDocumentId": {
+          "type": "string"
+        },
+        "typedLawId": {
+          "type": "string"
+        },
+        "typedLawRevision": {
+          "type": "string"
+        },
+        "typedEntityTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entityType"
+          }
+        },
+        "typedEntities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity"
+          }
+        },
+        "typedPredicates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/predicate"
+          }
+        },
+        "typedApplications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/application"
+          }
+        },
+        "typedScalars": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scalar"
+          }
+        },
+        "typedExpressions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/expression"
+          }
+        },
+        "typedLinks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/link"
+          }
+        },
+        "typedRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        },
+        "typedPropositions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/proposition"
+          }
+        },
+        "typedAssessments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assessment"
+          }
+        },
+        "typedValues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        "typedAnalyses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/analysis"
+          }
+        },
+        "typedOriginalSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "typedCaseAssertions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertion"
+          }
+        },
+        "typedAnnotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/annotation"
+          }
+        },
+        "typedPresentation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/presentation"
+          }
+        },
+        "typedLimitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

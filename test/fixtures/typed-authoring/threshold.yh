@@ -1,0 +1,9 @@
+typed-rules-model ThresholdReference {
+ limit 2048;
+ scalar value:measurement type integer;
+ scalar value:threshold type integer;
+ proposition p:threshold;
+ requirement q:threshold = compare(value:measurement,gt,value:threshold);
+ rule rule:threshold establishes proposition p:threshold when q:threshold;
+ limitation "Fixed RTA 2004 RE research threshold; externally validated breath medium, unit and common exact integer scale. No native physical quantities.";
+}

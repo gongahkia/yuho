@@ -153,7 +153,8 @@ explanationView projection focus options = do
         ++ map contextProjectedId alternatives ++ map objectProjectionId otherAssertions
         ++ map (projectedNodeId . neighbourOccurrence) (explanationDependencies explanation))
       kinds = ["selected_assessment","assessment_assertion","assessment_source","assertion_source",
-        "law_source","instance_of","assessment_input","member","requires","exception","chronology","support","challenge"]
+        "law_source","instance_of","assessment_input","member","requires","use","defines","definition_use",
+        "exception","chronology","support","challenge"]
       edges = [e | e <- projectionEdges value, elem (projectedEdgeKind e) kinds,
         elem (projectedEdgeFrom e) requested, elem (projectedEdgeTo e) requested]
       edgeIds = map projectedEdgeId edges

@@ -7,6 +7,8 @@ module Yuho.Authoring
   , module Yuho.Authoring.Projection.ViewEncode
   , module Yuho.Authoring.Edit
   , module Yuho.Authoring.Source
+  , module Yuho.Authoring.Typed
+  , module Yuho.Authoring.Definitions
   , module Yuho.Authoring.Interaction
   , validateDocument, validateAnalysis
   , SuppliedStatus(..), UnresolvedReason(..)
@@ -15,6 +17,8 @@ module Yuho.Authoring
 import Yuho.Authoring.Types
 import Yuho.Authoring.Edit
 import Yuho.Authoring.Source
+import Yuho.Authoring.Typed
+import Yuho.Authoring.Definitions
 import Yuho.Authoring.Interaction
 import Yuho.Authoring.Codec
 import Yuho.Authoring.Compile

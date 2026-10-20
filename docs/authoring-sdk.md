@@ -31,7 +31,13 @@ versions are rejected at `/documentFormat`. The
 [JSON schema](../schema/authoring-v0.1-experimental.schema.json) specifies the
 supported serialized fields; semantic validation is performed by the SDK.
 
+For intentional reuse of one authored expression across rules, use the optional
+[linked definitions profile](linked-definitions.md). It adds explicit v0.2
+definition/use constructs while retaining the v0.1 tree contract.
+
 ## Current API map
+
+The opt-in [grounded typed profile (v0.3)](typed-authoring.md) covers concrete entity tuples and exact integer comparisons through `TypedFiniteRules-v1`. It uses separate typed documents/reports; proof and linked-definition profiles retain their existing contracts.
 
 Import **`Yuho.Authoring`** for all entries below. The public record accessors are
 available from that facade; no implementation imports or lexer tokens are needed.
@@ -49,6 +55,8 @@ available from that facade; no implementation imports or lexer tokens are needed
 | Recover provenance | `inspectAssessment`, `inspectionAssessment`, `inspectionSelected`, `inspectionApplications`, `inspectionResolution`, `resolvedAssertions`; `resolveProjectedObject`, `recoverOriginalSource`, `excerptText` |
 | Compare compatible runs | `compareAnalyses`, `projectComparison`; `comparisonAssessments`, `comparisonChanged`, `comparisonUnchanged`, `comparisonConclusionChanged` |
 | Select and export a view | `lawOccurrenceView`, `caseView`, `applicationView`; `viewIncludedNodes`, `viewOmittedNodes`, `viewIncludedEdges`, `viewOmittedEdges`, `viewNodeBindings`, `viewEdgeBindings`; encoders below |
+| Inspect explicit shared definitions (v0.2) | `linkedAuthoringFormat`, `inspectDefinition`, `sharedUses`, `sharedOccurrences`, `inspectDefinitionOccurrence`, `definitionView`, `definitionOccurrenceView`; see [contract](linked-definitions.md) |
+| Author grounded typed relations and integers (v0.3) | `TypedDocument`, `GroundTuple`, `TypedAssessment`, `TypedValue`; `decodeTypedDocument`, `validateTypedAnalysis`, `compileTypedAnalysis`, `evaluateTypedAnalysis`, `projectTypedEvaluation`, `inspectTypedExpression`, `typedReferenceView`, `recoverTypedSource`; see [typed contract](typed-authoring.md) |
 | Explain a requirement without graph joins | `focusRequirement`, `AuthoredRequirement`, `RequirementOccurrence`; `explanationSelected`, `explanationAlternatives`, `explanationDependencies`, `explanationAncestors`, `explanationRules`, `explanationExceptions`; `explanationView`, `defaultExplanationOptions` |
 
 An authored input definition, its structural occurrence, a selected assessment,
@@ -337,6 +345,9 @@ The lower-level `Yuho.Authoring.Validate.validateBindings` performs adapter chec
 without attempting kernel compilation. Prefer the facade's `validateAnalysis`.
 
 ## Supported graph and authored information
+
+This section describes the retained v0.1 tree profile. Explicit reusable
+definitions are available through the opt-in [v0.2 profile](linked-definitions.md).
 
 A `LawDefinition` identifies its definition and revision. Law nodes have globally
 unique IDs and kinds `rule`, `input`, `all`, or `any`. Executable `LawEdge`s have
