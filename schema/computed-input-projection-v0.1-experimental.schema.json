@@ -1,0 +1,304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.dev/schema/computed-input-projection-v0.1-experimental.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "computedProjectionVersion": {
+      "const": "yuho.computed-input-projection/v0.1-experimental"
+    },
+    "computedProjectionId": {
+      "type": "string"
+    },
+    "computedProjectionReport": {
+      "$ref": "#/$defs/report"
+    },
+    "computedSourceProjection": {
+      "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json"
+    },
+    "computedSourceInspection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "typedFocusSnapshot": {
+          "type": "string"
+        },
+        "typedFocusAnalysis": {
+          "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/analysis"
+        },
+        "typedFocusExpression": {
+          "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/expression"
+        },
+        "typedFocusOccurrence": {
+          "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/node"
+        },
+        "typedFocusObservation": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/observation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "typedFocusApplication": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/application"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "typedFocusPredicate": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/predicate"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "typedFocusArguments": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/argument"
+              },
+              {
+                "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/entity"
+              }
+            ],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "typedFocusSelected": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/assessment"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "typedFocusAlternatives": {
+          "type": "array",
+          "items": {
+            "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/assessment"
+          }
+        },
+        "typedFocusScalars": {
+          "type": "array",
+          "items": {
+            "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/scalar"
+          }
+        },
+        "typedFocusValues": {
+          "type": "array",
+          "items": {
+            "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/value"
+          }
+        },
+        "typedFocusAssertions": {
+          "type": "array",
+          "items": {
+            "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/assertion"
+          }
+        },
+        "typedFocusSources": {
+          "type": "array",
+          "items": {
+            "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/sourceRef"
+          }
+        },
+        "typedFocusParents": {
+          "type": "array",
+          "items": {
+            "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/link"
+          }
+        },
+        "typedFocusChildren": {
+          "type": "array",
+          "items": {
+            "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/link"
+          }
+        }
+      },
+      "required": [
+        "typedFocusSnapshot",
+        "typedFocusAnalysis",
+        "typedFocusExpression",
+        "typedFocusOccurrence",
+        "typedFocusObservation",
+        "typedFocusApplication",
+        "typedFocusPredicate",
+        "typedFocusArguments",
+        "typedFocusSelected",
+        "typedFocusAlternatives",
+        "typedFocusScalars",
+        "typedFocusValues",
+        "typedFocusAssertions",
+        "typedFocusSources",
+        "typedFocusParents",
+        "typedFocusChildren"
+      ]
+    },
+    "computedProofProjection": {
+      "anyOf": [
+        {
+          "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "computedPresumptionProjection": {
+      "anyOf": [
+        {
+          "$ref": "https://yuho.dev/schema/presumption-projection-v0.4-experimental.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "computedProjectionNodes": {
+      "type": "array",
+      "items": {
+        "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/projectionNode"
+      }
+    },
+    "computedProjectionEdges": {
+      "type": "array",
+      "items": {
+        "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/projectionEdge"
+      }
+    },
+    "computedNavigation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "integrationNode": {
+            "type": "string"
+          },
+          "componentProjection": {
+            "type": "string"
+          },
+          "componentNode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "integrationNode",
+          "componentProjection",
+          "componentNode"
+        ]
+      }
+    }
+  },
+  "required": [
+    "computedProjectionVersion",
+    "computedProjectionId",
+    "computedProjectionReport",
+    "computedSourceProjection",
+    "computedSourceInspection",
+    "computedProofProjection",
+    "computedPresumptionProjection",
+    "computedProjectionNodes",
+    "computedProjectionEdges",
+    "computedNavigation"
+  ],
+  "$defs": {
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "computedReportVersion": {
+          "const": "yuho.computed-input/v0.1-experimental"
+        },
+        "computedExecutionId": {
+          "type": "string"
+        },
+        "computedReportDocument": {
+          "$ref": "https://yuho.dev/schema/computed-input-v0.1-experimental.schema.json"
+        },
+        "computedTypedSnapshot": {
+          "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/snapshot"
+        },
+        "computedOriginalObservation": {
+          "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/observation"
+        },
+        "computedUpstreamReport": {
+          "$ref": "https://yuho.dev/schema/typed-analysis-projection-v0.3-experimental.schema.json#/$defs/report"
+        },
+        "computedMappedClassification": {
+          "$ref": "https://yuho.example/schema/authoring-v0.1-experimental.json#/$defs/classification"
+        },
+        "computedGeneratedOrigin": {
+          "const": "generated_computed_input_bridge"
+        },
+        "computedGeneratedAssessment": {
+          "$ref": "https://yuho.example/schema/authoring-v0.1-experimental.json#/$defs/assessment"
+        },
+        "computedExecutionOverlay": {
+          "$ref": "https://yuho.dev/schema/computed-input-v0.1-experimental.schema.json#/$defs/destination"
+        },
+        "computedDownstreamSnapshot": {
+          "type": "string"
+        },
+        "computedDownstreamReport": {
+          "oneOf": [
+            {
+              "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/application"
+            },
+            {
+              "$ref": "https://yuho.dev/schema/presumption-projection-v0.4-experimental.schema.json#/$defs/presumptionApplication"
+            }
+          ]
+        },
+        "computedDerivationReport": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.dev/schema/presumption-projection-v0.4-experimental.schema.json#/$defs/presumptionReport"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "computedReportNotice": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "computedReportVersion",
+        "computedExecutionId",
+        "computedReportDocument",
+        "computedTypedSnapshot",
+        "computedOriginalObservation",
+        "computedUpstreamReport",
+        "computedMappedClassification",
+        "computedGeneratedOrigin",
+        "computedGeneratedAssessment",
+        "computedExecutionOverlay",
+        "computedDownstreamSnapshot",
+        "computedDownstreamReport",
+        "computedDerivationReport",
+        "computedReportNotice"
+      ]
+    },
+    "view": {
+      "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/view"
+    }
+  }
+}

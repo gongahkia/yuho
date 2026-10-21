@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.dev/schema/computed-input-v0.1-experimental.schema.json",
+  "title": "Explicit single named typed-expression to proof/presumption technical input",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "computedDocumentFormat": {
+      "const": "yuho.computed-input/v0.1-experimental"
+    },
+    "computedDocumentId": {
+      "type": "string"
+    },
+    "computedTypedSource": {
+      "$ref": "https://yuho.dev/schema/authoring-v0.3-experimental.schema.json"
+    },
+    "computedDestination": {
+      "$ref": "#/$defs/destination"
+    },
+    "computedBinding": {
+      "$ref": "#/$defs/binding"
+    }
+  },
+  "required": [
+    "computedDocumentFormat",
+    "computedDocumentId",
+    "computedTypedSource",
+    "computedDestination",
+    "computedBinding"
+  ],
+  "$defs": {
+    "destination": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destinationProfile": {
+          "enum": [
+            "SuppliedProofStatus-v1",
+            "RegisteredPresumptionDerivations-v1"
+          ]
+        },
+        "destinationAnalysis": {
+          "type": "string"
+        },
+        "destinationProof": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.example/schema/authoring-v0.1-experimental.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "destinationPresumption": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.dev/schema/authoring-v0.4-experimental.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "destinationProfile",
+        "destinationAnalysis",
+        "destinationProof",
+        "destinationPresumption"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "destinationProfile": {
+              "const": "SuppliedProofStatus-v1"
+            },
+            "destinationProof": {
+              "$ref": "https://yuho.example/schema/authoring-v0.1-experimental.json"
+            },
+            "destinationPresumption": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "destinationProfile": {
+              "const": "RegisteredPresumptionDerivations-v1"
+            },
+            "destinationProof": {
+              "type": "null"
+            },
+            "destinationPresumption": {
+              "$ref": "https://yuho.dev/schema/authoring-v0.4-experimental.schema.json"
+            }
+          }
+        }
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "computedBindingId": {
+          "type": "string"
+        },
+        "computedSourceDocument": {
+          "type": "string"
+        },
+        "computedSourceAnalysis": {
+          "type": "string"
+        },
+        "computedSourceExpression": {
+          "type": "string"
+        },
+        "computedSourceSnapshot": {
+          "type": "string"
+        },
+        "computedDestinationId": {
+          "type": "string"
+        },
+        "computedDestinationAnalysis": {
+          "type": "string"
+        },
+        "computedDestinationInput": {
+          "type": "string"
+        },
+        "computedDestinationFingerprint": {
+          "type": "string"
+        },
+        "computedRationale": {
+          "type": "string"
+        },
+        "computedSourceScope": {
+          "$ref": "https://yuho.example/schema/authoring-v0.1-experimental.json#/$defs/scope"
+        },
+        "computedDestinationScope": {
+          "$ref": "https://yuho.example/schema/authoring-v0.1-experimental.json#/$defs/scope"
+        },
+        "computedPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mappingPolicy": {
+              "const": "yuho.technical-status-to-proof/v1"
+            },
+            "mappingUnresolvedReason": {
+              "enum": [
+                "not_determined",
+                "external_decision_pending"
+              ]
+            }
+          },
+          "required": [
+            "mappingPolicy",
+            "mappingUnresolvedReason"
+          ]
+        },
+        "computedOriginalSources": {
+          "type": "array",
+          "items": {
+            "$ref": "https://yuho.example/schema/authoring-v0.1-experimental.json#/$defs/sourceRef"
+          }
+        }
+      },
+      "required": [
+        "computedBindingId",
+        "computedSourceDocument",
+        "computedSourceAnalysis",
+        "computedSourceExpression",
+        "computedSourceSnapshot",
+        "computedDestinationId",
+        "computedDestinationAnalysis",
+        "computedDestinationInput",
+        "computedDestinationFingerprint",
+        "computedRationale",
+        "computedSourceScope",
+        "computedDestinationScope",
+        "computedPolicy",
+        "computedOriginalSources"
+      ]
+    }
+  }
+}

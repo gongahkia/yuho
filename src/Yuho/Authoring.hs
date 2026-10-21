@@ -1,6 +1,8 @@
 -- | Experimental diagram-first SDK. See docs/authoring-sdk.md.
 module Yuho.Authoring
-  ( module Yuho.Authoring.Temporal
+  ( module Yuho.Authoring.ComputedInput
+  , module Yuho.Authoring.ComputedInput.Projection
+  , module Yuho.Authoring.Temporal
   , module Yuho.Authoring.Types, module Yuho.Authoring.Codec
   , module Yuho.Authoring.Compile, module Yuho.Authoring.Report
   , module Yuho.Authoring.Projection, module Yuho.Authoring.Projection.Encode
@@ -16,6 +18,8 @@ module Yuho.Authoring
   , SuppliedStatus(..), UnresolvedReason(..)
   ) where
 
+import Yuho.Authoring.ComputedInput
+import Yuho.Authoring.ComputedInput.Projection
 import Yuho.Authoring.Temporal
 import Yuho.Authoring.Types
 import Yuho.Authoring.Edit

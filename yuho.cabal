@@ -24,6 +24,8 @@ library
   other-modules: Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON
   exposed-modules:
       Yuho.Authoring
+      Yuho.Authoring.ComputedInput
+      Yuho.Authoring.ComputedInput.Projection
       Yuho.Authoring.Temporal
       Yuho.Authoring.Temporal.Types
       Yuho.Authoring.Temporal.Run
@@ -168,8 +170,8 @@ test-suite yuho-test
   import: yuho-common
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: TemporalAuthoringChecks, TemporalExamples, PresumptionAuthoringChecks, PresumptionExamples, TypedBoundaryChecks, TypedAuthoringChecks, TypedExamples, IndependentLinkedRegressions, LinkedDefinitionChecks, LinkedExample, InteractionChecks, SourceAnchorChecks, SourceAnchors, EditingChecks, Editing, Acknowledgements, HurtChecks, Hurt, CaseViewChecks, ProjectionChecks, AuthoringChecks, Cheating, CaseApplication, ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
-  hs-source-dirs: test examples/temporal-consumer examples/presumption-consumer examples/authoring-consumer examples/linked-definitions-consumer examples/typed-authoring-consumer
+  other-modules: ComputedInputChecks, ComputedExample, TemporalAuthoringChecks, TemporalExamples, PresumptionAuthoringChecks, PresumptionExamples, TypedBoundaryChecks, TypedAuthoringChecks, TypedExamples, IndependentLinkedRegressions, LinkedDefinitionChecks, LinkedExample, InteractionChecks, SourceAnchorChecks, SourceAnchors, EditingChecks, Editing, Acknowledgements, HurtChecks, Hurt, CaseViewChecks, ProjectionChecks, AuthoringChecks, Cheating, CaseApplication, ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
+  hs-source-dirs: test examples/computed-input-consumer examples/temporal-consumer examples/presumption-consumer examples/authoring-consumer examples/linked-definitions-consumer examples/typed-authoring-consumer
   build-depends:
       yuho ==1.0.0.0
     , QuickCheck ==2.18.0.0

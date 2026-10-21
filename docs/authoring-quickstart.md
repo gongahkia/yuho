@@ -27,6 +27,10 @@ quickstart itself retains the existing v0.1 example.
 For concrete typed relationships and exact integer comparisons, the separate
 [typed-authoring guide](typed-authoring.md) provides the opt-in v0.3 lifecycle.
 
+To use an actual named typed computation as a destination technical input, see
+[explicit computed-input bindings](computed-input-bindings.md). The author must
+authorise the mapping; technical satisfaction does not establish legal proof.
+
 ## Build a real consumer outside the checkout
 
 Yuho is used here as an **explicit local Cabal package**, not an assumed Hackage
