@@ -3,6 +3,7 @@
 module Yuho.Authoring.Report
   ( Evaluation, evaluateAnalysis, evaluationReport, evaluationSnapshot
   , evaluationKernelResponse, evaluationMappings, evaluationCompilation
+  , applicationReportFromResult
   , ApplicationReport(..), RequirementObservation(..), RuleObservation(..)
   , ExceptionObservation(..), Comparison(..), AssessmentChange(..)
   , ObservationChange(..), compareAnalyses ) where
@@ -72,6 +73,15 @@ evaluateAnalysis compiled = do
   response <- kernel (encodeProofResult (compiledValidated compiled) result selection)
   request <- either (\_ -> Left [issue "AINTERNAL" "/" [] "compiled request unavailable"])
     Right (decodeJson (compiledRequest compiled))
+  pure (Evaluation (applicationReportFromResult compiled result (inputDigest request)) compiled response)
+  where kernel = either (\_ -> Left [issue "AKERNEL" "/evaluation"
+          [analysisId (snapshotAnalysis (compiledSnapshot compiled))]
+          "existing evaluator or result encoder rejected the validated artifact"]) Right
+
+-- | Assemble authored mappings from an existing proof result; performs no evaluation.
+-- The caller owns the backend/profile and its immutable outer snapshot.
+applicationReportFromResult :: CompiledAnalysis -> Proof.ProofResult -> Text -> ApplicationReport
+applicationReportFromResult compiled result digest =
   let snapshot = compiledSnapshot compiled
       doc = snapshotDocument snapshot
       law = documentLaw doc
@@ -123,16 +133,11 @@ evaluateAnalysis compiled = do
                       ((== "satisfied") <$> status)
                       (if status == Nothing then whySkipped else Nothing)
         | e <- lawEdges law, edgeFrom e == analysisTarget analysis, edgeKind e == "exception"]
-      report = ApplicationReport (snapshotId snapshot) (inputDigest request) (snapshotProfile snapshot)
+  in ApplicationReport (snapshotId snapshot) digest (snapshotProfile snapshot)
         (analysisId analysis) (analysisTarget analysis) (analysisScope analysis)
         (Proof.satisfactionText (Proof.proofResultStatus result)) observations rules exceptions
         (openInputs (validateBindings doc (analysisId analysis)))
         "Technical evaluation of the selected model and supplied classifications; no evidence weighing, legal interpretation selection, factual falsity, guilt or sentence finding."
-  pure (Evaluation report compiled response)
-  where kernel = either (\_ -> Left [issue "AKERNEL" "/evaluation"
-          [analysisId (snapshotAnalysis (compiledSnapshot compiled))]
-          "existing evaluator or result encoder rejected the validated artifact"]) Right
-
 reasonText :: Proof.ProofReason -> Text
 reasonText reason = case reason of
   Proof.ProofSatisfied -> "satisfied"

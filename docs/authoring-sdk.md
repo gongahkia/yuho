@@ -35,6 +35,9 @@ For intentional reuse of one authored expression across rules, use the optional
 [linked definitions profile](linked-definitions.md). It adds explicit v0.2
 definition/use constructs while retaining the v0.1 tree contract.
 
+For operative registered derivations with separate direct/effective values, see the
+[presumption profile (v0.4)](presumption-authoring.md). It is a separate explicit wrapper over v0.1, not an interpretation of descriptive support/challenge edges.
+
 ## Current API map
 
 The opt-in [grounded typed profile (v0.3)](typed-authoring.md) covers concrete entity tuples and exact integer comparisons through `TypedFiniteRules-v1`. It uses separate typed documents/reports; proof and linked-definition profiles retain their existing contracts.
@@ -57,6 +60,7 @@ available from that facade; no implementation imports or lexer tokens are needed
 | Select and export a view | `lawOccurrenceView`, `caseView`, `applicationView`; `viewIncludedNodes`, `viewOmittedNodes`, `viewIncludedEdges`, `viewOmittedEdges`, `viewNodeBindings`, `viewEdgeBindings`; encoders below |
 | Inspect explicit shared definitions (v0.2) | `linkedAuthoringFormat`, `inspectDefinition`, `sharedUses`, `sharedOccurrences`, `inspectDefinitionOccurrence`, `definitionView`, `definitionOccurrenceView`; see [contract](linked-definitions.md) |
 | Author grounded typed relations and integers (v0.3) | `TypedDocument`, `GroundTuple`, `TypedAssessment`, `TypedValue`; `decodeTypedDocument`, `validateTypedAnalysis`, `compileTypedAnalysis`, `evaluateTypedAnalysis`, `projectTypedEvaluation`, `inspectTypedExpression`, `typedReferenceView`, `recoverTypedSource`; see [typed contract](typed-authoring.md) |
+| Inspect operative presumptions (v0.4) | `PresumptionDocument`, `AuthoredRegistration`, `RegisteredCondition`; `validatePresumptionAnalysis`, `compilePresumptionAnalysis`, `evaluatePresumptionAnalysis`, `projectPresumptionEvaluation`, `inspectPresumptionTarget`, `inspectRegistration`, `recoverPresumptionSource`, `presumptionReferenceView`; see [presumption contract](presumption-authoring.md) |
 | Explain a requirement without graph joins | `focusRequirement`, `AuthoredRequirement`, `RequirementOccurrence`; `explanationSelected`, `explanationAlternatives`, `explanationDependencies`, `explanationAncestors`, `explanationRules`, `explanationExceptions`; `explanationView`, `defaultExplanationOptions` |
 
 An authored input definition, its structural occurrence, a selected assessment,
