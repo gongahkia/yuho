@@ -1,0 +1,3052 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.dev/schema/temporal-projection-v0.5-experimental.schema.json",
+  "title": "Complete temporal selection and unchanged selected proof projection",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "temporalProjectionVersion": {
+      "const": "yuho.temporal-projection/v0.5-experimental"
+    },
+    "temporalProjectionId": {
+      "type": "string"
+    },
+    "temporalProjectionSelection": {
+      "$ref": "#/$defs/temporalSelection"
+    },
+    "temporalProjectionProof": {
+      "$ref": "#/$defs/proofProjection"
+    },
+    "temporalProjectionNodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/temporalProjectionNode"
+      }
+    },
+    "temporalProjectionEdges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/temporalProjectionEdge"
+      }
+    }
+  },
+  "required": [
+    "temporalProjectionVersion",
+    "temporalProjectionId",
+    "temporalProjectionSelection",
+    "temporalProjectionProof",
+    "temporalProjectionNodes",
+    "temporalProjectionEdges"
+  ],
+  "$defs": {
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end",
+        "startLine",
+        "startColumn",
+        "endLine",
+        "endColumn"
+      ],
+      "properties": {
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "startLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "startColumn": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "endLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "endColumn": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "sourceKind"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string"
+        },
+        "sourceKind": {
+          "enum": [
+            "law",
+            "case",
+            "other",
+            "synthetic"
+          ]
+        },
+        "sourceLocator": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "referenceSource"
+      ],
+      "properties": {
+        "referenceSource": {
+          "type": "string"
+        },
+        "referenceSpan": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nodeId",
+        "nodeKind",
+        "nodeLabel",
+        "nodeSources"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string"
+        },
+        "nodeKind": {
+          "enum": [
+            "rule",
+            "input",
+            "all",
+            "any"
+          ]
+        },
+        "nodeLabel": {
+          "type": "string"
+        },
+        "nodeQuotation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nodeCitation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nodeSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edgeId",
+        "edgeFrom",
+        "edgeTo",
+        "edgeKind"
+      ],
+      "properties": {
+        "edgeId": {
+          "type": "string"
+        },
+        "edgeFrom": {
+          "type": "string"
+        },
+        "edgeTo": {
+          "type": "string"
+        },
+        "edgeKind": {
+          "enum": [
+            "requires",
+            "member",
+            "exception"
+          ]
+        }
+      }
+    },
+    "law": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lawId",
+        "lawRevision",
+        "lawNodes",
+        "lawEdges",
+        "lawScope"
+      ],
+      "properties": {
+        "lawId": {
+          "type": "string"
+        },
+        "lawRevision": {
+          "type": "string"
+        },
+        "lawNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "lawEdges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/edge"
+          }
+        },
+        "lawScope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopeActor",
+        "scopeContext"
+      ],
+      "properties": {
+        "scopeActor": {
+          "type": "string"
+        },
+        "scopeContext": {
+          "type": "string"
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assertionId",
+        "assertionDescription",
+        "assertionScope",
+        "assertionSources"
+      ],
+      "properties": {
+        "assertionId": {
+          "type": "string"
+        },
+        "assertionDescription": {
+          "type": "string"
+        },
+        "assertionScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "assertionSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "classification": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "proved"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "not_proved"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "reason"
+          ],
+          "properties": {
+            "kind": {
+              "const": "unresolved"
+            },
+            "reason": {
+              "enum": [
+                "not_determined",
+                "external_decision_pending"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assessmentId",
+        "assessmentInput",
+        "assessmentScope",
+        "assessmentClassification",
+        "assessmentReason",
+        "assessmentIssuer",
+        "assessmentOrigin",
+        "assessmentBasis",
+        "assessmentAssertions",
+        "assessmentSources"
+      ],
+      "properties": {
+        "assessmentId": {
+          "type": "string"
+        },
+        "assessmentInput": {
+          "type": "string"
+        },
+        "assessmentScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "assessmentClassification": {
+          "$ref": "#/$defs/classification"
+        },
+        "assessmentReason": {
+          "type": "string"
+        },
+        "assessmentIssuer": {
+          "type": "string"
+        },
+        "assessmentOrigin": {
+          "enum": [
+            "external_assertion",
+            "synthetic_fixture"
+          ]
+        },
+        "assessmentBasis": {
+          "enum": [
+            "case_material",
+            "assumption"
+          ]
+        },
+        "assessmentAssertions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "assessmentSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "analysisId",
+        "analysisTarget",
+        "analysisScope",
+        "analysisAssessments",
+        "analysisReferenceDate"
+      ],
+      "properties": {
+        "analysisId": {
+          "type": "string"
+        },
+        "analysisTarget": {
+          "type": "string"
+        },
+        "analysisScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "analysisAssessments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "analysisReferenceDate": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationshipId",
+        "relationshipKind",
+        "relationshipFrom",
+        "relationshipTo",
+        "relationshipComment"
+      ],
+      "properties": {
+        "relationshipId": {
+          "type": "string"
+        },
+        "relationshipKind": {
+          "enum": [
+            "chronology",
+            "support",
+            "challenge"
+          ]
+        },
+        "relationshipFrom": {
+          "type": "string"
+        },
+        "relationshipTo": {
+          "type": "string"
+        },
+        "relationshipComment": {
+          "type": "string"
+        }
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "annotationId",
+        "annotationAbout",
+        "annotationText",
+        "annotationState"
+      ],
+      "properties": {
+        "annotationId": {
+          "type": "string"
+        },
+        "annotationAbout": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "annotationText": {
+          "type": "string"
+        },
+        "annotationState": {
+          "enum": [
+            "draft",
+            "retained"
+          ]
+        }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "presentationObject",
+        "presentationProperties"
+      ],
+      "properties": {
+        "presentationObject": {
+          "type": "string"
+        },
+        "presentationProperties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "authoringDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentFormat",
+        "documentId",
+        "documentLaw",
+        "documentSources",
+        "documentAssertions",
+        "documentAssessments",
+        "documentAnalyses",
+        "documentRelationships",
+        "documentAnnotations",
+        "documentPresentation"
+      ],
+      "properties": {
+        "documentFormat": {
+          "const": "yuho.authoring/v0.1-experimental"
+        },
+        "documentId": {
+          "type": "string"
+        },
+        "documentLaw": {
+          "$ref": "#/$defs/law"
+        },
+        "documentSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "documentAssertions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertion"
+          }
+        },
+        "documentAssessments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assessment"
+          }
+        },
+        "documentAnalyses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/analysis"
+          }
+        },
+        "documentRelationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "documentAnnotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/annotation"
+          }
+        },
+        "documentPresentation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/presentation"
+          }
+        }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "diagnosticCode",
+        "diagnosticLocation",
+        "diagnosticObjects",
+        "diagnosticMessage"
+      ],
+      "properties": {
+        "diagnosticCode": {
+          "type": "string"
+        },
+        "diagnosticLocation": {
+          "type": "string"
+        },
+        "diagnosticObjects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "diagnosticMessage": {
+          "type": "string"
+        }
+      }
+    },
+    "openInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "openInputId",
+        "openOccurrence",
+        "openRule",
+        "openScope",
+        "openState",
+        "openAssessment"
+      ],
+      "properties": {
+        "openInputId": {
+          "type": "string"
+        },
+        "openOccurrence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "openRule": {
+          "type": "string"
+        },
+        "openScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "openState": {
+          "enum": [
+            "missing",
+            "unresolved"
+          ]
+        },
+        "openAssessment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshotId",
+        "snapshotLawDigest",
+        "snapshotProfile",
+        "snapshotAnalysis",
+        "snapshotDocument"
+      ],
+      "properties": {
+        "snapshotId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "snapshotLawDigest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "snapshotProfile": {
+          "const": "SuppliedProofStatus-v1"
+        },
+        "snapshotAnalysis": {
+          "$ref": "#/$defs/analysis"
+        },
+        "snapshotDocument": {
+          "$ref": "#/$defs/authoringDocument"
+        }
+      }
+    },
+    "occurrenceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "occurrenceLawDigest",
+        "occurrenceTarget",
+        "occurrenceScope",
+        "occurrenceAuthoredNode",
+        "occurrenceAuthoredRule",
+        "occurrenceEdges"
+      ],
+      "properties": {
+        "occurrenceLawDigest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "occurrenceTarget": {
+          "type": "string"
+        },
+        "occurrenceScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "occurrenceAuthoredNode": {
+          "type": "string"
+        },
+        "occurrenceAuthoredRule": {
+          "type": "string"
+        },
+        "occurrenceEdges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "observationIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observationRunSnapshot",
+        "observationProfile",
+        "observationCategory",
+        "observationAuthoredObject",
+        "observationAuthoredPath",
+        "observationOriginalKernelId",
+        "observationOriginalBranchId"
+      ],
+      "properties": {
+        "observationRunSnapshot": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "observationProfile": {
+          "const": "SuppliedProofStatus-v1"
+        },
+        "observationCategory": {
+          "enum": [
+            "requirement",
+            "rule",
+            "exception"
+          ]
+        },
+        "observationAuthoredObject": {
+          "type": "string"
+        },
+        "observationAuthoredPath": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "observationOriginalKernelId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observationOriginalBranchId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "originKind",
+        "originRole",
+        "originAuthoredObjects"
+      ],
+      "properties": {
+        "originKind": {
+          "enum": [
+            "authored",
+            "projection_generated"
+          ]
+        },
+        "originRole": {
+          "type": "string"
+        },
+        "originAuthoredObjects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bindingState",
+        "bindingAssessment",
+        "bindingSupplied",
+        "bindingReason"
+      ],
+      "properties": {
+        "bindingState": {
+          "enum": [
+            "selected",
+            "alternative",
+            "missing"
+          ]
+        },
+        "bindingAssessment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bindingSupplied": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/classification"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bindingReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "projectionNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectedNodeId",
+        "projectedNodeKind",
+        "projectedNodeRole",
+        "projectedNodeLabel",
+        "projectedNodeOrigin",
+        "projectedNodeOccurrence",
+        "projectedNodeObservation",
+        "projectedNodeSelected",
+        "projectedNodeBinding",
+        "projectedNodeComputed",
+        "projectedNodeEvaluation",
+        "projectedNodeSkipReason",
+        "projectedNodeBranchReason"
+      ],
+      "properties": {
+        "projectedNodeId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedNodeKind": {
+          "enum": [
+            "authored",
+            "occurrence",
+            "observation",
+            "generated_source"
+          ]
+        },
+        "projectedNodeRole": {
+          "type": "string"
+        },
+        "projectedNodeLabel": {
+          "type": "string"
+        },
+        "projectedNodeOrigin": {
+          "$ref": "#/$defs/origin"
+        },
+        "projectedNodeOccurrence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/occurrenceIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeObservation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/observationIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeSelected": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeBinding": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/binding"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeEvaluation": {
+          "enum": [
+            "not_applicable",
+            "not_requested",
+            "evaluated",
+            "not_evaluated"
+          ]
+        },
+        "projectedNodeSkipReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeBranchReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "projectedNodeKind": {
+                "const": "authored"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectedNodeComputed": {
+                "type": "null"
+              },
+              "projectedNodeEvaluation": {
+                "const": "not_applicable"
+              },
+              "projectedNodeOccurrence": {
+                "type": "null"
+              },
+              "projectedNodeObservation": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "projectedNodeKind": {
+                "const": "occurrence"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectedNodeOccurrence": {
+                "$ref": "#/$defs/occurrenceIdentity"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "projectedNodeKind": {
+                "const": "observation"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectedNodeObservation": {
+                "$ref": "#/$defs/observationIdentity"
+              },
+              "projectedNodeBinding": {
+                "type": "null"
+              },
+              "projectedNodeEvaluation": {
+                "enum": [
+                  "evaluated",
+                  "not_evaluated"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "projectionEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectedEdgeId",
+        "projectedEdgeFrom",
+        "projectedEdgeTo",
+        "projectedEdgeKind",
+        "projectedEdgeSemantics",
+        "projectedEdgeOrigin",
+        "projectedEdgeOriginalSource"
+      ],
+      "properties": {
+        "projectedEdgeId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedEdgeFrom": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedEdgeTo": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedEdgeKind": {
+          "enum": [
+            "requires",
+            "member",
+            "exception",
+            "chronology",
+            "support",
+            "challenge",
+            "instance_of",
+            "selected_assessment",
+            "assessment_input",
+            "assessment_assertion",
+            "assessment_source",
+            "law_source",
+            "assertion_source",
+            "annotation_about",
+            "analysis_target",
+            "analysis_selection",
+            "relationship_subject",
+            "relationship_object",
+            "contains",
+            "observes",
+            "generated_span"
+          ]
+        },
+        "projectedEdgeSemantics": {
+          "enum": [
+            "law_structure",
+            "descriptive",
+            "occurrence_structure",
+            "projection",
+            "assessment_selection",
+            "assessment_binding",
+            "provenance",
+            "observation",
+            "generated_provenance"
+          ]
+        },
+        "projectedEdgeOrigin": {
+          "$ref": "#/$defs/origin"
+        },
+        "projectedEdgeOriginalSource": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "generatedSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generatedSourceId",
+        "generatedSourceKind",
+        "generatedSourceText",
+        "generatedSourceObjects"
+      ],
+      "properties": {
+        "generatedSourceId": {
+          "type": "string"
+        },
+        "generatedSourceKind": {
+          "enum": [
+            "generated_law_projection",
+            "generated_assessment_projection"
+          ]
+        },
+        "generatedSourceText": {
+          "type": "string"
+        },
+        "generatedSourceObjects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "identityMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identityKernelId",
+        "identityKind",
+        "identityAuthoredIds"
+      ],
+      "properties": {
+        "identityKernelId": {
+          "type": "string"
+        },
+        "identityKind": {
+          "type": "string"
+        },
+        "identityAuthoredIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sourceMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceMappingKernelId",
+        "sourceMappingSource",
+        "sourceMappingSpan",
+        "sourceMappingObjects",
+        "sourceMappingOriginals"
+      ],
+      "properties": {
+        "sourceMappingKernelId": {
+          "type": "string"
+        },
+        "sourceMappingSource": {
+          "type": "string"
+        },
+        "sourceMappingSpan": {
+          "$ref": "#/$defs/span"
+        },
+        "sourceMappingObjects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceMappingOriginals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "compiler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectionGeneratedSources",
+        "projectionCompilerIdentities",
+        "projectionGeneratedSpans"
+      ],
+      "properties": {
+        "projectionGeneratedSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/generatedSource"
+          }
+        },
+        "projectionCompilerIdentities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identityMapping"
+          }
+        },
+        "projectionGeneratedSpans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceMapping"
+          }
+        }
+      }
+    },
+    "requirementObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observationNode",
+        "observationOccurrence",
+        "observationRule",
+        "observationKind",
+        "observationLaw",
+        "observationRelationships",
+        "observationKernelId",
+        "observationKernelBranch",
+        "observationAssessment",
+        "observationAssertions",
+        "observationSources",
+        "observationComputed",
+        "observationEvaluation",
+        "observationSkipReason"
+      ],
+      "properties": {
+        "observationNode": {
+          "type": "string"
+        },
+        "observationOccurrence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "observationRule": {
+          "type": "string"
+        },
+        "observationKind": {
+          "type": "string"
+        },
+        "observationLaw": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/node"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observationRelationships": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "observationKernelId": {
+          "type": "string"
+        },
+        "observationKernelBranch": {
+          "type": "string"
+        },
+        "observationAssessment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/assessment"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observationAssertions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertion"
+          }
+        },
+        "observationSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "observationComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observationEvaluation": {
+          "enum": [
+            "evaluated",
+            "not_evaluated"
+          ]
+        },
+        "observationSkipReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "ruleObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleAuthoredId",
+        "ruleKernelId",
+        "ruleKernelBranch",
+        "ruleComputed",
+        "ruleEvaluation",
+        "ruleBranchReason"
+      ],
+      "properties": {
+        "ruleAuthoredId": {
+          "type": "string"
+        },
+        "ruleKernelId": {
+          "type": "string"
+        },
+        "ruleKernelBranch": {
+          "type": "string"
+        },
+        "ruleComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ruleEvaluation": {
+          "enum": [
+            "evaluated",
+            "not_evaluated"
+          ]
+        },
+        "ruleBranchReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "exceptionObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exceptionRelationship",
+        "exceptionMainRule",
+        "exceptionGuardRule",
+        "exceptionEvaluation",
+        "exceptionComputed",
+        "exceptionFired",
+        "exceptionSkipReason"
+      ],
+      "properties": {
+        "exceptionRelationship": {
+          "type": "string"
+        },
+        "exceptionMainRule": {
+          "type": "string"
+        },
+        "exceptionGuardRule": {
+          "type": "string"
+        },
+        "exceptionEvaluation": {
+          "enum": [
+            "evaluated",
+            "not_evaluated"
+          ]
+        },
+        "exceptionComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exceptionFired": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exceptionSkipReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reportSnapshot",
+        "reportRequestDigest",
+        "reportProfile",
+        "reportAnalysis",
+        "reportTarget",
+        "reportScope",
+        "reportConclusion",
+        "reportRequirements",
+        "reportRules",
+        "reportExceptions",
+        "reportOpenInputs",
+        "reportNotice"
+      ],
+      "properties": {
+        "reportSnapshot": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "reportRequestDigest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "reportProfile": {
+          "const": "SuppliedProofStatus-v1"
+        },
+        "reportAnalysis": {
+          "type": "string"
+        },
+        "reportTarget": {
+          "type": "string"
+        },
+        "reportScope": {
+          "$ref": "#/$defs/scope"
+        },
+        "reportConclusion": {
+          "enum": [
+            "satisfied",
+            "not_satisfied",
+            "unresolved"
+          ]
+        },
+        "reportRequirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/requirementObservation"
+          }
+        },
+        "reportRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ruleObservation"
+          }
+        },
+        "reportExceptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/exceptionObservation"
+          }
+        },
+        "reportOpenInputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/openInput"
+          }
+        },
+        "reportNotice": {
+          "type": "string"
+        }
+      }
+    },
+    "assessmentChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "changeInput",
+        "changeOccurrence",
+        "changeOldAssessment",
+        "changeNewAssessment",
+        "changeSelection",
+        "changeClassification",
+        "changeAuthorship",
+        "changeReferencedMaterial"
+      ],
+      "properties": {
+        "changeInput": {
+          "type": "string"
+        },
+        "changeOccurrence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "changeOldAssessment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/assessment"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changeNewAssessment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/assessment"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changeSelection": {
+          "type": "boolean"
+        },
+        "changeClassification": {
+          "type": "boolean"
+        },
+        "changeAuthorship": {
+          "type": "boolean"
+        },
+        "changeReferencedMaterial": {
+          "type": "boolean"
+        }
+      }
+    },
+    "observationChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "changeObservationKind",
+        "changeObject",
+        "changePath",
+        "changeOldComputed",
+        "changeNewComputed",
+        "changeOldEvaluation",
+        "changeNewEvaluation",
+        "changeOldReason",
+        "changeNewReason"
+      ],
+      "properties": {
+        "changeObservationKind": {
+          "enum": [
+            "requirement",
+            "rule",
+            "exception"
+          ]
+        },
+        "changeObject": {
+          "type": "string"
+        },
+        "changePath": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "changeOldComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changeNewComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changeOldEvaluation": {
+          "enum": [
+            "not_applicable",
+            "not_requested",
+            "evaluated",
+            "not_evaluated"
+          ]
+        },
+        "changeNewEvaluation": {
+          "enum": [
+            "not_applicable",
+            "not_requested",
+            "evaluated",
+            "not_evaluated"
+          ]
+        },
+        "changeOldReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changeNewReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "projectedAssessmentChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assessmentChange",
+        "assessmentChangeOccurrence",
+        "assessmentChangeOldNode",
+        "assessmentChangeNewNode"
+      ],
+      "properties": {
+        "assessmentChange": {
+          "$ref": "#/$defs/assessmentChange"
+        },
+        "assessmentChangeOccurrence": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "assessmentChangeOldNode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "assessmentChangeNewNode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "projectedObservationChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observationChange",
+        "observationChangeAlignment",
+        "observationChangeOldNode",
+        "observationChangeNewNode",
+        "observationChangeOldIdentity",
+        "observationChangeNewIdentity",
+        "observationComputedFieldChanged",
+        "observationComputedValueChanged",
+        "observationEvaluationChanged",
+        "observationReasonChanged",
+        "observationBranchReasonChanged"
+      ],
+      "properties": {
+        "observationChange": {
+          "$ref": "#/$defs/observationChange"
+        },
+        "observationChangeAlignment": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "observationChangeOldNode": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "observationChangeNewNode": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "observationChangeOldIdentity": {
+          "$ref": "#/$defs/observationIdentity"
+        },
+        "observationChangeNewIdentity": {
+          "$ref": "#/$defs/observationIdentity"
+        },
+        "observationComputedFieldChanged": {
+          "type": "boolean"
+        },
+        "observationComputedValueChanged": {
+          "type": "boolean"
+        },
+        "observationEvaluationChanged": {
+          "type": "boolean"
+        },
+        "observationReasonChanged": {
+          "type": "boolean"
+        },
+        "observationBranchReasonChanged": {
+          "type": "boolean"
+        }
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectionComparisonVersion",
+        "comparisonOldProjection",
+        "comparisonNewProjection",
+        "projectedAssessmentChanges",
+        "projectedChangedObservations",
+        "projectedUnchangedObservations",
+        "projectedOldConclusion",
+        "projectedNewConclusion",
+        "projectedConclusionChanged"
+      ],
+      "properties": {
+        "projectionComparisonVersion": {
+          "const": "yuho.projection-comparison/v0.1-experimental"
+        },
+        "comparisonOldProjection": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "comparisonNewProjection": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedAssessmentChanges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/projectedAssessmentChange"
+          }
+        },
+        "projectedChangedObservations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/projectedObservationChange"
+          }
+        },
+        "projectedUnchangedObservations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/projectedObservationChange"
+          }
+        },
+        "projectedOldConclusion": {
+          "type": "string"
+        },
+        "projectedNewConclusion": {
+          "type": "string"
+        },
+        "projectedConclusionChanged": {
+          "type": "boolean"
+        }
+      }
+    },
+    "viewBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "viewBindingProjectedId",
+        "viewBindingRenderedId"
+      ],
+      "properties": {
+        "viewBindingProjectedId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "viewBindingRenderedId": {
+          "type": "string",
+          "pattern": "^node-p-[a-z-]+-[0-9a-f]{64}$"
+        }
+      }
+    },
+    "edgeBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edgeBindingIndex",
+        "edgeBindingProjectedId",
+        "edgeBindingRenderedId"
+      ],
+      "properties": {
+        "edgeBindingIndex": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "edgeBindingProjectedId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "edgeBindingRenderedId": {
+          "type": "string",
+          "pattern": "^edge-p-[a-z-]+-[0-9a-f]{64}$"
+        }
+      }
+    },
+    "view": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "viewVersion",
+        "viewId",
+        "viewProjectionId",
+        "viewScope",
+        "viewIncludedNodes",
+        "viewIncludedEdges",
+        "viewOmittedNodes",
+        "viewOmittedEdges",
+        "viewNodeBindings",
+        "viewEdgeBindings"
+      ],
+      "properties": {
+        "viewVersion": {
+          "const": "yuho.projection-view/v0.1-experimental"
+        },
+        "viewId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "viewProjectionId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "viewScope": {
+          "type": "string"
+        },
+        "viewIncludedNodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+          }
+        },
+        "viewIncludedEdges": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+          }
+        },
+        "viewOmittedNodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+          }
+        },
+        "viewOmittedEdges": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+          }
+        },
+        "viewNodeBindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/viewBinding"
+          }
+        },
+        "viewEdgeBindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/edgeBinding"
+          }
+        }
+      }
+    },
+    "legacyNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "citation": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "boundary": {
+          "type": "string"
+        }
+      }
+    },
+    "legacyEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to",
+        "kind",
+        "label"
+      ],
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "legacyView": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "graph_id",
+        "view",
+        "nodes",
+        "edges",
+        "notice"
+      ],
+      "properties": {
+        "format": {
+          "const": "yuho.semantic-graph/v0.1"
+        },
+        "graph_id": {
+          "type": "string"
+        },
+        "view": {
+          "enum": [
+            "rule",
+            "modules",
+            "case",
+            "trace"
+          ]
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacyNode"
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacyEdge"
+          }
+        },
+        "notice": {
+          "type": "string"
+        }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolvedSnapshot",
+        "resolvedAuthoredIds",
+        "resolvedLawNodes",
+        "resolvedLawRelationships",
+        "resolvedAssessments",
+        "resolvedAssertions",
+        "resolvedOriginalSources",
+        "resolvedOriginalReferences",
+        "resolvedRelationships",
+        "resolvedAnnotations",
+        "resolvedGeneratedSpans"
+      ],
+      "properties": {
+        "resolvedSnapshot": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "resolvedAuthoredIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resolvedLawNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "resolvedLawRelationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/edge"
+          }
+        },
+        "resolvedAssessments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assessment"
+          }
+        },
+        "resolvedAssertions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertion"
+          }
+        },
+        "resolvedOriginalSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "resolvedOriginalReferences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        },
+        "resolvedRelationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "resolvedAnnotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/annotation"
+          }
+        },
+        "resolvedGeneratedSpans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceMapping"
+          }
+        }
+      }
+    },
+    "assertionLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "linkedAssertion",
+        "linkedAssessments",
+        "linkedSelectedAssessments"
+      ],
+      "properties": {
+        "linkedAssertion": {
+          "type": "string"
+        },
+        "linkedAssessments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "linkedSelectedAssessments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "originalSourceExcerpt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "excerptSource",
+        "excerptReference",
+        "excerptState",
+        "excerptText"
+      ],
+      "properties": {
+        "excerptSource": {
+          "$ref": "#/$defs/source"
+        },
+        "excerptReference": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "excerptState": {
+          "enum": [
+            "anchored",
+            "retained_unanchored",
+            "locator_only",
+            "reference_only"
+          ]
+        },
+        "excerptText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "excerptState": {
+                "const": "anchored"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "excerptText": {
+                "type": "string"
+              },
+              "excerptReference": {
+                "properties": {
+                  "referenceSpan": {
+                    "$ref": "#/$defs/span"
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "excerptText": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "assessmentApplication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicationOccurrence",
+        "applicationSelected",
+        "applicationObservation",
+        "applicationEvaluation",
+        "applicationComputed",
+        "applicationSkipReason"
+      ],
+      "properties": {
+        "applicationOccurrence": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "applicationSelected": {
+          "type": "boolean"
+        },
+        "applicationObservation": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "applicationEvaluation": {
+          "enum": [
+            "evaluated",
+            "not_evaluated",
+            "not_requested",
+            "not_applicable"
+          ]
+        },
+        "applicationComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "applicationSkipReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "applicationSelected": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "applicationComputed": {
+                "type": "null"
+              },
+              "applicationObservation": {
+                "type": "null"
+              },
+              "applicationEvaluation": {
+                "const": "not_applicable"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "applicationEvaluation": {
+                "enum": [
+                  "not_evaluated",
+                  "not_requested"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "applicationComputed": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "assessmentInspection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inspectionSnapshot",
+        "inspectionProjectedAssessment",
+        "inspectionAssessment",
+        "inspectionSelected",
+        "inspectionResolution",
+        "inspectionApplications",
+        "inspectionOriginalSources"
+      ],
+      "properties": {
+        "inspectionSnapshot": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "inspectionProjectedAssessment": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "inspectionAssessment": {
+          "$ref": "#/$defs/assessment"
+        },
+        "inspectionSelected": {
+          "type": "boolean"
+        },
+        "inspectionResolution": {
+          "$ref": "#/$defs/resolution"
+        },
+        "inspectionApplications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assessmentApplication"
+          }
+        },
+        "inspectionOriginalSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/originalSourceExcerpt"
+          }
+        }
+      }
+    },
+    "proofDocument": {
+      "title": "Experimental Yuho authored document v0.1",
+      "description": "Structural format only. SDK validation additionally checks global identities, references, original UTF-8 anchors, executable trees, assessment bindings and readiness. Presentation and retained relationships are non-executable.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentFormat",
+        "documentId",
+        "documentLaw",
+        "documentSources",
+        "documentAssertions",
+        "documentAssessments",
+        "documentAnalyses",
+        "documentRelationships",
+        "documentAnnotations",
+        "documentPresentation"
+      ],
+      "properties": {
+        "documentFormat": {
+          "const": "yuho.authoring/v0.1-experimental"
+        },
+        "documentId": {
+          "type": "string"
+        },
+        "documentLaw": {
+          "$ref": "#/$defs/law"
+        },
+        "documentSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "documentAssertions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertion"
+          }
+        },
+        "documentAssessments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assessment"
+          }
+        },
+        "documentAnalyses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/analysis"
+          }
+        },
+        "documentRelationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "documentAnnotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/annotation"
+          }
+        },
+        "documentPresentation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/presentation"
+          }
+        }
+      }
+    },
+    "temporalExpression": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "temporalExpressionId": {
+          "type": "string"
+        },
+        "temporalExpressionVersion": {
+          "type": "string"
+        },
+        "temporalEffectiveFrom": {
+          "type": "string",
+          "format": "date"
+        },
+        "temporalEffectiveTo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "temporalExpressionDocument": {
+          "$ref": "#/$defs/proofDocument"
+        },
+        "temporalExpressionAnalysis": {
+          "type": "string"
+        },
+        "temporalExpressionSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        },
+        "temporalDateSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        },
+        "temporalSupersedes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "temporalExpressionId",
+        "temporalExpressionVersion",
+        "temporalEffectiveFrom",
+        "temporalExpressionDocument",
+        "temporalExpressionAnalysis",
+        "temporalExpressionSources",
+        "temporalDateSources"
+      ]
+    },
+    "temporalDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "temporalDocumentFormat": {
+          "const": "yuho.authoring/v0.5-experimental"
+        },
+        "temporalDocumentId": {
+          "type": "string"
+        },
+        "temporalWorkId": {
+          "type": "string"
+        },
+        "temporalExpressions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/temporalExpression"
+          },
+          "minItems": 2,
+          "maxItems": 64
+        },
+        "temporalSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "temporalScope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "temporalAssumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "temporalDocumentFormat",
+        "temporalDocumentId",
+        "temporalWorkId",
+        "temporalExpressions",
+        "temporalSources",
+        "temporalScope",
+        "temporalAssumptions"
+      ]
+    },
+    "proofProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectionVersion",
+        "projectionId",
+        "projectionMode",
+        "projectionSnapshot",
+        "projectionApplication",
+        "projectionCompiler",
+        "projectionNodes",
+        "projectionEdges",
+        "projectionDiagnostics",
+        "projectionOpenInputs",
+        "projectionNotice"
+      ],
+      "properties": {
+        "projectionVersion": {
+          "const": "yuho.analysis-projection/v0.1-experimental"
+        },
+        "projectionId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectionMode": {
+          "enum": [
+            "authored",
+            "evaluated"
+          ]
+        },
+        "projectionSnapshot": {
+          "$ref": "#/$defs/snapshot"
+        },
+        "projectionApplication": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/application"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectionCompiler": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/compiler"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectionNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/projectionNode"
+          }
+        },
+        "projectionEdges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/projectionEdge"
+          }
+        },
+        "projectionDiagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          }
+        },
+        "projectionOpenInputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/openInput"
+          }
+        },
+        "projectionNotice": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "projectionMode": {
+                "const": "authored"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectionApplication": {
+                "type": "null"
+              },
+              "projectionCompiler": {
+                "type": "null"
+              },
+              "projectionNodes": {
+                "items": {
+                  "properties": {
+                    "projectedNodeComputed": {
+                      "type": "null"
+                    },
+                    "projectedNodeObservation": {
+                      "type": "null"
+                    },
+                    "projectedNodeEvaluation": {
+                      "enum": [
+                        "not_applicable",
+                        "not_requested"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "projectionApplication": {
+                "$ref": "#/$defs/application"
+              },
+              "projectionCompiler": {
+                "$ref": "#/$defs/compiler"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "temporalSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "temporalSnapshotId": {
+          "type": "string"
+        },
+        "temporalSnapshotDocument": {
+          "$ref": "#/$defs/temporalDocument"
+        },
+        "temporalSnapshotConductDate": {
+          "type": "string"
+        },
+        "temporalSnapshotExpression": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "temporalSnapshotId",
+        "temporalSnapshotDocument",
+        "temporalSnapshotConductDate",
+        "temporalSnapshotExpression"
+      ]
+    },
+    "temporalSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selectionWrapper": {
+          "type": "string"
+        },
+        "selectionWork": {
+          "type": "string"
+        },
+        "selectionConductDate": {
+          "type": "string"
+        },
+        "selectionExpression": {
+          "$ref": "#/$defs/temporalExpression"
+        },
+        "selectionSnapshot": {
+          "$ref": "#/$defs/temporalSnapshot"
+        },
+        "selectionAnalysis": {
+          "$ref": "#/$defs/analysis"
+        },
+        "selectionUnderlyingSnapshot": {
+          "type": "string"
+        },
+        "selectionCompilation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "selectionNotice": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "selectionWrapper",
+        "selectionWork",
+        "selectionConductDate",
+        "selectionExpression",
+        "selectionSnapshot",
+        "selectionAnalysis",
+        "selectionUnderlyingSnapshot",
+        "selectionCompilation",
+        "selectionNotice"
+      ]
+    },
+    "temporalProjectionNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectedNodeId",
+        "projectedNodeKind",
+        "projectedNodeRole",
+        "projectedNodeLabel",
+        "projectedNodeOrigin",
+        "projectedNodeOccurrence",
+        "projectedNodeObservation",
+        "projectedNodeSelected",
+        "projectedNodeBinding",
+        "projectedNodeComputed",
+        "projectedNodeEvaluation",
+        "projectedNodeSkipReason",
+        "projectedNodeBranchReason"
+      ],
+      "properties": {
+        "projectedNodeId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedNodeKind": {
+          "enum": [
+            "authored",
+            "occurrence",
+            "observation",
+            "generated_source",
+            "selection"
+          ]
+        },
+        "projectedNodeRole": {
+          "type": "string"
+        },
+        "projectedNodeLabel": {
+          "type": "string"
+        },
+        "projectedNodeOrigin": {
+          "$ref": "#/$defs/origin"
+        },
+        "projectedNodeOccurrence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/occurrenceIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeObservation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/observationIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeSelected": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeBinding": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/binding"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeEvaluation": {
+          "enum": [
+            "not_applicable",
+            "not_requested",
+            "evaluated",
+            "not_evaluated"
+          ]
+        },
+        "projectedNodeSkipReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeBranchReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "projectedNodeKind": {
+                "const": "authored"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectedNodeComputed": {
+                "type": "null"
+              },
+              "projectedNodeEvaluation": {
+                "const": "not_applicable"
+              },
+              "projectedNodeOccurrence": {
+                "type": "null"
+              },
+              "projectedNodeObservation": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "projectedNodeKind": {
+                "const": "occurrence"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectedNodeOccurrence": {
+                "$ref": "#/$defs/occurrenceIdentity"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "projectedNodeKind": {
+                "const": "observation"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectedNodeObservation": {
+                "$ref": "#/$defs/observationIdentity"
+              },
+              "projectedNodeBinding": {
+                "type": "null"
+              },
+              "projectedNodeEvaluation": {
+                "enum": [
+                  "evaluated",
+                  "not_evaluated"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "temporalProjectionEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectedEdgeId",
+        "projectedEdgeFrom",
+        "projectedEdgeTo",
+        "projectedEdgeKind",
+        "projectedEdgeSemantics",
+        "projectedEdgeOrigin",
+        "projectedEdgeOriginalSource"
+      ],
+      "properties": {
+        "projectedEdgeId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedEdgeFrom": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedEdgeTo": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedEdgeKind": {
+          "enum": [
+            "requires",
+            "member",
+            "exception",
+            "chronology",
+            "support",
+            "challenge",
+            "instance_of",
+            "selected_assessment",
+            "assessment_input",
+            "assessment_assertion",
+            "assessment_source",
+            "law_source",
+            "assertion_source",
+            "annotation_about",
+            "analysis_target",
+            "analysis_selection",
+            "relationship_subject",
+            "relationship_object",
+            "contains",
+            "observes",
+            "generated_span",
+            "selected_interval",
+            "authored_alternative_not_evaluated",
+            "selected_rule_result",
+            "selected_underlying_occurrence",
+            "expression_original_source",
+            "effective_date_evidence"
+          ]
+        },
+        "projectedEdgeSemantics": {
+          "enum": [
+            "law_structure",
+            "descriptive",
+            "occurrence_structure",
+            "projection",
+            "assessment_selection",
+            "assessment_binding",
+            "provenance",
+            "observation",
+            "generated_provenance",
+            "temporal_selection_or_provenance"
+          ]
+        },
+        "projectedEdgeOrigin": {
+          "$ref": "#/$defs/origin"
+        },
+        "projectedEdgeOriginalSource": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

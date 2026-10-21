@@ -6,6 +6,10 @@ bounded fragment to the unchanged `SuppliedProofStatus-v1` backend and returns
 object-linked application reports and scenario comparisons. No CLI, renderer,
 research-directory lookup, or lexer-token construction is required.
 
+For explicit conduct-date selection among complete proof versions, see the
+[temporal authoring guide](temporal-authoring.md). This opt-in v0.5 wrapper does
+not change the earlier profiles or determine real-world legal applicability.
+
 ## Recommended reading path
 
 1. Start with the [tested Haskell quickstart](authoring-quickstart.md): local Cabal

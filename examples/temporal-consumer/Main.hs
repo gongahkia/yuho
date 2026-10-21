@@ -25,6 +25,8 @@ main=do
   BS.writeFile (dataDir</>"synthetic-authored.json") (encodeTemporalDocument syntheticTemporal)
   replay<-required (decodeTemporalDocument (encodeTemporalDocument syntheticTemporal))
   check "round trip" (replay==syntheticTemporal)
+  check "complete temporal validation" (null (validateTemporalDocument replay))
+  save (dataDir</>"synthetic-validation.json") (validateTemporalDocument replay)
   statutory<-required section24Temporal
   BS.writeFile (dataDir</>"pc24-authored.json") (encodeTemporalDocument statutory)
   forM_ [("before","2023-12-31"),("boundary","2024-01-01"),("after","2024-01-02")] $ \(name,date)->export out ("synthetic-"<>name) syntheticTemporal date
@@ -49,6 +51,8 @@ main=do
   revisedLaw<-required (executeTemporal lawEdit "2023-12-31")
   BS.writeFile (dataDir</>"interval-revision-authored.json") (encodeTemporalDocument intervalEdit)
   BS.writeFile (dataDir</>"law-revision-authored.json") (encodeTemporalDocument lawEdit)
+  save (dataDir</>"interval-revision-application-report.json") (evaluationReport (temporalEvaluationProof revisedInterval))
+  save (dataDir</>"law-revision-application-report.json") (evaluationReport (temporalEvaluationProof revisedLaw))
   expanded<-required (projectTemporalEvaluation initial)
   _<-required (temporalReferenceView expanded TemporalProvenanceView)
   let snapshot e=temporalSnapshotId (temporalEvaluationSnapshot e)

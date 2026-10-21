@@ -1,0 +1,4 @@
+temporal-model TemporalAB {
+ expression expr:old effective-from 2020-01-01 effective-to 2024-01-01 source-model "old.yh";
+ expression expr:new effective-from 2024-01-01 open-end source-model "new.yh" supersedes expr:old;
+}

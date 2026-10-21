@@ -16,6 +16,7 @@ import qualified Data.Text.Encoding as UTF8
 import GHC.Generics (Generic)
 import Yuho.Authoring.Codec (encodeRecord)
 import Yuho.Authoring.Projection
+import Yuho.Authoring.Projection.Inspect (OriginalSourceExcerpt(..))
 import Yuho.Authoring.Projection.Render (escape, wrap, number, xmlCharacter, computedLabel, evaluationLabel)
 import Yuho.Authoring.Temporal.Types
 import Yuho.Authoring.Temporal.Run
@@ -63,9 +64,9 @@ build s proof status = do
       selectedId=temporalExpressionId (selectionExpression s)
       plain key role label origins=ProjectionNode key "authored" role label (ProjectionOrigin "authored" role origins) Nothing Nothing Nothing Nothing Nothing "not_applicable" Nothing Nothing
       edge role from to origins anchor index=ProjectionEdge (projectionIdentity "temporal-edge" (role,from,to,index::Int)) from to role "temporal_selection_or_provenance" (ProjectionOrigin "projection_generated" role origins) anchor
-      nodes=[(plain dateId "conduct_date" ("Supplied conduct date: "<>selectionConductDate s) [temporalDocumentId d]) {projectedNodeKind="selection"}]
+      nodes=[(plain dateId "conduct_date" ("Supplied conduct date: "<>selectionConductDate s) [temporalDocumentId d]) {projectedNodeKind="selection",projectedNodeOrigin=ProjectionOrigin "projection_generated" "supplied_conduct_date" [temporalDocumentId d]}]
         ++ [(plain (obj "expression" (temporalExpressionId e)) "temporal_expression" (temporalExpressionId e<>" | "<>temporalExpressionVersion e<>" | ["<>temporalEffectiveFrom e<>", "<>maybe "open-end" id (temporalEffectiveTo e)<>")") [temporalExpressionId e]) {projectedNodeSelected=Just (temporalExpressionId e==selectedId)} | e <- temporalExpressions d]
-        ++ [(plain (obj "result" selectedId) "selected_result" ("Selected rule: "<>analysisTarget (selectionAnalysis s)) [selectedId,analysisTarget (selectionAnalysis s)]) {projectedNodeKind="selection",projectedNodeComputed=status,projectedNodeEvaluation=if status==Nothing then "not_requested" else "evaluated"}]
+        ++ [(plain (obj "result" selectedId) "selected_result" ("Selected rule: "<>analysisTarget (selectionAnalysis s)) [selectedId,analysisTarget (selectionAnalysis s)]) {projectedNodeKind="selection",projectedNodeOrigin=ProjectionOrigin "projection_generated" "selected_report_summary" [selectedId,analysisId (selectionAnalysis s)],projectedNodeComputed=status,projectedNodeEvaluation=if status==Nothing then "not_requested" else "evaluated"}]
         ++ [plain (obj "source" (sourceId source)) "temporal_original_source" (maybe (sourceId source) id (sourceLocator source)) [sourceId source] | source <- temporalSources d]
       edges=[edge (if temporalExpressionId e==selectedId then "selected_interval" else "authored_alternative_not_evaluated") dateId (obj "expression" (temporalExpressionId e)) [temporalExpressionId e] Nothing i | (i,e) <- zip [0..] (temporalExpressions d)]
         ++ [edge "selected_rule_result" (obj "expression" selectedId) (obj "result" selectedId) [selectedId] Nothing 0]
@@ -88,8 +89,14 @@ data TemporalView = TemporalSetView | TemporalProvenanceView deriving (Eq,Show)
 temporalReferenceView :: TemporalProjection -> TemporalView -> Either [AuthoringDiagnostic] ProjectionView
 temporalReferenceView p mode = do
   let value=temporalProjectionData p
-      roles=case mode of TemporalSetView -> ["conduct_date","temporal_expression","selected_result"]; TemporalProvenanceView -> ["conduct_date","temporal_expression","selected_result","temporal_original_source"]
-      ns=[projectedNodeId n | n <- temporalProjectionNodes value,projectedNodeRole n `elem` roles,mode==TemporalSetView || projectedNodeSelected n/=Just False]
+      allNodes=temporalProjectionNodes value
+      selectedExpressions=[projectedNodeId n | n<-allNodes,projectedNodeRole n=="temporal_expression",projectedNodeSelected n==Just True]
+      relatedSources=[projectedEdgeTo e | e<-temporalProjectionEdges value,projectedEdgeFrom e `elem` selectedExpressions,projectedEdgeKind e `elem` ["expression_original_source","effective_date_evidence"]]
+      keys role=[projectedNodeId n | n<-allNodes,projectedNodeRole n==role]
+      ns=keys "conduct_date" ++ selectedExpressions ++ keys "selected_result"
+        ++ case mode of
+          TemporalSetView -> [projectedNodeId n | n<-allNodes,projectedNodeRole n=="temporal_expression",projectedNodeSelected n==Just False]
+          TemporalProvenanceView -> [key | key<-keys "temporal_original_source",key `elem` relatedSources]
       es=[projectedEdgeId e | e <- temporalProjectionEdges value,projectedEdgeFrom e `elem` ns,projectedEdgeTo e `elem` ns]
       view=ProjectionView projectionViewFormat (projectionIdentity "temporal-view" (temporalProjectionId value,T.pack (show mode))) (temporalProjectionId value)
         "Technical conduct-date interval selection; sources are retained authorship, not an applicability ruling. Detailed selected law tree is a separately bound view."
@@ -123,16 +130,21 @@ encodeTemporalViewSvg :: TemporalProjection -> ProjectionView -> Either [Authori
 encodeTemporalViewSvg p v=do
   checked p v
   let (ns,es)=objects p v
-      row n=concatMap (concatMap (wrap 96) . T.lines) ([projectedNodeLabel n] ++ case projectedNodeRole n of
+      document=temporalSnapshotDocument (selectionSnapshot (temporalProjectionSelection (temporalProjectionData p)))
+      chunks limit textValue | T.length textValue<=limit = [textValue]
+                             | otherwise = let (a,b)=T.splitAt limit textValue in a:chunks limit b
+      safeWrap limit=concatMap (chunks limit) . wrap limit
+      row n=concatMap (concatMap (safeWrap 96) . T.lines) ([projectedNodeLabel n] ++ case projectedNodeRole n of
         "temporal_expression" -> [if projectedNodeSelected n==Just True then "SELECTED by half-open interval membership" else "NOT SELECTED; no computation attributed"]
         "selected_result" -> ["Computed: "<>computedLabel (projectedNodeComputed n),evaluationLabel (projectedNodeEvaluation n)]
         "temporal_original_source" -> ["Original evidence/locator; generated kernel sources remain separate."]
+          ++ nub ["Retained anchored excerpt: "<>value | e<-es,projectedEdgeTo e==projectedNodeId n,Just ref<-[projectedEdgeOriginalSource e],Right recovered<-[recoverTemporalSource document ref],Just value<-[excerptText recovered]]
         _ -> ["Supplied date; distinct from retained analysis reference date."])
       rows=[(n,row n) | n<-ns]
       ys=scanl (\y (_,ls)->y+64+22*length ls) 108 rows
       positions=Map.fromList [(projectedNodeId n,(y,48+22*length ls)) | ((n,ls),y)<-zip rows ys]
       left=80+9*length es; width=left+1000
-      legend=concatMap (wrap 122 . (\e -> projectedEdgeKind e<>" ("<>label (projectedEdgeFrom e)<>" → "<>label (projectedEdgeTo e)<>")")) es
+      legend=concatMap (safeWrap 122 . (\e -> projectedEdgeKind e<>" ("<>label (projectedEdgeFrom e)<>" → "<>label (projectedEdgeTo e)<>")")) es
       label key=case [projectedNodeLabel n | n<-ns,projectedNodeId n==key] of x:_ -> x; [] -> key
       legendY=128+sum [64+22*length ls | (_,ls)<-rows]; height=legendY+20*length legend+48
       text x y size value="<text x=\""<>number x<>"\" y=\""<>number y<>"\" font-size=\""<>number size<>"\">"<>escape value<>"</text>"

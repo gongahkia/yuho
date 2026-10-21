@@ -5,6 +5,9 @@ supplied assessments and one represented acyclic exception guard. It does not
 weigh evidence or determine legal completeness. The API and serialized formats
 are experimental. Use the [SDK guide](authoring-sdk.md) for the full contract.
 
+Optional next reference: [temporal expression selection](temporal-authoring.md)
+wraps complete v0.1 models with explicit authored intervals and a conduct date.
+
 ## Recommended reading order
 
 Start here and run the lifecycle below. Then use the SDK guide's

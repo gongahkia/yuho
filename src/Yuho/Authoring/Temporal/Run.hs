@@ -10,6 +10,7 @@ import qualified Data.Aeson as A
 import qualified Data.ByteString as BS
 import Data.List (group, sort)
 import Data.Text (Text)
+import qualified Data.Time
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as UTF8
 import Yuho.Authoring.Codec (encodeRecord)
@@ -34,6 +35,14 @@ decodeTemporalDocument bytes = do
     _ -> Left (issue "TAVERSION" "/temporalDocumentFormat" [] "expected explicit v0.5 temporal wrapper")
   either (Left . issue "TAJSON" "/" [] . T.pack) Right (A.eitherDecodeStrict' bytes)
 
+-- JSON strings are complete dates, unlike whitespace-delimited legacy tokens.
+-- Keep the legacy parser unchanged; admit the explicit four-digit ISO spelling.
+calendarDate :: Text -> Maybe Data.Time.Day
+calendarDate value=case T.splitOn "-" value of
+  [year,month,day] | T.length year==4 && T.length month==2 && T.length day==2
+    && T.all (\c -> c>='0' && c<='9') (year<>month<>day) -> I.parseDate value
+  _ -> Nothing
+
 interval :: TemporalExpression -> Either [AuthoringDiagnostic] (I.Interval TemporalExpression)
 interval e = do
   from <- date "/temporalEffectiveFrom" (temporalEffectiveFrom e)
@@ -42,7 +51,7 @@ interval e = do
     else Right (I.Interval e from to)
   where
     err code message = issue code "/temporalExpressions" [temporalExpressionId e] message
-    date path value = maybe (Left [issue "TADATE" ("/temporalExpressions/" <> temporalExpressionId e <> path) [temporalExpressionId e] "invalid ISO calendar date"]) Right (I.parseDate value)
+    date path value = maybe (Left [issue "TADATE" ("/temporalExpressions/" <> temporalExpressionId e <> path) [temporalExpressionId e] "invalid ISO calendar date"]) Right (calendarDate value)
 
 validateTemporalDocument :: TemporalDocument -> [AuthoringDiagnostic]
 validateTemporalDocument d = version ++ ids ++ limits ++ concatMap source sources ++ concatMap expression es ++ intervals
@@ -53,7 +62,7 @@ validateTemporalDocument d = version ++ ids ++ limits ++ concatMap source source
     ids=[issue "TAID" "/" [key] "identity must contain 1..128 UTF-8 bytes" | key <- named,T.null (T.strip key) || BS.length (UTF8.encodeUtf8 key)>128]
       ++ [issue "TADUPLICATE" "/temporalExpressions" [key] "duplicate temporal wrapper identity" | (key:_:_) <- group (sort named)]
     limits=[issue "TALIMIT" "/" [temporalDocumentId d] "temporal document exceeds one MiB, 64 expressions or 4096 wrapper identities" | BS.length (encodeRecord d)>1048576 || length es>64 || length named>4096]
-    source s = [issue "TASOURCE" "/temporalSources" [sourceId s] "source kind required" | T.null (T.strip (sourceKind s))]
+    source s = [issue "TASOURCE" "/temporalSources" [sourceId s] "unsupported original source kind" | sourceKind s `notElem` ["law","case","other","synthetic"]]
     refs owner rs=concat [either (map (\x -> x {diagnosticLocation="/temporalExpressions/"<>owner,diagnosticObjects=owner:diagnosticObjects x})) (const []) (recoverSourceReference sources r) | r <- rs]
     expression e = let doc=temporalExpressionDocument e; key=temporalExpressionId e in
       [issue "TAPROFILE" "/temporalExpressionDocument/documentFormat" [key,documentId doc] "temporal candidates must be complete v0.1 proof documents; linked, typed, presumption and nested temporal profiles are unsupported" | documentFormat doc /= authoringFormat]
@@ -75,7 +84,7 @@ selectTemporalExpression :: TemporalDocument -> Maybe Text -> Either [AuthoringD
 selectTemporalExpression d supplied = do
   case validateTemporalDocument d of [] -> pure (); errors -> Left errors
   text <- maybe (Left [issue "TACONDUCT" "/conductDate" [temporalDocumentId d] "explicit conduct date required"]) Right supplied
-  day <- maybe (Left [issue "TADATE" "/conductDate" [temporalDocumentId d] "invalid ISO conduct date"]) Right (I.parseDate text)
+  day <- maybe (Left [issue "TADATE" "/conductDate" [temporalDocumentId d] "invalid ISO conduct date"]) Right (calendarDate text)
   xs <- traverse interval (temporalExpressions d)
   e <- case I.matchIntervals day (I.orderIntervals xs) of
     [x] -> Right x
@@ -96,7 +105,7 @@ compileTemporalAnalysis :: TemporalDocument -> Maybe Text -> Either [AuthoringDi
 compileTemporalAnalysis d date = do
   selected <- selectTemporalExpression d date
   let e=selectionExpression selected
-  compiled <- compileAnalysis (temporalExpressionDocument e) (temporalExpressionAnalysis e)
+  compiled <- either (Left . map (\x -> x {diagnosticLocation="/temporalExpressions/"<>temporalExpressionId e<>"/temporalExpressionDocument"<>diagnosticLocation x,diagnosticObjects=temporalExpressionId e:diagnosticObjects x})) Right (compileAnalysis (temporalExpressionDocument e) (temporalExpressionAnalysis e))
   pure (TemporalCompilation selected {selectionCompilation=Just (sha256Text (compiledRequest compiled))} compiled)
 data TemporalEvaluation = TemporalEvaluation TemporalCompilation Evaluation
 temporalEvaluationCompilation :: TemporalEvaluation -> TemporalCompilation
