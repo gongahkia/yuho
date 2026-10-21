@@ -24,6 +24,11 @@ library
   other-modules: Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON
   exposed-modules:
       Yuho.Authoring
+      Yuho.Authoring.Temporal
+      Yuho.Authoring.Temporal.Types
+      Yuho.Authoring.Temporal.Run
+      Yuho.Authoring.Temporal.Projection
+      Yuho.Temporal.Interval
       Yuho.Authoring.Types
       Yuho.Authoring.Edit
       Yuho.Authoring.Source

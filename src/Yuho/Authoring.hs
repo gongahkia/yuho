@@ -1,6 +1,7 @@
 -- | Experimental diagram-first SDK. See docs/authoring-sdk.md.
 module Yuho.Authoring
-  ( module Yuho.Authoring.Types, module Yuho.Authoring.Codec
+  ( module Yuho.Authoring.Temporal
+  , module Yuho.Authoring.Types, module Yuho.Authoring.Codec
   , module Yuho.Authoring.Compile, module Yuho.Authoring.Report
   , module Yuho.Authoring.Projection, module Yuho.Authoring.Projection.Encode
   , module Yuho.Authoring.Projection.Inspect, module Yuho.Authoring.Projection.Views
@@ -15,6 +16,7 @@ module Yuho.Authoring
   , SuppliedStatus(..), UnresolvedReason(..)
   ) where
 
+import Yuho.Authoring.Temporal
 import Yuho.Authoring.Types
 import Yuho.Authoring.Edit
 import Yuho.Authoring.Source
@@ -42,3 +44,4 @@ validateAnalysis doc key =
   if not (analysisReady report) then report else case compileAnalysis doc key of
     Left diagnostics -> report { analysisReady = False, validationDiagnostics = diagnostics }
     Right _ -> report
+

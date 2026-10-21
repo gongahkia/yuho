@@ -5,11 +5,11 @@ module Yuho.Surface.Temporal
 
 import Control.Exception (IOException, try)
 import qualified Data.ByteString as BS
-import Data.List (sortOn)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
-import Data.Time (Day, defaultTimeLocale, parseTimeM)
+import Data.Time (Day)
+import qualified Yuho.Temporal.Interval as I
 import System.FilePath (isAbsolute, takeDirectory, takeExtension, takeFileName, (</>))
 import System.Posix.Files (fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.Surface.Modules (AuthoredModel(..), loadAuthoredModel)
@@ -125,7 +125,7 @@ parseWith parser path bytes = do
 dateValue :: FilePath -> Token -> Either Diagnostic Day
 dateValue path token = maybe
   (at "SFT002" path token "invalid ISO conduct or effective date") Right
-  (parseTimeM True defaultTimeLocale "%F" (Text.unpack (tokenText token)))
+  (I.parseDate (tokenText token))
 
 safeLocal :: Token -> Bool
 safeLocal token = let value = Text.unpack (tokenText token) in
@@ -155,9 +155,11 @@ validateExpressions path modelId alternatives = do
   if Set.size (Set.fromList ids) == length ids then Right ()
   else at "SFT004" path modelId "duplicate temporal expression identifier"
   dated <- traverse convert alternatives
-  let ordered = sortOn (\(DatedExpression _ from _) -> from) dated
-  validatePairs ordered
-  pure ordered
+  let ordered = I.orderIntervals [I.Interval e from to | DatedExpression e from to <- dated]
+  case I.intervalProblem ordered of
+    Nothing -> Right ()
+    Just (Expression next _ _ _ _, message) -> at "SFT005" path next message
+  pure [DatedExpression e from to | I.Interval e from to <- ordered]
   where
     convert expression@(Expression _ from end source _) = do
       if safeLocal source then Right ()
@@ -168,14 +170,6 @@ validateExpressions path modelId alternatives = do
         Just value | value <= start -> at "SFT004" path from
           "effective interval must end after it starts"
         _ -> Right (DatedExpression expression start finish)
-    validatePairs [] = Right ()
-    validatePairs [_] = Right ()
-    validatePairs (DatedExpression _ _ Nothing:DatedExpression (Expression next _ _ _ _) _ _:_) =
-      at "SFT005" path next "open-ended expression overlaps a later expression"
-    validatePairs (DatedExpression _ _ (Just finish):rest@(DatedExpression (Expression next _ _ _ _) start _:_))
-      | finish < start = at "SFT005" path next "gap between authored effective intervals"
-      | finish > start = at "SFT005" path next "overlapping authored effective intervals"
-      | otherwise = validatePairs rest
 
 loadAuthoredInput :: FilePath -> BS.ByteString
   -> Maybe (FilePath, BS.ByteString)
@@ -199,9 +193,7 @@ loadTemporal path bytes supplied = case parseWith modelParser path bytes of
           (validateExpressions path modelId alternatives, dateValue scenarioPath conductToken) of
         (Left issue,_) -> pure (Left issue)
         (_,Left issue) -> pure (Left issue)
-        (Right dated,Right conductDate) -> case [expression |
-            DatedExpression expression start end <- dated,
-            start <= conductDate, maybe True (conductDate <) end] of
+        (Right dated,Right conductDate) -> case I.matchIntervals conductDate [I.Interval e from to | DatedExpression e from to <- dated] of
           [] -> pure (at "SFT007" scenarioPath conductToken
             "conduct-date falls in no authored effective interval")
           _:_:_ -> pure (at "SFT007" scenarioPath conductToken
