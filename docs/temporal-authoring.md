@@ -133,6 +133,13 @@ rendered IDs. `encodeTemporalViewJson`, `encodeTemporalViewXml` and
 `encodeTemporalViewSvg` export simplified derived views; save `encodeRecord view`
 as the binding companion. The complete projection is the full contract.
 
+Temporal views use the existing `projectionViewFormat` companion identifier
+(`yuho.projection-view/v0.1-experimental`), generated automatically by
+`temporalReferenceView`. `validateTemporalView` and all three temporal view
+encoders reject any other `viewVersion` with `TAVIEW` at `/viewVersion`, naming
+the supplied and expected versions. They do not normalise malformed records;
+valid view output bytes are unchanged.
+
 For the selected law, use `temporalSelectedProjection p` with the existing
 `lawOccurrenceView`, `encodeProjectionSvg`, `encodeProjectionLegacyJson` and
 `encodeProjectionLegacyXml`. Save that proof projection and its own bindings:

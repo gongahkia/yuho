@@ -1,0 +1,389 @@
+{
+  "temporalDocumentFormat": "yuho.authoring/v0.5-experimental",
+  "temporalDocumentId": "independent-wrapper",
+  "temporalWorkId": "fictional-work",
+  "temporalExpressions": [
+    {
+      "temporalExpressionId": "version-A",
+      "temporalExpressionVersion": "A",
+      "temporalEffectiveFrom": "2021-01-01",
+      "temporalEffectiveTo": "2025-01-01",
+      "temporalExpressionDocument": {
+        "documentFormat": "yuho.authoring/v0.1-experimental",
+        "documentId": "independent-A",
+        "documentLaw": {
+          "lawId": "fiction-A",
+          "lawRevision": "1",
+          "lawNodes": [
+            {
+              "nodeId": "rule",
+              "nodeKind": "rule",
+              "nodeLabel": "Fictional A",
+              "nodeQuotation": null,
+              "nodeCitation": "Fictional A",
+              "nodeSources": [
+                {
+                  "referenceSource": "law-source",
+                  "referenceSpan": null
+                }
+              ]
+            },
+            {
+              "nodeId": "group",
+              "nodeKind": "all",
+              "nodeLabel": "all",
+              "nodeQuotation": null,
+              "nodeCitation": "Fictional A",
+              "nodeSources": [
+                {
+                  "referenceSource": "law-source",
+                  "referenceSpan": null
+                }
+              ]
+            },
+            {
+              "nodeId": "A",
+              "nodeKind": "input",
+              "nodeLabel": "A",
+              "nodeQuotation": null,
+              "nodeCitation": "Fictional A",
+              "nodeSources": [
+                {
+                  "referenceSource": "law-source",
+                  "referenceSpan": null
+                }
+              ]
+            },
+            {
+              "nodeId": "B",
+              "nodeKind": "input",
+              "nodeLabel": "B",
+              "nodeQuotation": null,
+              "nodeCitation": "Fictional A",
+              "nodeSources": [
+                {
+                  "referenceSource": "law-source",
+                  "referenceSpan": null
+                }
+              ]
+            }
+          ],
+          "lawEdges": [
+            {
+              "edgeId": "requires",
+              "edgeFrom": "rule",
+              "edgeTo": "group",
+              "edgeKind": "requires"
+            },
+            {
+              "edgeId": "member-A",
+              "edgeFrom": "group",
+              "edgeTo": "A",
+              "edgeKind": "member"
+            },
+            {
+              "edgeId": "member-B",
+              "edgeFrom": "group",
+              "edgeTo": "B",
+              "edgeKind": "member"
+            }
+          ],
+          "lawScope": [
+            "Fiction only; not a legal conclusion."
+          ]
+        },
+        "documentSources": [
+          {
+            "sourceId": "law-source",
+            "sourceKind": "synthetic",
+            "sourceLocator": "urn:independent:law-source",
+            "sourceText": "é猫 — A requires A AND B."
+          }
+        ],
+        "documentAssertions": [],
+        "documentAssessments": [
+          {
+            "assessmentId": "assessment-A",
+            "assessmentInput": "A",
+            "assessmentScope": {
+              "scopeActor": "person",
+              "scopeContext": "fictional"
+            },
+            "assessmentClassification": {
+              "kind": "proved"
+            },
+            "assessmentReason": "independently supplied",
+            "assessmentIssuer": "reviewer",
+            "assessmentOrigin": "synthetic_fixture",
+            "assessmentBasis": "assumption",
+            "assessmentAssertions": [],
+            "assessmentSources": [
+              {
+                "referenceSource": "law-source",
+                "referenceSpan": null
+              }
+            ]
+          },
+          {
+            "assessmentId": "assessment-B",
+            "assessmentInput": "B",
+            "assessmentScope": {
+              "scopeActor": "person",
+              "scopeContext": "fictional"
+            },
+            "assessmentClassification": {
+              "kind": "not_proved"
+            },
+            "assessmentReason": "independently supplied",
+            "assessmentIssuer": "reviewer",
+            "assessmentOrigin": "synthetic_fixture",
+            "assessmentBasis": "assumption",
+            "assessmentAssertions": [],
+            "assessmentSources": [
+              {
+                "referenceSource": "law-source",
+                "referenceSpan": null
+              }
+            ]
+          }
+        ],
+        "documentAnalyses": [
+          {
+            "analysisId": "analysis",
+            "analysisTarget": "rule",
+            "analysisScope": {
+              "scopeActor": "person",
+              "scopeContext": "fictional"
+            },
+            "analysisAssessments": [
+              "assessment-A",
+              "assessment-B"
+            ],
+            "analysisReferenceDate": "2030-06-15"
+          }
+        ],
+        "documentRelationships": [],
+        "documentAnnotations": [],
+        "documentPresentation": []
+      },
+      "temporalExpressionAnalysis": "analysis",
+      "temporalExpressionSources": [
+        {
+          "referenceSource": "source-A",
+          "referenceSpan": null
+        }
+      ],
+      "temporalDateSources": [
+        {
+          "referenceSource": "date-evidence",
+          "referenceSpan": null
+        }
+      ],
+      "temporalSupersedes": "unrelated-metadata"
+    },
+    {
+      "temporalExpressionId": "version-B",
+      "temporalExpressionVersion": "B",
+      "temporalEffectiveFrom": "2025-01-01",
+      "temporalEffectiveTo": null,
+      "temporalExpressionDocument": {
+        "documentFormat": "yuho.authoring/v0.1-experimental",
+        "documentId": "independent-B",
+        "documentLaw": {
+          "lawId": "fiction-B",
+          "lawRevision": "1",
+          "lawNodes": [
+            {
+              "nodeId": "rule",
+              "nodeKind": "rule",
+              "nodeLabel": "Fictional B",
+              "nodeQuotation": null,
+              "nodeCitation": "Fictional B",
+              "nodeSources": [
+                {
+                  "referenceSource": "law-source",
+                  "referenceSpan": null
+                }
+              ]
+            },
+            {
+              "nodeId": "group",
+              "nodeKind": "any",
+              "nodeLabel": "any",
+              "nodeQuotation": null,
+              "nodeCitation": "Fictional B",
+              "nodeSources": [
+                {
+                  "referenceSource": "law-source",
+                  "referenceSpan": null
+                }
+              ]
+            },
+            {
+              "nodeId": "A",
+              "nodeKind": "input",
+              "nodeLabel": "A",
+              "nodeQuotation": null,
+              "nodeCitation": "Fictional B",
+              "nodeSources": [
+                {
+                  "referenceSource": "law-source",
+                  "referenceSpan": null
+                }
+              ]
+            },
+            {
+              "nodeId": "B",
+              "nodeKind": "input",
+              "nodeLabel": "B",
+              "nodeQuotation": null,
+              "nodeCitation": "Fictional B",
+              "nodeSources": [
+                {
+                  "referenceSource": "law-source",
+                  "referenceSpan": null
+                }
+              ]
+            }
+          ],
+          "lawEdges": [
+            {
+              "edgeId": "requires",
+              "edgeFrom": "rule",
+              "edgeTo": "group",
+              "edgeKind": "requires"
+            },
+            {
+              "edgeId": "member-A",
+              "edgeFrom": "group",
+              "edgeTo": "A",
+              "edgeKind": "member"
+            },
+            {
+              "edgeId": "member-B",
+              "edgeFrom": "group",
+              "edgeTo": "B",
+              "edgeKind": "member"
+            }
+          ],
+          "lawScope": [
+            "Fiction only; not a legal conclusion."
+          ]
+        },
+        "documentSources": [
+          {
+            "sourceId": "law-source",
+            "sourceKind": "synthetic",
+            "sourceLocator": "urn:independent:law-source",
+            "sourceText": "é猫 — B requires A OR B."
+          }
+        ],
+        "documentAssertions": [],
+        "documentAssessments": [
+          {
+            "assessmentId": "assessment-A",
+            "assessmentInput": "A",
+            "assessmentScope": {
+              "scopeActor": "person",
+              "scopeContext": "fictional"
+            },
+            "assessmentClassification": {
+              "kind": "proved"
+            },
+            "assessmentReason": "independently supplied",
+            "assessmentIssuer": "reviewer",
+            "assessmentOrigin": "synthetic_fixture",
+            "assessmentBasis": "assumption",
+            "assessmentAssertions": [],
+            "assessmentSources": [
+              {
+                "referenceSource": "law-source",
+                "referenceSpan": null
+              }
+            ]
+          },
+          {
+            "assessmentId": "assessment-B",
+            "assessmentInput": "B",
+            "assessmentScope": {
+              "scopeActor": "person",
+              "scopeContext": "fictional"
+            },
+            "assessmentClassification": {
+              "kind": "not_proved"
+            },
+            "assessmentReason": "independently supplied",
+            "assessmentIssuer": "reviewer",
+            "assessmentOrigin": "synthetic_fixture",
+            "assessmentBasis": "assumption",
+            "assessmentAssertions": [],
+            "assessmentSources": [
+              {
+                "referenceSource": "law-source",
+                "referenceSpan": null
+              }
+            ]
+          }
+        ],
+        "documentAnalyses": [
+          {
+            "analysisId": "analysis",
+            "analysisTarget": "rule",
+            "analysisScope": {
+              "scopeActor": "person",
+              "scopeContext": "fictional"
+            },
+            "analysisAssessments": [
+              "assessment-A",
+              "assessment-B"
+            ],
+            "analysisReferenceDate": "2030-06-15"
+          }
+        ],
+        "documentRelationships": [],
+        "documentAnnotations": [],
+        "documentPresentation": []
+      },
+      "temporalExpressionAnalysis": "analysis",
+      "temporalExpressionSources": [
+        {
+          "referenceSource": "source-B",
+          "referenceSpan": null
+        }
+      ],
+      "temporalDateSources": [
+        {
+          "referenceSource": "date-evidence",
+          "referenceSpan": null
+        }
+      ],
+      "temporalSupersedes": null
+    }
+  ],
+  "temporalSources": [
+    {
+      "sourceId": "source-A",
+      "sourceKind": "synthetic",
+      "sourceLocator": "urn:independent:source-A",
+      "sourceText": "é猫 original Version A: A AND B."
+    },
+    {
+      "sourceId": "source-B",
+      "sourceKind": "synthetic",
+      "sourceLocator": "urn:independent:source-B",
+      "sourceText": "é犬 original Version B: A OR B."
+    },
+    {
+      "sourceId": "date-evidence",
+      "sourceKind": "synthetic",
+      "sourceLocator": "urn:independent:date-evidence",
+      "sourceText": "Fictional commencement asserted for 2025-01-01."
+    }
+  ],
+  "temporalScope": [
+    "Independent fictional technical test; no legal applicability asserted."
+  ],
+  "temporalAssumptions": [
+    "A proved, B not proved are synthetic supplied classifications."
+  ]
+}

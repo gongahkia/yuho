@@ -14,6 +14,7 @@ def verify(out):
         return json.loads(path.read_bytes())
     doc_schema = load(ROOT / 'schema/authoring-v0.5-experimental.schema.json')
     projection_schema = load(ROOT / 'schema/temporal-projection-v0.5-experimental.schema.json')
+    view_validator = Draft202012Validator({'$defs': projection_schema['$defs'], '$ref': '#/$defs/view'})
     for schema in [doc_schema, projection_schema]:
         Draft202012Validator.check_schema(schema)
     for name in ['synthetic-authored.json', 'pc24-authored.json', 'law-revision-authored.json', 'interval-revision-authored.json']:
@@ -44,6 +45,14 @@ def verify(out):
         prefix = path.name.removesuffix('-projection.json')
         for view_name in ['selection', 'provenance']:
             view = load(path.parent / (prefix + '-' + view_name + '-bindings.json'))
+            view_validator.validate(view)
+            assert view['viewVersion'] == projection_schema['$defs']['view']['properties']['viewVersion']['const']
+            # F1: the schema independently rejects each malformed companion;
+            # public runtime/encoder rejection is covered by native regressions.
+            for version in ['yuho.projection-view/v999-unsupported', '', 'yuho.projection-view/v0.2-experimental']:
+                malformed = dict(view, viewVersion=version)
+                errors = list(view_validator.iter_errors(malformed))
+                assert errors and any(list(e.absolute_path) == ['viewVersion'] for e in errors)
             inc = set(view['viewIncludedNodes'])
             edges = set(view['viewIncludedEdges'])
             assert view['viewProjectionId'] == data['temporalProjectionId']

@@ -105,8 +105,12 @@ temporalReferenceView p mode = do
   if length ns>64 || length es>128 then Left [issue "TAVIEWLIMIT" "/view" [] "reference view exceeds 64 objects or 128 relationships; no truncation performed"] else pure ()
   case validateTemporalView p view of [] -> Right view; errors -> Left errors
 validateTemporalView :: TemporalProjection -> ProjectionView -> [AuthoringDiagnostic]
-validateTemporalView p v = validateTemporalProjection value ++ [issue "TAVIEW" "/view" [] "view identity, partition, endpoints or bindings invalid" | not valid]
+validateTemporalView p v = validateTemporalProjection value ++ versionErrors
+  ++ [issue "TAVIEW" "/view" [] "view identity, partition, endpoints or bindings invalid" | not valid]
   where
+    versionErrors = [issue "TAVIEW" "/viewVersion" [viewId v]
+      ("unsupported viewVersion " <> T.pack (show (viewVersion v)) <> "; expected " <> projectionViewFormat)
+      | viewVersion v /= projectionViewFormat]
     value=temporalProjectionData p; ns=map projectedNodeId (temporalProjectionNodes value); es=map projectedEdgeId (temporalProjectionEdges value)
     partition included omitted whole=sort (included++omitted)==sort whole && length (nub (included++omitted))==length whole
     valid=viewProjectionId v==temporalProjectionId value && partition (viewIncludedNodes v) (viewOmittedNodes v) ns && partition (viewIncludedEdges v) (viewOmittedEdges v) es

@@ -7,6 +7,7 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
 import Data.List (find, sort)
 import Data.Maybe (isNothing)
+import qualified Data.Map.Strict as Map
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as UTF8
 import System.FilePath ((</>))
@@ -20,6 +21,7 @@ import Yuho.SuppliedProofStatus.Validate (validateProofRequest)
 import Yuho.SuppliedProofStatus.Evaluate (evaluateProof)
 import qualified Yuho.SuppliedProofStatus.Types as P
 import Yuho.Protocol.Json (decodeJson)
+import Yuho.Protocol.Decode (sha256Text)
 import Yuho.Exception.Types (ExceptionTrace(..))
 import TemporalExamples
 check :: String -> Bool -> IO ()
@@ -28,6 +30,7 @@ required :: Show e => Either e a -> IO a
 required=either (fail . show) pure
 runTemporalAuthoringChecks :: FilePath -> IO ()
 runTemporalAuthoringChecks root=do
+  viewFormatChecks root
   let d=syntheticTemporal
       fixture=root</>"test/fixtures/temporal-sdk"
       path=fixture</>"model.yh"
@@ -174,3 +177,54 @@ guarded d=d {temporalExpressions=[e {temporalExpressionDocument=add (temporalExp
       documentAssessments=documentAssessments doc++[Assessment ("assessment:"<>key) key (Scope "actor:fixture" "event:fixed") (Classification value) "Explicit independent synthetic guard assumption" "Fixture author" "synthetic_fixture" "assumption" [] [] | (key,value)<-[("C",Proved),("G",NotProved),("H",NotProved)]],
       documentAnalyses=[a {analysisAssessments=analysisAssessments a++["assessment:C","assessment:G","assessment:H"]} | a<-documentAnalyses doc]}
       where law=documentLaw doc
+
+-- Independent acceptance-review F1: replay the exact original authored input
+-- and malformed view. Valid-byte hashes were frozen with Python hashlib before
+-- changing the validator, through the public encoders (both reference views).
+viewFormatChecks :: FilePath -> IO ()
+viewFormatChecks root = do
+  let fixture = root </> "test/fixtures/temporal-view-format"
+      encoders :: [(T.Text, TemporalProjection -> ProjectionView -> Either [AuthoringDiagnostic] BS.ByteString)]
+      encoders = [("json",encodeTemporalViewJson),("xml",encodeTemporalViewXml),("svg",encodeTemporalViewSvg)]
+      badVersions = ["yuho.projection-view/v999-unsupported","","yuho.projection-view/v0.2-experimental"]
+  bytes <- BS.readFile (fixture </> "reviewer.document.json")
+  doc <- required (decodeTemporalDocument bytes)
+  evaluation <- required (compileTemporalAnalysis doc (Just "2025-01-01") >>= evaluateTemporalAnalysis)
+  projection <- required (projectTemporalEvaluation evaluation)
+  originalBad <- BS.readFile (fixture </> "reviewer.malformed-view.json")
+  hashes <- BS.readFile (fixture </> "valid-exports.sha256.json") >>= required .
+    (A.eitherDecodeStrict' :: BS.ByteString -> Either String (Map.Map T.Text T.Text))
+  replay <- required (decodeTemporalDocument (encodeTemporalDocument doc))
+  replayed <- required (compileTemporalAnalysis replay (Just "2025-01-01") >>= evaluateTemporalAnalysis >>= projectTemporalEvaluation)
+  forM_ [TemporalSetView,TemporalProvenanceView] $ \mode -> do
+    view <- required (temporalReferenceView projection mode)
+    let name = T.pack (show mode)
+    check "view-format: constructor uses canonical supported format" (viewVersion view == projectionViewFormat)
+    check "view-format: generated view validates" (null (validateTemporalView projection view))
+    forM_ encoders $ \(format,encoder) -> do
+      output <- required (encoder projection view)
+      check ("view-format: prior valid bytes " <> show mode <> "/" <> T.unpack format)
+        (Map.lookup (name <> "/" <> format) hashes == Just (sha256Text output))
+    forM_ badVersions $ \version -> do
+      let malformed = view {viewVersion=version}
+          diagnostics = validateTemporalView projection malformed
+          label = "view-format: " <> show mode <> " version " <> show version
+      if mode == TemporalSetView && version == "yuho.projection-view/v999-unsupported"
+        then check "view-format: exact original reviewer malformed input" (encodeRecord malformed == originalBad)
+        else pure ()
+      check (label <> " rejected by public validator") (not (null diagnostics))
+      check (label <> " useful version diagnostic") (any (\d -> diagnosticCode d == "TAVIEW"
+        && diagnosticLocation d == "/viewVersion"
+        && T.pack (show version) `T.isInfixOf` diagnosticMessage d
+        && projectionViewFormat `T.isInfixOf` diagnosticMessage d) diagnostics)
+      forM_ encoders $ \(format,encoder) -> check (label <> " rejected by " <> T.unpack format)
+        (case encoder projection malformed of Left errors -> errors == diagnostics; Right _ -> False)
+    -- Inspecting malformed copies never normalises the original or changes its
+    -- selection/snapshots; reloading the source reproduces the exact bindings.
+    forM_ encoders $ \(format,encoder) -> do
+      output <- required (encoder projection view)
+      check ("view-format: original unchanged " <> T.unpack format) (Map.lookup (name <> "/" <> format) hashes == Just (sha256Text output))
+    replayView <- required (temporalReferenceView replayed mode)
+    check "view-format: saved replay retains supported version and bindings" (replayView == view && viewVersion replayView == projectionViewFormat)
+  check "view-format: replay keeps temporal and proof snapshots" (temporalProjectionSelection (temporalProjectionData projection) == temporalProjectionSelection (temporalProjectionData replayed))
+  putStrLn "temporal view-format F1: exact reviewer input, both views, three bad versions, all encoders, six prior-byte controls and saved replay passed"
