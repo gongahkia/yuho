@@ -25,3 +25,22 @@ of the faithfully retained record. It does not establish that the owner holds
 every contributor's rights. Specific contributor/commissioned-work questions,
 if any, need their own authority record. No blanket contributor assignment is
 claimed, and no software licence choice is being reopened.
+
+## Mascot authorship update
+
+The owner later stated directly: "mascot rights are to me, i drew them dawg".
+This supersedes the earlier lack of creator information and is retained in the
+structured record. It establishes the owner's authorship/rights assertion for
+the four mascot files. No service origin or third-party reference is invented.
+The owner then explicitly answered "Apply Apache-2.0 to the four mascot files"
+to question item `call_b230b4ff2023498db2eaf2c38de89104`, item 0. That approval
+extends the original-material licence scope to:
+
+- `assets/logo/yuho_mascot.ico`
+- `assets/logo/yuho_mascot.jpg`
+- `assets/logo/yuho_mascot.png`
+- `assets/logo/yuho_mascot_favicon.png`
+
+The exact question/answer is retained in the structured record. This supersedes
+the interim pending artwork-licence question. No approval timestamp is supplied
+or invented. The original artwork bytes are unchanged.

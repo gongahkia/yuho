@@ -43,6 +43,14 @@ def check_notices(files: dict[str, bytes]) -> list[str]:
             errors.append("owner evidence differs from supplied approval")
     except (ValueError, AttributeError):
         errors.append("invalid owner evidence")
+    else:
+        mascot = record.get("mascot_owner_statement", {})
+        grant = mascot.get("license_approval", {})
+        if (mascot.get("verbatim") != "mascot rights are to me, i drew them dawg"
+                or mascot.get("artwork_license_choice") != "Apache-2.0"
+                or grant.get("answer") != "Apply Apache-2.0 to the four mascot files"
+                or grant.get("approval_timestamp") is not None):
+            errors.append("mascot authorship/licence evidence differs from owner replies")
     return errors
 
 

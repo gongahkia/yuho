@@ -8,6 +8,20 @@
   "answer": "Approve Apache-2.0 for authorised original materials",
   "scope": ["authorised original software", "authorised original documentation", "authorised original examples", "authorised original Lean code"],
   "exclusions": ["third-party statutory text", "other third-party materials", "third-party dependencies"],
+  "mascot_owner_statement": {
+    "source": "later direct owner message in the same implementation conversation",
+    "verbatim": "mascot rights are to me, i drew them dawg",
+    "scope": "the four assets/logo/yuho_mascot* files",
+    "effect": "supersedes earlier creator/rights-holder uncertainty",
+    "artwork_license_choice": "Apache-2.0",
+    "license_approval": {
+      "question_item_id": "[\"request_user_input_async\",\"call_b230b4ff2023498db2eaf2c38de89104\",0]",
+      "question": "Should the four original mascot files also use Apache-2.0? Your earlier licence approval explicitly covered software, documentation, examples and Lean code, so I need your artwork licensing choice before extending that scope.",
+      "answer": "Apply Apache-2.0 to the four mascot files",
+      "approval_timestamp": null
+    },
+    "statement_timestamp": null
+  },
   "approval_timestamp": null,
   "retention_date": "2026-10-22",
   "limitations": ["No signature or independently authenticated legal identity is supplied", "No contributor assignment or universal ownership is inferred", "Retention date is not an invented approval date", "Third-party redistribution remains separately gated"]

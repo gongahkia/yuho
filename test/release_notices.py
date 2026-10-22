@@ -28,7 +28,10 @@ def main():
     altered = json.loads(files[owner])
     altered["answer"] = "Unapproved licence"
     assert notices.check_notices({**files, owner: json.dumps(altered).encode()})
-    altered["answer"] = notices.ANSWER
+    altered = json.loads(files[owner])
+    altered["mascot_owner_statement"]["license_approval"]["answer"] = "No artwork grant"
+    assert notices.check_notices({**files, owner: json.dumps(altered).encode()})
+    altered = json.loads(files[owner])
     altered["approval_timestamp"] = "invented"
     assert notices.check_notices({**files, owner: json.dumps(altered).encode()})
     with tempfile.TemporaryDirectory(prefix="yuho-notice-tests-") as tmp:
@@ -43,7 +46,7 @@ def main():
                     info.size = len(data)
                     tar.addfile(info, io.BytesIO(data))
             assert (not notices.check_archive(archive, files)) == valid
-    print("Release notices: seven acknowledgement omissions, altered approval/date and two archive substitutions rejected")
+    print("Release notices: seven acknowledgement omissions, altered software/artwork approval/date and two archive substitutions rejected")
 
 
 if __name__ == "__main__":
