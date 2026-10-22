@@ -1,6 +1,7 @@
 """Compare all six prior protocol families with their committed baseline bytes."""
 
 import io
+import hashlib
 import json
 import os
 import shutil
@@ -11,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = "9dd40b628bfb18e50f10050f3e9300e7f5bfc7c1"
+BASELINE_ARCHIVE_SHA256 = "8d87e94a46f758a28ba5af4719f2cf8b3bdaa8042da797ab8b49aa1b707b587b"
 FAMILIES = [
     ("frozen", ROOT / "test/kernel-fixtures/frozen/requests"),
     ("H", ROOT / "test/fixtures/requests"),
@@ -47,12 +49,23 @@ def responses(executable, requests):
     return lines
 
 
+def baseline_archive():
+    """Use the same pinned source, including in a Git-free research bundle."""
+    embedded = ROOT / "reproducibility/prior-kernel.tar"
+    if embedded.is_file():
+        archive = embedded.read_bytes()
+        if hashlib.sha256(archive).hexdigest() != BASELINE_ARCHIVE_SHA256:
+            raise SystemExit("embedded historical kernel archive SHA-256 mismatch")
+        return archive
+    return subprocess.run(["git", "archive", "--format=tar", BASELINE, "rewrite/haskell"],
+                          cwd=ROOT, capture_output=True, check=True).stdout
+
+
 def main():
     version = subprocess.check_output([GHC, "--numeric-version"], text=True).strip()
     if version != "9.8.4":
         raise SystemExit(f"prior-byte comparison requires GHC 9.8.4, found {version}")
-    archive = subprocess.run(["git", "archive", BASELINE, "rewrite/haskell"],
-                             cwd=ROOT, capture_output=True, check=True).stdout
+    archive = baseline_archive()
     with tempfile.TemporaryDirectory(prefix="yuho-six-variant-baseline-") as folder:
         target = Path(folder)
         with tarfile.open(fileobj=io.BytesIO(archive)) as tar:

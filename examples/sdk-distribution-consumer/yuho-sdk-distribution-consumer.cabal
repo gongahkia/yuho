@@ -1,0 +1,9 @@
+cabal-version: 3.0
+name: yuho-sdk-distribution-consumer
+version: 0.1.0.0
+build-type: Simple
+executable yuho-sdk-distribution-consumer
+  main-is: Main.hs
+  default-language: Haskell2010
+  ghc-options: -Wall
+  build-depends: base ==4.19.2.0, yuho ==1.0.0.0, bytestring ==0.12.1.0, text ==2.1.1, time ==1.12.2, directory ==1.3.8.5, filepath ==1.4.301.0

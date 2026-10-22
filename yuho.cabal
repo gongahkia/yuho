@@ -2,10 +2,87 @@ cabal-version: 3.0
 name: yuho
 version: 1.0.0.0
 build-type: Simple
+license: Apache-2.0
+license-file: LICENSE
+synopsis: Experimental diagram-first legal modelling language and SDK
+description:
+  A diagram-first language and Haskell SDK for explicitly authored legal
+  structures, case information and technical application traces, with bounded
+  Singapore criminal-law research examples. Authoring and projection formats
+  remain experimental; technical results are not judicial or evidential findings.
+category: Language
+maintainer: https://github.com/gongahkia/yuho/issues
+homepage: https://github.com/gongahkia/yuho
+bug-reports: https://github.com/gongahkia/yuho/issues
+extra-doc-files:
+    README.md
+    CHANGELOG.md
+    NOTICE
+    docs/*.md
+    schema/README.md
+extra-source-files:
+    cabal.project.sdk
+    cabal.project.freeze
+    schema/*.json
+    examples/authoring-quickstart/*.hs
+    examples/authoring-quickstart/*.cabal
+    examples/authoring-consumer/*.hs
+    examples/authoring-consumer/*.cabal
+    examples/authoring-consumer/fixtures/*.json
+    examples/linked-definitions-consumer/*.hs
+    examples/linked-definitions-consumer/*.cabal
+    examples/typed-authoring-consumer/*.hs
+    examples/typed-authoring-consumer/*.cabal
+    examples/presumption-consumer/*.hs
+    examples/presumption-consumer/*.cabal
+    examples/temporal-consumer/*.hs
+    examples/temporal-consumer/*.cabal
+    examples/computed-input-consumer/*.hs
+    examples/computed-input-consumer/*.cabal
+    examples/sdk-distribution-consumer/*.hs
+    examples/sdk-distribution-consumer/*.cabal
+    test/fixtures/computed-input-repair/*.json
+    test/fixtures/presumption-authoring/*.json
+    test/fixtures/typed-authoring/*.yh
+    test/fixtures/typed-authoring/*.yhs
+    test/fixtures/typed-boundary/*.json
+    test/fixtures/temporal-sdk/*.yh
+    test/fixtures/temporal-view-format/*.json
+    test/authoring_consumer.py
+    test/authoring_quickstart.py
+    test/hurt_consumer.py
+    test/editing_consumer.py
+    test/interaction_consumer.py
+    test/linked_definitions_consumer.py
+    test/typed_authoring_consumer.py
+    test/presumption_authoring_consumer.py
+    test/temporal_authoring_consumer.py
+    test/computed_input_consumer.py
+    test/prior_bytes.py
+    test/release_distribution.py
+    scripts/verify_sdk_distribution.py
+    scripts/generate_reproducibility_bundle.py
+    scripts/extract_reproducibility_bundle.py
+
+source-repository head
+  type: git
+  location: https://github.com/gongahkia/yuho
+
+flag development
+  description: Treat warnings as errors under the pinned development toolchain
+  default: False
+  manual: True
+
+flag research-tests
+  description: Enable tests requiring the complete research reproducibility bundle
+  default: False
+  manual: True
 
 common yuho-common
   default-language: Haskell2010
-  ghc-options: -Wall -Werror -O1
+  ghc-options: -Wall
+  if flag(development)
+    ghc-options: -Werror
   build-depends:
       base ==4.19.2.0
     , aeson ==2.3.1.0
@@ -177,3 +254,13 @@ test-suite yuho-test
     , QuickCheck ==2.18.0.0
     , directory ==1.3.8.5
     , filepath ==1.4.301.0
+  if !flag(research-tests)
+    buildable: False
+
+test-suite yuho-sdk-test
+  import: yuho-common
+  type: exitcode-stdio-1.0
+  main-is: SDKMain.hs
+  hs-source-dirs: test examples/computed-input-consumer examples/temporal-consumer examples/presumption-consumer examples/authoring-consumer examples/linked-definitions-consumer examples/typed-authoring-consumer
+  other-modules: Acknowledgements, CaseApplication, CaseViewChecks, Cheating, ComputedExample, ComputedInputChecks, ComputedInputRepairChecks, Editing, EditingChecks, Hurt, IndependentLinkedRegressions, InteractionChecks, PresumptionAuthoringChecks, PresumptionExamples, ProjectionChecks, SourceAnchorChecks, SourceAnchors, TemporalAuthoringChecks, TemporalExamples, TypedAuthoringChecks, TypedBoundaryChecks, TypedExamples
+  build-depends: yuho ==1.0.0.0

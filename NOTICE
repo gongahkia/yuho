@@ -1,0 +1,15 @@
+Yuho
+
+The project's original software implementation, original documentation and
+examples, and original Lean code are licensed under the Apache License,
+Version 2.0, to the extent the project owner is authorised to license them.
+See LICENSE for the license terms.
+
+Third-party statutory text, quotations, source extracts, external data/assets,
+and third-party dependencies are excluded from that grant and retain their
+own rights and terms. Inclusion in this repository is not a representation
+that those materials are cleared for public redistribution. See
+docs/third-party-notices.md and the retained source-provenance records.
+
+No contributor assignment, third-party permission, legal-source authentication
+or legal applicability is implied by this notice.

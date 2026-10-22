@@ -15,7 +15,7 @@ build:
 	$(CABAL) v2-build all --offline -j1 --with-compiler=$(GHC)
 
 test: build
-	$(CABAL) v2-test yuho-test --offline -j1 --with-compiler=$(GHC) --test-show-details=direct
+	$(CABAL) v2-test yuho-test yuho-sdk-test --offline -j1 --with-compiler=$(GHC) --test-show-details=direct
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)
@@ -50,3 +50,4 @@ release-verify: build
 
 verify: test protocols conformance lean corpus docs release-verify
 	$(PYTHON) test/prior_bytes.py
+	$(PYTHON) test/release_distribution.py

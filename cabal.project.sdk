@@ -1,0 +1,9 @@
+-- Copy to cabal.project in an extracted source distribution. The unchanged
+-- cabal.project.freeze beside it supplies the frozen versions and flags.
+packages: . examples/authoring-consumer examples/linked-definitions-consumer examples/typed-authoring-consumer examples/presumption-consumer examples/temporal-consumer examples/computed-input-consumer
+with-compiler: ghc-9.8.4
+index-state: 2026-09-12T03:17:42Z
+jobs: 1
+
+package yuho
+  flags: +development -research-tests
