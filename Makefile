@@ -54,3 +54,6 @@ release-verify: build
 verify: test protocols conformance lean corpus docs release-verify
 	$(PYTHON) test/prior_bytes.py
 	$(PYTHON) test/release_distribution.py
+	$(PYTHON) test/release_notices.py
+	$(PYTHON) test/rights_inventory.py
+	$(PYTHON) test/reduced_sdk.py

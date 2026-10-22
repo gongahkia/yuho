@@ -21,6 +21,7 @@ extra-doc-files:
     docs/*.md
     schema/README.md
 extra-source-files:
+    release/owner-apache-authorisation.json
     cabal.project.sdk
     cabal.project.freeze
     schema/*.json
@@ -63,6 +64,18 @@ extra-source-files:
     scripts/verify_sdk_distribution.py
     scripts/generate_reproducibility_bundle.py
     scripts/extract_reproducibility_bundle.py
+    scripts/verify_release_notices.py
+    test/release_notices.py
+    test/rights_inventory.py
+    test/reduced_sdk.py
+    scripts/rights_inventory.py
+    scripts/reduced_sdk.py
+    release/rights-content-evidence.json
+    release/reduced-sdk-inventory.json
+    release/reduced-sdk/yuho.cabal
+    release/reduced-sdk/cabal.project.sdk
+    release/reduced-sdk/NOTICE
+    release/reduced-sdk/docs/sdk-only-inspection.md
 
 source-repository head
   type: git

@@ -1,0 +1,933 @@
+{
+  "format": "yuho.reduced-sdk-inventory/v1",
+  "owner_approved": false,
+  "package_root": "yuho-1.0.0.0",
+  "starting_archive_sha256": "72ae8dfe99fb3e7b6ce261f7a18b78dd7577a121faacbdd1321726a24790e388",
+  "scope": "Private reviewed original-library/schema/synthetic-consumer proposal; not public redistribution clearance or repository/history approval",
+  "files": [
+    {
+      "path": "CHANGELOG.md",
+      "type": "file",
+      "sha256": "77e9868c1963869b2586c3ca9e5ab8508b7dc63030e23007533b010450470039",
+      "source": "CHANGELOG.md"
+    },
+    {
+      "path": "LICENSE",
+      "type": "file",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "source": "LICENSE"
+    },
+    {
+      "path": "NOTICE",
+      "type": "file",
+      "sha256": "2cf35c6f7da4d5926d670b0f987e0658b4ff1a6ccae90c834d3bb461bfeb27d6",
+      "source": "release/reduced-sdk/NOTICE"
+    },
+    {
+      "path": "cabal.project.freeze",
+      "type": "file",
+      "sha256": "c9d50a5c80314003273993e46a6355ca6900751b452cf1795eea550126ee377f",
+      "source": "cabal.project.freeze"
+    },
+    {
+      "path": "cabal.project.sdk",
+      "type": "file",
+      "sha256": "ff3496487f3d555e7e06d8b80ac5e65a6a08c18f4204a2b1697af15b14fec2e8",
+      "source": "release/reduced-sdk/cabal.project.sdk"
+    },
+    {
+      "path": "docs/owner-authorisation.md",
+      "type": "file",
+      "sha256": "bc3d1a42a54c82c3ce58de00dab4bae6d1e913972478c108d6270cebbd8c3184",
+      "source": "docs/owner-authorisation.md"
+    },
+    {
+      "path": "docs/sdk-only-inspection.md",
+      "type": "file",
+      "sha256": "e32e3685318de253d2484f3acc7818a7741dceeae4854d934000cee1b8e22058",
+      "source": "release/reduced-sdk/docs/sdk-only-inspection.md"
+    },
+    {
+      "path": "examples/sdk-distribution-consumer/Main.hs",
+      "type": "file",
+      "sha256": "93669a77c45e258526f1a75b2f2567c01d3fbc01574d54824d1b5468e93440fb",
+      "source": "examples/sdk-distribution-consumer/Main.hs"
+    },
+    {
+      "path": "examples/sdk-distribution-consumer/yuho-sdk-distribution-consumer.cabal",
+      "type": "file",
+      "sha256": "c38b83da587e3424722c605a43375d3223c379887910dd60a05d4082fa381c4a",
+      "source": "examples/sdk-distribution-consumer/yuho-sdk-distribution-consumer.cabal"
+    },
+    {
+      "path": "release/owner-apache-authorisation.json",
+      "type": "file",
+      "sha256": "017d36f1b845c38f0beea8609c47371d5b34d9e80d28fccf23d661947a985801",
+      "source": "release/owner-apache-authorisation.json"
+    },
+    {
+      "path": "schema/analysis-projection-v0.1-experimental.schema.json",
+      "type": "file",
+      "sha256": "33b598e2e3aacf85a5ecb3325e8b7eced991efe1f3aa4092be6d7f6c3b4f11b7",
+      "source": "schema/analysis-projection-v0.1-experimental.schema.json"
+    },
+    {
+      "path": "schema/analysis-projection-v0.2-experimental.schema.json",
+      "type": "file",
+      "sha256": "ed91aacd06615c882382737d730350ac0f11d7d4104174f9a79b24babc28ea91",
+      "source": "schema/analysis-projection-v0.2-experimental.schema.json"
+    },
+    {
+      "path": "schema/authoring-v0.1-experimental.schema.json",
+      "type": "file",
+      "sha256": "17b24df3e1004c67b7250ec562f3e398d89a2cc8b1dd515f3c7dc038ba7792cc",
+      "source": "schema/authoring-v0.1-experimental.schema.json"
+    },
+    {
+      "path": "schema/authoring-v0.2-experimental.schema.json",
+      "type": "file",
+      "sha256": "643e86c32156278945741f7c3dba37b281ddb6895c690fd3d43c0bad54f34494",
+      "source": "schema/authoring-v0.2-experimental.schema.json"
+    },
+    {
+      "path": "schema/authoring-v0.3-experimental.schema.json",
+      "type": "file",
+      "sha256": "6a7b7bbfa14fde46d2e6687149fd3dab55716853fa727573d9b66dc072da0a34",
+      "source": "schema/authoring-v0.3-experimental.schema.json"
+    },
+    {
+      "path": "schema/authoring-v0.4-experimental.schema.json",
+      "type": "file",
+      "sha256": "3ab5210b127b5b37ea4c5712c87eca76cfd26a8ae5bc3c297584c6ca1475d183",
+      "source": "schema/authoring-v0.4-experimental.schema.json"
+    },
+    {
+      "path": "schema/authoring-v0.5-experimental.schema.json",
+      "type": "file",
+      "sha256": "83d6b517af09aa8f06c6a5b4f33623c848a60159fb49031ac7b67dd006c48408",
+      "source": "schema/authoring-v0.5-experimental.schema.json"
+    },
+    {
+      "path": "schema/computed-input-projection-v0.1-experimental.schema.json",
+      "type": "file",
+      "sha256": "55c24d1a17b128f3b01f617f750b7ef4a7d35e6f75c48fb84a6c5ba58aa928c5",
+      "source": "schema/computed-input-projection-v0.1-experimental.schema.json"
+    },
+    {
+      "path": "schema/computed-input-v0.1-experimental.schema.json",
+      "type": "file",
+      "sha256": "f3c31ef62d227b611b1a72c44580969c4cb767f978c900b3becdecd1c77603f2",
+      "source": "schema/computed-input-v0.1-experimental.schema.json"
+    },
+    {
+      "path": "schema/core-yuho-conformance-v0.1.json",
+      "type": "file",
+      "sha256": "44f6159b0aa7badf9235f731d3763618e2107e1cbde818a1314179df273633d0",
+      "source": "schema/core-yuho-conformance-v0.1.json"
+    },
+    {
+      "path": "schema/core-yuho-conformance-v0.2.json",
+      "type": "file",
+      "sha256": "8a302048762cde81a6b138a50ea320119f51d9e6e2cd152d4101621e636b3f92",
+      "source": "schema/core-yuho-conformance-v0.2.json"
+    },
+    {
+      "path": "schema/core-yuho-conformance-v0.3.json",
+      "type": "file",
+      "sha256": "d4f128ef18662f9a6efba694b8d9b9bea16421575d0c9f763a8658238e0c0090",
+      "source": "schema/core-yuho-conformance-v0.3.json"
+    },
+    {
+      "path": "schema/model-bundle-change-set.schema.json",
+      "type": "file",
+      "sha256": "a1442ec822511367c41019f9834aa6afc294c433616f2edc7284d7d93729fdb8",
+      "source": "schema/model-bundle-change-set.schema.json"
+    },
+    {
+      "path": "schema/model-bundle-core.schema.json",
+      "type": "file",
+      "sha256": "cc70c8886c62768ce33f4f0ecebcf79670d7b9193d4be01a2546f9c9aa114722",
+      "source": "schema/model-bundle-core.schema.json"
+    },
+    {
+      "path": "schema/model-bundle-review.schema.json",
+      "type": "file",
+      "sha256": "27d5c06a3d05c68299325907ecf0d00f1e1df17c10a85481201c903a04e4932d",
+      "source": "schema/model-bundle-review.schema.json"
+    },
+    {
+      "path": "schema/model-bundle-validation.schema.json",
+      "type": "file",
+      "sha256": "63600743d4500e73fd2a6dfceba5b4342296958a4eae18e65fe1201e5f1f48b0",
+      "source": "schema/model-bundle-validation.schema.json"
+    },
+    {
+      "path": "schema/presumption-projection-v0.4-experimental.schema.json",
+      "type": "file",
+      "sha256": "61031bf3996e40750fe21657f7d0a00bd849f82edcba44bc580a851014431508",
+      "source": "schema/presumption-projection-v0.4-experimental.schema.json"
+    },
+    {
+      "path": "schema/request.schema.json",
+      "type": "file",
+      "sha256": "5a2fd94dfd4d57f96f4e9922607769a9854da64834b24c436b95ec341a076f1c",
+      "source": "schema/request.schema.json"
+    },
+    {
+      "path": "schema/result.schema.json",
+      "type": "file",
+      "sha256": "b0e4ae4665720f99b35fce8bd25be852779da12b6d1a44f76bae3a157cbd3f09",
+      "source": "schema/result.schema.json"
+    },
+    {
+      "path": "schema/temporal-projection-v0.5-experimental.schema.json",
+      "type": "file",
+      "sha256": "b344167438f39ce4cb07b6399276eec5f514b549e7dab461fcca57a37a105819",
+      "source": "schema/temporal-projection-v0.5-experimental.schema.json"
+    },
+    {
+      "path": "schema/typed-analysis-projection-v0.3-experimental.schema.json",
+      "type": "file",
+      "sha256": "bbb90747e34a743dcbed1aa48c2cf7eb5d33a5ada6e2074ae746a58c3e7af66a",
+      "source": "schema/typed-analysis-projection-v0.3-experimental.schema.json"
+    },
+    {
+      "path": "schema/typed-finite-rules-request.schema.json",
+      "type": "file",
+      "sha256": "cfa119547e69d4fdf3373988dbe323ef8d6e0abaa4002e3bec6e877e70e70a87",
+      "source": "schema/typed-finite-rules-request.schema.json"
+    },
+    {
+      "path": "schema/typed-finite-rules-result.schema.json",
+      "type": "file",
+      "sha256": "704e6eeb34920e6c5256c38145ae5ef957175c4ae4e4afefdd4ebadca120c175",
+      "source": "schema/typed-finite-rules-result.schema.json"
+    },
+    {
+      "path": "src/Yuho/Authoring.hs",
+      "type": "file",
+      "sha256": "98e3ebe606e23b2cd135b1dee621cf75e93449185f67f2c86e76ee04e681329d",
+      "source": "src/Yuho/Authoring.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Codec.hs",
+      "type": "file",
+      "sha256": "06e8599555d46e29ab68741d73638c05ce064aca96f19918708d984380a7cfe4",
+      "source": "src/Yuho/Authoring/Codec.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Compile.hs",
+      "type": "file",
+      "sha256": "478068cfbd7a0f4a63408dca0c96caab183a0db0d36d9dfa4d7d0ecaddd2d503",
+      "source": "src/Yuho/Authoring/Compile.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/ComputedInput.hs",
+      "type": "file",
+      "sha256": "77900eac0dd22c85c2c5d233f9c90d2e97286733531601566d3297bffd031211",
+      "source": "src/Yuho/Authoring/ComputedInput.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/ComputedInput/Projection.hs",
+      "type": "file",
+      "sha256": "33425637c9b97bbcceedae506b363aeaf06152987522c5955017a791848b506e",
+      "source": "src/Yuho/Authoring/ComputedInput/Projection.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Definitions.hs",
+      "type": "file",
+      "sha256": "7e20a9d7982eaeb71d65b874d2015d062f7720d969cb8773bb716fa4c72e8b8a",
+      "source": "src/Yuho/Authoring/Definitions.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Edit.hs",
+      "type": "file",
+      "sha256": "691234411a19993db6390c590a878e027c0ee610555bddfc90e2f0a17e8690fd",
+      "source": "src/Yuho/Authoring/Edit.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Interaction.hs",
+      "type": "file",
+      "sha256": "db727302003c2885afedd82a157357fa79a64f549cac06474008bb81a7b6aa7e",
+      "source": "src/Yuho/Authoring/Interaction.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Presumption.hs",
+      "type": "file",
+      "sha256": "5a467f693cf4b700935c0d540d1446fa2b736e3e0ac31b15fa87c8c0a161983b",
+      "source": "src/Yuho/Authoring/Presumption.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Presumption/Projection.hs",
+      "type": "file",
+      "sha256": "5cbcbcf3a08c37cc257490c4283da169a825274757f0eb9cf1e8de4b6d5a01e1",
+      "source": "src/Yuho/Authoring/Presumption/Projection.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Presumption/Run.hs",
+      "type": "file",
+      "sha256": "c05207b62d982cd774f6e7db946416c3cfc7d5f3b181897cb36f616182f84859",
+      "source": "src/Yuho/Authoring/Presumption/Run.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Presumption/Types.hs",
+      "type": "file",
+      "sha256": "d853b4135d7090db0908b48a4a4b2c7a8d0fc69011e67916e4ebc0319c962de5",
+      "source": "src/Yuho/Authoring/Presumption/Types.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Presumption/Validate.hs",
+      "type": "file",
+      "sha256": "91b912431bacab11e4a6c0d624495731348ac0da756fe0c478108ebd8b6c62c8",
+      "source": "src/Yuho/Authoring/Presumption/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Projection.hs",
+      "type": "file",
+      "sha256": "65fa73603a1a70869574c599f758f5e71dadd30a0b1601dc81cd162f811e906e",
+      "source": "src/Yuho/Authoring/Projection.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Projection/Encode.hs",
+      "type": "file",
+      "sha256": "9d81cf02ef5fa7735be6c40f29df095eed6c99c99ae9a475d817a1b5e3e4e3c4",
+      "source": "src/Yuho/Authoring/Projection/Encode.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Projection/Inspect.hs",
+      "type": "file",
+      "sha256": "d73933744613cce8bffb4c5660ea2b877a0fc0fa5042fd79517e5630b43aab61",
+      "source": "src/Yuho/Authoring/Projection/Inspect.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Projection/Render.hs",
+      "type": "file",
+      "sha256": "e40b1dcf5220c68feacd1e74feb2dc8ca8d2dc041fb1d0d9275f7a50f3afab96",
+      "source": "src/Yuho/Authoring/Projection/Render.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Projection/Types.hs",
+      "type": "file",
+      "sha256": "412e8e38539d4d79feb59f375a3b162caa17e557ae44f69f60208512a36a2842",
+      "source": "src/Yuho/Authoring/Projection/Types.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Projection/ViewEncode.hs",
+      "type": "file",
+      "sha256": "13f9af9dd8ec868da408948c83304c9e596961c692546ef4a9524d7cfaea3ee7",
+      "source": "src/Yuho/Authoring/Projection/ViewEncode.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Projection/Views.hs",
+      "type": "file",
+      "sha256": "baf5bb4ccb359fe3eac453013a135f6caac40b747a3fae5e07e0dbce678e6366",
+      "source": "src/Yuho/Authoring/Projection/Views.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Report.hs",
+      "type": "file",
+      "sha256": "3f22c25011467ac22e93d7168f5b0ca95aadef7472b35afedd15ba833656e6ae",
+      "source": "src/Yuho/Authoring/Report.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Snapshot.hs",
+      "type": "file",
+      "sha256": "5da6cdd88fc5838a74fdfad6c5c9612327723aa25b74430e6171f6390e96aa02",
+      "source": "src/Yuho/Authoring/Snapshot.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Source.hs",
+      "type": "file",
+      "sha256": "816955629b75d9992ac8b5a0ba1bd4b5bd5efe295152de3509419d517e3494cc",
+      "source": "src/Yuho/Authoring/Source.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Temporal.hs",
+      "type": "file",
+      "sha256": "7e81d0b26c1bf5a814ee89841ec9d235f0f46a5266e3eaeafbb2a0ad1401334f",
+      "source": "src/Yuho/Authoring/Temporal.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Temporal/Projection.hs",
+      "type": "file",
+      "sha256": "ffdf40668f81123328c645c2b2bacb799b424f1b278413f4bb4a1cdd9290efc1",
+      "source": "src/Yuho/Authoring/Temporal/Projection.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Temporal/Run.hs",
+      "type": "file",
+      "sha256": "7f4e77f487a4d55af7c63d7392c30fa5aa789ddf51884aa8a862baf3cc15a5b7",
+      "source": "src/Yuho/Authoring/Temporal/Run.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Temporal/Types.hs",
+      "type": "file",
+      "sha256": "4db60cfedcea588cc4ed80895d174aea50ed9c3d4e6638089aa5cbed11e686eb",
+      "source": "src/Yuho/Authoring/Temporal/Types.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Typed.hs",
+      "type": "file",
+      "sha256": "162cce137a9fdca3f284d43b4bd61ef13900a008378007a33c8f0db01dca8937",
+      "source": "src/Yuho/Authoring/Typed.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Typed/JSON.hs",
+      "type": "file",
+      "sha256": "8543de8a3854483453fa40c0c371568f2e78f5ca3e5317a60dc71afc9121210a",
+      "source": "src/Yuho/Authoring/Typed/JSON.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Typed/Projection.hs",
+      "type": "file",
+      "sha256": "df5997cbdd9a7ebecbe1f585651c2dd9fecde3a26adba98a609cf79e61de7ca6",
+      "source": "src/Yuho/Authoring/Typed/Projection.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Typed/Run.hs",
+      "type": "file",
+      "sha256": "fb9a2f12482693a02ac1a02b1da0eb912e9c2487b8edf6455ee931af8abc4a0e",
+      "source": "src/Yuho/Authoring/Typed/Run.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Typed/Types.hs",
+      "type": "file",
+      "sha256": "2f63216b5ec8ab2d5201336286121e708346f5aa8c2ccd606ef132c2c10797c7",
+      "source": "src/Yuho/Authoring/Typed/Types.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Typed/Validate.hs",
+      "type": "file",
+      "sha256": "0c6698852988023304dbb08fdf6540787a0e6cf447d7fe64e605bf2a224648a6",
+      "source": "src/Yuho/Authoring/Typed/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Types.hs",
+      "type": "file",
+      "sha256": "bd1364695d2cc747207957baa432f15dd57e98949705d1f092489eddbb54d725",
+      "source": "src/Yuho/Authoring/Types.hs"
+    },
+    {
+      "path": "src/Yuho/Authoring/Validate.hs",
+      "type": "file",
+      "sha256": "163ee22a7169be7d63ce1490a3fb3604eda3b9e2d9f1b0a49d48fe8dbfaa85e0",
+      "source": "src/Yuho/Authoring/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/CLI.hs",
+      "type": "file",
+      "sha256": "bcfbf6b4dec6411d7d5cfe4581efa31be9ad1cc61377a0a801a5fe33d376e024",
+      "source": "src/Yuho/CLI.hs"
+    },
+    {
+      "path": "src/Yuho/Core/Source.hs",
+      "type": "file",
+      "sha256": "8027d91d197aecf6f8381b1d4c9ceeaa46e7718770524ab0a6c0b568fd3b880b",
+      "source": "src/Yuho/Core/Source.hs"
+    },
+    {
+      "path": "src/Yuho/Core/Types.hs",
+      "type": "file",
+      "sha256": "30a38295dd38ebfd937920f77b489df23b7ce1bf0130379c715c4d28751aa17b",
+      "source": "src/Yuho/Core/Types.hs"
+    },
+    {
+      "path": "src/Yuho/CoreYuho/Conformance.hs",
+      "type": "file",
+      "sha256": "2a16185489e8dd642bd18b29fcc403f7f15ab9c6527ba41da216b6fc0acd3066",
+      "source": "src/Yuho/CoreYuho/Conformance.hs"
+    },
+    {
+      "path": "src/Yuho/CoreYuho/Normalize.hs",
+      "type": "file",
+      "sha256": "fe2b393ed0578da7fb0593f42ae10145d5f6a6363e355740cdc71d131b033ab6",
+      "source": "src/Yuho/CoreYuho/Normalize.hs"
+    },
+    {
+      "path": "src/Yuho/CoreYuho/Registry.hs",
+      "type": "file",
+      "sha256": "c6f725e355105eecbc0ab44f6876147a7d7c0fe72d12653dd2b4b25c827587e6",
+      "source": "src/Yuho/CoreYuho/Registry.hs"
+    },
+    {
+      "path": "src/Yuho/CoreYuho/Semantics.hs",
+      "type": "file",
+      "sha256": "26fc2c7cd1e19af1d172280195a709d518609a9f222c87ba1ebf1a697846a2da",
+      "source": "src/Yuho/CoreYuho/Semantics.hs"
+    },
+    {
+      "path": "src/Yuho/CoreYuho/TypedFinite.hs",
+      "type": "file",
+      "sha256": "95a1ba5e8401155105e9ceb7ba91d9fae44d2b20465f24bee1d21224435b4119",
+      "source": "src/Yuho/CoreYuho/TypedFinite.hs"
+    },
+    {
+      "path": "src/Yuho/CoreYuho/Types.hs",
+      "type": "file",
+      "sha256": "bffcb62e5efb74c803de34eea18575a7448e0f3041a5981e307267fede8ae791",
+      "source": "src/Yuho/CoreYuho/Types.hs"
+    },
+    {
+      "path": "src/Yuho/Corpus.hs",
+      "type": "file",
+      "sha256": "aa1aef59edafc6910436b775e4bbebc040e4bfb2a64b0da3a5b780cd28989a8a",
+      "source": "src/Yuho/Corpus.hs"
+    },
+    {
+      "path": "src/Yuho/Diagram/Build.hs",
+      "type": "file",
+      "sha256": "1552fa51499188039a2e88539a5f2c2d31d0021365e0554728ef86ecbf7b4e84",
+      "source": "src/Yuho/Diagram/Build.hs"
+    },
+    {
+      "path": "src/Yuho/Diagram/Encode.hs",
+      "type": "file",
+      "sha256": "9a18385bb3f51461a57903a1ebfb381a68dea05bb3a0bb3906ac8eecd1038e94",
+      "source": "src/Yuho/Diagram/Encode.hs"
+    },
+    {
+      "path": "src/Yuho/Diagram/Types.hs",
+      "type": "file",
+      "sha256": "9327e1ed060f34f63d7ba3cd7091b0186b22e316dbc0669babd18cfdc2b17469",
+      "source": "src/Yuho/Diagram/Types.hs"
+    },
+    {
+      "path": "src/Yuho/Exception/Decode.hs",
+      "type": "file",
+      "sha256": "e9a2b9350f68f3a0968f000025bd342866cb110be7b7f8ff311524253e2d3007",
+      "source": "src/Yuho/Exception/Decode.hs"
+    },
+    {
+      "path": "src/Yuho/Exception/Encode.hs",
+      "type": "file",
+      "sha256": "7a1408aeb9da7bee28f5396f24403aa2a7a06b251b1fac402eee1589b867ceb0",
+      "source": "src/Yuho/Exception/Encode.hs"
+    },
+    {
+      "path": "src/Yuho/Exception/Evaluate.hs",
+      "type": "file",
+      "sha256": "43b92be51fc1e706fc5eb38900f0ab390517dae6e8263fe20bef697b41476aa4",
+      "source": "src/Yuho/Exception/Evaluate.hs"
+    },
+    {
+      "path": "src/Yuho/Exception/Run.hs",
+      "type": "file",
+      "sha256": "539de249b04d1fc2794e4acbdb0a315fa0a8ff33cb13d8f3dcfaa1bc6b2d1748",
+      "source": "src/Yuho/Exception/Run.hs"
+    },
+    {
+      "path": "src/Yuho/Exception/Types.hs",
+      "type": "file",
+      "sha256": "2b3a9ba3fb67ac1445aa439e1ddaf293342c5c0ecfb124352a1a7fe2d86da754",
+      "source": "src/Yuho/Exception/Types.hs"
+    },
+    {
+      "path": "src/Yuho/Exception/Validate.hs",
+      "type": "file",
+      "sha256": "afb6891832bf483c7d63eccc24c12aece9642dea6bda361c325b82f763a3b65b",
+      "source": "src/Yuho/Exception/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/Kernel/Evaluate.hs",
+      "type": "file",
+      "sha256": "b2ef4e2b7a1358078da07188e610fcf627c0acf5a62da28ff98b2eb483564ff3",
+      "source": "src/Yuho/Kernel/Evaluate.hs"
+    },
+    {
+      "path": "src/Yuho/Kernel/Run.hs",
+      "type": "file",
+      "sha256": "14a03148e1faf20279c7170cc894c22859f2750f8fe7a289a7477f55a5daf806",
+      "source": "src/Yuho/Kernel/Run.hs"
+    },
+    {
+      "path": "src/Yuho/Kernel/Validate.hs",
+      "type": "file",
+      "sha256": "dba9d16d3d369845830d4af1769145bd2f3102e2f0ad5022b1b2356cf8805357",
+      "source": "src/Yuho/Kernel/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/ModelBundle/ChangeSet.hs",
+      "type": "file",
+      "sha256": "66b376ab6097c61da473be32e9ca1ab709b30e2f6672f2771a0733a5197e4710",
+      "source": "src/Yuho/ModelBundle/ChangeSet.hs"
+    },
+    {
+      "path": "src/Yuho/ModelBundle/Diff.hs",
+      "type": "file",
+      "sha256": "87636076ee54aca5e3cf9065cf90ac48fa543e906f5b857438a3a5f7431d60ed",
+      "source": "src/Yuho/ModelBundle/Diff.hs"
+    },
+    {
+      "path": "src/Yuho/ModelBundle/Json.hs",
+      "type": "file",
+      "sha256": "2623cfa777d8b4a84a75e14ee30a0f54caf9a6441435dbe5971f9c24ba039f0d",
+      "source": "src/Yuho/ModelBundle/Json.hs"
+    },
+    {
+      "path": "src/Yuho/ModelBundle/Package.hs",
+      "type": "file",
+      "sha256": "2ec10c957c2b84572be73772292be6d19bf513afac8cd2a0fc45e90327e6d333",
+      "source": "src/Yuho/ModelBundle/Package.hs"
+    },
+    {
+      "path": "src/Yuho/ModelBundle/Review.hs",
+      "type": "file",
+      "sha256": "9a1306340b4d5cb1be52f574f43e597e08ae88affa327ae41e36cf68b7f8d835",
+      "source": "src/Yuho/ModelBundle/Review.hs"
+    },
+    {
+      "path": "src/Yuho/ModelBundle/Run.hs",
+      "type": "file",
+      "sha256": "8061c8a37b12944e96a5ed8d572893514ecd1930d92a2bcf23fcfbeb7349fcea",
+      "source": "src/Yuho/ModelBundle/Run.hs"
+    },
+    {
+      "path": "src/Yuho/ModelBundle/Types.hs",
+      "type": "file",
+      "sha256": "34d5e3cebd3d2d308ac79e5062767d12a14772b35909df9853eac8cb8dbf1d2e",
+      "source": "src/Yuho/ModelBundle/Types.hs"
+    },
+    {
+      "path": "src/Yuho/ModelBundle/Validate.hs",
+      "type": "file",
+      "sha256": "be7bf6a26269eb6920abc437398dd71b9dbb2e14760ac632fa72f74fe26752aa",
+      "source": "src/Yuho/ModelBundle/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltySelection/Decode.hs",
+      "type": "file",
+      "sha256": "2f7808173e8e1a5080475795ec524761e5ebbe052bdc435318642d3f9e0d8ca4",
+      "source": "src/Yuho/PenaltySelection/Decode.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltySelection/Encode.hs",
+      "type": "file",
+      "sha256": "6da1a0bc9032cb5db5cd028a66d99b9a7db935fe1151977814a0a1cef326d659",
+      "source": "src/Yuho/PenaltySelection/Encode.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltySelection/Run.hs",
+      "type": "file",
+      "sha256": "30a5dbb2e77d122aa908989b982de966f91ec8222b37abf3244509050dac1427",
+      "source": "src/Yuho/PenaltySelection/Run.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltySelection/Select.hs",
+      "type": "file",
+      "sha256": "54a9fc556c5ed964ee12f087a13fca6f241fb8dcb3ab12cc819c171a334ac7ea",
+      "source": "src/Yuho/PenaltySelection/Select.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltySelection/Types.hs",
+      "type": "file",
+      "sha256": "01781d5732a31c341b4199535a03ec48c5bdcaeef12ddd972f759ba25e9a4e7d",
+      "source": "src/Yuho/PenaltySelection/Types.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltySelection/Validate.hs",
+      "type": "file",
+      "sha256": "37e30026e165eb2be824f05f9d6b213949f18db9a2d3f41b8300ed9aeb3a70da",
+      "source": "src/Yuho/PenaltySelection/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltyTerms/Decode.hs",
+      "type": "file",
+      "sha256": "3e6bb93a3d1ce8f94b98944a83990aa4afdc4cb45412f7bc2e977af6c43bcda5",
+      "source": "src/Yuho/PenaltyTerms/Decode.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltyTerms/Encode.hs",
+      "type": "file",
+      "sha256": "66cd9831e18d2bd72af0f31a2ba0fa521ad2d27d831e52c7f1655633512b8344",
+      "source": "src/Yuho/PenaltyTerms/Encode.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltyTerms/Run.hs",
+      "type": "file",
+      "sha256": "2692d00199617b41ac96f3a385722a06241f981216b18448ec9ec48530edd1a3",
+      "source": "src/Yuho/PenaltyTerms/Run.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltyTerms/Types.hs",
+      "type": "file",
+      "sha256": "22ec037f6f42c2e33f146daacc90eddcd078d8b9f4dfa64e18d08f0640364b2d",
+      "source": "src/Yuho/PenaltyTerms/Types.hs"
+    },
+    {
+      "path": "src/Yuho/PenaltyTerms/Validate.hs",
+      "type": "file",
+      "sha256": "c93c5e6bdfe6bacdb6b71e4fd60081d501fe3f0f0d2a8b4bcbf8c465a58ea8d7",
+      "source": "src/Yuho/PenaltyTerms/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/Presumption/Decode.hs",
+      "type": "file",
+      "sha256": "8d94fcf3267d46efcee56b35e31ab4ffbc136f1272071e4d0078c52b74e1f046",
+      "source": "src/Yuho/Presumption/Decode.hs"
+    },
+    {
+      "path": "src/Yuho/Presumption/Encode.hs",
+      "type": "file",
+      "sha256": "f18c3c3e04aeb118e9530208a7b3155550eac38ea02912d8da2fde7c0af5de79",
+      "source": "src/Yuho/Presumption/Encode.hs"
+    },
+    {
+      "path": "src/Yuho/Presumption/Evaluate.hs",
+      "type": "file",
+      "sha256": "78b2e9da315ffb5d8c4516710147b2c02125401905aae71ad1e3c6d081848943",
+      "source": "src/Yuho/Presumption/Evaluate.hs"
+    },
+    {
+      "path": "src/Yuho/Presumption/Resolve.hs",
+      "type": "file",
+      "sha256": "8d90d30a57adee61d5cadde369d8fb186b09712fdf72510d645f0783c2702a35",
+      "source": "src/Yuho/Presumption/Resolve.hs"
+    },
+    {
+      "path": "src/Yuho/Presumption/Run.hs",
+      "type": "file",
+      "sha256": "ee8de29fa64fae7c5dd4b2d0710a046e799b91fd8864fe562c048e4114243c52",
+      "source": "src/Yuho/Presumption/Run.hs"
+    },
+    {
+      "path": "src/Yuho/Presumption/Types.hs",
+      "type": "file",
+      "sha256": "950f33e718ef042c1c34d4403cf5ddaa40fae3dd7cf81ff45d1673458ecef4c9",
+      "source": "src/Yuho/Presumption/Types.hs"
+    },
+    {
+      "path": "src/Yuho/Presumption/Validate.hs",
+      "type": "file",
+      "sha256": "56c07bf41423518d451cff90cd1446b8e7be50bce2c3e4a8e1d0f0ff8653d7d0",
+      "source": "src/Yuho/Presumption/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/Protocol/Decode.hs",
+      "type": "file",
+      "sha256": "9bea3a20e129f4e23da904e142ce582e0b84661384c47c77475a7b5741a31d8d",
+      "source": "src/Yuho/Protocol/Decode.hs"
+    },
+    {
+      "path": "src/Yuho/Protocol/Encode.hs",
+      "type": "file",
+      "sha256": "67db0f18a0e71e6e92877ca4a434d839b17ea9b721b8629d10ea3829ebe7ca99",
+      "source": "src/Yuho/Protocol/Encode.hs"
+    },
+    {
+      "path": "src/Yuho/Protocol/Json.hs",
+      "type": "file",
+      "sha256": "963f22b5f506ac78fcbf4db7686dc338001d9c46edd0beaef497526519f475fe",
+      "source": "src/Yuho/Protocol/Json.hs"
+    },
+    {
+      "path": "src/Yuho/Release.hs",
+      "type": "file",
+      "sha256": "39bae280e26d09488a794ec7f213d2a386786a66eb338ac7cd9848e74b53a20a",
+      "source": "src/Yuho/Release.hs"
+    },
+    {
+      "path": "src/Yuho/SuppliedProofStatus/Decode.hs",
+      "type": "file",
+      "sha256": "5dd14cc619d6a1348fbbbe1dab2e34881e0360921ab69289487da881cc172df3",
+      "source": "src/Yuho/SuppliedProofStatus/Decode.hs"
+    },
+    {
+      "path": "src/Yuho/SuppliedProofStatus/Encode.hs",
+      "type": "file",
+      "sha256": "2f9d2f58333edfa38f85352d5521b2cee1964cd1a004af011c17d80639ce0f70",
+      "source": "src/Yuho/SuppliedProofStatus/Encode.hs"
+    },
+    {
+      "path": "src/Yuho/SuppliedProofStatus/Evaluate.hs",
+      "type": "file",
+      "sha256": "bb5b2c3e7cf9bd4dad0d0d50267b2dcb529509dd0037c2dcd61773c31ea62a55",
+      "source": "src/Yuho/SuppliedProofStatus/Evaluate.hs"
+    },
+    {
+      "path": "src/Yuho/SuppliedProofStatus/Run.hs",
+      "type": "file",
+      "sha256": "945c0f8edd7a18a1311f50a7b9005116595c63fbc925e23a8996e3249f79836c",
+      "source": "src/Yuho/SuppliedProofStatus/Run.hs"
+    },
+    {
+      "path": "src/Yuho/SuppliedProofStatus/Select.hs",
+      "type": "file",
+      "sha256": "02bc5537dcaf50dd9dcb210821a13dfafe8cb56c1ec1fe4c17552bb1ac97bd9b",
+      "source": "src/Yuho/SuppliedProofStatus/Select.hs"
+    },
+    {
+      "path": "src/Yuho/SuppliedProofStatus/Types.hs",
+      "type": "file",
+      "sha256": "ac28702a13520971789abfb27ffed4d4ce1cd9e2146ef4889517c1761ab17cff",
+      "source": "src/Yuho/SuppliedProofStatus/Types.hs"
+    },
+    {
+      "path": "src/Yuho/SuppliedProofStatus/Validate.hs",
+      "type": "file",
+      "sha256": "56df6a58f30f8b07dab8f4ea73027bf92f06a09a9b5ee0dc0b4a50568f912830",
+      "source": "src/Yuho/SuppliedProofStatus/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/AST.hs",
+      "type": "file",
+      "sha256": "56fb9e0351fd7d9a23e8613786cd2d73d2e66111f04ce7ff50e94f0e3ab7b35d",
+      "source": "src/Yuho/Surface/AST.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Abetment.hs",
+      "type": "file",
+      "sha256": "b2154c6a7c782ce0aaec4ccbb7f5cdcfa1b013b2f97e78097eb3fdc9535d021a",
+      "source": "src/Yuho/Surface/Abetment.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/ActorExceptions.hs",
+      "type": "file",
+      "sha256": "4f68de9cb390c05b7dd671b93177788890ebf8e421487d51eb6c7600e560f9a5",
+      "source": "src/Yuho/Surface/ActorExceptions.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Case.hs",
+      "type": "file",
+      "sha256": "adc45aac18b5de949187addabd6f267f17a25267bcec5254b4435f2dc2b90a2a",
+      "source": "src/Yuho/Surface/Case.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/CaseFacts.hs",
+      "type": "file",
+      "sha256": "c6d585eea39e35270cd02f11feee1507f918cad8f835a37398684c9800cbaeaf",
+      "source": "src/Yuho/Surface/CaseFacts.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Check.hs",
+      "type": "file",
+      "sha256": "eca6b516859410860b5bf767a76a32b9e7a67a0dc32c86de09c6fcc5277a8ea8",
+      "source": "src/Yuho/Surface/Check.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Compile.hs",
+      "type": "file",
+      "sha256": "f9f3c7b1c4795e90f93fd203a7e41ab4de71b3bd058e637d2dc008360f19e43e",
+      "source": "src/Yuho/Surface/Compile.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Definitions.hs",
+      "type": "file",
+      "sha256": "527ec5188218860a461c6e1fdd1c0d2a643279afc56dd6f6a79127731f5ec1dd",
+      "source": "src/Yuho/Surface/Definitions.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Explain.hs",
+      "type": "file",
+      "sha256": "334310a08c0364fe74fc2cb8627b4c6e2464ad7c238e763fbce5f11e4f50b073",
+      "source": "src/Yuho/Surface/Explain.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Lexer.hs",
+      "type": "file",
+      "sha256": "cabcdf7622e37268507c3bcbb4ce22a6aa427358149c39cd40a7e46cf10920c2",
+      "source": "src/Yuho/Surface/Lexer.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Lower.hs",
+      "type": "file",
+      "sha256": "66983e57478d30a61beee802f2dc0978c2956edf4405baf52485086d8fe64b10",
+      "source": "src/Yuho/Surface/Lower.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Modules.hs",
+      "type": "file",
+      "sha256": "9639d5230b56c59d1c922a00390b6b6b2c20fab26c4074817a2dd74b59be43a7",
+      "source": "src/Yuho/Surface/Modules.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Parser.hs",
+      "type": "file",
+      "sha256": "24be48a324a25d79b1ffb40a09a58976c9196725ea2607defb89aff5cc95c3a3",
+      "source": "src/Yuho/Surface/Parser.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Participation.hs",
+      "type": "file",
+      "sha256": "481b9c7709a252320b1d95be4e8dac45d465b6c888887a643fe4d70a0725ba3e",
+      "source": "src/Yuho/Surface/Participation.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Presumption.hs",
+      "type": "file",
+      "sha256": "54deb7cf2c699c1e65c5d2c09d8aa6863cbfd0608d0841d4990b51155e89ed73",
+      "source": "src/Yuho/Surface/Presumption.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Resolve.hs",
+      "type": "file",
+      "sha256": "bd5280a2160977db6c42fb94f8cd35b4284127f36859cf4bafa8c6e07312c962",
+      "source": "src/Yuho/Surface/Resolve.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Temporal.hs",
+      "type": "file",
+      "sha256": "9853a24f33780380c84d0b4ebe43379f74721487b6098f31b9d455001146b870",
+      "source": "src/Yuho/Surface/Temporal.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/Token.hs",
+      "type": "file",
+      "sha256": "71f7e2182898c3f7320adfb0126a99ae076c306e57c773769ac54b3b4bd7eee7",
+      "source": "src/Yuho/Surface/Token.hs"
+    },
+    {
+      "path": "src/Yuho/Surface/TypedFinite.hs",
+      "type": "file",
+      "sha256": "352253e58e54d0a7f6300465b12cc2d1c971e02f4f1cc1bb9348bda0a5d92d62",
+      "source": "src/Yuho/Surface/TypedFinite.hs"
+    },
+    {
+      "path": "src/Yuho/Temporal/Interval.hs",
+      "type": "file",
+      "sha256": "8dc60f1aa51f1a9f806adc35137820909a5af80ce049c66784b688bb5bcba3c7",
+      "source": "src/Yuho/Temporal/Interval.hs"
+    },
+    {
+      "path": "src/Yuho/TypedFacts/Decode.hs",
+      "type": "file",
+      "sha256": "6f639f371b9c762ee3d8ff2fe9846a3daff168bf8269b6479e044f4804778dd6",
+      "source": "src/Yuho/TypedFacts/Decode.hs"
+    },
+    {
+      "path": "src/Yuho/TypedFacts/Encode.hs",
+      "type": "file",
+      "sha256": "b86fd8d55e3a9b4fd03ba1aa4876329631dc8e366fde287699746c7006f8bee9",
+      "source": "src/Yuho/TypedFacts/Encode.hs"
+    },
+    {
+      "path": "src/Yuho/TypedFacts/Run.hs",
+      "type": "file",
+      "sha256": "d705750ebd620341792bfb2ae053baf657d37caa3b3c089e7a400e4cc898670e",
+      "source": "src/Yuho/TypedFacts/Run.hs"
+    },
+    {
+      "path": "src/Yuho/TypedFacts/Types.hs",
+      "type": "file",
+      "sha256": "9d864d2df9f17894ea9996f429394ca29d2e62cffe192e5ff53e77d358f6f935",
+      "source": "src/Yuho/TypedFacts/Types.hs"
+    },
+    {
+      "path": "src/Yuho/TypedFacts/Validate.hs",
+      "type": "file",
+      "sha256": "6a6e1683a5a21b2562282a0e8107e4b766d0cd2953071d50d9156dc1c2b70de8",
+      "source": "src/Yuho/TypedFacts/Validate.hs"
+    },
+    {
+      "path": "src/Yuho/TypedFiniteRules/Run.hs",
+      "type": "file",
+      "sha256": "6cad5e8ef6a74cfa590e523edb05babe5ce2cff176d3b9b8cdf9479530668cbc",
+      "source": "src/Yuho/TypedFiniteRules/Run.hs"
+    },
+    {
+      "path": "yuho.cabal",
+      "type": "file",
+      "sha256": "3a2aaa452bb1e7858fe44ba4b3e1b0076c7bc67ac7315bcee5d5216ea12888db",
+      "source": "release/reduced-sdk/yuho.cabal"
+    }
+  ]
+}

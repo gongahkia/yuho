@@ -1,0 +1,179 @@
+cabal-version: 3.0
+name: yuho
+version: 1.0.0.0
+build-type: Simple
+license: Apache-2.0
+license-file: LICENSE
+synopsis: Experimental diagram-first legal modelling language and SDK
+description:
+  A diagram-first language and Haskell SDK for explicitly authored legal
+  structures, case information and technical application traces, with bounded
+  Singapore criminal-law research examples. Authoring and projection formats
+  remain experimental; technical results are not judicial or evidential findings.
+category: Language
+maintainer: https://github.com/gongahkia/yuho/issues
+homepage: https://github.com/gongahkia/yuho
+bug-reports: https://github.com/gongahkia/yuho/issues
+extra-doc-files:
+    CHANGELOG.md
+    NOTICE
+    docs/sdk-only-inspection.md
+    docs/owner-authorisation.md
+extra-source-files:
+    cabal.project.sdk
+    cabal.project.freeze
+    release/owner-apache-authorisation.json
+    schema/*.json
+    examples/sdk-distribution-consumer/*.hs
+    examples/sdk-distribution-consumer/*.cabal
+
+source-repository head
+  type: git
+  location: https://github.com/gongahkia/yuho
+
+flag development
+  description: Treat warnings as errors under the pinned development toolchain
+  default: False
+  manual: True
+
+common yuho-common
+  default-language: Haskell2010
+  ghc-options: -Wall
+  if flag(development)
+    ghc-options: -Werror
+  build-depends:
+      base ==4.19.2.0
+    , aeson ==2.3.1.0
+    , bytestring ==0.12.1.0
+    , containers ==0.6.8
+    , crypton ==1.1.5
+    , directory ==1.3.8.5
+    , filepath ==1.4.301.0
+    , text ==2.1.1
+    , time ==1.12.2
+    , unix ==2.8.6.0
+
+library
+  import: yuho-common
+  hs-source-dirs: src
+  other-modules: Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON
+  exposed-modules:
+      Yuho.Authoring
+      Yuho.Authoring.ComputedInput
+      Yuho.Authoring.ComputedInput.Projection
+      Yuho.Authoring.Temporal
+      Yuho.Authoring.Temporal.Types
+      Yuho.Authoring.Temporal.Run
+      Yuho.Authoring.Temporal.Projection
+      Yuho.Temporal.Interval
+      Yuho.Authoring.Types
+      Yuho.Authoring.Edit
+      Yuho.Authoring.Source
+      Yuho.Authoring.Presumption
+      Yuho.Authoring.Presumption.Types
+      Yuho.Authoring.Presumption.Validate
+      Yuho.Authoring.Presumption.Run
+      Yuho.Authoring.Presumption.Projection
+      Yuho.Authoring.Typed
+      Yuho.Authoring.Typed.Projection
+      Yuho.Authoring.Typed.Types
+      Yuho.Authoring.Typed.Validate
+      Yuho.Authoring.Typed.Run
+      Yuho.Authoring.Definitions
+      Yuho.Authoring.Interaction
+      Yuho.Authoring.Codec
+      Yuho.Authoring.Validate
+      Yuho.Authoring.Compile
+      Yuho.Authoring.Report
+      Yuho.Authoring.Snapshot
+      Yuho.Authoring.Projection
+      Yuho.Authoring.Projection.Types
+      Yuho.Authoring.Projection.Encode
+      Yuho.Authoring.Projection.Inspect
+      Yuho.Authoring.Projection.Views
+      Yuho.Authoring.Projection.ViewEncode
+      Yuho.Core.Types
+      Yuho.Core.Source
+      Yuho.CoreYuho.Types
+      Yuho.CoreYuho.Semantics
+      Yuho.CoreYuho.Normalize
+      Yuho.CoreYuho.Registry
+      Yuho.CoreYuho.Conformance
+      Yuho.CoreYuho.TypedFinite
+      Yuho.Corpus
+      Yuho.Release
+      Yuho.Diagram.Types
+      Yuho.Diagram.Build
+      Yuho.Diagram.Encode
+      Yuho.Protocol.Json
+      Yuho.Protocol.Decode
+      Yuho.Protocol.Encode
+      Yuho.Kernel.Validate
+      Yuho.Kernel.Evaluate
+      Yuho.Kernel.Run
+      Yuho.Exception.Types
+      Yuho.Exception.Decode
+      Yuho.Exception.Validate
+      Yuho.Exception.Evaluate
+      Yuho.Exception.Encode
+      Yuho.Exception.Run
+      Yuho.TypedFacts.Types
+      Yuho.TypedFacts.Decode
+      Yuho.TypedFacts.Validate
+      Yuho.TypedFacts.Encode
+      Yuho.TypedFacts.Run
+      Yuho.PenaltySelection.Types
+      Yuho.PenaltySelection.Decode
+      Yuho.PenaltySelection.Validate
+      Yuho.PenaltySelection.Select
+      Yuho.PenaltySelection.Encode
+      Yuho.PenaltySelection.Run
+      Yuho.PenaltyTerms.Types
+      Yuho.PenaltyTerms.Decode
+      Yuho.PenaltyTerms.Validate
+      Yuho.PenaltyTerms.Encode
+      Yuho.PenaltyTerms.Run
+      Yuho.SuppliedProofStatus.Types
+      Yuho.SuppliedProofStatus.Decode
+      Yuho.SuppliedProofStatus.Validate
+      Yuho.SuppliedProofStatus.Evaluate
+      Yuho.SuppliedProofStatus.Select
+      Yuho.SuppliedProofStatus.Encode
+      Yuho.SuppliedProofStatus.Run
+      Yuho.Presumption.Types
+      Yuho.Presumption.Decode
+      Yuho.Presumption.Validate
+      Yuho.Presumption.Resolve
+      Yuho.Presumption.Evaluate
+      Yuho.Presumption.Encode
+      Yuho.Presumption.Run
+      Yuho.TypedFiniteRules.Run
+      Yuho.ModelBundle.Types
+      Yuho.ModelBundle.Json
+      Yuho.ModelBundle.Validate
+      Yuho.ModelBundle.Package
+      Yuho.ModelBundle.Review
+      Yuho.ModelBundle.ChangeSet
+      Yuho.ModelBundle.Diff
+      Yuho.ModelBundle.Run
+      Yuho.Surface.Token
+      Yuho.Surface.Lexer
+      Yuho.Surface.AST
+      Yuho.Surface.ActorExceptions
+      Yuho.Surface.Abetment
+      Yuho.Surface.Case
+      Yuho.Surface.CaseFacts
+      Yuho.Surface.Parser
+      Yuho.Surface.Resolve
+      Yuho.Surface.Definitions
+      Yuho.Surface.Participation
+      Yuho.Surface.Check
+      Yuho.Surface.Lower
+      Yuho.Surface.Compile
+      Yuho.Surface.Explain
+      Yuho.Surface.Modules
+      Yuho.Surface.Temporal
+      Yuho.Surface.Presumption
+      Yuho.Surface.TypedFinite
+      Yuho.CLI
+
