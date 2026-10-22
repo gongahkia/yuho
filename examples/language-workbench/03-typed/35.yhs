@@ -1,0 +1,6 @@
+typed-rules-scenario measure-35 for WorkshopTyped {
+ classify permitted(actor:one,resource:room) as proved reason "Supplied actor one classification";
+ classify permitted(actor:two,resource:room) as not_proved reason "Separate actor; no matching by label";
+ value measured = integer 35;
+ value threshold = integer 35;
+}

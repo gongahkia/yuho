@@ -1,0 +1,18 @@
+// Original fictional relation and dimensionless integer conditions; no physical units.
+typed-rules-model WorkshopTyped {
+ limit 2048;
+ entity-type actor;
+ entity-type resource;
+ entity actor:one as actor;
+ entity actor:two as actor;
+ entity resource:room as resource;
+ predicate permitted(actor,resource) kind relationship;
+ scalar measured type integer;
+ scalar threshold type integer;
+ proposition p:admitted;
+ requirement q:permission = permitted(actor:one,resource:room);
+ requirement q:threshold = compare(measured,gt,threshold);
+ requirement q:route = all(q:permission,q:threshold);
+ rule r:admit establishes proposition p:admitted when q:route;
+ limitation "Exact externally normalised integers. No inference from missing permission, no unit conversion.";
+}

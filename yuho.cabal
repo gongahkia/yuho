@@ -90,6 +90,7 @@ common yuho-common
     , containers ==0.6.8
     , crypton ==1.1.5
     , directory ==1.3.8.5
+    , process ==1.6.25.0
     , filepath ==1.4.301.0
     , text ==2.1.1
     , time ==1.12.2
@@ -98,7 +99,7 @@ common yuho-common
 library
   import: yuho-common
   hs-source-dirs: src
-  other-modules: Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON
+  other-modules: Yuho.Machine, Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON, Yuho.Surface.InspectionData, Yuho.Surface.Computed.Parser, Yuho.Surface.Computed.CLI
   exposed-modules:
       Yuho.Authoring
       Yuho.Authoring.ComputedInput
@@ -212,6 +213,8 @@ library
       Yuho.Surface.Check
       Yuho.Surface.Lower
       Yuho.Surface.Compile
+      Yuho.Surface.Inspect
+      Yuho.Surface.Computed
       Yuho.Surface.Explain
       Yuho.Surface.Modules
       Yuho.Surface.Temporal
@@ -247,12 +250,13 @@ test-suite yuho-test
   import: yuho-common
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: ComputedInputRepairChecks, ComputedInputChecks, ComputedExample, TemporalAuthoringChecks, TemporalExamples, PresumptionAuthoringChecks, PresumptionExamples, TypedBoundaryChecks, TypedAuthoringChecks, TypedExamples, IndependentLinkedRegressions, LinkedDefinitionChecks, LinkedExample, InteractionChecks, SourceAnchorChecks, SourceAnchors, EditingChecks, Editing, Acknowledgements, HurtChecks, Hurt, CaseViewChecks, ProjectionChecks, AuthoringChecks, Cheating, CaseApplication, ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
+  other-modules: SourceCompositionChecks, InspectionChecks, ComputedInputRepairChecks, ComputedInputChecks, ComputedExample, TemporalAuthoringChecks, TemporalExamples, PresumptionAuthoringChecks, PresumptionExamples, TypedBoundaryChecks, TypedAuthoringChecks, TypedExamples, IndependentLinkedRegressions, LinkedDefinitionChecks, LinkedExample, InteractionChecks, SourceAnchorChecks, SourceAnchors, EditingChecks, Editing, Acknowledgements, HurtChecks, Hurt, CaseViewChecks, ProjectionChecks, AuthoringChecks, Cheating, CaseApplication, ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
   hs-source-dirs: test examples/computed-input-consumer examples/temporal-consumer examples/presumption-consumer examples/authoring-consumer examples/linked-definitions-consumer examples/typed-authoring-consumer
   build-depends:
       yuho ==1.0.0.0
     , QuickCheck ==2.18.0.0
     , directory ==1.3.8.5
+    , process ==1.6.25.0
     , filepath ==1.4.301.0
   if !flag(research-tests)
     buildable: False

@@ -1,0 +1,5 @@
+typed-rules-scenario two for WorkshopShared {
+ classify inspected(resource:room) as proved reason "Separately supplied inspection condition; not a derived common status";
+ classify permitted(actor:one,resource:room) as not_proved reason "Independent scope two, actor one";
+ classify permitted(actor:two,resource:room) as unresolved reason "Independent scope two, actor two";
+}

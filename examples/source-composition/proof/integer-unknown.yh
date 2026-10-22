@@ -1,0 +1,4 @@
+typed-rules-scenario Scalar-unknown for FictionalInteger {
+ value measurement = unresolved reason "pending exact measurement";
+ value threshold = integer 35;
+}

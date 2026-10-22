@@ -1,5 +1,9 @@
 # Authoring with the Haskell Yuho research DSL
 
+For executable pipeline examples and stage inspection, see the [compiler guide](compiler-guide.md).
+For the bounded `computed-project` entry point connecting separately authored typed
+and proof/presumption programs, see [source composition](source-composition.md).
+
 This guide covers Yuho Haskell Research Language v1.0. The Haskell lexer, source-located AST, resolver, checker, normalized Core, lowering, CLI and in-process kernel are authoritative. The language exposes criminal-law structure and evaluates supplied classifications, but it does not assess evidence, determine guilt, select legally applicable law, impose a sentence or make a court disposition.
 
 ## Build and normal commands

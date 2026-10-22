@@ -1,0 +1,11 @@
+typed-rules-model FictionalInteger {
+ limit 2048;
+ entity-type actor;
+ entity actor:one as actor;
+ scalar measurement type integer;
+ scalar threshold type integer;
+ proposition p:technical;
+ requirement q:relationship = compare(measurement,gt,threshold);
+ rule typed-rule establishes proposition p:technical when q:relationship;
+ limitation "Exact dimensionless fictional integers. External normalisation only, no units or specimen compatibility.";
+}

@@ -4,7 +4,11 @@ Build at the repository root with GHC 9.8.4, then obtain the executable path wit
 
 | Command | Purpose |
 |---|---|
-| `yuho check MODEL [--scenario SCENARIO]` | Parse, resolve and statically check a model, scenario, presumption program or case. |
+| `yuho inspect SOURCE [--scenario SCENARIO] [--stage STAGE] [--output FILE]` | Inspect supported compilation stages without evaluation; see the [compiler guide](compiler-guide.md). |
+| `yuho compose check PROJECT [--against ARTIFACT]` | Statically check a bounded source composition and optionally reject attachment to changed sources. |
+| `yuho compose run PROJECT --output NEW_DIRECTORY` | Fresh typed → explicit binding → proof/presumption execution with complete projections; see [source composition](source-composition.md). |
+| `yuho compose replay ARTIFACT --output NEW_DIRECTORY` | Reevaluate immutable embedded component sources, without reading live `.yh` files. |
+| `yuho check MODEL [--scenario SCENARIO]` | Parse, resolve and validate a model, scenario, presumption program or case. |
 | `yuho compile MODEL [--scenario SCENARIO] [--output FILE]` | Emit canonical KernelInput or case input. Output publication is atomic and refuses an existing file. |
 | `yuho run MODEL [--scenario SCENARIO]` | Compile and evaluate with the in-process Haskell kernel. |
 | `yuho explain MODEL [--scenario SCENARIO]` | Render a structured technical derivation and limitations. |
@@ -20,3 +24,10 @@ Build at the repository root with GHC 9.8.4, then obtain the executable path wit
 No production command requires a network connection, an external renderer, or a non-Haskell runtime.
 
 `diagram --format xml` is a deterministic XML representation of the same semantic graph emitted by `diagram --format json`. It is not Akoma Ntoso or an authoritative legal-document representation; see [XML output](xml.md).
+
+`yuho inspect --help` lists the opt-in inspection flags. Stages are `parsed`,
+`checked`, `normalized`, `lowered`, and `all`; unsupported stages are explicit
+errors. Its source subset is documented in the compiler guide. In contrast,
+the established typed and presumption `check`/`compile` paths include
+evaluation-backed acceptance checks. Their existing behavior is preserved;
+use `inspect` when execution must not occur.

@@ -1,0 +1,4 @@
+typed-rules-scenario Scalar-boundary for FictionalInteger {
+ value measurement = integer 35;
+ value threshold = integer 35;
+}

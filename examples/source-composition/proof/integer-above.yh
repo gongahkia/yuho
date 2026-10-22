@@ -1,0 +1,4 @@
+typed-rules-scenario Scalar-above for FictionalInteger {
+ value measurement = integer 36;
+ value threshold = integer 35;
+}

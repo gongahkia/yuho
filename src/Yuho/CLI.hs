@@ -5,6 +5,7 @@ module Yuho.CLI (main) where
 import Control.Exception (IOException, finally, try)
 import qualified Data.ByteString as BS
 import Data.Text (Text)
+import qualified Data.Text as DataText
 import qualified Data.Text.Encoding as Encoding
 import System.Directory (doesDirectoryExist, removeFile)
 import System.Environment (getArgs)
@@ -12,6 +13,7 @@ import System.Exit (exitFailure)
 import System.FilePath (takeDirectory)
 import System.IO (IOMode(ReadMode), hClose, openBinaryTempFile, stderr, stdout, withBinaryFile)
 import System.Posix.Files (createLink, fileSize, getSymbolicLinkStatus, isRegularFile)
+import Yuho.Machine (runMachine)
 import Yuho.Kernel.Run (runLine)
 import qualified Yuho.Corpus as Corpus
 import Yuho.CoreYuho.Normalize (normalizeCase, normalizeChecked, normalizePresumption)
@@ -24,11 +26,13 @@ import Yuho.Release
   ( doctorReport, initialiseProject, locateRepository, releaseName, releaseVersion
   , verifyReleaseManifest )
 import Yuho.Surface.Compile (checkParsed, compileParsed)
+import Yuho.Surface.Computed.CLI (runComputedCommand)
 import Yuho.Surface.AST (AnalysisCase(..), CaseAllegation(..))
 import Yuho.Surface.Case
   ( caseModelFile, checkAnalysisCase, compileAnalysisCase, runAnalysisCase
   , explainAnalysisCase )
 import Yuho.Surface.Explain (explainChecked)
+import Yuho.Surface.Inspect (inspectSource)
 import Yuho.Surface.Lexer (lexSource)
 import Yuho.Surface.Modules
   ( AuthoredModel(..), authoredPrefix, loadAuthoredModel
@@ -56,6 +60,9 @@ main = do
     ["--help"] -> BS.hPut stdout usage
     ["--version"] -> BS.hPut stdout (Encoding.encodeUtf8
       (releaseName <> " v" <> releaseVersion <> "\n"))
+    "machine":rest -> runMachine rest
+    "inspect":rest -> operateInspection rest
+    "compose":rest -> runComputedCommand rest
     "fmt":_ -> releaseIssue
       "fmt is not available in v1 because the authoritative lexer does not preserve comments"
     "corpus":rest -> Corpus.runCorpus rest
@@ -372,3 +379,26 @@ report :: Diagnostic -> IO a
 report issue = do
   BS.hPut stderr (encodeJson (diagnosticJson issue) <> "\n")
   exitFailure
+
+-- Separate opt-in dispatch keeps established command flags and output unchanged.
+operateInspection :: [String] -> IO ()
+operateInspection ["--help"] = BS.hPut stdout
+  "usage: yuho inspect <source.yh> [--scenario <path>] [--stage parsed|checked|normalized|lowered|all] [--output <new-path>]\n"
+operateInspection arguments = case arguments of
+  path:rest -> case inspectFlags rest Nothing Nothing Nothing of
+    Left message -> bad message
+    Right (scenarioPath,selectedStage,output) -> do
+      bytes <- readSource path >>= either report pure
+      scenario <- traverse (\p -> do b <- readSource p >>= either report pure; pure (p,b)) scenarioPath
+      value <- inspectSource (maybe "all" id selectedStage) path bytes scenario >>= either report pure
+      let encoded = encodeJson value <> "\n"
+      maybe (BS.hPut stdout encoded) (\destination -> publish destination encoded) output
+  _ -> bad "inspect requires a source; see yuho inspect --help"
+  where
+    bad message = report (Diagnostic "SFI001" "<command>" (Token EndToken "" 1 1) message Nothing)
+    inspectFlags [] scenario stage output = Right (scenario,stage,output)
+    inspectFlags ("--scenario":path:rest) Nothing stage output = inspectFlags rest (Just path) stage output
+    inspectFlags ("--stage":value:rest) scenario Nothing output =
+      inspectFlags rest scenario (Just (DataText.pack value)) output
+    inspectFlags ("--output":path:rest) scenario stage Nothing = inspectFlags rest scenario stage (Just path)
+    inspectFlags _ _ _ _ = Left "unknown or duplicate inspect option"

@@ -5,6 +5,8 @@ module Yuho.Surface.TypedFinite
   , TypedFiniteScenario(..), TypedFiniteCase(..), TypedFiniteAllegation(..)
   , loadTypedFiniteCase, encodeTypedFiniteRequest, encodeTypedFiniteCase
   , explainTypedFinite, explainTypedFiniteCase
+  , inspectTypedFiniteModel, inspectTypedFiniteScenario, prepareTypedFiniteInspection
+  , typedDeclarationTokens
   ) where
 
 import Control.Exception (IOException, try)
@@ -24,6 +26,7 @@ import System.Posix.Files (fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.CoreYuho.TypedFinite
 import Yuho.Exception.Types (Truth(..))
 import Yuho.Protocol.Json (J(..), decodeJson, encodeJson)
+import Yuho.Surface.InspectionData (locatedToken)
 import Yuho.Surface.Lexer (lexSource)
 import Yuho.Surface.Token
 
@@ -603,8 +606,33 @@ loadTypedFiniteProgram path modelBytes scenarioBytes = case parseTypedFiniteMode
       scenario <- parseTypedFiniteScenario scenarioPath scenarioRaw
       when (tokenText (scenarioModel scenario) /= tokenText (rawModelId model))
         (at "SFT002" scenarioPath (scenarioModel scenario) "scenario model identity mismatch")
-      program <- validateModel path scenarioPath model scenario
+      program <- either (Left . importDiagnostic path rawModel) Right
+        (validateModel path scenarioPath model scenario)
       pure program { finiteModules = moduleRecords }
+
+-- Imported expression tokens do not carry their defining file after selection.
+-- Point to the actual host use-site when possible, never to that module's line
+-- number in the host file. The original diagnostic code is unchanged.
+importDiagnostic :: FilePath -> RawModel -> Diagnostic -> Diagnostic
+importDiagnostic path host issue
+  | diagnosticPath issue == path
+  , not (tokenText (diagnosticToken issue) `elem` hostDeclarations)
+  , [use] <- [token | (_,token) <- rawUses host
+    , last (Text.splitOn "::" (tokenText token)) == tokenText (diagnosticToken issue)] =
+      issue { diagnosticToken = use, diagnosticRelated = Nothing
+            , diagnosticMessage = diagnosticMessage issue
+                <> "; at importing use-site (defining source location not retained)" }
+  | otherwise = issue { diagnosticRelated = related }
+  where
+    related = case diagnosticRelated issue of
+      Just (relatedPath,token) | relatedPath == path
+        , tokenText token `notElem` [tokenText i | (i,_,_) <- rawPredicates host]
+        , [use] <- [t | (_,t) <- rawUses host
+          , last (Text.splitOn "::" (tokenText t)) == tokenText token] -> Just (path,use)
+      value -> value
+    hostDeclarations = map (tokenText . fst) (rawRequirements host)
+      ++ [tokenText i | (i,_,_,_,_,_) <- rawRules host]
+      ++ [tokenText i | (i,_,_,_,_,_) <- rawNorms host ++ rawRoutes host]
 
 loadTypedModules :: FilePath -> RawModel
   -> IO (Either Diagnostic (RawModel,[FiniteModule]))
@@ -718,7 +746,13 @@ mergeSelection host (kindValue,identifier,moduleModel) = case kindValue of
 
 validateModel :: FilePath -> FilePath -> RawModel -> TypedFiniteScenario
   -> Either Diagnostic TypedFiniteProgram
-validateModel path scenarioPath model scenario = do
+validateModel = validateModelWith True
+
+-- The ordinary loader retains its established evaluation-backed acceptance check.
+-- Inspection uses the same structural checks, then checks ground input presence.
+validateModelWith :: Bool -> FilePath -> FilePath -> RawModel -> TypedFiniteScenario
+  -> Either Diagnostic TypedFiniteProgram
+validateModelWith execute path scenarioPath model scenario = do
   limit <- numeric path (rawLimit model)
   when (limit < 1 || limit > 2048) (at "SFT010" path (rawLimit model)
     "generated-node limit must be between 1 and 2048")
@@ -758,9 +792,9 @@ validateModel path scenarioPath model scenario = do
       requirementIndex = Map.fromList [(tokenText identifier,expression)
         | (identifier,expression) <- rawRequirements model]
       propositionSet = Set.fromList (map tokenText (rawPropositions model))
-  mapM_ (\(identifier,expression) -> validateExpression path typeNames entityIndex
-    predicateIndex scalarIndex requirementIndex Set.empty 0 expression
-      >> pure identifier) (rawRequirements model)
+  mapM_ (\(identifier,expression) -> relatedPredicate expression
+    (validateExpression path identifier typeNames entityIndex
+      predicateIndex scalarIndex requirementIndex Set.empty 0 expression)) (rawRequirements model)
   rules <- traverse (ruleDeclaration path typeNames propositionSet entityIndex
     predicateIndex scalarIndex requirementIndex) (rawRules model)
   norms <- traverse (normDeclaration path propositionSet entityIndex typeNames
@@ -800,14 +834,25 @@ validateModel path scenarioPath model scenario = do
     (expandedNodeEstimate program)
   when (estimated > fromInteger limit) (at "SFT010" path (rawLimit model)
     "generated-node limit exceeded before evaluation")
-  expanded <- either (at "SFT011" scenarioPath (scenarioIdentifier scenario)) Right
-    (evaluateTypedFinite program)
-  let nodeCount = length (finiteResultExpressions expanded) + length (finiteResultRules expanded)
-        + length (finiteResultPropositions expanded) + expressionNodes program
+  nodeCount <- if execute then do
+      expanded <- either (at "SFT011" scenarioPath (scenarioIdentifier scenario)) Right
+        (evaluateTypedFinite program)
+      pure (length (finiteResultExpressions expanded) + length (finiteResultRules expanded)
+        + length (finiteResultPropositions expanded) + expressionNodes program)
+    else do
+      checkGroundInputs path scenarioPath model scenario program
+      pure (length (finiteRequirements program) + length (finiteRules program)
+        + length (finitePropositions program) + expressionNodes program)
   when (nodeCount > fromInteger limit) (at "SFT010" path (rawLimit model)
     "generated-node limit exceeded")
   pure program
   where
+    relatedPredicate (PredicateExpr name _) (Left issue)
+      | diagnosticCode issue `elem` ["SFT004","SFT005"] = case
+          [token | (token,_,_) <- rawPredicates model, tokenText token == name] of
+          [token] -> Left issue { diagnosticRelated = Just (path,token) }
+          _ -> Left issue
+    relatedPredicate _ result = result
     validateDomainSize source kindValue = when
       (length [() | (_,declared) <- rawEntities model, tokenText declared == kindValue] > 64)
       (at "SFT010" source (rawModelId model) "entity-per-type limit exceeded")
@@ -873,17 +918,19 @@ predicateDeclaration path types (identifier,arguments,kindToken) = do
     _ -> at "SFT004" path kindToken "unsupported predicate kind"
   pure (PredicateDecl (tokenText identifier) (map tokenText arguments) kindValue)
 
-validateExpression :: FilePath -> Set Text -> Map Text Text -> Map Text PredicateDecl
+validateExpression :: FilePath -> Token -> Set Text -> Map Text Text -> Map Text PredicateDecl
   -> Map Text ScalarType -> Map Text FiniteExpr -> Set Text -> Int -> FiniteExpr
   -> Either Diagnostic ()
-validateExpression path types entities predicates scalars requirements scope depth expression = do
+validateExpression path origin types entities predicates scalars requirements scope depth expression = do
   when (depth > 4) (at "SFT010" path origin "quantifier nesting limit exceeded")
   case expression of
     PredicateExpr name terms -> do
       signature <- maybe (at "SFT003" path origin ("unknown predicate " <> name)) Right
         (Map.lookup name predicates)
       when (length terms /= length (predicateArguments signature))
-        (at "SFT004" path origin "predicate argument count mismatch")
+        (at "SFT004" path origin ("predicate " <> name <> " argument count mismatch: expected "
+          <> Text.pack (show (length (predicateArguments signature)))
+          <> ", supplied " <> Text.pack (show (length terms))))
       sequence_ [validateTerm expected term | (expected,term) <- zip (predicateArguments signature) terms]
     ComparisonExpr operation left right upper -> validateComparison operation left right upper
     AllExpr members -> mapM_ recurse members
@@ -898,8 +945,7 @@ validateExpression path types entities predicates scalars requirements scope dep
     ReferenceExpr identifier -> unless (Map.member identifier requirements)
       (at "SFT003" path origin ("unknown requirement " <> identifier))
   where
-    origin = Token WordToken "typed-expression" 1 1
-    recurse = validateExpression path types entities predicates scalars requirements scope depth
+    recurse = validateExpression path origin types entities predicates scalars requirements scope depth
     validateTerm expected term = case term of
       EntityTerm identifier -> case Map.lookup identifier entities of
         Just actual | actual == expected -> Right ()
@@ -913,7 +959,7 @@ validateExpression path types entities predicates scalars requirements scope dep
       unless (Set.member kindValue types) (at "SFT003" path origin "unknown quantified type")
       when (any (Text.isPrefixOf (variable <> "@")) (Set.toList scope))
         (at "SFT006" path origin "variable shadowing is unsupported")
-      validateExpression path types entities predicates scalars requirements
+      validateExpression path origin types entities predicates scalars requirements
         (Set.insert (variable <> "@" <> kindValue) scope) (depth + 1) body
     validateComparison operation left right upper = do
       leftType <- maybe (at "SFT003" path origin ("unknown scalar " <> left)) Right
@@ -951,7 +997,7 @@ ruleDeclaration path types propositions entities predicates scalars requirements
     _ -> at "SFT007" path polarityToken "rule polarity must be establishes or defeats"
   let scope = Set.fromList [tokenText variable <> "@" <> tokenText kindValue
         | (variable,kindValue) <- parameters]
-  validateExpression path types entities predicates scalars requirements scope 0 body
+  validateExpression path identifier types entities predicates scalars requirements scope 0 body
   pure (RuleDecl (tokenText identifier)
     [(tokenText variable,tokenText kindValue) | (variable,kindValue) <- parameters]
     polarity (tokenText conclusion) body (tokenText <$> citation))
@@ -974,7 +1020,7 @@ normDeclaration path propositions entities types predicates scalars requirements
     "permitted" -> Right Permitted
     _ -> at "SFT015" path modalityToken
       "norm modality must be required, prohibited or permitted"
-  validateExpression path types entities predicates scalars requirements Set.empty 0 body
+  validateExpression path identifier types entities predicates scalars requirements Set.empty 0 body
   pure (NormDecl (tokenText identifier) (tokenText subject) modality
     (tokenText action) body (tokenText <$> citation))
 
@@ -1000,7 +1046,7 @@ routeDeclaration path propositions entities types predicates scalars requirement
     value | "other:" `Text.isPrefixOf` value && Text.length value > 6 ->
       Right (AuthoredContribution (Text.drop 6 value))
     _ -> at "SFT016" path kindToken "unsupported responsibility route kind"
-  validateExpression path types entities predicates scalars requirements Set.empty 0 body
+  validateExpression path identifier types entities predicates scalars requirements Set.empty 0 body
   unless (expressionMentions (tokenText subject) requirements body)
     (at "SFT016" path subject
       "responsibility route requirements must explicitly mention its subject actor")
@@ -1378,3 +1424,103 @@ scalarValueText (DateValue value) = Text.pack (show value)
 scalarValueText (EnumValue name value) = name <> ":" <> value
 scalarValueText (MoneyValue currency value) = currency <> " " <> Text.pack (show value) <> " minor-units"
 scalarValueText (ScalarUnresolved reason _) = "unresolved(" <> reason <> ")"
+
+-- | Structured parsed declarations. FiniteExpr is already constructed by this
+-- parser; child-token spans are not retained. Identifier tokens remain exact.
+inspectTypedFiniteModel :: FilePath -> BS.ByteString -> Either Diagnostic J
+inspectTypedFiniteModel path bytes = do
+  model <- parseTypedFiniteModel path bytes
+  tokens <- lexSource path bytes
+  let loc = locatedToken path bytes
+      expressionRow (identifier,expression) = JObj
+        [("id",loc identifier),("expression",expressionJson expression)]
+      rawType RawInteger = JObj [("kind",JStr "integer")]
+      rawType RawDate = JObj [("kind",JStr "date")]
+      rawType (RawEnum token) = JObj [("kind",JStr "enum"),("name",loc token)]
+      rawType (RawMoney token) = JObj [("kind",JStr "money"),("currency",loc token)]
+  pure (JObj [("id",loc (rawModelId model)),("limit",loc (rawLimit model))
+    ,("tokens",JArr (map loc tokens))
+    ,("entity_types",JArr (map loc (rawEntityTypes model)))
+    ,("entities",JArr [JObj [("id",loc i),("type",loc t)] | (i,t) <- rawEntities model])
+    ,("predicates",JArr [JObj [("id",loc i),("arguments",JArr (map loc args)),("kind",loc k)]
+      | (i,args,k) <- rawPredicates model])
+    ,("scalars",JArr [JObj [("id",loc i),("type",rawType t)] | (i,t) <- rawScalars model])
+    ,("requirements",JArr (map expressionRow (rawRequirements model)))
+    ,("rules",JArr [JObj [("id",loc i),("parameters",JArr [JObj [("variable",loc v),("type",loc t)] | (v,t) <- ps])
+      ,("polarity",loc polarity),("conclusion",loc conclusion),("body",expressionJson body)
+      ,("citation",maybe JNull loc citation)] | (i,ps,polarity,conclusion,body,citation) <- rawRules model])
+    ,("propositions",JArr (map loc (rawPropositions model)))
+    ,("limitations",JArr (map loc (rawLimitations model)))
+    ,("scope",JStr "declaration overview plus complete source tokens; not lossless authoring interchange")])
+
+-- | Inspection admits ground, non-module programs only. It never calls
+-- evaluateTypedFinite: presence checks traverse structure, not truth values.
+prepareTypedFiniteInspection :: FilePath -> BS.ByteString -> Maybe (FilePath,BS.ByteString)
+  -> Either Diagnostic TypedFiniteProgram
+prepareTypedFiniteInspection path bytes supplied = do
+  model <- parseTypedFiniteModel path bytes
+  unless (null (rawImports model) && null (rawUses model)
+    && null (rawNorms model) && null (rawRoutes model)
+    && all (null . parameters) (rawRules model))
+    (at "SFI002" path (rawModelId model)
+      "checked typed inspection currently requires ground rules without imports, norms or responsibility routes")
+  (scenarioPath,rawScenario) <- maybe (at "SFT011" path (rawModelId model)
+    "typed-rules model requires a scenario") Right supplied
+  scenario <- parseTypedFiniteScenario scenarioPath rawScenario
+  when (tokenText (scenarioModel scenario) /= tokenText (rawModelId model))
+    (at "SFT002" scenarioPath (scenarioModel scenario) "scenario model identity mismatch")
+  validateModelWith False path scenarioPath model scenario
+  where parameters (_,ps,_,_,_,_) = ps
+
+checkGroundInputs :: FilePath -> FilePath -> RawModel -> TypedFiniteScenario -> TypedFiniteProgram
+  -> Either Diagnostic ()
+checkGroundInputs path scenarioPath raw scenario program = do
+  mapM_ (uncurry (walk Set.empty)) (rawRequirements raw)
+  mapM_ (\(identifier,_,_,_,body,_) -> walk Set.empty identifier body) (rawRules raw)
+  where
+    facts = Set.fromList [groundKey (groundPredicate f) (groundArguments f) | f <- finiteFacts program]
+    definitions = Map.fromList [(tokenText i,(i,e)) | (i,e) <- rawRequirements raw]
+    walk active origin expression = case expression of
+      PredicateExpr name arguments -> do
+        entities <- traverse (entity origin) arguments
+        let key = groundKey name entities
+        unless (Set.member key facts) (atRelated "SFT011" scenarioPath (scenarioIdentifier scenario)
+          ("missing ground classification " <> key) path origin)
+      ComparisonExpr {} -> Right () -- Declaration/value checks ran above; no comparison is computed.
+      AllExpr members -> mapM_ (walk active origin) members
+      AnyExpr members -> mapM_ (walk active origin) members
+      NotExpr member -> walk active origin member
+      CardinalityExpr _ _ members -> mapM_ (walk active origin) members
+      ReferenceExpr name
+        | Set.member name active -> at "SFT010" path origin "cyclic requirement expansion"
+        | otherwise -> case Map.lookup name definitions of
+            Nothing -> at "SFT003" path origin ("unknown requirement " <> name)
+            Just (identifier,body) -> walk (Set.insert name active) identifier body
+      _ -> at "SFI002" path origin "quantified inspection is unsupported; use the existing compile/run path"
+    entity _ (EntityTerm identifier) = Right identifier
+    entity origin _ = at "SFI002" path origin "inspection requires ground entity terms"
+
+
+inspectTypedFiniteScenario :: FilePath -> BS.ByteString -> Either Diagnostic J
+inspectTypedFiniteScenario path bytes = do
+  scenario <- parseTypedFiniteScenario path bytes
+  tokens <- lexSource path bytes
+  let loc = locatedToken path bytes
+  pure (JObj [("id",loc (scenarioIdentifier scenario)),("model",loc (scenarioModel scenario))
+    ,("classifications",JArr [JObj [("predicate",loc p),("arguments",JArr (map loc args))
+      ,("status",loc status),("reason",loc reason)] | (p,args,status,reason) <- scenarioFacts scenario])
+    ,("value_declarations",JArr [loc i | (i,_) <- scenarioValues scenario])
+    ,("tokens",JArr (map loc tokens))])
+
+-- Actual parser-retained declaration identities. References in rule bodies are
+-- deliberately absent; textual adjacency is not declaration correspondence.
+typedDeclarationTokens :: FilePath -> BS.ByteString -> Either Diagnostic [(Text,Token)]
+typedDeclarationTokens path bytes = do
+  model <- parseTypedFiniteModel path bytes
+  pure ([ ("entity-type",t) | t <- rawEntityTypes model ]
+    ++ [("entity",t) | (t,_) <- rawEntities model]
+    ++ [("predicate",t) | (t,_,_) <- rawPredicates model]
+    ++ [("scalar",t) | (t,_) <- rawScalars model]
+    ++ [("requirement",t) | (t,_) <- rawRequirements model]
+    ++ [("rule",t) | (t,_,_,_,_,_) <- rawRules model]
+    ++ [("proposition",t) | t <- rawPropositions model])

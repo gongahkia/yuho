@@ -26,6 +26,8 @@ import PresumptionChecks (runPresumptionChecks)
 import ModelBundleChecks (runModelBundleChecks)
 import ChangeSetChecks (runChangeSetChecks)
 import SurfaceChecks (runSurfaceChecks)
+import InspectionChecks (runInspectionChecks)
+import SourceCompositionChecks (runSourceCompositionChecks)
 import LegalSurfaceChecks (runLegalSurfaceChecks)
 import MultiOffenceChecks (runMultiOffenceChecks)
 import DefinitionSurfaceChecks (runDefinitionSurfaceChecks)
@@ -89,6 +91,8 @@ main = do
   runPresumptionChecks (root </> "test/presumption-fixtures")
   runModelBundleChecks (root </> "test/model-bundle-fixtures")
   runChangeSetChecks (root </> "test/model-bundle-diff-fixtures")
+  runInspectionChecks root
+  runSourceCompositionChecks root
   runSurfaceChecks root
   runLegalSurfaceChecks root
   runMultiOffenceChecks root

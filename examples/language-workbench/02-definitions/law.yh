@@ -1,0 +1,20 @@
+// Fictional shared expression; reuse is named-reference syntax in the native typed language.
+typed-rules-model WorkshopShared {
+ limit 2048;
+ entity-type actor;
+ entity-type resource;
+ entity actor:one as actor;
+ entity actor:two as actor;
+ entity resource:room as resource;
+ predicate available(resource) kind circumstance;
+ predicate inspected(resource) kind circumstance;
+ predicate permitted(actor,resource) kind relationship;
+ proposition p:one;
+ proposition p:two;
+ requirement q:common = all(available(resource:room),inspected(resource:room));
+ requirement q:one = all(q:common,permitted(actor:one,resource:room));
+ requirement q:two = all(q:common,permitted(actor:two,resource:room));
+ rule r:one establishes proposition p:one when q:one;
+ rule r:two establishes proposition p:two when q:two;
+ limitation "Fictional technical conditions. Each allegation evaluates the complete grounded model independently.";
+}

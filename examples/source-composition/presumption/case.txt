@@ -1,0 +1,1 @@
+Zoë records the named actor, resource and read action. Two actors share the display label Alex; their identities remain distinct.

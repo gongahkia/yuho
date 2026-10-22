@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.CoreYuho.Normalize
-  ( normalizeChecked, normalizeCase, normalizePresumption ) where
+  ( normalizeChecked, normalizeCheckedStructure, normalizeCase, normalizePresumption ) where
 
 import qualified Data.ByteString as BS
 import qualified Data.Map.Strict as Map
@@ -22,7 +22,17 @@ import Yuho.Surface.Lower (lowerChecked)
 import Yuho.Surface.Token (tokenText)
 
 normalizeChecked :: AuthoredModel -> Checked -> CoreProgram
-normalizeChecked authored checked@(Checked model scenario assignments first second) = CoreProgram
+normalizeChecked authored checked = (normalizeCheckedStructure authored checked)
+  { coreProgramRuleStatuses = fst evaluated, coreProgramBranchReasons = snd evaluated }
+  where
+    evaluated = case lowerChecked checked of
+      Right request -> resultMaps (runLine request)
+      Left _ -> (Map.empty,Map.empty)
+
+-- | The existing diagram normalization, before adding execution observations.
+-- Empty observation maps here mean not evaluated, not a negative result.
+normalizeCheckedStructure :: AuthoredModel -> Checked -> CoreProgram
+normalizeCheckedStructure authored (Checked model scenario assignments first second) = CoreProgram
   { coreProgramId = tokenText (modelIdentifier model)
   , coreProgramJurisdiction = tokenText (modelJurisdiction model)
   , coreProgramRules = map coreRule (bodyRules (modelBody model))
@@ -33,17 +43,14 @@ normalizeChecked authored checked@(Checked model scenario assignments first seco
   , coreProgramRelations = bodyRelations (modelBody model)
   , coreProgramRoots = map (resolvedRequirement assignmentMap) (first : maybe [] (:[]) second)
   , coreProgramAssignments = assignmentMap
-  , coreProgramRuleStatuses = fst evaluated
-  , coreProgramBranchReasons = snd evaluated
+  , coreProgramRuleStatuses = Map.empty
+  , coreProgramBranchReasons = Map.empty
   , coreProgramModules = modules
   , coreProgramTemporal = temporal
   , coreProgramLimitations = map tokenText (modelLimitations model)
   }
   where
     assignmentMap = Map.fromList [(tokenText item, proofTruth proof) | (item,proof) <- assignments]
-    evaluated = case lowerChecked checked of
-      Right request -> resultMaps (runLine request)
-      Left _ -> (Map.empty,Map.empty)
     imports = authoredImports authored
     temporal = case imports of
       [("effective-expression", expression, reason)] ->

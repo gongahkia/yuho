@@ -1,0 +1,13 @@
+computed-project workflow:true {
+ source-model "relationship.yh";
+ source-scenario "true.yh";
+ source-analysis analysis:typed rule typed-rule expression q:relationship actor actor:one context event:fictional;
+ destination-model "proof.yh";
+ destination-scenario "direct.yh";
+ destination-analysis analysis:proof rule o:entry input f:no-authorization actor actor:one context event:fictional;
+ binding binding:true mapping "yuho.technical-status-to-proof/v1" unresolved not_determined
+   rationale "I explicitly authorise fresh technical conversion for this fictional input, not a judicial proof finding.";
+ label actor:one "Alex";
+ label actor:two "Alex";
+ assertion assertion:record for q:relationship source "case.txt";
+}

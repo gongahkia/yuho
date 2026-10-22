@@ -1,0 +1,5 @@
+typed-rules-case case:workshop model "law.yh" {
+ shared-classification supplied:room available(resource:room) as proved reason "Explicit shared room classification";
+ allegation allegation:one scenario "one.yhs" use supplied:room;
+ allegation allegation:two scenario "two.yhs" use supplied:room;
+}

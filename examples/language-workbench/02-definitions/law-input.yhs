@@ -1,0 +1,6 @@
+typed-rules-scenario law-view for WorkshopShared {
+ classify inspected(resource:room) as proved reason "Separately supplied inspection condition; not a derived common status";
+ classify available(resource:room) as proved reason "Same explicit shared room input for the law view";
+ classify permitted(actor:one,resource:room) as proved reason "Independent scope one, actor one";
+ classify permitted(actor:two,resource:room) as not_proved reason "Independent scope one, actor two";
+}

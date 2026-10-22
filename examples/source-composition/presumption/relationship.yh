@@ -1,0 +1,17 @@
+// Fictional technical relationship; these supplied values do not establish legal permission.
+typed-rules-model FictionalAccess {
+ limit 2048;
+ entity-type actor;
+ entity-type resource;
+ entity-type action;
+ entity actor:one as actor;
+ entity actor:two as actor;
+ entity resource:r as resource;
+ entity action:read as action;
+ entity action:write as action;
+ predicate authorised(actor,resource,action) kind relationship;
+ proposition p:technical;
+ requirement q:relationship = authorised(actor:one,resource:r,action:read);
+ rule typed-rule establishes proposition p:technical when q:relationship;
+ limitation "Fictional, exact tuple only; no absence-as-false, evidential or legal authorisation inference.";
+}

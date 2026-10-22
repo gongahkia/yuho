@@ -16,6 +16,9 @@ build:
 
 test: build
 	$(CABAL) v2-test yuho-test yuho-sdk-test --offline -j1 --with-compiler=$(GHC) --test-show-details=direct
+	$(PYTHON) test/compiler_inspection.py $(YUHO)
+	$(PYTHON) test/source_composition.py $(YUHO)
+	$(PYTHON) test/machine_workbench.py $(YUHO)
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)

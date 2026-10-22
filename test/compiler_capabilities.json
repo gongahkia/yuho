@@ -1,0 +1,136 @@
+[
+  {
+    "id": "proof",
+    "claim": "finite proof requirements, explicit classifications, exception guards",
+    "command": [
+      "run",
+      "@examples/synthetic/restricted_entry.yh",
+      "--scenario",
+      "@examples/synthetic/scenario_all_proved.yh"
+    ]
+  },
+  {
+    "id": "section",
+    "claim": "source-located Section proof form",
+    "command": [
+      "compile",
+      "@research/singapore/section-84-pilot/surface/section84.yh"
+    ]
+  },
+  {
+    "id": "typed-ground",
+    "claim": "nominal ground predicate tuples with explicit classifications",
+    "command": [
+      "run",
+      "@test/fixtures/typed-authoring/permission.yh",
+      "--scenario",
+      "@test/fixtures/typed-authoring/permission.yhs"
+    ]
+  },
+  {
+    "id": "typed-threshold",
+    "claim": "exact integer comparisons",
+    "command": [
+      "run",
+      "@test/fixtures/typed-authoring/threshold.yh",
+      "--scenario",
+      "@test/fixtures/typed-authoring/threshold.yhs"
+    ]
+  },
+  {
+    "id": "typed-finite",
+    "claim": "finite quantification, technical negation, cardinality, dates, enums, money, explicit priorities",
+    "command": [
+      "run",
+      "@examples/typed-finite/fictional-typed-rules.yh",
+      "--scenario",
+      "@examples/typed-finite/fictional-typed-rules-satisfied.yh"
+    ]
+  },
+  {
+    "id": "typed-modules",
+    "claim": "exact-version local typed module resolution",
+    "command": [
+      "run",
+      "@examples/typed-finite/modular-typed-rules.yh",
+      "--scenario",
+      "@examples/typed-finite/modular-typed-rules-scenario.yh"
+    ]
+  },
+  {
+    "id": "typed-case",
+    "claim": "separately scoped typed allegations and shared supplied case facts",
+    "command": [
+      "run",
+      "@examples/typed-finite/multi-person-property-case.yh"
+    ]
+  },
+  {
+    "id": "norms-routes",
+    "claim": "norm and responsibility-route elaboration to existing typed rules",
+    "command": [
+      "run",
+      "@examples/typed-finite-v0.3/normative-responsibility.yh",
+      "--scenario",
+      "@examples/typed-finite-v0.3/normative-responsibility-satisfied.yh"
+    ]
+  },
+  {
+    "id": "presumption",
+    "claim": "registered effective-leaf derivations, not opaque classifications",
+    "command": [
+      "run",
+      "@examples/synthetic/presumption_active.yh"
+    ]
+  },
+  {
+    "id": "temporal",
+    "claim": "half-open technical interval selection before source-model execution",
+    "command": [
+      "run",
+      "@examples/synthetic/temporal_restricted_entry.yh",
+      "--scenario",
+      "@examples/synthetic/temporal_at_boundary.yh"
+    ]
+  },
+  {
+    "id": "definitions",
+    "claim": "named statutory definition source forms",
+    "command": [
+      "check",
+      "@research/singapore/section-84-pilot/statutory-definitions/section323-section379-definitions.yh"
+    ]
+  },
+  {
+    "id": "participation",
+    "claim": "bounded intentional-aid source forms",
+    "command": [
+      "check",
+      "@research/singapore/abetment-pilot/intentional-aid-theft.yh"
+    ]
+  },
+  {
+    "id": "attempt",
+    "claim": "bounded target-directed attempt source forms",
+    "command": [
+      "check",
+      "@research/singapore/attempt-pilot/section511-theft-attempt.yh"
+    ]
+  },
+  {
+    "id": "actor-exceptions",
+    "claim": "actor-scoped exception source forms",
+    "command": [
+      "check",
+      "@research/singapore/actor-exception-pilot/actor-scoped-section84.yh"
+    ]
+  },
+  {
+    "id": "abetment",
+    "claim": "bounded multi-route abetment source forms",
+    "command": [
+      "check",
+      "@research/singapore/abetment-routes-pilot/section107-routes-theft.yh"
+    ]
+  }
+]

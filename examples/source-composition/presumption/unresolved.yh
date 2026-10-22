@@ -1,0 +1,4 @@
+typed-rules-scenario Input-unresolved for FictionalAccess {
+ classify authorised(actor:one,resource:r,action:read) as unresolved reason "Explicit fictional unresolved classification";
+ classify authorised(actor:two,resource:r,action:read) as not_proved reason "Independent other actor; unselected tuple";
+}

@@ -1,0 +1,221 @@
+[
+  {
+    "id": "requirements-satisfied",
+    "input_kind": "native-yh",
+    "path": "01-requirements/law.yh",
+    "scenario": "01-requirements/satisfied.yhs",
+    "expected": {
+      "/rules/0/status": "satisfied"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "requirements-defeated",
+    "input_kind": "native-yh",
+    "path": "01-requirements/law.yh",
+    "scenario": "01-requirements/defeated.yhs",
+    "expected": {
+      "/rules/0/status": "not_satisfied",
+      "/rules/0/branches/0/reason": "defeated"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "requirements-unresolved",
+    "input_kind": "native-yh",
+    "path": "01-requirements/law.yh",
+    "scenario": "01-requirements/unresolved.yhs",
+    "expected": {
+      "/rules/0/status": "unresolved"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "requirements-partial",
+    "input_kind": "native-yh",
+    "path": "01-requirements/law.yh",
+    "scenario": "01-requirements/partial.yhs",
+    "expected": {
+      "/rules/0/status": "not_satisfied"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "requirements-or",
+    "input_kind": "native-yh",
+    "path": "01-requirements/alternative.yh",
+    "scenario": "01-requirements/partial.yhs",
+    "expected": {
+      "/rules/0/status": "satisfied"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "shared-definitions",
+    "input_kind": "native-yh",
+    "path": "02-definitions/case.yh",
+    "scenario": null,
+    "expected": {
+      "/allegations/0/result/rules/0/status": "satisfied",
+      "/allegations/0/result/rules/1/status": "not_satisfied",
+      "/allegations/1/result/rules/0/status": "not_satisfied",
+      "/allegations/1/result/rules/1/status": "unresolved"
+    },
+    "view": "case",
+    "inspection": false
+  },
+  {
+    "id": "typed-34",
+    "input_kind": "native-yh",
+    "path": "03-typed/law.yh",
+    "scenario": "03-typed/34.yhs",
+    "expected": {
+      "/rules/0/status": "not_satisfied"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "typed-35",
+    "input_kind": "native-yh",
+    "path": "03-typed/law.yh",
+    "scenario": "03-typed/35.yhs",
+    "expected": {
+      "/rules/0/status": "not_satisfied"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "typed-36",
+    "input_kind": "native-yh",
+    "path": "03-typed/law.yh",
+    "scenario": "03-typed/36.yhs",
+    "expected": {
+      "/rules/0/status": "satisfied"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "typed-unknown",
+    "input_kind": "native-yh",
+    "path": "03-typed/law.yh",
+    "scenario": "03-typed/unknown.yhs",
+    "expected": {
+      "/rules/0/status": "unresolved"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "presumption-active",
+    "input_kind": "native-yh",
+    "path": "04-presumptions/active.yh",
+    "scenario": null,
+    "expected": {
+      "/rules/0/status": "satisfied",
+      "/presumption_derivations/0/state": "active",
+      "/presumption_derivations/0/target_direct_satisfaction": "not_satisfied",
+      "/presumption_derivations/0/target_effective_satisfaction": "satisfied"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "presumption-rebutted",
+    "input_kind": "native-yh",
+    "path": "04-presumptions/rebutted.yh",
+    "scenario": null,
+    "expected": {
+      "/rules/0/status": "not_satisfied",
+      "/presumption_derivations/0/state": "rebutted",
+      "/presumption_derivations/0/target_direct_satisfaction": "not_satisfied",
+      "/presumption_derivations/0/target_effective_satisfaction": "not_satisfied"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "presumption-dominance",
+    "input_kind": "native-yh",
+    "path": "04-presumptions/dominance.yh",
+    "scenario": null,
+    "expected": {
+      "/rules/0/status": "satisfied",
+      "/presumption_derivations/0/state": "rebutted",
+      "/presumption_derivations/0/target_direct_satisfaction": "satisfied",
+      "/presumption_derivations/0/target_effective_satisfaction": "satisfied"
+    },
+    "view": "trace",
+    "inspection": true
+  },
+  {
+    "id": "temporal-before",
+    "input_kind": "native-yh",
+    "path": "05-temporal/law.yh",
+    "scenario": "05-temporal/before.yhs",
+    "expected": {
+      "/rules/0/status": "not_satisfied"
+    },
+    "view": "trace",
+    "inspection": false
+  },
+  {
+    "id": "temporal-boundary",
+    "input_kind": "native-yh",
+    "path": "05-temporal/law.yh",
+    "scenario": "05-temporal/boundary.yhs",
+    "expected": {
+      "/rules/0/status": "satisfied"
+    },
+    "view": "trace",
+    "inspection": false
+  },
+  {
+    "id": "temporal-after",
+    "input_kind": "native-yh",
+    "path": "05-temporal/law.yh",
+    "scenario": "05-temporal/after.yhs",
+    "expected": {
+      "/rules/0/status": "satisfied"
+    },
+    "view": "trace",
+    "inspection": false
+  },
+  {
+    "id": "composition-true",
+    "input_kind": "composition-yh",
+    "path": "06-composition/true.project.yh",
+    "expected": {
+      "/computedOriginalObservation/typedObservedStatus": "satisfied",
+      "/computedDownstreamReport/reportConclusion": "satisfied"
+    },
+    "scenario": null
+  },
+  {
+    "id": "composition-false",
+    "input_kind": "composition-yh",
+    "path": "06-composition/false.project.yh",
+    "expected": {
+      "/computedOriginalObservation/typedObservedStatus": "not_satisfied",
+      "/computedDownstreamReport/reportConclusion": "not_satisfied"
+    },
+    "scenario": null
+  },
+  {
+    "id": "composition-unresolved",
+    "input_kind": "composition-yh",
+    "path": "06-composition/unresolved.project.yh",
+    "expected": {
+      "/computedOriginalObservation/typedObservedStatus": "unresolved",
+      "/computedDownstreamReport/reportConclusion": "unresolved"
+    },
+    "scenario": null
+  }
+]

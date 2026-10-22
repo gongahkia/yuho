@@ -1,0 +1,368 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/machine-request-v0.1-experimental.schema.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "scenario": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "stage": {
+          "enum": [
+            "all",
+            "parsed",
+            "checked",
+            "normalized",
+            "lowered"
+          ]
+        },
+        "format": {
+          "const": "yuho.machine-request/v0.1-experimental"
+        },
+        "input_kind": {
+          "const": "native-yh"
+        },
+        "operation": {
+          "const": "inspect"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "scenario": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "format": {
+          "const": "yuho.machine-request/v0.1-experimental"
+        },
+        "input_kind": {
+          "const": "native-yh"
+        },
+        "operation": {
+          "const": "check"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "scenario": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "format": {
+          "const": "yuho.machine-request/v0.1-experimental"
+        },
+        "input_kind": {
+          "const": "native-yh"
+        },
+        "operation": {
+          "const": "compile"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "scenario": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "format": {
+          "const": "yuho.machine-request/v0.1-experimental"
+        },
+        "input_kind": {
+          "const": "native-yh"
+        },
+        "operation": {
+          "const": "run"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path",
+        "output",
+        "view",
+        "encoding"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "scenario": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "view": {
+          "enum": [
+            "rule",
+            "modules",
+            "case",
+            "trace"
+          ]
+        },
+        "encoding": {
+          "enum": [
+            "json",
+            "xml",
+            "svg"
+          ]
+        },
+        "format": {
+          "const": "yuho.machine-request/v0.1-experimental"
+        },
+        "input_kind": {
+          "const": "native-yh"
+        },
+        "operation": {
+          "const": "diagram"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "against": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "format": {
+          "const": "yuho.machine-request/v0.1-experimental"
+        },
+        "input_kind": {
+          "const": "composition-yh"
+        },
+        "operation": {
+          "const": "check"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path",
+        "output"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "format": {
+          "const": "yuho.machine-request/v0.1-experimental"
+        },
+        "input_kind": {
+          "const": "composition-yh"
+        },
+        "operation": {
+          "const": "run"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "format": {
+          "const": "yuho.machine-request/v0.1-experimental"
+        },
+        "input_kind": {
+          "const": "computed-input-json"
+        },
+        "operation": {
+          "const": "check"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path",
+        "output"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "\u0000"
+          }
+        },
+        "format": {
+          "const": "yuho.machine-request/v0.1-experimental"
+        },
+        "input_kind": {
+          "const": "computed-input-json"
+        },
+        "operation": {
+          "const": "replay"
+        }
+      }
+    }
+  ]
+}

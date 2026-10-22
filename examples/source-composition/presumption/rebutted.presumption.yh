@@ -1,0 +1,6 @@
+presumption-program FictionalSupport-rebutted {
+ base-model "proof.yh";
+ base-scenario "rebutted-direct.yh";
+ burden bearer fictional-proponent standard supplied-classification note "Technical routes only; rebuttal sufficiency is externally supplied";
+ presumption pres:technical target f:no-authorization source src:fictional-rule trigger f:knowledge rebuttal f:rescue-purpose;
+}

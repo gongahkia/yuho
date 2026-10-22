@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/machine-response-v0.1-experimental.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "success",
+    "operation",
+    "input_kind",
+    "semantic_profiles",
+    "profile_authority",
+    "effects",
+    "payload",
+    "diagnostics",
+    "exports"
+  ],
+  "properties": {
+    "format": {
+      "const": "yuho.machine-response/v0.1-experimental"
+    },
+    "success": {
+      "type": "boolean"
+    },
+    "operation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "input_kind": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "semantic_profiles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "profile_authority": {
+      "enum": [
+        "native_payload",
+        "not_reported_by_operation"
+      ]
+    },
+    "effects": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "payload": {},
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "exports": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+presumption-program Workshop-rebutted {
+ base-model "law.yh";
+ base-scenario "input-rebutted.yh";
+ burden bearer fictional-reviewer standard supplied-classification note "Context only, no burden transfer";
+ presumption pres:technical target f:no-authorization source src:fictional-rule trigger f:knowledge rebuttal f:rescue-purpose;
+}

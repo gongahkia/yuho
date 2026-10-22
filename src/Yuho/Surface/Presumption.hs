@@ -1,7 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module Yuho.Surface.Presumption
-  ( PresumptionProgram(..), loadPresumptionProgram, explainPresumptionProgram ) where
+  ( PresumptionProgram(..), loadPresumptionProgram, explainPresumptionProgram
+  , Registration(..), PresumptionSource(..), PreparedPresumption(..)
+  , parsePresumptionSource, presumptionSourceJson, preparePresumptionProgram ) where
 
 import Control.Exception (IOException, try)
 import qualified Data.ByteString as BS
@@ -12,7 +14,10 @@ import System.FilePath (isAbsolute, takeDirectory, takeExtension, takeFileName, 
 import System.Posix.Files (fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.Kernel.Run (runLine)
 import Yuho.Protocol.Json (J(..), decodeJson, encodeJson, lookupField, objectFields, textValue)
-import Yuho.Surface.Compile (compileParsed)
+import Yuho.Surface.AST (Checked)
+import Yuho.Surface.Compile (checkParsed)
+import Yuho.Surface.Lower (lowerChecked)
+import Yuho.Surface.InspectionData (locatedToken)
 import Yuho.Surface.Lexer (lexSource)
 import Yuho.Surface.Modules (AuthoredModel(..), loadAuthoredModel)
 import Yuho.Surface.Token
@@ -117,13 +122,52 @@ programParser = do
         (item :) <$> manyRegistrations
       else pure []
 
-loadPresumptionProgram :: FilePath -> BS.ByteString
-  -> IO (Either Diagnostic PresumptionProgram)
-loadPresumptionProgram path bytes = case lexSource path bytes >>= \tokens ->
-    fst <$> runP programParser path tokens of
+data PresumptionSource = PresumptionSource
+  { presumptionSourceName :: Token
+  , presumptionSourceModel :: Token
+  , presumptionSourceScenario :: Token
+  , presumptionSourceBearer :: Token
+  , presumptionSourceStandard :: Token
+  , presumptionSourceNote :: Token
+  , presumptionSourceRegistrations :: [Registration]
+  } deriving (Eq, Show)
+
+data PreparedPresumption = PreparedPresumption
+  { preparedSource :: PresumptionSource
+  , preparedModelPath :: FilePath
+  , preparedModelBytes :: BS.ByteString
+  , preparedScenarioPath :: FilePath
+  , preparedScenarioBytes :: BS.ByteString
+  , preparedChecked :: Checked
+  , preparedRequest :: BS.ByteString
+  } deriving (Eq, Show)
+
+parsePresumptionSource :: FilePath -> BS.ByteString -> Either Diagnostic PresumptionSource
+parsePresumptionSource path bytes = do
+  tokens <- lexSource path bytes
+  ((name,model,scenario,bearer,standard,note,registrations),_) <- runP programParser path tokens
+  pure (PresumptionSource name model scenario bearer standard note registrations)
+
+presumptionSourceJson :: FilePath -> BS.ByteString -> PresumptionSource -> J
+presumptionSourceJson path bytes item = JObj
+  [("id",loc (presumptionSourceName item)),("base_model",loc (presumptionSourceModel item))
+  ,("base_scenario",loc (presumptionSourceScenario item)),("burden_bearer",loc (presumptionSourceBearer item))
+  ,("standard",loc (presumptionSourceStandard item)),("note",loc (presumptionSourceNote item))
+  ,("registrations",JArr [JObj [("id",loc i),("target",loc t),("source",loc s)
+      ,("trigger",loc trigger),("rebuttal",loc rebuttal)]
+    | Registration i t s trigger rebuttal <- presumptionSourceRegistrations item])]
+  where loc = locatedToken path bytes
+
+-- | Compile only. This preparation step never calls a result evaluator.
+preparePresumptionProgram :: FilePath -> BS.ByteString -> IO (Either Diagnostic PreparedPresumption)
+preparePresumptionProgram path bytes = case parsePresumptionSource path bytes of
   Left issue -> pure (Left issue)
-  Right (name,modelToken,scenarioToken,bearer,standard,note,registrations) -> do
-    let resolve token = takeDirectory path </> Text.unpack (tokenText token)
+  Right parsed -> do
+    let modelToken = presumptionSourceModel parsed
+        scenarioToken = presumptionSourceScenario parsed
+        name = presumptionSourceName parsed
+        registrations = presumptionSourceRegistrations parsed
+        resolve token = takeDirectory path </> Text.unpack (tokenText token)
     if not (safeSibling modelToken && safeSibling scenarioToken)
       then pure (at "SFR002" path modelToken
         "presumption base model and scenario must be sibling .yh files")
@@ -138,32 +182,41 @@ loadPresumptionProgram path bytes = case lexSource path bytes >>= \tokens ->
               if null registrations || length registrations > 16 then
                 at "SFR003" path name "presumption program requires 1 to 16 registrations"
               else pure ()
-              let identities = [tokenText item
-                    | Registration item _ _ _ _ <- registrations]
+              let identities = [tokenText item | Registration item _ _ _ _ <- registrations]
               if length identities == Set.size (Set.fromList identities)
                   && all ("pres:" `Text.isPrefixOf`) identities
                 then pure () else at "SFR003" path name
                   "presumption identities must be unique typed pres: identifiers"
-              base <- compileParsed (resolve modelToken) (authoredModel loaded)
+              checked <- checkParsed (resolve modelToken) (authoredModel loaded)
                 (Just (resolve scenarioToken,rawScenario))
+              base <- lowerChecked checked
               value <- either (\_ -> at "SFR004" path name
                 "compiled presumption base is not JSON") Right (decodeJson base)
               requestValue <- addRegistrations path registrations value
-              let request = encodeJson requestValue
-                  result = runLine request
-              response <- either (\_ -> at "SFR004" path name
-                "presumption kernel response is not JSON") Right (decodeJson result)
-              case lookupField "status" response >>= textValue of
-                Just "rejected" -> at "SFR004" path name
-                  "registered-presumption kernel rejected the authored program"
-                Just _ -> Right (PresumptionProgram name bearer standard note
-                  [(tokenText item,tokenText target,tokenText source,
-                    tokenText trigger,tokenText rebuttal)
-                  | Registration item target source trigger rebuttal <- registrations]
-                  request result)
-                Nothing -> at "SFR004" path name "presumption response has no status"
+              pure (PreparedPresumption parsed (resolve modelToken) rawModel
+                (resolve scenarioToken) rawScenario checked (encodeJson requestValue))
           (Left issue,_) -> pure (Left issue)
           (_,Left issue) -> pure (Left issue)
+
+loadPresumptionProgram :: FilePath -> BS.ByteString -> IO (Either Diagnostic PresumptionProgram)
+loadPresumptionProgram path bytes = do
+  prepared <- preparePresumptionProgram path bytes
+  pure $ do
+    item <- prepared
+    let parsed = preparedSource item
+        name = presumptionSourceName parsed
+        request = preparedRequest item
+        result = runLine request
+    response <- either (\_ -> at "SFR004" path name
+      "presumption kernel response is not JSON") Right (decodeJson result)
+    case lookupField "status" response >>= textValue of
+      Just "rejected" -> at "SFR004" path name
+        "registered-presumption kernel rejected the authored program"
+      Just _ -> Right (PresumptionProgram name (presumptionSourceBearer parsed)
+        (presumptionSourceStandard parsed) (presumptionSourceNote parsed)
+        [(tokenText i,tokenText t,tokenText s,tokenText trigger,tokenText rebuttal)
+        | Registration i t s trigger rebuttal <- presumptionSourceRegistrations parsed] request result)
+      Nothing -> at "SFR004" path name "presumption response has no status"
 
 safeSibling :: Token -> Bool
 safeSibling token = let value = Text.unpack (tokenText token) in
