@@ -88,7 +88,11 @@ makeComputedInputBinding key source expression dest input policy rationale refs 
       b = ComputedInputBinding key (typedDocumentId (typedSnapshotDocument snapshot)) (typedAnalysisId upstream)
         expression (typedAnalysisScope upstream) (typedSnapshotId snapshot) (destinationId dest)
         (destinationAnalysis dest) input (analysisScope a) (computedDestinationDigest dest) policy rationale refs
-      doc = ComputedInputDocument computedInputFormat ("workflow:" <> key) (typedSnapshotDocument snapshot) dest b
+      -- Constructor validation is independent of the caller's eventual document
+      -- ID. A one-byte temporary ID cannot consume the binding's byte budget or
+      -- reject an otherwise admissible near-limit artifact. It is never saved.
+      temporaryId = if key == "w" then "x" else "w"
+      doc = ComputedInputDocument computedInputFormat temporaryId (typedSnapshotDocument snapshot) dest b
   _ <- resolveBinding doc source
   pure b
 

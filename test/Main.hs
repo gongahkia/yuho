@@ -18,6 +18,7 @@ import TypedFactsChecks (runTypedChecks)
 import PenaltyChecks (runPenaltyChecks)
 import TermsChecks (runTermsChecks)
 import ProofChecks (runProofChecks)
+import ComputedInputRepairChecks (runComputedInputRepairChecks)
 import ComputedInputChecks (runComputedInputChecks)
 import TemporalAuthoringChecks (runTemporalAuthoringChecks)
 import PresumptionAuthoringChecks (runPresumptionAuthoringChecks)
@@ -65,6 +66,7 @@ main = do
       hardening = root </> "test/fixtures"
   golden frozen
   hardeningCases hardening
+  runComputedInputRepairChecks root
   runComputedInputChecks
   runTemporalAuthoringChecks root
   runAuthoringChecks root

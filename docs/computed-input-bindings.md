@@ -183,3 +183,41 @@ The consumer executes true/false/unresolved proof compositions and active,
 inactive, unresolved, rebutted, direct-proof-dominant and downstream-skipped
 presumption compositions. Independent supplied-input reference documents are
 saved separately. Equal technical outcomes do not imply equal provenance.
+
+## Navigation identity and binding-ID boundary
+
+Integration navigation is a role-specific correspondence table, not a join of
+`originAuthoredObjects` strings. Equal strings across authored and kernel
+namespaces (for example an unrelated authored input named `rule:0`) establish no
+relationship. Generated kernel IDs remain in compiler and observation records;
+integration authored-origin lists contain authored identities only.
+
+Each `ComputedNavigation` names its component projection as well as its node.
+The SDK checks that component's selected snapshot/report against the retained
+execution. Typed definitions, selected occurrences and actual typed observations
+are resolved separately. Destination definitions, generated assessments, proof
+occurrences, proof observations, registration derivations, trigger/rebuttal
+condition traces and effective-leaf observations have distinct correspondence
+rules. Opening a link never executes an evaluator.
+
+`validateComputedProjection` reconstructs the expected correspondences from the
+binding, reports, compiler mappings and component metadata. A wrong-but-existing
+endpoint, wrong observation category, ambiguous match, stale component or missing
+required correspondence produces `CBNAVIGATION` at `/computedNavigation`. It does
+not accept a relationship merely because both endpoints exist. A skipped
+presumption guard has an authored definition/occurrence link, but no fabricated
+run-observation link. Complete component context remains available.
+
+The projection shape and version are unchanged. Navigation and authored-origin
+arrays are intentionally corrected; evaluator reports, original documents,
+snapshots and generated assessments for previously valid executions are unchanged.
+Broad incidental links to compiler spans or unrelated objects are not retained as
+provenance. Reference-view partitions and native component identities are preserved.
+
+Binding IDs must be nonblank and at most **128 UTF-8 bytes**, not 128 code points.
+`makeComputedInputBinding` validates using an internal one-byte workflow ID (`w`,
+or `x` when the binding ID is `w`). That temporary ID is never returned or saved.
+It cannot lengthen or truncate the caller's binding ID, and is always distinct
+from it. Callers independently choose their actual `ComputedInputDocument` ID;
+its existing byte limit and distinctness rule still apply. Returned short-ID
+bindings and saved valid artifacts retain their prior representation.
