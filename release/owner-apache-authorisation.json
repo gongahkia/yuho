@@ -1,0 +1,14 @@
+{
+  "project": "Yuho",
+  "repository": "https://github.com/gongahkia/yuho",
+  "license": "Apache-2.0",
+  "evidence_type": "owner question reply supplied in the implementation conversation",
+  "question_item_id": "[\"request_user_input_async\",\"call_c84fdd68b28a476aadf4b1fb155ea0f8\",0]",
+  "question": "Your release instructions require an explicit license decision. The [decision memo](/home/gongahkia/yuho-review/experimental-sdk-release-preparation/LICENSING-DECISION.md) recommends Apache-2.0 for original software, documentation, examples and Lean code that you are authorised to license, excluding third-party statutory text. Which option do you authorise? MIT would also require your preferred copyright attribution. Statutory-text redistribution remains a separate review decision.",
+  "answer": "Approve Apache-2.0 for authorised original materials",
+  "scope": ["authorised original software", "authorised original documentation", "authorised original examples", "authorised original Lean code"],
+  "exclusions": ["third-party statutory text", "other third-party materials", "third-party dependencies"],
+  "approval_timestamp": null,
+  "retention_date": "2026-10-22",
+  "limitations": ["No signature or independently authenticated legal identity is supplied", "No contributor assignment or universal ownership is inferred", "Retention date is not an invented approval date", "Third-party redistribution remains separately gated"]
+}

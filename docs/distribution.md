@@ -22,6 +22,11 @@ It is needed for `yuho-test` and `make verify`. Neither artifact contains compil
 binaries or a dependency cache. The complete bundle does not require a live Git
 repository. Public distribution requires the [rights review](third-party-notices.md).
 Generated local archives are private release candidates, not published releases.
+The [public-surface comparison](distribution-boundaries.md) keeps repository,
+archive and history decisions separate. [Legislative notices](legislation-notice.md)
+and the [owner-authorisation record](owner-authorisation.md) accompany both source
+artifacts; their presence does not establish redistribution clearance. Check
+notice inclusion with `python3 scripts/verify_release_notices.py --archive PATH`.
 
 After final metadata edits and release-manifest regeneration, create the larger
 artifact from the complete Git checkout:
