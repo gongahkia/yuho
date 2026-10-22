@@ -173,13 +173,13 @@
     "computedProjectionNodes": {
       "type": "array",
       "items": {
-        "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/projectionNode"
+        "$ref": "#/$defs/integrationNode"
       }
     },
     "computedProjectionEdges": {
       "type": "array",
       "items": {
-        "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/projectionEdge"
+        "$ref": "#/$defs/integrationEdge"
       }
     },
     "computedNavigation": {
@@ -299,6 +299,256 @@
     },
     "view": {
       "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/view"
+    },
+    "integrationNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectedNodeId",
+        "projectedNodeKind",
+        "projectedNodeRole",
+        "projectedNodeLabel",
+        "projectedNodeOrigin",
+        "projectedNodeOccurrence",
+        "projectedNodeObservation",
+        "projectedNodeSelected",
+        "projectedNodeBinding",
+        "projectedNodeComputed",
+        "projectedNodeEvaluation",
+        "projectedNodeSkipReason",
+        "projectedNodeBranchReason"
+      ],
+      "properties": {
+        "projectedNodeId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedNodeKind": {
+          "enum": [
+            "authored",
+            "computed",
+            "derived",
+            "generated"
+          ]
+        },
+        "projectedNodeRole": {
+          "type": "string"
+        },
+        "projectedNodeLabel": {
+          "type": "string"
+        },
+        "projectedNodeOrigin": {
+          "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/origin"
+        },
+        "projectedNodeOccurrence": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/occurrenceIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeObservation": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/observationIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeSelected": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeBinding": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/binding"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeComputed": {
+          "anyOf": [
+            {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeEvaluation": {
+          "enum": [
+            "not_applicable",
+            "not_requested",
+            "evaluated",
+            "not_evaluated"
+          ]
+        },
+        "projectedNodeSkipReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectedNodeBranchReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "projectedNodeKind": {
+                "const": "authored"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectedNodeComputed": {
+                "type": "null"
+              },
+              "projectedNodeEvaluation": {
+                "const": "not_applicable"
+              },
+              "projectedNodeOccurrence": {
+                "type": "null"
+              },
+              "projectedNodeObservation": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "projectedNodeKind": {
+                "const": "occurrence"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectedNodeOccurrence": {
+                "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/occurrenceIdentity"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "projectedNodeKind": {
+                "const": "observation"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "projectedNodeObservation": {
+                "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/observationIdentity"
+              },
+              "projectedNodeBinding": {
+                "type": "null"
+              },
+              "projectedNodeEvaluation": {
+                "enum": [
+                  "evaluated",
+                  "not_evaluated"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "integrationEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectedEdgeId",
+        "projectedEdgeFrom",
+        "projectedEdgeTo",
+        "projectedEdgeKind",
+        "projectedEdgeSemantics",
+        "projectedEdgeOrigin",
+        "projectedEdgeOriginalSource"
+      ],
+      "properties": {
+        "projectedEdgeId": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedEdgeFrom": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedEdgeTo": {
+          "type": "string",
+          "pattern": "^p-[a-z-]+-[0-9a-f]{64}$"
+        },
+        "projectedEdgeKind": {
+          "enum": [
+            "actual_named_expression_observation",
+            "authorised_status_mapping",
+            "execution_overlay_input",
+            "downstream_requirement_observation",
+            "trigger_effective_input",
+            "rebuttal_effective_input",
+            "registration_route_to_effective_target",
+            "selected_execution_context"
+          ]
+        },
+        "projectedEdgeSemantics": {
+          "enum": [
+            "explicit_technical_execution_dependency",
+            "same_execution_context_not_independent_support"
+          ]
+        },
+        "projectedEdgeOrigin": {
+          "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/origin"
+        },
+        "projectedEdgeOriginalSource": {
+          "anyOf": [
+            {
+              "$ref": "https://yuho.example/schema/analysis-projection-v0.1-experimental.json#/$defs/sourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
     }
   }
 }

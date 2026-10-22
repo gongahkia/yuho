@@ -53,6 +53,7 @@ runComputedInputChecks=do
     excerpt<-right (recoverComputedInputSource e "source" (SourceRef "packet" (Just (TextSpan 0 57 1 1 1 58))))
     check "original Unicode excerpt" (excerptText excerpt==Just "Zoë records access for Actor One to Resource R for read.")
     let pd=computedProjectionData p
+    check "malformed generated identity rejected" (not (null (validateComputedProjection pd {computedProjectionNodes=[x {projectedNodeId="bad_id"} | x<-computedProjectionNodes pd]})))
     check "duplicate generated projection identity rejected" (not (null (validateComputedProjection pd {computedProjectionNodes=computedProjectionNodes pd++take 1 (computedProjectionNodes pd)})))
   forM_ [(TechnicalTrue,NotProved,NotProved,False,"active","satisfied"),
       (TechnicalFalse,NotProved,NotProved,False,"inactive","not_satisfied"),

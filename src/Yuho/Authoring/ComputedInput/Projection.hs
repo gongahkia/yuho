@@ -58,6 +58,7 @@ projectComputedInput e = do
       pp = presumptionProjectionData <$> presumption
       nativeNodes = maybe [] projectionNodes dp ++ maybe [] presumptionProjectionNodes pp
       nativeId = maybe (maybe "" presumptionProjectionId pp) projectionId dp
+      key :: Text -> Text
       key role = projectionIdentity "computed-input-object" (computedExecutionId report,role)
       n role kind label origins status state = ProjectionNode (key role) kind role label
         (ProjectionOrigin (if kind == "authored" then "authored" else "projection_generated") role origins)
@@ -108,10 +109,11 @@ validateComputedProjection p = validateTypedProjection (computedSourceProjection
   ++ maybe [] validateProjection (computedProofProjection p)
   ++ maybe [] validatePresumptionProjection (computedPresumptionProjection p)
   ++ [issue "CBPROJECTION" "/computedProjection" [] "unsupported projection version, duplicate identity, missing endpoint or invalid component navigation"
-  | computedProjectionVersion p /= "yuho.computed-input-projection/v0.1-experimental" || length ids /= length (nub ids)
+  | computedProjectionVersion p /= "yuho.computed-input-projection/v0.1-experimental" || length ids /= length (nub ids) || any (not . validId) ids
     || any (\e -> projectedEdgeFrom e `notElem` ns || projectedEdgeTo e `notElem` ns) es
     || any invalidLink (computedNavigation p)]
   where
+    validId x = let (prefix,digest)=T.splitAt (T.length x-64) x in T.isPrefixOf "p-" prefix && T.isSuffixOf "-" prefix && T.all (\c->(c>='a' && c<='z') || c=='-') prefix && T.length digest==64 && T.all (\c->(c>='0' && c<='9') || (c>='a' && c<='f')) digest
     ns=map projectedNodeId (computedProjectionNodes p);es=computedProjectionEdges p;ids=ns++map projectedEdgeId es
     source=computedSourceProjection p
     native=[(typedProjectionId source,map typedNodeId (typedProjectionNodes source))]
