@@ -69,9 +69,11 @@ Non-JSON subprocess logs go to stderr, never into payloads. Ordinary tested succ
 and refusal paths have empty stderr. OS termination, a broken output pipe or an
 unrecoverable process failure is not a promise of a complete JSON response; callers
 must check process termination and parsing. Native operation failures emit no export
-references. Existing file publication refuses overwrites. Composition can leave a
-new partial directory after an I/O failure, as before; it never reuses an existing
-output directory. `effects` describes requested operation effects, not a transaction
+references. Existing file publication refuses overwrites. Composition stages its complete artifact set beside the destination, then uses
+Linux atomic no-replace publication; handled write/publication failures remove
+only private staging files and never expose a partial requested directory. It
+refuses existing destinations, symlink ancestors and unsupported publication
+platforms/filesystems. See the [publication contract](source-composition.md#failure-safe-export-publication-linux). `effects` describes requested operation effects, not a transaction
 log proving how far a failing operation reached.
 
 `semantic_profiles` lists profiles explicitly available in native payloads. Empty

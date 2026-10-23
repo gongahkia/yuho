@@ -1,18 +1,27 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE ForeignFunctionInterface #-}
 module Yuho.Surface.Computed.CLI (runComputedCommand) where
 
-import Control.Exception (IOException, try)
+import Control.Exception (IOException, bracketOnError, evaluate, try)
 import Control.Monad (when)
 import qualified Data.Aeson as J
 import qualified Data.ByteString as BS
 import Data.Text (Text)
 import qualified Data.Text as T
-import System.Directory (doesPathExist, createDirectory)
+import System.Directory (makeAbsolute, removeDirectoryRecursive)
 import System.Exit (exitFailure)
-import System.FilePath ((</>))
+import System.FilePath ((</>), takeDirectory, takeFileName, splitDirectories)
 import System.IO (stderr, stdout)
-import System.Posix.Files (getSymbolicLinkStatus, isRegularFile, fileSize)
+import System.Posix.Files (getSymbolicLinkStatus, isRegularFile, isDirectory, fileSize)
+import System.Posix.Temp (mkdtemp)
+import System.IO.Error (isDoesNotExistError)
+#if defined(linux_HOST_OS)
+import Foreign.C.String (CString, withCString)
+import Foreign.C.Types (CInt(..), CUInt(..))
+import Foreign.C.Error (throwErrnoIfMinus1_)
+#endif
 import qualified Yuho.Authoring as A
 import Yuho.Protocol.Json (encodeJson)
 import Yuho.Surface.Computed
@@ -70,13 +79,55 @@ export out evaluation = do
         ,("projection.json",A.encodeComputedProjection projection),("view-bindings.json",A.encodeRecord view)
         ,("view.json",json),("view.xml",xml),("view.svg",svg)
         ,("source-map.json",A.encodeRecord (compositionSourceMap document))]
-  exists<-doesPathExist out
-  when exists (failAt "SFC006" out "output directory already exists; use a new directory")
   result<-try $ do
-    createDirectory out
-    mapM_ (\(name,bytes)->BS.writeFile (out</>name) bytes) files
+    -- Force every encoded byte before creating a staging directory. In particular,
+    -- a lazy encoding failure must never occur after publication.
+    mapM_ (evaluate . BS.length . snd) files
+    publishExport out files
   case result of
-    Left (_ :: IOException) -> failAt "SFC006" out "could not publish new output directory; any partial files are left for inspection"
+    Left (issue :: IOException) -> failAt "SFC006" out
+      ("could not publish complete output directory: " <> T.pack (show issue))
     Right () -> BS.hPut stdout (A.encodeRecord (J.object
       ["status" J..= ("evaluated" :: Text),"execution" J..= A.computedExecutionId report
       ,"output" J..= out,"replay_authority" J..= ("artifact.json retains exact sources and binding; replay does not read live .yh files" :: Text)]) <> "\n")
+
+-- Linux renameat2(RENAME_NOREPLACE) publishes the completed directory in one
+-- filesystem operation and refuses *any* existing destination, including an empty
+-- directory or a dangling link. There is deliberately no check-then-rename fallback.
+-- This is atomic visibility/no-clobber, not a power-loss durability guarantee.
+publishExport :: FilePath -> [(FilePath,BS.ByteString)] -> IO ()
+publishExport out files = do
+  when (null out || takeFileName out `elem` ["", ".", ".."]
+        || ".." `elem` splitDirectories out)
+    (ioError (userError "output must name a new directory without parent traversal"))
+  destination <- makeAbsolute out
+  let parent = takeDirectory destination
+  checkParents parent
+  existing <- try (getSymbolicLinkStatus destination)
+  case existing of
+    Right _ -> ioError (userError "output destination already exists; use a new directory")
+    Left issue | isDoesNotExistError issue -> pure ()
+               | otherwise -> ioError issue
+  bracketOnError (mkdtemp (parent </> ".yuho-compose-")) removeDirectoryRecursive $ \staging -> do
+    mapM_ (\(name,bytes) -> BS.writeFile (staging </> name) bytes) files
+    publishNoReplace staging destination
+  where
+    checkParents path = do
+      stat <- getSymbolicLinkStatus path
+      when (not (isDirectory stat))
+        (ioError (userError "output parent and ancestors must be real directories, not links"))
+      let parent = takeDirectory path
+      when (parent /= path) (checkParents parent)
+
+publishNoReplace :: FilePath -> FilePath -> IO ()
+#if defined(linux_HOST_OS)
+publishNoReplace source destination = withCString source $ \src ->
+  withCString destination $ \dst ->
+    throwErrnoIfMinus1_ "renameat2(RENAME_NOREPLACE)" (renameNoReplace (-100) src (-100) dst 1)
+
+foreign import ccall unsafe "renameat2"
+  renameNoReplace :: CInt -> CString -> CInt -> CString -> CUInt -> IO CInt
+#else
+publishNoReplace _ _ = ioError (userError
+  "atomic no-replace directory publication is unsupported on this platform; no output published")
+#endif

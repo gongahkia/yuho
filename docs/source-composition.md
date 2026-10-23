@@ -250,3 +250,24 @@ rights policy. Any release-manifest staleness is reported separately.
 
 For local non-Haskell integration, see the [machine interface](machine-interface.md)
 and its standard-library Python consumer. Frozen replay remains an evaluation.
+
+## Failure-safe export publication (Linux)
+
+`compose run` and `compose replay` compute and validate all eight export byte
+strings before publication. They write them into a private temporary directory
+in the destination's existing parent, then publish the complete directory with
+Linux `renameat2(RENAME_NOREPLACE)`. Existing files, directories and links,
+including racing destinations, are never replaced. Failed writes or publication
+remove only this invocation's temporary directory; the requested destination
+remains absent (or retains the unrelated existing/racing entry). Temporary names
+start with `.yuho-compose-` and are not committed exports.
+
+The output must name a new directory beneath real, non-symlink ancestors, without
+`..` traversal; its parent must already exist. This contract assumes ancestors
+are not concurrently renamed/replaced by another actor. It provides atomic
+visibility and no replacement on supported Linux filesystems, rather than crash
+or power-loss durability. Unsupported platforms/filesystems refuse publication
+without a non-atomic fallback. Process termination can leave private staging
+files, but cannot expose a partially written requested destination. Success is
+reported only after publication; a broken response pipe can leave a complete
+published directory without a delivered acknowledgement.

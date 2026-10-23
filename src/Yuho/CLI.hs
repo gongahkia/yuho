@@ -19,7 +19,7 @@ import qualified Yuho.Corpus as Corpus
 import Yuho.CoreYuho.Normalize (normalizeCase, normalizeChecked, normalizePresumption)
 import Yuho.Diagram.Build
   ( caseGraph, presumptionGraph, programGraph, typedFiniteGraph, typedFiniteCaseGraph )
-import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSemanticGraphXml, encodeSvg)
+import Yuho.Diagram.Encode (encodeNativeSemanticGraph, encodeNativeSemanticGraphXml, encodeNativeSvg)
 import Yuho.Diagram.Types (DiagramFormat(..), DiagramView(..), SemanticGraph)
 import Yuho.Protocol.Json (J(..), decodeJson, encodeJson, lookupField, textValue)
 import Yuho.Release
@@ -369,9 +369,9 @@ emitDiagram destination format graph = case destination of
     publish path bytes
   where
     encoded = case format of
-      SvgFormat -> Right (encodeSvg graph)
-      JsonFormat -> Right (encodeSemanticGraph graph)
-      XmlFormat -> encodeSemanticGraphXml graph
+      SvgFormat -> Right (encodeNativeSvg graph)
+      JsonFormat -> Right (encodeNativeSemanticGraph graph)
+      XmlFormat -> encodeNativeSemanticGraphXml graph
     origin = Token EndToken "" 1 1
     diagramIssue message = Diagnostic "SFD001" "<diagram>" origin message Nothing
 

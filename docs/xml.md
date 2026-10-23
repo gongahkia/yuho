@@ -6,8 +6,13 @@
 yuho diagram model.yh --scenario scenario.yh --view rule --format xml --output rule.xml
 ```
 
-The XML declaration is UTF-8. Its root is `yuho:semantic-graph` in the `urn:yuho:semantic-graph:v0.1` namespace. The root records the graph ID, view and `yuho.semantic-graph/v0.1` format; `yuho:nodes` contains `yuho:node` elements and `yuho:edges` contains `yuho:edge` elements. Node IDs, kinds, labels, citations, statuses and module boundaries, as well as edge endpoints, kinds and labels, use the same values as the JSON semantic graph.
+The XML declaration is UTF-8. Its root is `yuho:semantic-graph` in the `urn:yuho:semantic-graph:v0.2` namespace. The root records the graph ID, view and `yuho.semantic-graph/v0.2` format; `yuho:nodes` contains `yuho:node` elements and `yuho:edges` contains `yuho:edge` elements. Node IDs, kinds, labels, citations, statuses and module boundaries, as well as edge endpoints, kinds and labels, use the same values as the JSON semantic graph.
 
 This output is an XML representation of Yuho's native semantic graph, not an XML encoding of KernelInput. It is not Akoma Ntoso, an authoritative statute, a source-text preservation format, or a new kernel protocol. JSON remains the canonical graph output. XML generation rejects XML 1.0 control characters rather than silently changing graph values.
 
 The normal `diagram --output` safety rules apply: the parent directory must exist, an existing target is refused, and successful output publication is atomic.
+
+Version 0.2 adds optional node attributes `evaluation`, `technical-value`,
+`branch-reason` and `skip-reason`, matching JSON `observation` fields. A skipped
+node has no fabricated technical value. Existing node/edge identifiers and
+source citations remain structured identities, not layout coordinates.

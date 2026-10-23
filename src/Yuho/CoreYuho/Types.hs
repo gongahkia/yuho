@@ -6,6 +6,7 @@ module Yuho.CoreYuho.Types
   , CoreTemporalSelection(..), CorePresumption(..), CoreAllegation(..)
   , CoreScopeKey(..), CoreInterval(..), CoreSharedFact(..), CoreProgram(..)
   , CoreCase(..), CorePresumptionProgram(..)
+  , CoreObservation(..), CoreGuard(..)
   ) where
 
 import Data.Map.Strict (Map)
@@ -130,6 +131,8 @@ data CoreAllegation = CoreAllegation
   , coreAllegationTarget :: Text
   , coreAllegationRole :: Text
   , coreAllegationStatus :: Text
+  , coreAllegationObservation :: CoreObservation
+  , coreAllegationGuards :: [CoreGuard]
   } deriving (Eq, Show)
 
 data CoreSharedFact = CoreSharedFact
@@ -156,6 +159,8 @@ data CoreProgram = CoreProgram
   , coreProgramModules :: [CoreModule]
   , coreProgramTemporal :: Maybe CoreTemporalSelection
   , coreProgramLimitations :: [Text]
+  , coreProgramObservations :: Map Text CoreObservation
+  , coreProgramGuards :: [CoreGuard]
   } deriving (Eq, Show)
 
 data CoreCase = CoreCase
@@ -173,4 +178,28 @@ data CorePresumptionProgram = CorePresumptionProgram
   , corePresumptionContext :: Text
   , corePresumptions :: [CorePresumption]
   , corePresumptionFinalStatus :: Text
+  , corePresumptionTargets :: [(Text,Text,Text)]
+  , corePresumptionConditions :: Map Text Text
+  , corePresumptionObservations :: Map Text CoreObservation
+  , corePresumptionGuards :: [CoreGuard]
+  , corePresumptionRootRule :: Maybe Text
+  } deriving (Eq, Show)
+
+-- Observations copied from the execution report, never locally recomputed truth.
+-- Missing values on a skipped occurrence are distinct from evaluated unresolved.
+data CoreObservation = CoreObservation
+  { coreObservationEvaluation :: Text
+  , coreObservationValue :: Maybe Text
+  , coreObservationBranchReason :: Maybe Text
+  , coreObservationSkipReason :: Maybe Text
+  } deriving (Eq, Show)
+
+data CoreGuard = CoreGuard
+  { coreGuardIdentity :: Text
+  , coreGuardId :: Text
+  , coreGuardRule :: Text
+  , coreGuardBranch :: Text
+  , coreGuardTarget :: Text
+  , coreGuardSource :: Maybe Text
+  , coreGuardObservation :: CoreObservation
   } deriving (Eq, Show)

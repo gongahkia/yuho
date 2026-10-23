@@ -94,12 +94,11 @@ This is development against the current checkout. The accepted distribution arch
 and manifest are not refreshed by these commands. Release-manifest failures must be
 reported separately from semantic tests; a passing workbench is not release readiness.
 
-Visual inspection of this candidate found limitations in the existing native renderer:
-the case summary places some rightmost cards beyond its fixed SVG viewport, long
-typed-expression labels overlap adjacent cards, and scalar cards show `known` rather
-than the numeric value. The presumption summary shows route/final status without
-separate direct/effective target cards. Read the structured native result and compiled
-input for those distinctions; composition's complete projections provide richer
-inspection. Native exception diagrams also repeat input/trace cards and have crossing
-connections. These are reported presentation limitations, not repaired by this control
-interface or treated as proof of human readability.
+Native diagrams now use the [v0.2 observation contract](diagrams.md): skipped
+guards are explicit, numeric operands remain visible, and presumption traces
+separate direct support, global derivations, effective values and downstream
+execution. Cards wrap all text and size from their content; routing lanes and
+canvas bounds follow the actual graph. Dense graphs can still need zooming.
+These remain simplified native views, while composition exports retain complete
+projections and bindings. Historical v0.1 examples in docs/artifacts are retained
+as recorded evidence rather than silently regenerated.

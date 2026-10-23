@@ -67,7 +67,8 @@ runInspectionChecks root = do
   check "structural Core contains no computation" (Map.null (coreProgramRuleStatuses structural)
     && Map.null (coreProgramBranchReasons structural))
   check "structural normalization preserves existing Core"
-    (evaluated { coreProgramRuleStatuses = Map.empty, coreProgramBranchReasons = Map.empty } == structural)
+    (evaluated { coreProgramRuleStatuses = Map.empty, coreProgramBranchReasons = Map.empty
+      , coreProgramObservations = Map.empty, coreProgramGuards = [] } == structural)
   parsedOnly <- inspectSource "parsed" typedPath typed Nothing
   check "parsing does not demand scenario/evaluate" (either (const False) (const True) parsedOnly)
   noNormalized <- inspectSource "normalized" typedPath typed (Just (typedScenarioPath,typedScenario))

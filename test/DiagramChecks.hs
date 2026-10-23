@@ -9,7 +9,7 @@ import System.Exit (exitFailure)
 import System.FilePath ((</>))
 import Yuho.CoreYuho.Normalize (normalizeCase, normalizeChecked, normalizePresumption)
 import Yuho.Diagram.Build (caseGraph, presumptionGraph, programGraph)
-import Yuho.Diagram.Encode (encodeSemanticGraph, encodeSemanticGraphXml, encodeSvg)
+import Yuho.Diagram.Encode (encodeNativeSemanticGraph, encodeNativeSemanticGraphXml, encodeNativeSvg)
 import Yuho.Diagram.Types
   ( DiagramView(..), GraphEdge(..), GraphNode(..), SemanticGraph(..), semanticGraphNodes )
 import Yuho.Protocol.Json (decodeJson)
@@ -39,18 +39,18 @@ programChecks root = do
     (checkParsed modelPath (authoredModel authored) (Just (scenarioPath,scenario)))
   let core = normalizeChecked authored checked
       graph = programGraph TraceView core
-      json = encodeSemanticGraph graph
+      json = encodeNativeSemanticGraph graph
   xml <- either (const (failed "semantic graph XML encoding")) pure
-    (encodeSemanticGraphXml graph)
+    (encodeNativeSemanticGraphXml graph)
   let
-      svg = encodeSvg graph
+      svg = encodeNativeSvg graph
   check "semantic graph JSON decodes" (either (const False) (const True) (decodeJson json))
-  check "JSON generation deterministic" (json == encodeSemanticGraph graph)
-  check "XML generation deterministic" (Right xml == encodeSemanticGraphXml graph)
+  check "JSON generation deterministic" (json == encodeNativeSemanticGraph graph)
+  check "XML generation deterministic" (Right xml == encodeNativeSemanticGraphXml graph)
   check "XML is a standalone semantic graph"
     ("<?xml" `BS.isPrefixOf` xml && "<yuho:semantic-graph " `BS.isInfixOf` xml
       && "<yuho:nodes>" `BS.isInfixOf` xml && "<yuho:edges>" `BS.isInfixOf` xml)
-  check "SVG generation deterministic" (svg == encodeSvg graph)
+  check "SVG generation deterministic" (svg == encodeNativeSvg graph)
   check "SVG is standalone XML-shaped output"
     ("<?xml" `BS.isPrefixOf` svg && "<svg xmlns=" `BS.isInfixOf` svg
       && "marker-end:url(#arrow)" `BS.isInfixOf` svg)
@@ -72,7 +72,7 @@ caseChecks root = do
   authored <- loadAuthoredModel modelPath modelSource >>= right "case model load"
   checked <- either (const (failed "case check")) pure
     (checkAnalysisCase path declaration modelPath (authoredModel authored))
-  let json = encodeSemanticGraph (caseGraph CaseView (normalizeCase authored checked))
+  let json = encodeNativeSemanticGraph (caseGraph CaseView (normalizeCase authored checked))
   check "case graph has allegations and shared facts"
     ("\"kind\":\"allegation\"" `BS.isInfixOf` json
       && "\"kind\":\"shared-fact\"" `BS.isInfixOf` json
@@ -87,7 +87,7 @@ caseChecks root = do
   traceAuthored <- loadAuthoredModel traceModelPath traceModelSource >>= right "trace model load"
   traceChecked <- either (const (failed "trace case check")) pure
     (checkAnalysisCase tracePath traceDeclaration traceModelPath (authoredModel traceAuthored))
-  let trace = encodeSemanticGraph
+  let trace = encodeNativeSemanticGraph
         (caseGraph TraceView (normalizeCase traceAuthored traceChecked))
   check "execution trace contains satisfied, defeated and unresolved nodes"
     (all (`BS.isInfixOf` trace) ["\"satisfied\"","\"defeated\"","\"unresolved\""])
@@ -97,7 +97,7 @@ presumptionChecks root = do
   let path = root </> "examples/synthetic/presumption_active.yh"
   source <- BS.readFile path
   program <- loadPresumptionProgram path source >>= right "presumption load"
-  let json = encodeSemanticGraph (presumptionGraph (normalizePresumption program))
+  let json = encodeNativeSemanticGraph (presumptionGraph (normalizePresumption program))
   check "presumption graph retains active derivation"
     ("\"kind\":\"presumption\"" `BS.isInfixOf` json
       && "\"status\":\"active\"" `BS.isInfixOf` json)
@@ -109,13 +109,13 @@ xmlChecks = do
           (Just "satisfied") (Just "scope")]
         [GraphEdge "n:one" "n:two" "requires" "then &"] "notice & <"
   xml <- either (const (failed "small semantic graph XML encoding")) pure
-    (encodeSemanticGraphXml graph)
+    (encodeNativeSemanticGraphXml graph)
   check "XML graph retains and escapes semantic fields" (all (`BS.isInfixOf` xml)
     ["graph-id=\"graph&amp;one\"","view=\"rule\""
     ,"<yuho:node id=\"n:one\" kind=\"input\" label=\"A&lt;&amp;&quot;\" citation=\"source&apos;one\" status=\"satisfied\" boundary=\"scope\"/>"
     ,"<yuho:edge from=\"n:one\" to=\"n:two\" kind=\"requires\" label=\"then &amp;\"/>"
     ,"<yuho:notice>notice &amp; &lt;</yuho:notice>"])
-  check "XML graph rejects XML 1.0 control characters" $ case encodeSemanticGraphXml
+  check "XML graph rejects XML 1.0 control characters" $ case encodeNativeSemanticGraphXml
     (SemanticGraph "bad\x1f" RuleView [] [] "notice") of
       Left _ -> True
       Right _ -> False

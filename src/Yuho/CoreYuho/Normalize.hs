@@ -11,7 +11,8 @@ import qualified Data.Text as Text
 import Yuho.CoreYuho.Types
 import Yuho.Exception.Types (Truth(..))
 import Yuho.Kernel.Run (runLine)
-import Yuho.Protocol.Json (J(..), decodeJson, lookupField, textValue)
+import Yuho.Protocol.Json (J(..), decodeJson, encodeJson, lookupField, textValue)
+import Yuho.Protocol.Decode (sha256Text)
 import Yuho.Surface.AST
 import Yuho.Surface.ActorExceptions (actContextToken, attachmentTargetToken)
 import Yuho.Surface.Case (CheckedCase(..), CheckedIssue(..))
@@ -23,11 +24,15 @@ import Yuho.Surface.Token (tokenText)
 
 normalizeChecked :: AuthoredModel -> Checked -> CoreProgram
 normalizeChecked authored checked = (normalizeCheckedStructure authored checked)
-  { coreProgramRuleStatuses = fst evaluated, coreProgramBranchReasons = snd evaluated }
+  { coreProgramRuleStatuses = fst evaluated, coreProgramBranchReasons = snd evaluated
+  , coreProgramObservations = observations, coreProgramGuards = guards }
   where
-    evaluated = case lowerChecked checked of
-      Right request -> resultMaps (runLine request)
-      Left _ -> (Map.empty,Map.empty)
+    (evaluated,observations,guards) = case lowerChecked checked of
+      Right request ->
+        let response = runLine request
+            (seen,guardRows) = executionObservations request response
+        in (resultMaps response,seen,guardRows)
+      Left _ -> ((Map.empty,Map.empty),Map.empty,[])
 
 -- | The existing diagram normalization, before adding execution observations.
 -- Empty observation maps here mean not evaluated, not a negative result.
@@ -48,6 +53,8 @@ normalizeCheckedStructure authored (Checked model scenario assignments first sec
   , coreProgramModules = modules
   , coreProgramTemporal = temporal
   , coreProgramLimitations = map tokenText (modelLimitations model)
+  , coreProgramObservations = Map.empty
+  , coreProgramGuards = []
   }
   where
     assignmentMap = Map.fromList [(tokenText item, proofTruth proof) | (item,proof) <- assignments]
@@ -76,10 +83,14 @@ normalizeCase authored (CheckedCase _ caseId _ facts issues) = CoreCase
   }
   where
     emptyProgram = CoreProgram "invalid-empty-case" "" [] [] [] [] [] [] []
-      Map.empty Map.empty Map.empty [] Nothing []
+      Map.empty Map.empty Map.empty [] Nothing [] Map.empty []
     allegation (CheckedIssue (CaseAllegation item kind target role _ _) _ request) =
       CoreAllegation (tokenText item) (caseKind kind) (tokenText target)
-        (tokenText role) (allegationStatus (runLine request))
+        (tokenText role) (allegationStatus response)
+        (CoreObservation "evaluated" (Just (resultStatus response))
+          (if allegationStatus response == "defeated" then Just "defeated" else Nothing) Nothing)
+        (snd (executionObservations request response))
+      where response = runLine request
     orderedActors resolved rows = distinctActors
       ([CoreActor (factActor fact) "case-fact-subject"
        | ResolvedCaseFact fact _ <- resolved, factActor fact /= ""] ++
@@ -96,9 +107,26 @@ normalizePresumption program = CorePresumptionProgram
       (Map.findWithDefault "not_evaluated" item states)
       | (item,target,source,trigger,rebuttal) <- presumptionRegistrations program]
   , corePresumptionFinalStatus = resultStatus (presumptionResult program)
+  , corePresumptionTargets = mapMaybe targetValues derivations
+  , corePresumptionConditions = Map.fromList (concatMap conditions derivations)
+  , corePresumptionObservations = fst observed
+  , corePresumptionGuards = snd observed
+  , corePresumptionRootRule = either (const Nothing) (string "root_rule")
+      (decodeJson (presumptionResult program))
   }
   where
     states = Map.fromList (presumptionStates (presumptionResult program))
+    observed = executionObservations (presumptionRequest program) (presumptionResult program)
+    derivations = either (const []) (array "presumption_derivations")
+      (decodeJson (presumptionResult program))
+    targetValues row = (,,) <$> string "target_leaf_id" row
+      <*> string "target_direct_satisfaction" row <*> string "target_effective_satisfaction" row
+    conditions row = case string "presumption_id" row of
+      Nothing -> []
+      Just registrationId -> concat
+        [[(leaf,value) | Just value <- [string field row]]
+        | (name,_,_,trigger,rebuttal) <- presumptionRegistrations program, name == registrationId
+        , (leaf,field) <- [(trigger,"trigger_value"),(rebuttal,"rebuttal_value")]]
 
 proofTruth :: Proof -> Truth
 proofTruth Proved = TrueValue
@@ -344,6 +372,61 @@ presumptionStates bytes = case decodeJson bytes of
   where
     row value = (,) <$> (lookupField "presumption_id" value >>= textValue)
       <*> (lookupField "state" value >>= textValue)
+
+-- The registry supplies authored occurrences; only returned report rows supply
+-- evaluated values. A target rule and each of its callers' guard occurrences
+-- remain separate, even when a rule is shared or globally resolved elsewhere.
+executionObservations :: BS.ByteString -> BS.ByteString
+  -> (Map Text CoreObservation,[CoreGuard])
+executionObservations requestBytes resultBytes = case
+    (decodeJson requestBytes,decodeJson resultBytes) of
+  (Right request,Right response)
+    | string "status" response /= Just "rejected" ->
+      let rules = array "rules" response
+          registry = array "registry" request
+          reported = Map.fromList
+            [(objectId,CoreObservation "evaluated" (string "status" row)
+              (branchReasons (array "branches" row)) Nothing)
+            | row <- rules, Just objectId <- [string "id" row]]
+          missing = Map.fromList
+            [(objectId,CoreObservation "not_evaluated" Nothing Nothing
+              (Just "no rule observation returned; see incoming guard occurrences"))
+            | row <- registry, Just objectId <- [string "id" row]]
+          guards = [guardRow parent declaration
+            | row <- registry, Just parent <- [string "id" row]
+            , declaration <- array "exceptions" row]
+          guardRow parent declaration =
+            let objectId = maybe "" id (string "id" declaration)
+                branch = maybe "" id (string "branch_id" declaration)
+                target = maybe "" id (lookupField "guard" declaration >>= string "target")
+                branches = concat [array "branches" row | row <- rules, string "id" row == Just parent]
+                selected = [row | row <- branches, string "id" row == Just branch]
+                observations = concatMap (array "exceptions") selected
+                actual = [value | row <- observations, string "id" row == Just objectId
+                  , Just value <- [string "guard_status" row]]
+                reason = branchReasons selected
+                observation = case actual of
+                  [value] -> CoreObservation "evaluated" (Just value) reason Nothing
+                  _ -> CoreObservation "not_evaluated" Nothing reason
+                    (Just ("exception guard skipped because main branch: "
+                      <> maybe "parent rule not evaluated" id reason))
+            in CoreGuard (sha256Text (encodeJson (JArr (map JStr [parent,branch,objectId]))))
+              objectId parent branch target (string "source_id" declaration) observation
+      in (Map.union reported missing,guards)
+  _ -> (Map.empty,[])
+
+array :: Text -> J -> [J]
+array name value = case lookupField name value of
+  Just (JArr rows) -> rows
+  _ -> []
+
+string :: Text -> J -> Maybe Text
+string name value = lookupField name value >>= textValue
+
+branchReasons :: [J] -> Maybe Text
+branchReasons rows = case [reason | row <- rows, Just reason <- [string "reason" row]] of
+  [] -> Nothing
+  reasons -> Just (Text.intercalate "; " reasons)
 
 resultMaps :: BS.ByteString -> (Map Text Text,Map Text Text)
 resultMaps bytes = case decodeJson bytes of

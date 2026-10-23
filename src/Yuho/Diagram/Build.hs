@@ -6,7 +6,6 @@ module Yuho.Diagram.Build
 import qualified Data.Map.Strict as Map
 import Data.Text (Text)
 import qualified Data.Text as Text
-import Yuho.CoreYuho.Semantics (evaluateRequirement)
 import Yuho.CoreYuho.Types
 import Yuho.CoreYuho.TypedFinite
 import Yuho.Diagram.Types
@@ -33,25 +32,31 @@ typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) v
     predicateNodes = [GraphNode (nodeId "predicate" (predicateName item)) "predicate"
       (predicateName item <> "(" <> Text.intercalate ", " (predicateArguments item) <> ")")
       Nothing Nothing Nothing | item <- finitePredicates program]
-    scalarNodes = [GraphNode (nodeId "scalar" (scalarName item)) "scalar"
-      (scalarName item <> " : " <> scalarTypeLabel (scalarType item)) Nothing
+    scalarNodes = [withObservation (CoreObservation "supplied" Nothing Nothing Nothing) $
+      GraphNode (nodeId "scalar" (scalarName item)) "scalar"
+      (scalarName item <> " : " <> scalarTypeLabel (scalarType item)
+        <> maybe "" (("\nsupplied value: " <>) . scalarValueLabel)
+             (Map.lookup (scalarName item) (finiteValues program))) Nothing
       (scalarStatus <$> Map.lookup (scalarName item) (finiteValues program)) Nothing
       | item <- finiteScalars program]
     factNodes = [GraphNode (nodeId "ground-fact" key) "ground-fact"
       key Nothing (Just (truthName (groundStatus item))) Nothing
       | item <- finiteFacts program,
         let key = groundKey (groundPredicate item) (groundArguments item)]
-    requirementNodes = [GraphNode (nodeId "finite-requirement" (expressionLabel item))
+    requirementNodes = [withObservation (computed (truthName (expressionStatus item))) $
+      GraphNode (nodeId "finite-requirement" (expressionLabel item))
       (expressionKind expression) (expressionLabel item <> "\n" <> expressionDetail item)
       Nothing (Just (truthName (expressionStatus item))) Nothing
       | item <- finiteResultExpressions result,
         Just expression <- [lookup (expressionLabel item) (finiteRequirements program)]]
-    ruleNodes = [GraphNode (nodeId "finite-rule" (observedRule item)) "finite-rule"
+    ruleNodes = [withObservation (computed (truthName (observedStatus item))) $
+      GraphNode (nodeId "finite-rule" (observedRule item)) "finite-rule"
       (observedRule item <> "\n" <> polarityLabel (observedPolarity item))
       (ruleCitation =<< findRule (observedRule item))
       (Just (truthName (observedStatus item))) Nothing
       | item <- finiteResultRules result]
-    propositionNodes = [GraphNode (nodeId "proposition" (observedPropositionId item))
+    propositionNodes = [withObservation (computed (truthName (propositionStatus item))) $
+      GraphNode (nodeId "proposition" (observedPropositionId item))
       (if propositionState item == "conflict" then "conflict" else "proposition")
       (observedPropositionId item <> "\n" <> propositionState item) Nothing
       (Just (truthName (propositionStatus item))) Nothing
@@ -103,7 +108,10 @@ typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) v
     routeEdges = [GraphEdge (nodeId "responsibility-route" (routeName item))
       (nodeId "proposition" (routeTarget item)) "responsibility-target"
       "explicit authored route" | item <- finiteRoutes program]
-    edges = moduleEdges ++ entityEdges ++ predicateEdges ++ factEdges ++ ruleEdges
+    operandEdges = [GraphEdge (nodeId "scalar" operand)
+        (nodeId "finite-requirement" identifier) "operand" "supplied scalar operand"
+      | (identifier,expression) <- finiteRequirements program, operand <- scalarOperands expression]
+    edges = moduleEdges ++ entityEdges ++ predicateEdges ++ factEdges ++ ruleEdges ++ operandEdges
       ++ priorityEdges ++ normEdges ++ routeEdges ++ rootEdges
     findRule identifier = case filter ((== identifier) . ruleName) (finiteRules program) of
       item:_ -> Just item
@@ -124,7 +132,7 @@ typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) v
 typedFiniteCaseGraph :: DiagramView -> Text -> [(Text,TypedFiniteResult)]
   -> [(Text,GroundFact,[Text])] -> SemanticGraph
 typedFiniteCaseGraph view caseId results shared = SemanticGraph caseId view
-  (distinctNodes nodes) (distinctEdges edges) notice
+  nodes (distinctEdges edges) notice
   where
     root = GraphNode (nodeId "case" caseId) "case"
       (caseId <> "\nindependent typed allegations") Nothing Nothing Nothing
@@ -133,20 +141,35 @@ typedFiniteCaseGraph view caseId results shared = SemanticGraph caseId view
     sharedNodes = [GraphNode (nodeId "shared-ground-fact" identifier) "shared-fact"
       (identifier <> "\n" <> groundKey (groundPredicate fact) (groundArguments fact))
       Nothing (Just (truthName (groundStatus fact))) Nothing | (identifier,fact,_) <- shared]
-    propositionNodes = [GraphNode (nodeId "case-proposition" (allegation <> "--" <> observedPropositionId row))
+    -- Checked cases have unique allegations and each backend result has unique
+    -- proposition observations. Retain every occurrence, without deduplicating
+    -- away evidence of an identity error. Nodes and edges share the same keys.
+    scopedPropositions =
+      [(typedCasePropositionId allegation (observedPropositionId row),allegation,row)
+      | (allegation,result) <- results, row <- finiteResultPropositions result]
+    propositionNodes = [GraphNode identifier
       (if propositionState row == "conflict" then "conflict" else "proposition")
       (observedPropositionId row <> "\n" <> propositionState row) Nothing
       (Just (truthName (propositionStatus row))) (Just allegation)
-      | (allegation,result) <- results, row <- finiteResultPropositions result]
+      | (identifier,allegation,row) <- scopedPropositions]
     nodes = root : allegationNodes ++ sharedNodes ++ propositionNodes
     edges = [GraphEdge (graphNodeId root) (nodeId "allegation" identifier)
         "contains" "independent allegation" | (identifier,_) <- results]
       ++ [GraphEdge (nodeId "shared-ground-fact" sharedId) (nodeId "allegation" allegation)
           "fact-binding" "explicit shared classification"
         | (sharedId,_,destinations) <- shared, allegation <- destinations]
-      ++ [GraphEdge (nodeId "case-proposition" (allegation <> "--" <> observedPropositionId row))
+      ++ [GraphEdge identifier
           (nodeId "allegation" allegation) "technical-result" "no aggregate status"
-        | (allegation,result) <- results, row <- finiteResultPropositions result]
+        | (identifier,allegation,_) <- scopedPropositions]
+
+-- Canonical pair of Unicode scalar-count-prefixed Text values. Decode each
+-- decimal length up to ':', then consume exactly that many characters; neither
+-- embedded delimiters nor Unicode can change the boundary between components.
+-- The fixed node kind separates this namespace from other graph identities.
+typedCasePropositionId :: Text -> Text -> Text
+typedCasePropositionId allegation proposition = nodeId "case-proposition"
+  (component allegation <> component proposition)
+  where component value = Text.pack (show (Text.length value)) <> ":" <> value
 
 scalarTypeLabel :: ScalarType -> Text
 scalarTypeLabel IntegerType = "integer"
@@ -157,6 +180,25 @@ scalarTypeLabel (MoneyType currency) = "money " <> currency
 scalarStatus :: ScalarValue -> Text
 scalarStatus (ScalarUnresolved _ _) = "unresolved"
 scalarStatus _ = "known"
+
+scalarValueLabel :: ScalarValue -> Text
+scalarValueLabel value = case value of
+  IntegerValue number -> Text.pack (show number)
+  DateValue day -> Text.pack (show day)
+  EnumValue domain member -> domain <> ":" <> member
+  MoneyValue currency minor -> currency <> " " <> Text.pack (show minor) <> " minor units"
+  ScalarUnresolved reason _ -> "unresolved (" <> reason <> ")"
+
+scalarOperands :: FiniteExpr -> [Text]
+scalarOperands expression = case expression of
+  ComparisonExpr _ left right upper -> left:right:maybe [] pure upper
+  AllExpr children -> concatMap scalarOperands children
+  AnyExpr children -> concatMap scalarOperands children
+  NotExpr child -> scalarOperands child
+  ForallExpr _ _ child -> scalarOperands child
+  ExistsExpr _ _ child -> scalarOperands child
+  CardinalityExpr _ _ children -> concatMap scalarOperands children
+  _ -> []
 
 expressionKind :: FiniteExpr -> Text
 expressionKind expression = case expression of
@@ -199,11 +241,11 @@ programGraph view program = SemanticGraph (coreProgramId program) view nodes edg
       ModulesView -> moduleNodes ++ exportNodes ++ [programNode] ++ temporalNodes
       _ -> [programNode] ++ moduleNodes ++ temporalNodes ++ definitionNodes
         ++ ruleNodes ++ elementNodes ++ requirementNodes ++ attachmentNodes
-        ++ penaltyNodes ++ actorNodes ++ relationNodes
+        ++ penaltyNodes ++ actorNodes ++ relationNodes ++ guardNodes
     edges = distinctEdges $ case view of
       ModulesView -> moduleEdges ++ exportEdges ++ temporalEdges
       _ -> moduleEdges ++ temporalEdges ++ definitionEdges ++ ruleEdges
-        ++ requirementEdges ++ attachmentEdges ++ penaltyEdges ++ relationEdges
+        ++ requirementEdges ++ attachmentEdges ++ penaltyEdges ++ relationEdges ++ guardEdges
     programNode = GraphNode (nodeId "program" (coreProgramId program)) "program"
       (coreProgramId program) Nothing Nothing Nothing
     moduleNodes = [GraphNode (nodeId "module" (coreModuleAlias item)) "module"
@@ -242,7 +284,8 @@ programGraph view program = SemanticGraph (coreProgramId program) view nodes edg
           (nodeId "definition" (coreDefinitionId item)) "defines" "requirement"
         | requirement <- coreDefinitionRequirements item]
       | item <- coreProgramDefinitions program]
-    ruleNodes = [GraphNode (nodeId "rule" (coreRuleId item))
+    ruleNodes = [withOptionalObservation (Map.lookup (coreRuleTechnicalId item) (coreProgramObservations program)) $
+      GraphNode (nodeId "rule" (coreRuleId item))
       (ruleKindText (coreRuleKind item)) (coreRuleId item)
       (sectionCitation (coreRuleSections item)) (ruleStatus item) Nothing
       | item <- coreProgramRules program]
@@ -254,7 +297,8 @@ programGraph view program = SemanticGraph (coreProgramId program) view nodes edg
           (nodeId "rule" (coreRuleId item)) "requires" "root requirement"
         | requirement <- coreRuleRequirements item]
       | item <- coreProgramRules program]
-    elementNodes = [GraphNode (nodeId "element" (coreElementId item)) "input"
+    elementNodes = [withOptionalObservation (supplied <$> Map.lookup (coreElementId item)
+        (coreProgramAssignments program)) $ GraphNode (nodeId "element" (coreElementId item)) "input"
       (coreElementId item <> "\n" <> coreElementCategory item)
       (nonEmpty (coreElementCitation item)) (assignmentStatus (coreElementId item)) Nothing
       | rule <- coreProgramRules program, item <- coreRuleElements rule]
@@ -289,15 +333,19 @@ programGraph view program = SemanticGraph (coreProgramId program) view nodes edg
       | item <- coreProgramRelations program]
     assignmentStatus identifier = truthText <$> Map.lookup identifier
       (coreProgramAssignments program)
-    ruleStatus item = case Map.lookup (coreRuleTechnicalId item)
-        (coreProgramBranchReasons program) of
-      Just reason -> Just reason
-      Nothing -> case Map.lookup (coreRuleTechnicalId item) (coreProgramRuleStatuses program) of
-          Just status -> Just status
-          Nothing -> case coreRuleRequirements item of
-            [root] -> either (const Nothing) (Just . truthText)
-              (evaluateRequirement (coreProgramAssignments program) root)
-            _ -> Nothing
+    ruleStatus item = Map.lookup (coreRuleTechnicalId item) (coreProgramObservations program)
+      >>= coreObservationValue
+    authoredId technical = case [coreRuleId rule | rule <- coreProgramRules program,
+        coreRuleTechnicalId rule == technical] of
+      [identifier] -> Just identifier
+      _ -> Nothing
+    guardNodes = map guardNode (coreProgramGuards program)
+    guardEdges = concat
+      [[GraphEdge (nodeId "rule" target) (guardNodeId guard) "guard-target" "target computation"
+        | Just target <- [authoredId (coreGuardTarget guard)]]
+       ++ [GraphEdge (guardNodeId guard) (nodeId "rule" parent) "exception-guard" "defeats if satisfied"
+          | Just parent <- [authoredId (coreGuardRule guard)]]
+      | guard <- coreProgramGuards program]
 
 caseGraph :: DiagramView -> CoreCase -> SemanticGraph
 caseGraph view item = SemanticGraph (coreCaseId item) view nodes edges notice
@@ -307,7 +355,8 @@ caseGraph view item = SemanticGraph (coreCaseId item) view nodes edges notice
     actors = [GraphNode (nodeId "actor" (coreActorId actor)) "actor"
       (coreActorId actor <> "\n" <> coreActorRole actor) Nothing Nothing Nothing
       | actor <- coreCaseActors item]
-    allegations = [GraphNode (nodeId "allegation" (coreAllegationId allegation))
+    allegations = [withObservation (coreAllegationObservation allegation) $
+      GraphNode (nodeId "allegation" (coreAllegationId allegation))
       "allegation" (Text.intercalate "\n"
         [coreAllegationId allegation,ruleKindText (coreAllegationKind allegation)
           <> " " <> coreAllegationTarget allegation,
@@ -318,9 +367,14 @@ caseGraph view item = SemanticGraph (coreCaseId item) view nodes edges notice
       (Text.intercalate "\n" [coreSharedFactId fact,coreSharedFactKind fact,
         coreSharedFactSubject fact]) Nothing (Just (coreSharedFactStatus fact)) Nothing
       | fact <- coreCaseFacts item]
-    guardNodes = [GraphNode (nodeId "trace" (coreAllegationId allegation <> "--exception"))
-      "exception" "attached exception guard" Nothing (Just "satisfied") Nothing
-      | allegation <- coreCaseAllegations item, coreAllegationStatus allegation == "defeated"]
+    scopedGuards = [(allegation,guard) | allegation <- coreCaseAllegations item,
+      guard <- coreAllegationGuards allegation]
+    scopedGuardId allegation guard = nodeId "case-guard"
+      (coreAllegationId allegation <> "/" <> coreGuardIdentity guard)
+    guardNodes = [(guardNode guard)
+      { graphNodeId = scopedGuardId allegation guard
+      , graphNodeBoundary = Just ("allegation " <> coreAllegationId allegation) }
+      | (allegation,guard) <- scopedGuards]
     nodes = distinctNodes (caseNode : actors ++ facts ++ allegations ++ guardNodes)
     edges = distinctEdges $
       [GraphEdge (graphNodeId caseNode) (nodeId "allegation" (coreAllegationId allegation))
@@ -332,43 +386,66 @@ caseGraph view item = SemanticGraph (coreCaseId item) view nodes edges notice
       ++ [GraphEdge (nodeId "fact" (coreSharedFactId fact))
           (nodeId "allegation" allegation) "fact-binding" destination
         | fact <- coreCaseFacts item, (allegation,destination) <- coreSharedFactDestinations fact]
-      ++ [GraphEdge (nodeId "trace" (coreAllegationId allegation <> "--exception"))
-          (nodeId "allegation" (coreAllegationId allegation)) "defeats" "guard satisfied"
-        | allegation <- coreCaseAllegations item, coreAllegationStatus allegation == "defeated"]
+      ++ [GraphEdge (scopedGuardId allegation guard)
+          (nodeId "allegation" (coreAllegationId allegation)) "exception-guard" "defeats if satisfied"
+        | (allegation,guard) <- scopedGuards]
 
 presumptionGraph :: CorePresumptionProgram -> SemanticGraph
 presumptionGraph program = SemanticGraph (corePresumptionProgramId program) TraceView nodes edges notice
   where
-    root = GraphNode (nodeId "presumption-program" (corePresumptionProgramId program))
+    root = withObservation (computed (corePresumptionFinalStatus program)) $
+      GraphNode (nodeId "presumption-program" (corePresumptionProgramId program))
       "presumption-program" (Text.intercalate "\n"
         [corePresumptionProgramId program,
          "burden: " <> corePresumptionBurdenBearer program,
-         "standard: " <> corePresumptionStandard program]) Nothing
+         "standard: " <> corePresumptionStandard program,
+         "context: " <> corePresumptionContext program]) Nothing
       (Just (corePresumptionFinalStatus program)) Nothing
     rows = concatMap nodesFor (corePresumptions program)
-    nodes = distinctNodes (root : rows)
-    edges = distinctEdges (concatMap edgesFor (corePresumptions program))
+    targets = [withObservation (CoreObservation state (Just value) Nothing Nothing) $
+        GraphNode (nodeId kind target) kind (target <> "\n" <> label) Nothing (Just value)
+          (Just "global support; separate from downstream guard execution")
+      | (target,direct,effective) <- corePresumptionTargets program
+      , (kind,label,state,value) <- [("direct-input","direct supplied classification","supplied",direct)
+          ,("effective-input","effective technical value","evaluated",effective)]]
+    downstream = [withObservation observation $ GraphNode (nodeId "downstream-rule" identifier)
+        "rule" (identifier <> "\ndownstream rule") Nothing (coreObservationValue observation) Nothing
+      | (identifier,observation) <- Map.toAscList (corePresumptionObservations program)]
+    guards = corePresumptionGuards program
+    nodes = distinctNodes (root : rows ++ targets ++ downstream ++ map guardNode guards)
+    edges = distinctEdges (concatMap edgesFor (corePresumptions program)
+      ++ [GraphEdge (nodeId "direct-input" target) (nodeId "effective-input" target)
+            "direct-support" "direct support retained"
+          | (target,_,_) <- corePresumptionTargets program]
+      ++ [GraphEdge (nodeId "downstream-rule" (coreGuardTarget guard))
+            (guardNodeId guard) "guard-target" "target computation" | guard <- guards]
+      ++ [GraphEdge (guardNodeId guard) (nodeId "downstream-rule" (coreGuardRule guard))
+            "exception-guard" "defeats if satisfied" | guard <- guards]
+      ++ [GraphEdge (nodeId "downstream-rule" identifier) (graphNodeId root)
+            "technical-result" "root rule result" | Just identifier <- [corePresumptionRootRule program]])
     nodesFor item =
-      [GraphNode (nodeId "input" (corePresumptionTrigger item)) "input"
-        (corePresumptionTrigger item) Nothing Nothing Nothing,
-       GraphNode (nodeId "input" (corePresumptionRebuttal item)) "input"
-        (corePresumptionRebuttal item) Nothing Nothing Nothing,
+      [conditionNode (corePresumptionTrigger item),conditionNode (corePresumptionRebuttal item),
+       withObservation (computed (corePresumptionState item)) $
        GraphNode (nodeId "presumption" (corePresumptionId item)) "presumption"
         (Text.intercalate "\n" [corePresumptionId item,
           "target " <> corePresumptionTarget item]) (Just (corePresumptionSource item))
         (Just (corePresumptionState item)) Nothing]
+    conditionNode identifier = withOptionalObservation
+      (computed <$> Map.lookup identifier (corePresumptionConditions program)) $
+      GraphNode (nodeId "input" identifier) "input" identifier Nothing
+        (Map.lookup identifier (corePresumptionConditions program)) (Just "global presumption condition")
     edgesFor item =
       [GraphEdge (nodeId "input" (corePresumptionTrigger item))
         (nodeId "presumption" (corePresumptionId item)) "trigger" "trigger",
        GraphEdge (nodeId "input" (corePresumptionRebuttal item))
         (nodeId "presumption" (corePresumptionId item)) "rebuttal" "rebuttal",
        GraphEdge (nodeId "presumption" (corePresumptionId item))
-        (graphNodeId root) "derives" (corePresumptionState item)]
+        (nodeId "effective-input" (corePresumptionTarget item)) "derivation" (corePresumptionState item)]
 
 requirementGraph :: CoreRequirement -> ([GraphNode],[GraphEdge])
 requirementGraph requirement = case requirement of
   CoreInput identifier citation status ->
-    ([GraphNode (nodeId "requirement" identifier) "input" identifier
+    ([withOptionalObservation (supplied <$> status) $ GraphNode (nodeId "requirement" identifier) "input" identifier
       (nonEmpty citation) (truthText <$> status) Nothing],[])
   CoreAll identifier members -> group "all" identifier members
   CoreAny identifier members -> group "any" identifier members
@@ -381,6 +458,29 @@ requirementGraph requirement = case requirement of
       in (GraphNode parent kindValue identifier Nothing Nothing Nothing : nodes,
           [GraphEdge (nodeId "requirement" (requirementId member)) parent
             "member" kindValue | member <- members] ++ edges)
+
+withObservation :: CoreObservation -> GraphNode -> GraphNode
+withObservation value node = node { graphNodeObservation = Just value }
+
+withOptionalObservation :: Maybe CoreObservation -> GraphNode -> GraphNode
+withOptionalObservation value node = node { graphNodeObservation = value }
+
+computed :: Text -> CoreObservation
+computed value = CoreObservation "evaluated" (Just value) Nothing Nothing
+
+supplied :: CoreTruth -> CoreObservation
+supplied value = CoreObservation "supplied" (Just (truthText value)) Nothing Nothing
+
+guardNodeId :: CoreGuard -> Text
+guardNodeId = nodeId "guard" . coreGuardIdentity
+
+guardNode :: CoreGuard -> GraphNode
+guardNode guard = withObservation observation $
+  GraphNode (guardNodeId guard) "guard"
+    (coreGuardId guard <> "\nexception guard occurrence") (coreGuardSource guard)
+    (coreObservationValue observation)
+    (Just (coreGuardRule guard <> " / " <> coreGuardBranch guard))
+  where observation = coreGuardObservation guard
 
 requirementId :: CoreRequirement -> Text
 requirementId requirement = case requirement of

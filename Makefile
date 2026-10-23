@@ -19,6 +19,8 @@ test: build
 	$(PYTHON) test/compiler_inspection.py $(YUHO)
 	$(PYTHON) test/source_composition.py $(YUHO)
 	$(PYTHON) test/machine_workbench.py $(YUHO)
+	$(PYTHON) test/tranche04.py $(YUHO)
+	$(PYTHON) test/typed_case_identity.py $(YUHO)
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)
