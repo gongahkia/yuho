@@ -21,6 +21,8 @@ test: build
 	$(PYTHON) test/machine_workbench.py $(YUHO)
 	$(PYTHON) test/tranche04.py $(YUHO)
 	$(PYTHON) test/typed_case_identity.py $(YUHO)
+	$(PYTHON) test/checked_dependencies.py $(YUHO)
+	$(PYTHON) test/dependency_native.py $(YUHO)
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)
@@ -36,6 +38,7 @@ conformance: build
 	$(PYTHON) scripts/verify_core_yuho_conformance.py
 	$(PYTHON) scripts/verify_core_yuho_typed_finite_conformance.py
 	$(PYTHON) scripts/verify_core_yuho_v03_conformance.py
+	$(PYTHON) scripts/verify_dependency_conformance.py
 
 lean:
 	cd mechanisation && lake build

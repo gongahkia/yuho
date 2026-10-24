@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/dependency-report-v0.1-experimental.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "yuho.dependency-report/v0.1-experimental"
+    },
+    "execution": {
+      "type": "string"
+    },
+    "plan_snapshot": {
+      "type": "string"
+    },
+    "order": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "eligible_candidates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notice": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "format",
+    "execution",
+    "plan_snapshot",
+    "order",
+    "components",
+    "bindings",
+    "candidates",
+    "eligible_candidates",
+    "notice"
+  ]
+}

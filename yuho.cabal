@@ -49,6 +49,13 @@ extra-source-files:
     test/fixtures/typed-boundary/*.json
     test/fixtures/temporal-sdk/*.yh
     test/fixtures/temporal-view-format/*.json
+    test/dependency_native.py
+    test/checked_dependencies.py
+    test/DependencyModelChecks.hs
+    scripts/verify_dependency_conformance.py
+    test/fixtures/dependency/*/*.yh
+    test/fixtures/dependency/*/*.yhs
+    test/fixtures/dependency/*/*.json
     test/authoring_consumer.py
     test/authoring_quickstart.py
     test/hurt_consumer.py
@@ -112,8 +119,11 @@ common yuho-common
 library
   import: yuho-common
   hs-source-dirs: src
-  other-modules: Yuho.Machine, Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON, Yuho.Surface.InspectionData, Yuho.Surface.Computed.Parser, Yuho.Surface.Computed.CLI
+  other-modules: Yuho.Machine, Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON, Yuho.Surface.InspectionData, Yuho.Surface.Computed.Parser, Yuho.Surface.Computed.CLI, Yuho.Dependency.Check, Yuho.Dependency.Run, Yuho.Dependency.Codec, Yuho.Dependency.Projection, Yuho.Dependency.Publication, Yuho.Dependency.Source, Yuho.Surface.Dependency.Parser, Yuho.Surface.Dependency.CLI, Yuho.Surface.Publication
   exposed-modules:
+      Yuho.Dependency.Types
+      Yuho.Authoring.Dependency
+      Yuho.Surface.Dependency
       Yuho.Authoring
       Yuho.Authoring.ComputedInput
       Yuho.Authoring.ComputedInput.Projection
@@ -263,7 +273,7 @@ test-suite yuho-test
   import: yuho-common
   type: exitcode-stdio-1.0
   main-is: Main.hs
-  other-modules: SourceCompositionChecks, InspectionChecks, ComputedInputRepairChecks, ComputedInputChecks, ComputedExample, TemporalAuthoringChecks, TemporalExamples, PresumptionAuthoringChecks, PresumptionExamples, TypedBoundaryChecks, TypedAuthoringChecks, TypedExamples, IndependentLinkedRegressions, LinkedDefinitionChecks, LinkedExample, InteractionChecks, SourceAnchorChecks, SourceAnchors, EditingChecks, Editing, Acknowledgements, HurtChecks, Hurt, CaseViewChecks, ProjectionChecks, AuthoringChecks, Cheating, CaseApplication, ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
+  other-modules: DependencyChecks, SourceCompositionChecks, InspectionChecks, ComputedInputRepairChecks, ComputedInputChecks, ComputedExample, TemporalAuthoringChecks, TemporalExamples, PresumptionAuthoringChecks, PresumptionExamples, TypedBoundaryChecks, TypedAuthoringChecks, TypedExamples, IndependentLinkedRegressions, LinkedDefinitionChecks, LinkedExample, InteractionChecks, SourceAnchorChecks, SourceAnchors, EditingChecks, Editing, Acknowledgements, HurtChecks, Hurt, CaseViewChecks, ProjectionChecks, AuthoringChecks, Cheating, CaseApplication, ExceptionChecks, TypedFactsChecks, PenaltyChecks, TermsChecks, ProofChecks, PresumptionChecks, ModelBundleChecks, ChangeSetChecks, SurfaceChecks, LegalSurfaceChecks, MultiOffenceChecks, DefinitionSurfaceChecks, ParticipationSurfaceChecks, AttemptSurfaceChecks, ActorExceptionSurfaceChecks, AbetmentSurfaceChecks, CaseSurfaceChecks, SharedCaseFactChecks, LanguageExpansionChecks, ReleaseChecks, CoreYuhoChecks, DiagramChecks, ConformanceChecks, TypedFiniteChecks, CorpusChecks, ReleaseV1Checks
   hs-source-dirs: test examples/computed-input-consumer examples/temporal-consumer examples/presumption-consumer examples/authoring-consumer examples/linked-definitions-consumer examples/typed-authoring-consumer
   build-depends:
       yuho ==1.0.0.0
@@ -279,5 +289,5 @@ test-suite yuho-sdk-test
   type: exitcode-stdio-1.0
   main-is: SDKMain.hs
   hs-source-dirs: test examples/computed-input-consumer examples/temporal-consumer examples/presumption-consumer examples/authoring-consumer examples/linked-definitions-consumer examples/typed-authoring-consumer
-  other-modules: Acknowledgements, CaseApplication, CaseViewChecks, Cheating, ComputedExample, ComputedInputChecks, ComputedInputRepairChecks, Editing, EditingChecks, Hurt, IndependentLinkedRegressions, InteractionChecks, PresumptionAuthoringChecks, PresumptionExamples, ProjectionChecks, SourceAnchorChecks, SourceAnchors, TemporalAuthoringChecks, TemporalExamples, TypedAuthoringChecks, TypedBoundaryChecks, TypedExamples
+  other-modules: DependencyChecks, Acknowledgements, CaseApplication, CaseViewChecks, Cheating, ComputedExample, ComputedInputChecks, ComputedInputRepairChecks, Editing, EditingChecks, Hurt, IndependentLinkedRegressions, InteractionChecks, PresumptionAuthoringChecks, PresumptionExamples, ProjectionChecks, SourceAnchorChecks, SourceAnchors, TemporalAuthoringChecks, TemporalExamples, TypedAuthoringChecks, TypedBoundaryChecks, TypedExamples
   build-depends: yuho ==1.0.0.0

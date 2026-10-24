@@ -1,0 +1,24 @@
+// Independent Phase1B selected structural model: PC2020 ss511,512.
+// Legal judgments and primitive evidence classifications are supplied; no judicial result.
+typed-rules-model Phase1BC10 {
+ limit 2048;
+ entity-type person;
+ entity-type event;
+ entity-type offence;
+ entity actor:a as person;
+ entity actor:b as person;
+ entity event:i as event;
+ entity event:j as event;
+ entity offence:target as offence;
+ predicate intendsOffence(person,offence) kind relationship;
+ predicate substantialStep(person,event,offence) kind relationship;
+ predicate punishableImprisonment(offence) kind relationship;
+ predicate expressAttemptPunishment(offence) kind relationship;
+ proposition p:attempt;
+ proposition p:general-candidate;
+ requirement q:attempt = all(intendsOffence(actor:a,offence:target),substantialStep(actor:a,event:i,offence:target));
+ requirement q:general-candidate = all(q:attempt,punishableImprisonment(offence:target),not(expressAttemptPunishment(offence:target)));
+ rule r:attempt establishes proposition p:attempt when q:attempt citation "PC2020 ss511,512; authored selected structure";
+ rule r:general-candidate establishes proposition p:general-candidate when q:general-candidate citation "PC2020 ss511,512; authored selected structure";
+ limitation "Selected source-grounded structural slice only; exact sources and interpretive limits are in the external legal-source ledger. No liability, evidence weighing or actual sentence.";
+}

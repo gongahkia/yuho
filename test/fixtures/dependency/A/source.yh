@@ -1,0 +1,32 @@
+// Independent Phase1B selected structural model: MDA2021 s33B.
+// Legal judgments and primitive evidence classifications are supplied; no judicial result.
+typed-rules-model Phase1BC15 {
+ limit 2048;
+ entity-type person;
+ entity-type event;
+ entity-type activity;
+ entity actor:a as person;
+ entity actor:b as person;
+ entity event:i as event;
+ entity event:j as event;
+ entity activity:transport as activity;
+ entity activity:offer as activity;
+ entity activity:preparatory as activity;
+ entity activity:sale as activity;
+ predicate involved(person,activity) kind relationship;
+ predicate allowedCourierActivity(activity) kind relationship;
+ predicate convicted5or7(person,event) kind relationship;
+ predicate capitalScheduleCategory(event) kind relationship;
+ predicate prosecutorCertificate(person,event) kind relationship;
+ predicate abnormalityOfMind(person,event) kind relationship;
+ predicate substantialMentalResponsibilityImpairment(person,event) kind relationship;
+ proposition p:discretionary-life-caning-candidate;
+ proposition p:mandatory-life-candidate;
+ requirement q:courier = all(exists var:x as activity (all(involved(actor:a,var:x),allowedCourierActivity(var:x))),forall var:x as activity (any(not(involved(actor:a,var:x)),allowedCourierActivity(var:x))));
+ requirement q:gateway = all(convicted5or7(actor:a,event:i),capitalScheduleCategory(event:i),q:courier);
+ requirement q:discretionary = all(q:gateway,prosecutorCertificate(actor:a,event:i));
+ requirement q:mandatory = all(q:gateway,abnormalityOfMind(actor:a,event:i),substantialMentalResponsibilityImpairment(actor:a,event:i));
+ rule r:discretionary-life-caning-candidate establishes proposition p:discretionary-life-caning-candidate when q:discretionary citation "MDA2021 s33B; authored selected structure";
+ rule r:mandatory-life-candidate establishes proposition p:mandatory-life-candidate when q:mandatory citation "MDA2021 s33B; authored selected structure";
+ limitation "Selected source-grounded structural slice only; exact sources and interpretive limits are in the external legal-source ledger. No liability, evidence weighing or actual sentence.";
+}

@@ -1,0 +1,3 @@
+typed-rules-scenario Local for FictionalReceipt {
+ classify localApproval(person:subject,event:context) as proved reason "Fictional local control";
+}

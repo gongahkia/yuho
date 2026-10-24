@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.PenaltyTerms.Validate (validateTerms, validateTermStructure) where
+module Yuho.PenaltyTerms.Validate (validateTerms, validateTermStructure, validateCandidateTerm) where
 
 import Control.Monad (foldM)
 import qualified Data.Map.Strict as Map
@@ -211,3 +211,9 @@ allIds raw = map fst (rawSources raw) ++ concatMap ruleIds (rawRules raw)
       ++ concatMap provisionIds (provisionChildren provision)
     requirementIds requirement = requirementId requirement
       : concatMap requirementIds (requirementMembers requirement)
+
+
+-- | Validate an independently authored candidate tree without fabricating a
+-- proof request or changing the frozen Terms-v1 validation path.
+validateCandidateTerm :: Source -> Span -> J -> Either Diagnostic Term
+validateCandidateTerm source outer value = snd <$> validateTerm source outer 1 Set.empty "/candidate/term" value

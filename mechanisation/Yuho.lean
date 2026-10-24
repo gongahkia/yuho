@@ -11,3 +11,5 @@ import Yuho.CoreYuho.TypedFiniteConformance
 import Yuho.CoreYuho.ReleaseV03
 import Yuho.CoreYuho.ReleaseV03TheoremRegistry
 import Yuho.CoreYuho.ReleaseV03Conformance
+
+import Yuho.CoreYuho.DependencyPlan

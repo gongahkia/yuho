@@ -1,0 +1,15 @@
+typed-rules-scenario C15certificate for Phase1BC15 {
+ classify involved(actor:a,activity:transport) as proved reason "Independent synthetic primitive classification";
+ classify involved(actor:a,activity:offer) as proved reason "Independent synthetic primitive classification";
+ classify involved(actor:a,activity:preparatory) as proved reason "Independent synthetic primitive classification";
+ classify involved(actor:a,activity:sale) as not_proved reason "Independent synthetic primitive classification";
+ classify allowedCourierActivity(activity:transport) as proved reason "Independent synthetic primitive classification";
+ classify allowedCourierActivity(activity:offer) as proved reason "Independent synthetic primitive classification";
+ classify allowedCourierActivity(activity:preparatory) as proved reason "Independent synthetic primitive classification";
+ classify allowedCourierActivity(activity:sale) as not_proved reason "Independent synthetic primitive classification";
+ classify convicted5or7(actor:a,event:i) as proved reason "Independent synthetic primitive classification";
+ classify capitalScheduleCategory(event:i) as proved reason "Independent synthetic primitive classification";
+ classify prosecutorCertificate(actor:a,event:i) as proved reason "Independent synthetic primitive classification";
+ classify abnormalityOfMind(actor:a,event:i) as not_proved reason "Independent synthetic primitive classification";
+ classify substantialMentalResponsibilityImpairment(actor:a,event:i) as not_proved reason "Independent synthetic primitive classification";
+}

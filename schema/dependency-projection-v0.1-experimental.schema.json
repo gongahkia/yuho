@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/dependency-projection-v0.1-experimental.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "yuho.dependency-projection/v0.1-experimental"
+    },
+    "execution": {
+      "type": "string"
+    },
+    "document": {
+      "$ref": "dependency-plan-v0.1-experimental.schema.json"
+    },
+    "report": {
+      "$ref": "dependency-report-v0.1-experimental.schema.json"
+    },
+    "source_map": {
+      "type": "object"
+    },
+    "view": {
+      "type": "object"
+    },
+    "bindings": {
+      "type": "object"
+    },
+    "checked_components": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "format",
+    "execution",
+    "document",
+    "report",
+    "source_map",
+    "view",
+    "bindings",
+    "checked_components"
+  ]
+}

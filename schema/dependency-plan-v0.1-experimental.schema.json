@@ -1,0 +1,731 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/dependency-plan-v0.1-experimental.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "dependencyFormat": {
+      "const": "yuho.dependency-plan/v0.1-experimental"
+    },
+    "dependencyPlan": {
+      "$ref": "#/$defs/Plan"
+    },
+    "dependencySources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "dependencyProjectSource": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "dependencyFormat",
+    "dependencyPlan",
+    "dependencySources",
+    "dependencyProjectSource"
+  ],
+  "$defs": {
+    "Location": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "locationPath": {
+          "type": "string"
+        },
+        "locationLine": {
+          "type": "integer"
+        },
+        "locationColumn": {
+          "type": "integer"
+        },
+        "locationStart": {
+          "type": "integer"
+        },
+        "locationEnd": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "locationPath",
+        "locationLine",
+        "locationColumn",
+        "locationStart",
+        "locationEnd"
+      ]
+    },
+    "Scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "scopeIdentity": {
+          "type": "string"
+        },
+        "scopeActor": {
+          "type": "string"
+        },
+        "scopeContext": {
+          "type": "string"
+        },
+        "scopeCase": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scopeAllegation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scopeEntities": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      },
+      "required": [
+        "scopeIdentity",
+        "scopeActor",
+        "scopeContext",
+        "scopeCase",
+        "scopeAllegation",
+        "scopeEntities"
+      ]
+    },
+    "Origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "originIdentity": {
+          "type": "string"
+        },
+        "originLocator": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "originIdentity",
+        "originLocator"
+      ]
+    },
+    "Port": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "portComponent": {
+          "type": "string"
+        },
+        "portCategory": {
+          "enum": [
+            "typed.expression.truth",
+            "typed.proposition.resolution"
+          ]
+        },
+        "portObject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "portComponent",
+        "portCategory",
+        "portObject"
+      ]
+    },
+    "Component": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "componentIdentity": {
+          "type": "string"
+        },
+        "componentProfile": {
+          "enum": [
+            "native-typed",
+            "sdk-typed-v0.3"
+          ]
+        },
+        "componentModel": {
+          "type": "string"
+        },
+        "componentScenario": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "componentEntry": {
+          "anyOf": [
+            {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "enum": [
+                    "analysis",
+                    "allegation"
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "items": false,
+              "minItems": 2,
+              "maxItems": 2
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "componentScope": {
+          "type": "string"
+        },
+        "componentNominals": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "componentEntities": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "componentRationale": {
+          "type": "string"
+        },
+        "componentTemplate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Template"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "componentLocation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Location"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "componentIdentity",
+        "componentProfile",
+        "componentModel",
+        "componentScenario",
+        "componentEntry",
+        "componentScope",
+        "componentNominals",
+        "componentEntities",
+        "componentRationale",
+        "componentTemplate",
+        "componentLocation"
+      ]
+    },
+    "Binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "bindingIdentity": {
+          "type": "string"
+        },
+        "bindingPort": {
+          "$ref": "#/$defs/Port"
+        },
+        "bindingComponent": {
+          "type": "string"
+        },
+        "bindingSlot": {
+          "type": "string"
+        },
+        "bindingPolicy": {
+          "enum": [
+            "yuho.condition-identity/v1",
+            "yuho.proposition-support/v1"
+          ]
+        },
+        "bindingRationale": {
+          "type": "string"
+        },
+        "bindingReferences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bindingLocation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Location"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "bindingIdentity",
+        "bindingPort",
+        "bindingComponent",
+        "bindingSlot",
+        "bindingPolicy",
+        "bindingRationale",
+        "bindingReferences",
+        "bindingLocation"
+      ]
+    },
+    "DataTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "termValue": {
+          "type": "object",
+          "$comment": "Validated by the unchanged PenaltyTerms-v1 structural term validator, with actual source spans; modality/guard remain outside."
+        }
+      },
+      "required": [
+        "termValue"
+      ]
+    },
+    "Candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "candidateIdentity": {
+          "type": "string"
+        },
+        "candidateScope": {
+          "type": "string"
+        },
+        "candidateGuard": {
+          "$ref": "#/$defs/Port"
+        },
+        "candidatePolicy": {
+          "enum": [
+            "yuho.condition-identity/v1",
+            "yuho.proposition-support/v1"
+          ]
+        },
+        "candidateModality": {
+          "enum": [
+            "may",
+            "shall",
+            "unspecified"
+          ]
+        },
+        "candidateRationale": {
+          "type": "string"
+        },
+        "candidateReferences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "candidateTerm": {
+          "$ref": "#/$defs/DataTerm"
+        },
+        "candidateLocation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Location"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "candidateIdentity",
+        "candidateScope",
+        "candidateGuard",
+        "candidatePolicy",
+        "candidateModality",
+        "candidateRationale",
+        "candidateReferences",
+        "candidateTerm",
+        "candidateLocation"
+      ]
+    },
+    "Plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "planIdentity": {
+          "type": "string"
+        },
+        "planOrigins": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Origin"
+          }
+        },
+        "planScopes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Scope"
+          }
+        },
+        "planComponents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Component"
+          }
+        },
+        "planBindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Binding"
+          }
+        },
+        "planCandidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Candidate"
+          }
+        }
+      },
+      "required": [
+        "planIdentity",
+        "planOrigins",
+        "planScopes",
+        "planComponents",
+        "planBindings",
+        "planCandidates"
+      ]
+    },
+    "Expr": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "TemplateAtom"
+            },
+            "contents": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "items": false,
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "required": [
+            "tag",
+            "contents"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "TemplateCondition"
+            },
+            "contents": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "tag",
+            "contents"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "TemplateAll"
+            },
+            "contents": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expr"
+              }
+            }
+          },
+          "required": [
+            "tag",
+            "contents"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "TemplateAny"
+            },
+            "contents": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expr"
+              }
+            }
+          },
+          "required": [
+            "tag",
+            "contents"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "TemplateNot"
+            },
+            "contents": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "required": [
+            "tag",
+            "contents"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "TemplateReference"
+            },
+            "contents": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "tag",
+            "contents"
+          ]
+        }
+      ]
+    },
+    "Template": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "templateIdentity": {
+          "type": "string"
+        },
+        "templateEntityTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "templateEntities": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "templatePredicates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "templateConditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "templateRequirements": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/Expr"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "templatePropositions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "templateRules": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        "templateFacts": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "enum": [
+                  "Satisfied",
+                  "NotSatisfied",
+                  "Unresolved"
+                ]
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "minItems": 4,
+            "maxItems": 4
+          }
+        },
+        "templateLimitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "templateIdentity",
+        "templateEntityTypes",
+        "templateEntities",
+        "templatePredicates",
+        "templateConditions",
+        "templateRequirements",
+        "templatePropositions",
+        "templateRules",
+        "templateFacts",
+        "templateLimitations"
+      ]
+    }
+  }
+}

@@ -6,7 +6,7 @@ module Yuho.Surface.TypedFinite
   , loadTypedFiniteCase, encodeTypedFiniteRequest, encodeTypedFiniteCase
   , explainTypedFinite, explainTypedFiniteCase
   , inspectTypedFiniteModel, inspectTypedFiniteScenario, prepareTypedFiniteInspection
-  , typedDeclarationTokens
+  , typedDeclarationTokens, expandedNodeEstimate, dependencySourcePaths, prepareDependencyTyped
   ) where
 
 import Control.Exception (IOException, try)
@@ -21,10 +21,12 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Time.Calendar (Day)
 import Data.Time.Format (defaultTimeLocale, parseTimeM)
-import System.FilePath ((</>), isAbsolute, takeDirectory)
+import System.FilePath ((</>), isAbsolute, takeDirectory, normalise)
 import System.Posix.Files (fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.CoreYuho.TypedFinite
 import Yuho.Exception.Types (Truth(..))
+import Yuho.Protocol.Decode (sha256Text)
+import qualified Data.Text.Encoding as UTF8
 import Yuho.Protocol.Json (J(..), decodeJson, encodeJson)
 import Yuho.Surface.InspectionData (locatedToken)
 import Yuho.Surface.Lexer (lexSource)
@@ -50,6 +52,7 @@ data RawModel = RawModel
   , rawModuleRoot :: Maybe Token
   , rawImports :: [(Token,Token,Token)]
   , rawUses :: [(Token,Token)]
+  , rawDependencySlots :: [Token]
   , rawLimitations :: [Token]
   } deriving (Eq, Show)
 
@@ -237,6 +240,12 @@ parseModelDeclaration :: P (RawModel -> RawModel)
 parseModelDeclaration = do
   headToken <- word
   case tokenText headToken of
+    "dependency-condition" -> do
+      identifier <- word
+      _ <- takeText "type"
+      _ <- takeText "technical-condition"
+      _ <- takeText ";"
+      pure (\model -> model { rawDependencySlots = rawDependencySlots model ++ [identifier] })
     "limit" -> do
       value <- word
       _ <- takeText ";"
@@ -401,7 +410,7 @@ parseTypedFiniteModel path bytes = do
 
 emptyRawModel :: Token -> RawModel
 emptyRawModel identifier = RawModel identifier (Token WordToken "2048" 1 1)
-  [] [] [] [] [] [] [] [] [] [] [] Nothing [] [] []
+  [] [] [] [] [] [] [] [] [] [] [] Nothing [] [] [] []
 
 parseTypedFiniteModule :: FilePath -> BS.ByteString -> Either Diagnostic RawModule
 parseTypedFiniteModule path bytes = do
@@ -752,7 +761,14 @@ validateModel = validateModelWith True
 -- Inspection uses the same structural checks, then checks ground input presence.
 validateModelWith :: Bool -> FilePath -> FilePath -> RawModel -> TypedFiniteScenario
   -> Either Diagnostic TypedFiniteProgram
-validateModelWith execute path scenarioPath model scenario = do
+validateModelWith execute = validateModelMode execute False
+
+validateModelMode :: Bool -> Bool -> FilePath -> FilePath -> RawModel -> TypedFiniteScenario
+  -> Either Diagnostic TypedFiniteProgram
+validateModelMode execute fullReadiness path scenarioPath model scenario = do
+  case rawDependencySlots model of
+    slot:_ -> at "DEPMISSING" path slot "dependency template requires a checked-project binding; standalone execution is unavailable"
+    [] -> pure ()
   limit <- numeric path (rawLimit model)
   when (limit < 1 || limit > 2048) (at "SFT010" path (rawLimit model)
     "generated-node limit must be between 1 and 2048")
@@ -840,7 +856,8 @@ validateModelWith execute path scenarioPath model scenario = do
       pure (length (finiteResultExpressions expanded) + length (finiteResultRules expanded)
         + length (finiteResultPropositions expanded) + expressionNodes program)
     else do
-      checkGroundInputs path scenarioPath model scenario program
+      if fullReadiness then either (at "SFT011" scenarioPath (scenarioIdentifier scenario)) Right
+        (checkTypedFiniteInputs program) else checkGroundInputs path scenarioPath model scenario program
       pure (length (finiteRequirements program) + length (finiteRules program)
         + length (finitePropositions program) + expressionNodes program)
   when (nodeCount > fromInteger limit) (at "SFT010" path (rawLimit model)
@@ -1524,3 +1541,110 @@ typedDeclarationTokens path bytes = do
     ++ [("requirement",t) | (t,_) <- rawRequirements model]
     ++ [("rule",t) | (t,_,_,_,_,_) <- rawRules model]
     ++ [("proposition",t) | t <- rawPropositions model])
+
+
+-- | Direct source closure for immutable dependency bundles. Resolution is against
+-- retained virtual paths; no evaluation and no live IO occurs in preparation.
+dependencySourcePaths :: FilePath -> BS.ByteString -> Either Diagnostic [FilePath]
+dependencySourcePaths _ bytes | BS.take 1 (BS.dropWhile (`elem` [9,10,13,32]) bytes)=="{" = Right []
+dependencySourcePaths path bytes = do
+  tokens <- lexSource path bytes
+  case tokens of
+    t:_ | tokenText t == "typed-rules-case" -> do
+      RawTypedCase _ model _ allegations <- parseTypedFiniteCase path bytes
+      pure (Text.unpack (tokenText model):[Text.unpack (tokenText sc) | (_,sc,_)<-allegations])
+    t:_ | tokenText t == "typed-rules-model" -> do
+      m <- parseTypedFiniteModel path bytes
+      pure [Text.unpack (tokenText root) </> Text.unpack (tokenText name <> "@" <> tokenText version <> ".yh")
+        | Just root <- [rawModuleRoot m], (name,version,_) <- rawImports m]
+    _ -> pure []
+
+prepareDependencyTyped :: Map FilePath BS.ByteString -> FilePath -> Maybe FilePath -> Maybe Text
+  -> Either Diagnostic (TypedFiniteProgram,[(Text,Text)],Maybe (Text,Text))
+prepareDependencyTyped bundle path scenarioPath allegation = do
+  bytes <- source path
+  tokens <- lexSource path bytes
+  case tokens of
+    t:_ | tokenText t == "typed-rules-case" -> do
+      RawTypedCase caseId modelToken shared allegations <- parseTypedFiniteCase path bytes
+      uniqueTokens path "DEPNAME" "duplicate allegation" [i | (i,_,_)<-allegations]
+      uniqueTokens path "DEPNAME" "duplicate shared classification" [i | (i,_,_,_,_)<-shared]
+      selected <- maybe (at "DEPNAME" path caseId "case component requires an allegation entry") Right allegation
+      (identifier,sc,uses) <- case [a | a@(i,_,_)<-allegations,tokenText i==selected] of
+        [a]->Right a; _->at "DEPNAME" path caseId "unknown or ambiguous allegation entry"
+      when (null allegations || length allegations>32) (at "DEPLIMIT" path caseId "case requires 1..32 allegations")
+      mapM_ (\(_,_,_,status,_)->statusValue path status >> pure ()) shared
+      let mp=takeDirectory path </> Text.unpack (tokenText modelToken)
+          sp=takeDirectory path </> Text.unpack (tokenText sc)
+      m <- source mp >>= parseTypedFiniteModel mp >>= modules mp
+      scenario <- source sp >>= parseTypedFiniteScenario sp
+      additions <- traverse (\i->case [x | x@(k,_,_,_,_)<-shared,tokenText k==tokenText i] of
+        [(_,predId,args,status,reason)]->Right (predId,args,status,reason)
+        _->at "DEPNAME" path i "unknown shared classification") uses
+      (program,slots) <- prepare mp sp m (scenario {scenarioFacts=scenarioFacts scenario++additions})
+      pure (program,slots,Just (tokenText caseId,tokenText identifier))
+    _ -> do
+      when (allegation/=Nothing) (at "DEPNAME" path origin "allegation selector requires an actual typed case")
+      m <- parseTypedFiniteModel path bytes >>= modules path
+      sp <- maybe (at "DEPMISSING" path origin "component requires scenario") Right scenarioPath
+      scenario <- source sp >>= parseTypedFiniteScenario sp
+      (program,slots)<-prepare path sp m scenario
+      pure (program,slots,Nothing)
+  where
+    origin=Token EndToken "" 1 1
+    source file=maybe (at "DEPMISSING" file origin "source is absent from retained bundle") Right (Map.lookup (normalise file) bundle)
+    modules mp m = do
+      validateImportIdentities mp (rawImports m)
+      loaded <- traverse (\(name,version,alias)->do
+        unless (safeModuleName (tokenText name) && safeVersion (tokenText version))
+          (at "SFT013" mp name "invalid exact module identity")
+        root<-maybe (at "SFT013" mp name "module-root required") Right (rawModuleRoot m)
+        unless (not (isAbsolute (Text.unpack (tokenText root)))
+          && all (`notElem` ["",".",".."]) (Text.splitOn "/" (tokenText root)))
+          (at "SFT013" mp root "unsafe module root")
+        let file=takeDirectory mp </> Text.unpack (tokenText root) </> Text.unpack (tokenText name<>"@"<>tokenText version<>".yh")
+        declaration@(RawModule actual actualVersion _ body)<-source file >>= parseTypedFiniteModule file
+        unless (tokenText actual==tokenText name && tokenText actualVersion==tokenText version
+          && null (rawImports body) && null (rawUses body) && null (rawDependencySlots body))
+          (at "SFT013" file actual "module identity mismatch or unsupported nested import/template")
+        pure (alias,declaration)) (rawImports m)
+      selections<-traverse (resolveUse mp [(tokenText a,d) | (a,d)<-loaded]) (rawUses m)
+      pure (foldl mergeSelection m selections)
+    prepare mp sp m scenario = do
+      unless (tokenText (scenarioModel scenario)==tokenText (rawModelId m))
+        (at "SFT002" sp (scenarioModel scenario) "scenario model identity mismatch")
+      uniqueTokens mp "DEPWRITER" "duplicate condition slot" (rawDependencySlots m)
+      let slots=[(tokenText i,"dep_"<>sha256Text (UTF8.encodeUtf8 (tokenText i))) | i<-rawDependencySlots m]
+          generatedType="dep_template_type"
+          generatedEntity="dep_template_entity"
+          generated=map snd slots++[generatedType,generatedEntity]
+      when (not (null slots) && (any (\i->tokenText i `elem` generated) (allIdentifiers m)
+          || any (\(i,_,_)->tokenText i=="condition") (rawPredicates m)))
+        (at "DEPWRITER" mp (rawModelId m) "template reserved identity conflicts with an authored declaration")
+      let tok x=Token WordToken x 1 1
+          rewrite e=case e of
+            PredicateExpr "condition" [EntityTerm i] | not (null slots) -> case lookup i slots of
+              Just n->Right (PredicateExpr n [EntityTerm generatedEntity])
+              Nothing->at "DEPNAME" mp (rawModelId m) ("unknown condition slot "<>i)
+            PredicateExpr "condition" _ | not (null slots)->at "DEPCATEGORY" mp (rawModelId m) "condition expects one declared slot"
+            AllExpr xs->AllExpr <$> traverse rewrite xs; AnyExpr xs->AnyExpr <$> traverse rewrite xs
+            NotExpr x->NotExpr <$> rewrite x; ForallExpr v t x->ForallExpr v t <$> rewrite x
+            ExistsExpr v t x->ExistsExpr v t <$> rewrite x
+            CardinalityExpr k n xs->CardinalityExpr k n <$> traverse rewrite xs
+            _->Right e
+      requirements<-traverse (\(i,e)->(,) i <$> rewrite e) (rawRequirements m)
+      rules<-traverse (\(i,ps,pol,p,e,c)->do e'<-rewrite e; pure (i,ps,pol,p,e',c)) (rawRules m)
+      norms<-traverse (\(i,a,modality,p,e,c)->do e'<-rewrite e;pure (i,a,modality,p,e',c)) (rawNorms m)
+      routes<-traverse (\(i,a,k,p,e,c)->do e'<-rewrite e;pure (i,a,k,p,e',c)) (rawRoutes m)
+      -- Placeholders exist only during structural readiness. They are never
+      -- observations and are replaced by execution-only inputs before evaluation.
+      let withSlots=m {rawDependencySlots=[],rawRequirements=requirements,rawRules=rules,rawNorms=norms,rawRoutes=routes
+            ,rawEntityTypes=rawEntityTypes m++[tok generatedType | not (null slots)]
+            ,rawEntities=rawEntities m++[(tok generatedEntity,tok generatedType) | not (null slots)]
+            ,rawPredicates=rawPredicates m++[(tok n,[tok generatedType],tok "circumstance") | (_,n)<-slots]}
+          scenarioSlots=scenario {scenarioFacts=scenarioFacts scenario++
+            [(tok n,[tok generatedEntity],tok "unresolved",Token StringToken "structural binding placeholder; not an observation" 1 1) | (_,n)<-slots]}
+      when (any (\(i,_,_,_)->tokenText i `elem` (map fst slots++map snd slots++["condition"])) (scenarioFacts scenario))
+        (at "DEPWRITER" sp (scenarioIdentifier scenario) "a dependency slot cannot have a direct classification")
+      program<-validateModelMode False True mp sp withSlots scenarioSlots
+      pure (program,slots)

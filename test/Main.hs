@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
 
+import DependencyChecks (runDependencyChecks)
 import Control.Monad (forM_, unless)
 import qualified Data.Aeson as Aeson
 import qualified Data.ByteString as BS
@@ -68,6 +69,7 @@ main = do
       hardening = root </> "test/fixtures"
   golden frozen
   hardeningCases hardening
+  runDependencyChecks
   runComputedInputRepairChecks root
   runComputedInputChecks
   runTemporalAuthoringChecks root

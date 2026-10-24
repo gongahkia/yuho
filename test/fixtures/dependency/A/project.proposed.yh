@@ -1,0 +1,27 @@
+// PROPOSED syntax, not currently supported. Original C15 source retained.
+checked-project plan:gateways version "yuho.dependency-plan/v0.1-experimental" {
+ source src:review locator "phase1b-ledger:MDA21";
+scope sc:a actor person:a context event:i case case:design allegation a:first {
+ identity person:a nominal role:person;
+ identity event:i nominal role:event;
+}
+ component gates profile native-typed model "source.yh" scenario "certificate.yh" scope sc:a {
+  nominal person as role:person;
+  nominal event as role:event;
+  entity actor:a as person:a;
+  entity event:i as event:i;
+ } rationale "Selected C15 actor and incident, explicit modelling identity; no real conviction inferred";
+ candidate cand:discretionary scope sc:a guard gates . expression q:discretionary
+  mapping "yuho.condition-identity/v1" modality may
+  rationale "Model-conditional availability only; quantitative endpoints not supplied by this design" refs src:review {
+   all-of term:pair {
+    life-imprisonment term:life;
+    caning term:caning minimum not-stated maximum not-stated;
+   }
+ }
+ candidate cand:mandatory scope sc:a guard gates . expression q:mandatory
+  mapping "yuho.condition-identity/v1" modality shall
+  rationale "Retain the distinct authored mandatory-life gateway without selecting a sentence" refs src:review {
+   life-imprisonment term:mandatory-life;
+ }
+}

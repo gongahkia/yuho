@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/machine-request-v0.2-experimental.schema.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.machine-request/v0.2-experimental"
+        },
+        "input_kind": {
+          "const": "dependency-yh"
+        },
+        "operation": {
+          "const": "check"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "against": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.machine-request/v0.2-experimental"
+        },
+        "input_kind": {
+          "const": "dependency-yh"
+        },
+        "operation": {
+          "const": "run"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path",
+        "output"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.machine-request/v0.2-experimental"
+        },
+        "input_kind": {
+          "const": "dependency-artifact-json"
+        },
+        "operation": {
+          "const": "check"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.machine-request/v0.2-experimental"
+        },
+        "input_kind": {
+          "const": "dependency-artifact-json"
+        },
+        "operation": {
+          "const": "replay"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path",
+        "output"
+      ]
+    }
+  ]
+}

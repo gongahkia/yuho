@@ -1,0 +1,14 @@
+// PROPOSED dependency-condition declaration / condition() reference.
+typed-rules-model FictionalRecipient {
+ limit 2048;
+ entity-type person;
+ entity-type event;
+ entity person:benefactor as person;
+ entity event:benefit as event;
+ predicate ownCriterion(person,event) kind circumstance;
+ dependency-condition in:qualification type technical-condition;
+ proposition p:recipient;
+ requirement q:recipient = all(ownCriterion(person:benefactor,event:benefit),not(condition(in:qualification)));
+ rule r:recipient establishes proposition p:recipient when q:recipient;
+ limitation "Fictional support-absence use, not factual negation or a legal proof claim.";
+}

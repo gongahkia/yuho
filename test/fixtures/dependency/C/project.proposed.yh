@@ -1,0 +1,46 @@
+// PROPOSED two-scope composition. Fine SGD100 is fictional, not PC quantum.
+checked-project plan:two-contexts version "yuho.dependency-plan/v0.1-experimental" {
+ source src:control locator "urn:yuho-design:fictional-receipt-with-C10-gates";
+ scope sc:a actor person:a context event:a case case:two allegation allegation:a {
+ identity person:a nominal role:person;
+ identity event:a nominal role:event;
+ }
+ component gate:a profile native-typed model "source.yh" scenario "yes.yh" scope sc:a {
+ nominal person as role:person; nominal event as role:event;
+ entity actor:a as person:a; entity event:i as event:a;
+ } rationale "Explicit local-to-project identity in this independent C10 instance";
+ component receipt:a profile native-typed model "receipt.proposed.yh" scenario "receipt.yhs" scope sc:a {
+ nominal person as role:person; nominal event as role:event;
+ entity person:subject as person:a; entity event:context as event:a;
+ } rationale "Separate fictional recipient occurrence";
+ bind link:attempt:a from gate:a . expression q:attempt to receipt:a . condition in:attempt
+ mapping "yuho.condition-identity/v1" rationale "Actual checked attempt condition, not a copied assessment" refs src:control;
+ bind link:general:a from gate:a . expression q:general-candidate to receipt:a . condition in:general
+ mapping "yuho.condition-identity/v1" rationale "Keep the existing express-punishment precedence gate" refs src:control;
+ candidate cand:a scope sc:a guard receipt:a . proposition p:receipt
+ mapping "yuho.proposition-support/v1" modality unspecified
+ rationale "Synthetic constant consequence control only; not actual PC sentencing terms" refs src:control {
+ fine term:fine:a currency SGD minimum not-stated maximum 100;
+ }
+ scope sc:b actor person:b context event:b case case:two allegation allegation:b {
+ identity person:b nominal role:person;
+ identity event:b nominal role:event;
+ }
+ component gate:b profile native-typed model "source.yh" scenario "specific.yh" scope sc:b {
+ nominal person as role:person; nominal event as role:event;
+ entity actor:a as person:b; entity event:i as event:b;
+ } rationale "Explicit local-to-project identity in this independent C10 instance";
+ component receipt:b profile native-typed model "receipt.proposed.yh" scenario "receipt.yhs" scope sc:b {
+ nominal person as role:person; nominal event as role:event;
+ entity person:subject as person:b; entity event:context as event:b;
+ } rationale "Separate fictional recipient occurrence";
+ bind link:attempt:b from gate:b . expression q:attempt to receipt:b . condition in:attempt
+ mapping "yuho.condition-identity/v1" rationale "Actual checked attempt condition, not a copied assessment" refs src:control;
+ bind link:general:b from gate:b . expression q:general-candidate to receipt:b . condition in:general
+ mapping "yuho.condition-identity/v1" rationale "Keep the existing express-punishment precedence gate" refs src:control;
+ candidate cand:b scope sc:b guard receipt:b . proposition p:receipt
+ mapping "yuho.proposition-support/v1" modality unspecified
+ rationale "Synthetic constant consequence control only; not actual PC sentencing terms" refs src:control {
+ fine term:fine:b currency SGD minimum not-stated maximum 100;
+ }
+}

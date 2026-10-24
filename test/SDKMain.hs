@@ -1,5 +1,6 @@
 module Main (main) where
 
+import DependencyChecks (runDependencyChecks)
 import Control.Monad (unless)
 import System.Directory (doesFileExist, getCurrentDirectory)
 import System.FilePath ((</>))
@@ -23,6 +24,7 @@ main = do
   root <- getCurrentDirectory
   present <- doesFileExist (root </> "test/fixtures/computed-input-repair/reviewer-rule0.document.json")
   unless present (fail "SDK test fixtures absent; run from the package root")
+  runDependencyChecks
   runComputedInputRepairChecks root
   runComputedInputChecks
   runTemporalAuthoringChecks root

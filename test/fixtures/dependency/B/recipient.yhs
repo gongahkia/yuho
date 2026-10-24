@@ -1,0 +1,3 @@
+typed-rules-scenario OwnFacts for FictionalRecipient {
+ classify ownCriterion(person:benefactor,event:benefit) as proved reason "Fictional own prerequisite, not derived qualification";
+}

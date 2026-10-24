@@ -1,6 +1,9 @@
 -- | Experimental diagram-first SDK. See docs/authoring-sdk.md.
 module Yuho.Authoring
-  ( module Yuho.Authoring.ComputedInput
+  ( CheckedPlan, DependencyDocument, DependencyExecution, DependencyArtifact
+  , checkDependencyPlan, executeDependencyPlan, reportDependencyPlan, projectDependencyPlan
+  , saveDependencyArtifact, encodeDependencyArtifact, decodeDependencyArtifact, replayDependencyPlan
+  , module Yuho.Authoring.ComputedInput
   , module Yuho.Authoring.ComputedInput.Projection
   , module Yuho.Authoring.Temporal
   , module Yuho.Authoring.Types, module Yuho.Authoring.Codec
@@ -18,6 +21,10 @@ module Yuho.Authoring
   , SuppliedStatus(..), UnresolvedReason(..)
   ) where
 
+import Yuho.Authoring.Dependency
+  ( CheckedPlan, DependencyDocument, DependencyExecution, DependencyArtifact
+  , checkDependencyPlan, executeDependencyPlan, reportDependencyPlan, projectDependencyPlan
+  , saveDependencyArtifact, encodeDependencyArtifact, decodeDependencyArtifact, replayDependencyPlan )
 import Yuho.Authoring.ComputedInput
 import Yuho.Authoring.ComputedInput.Projection
 import Yuho.Authoring.Temporal

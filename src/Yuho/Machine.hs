@@ -21,6 +21,9 @@ import System.Exit (ExitCode(..), exitFailure)
 import System.IO (stdin, stdout, stderr)
 import System.Posix.Files (getSymbolicLinkStatus, isRegularFile, fileSize)
 import System.Process (readProcessWithExitCode)
+import Yuho.Surface.Dependency (dependencyInput)
+import Yuho.Surface.Lexer (lexSource)
+import Yuho.Surface.Token (tokenText)
 import qualified Yuho.Authoring as SDK
 import qualified Yuho.Protocol.Json as Strict
 
@@ -28,7 +31,7 @@ requestVersion, responseVersion :: Text
 requestVersion = "yuho.machine-request/v0.1-experimental"
 responseVersion = "yuho.machine-response/v0.1-experimental"
 
-data Request = Request Text Text FilePath [(Text,Text)]
+data Request = Request Text Text Text FilePath [(Text,Text)]
 
 runMachine :: [String] -> IO ()
 runMachine ["--help"] = BS.hPut stdout
@@ -40,12 +43,29 @@ runMachine args = do
     _ -> bad Nothing "SMREQUEST" "/" "expected machine REQUEST.json or machine -"
   value <- either (bad Nothing "SMJSON" "/") pure (Strict.decodeJson bytes)
   when (BS.length bytes > 65536) (bad Nothing "SMLIMIT" "/" "control request exceeds 65536 bytes")
-  req <- either (\(field,message) -> bad Nothing "SMREQUEST" field message) pure (parseRequest value)
-  let Request kind op path fields = req
+  req <- case parseRequest value of
+    Right r -> pure r
+    Left (field,message) -> do
+      let format=case Strict.lookupField "format" value of
+            Just (Strict.JStr "yuho.machine-request/v0.2-experimental") -> "yuho.machine-response/v0.2-experimental"
+            _ -> responseVersion
+      emitVersion format Nothing False A.Null [] [A.object ["code" A..= ("SMREQUEST"::Text),"location" A..= field,"message" A..= message]] []
+      exitFailure
+  let Request version kind op path fields = req
   absolute <- traverse (\(key,v) -> if key `elem` ["scenario","output","against"]
     then (,) key . T.pack <$> makeAbsolute (T.unpack v) else pure (key,v)) fields
   input <- makeAbsolute path
-  let selected = Request kind op input absolute
+  let selected = Request version kind op input absolute
+  selectedDependency <- dependencyInput input
+  when (kind `elem` ["composition-yh","computed-input-json"] && selectedDependency)
+    (bad (Just selected) "SMREQUEST" "/input_kind" "dependency inputs require the explicit v0.2 dependency kinds")
+  when (kind=="dependency-yh") $ do
+    source <- readBounded 65536 input >>= either (bad (Just selected) "SMIO" "/path" . T.pack) pure
+    case lexSource input source of
+      Right (t:_) | tokenText t=="checked-project" -> pure ()
+      _ -> bad (Just selected) "SMREQUEST" "/input_kind" "dependency-yh requires checked-project source"
+  when (kind=="dependency-artifact-json" && not selectedDependency)
+    (bad (Just selected) "SMREQUEST" "/input_kind" "expected dependency artifact")
   if kind == "computed-input-json" && op == "check"
     then checkArtifact selected
     else delegate selected
@@ -57,9 +77,15 @@ parseRequest value = do
         Just (Strict.JStr t) | not (T.null (T.strip t)) && not (T.any (=='\0') t) -> Right t
         _ -> Left ("/"<>field,"required nonempty string")
   version <- get "format"
-  unless (version == requestVersion) (Left ("/format","unsupported version "<>version<>"; expected "<>requestVersion))
+  unless (version `elem` [requestVersion,"yuho.machine-request/v0.2-experimental"]) (Left ("/format","unsupported version "<>version<>"; expected "<>requestVersion))
   kind <- get "input_kind"; op <- get "operation"; path <- get "path"
-  (optional,required) <- case (kind,op) of
+  (optional,required) <- if version=="yuho.machine-request/v0.2-experimental" then case (kind,op) of
+    ("dependency-yh","check") -> Right (["against"],[])
+    ("dependency-yh","run") -> Right ([],["output"])
+    ("dependency-artifact-json","check") -> Right ([],[])
+    ("dependency-artifact-json","replay") -> Right ([],["output"])
+    _ -> Left ("/operation","unsupported v0.2 dependency input_kind/operation pair")
+   else case (kind,op) of
     ("native-yh","inspect") -> Right (["scenario","stage"],[])
     ("native-yh",x) | x `elem` ["check","compile","run"] -> Right (["scenario"],[])
     ("native-yh","diagram") -> Right (["scenario"],["output","view","encoding"])
@@ -78,7 +104,7 @@ parseRequest value = do
     Just v | v `notElem` choices -> Left ("/"<>key,"unsupported value "<>v)
     _ -> Right ()) [("stage",["all","parsed","checked","normalized","lowered"])
       ,("view",["rule","modules","case","trace"]),("encoding",["json","xml","svg"])]
-  pure (Request kind op (T.unpack path) extras)
+  pure (Request version kind op (T.unpack path) extras)
 
 -- Errors on the control boundary carry a JSON pointer, not a fabricated .yh span.
 bad :: Maybe Request -> Text -> Text -> Text -> IO a
@@ -100,7 +126,7 @@ readBounded limit path = do
     Right b -> Right b
 
 checkArtifact :: Request -> IO ()
-checkArtifact req@(Request _ _ path _) = do
+checkArtifact req@(Request _ _ _ path _) = do
   bytes <- readBounded 1048576 path >>= either (bad (Just req) "SMIO" "/path" . T.pack) pure
   doc <- case SDK.decodeComputedInputDocument bytes of
     Left d -> emit (Just req) False A.Null [] [A.toJSON d] [] >> exitFailure
@@ -112,7 +138,7 @@ checkArtifact req@(Request _ _ path _) = do
   unless (null ds) exitFailure
 
 delegate :: Request -> IO ()
-delegate req@(Request kind op path fields) = do
+delegate req@(Request _ kind op path fields) = do
   executable <- getExecutablePath
   let flags=[T.unpack flag | (key,v)<-fields,flag<-["--"<> (if key=="encoding" then "format" else key),v]]
       command = (if kind=="native-yh" then [T.unpack op,path] else ["compose",T.unpack op,path]) ++ flags
@@ -130,7 +156,7 @@ delegate req@(Request kind op path fields) = do
   let exports = case lookup "output" fields of
         Nothing -> []
         Just p | kind=="native-yh" -> [A.object ["path" A..= p,"contract" A..= ("simplified-semantic-graph"::Text)]]
-        Just p -> [A.object ["directory" A..= p,"contract" A..= ("complete-computed-projection-and-reference-views"::Text)
+        Just p -> [A.object ["directory" A..= p,"contract" A..= (if kind `elem` ["dependency-yh","dependency-artifact-json"] then "complete-dependency-projection-and-focused-native-view" else "complete-computed-projection-and-reference-views"::Text)
           ,"files" A..= (["artifact.json","report.json","projection.json","view-bindings.json","view.json","view.xml","view.svg","source-map.json"]::[Text])]]
   emit (Just req) success payload (profilesIn payload) diagnostics (if success then exports else [])
   unless success exitFailure
@@ -151,18 +177,23 @@ profilesIn value = nub (go value)
     go _ = []
 
 emit :: Maybe Request -> Bool -> A.Value -> [Text] -> [A.Value] -> [A.Value] -> IO ()
-emit req success payload profiles diagnostics exports = BL.hPut stdout (A.encode (A.object
-  ["format" A..= responseVersion,"success" A..= success
-  ,"operation" A..= fmap (\(Request _ op _ _) -> op) req
-  ,"input_kind" A..= fmap (\(Request k _ _ _) -> k) req
+emit req = emitVersion (case req of
+  Just (Request v _ _ _ _) | v=="yuho.machine-request/v0.2-experimental" -> "yuho.machine-response/v0.2-experimental"
+  _->responseVersion) req
+
+emitVersion :: Text -> Maybe Request -> Bool -> A.Value -> [Text] -> [A.Value] -> [A.Value] -> IO ()
+emitVersion format req success payload profiles diagnostics exports = BL.hPut stdout (A.encode (A.object
+  ["format" A..= format,"success" A..= success
+  ,"operation" A..= fmap (\(Request _ _ op _ _) -> op) req
+  ,"input_kind" A..= fmap (\(Request _ k _ _ _) -> k) req
   ,"semantic_profiles" A..= profiles
   ,"profile_authority" A..= (if null profiles then "not_reported_by_operation" else "native_payload" :: Text)
   ,"effects" A..= effects req,"payload" A..= payload,"diagnostics" A..= diagnostics,"exports" A..= exports]) <> "\n")
   where
     effects Nothing = A.Null
-    effects (Just (Request kind op _ _)) = A.object
+    effects (Just (Request _ kind op _ _)) = A.object
       ["evaluation" A..= (if op=="inspect" || (kind/="native-yh" && op=="check") then "none"
           else if op `elem` ["run","replay"] then "requested" else "native_command_may_evaluate" :: Text)
-      ,"source_authority" A..= (if kind=="computed-input-json" then "embedded_artifact" else "current_sources" :: Text)
+      ,"source_authority" A..= (if kind `elem` ["computed-input-json","dependency-artifact-json"] then "embedded_artifact" else "current_sources" :: Text)
       ,"writes" A..= (if op=="diagram" || (kind/="native-yh" && op `elem` ["run","replay"])
           then "new_output_only" else "none" :: Text)]

@@ -1,0 +1,4 @@
+typed-rules-scenario Facts for FictionalQualification {
+ classify supporting(subject:x,incident:x) as unresolved reason "Fictional independently supplied technical input";
+ classify opposing(subject:x,incident:x) as not_proved reason "Fictional independently supplied technical input";
+}

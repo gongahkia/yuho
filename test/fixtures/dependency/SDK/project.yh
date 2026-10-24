@@ -1,0 +1,16 @@
+checked-project plan:sdk version "yuho.dependency-plan/v0.1-experimental" {
+ source original locator "urn:fictional:SDK-producer";
+ scope scope:orin actor person:orin context context:archive {
+  identity person:orin nominal role:person;
+  identity context:archive nominal role:context;
+ }
+ component origin profile sdk-typed-v0.3 model "source.json" entry analysis analysis-a scope scope:orin {
+  nominal actor as role:person;
+  entity orin as person:orin;
+ } rationale "Explicit selected SDK archive-morning context mapped into this fictional project context; retain actual SDK scope";
+ candidate synthetic:record scope scope:orin guard origin . expression group
+  mapping "yuho.condition-identity/v1" modality unspecified
+  rationale "Fictional technical availability control, no sentence" refs original {
+   life-imprisonment term:fictional;
+  }
+}

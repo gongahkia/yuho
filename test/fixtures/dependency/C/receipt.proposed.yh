@@ -1,0 +1,14 @@
+typed-rules-model FictionalReceipt {
+ limit 2048;
+ entity-type person;
+ entity-type event;
+ entity person:subject as person;
+ entity event:context as event;
+ predicate localApproval(person,event) kind circumstance;
+ dependency-condition in:attempt type technical-condition;
+ dependency-condition in:general type technical-condition;
+ proposition p:receipt;
+ requirement q:receipt = all(condition(in:attempt),condition(in:general),localApproval(person:subject,event:context));
+ rule r:receipt establishes proposition p:receipt when q:receipt;
+ limitation "Fictional multi-stage control; no attempted-offence quantum or sentence inferred.";
+}

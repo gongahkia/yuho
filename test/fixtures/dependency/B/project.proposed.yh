@@ -1,0 +1,19 @@
+// PROPOSED syntax; select defeat-first + defeated scenario for the body-vs-result contrast.
+checked-project plan:qualification version "yuho.dependency-plan/v0.1-experimental" {
+ source src:fiction locator "urn:yuho-design:fictional-qualification";
+scope sc:a actor person:a context event:i case case:design allegation a:first {
+ identity person:a nominal role:person;
+ identity event:i nominal role:event;
+}
+ component supplier profile native-typed model "defeat-first.yh" scenario "defeated.yhs" scope sc:a {
+  nominal person as role:person; nominal event as role:event;
+  entity subject:x as person:a; entity incident:x as event:i;
+ } rationale "Explicit fictional source actor/context identity";
+ component recipient profile native-typed model "recipient.proposed.yh" scenario "recipient.yhs" scope sc:a {
+  nominal person as role:person; nominal event as role:event;
+  entity person:benefactor as person:a; entity event:benefit as event:i;
+ } rationale "Explicit fictional recipient identity; keep its own criterion separate";
+ bind link:qualification from supplier . proposition p:qualified to recipient . condition in:qualification
+  mapping "yuho.proposition-support/v1"
+  rationale "Consume resolved technical support; F for not_established means support absence, not factual falsity" refs src:fiction;
+}

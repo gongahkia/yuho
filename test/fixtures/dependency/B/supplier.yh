@@ -1,0 +1,16 @@
+// FICTIONAL control inspired by the C06 dependency gap, no legal doctrine.
+typed-rules-model FictionalQualification {
+ limit 2048;
+ entity-type person;
+ entity-type event;
+ entity subject:x as person;
+ entity incident:x as event;
+ predicate supporting(person,event) kind relationship;
+ predicate opposing(person,event) kind relationship;
+ proposition p:qualified;
+ requirement q:support = supporting(subject:x,incident:x);
+ requirement q:opposition = opposing(subject:x,incident:x);
+ rule r:support establishes proposition p:qualified when q:support;
+ rule r:oppose defeats proposition p:qualified when q:opposition;
+ limitation "Fictional technical-support policy control only; not PC89(d) legal completion.";
+}

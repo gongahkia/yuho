@@ -1,0 +1,6 @@
+typed-rules-scenario C10yes for Phase1BC10 {
+ classify intendsOffence(actor:a,offence:target) as proved reason "Independent synthetic primitive classification";
+ classify substantialStep(actor:a,event:i,offence:target) as proved reason "Independent synthetic primitive classification";
+ classify punishableImprisonment(offence:target) as proved reason "Independent synthetic primitive classification";
+ classify expressAttemptPunishment(offence:target) as not_proved reason "Independent synthetic primitive classification";
+}

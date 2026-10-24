@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.Protocol.Json
-  ( J(..), decodeJson, encodeJson, lookupField, objectFields, textValue, integerValue
+  ( J(..), decodeJson, decodeJsonBounded, encodeJson, lookupField, objectFields, textValue, integerValue
   , boolValue, arrayValue, maxRequestBytes, maxJsonDepth
   ) where
 
@@ -25,8 +25,13 @@ maxRequestBytes = 1048576
 maxJsonDepth = 64
 
 decodeJson :: BS.ByteString -> Either Text J
-decodeJson bytes
-  | BS.length bytes > maxRequestBytes = Left "request exceeds 1048576 bytes"
+decodeJson = decodeJsonBounded maxRequestBytes
+
+-- | Explicit caller-owned bound for separately versioned host artifacts. The
+-- existing protocol decoder retains its exact one-MiB limit and diagnostics.
+decodeJsonBounded :: Int -> BS.ByteString -> Either Text J
+decodeJsonBounded maximumBytes bytes
+  | BS.length bytes > maximumBytes = Left ("request exceeds " <> Text.pack (show maximumBytes) <> " bytes")
   | otherwise = do
       (value, remaining) <- token 0 (Decoding.bsToTokens bytes)
       if BS.all isSpace remaining then Right value else Left "trailing JSON bytes"

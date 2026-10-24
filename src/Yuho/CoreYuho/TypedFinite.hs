@@ -9,6 +9,7 @@ module Yuho.CoreYuho.TypedFinite
   , ExprObservation(..), RuleObservation(..), PropositionObservation(..)
   , TypedFiniteResult(..), truthName, groundKey, evaluateTypedFinite
   , negateTruth, compareScalar, cardinalityTruth, resolveProposition
+  , FiniteRead(..), evaluateTypedFiniteObserved, checkTypedFiniteInputs
   , substituteTerm
   ) where
 
@@ -231,100 +232,146 @@ cardinalityTruth kindValue threshold values =
             | satisfied > threshold || upper < threshold -> FalseValue
             | otherwise -> UnresolvedValue
 
+-- | Actual eager evaluation ledger. Paths are occurrence paths within a named
+-- expression or a grounded rule invocation; reference expansion is retained.
+-- This ledger is opt-in: the established result encoder remains unchanged.
+data FiniteRead = FiniteRead
+  { readRoot :: [Text], readPath :: [Int], readBindings :: [(Text,Text)]
+  , readKind :: Text, readStatus :: Truth, readDetail :: Text
+  , readInputs :: [Text]
+  } deriving (Eq, Show)
+
 evaluateTypedFinite :: TypedFiniteProgram -> Either Text TypedFiniteResult
-evaluateTypedFinite program = do
+evaluateTypedFinite program = fst <$> evaluateTypedFiniteObserved program
+
+evaluateTypedFiniteObserved :: TypedFiniteProgram -> Either Text (TypedFiniteResult,[FiniteRead])
+evaluateTypedFiniteObserved program = do
   let facts = Map.fromList [(groundKey (groundPredicate item) (groundArguments item), groundStatus item)
         | item <- finiteFacts program]
-      domains = Map.unionWith (++)
-        (Map.fromListWith (++) [(kindValue,[identifier])
-          | EntityDecl identifier kindValue <- finiteEntities program])
-        (Map.fromList [(kindValue,[]) | EntityTypeDecl kindValue <- finiteEntityTypes program])
+      domains = programDomains program
       requirements = Map.fromList (finiteRequirements program)
-      evaluator bindings seen expression = evaluateExpr program facts domains requirements bindings seen expression
+      evaluator root bindings seen = evaluateExpr program facts domains requirements root [] bindings seen
   requirementRows <- traverse (\(identifier,expression) -> do
-      (status,detail) <- evaluator Map.empty (Set.singleton identifier) expression
-      pure (ExprObservation identifier status [] detail)) (finiteRequirements program)
-  rawRuleRows <- traverse (evaluateRule evaluator domains) (finiteRules program)
-  let ruleRows = map (annotatePriority (finitePriorities program) rawRuleRows) rawRuleRows
-  propositionRows <- traverse (resolveProposition (finitePriorities program) ruleRows)
-    (finitePropositions program)
-  pure (TypedFiniteResult requirementRows ruleRows propositionRows)
+      (status,detail,ledger) <- evaluator ["expression",identifier] Map.empty (Set.singleton identifier) expression
+      pure (ExprObservation identifier status [] detail,ledger)) (finiteRequirements program)
+  rawRuleRows <- traverse (\declaration -> do
+    bindings <- parameterBindings domains (ruleParameters declaration)
+    rows <- traverse (\binding -> do
+      (status,_,ledger) <- evaluator (["rule",ruleName declaration] ++ concatMap (\(k,v)->[k,v]) binding)
+        (Map.fromList binding) Set.empty (ruleBody declaration)
+      pure (binding,status,ledger)) bindings
+    pure (RuleObservation (ruleName declaration) (rulePolarity declaration)
+      (ruleConclusion declaration) (anyStatus [status | (_,status,_) <- rows])
+      [binding | (binding,TrueValue,_) <- rows] [], concat [ledger | (_,_,ledger) <- rows])) (finiteRules program)
+  let ruleRows = map (annotatePriority (finitePriorities program) (map fst rawRuleRows)) (map fst rawRuleRows)
+  propositionRows <- traverse (resolveProposition (finitePriorities program) ruleRows) (finitePropositions program)
+  pure (TypedFiniteResult (map fst requirementRows) ruleRows propositionRows,
+    concatMap snd requirementRows ++ concatMap snd rawRuleRows)
 
-evaluateRule :: (Map Text Text -> Set Text -> FiniteExpr -> Either Text (Truth,Text))
-  -> Map Text [Text] -> RuleDecl -> Either Text RuleObservation
-evaluateRule evaluator domains declaration = do
-  bindings <- parameterBindings domains (ruleParameters declaration)
-  rows <- traverse (\binding -> do
-    (status,_) <- evaluator (Map.fromList binding) Set.empty (ruleBody declaration)
-    pure (binding,status)) bindings
-  let status = anyStatus (map snd rows)
-      witnesses = [binding | (binding,TrueValue) <- rows]
-  pure (RuleObservation (ruleName declaration) (rulePolarity declaration)
-    (ruleConclusion declaration) status witnesses [])
+programDomains :: TypedFiniteProgram -> Map Text [Text]
+programDomains program = Map.unionWith (++)
+  (Map.fromListWith (++) [(kindValue,[identifier]) | EntityDecl identifier kindValue <- finiteEntities program])
+  (Map.fromList [(kindValue,[]) | EntityTypeDecl kindValue <- finiteEntityTypes program])
 
 parameterBindings :: Map Text [Text] -> [(Text,Text)] -> Either Text [[(Text,Text)]]
 parameterBindings _ [] = Right [[]]
 parameterBindings domains ((variable,kindValue):rest) = do
-  domain <- maybe (Left ("unknown parameter type " <> kindValue)) Right
-    (Map.lookup kindValue domains)
+  domain <- maybe (Left ("unknown parameter type " <> kindValue)) Right (Map.lookup kindValue domains)
   remaining <- parameterBindings domains rest
   pure [[(variable,entity)] ++ suffix | entity <- domain, suffix <- remaining]
 
-evaluateExpr :: TypedFiniteProgram -> Map Text Truth -> Map Text [Text]
-  -> Map Text FiniteExpr -> Map Text Text -> Set Text -> FiniteExpr
-  -> Either Text (Truth,Text)
-evaluateExpr program facts domains requirements bindings seen expression = case expression of
-  PredicateExpr name terms -> do
-    arguments <- traverse (resolveTerm bindings) terms
-    let key = groundKey name arguments
-    status <- maybe (Left ("missing ground classification " <> key)) Right (Map.lookup key facts)
-    pure (status,key)
-  ComparisonExpr operation leftName rightName upperName -> do
-    left <- value leftName
-    right <- value rightName
-    upper <- traverse value upperName
-    status <- compareScalar operation left right upper
-    pure (status,leftName <> " " <> comparisonName operation <> " " <> rightName
-      <> maybe "" (" and " <>) upperName)
-  AllExpr members -> aggregate allStatus "all" members
-  AnyExpr members -> aggregate anyStatus "any" members
-  NotExpr member -> do
-    (status,detail) <- recurse member
-    pure (negateTruth status,"not(" <> detail <> ")")
-  ForallExpr variable kindValue body -> quantify allStatus "forall" variable kindValue body
-  ExistsExpr variable kindValue body -> quantify anyStatus "exists" variable kindValue body
-  CardinalityExpr kindValue threshold members -> do
-    rows <- traverse recurse members
-    let statuses = map fst rows
-        satisfied = length (filter (== TrueValue) statuses)
-        unresolved = length (filter (== UnresolvedValue) statuses)
-    pure (cardinalityTruth kindValue threshold statuses,
-      cardinalityName kindValue <> " " <> Text.pack (show threshold)
-      <> " [s=" <> Text.pack (show satisfied) <> ",u=" <> Text.pack (show unresolved) <> "]")
-  ReferenceExpr identifier
-    | Set.member identifier seen -> Left ("cyclic requirement reference " <> identifier)
-    | otherwise -> case Map.lookup identifier requirements of
-        Nothing -> Left ("unknown requirement " <> identifier)
-        Just target -> evaluateExpr program facts domains requirements bindings
-          (Set.insert identifier seen) target
+-- | Structural input readiness traverses all groundings without computing a
+-- technical value. Used only by the new plan checker, not as an evaluation.
+checkTypedFiniteInputs :: TypedFiniteProgram -> Either Text ()
+checkTypedFiniteInputs program = do
+  mapM_ (\(i,e)->walk Map.empty (Set.singleton i) e) (finiteRequirements program)
+  mapM_ (\r->parameterBindings domains (ruleParameters r) >>= mapM_
+    (\bs->walk (Map.fromList bs) Set.empty (ruleBody r))) (finiteRules program)
   where
-    recurse = evaluateExpr program facts domains requirements bindings seen
+    domains = programDomains program
+    facts = Set.fromList [groundKey (groundPredicate f) (groundArguments f) | f <- finiteFacts program]
+    walk bindings seen expression = case expression of
+      PredicateExpr name terms -> do
+        arguments <- traverse (resolveTerm bindings) terms
+        let key = groundKey name arguments
+        if Set.member key facts then Right () else Left ("missing ground classification " <> key)
+      ComparisonExpr _ l r u -> mapM_ (\i->if Map.member i (finiteValues program)
+        then Right () else Left ("missing scalar value "<>i)) (l:r:maybe [] (:[]) u)
+      AllExpr xs -> mapM_ (walk bindings seen) xs
+      AnyExpr xs -> mapM_ (walk bindings seen) xs
+      NotExpr x -> walk bindings seen x
+      CardinalityExpr _ _ xs -> mapM_ (walk bindings seen) xs
+      ForallExpr v t x -> quant v t x
+      ExistsExpr v t x -> quant v t x
+      ReferenceExpr i | Set.member i seen -> Left ("cyclic requirement reference "<>i)
+        | otherwise -> maybe (Left ("unknown requirement "<>i))
+            (walk bindings (Set.insert i seen)) (lookup i (finiteRequirements program))
+      where quant v t x = maybe (Left ("unknown quantified type "<>t))
+              (mapM_ (\e->walk (Map.insert v e bindings) seen x)) (Map.lookup t domains)
+
+evaluateExpr :: TypedFiniteProgram -> Map Text Truth -> Map Text [Text]
+  -> Map Text FiniteExpr -> [Text] -> [Int] -> Map Text Text -> Set Text -> FiniteExpr
+  -> Either Text (Truth,Text,[FiniteRead])
+evaluateExpr program facts domains requirements root path bindings seen expression = do
+  (status,detail,inputs,children) <- case expression of
+    PredicateExpr name terms -> do
+      arguments <- traverse (resolveTerm bindings) terms
+      let key = groundKey name arguments
+      status <- maybe (Left ("missing ground classification " <> key)) Right (Map.lookup key facts)
+      pure (status,key,[key],[])
+    ComparisonExpr operation leftName rightName upperName -> do
+      left <- value leftName
+      right <- value rightName
+      upper <- traverse value upperName
+      status <- compareScalar operation left right upper
+      pure (status,leftName <> " " <> comparisonName operation <> " " <> rightName
+        <> maybe "" (" and " <>) upperName,leftName:rightName:maybe [] (:[]) upperName,[])
+    AllExpr members -> aggregate allStatus "all" members
+    AnyExpr members -> aggregate anyStatus "any" members
+    NotExpr member -> do
+      (status,detail,ledger) <- recurse 0 member
+      pure (negateTruth status,"not(" <> detail <> ")",[],ledger)
+    ForallExpr variable kindValue body -> quantify allStatus "forall" variable kindValue body
+    ExistsExpr variable kindValue body -> quantify anyStatus "exists" variable kindValue body
+    CardinalityExpr kindValue threshold members -> do
+      rows <- traverse (uncurry recurse) (zip [0..] members)
+      let statuses = [s | (s,_,_) <- rows]
+          satisfied = length (filter (== TrueValue) statuses)
+          unresolved = length (filter (== UnresolvedValue) statuses)
+      pure (cardinalityTruth kindValue threshold statuses,
+        cardinalityName kindValue <> " " <> Text.pack (show threshold)
+        <> " [s=" <> Text.pack (show satisfied) <> ",u=" <> Text.pack (show unresolved) <> "]",[],concat [rs | (_,_,rs)<-rows])
+    ReferenceExpr identifier
+      | Set.member identifier seen -> Left ("cyclic requirement reference " <> identifier)
+      | otherwise -> case Map.lookup identifier requirements of
+          Nothing -> Left ("unknown requirement " <> identifier)
+          Just target -> do
+            (s,d,rs) <- evaluateExpr program facts domains requirements root (path++[0]) bindings
+              (Set.insert identifier seen) target
+            pure (s,d,[identifier],rs)
+  pure (status,detail,FiniteRead root path (Map.toAscList bindings) (kind expression) status detail inputs:children)
+  where
+    recurse index = evaluateExpr program facts domains requirements root (path++[index]) bindings seen
     value identifier = maybe (Left ("missing scalar value " <> identifier)) Right
       (Map.lookup identifier (finiteValues program))
     aggregate operation label members = do
-      rows <- traverse recurse members
-      pure (operation (map fst rows),label <> "(" <> Text.intercalate "," (map snd rows) <> ")")
+      rows <- traverse (uncurry recurse) (zip [0..] members)
+      pure (operation [s | (s,_,_)<-rows],label <> "(" <> Text.intercalate "," [d | (_,d,_)<-rows] <> ")",[],concat [rs | (_,_,rs)<-rows])
     quantify operation label variable kindValue body = do
-      domain <- maybe (Left ("unknown quantified type " <> kindValue)) Right
-        (Map.lookup kindValue domains)
-      rows <- traverse (\entity -> evaluateExpr program facts domains requirements
-        (Map.insert variable entity bindings) seen body) domain
-      let witnesses = [entity | (entity,(TrueValue,_)) <- zip domain rows]
-          counterexamples = [entity | (entity,(FalseValue,_)) <- zip domain rows]
+      domain <- maybe (Left ("unknown quantified type " <> kindValue)) Right (Map.lookup kindValue domains)
+      rows <- traverse (\(index,entity) -> evaluateExpr program facts domains requirements root (path++[index])
+        (Map.insert variable entity bindings) seen body) (zip [0..] domain)
+      let witnesses = [entity | (entity,(TrueValue,_,_)) <- zip domain rows]
+          counterexamples = [entity | (entity,(FalseValue,_,_)) <- zip domain rows]
           detail = label <> " " <> variable <> ":" <> kindValue
             <> " witnesses=" <> Text.intercalate "," witnesses
             <> " counterexamples=" <> Text.intercalate "," counterexamples
-      pure (operation (map fst rows),detail)
+      pure (operation [s | (s,_,_)<-rows],detail,[],concat [rs | (_,_,rs)<-rows])
+    kind e = case e of
+      PredicateExpr {} -> "predicate"; ComparisonExpr op _ _ _ -> comparisonName op
+      AllExpr {} -> "all"; AnyExpr {} -> "any"; NotExpr {} -> "not"
+      ForallExpr {} -> "forall"; ExistsExpr {} -> "exists"
+      CardinalityExpr k _ _ -> cardinalityName k; ReferenceExpr {} -> "reference"
 
 resolveTerm :: Map Text Text -> Term -> Either Text Text
 resolveTerm _ (EntityTerm identifier) = Right identifier
