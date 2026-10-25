@@ -114,9 +114,9 @@ compileTypedAnalysis d key = do
       refs keyObject = maybe [] (typedSources . snd) (find ((== keyObject) . typedId . snd) (typedObjects d))
       mappings = [TypedKernelMapping "expression" (typedId (expressionMeta x)) (typedId (expressionMeta x)) path
           (typedSources (expressionMeta x)) Nothing | (x,path) <- occurrences]
-        ++ [TypedKernelMapping "ground_application" (K.groundKey (tuplePredicate (applicationTuple x)) (tupleArguments (applicationTuple x)))
+        ++ [TypedKernelMapping "ground_application" (K.groundIdentityText (tuplePredicate (applicationTuple x)) (tupleArguments (applicationTuple x)))
           (typedId (applicationMeta x)) [] (typedSources (applicationMeta x)) Nothing | x <- typedApplications d, typedId (applicationMeta x) `elem` appIds]
-        ++ [TypedKernelMapping "assessment" (K.groundKey (tuplePredicate (assessedTuple x)) (tupleArguments (assessedTuple x)))
+        ++ [TypedKernelMapping "assessment" (K.groundIdentityText (tuplePredicate (assessedTuple x)) (tupleArguments (assessedTuple x)))
           (typedId (typedAssessmentMeta x)) [] (typedSources (typedAssessmentMeta x)) (Just (generatedReason x)) | x <- assessments]
         ++ [TypedKernelMapping "scalar" v v [] (refs v) Nothing | v <- operands]
         ++ [TypedKernelMapping "value" (valueScalar x) (typedId (valueMeta x)) [] (typedSources (valueMeta x)) Nothing | x <- values]

@@ -39,7 +39,7 @@ typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) v
              (Map.lookup (scalarName item) (finiteValues program))) Nothing
       (scalarStatus <$> Map.lookup (scalarName item) (finiteValues program)) Nothing
       | item <- finiteScalars program]
-    factNodes = [GraphNode (nodeId "ground-fact" key) "ground-fact"
+    factNodes = [GraphNode (nodeId "ground-fact" (groundIdentityText (groundPredicate item) (groundArguments item))) "ground-fact"
       key Nothing (Just (truthName (groundStatus item))) Nothing
       | item <- finiteFacts program,
         let key = groundKey (groundPredicate item) (groundArguments item)]
@@ -80,13 +80,12 @@ typedFiniteGraph view program result = SemanticGraph (finiteProgramId program) v
       (Text.pack (show position)) | predicate <- finitePredicates program,
       (position,kindValue) <- zip [1 :: Int ..] (predicateArguments predicate)]
     factEdges = concat
-      [[GraphEdge (nodeId "entity" argument) (nodeId "ground-fact" key)
+      [[GraphEdge (nodeId "entity" argument) (nodeId "ground-fact" (groundIdentityText (groundPredicate item) (groundArguments item)))
           "ground-argument" (Text.pack (show position))
         | (position,argument) <- zip [1 :: Int ..] (groundArguments item)]
-       ++ [GraphEdge (nodeId "predicate" (groundPredicate item)) (nodeId "ground-fact" key)
+       ++ [GraphEdge (nodeId "predicate" (groundPredicate item)) (nodeId "ground-fact" (groundIdentityText (groundPredicate item) (groundArguments item)))
           "application" "classified application"]
-      | item <- finiteFacts program,
-        let key = groundKey (groundPredicate item) (groundArguments item)]
+      | item <- finiteFacts program]
     ruleEdges = [GraphEdge (nodeId "finite-rule" (observedRule item))
       (nodeId "proposition" (observedProposition item)) "concludes"
       (polarityLabel (observedPolarity item)) | item <- finiteResultRules result]

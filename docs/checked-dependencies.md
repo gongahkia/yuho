@@ -139,3 +139,33 @@ Executable acceptance inputs and independent oracles are in
 `test/DependencyChecks.hs`. C15 retains its qualified gateway/term scope; the
 C06-inspired recipient and C10 receipts/SGD100 are explicitly fictional controls.
 They do not establish full statutory-domain adequacy or release clearance.
+
+Primitive identities and execution reads use structural predicate/ordered-argument
+keys. Punctuation in admitted SDK identifiers cannot substitute one fact for
+another; a genuinely missing classification is refused. Legacy printable ground
+strings and read `actual_inputs` remain human-readable descriptions. They must
+not be parsed or joined as semantic identities. Each read now also exposes
+`input_records` under `yuho.typed-read-input/v1`, distinguishing ground predicate
+lookups (including the exact classification/reason), requirement references and
+scalar operands. The enclosing read supplies component/snapshot/root/path/bindings.
+Only actual ground lookups propagate a generated condition's causal ancestry;
+eager `all(F,U)=F` still records both evaluated operands.
+
+The new read records are additive to dependency report/projection v0.1. Frozen
+kernel and SDK response schemas do not change. Their legacy-compatible execution
+digest excludes only this additive, recomputed `input_records` field. Unaffected
+saved dependency artifacts retain their execution identity; regenerated exports
+include the new records. Previously unsafe executions with wrong values or false
+causes fail replay against their old saved execution digest. Re-execution of the
+exact original authored document produces the corrected result. Projection/view
+validation still checks the full canonical records, including typed inputs.
+
+Machine v0.2 dispatches to explicit current-source or saved-artifact operations,
+shared with the CLI. `dependency-artifact-json` never falls through to a live
+project check. Static artifact check validates source authority without evaluating
+or verifying a syntactically valid execution digest; replay verifies that digest.
+Successful effects report the validated authority. Failed v0.2 responses report
+`source_authority: not_validated`, with `requested_source_authority` separately;
+check failures report no evaluation, while run/replay failures report evaluation
+as `not_reported` because evaluation may have preceded an export failure. Failed
+responses never declare successful exports. Machine v0.1 behavior is unchanged.

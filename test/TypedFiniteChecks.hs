@@ -21,12 +21,51 @@ import Yuho.Surface.TypedFinite
 runTypedFiniteChecks :: FilePath -> IO ()
 runTypedFiniteChecks root = do
   semanticMatrices
+  primitiveIdentityChecks
   registryCheck root
   fixtureChecks root
   diagramChecks root
   scopedIdentityChecks
   refusalChecks root
   putStrLn "typed finite rules: exhaustive bounded semantics, fixtures and refusals passed"
+
+-- Direct shared-evaluator and scalar/read-category controls. Literal tuples
+-- and expected observations are the oracle, not rendered keys.
+primitiveIdentityChecks :: IO ()
+primitiveIdentityChecks = do
+  let dep="dep_collision"
+      printed="dep_collision(dep_template_entity)"
+      tuples=[("p",["a(b"],TrueValue),("p(a",["b"],FalseValue),
+        ("pair",["x,y","z"],TrueValue),("pair",["x","y,z"],UnresolvedValue)]
+      facts=[GroundFact p args v "independent tuple" | (p,args,v)<-tuples]
+      program=TypedFiniteProgram "identity-control" [EntityTypeDecl "person"]
+        [EntityDecl i "person" | i<-["a(b","b","x,y","z","x","y,z","dep_template_entity"]]
+        [PredicateDecl "p" ["person"] PredicateRelationship,PredicateDecl "p(a" ["person"] PredicateRelationship,
+         PredicateDecl "pair" ["person","person"] PredicateRelationship,PredicateDecl dep ["person"] PredicateCircumstance]
+        [ScalarDecl printed IntegerType,ScalarDecl "upper" IntegerType] []
+        ([("q:"<>Text.pack (show i),PredicateExpr p (map EntityTerm args)) | (i,(p,args,_))<-zip [0::Int ..] tuples]
+         ++[(printed,PredicateExpr "p(a" [EntityTerm "b"]),("q:ref",ReferenceExpr printed),
+            ("q:scalar",ComparisonExpr LessThan printed "upper" Nothing),
+            ("q:dep",PredicateExpr dep [EntityTerm "dep_template_entity"]),
+            ("q:mixed",AllExpr [PredicateExpr "p(a" [EntityTerm "b"],ReferenceExpr "q:dep"])])
+        [] [] [] [] (facts++[GroundFact dep ["dep_template_entity"] UnresolvedValue "real conflicting technical input"])
+        (Map.fromList [(printed,IntegerValue 0),("upper",IntegerValue 1)]) [] ["fictional identity test"]
+  (result,ledger)<-either (fail . Text.unpack) pure (evaluateTypedFiniteObserved program)
+  check "structurally distinct facts retain distinct values"
+    (take 4 (map expressionStatus (finiteResultExpressions result))==[TrueValue,FalseValue,TrueValue,UnresolvedValue])
+  let inputs q=concatMap readInputs [r | r<-ledger,readRoot r==["expression",q]]
+      grounds q=[(groundPredicate f,groundArguments f) | GroundInput f<-inputs q]
+  check "reference expansion preserves exact local read" (grounds "q:ref"==[("p(a",["b"])])
+  check "reference name does not become a primitive read" (RequirementInput printed `elem` inputs "q:ref" && (dep,["dep_template_entity"]) `notElem` grounds "q:ref")
+  check "scalar name does not become a primitive read" (inputs "q:scalar"==[ScalarInput printed,ScalarInput "upper"] && null (grounds "q:scalar"))
+  check "decisive F still reads its actual U operand" (grounds "q:mixed"==[("p(a",["b"]),(dep,["dep_template_entity"])])
+  let missing=program {finiteFacts=filter (\f->(groundPredicate f,groundArguments f)/=("p(a",["b"])) (finiteFacts program)}
+  check "missing colliding tuple is not supplied by an alias" (case checkTypedFiniteInputs missing of Left _->True;_->False)
+  check "shared evaluator refuses missing tuple" (case evaluateTypedFinite missing of Left _->True;_->False)
+  check "shared evaluator refuses identical duplicate" (case evaluateTypedFinite program {finiteFacts=facts++finiteFacts program} of Left _->True;_->False)
+  let graph=typedFiniteGraph TraceView program result
+      ids=[graphNodeId n | n<-semanticGraphNodes graph,graphNodeKind n=="ground-fact"]
+  check "ground graph identities retain colliding observations" (length ids==5 && Map.size (Map.fromList [(i,()) | i<-ids])==5)
 
 semanticMatrices :: IO ()
 semanticMatrices = do

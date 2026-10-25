@@ -22,8 +22,7 @@ import System.IO (stdin, stdout, stderr)
 import System.Posix.Files (getSymbolicLinkStatus, isRegularFile, fileSize)
 import System.Process (readProcessWithExitCode)
 import Yuho.Surface.Dependency (dependencyInput)
-import Yuho.Surface.Lexer (lexSource)
-import Yuho.Surface.Token (tokenText)
+import Yuho.Surface.Dependency.CLI (DependencyInputKind(..),dependencyOperation)
 import qualified Yuho.Authoring as SDK
 import qualified Yuho.Protocol.Json as Strict
 
@@ -56,19 +55,30 @@ runMachine args = do
     then (,) key . T.pack <$> makeAbsolute (T.unpack v) else pure (key,v)) fields
   input <- makeAbsolute path
   let selected = Request version kind op input absolute
-  selectedDependency <- dependencyInput input
-  when (kind `elem` ["composition-yh","computed-input-json"] && selectedDependency)
-    (bad (Just selected) "SMREQUEST" "/input_kind" "dependency inputs require the explicit v0.2 dependency kinds")
-  when (kind=="dependency-yh") $ do
-    source <- readBounded 65536 input >>= either (bad (Just selected) "SMIO" "/path" . T.pack) pure
-    case lexSource input source of
-      Right (t:_) | tokenText t=="checked-project" -> pure ()
-      _ -> bad (Just selected) "SMREQUEST" "/input_kind" "dependency-yh requires checked-project source"
-  when (kind=="dependency-artifact-json" && not selectedDependency)
-    (bad (Just selected) "SMREQUEST" "/input_kind" "expected dependency artifact")
-  if kind == "computed-input-json" && op == "check"
-    then checkArtifact selected
-    else delegate selected
+  when (kind `elem` ["composition-yh","computed-input-json"]) $ do
+    selectedDependency <- dependencyInput input
+    when selectedDependency
+      (bad (Just selected) "SMREQUEST" "/input_kind" "dependency inputs require the explicit v0.2 dependency kinds")
+  if kind `elem` ["dependency-yh","dependency-artifact-json"] then dependencyRequest selected
+    else if kind == "computed-input-json" && op == "check"
+      then checkArtifact selected
+      else delegate selected
+
+-- Explicit source-only/artifact-only operations. No auto-detecting check and
+-- no second evaluator/export path at the machine boundary.
+dependencyRequest :: Request -> IO ()
+dependencyRequest req@(Request _ kind op path fields)=do
+  result<-dependencyOperation (if kind=="dependency-yh" then CurrentDependencySource else SavedDependencyArtifact)
+    op path (T.unpack <$> lookup "output" fields) (T.unpack <$> lookup "against" fields)
+  case result of
+    Left d->emit (Just req) False A.Null [] [A.toJSON d] [] >> exitFailure
+    Right payload->do
+      let exports=case lookup "output" fields of
+            Nothing->[]
+            Just out->[A.object ["directory" A..= out
+              ,"contract" A..= ("complete-dependency-projection-and-focused-native-view"::Text)
+              ,"files" A..= (["artifact.json","report.json","projection.json","view-bindings.json","view.json","view.xml","view.svg","source-map.json"]::[Text])]]
+      emit (Just req) True payload (profilesIn payload) [] exports
 
 parseRequest :: Strict.J -> Either (Text,Text) Request
 parseRequest value = do
@@ -191,7 +201,12 @@ emitVersion format req success payload profiles diagnostics exports = BL.hPut st
   ,"effects" A..= effects req,"payload" A..= payload,"diagnostics" A..= diagnostics,"exports" A..= exports]) <> "\n")
   where
     effects Nothing = A.Null
-    effects (Just (Request _ kind op _ _)) = A.object
+    effects (Just (Request version kind op _ _))
+      | version=="yuho.machine-request/v0.2-experimental" && not success = A.object
+        ["evaluation" A..= (if op=="check" then "none" else "not_reported"::Text),"source_authority" A..= ("not_validated"::Text)
+        ,"requested_source_authority" A..= (if kind=="dependency-artifact-json" then "embedded_artifact" else "current_sources"::Text)
+        ,"writes" A..= ("none"::Text)]
+      | otherwise = A.object
       ["evaluation" A..= (if op=="inspect" || (kind/="native-yh" && op=="check") then "none"
           else if op `elem` ["run","replay"] then "requested" else "native_command_may_evaluate" :: Text)
       ,"source_authority" A..= (if kind `elem` ["computed-input-json","dependency-artifact-json"] then "embedded_artifact" else "current_sources" :: Text)

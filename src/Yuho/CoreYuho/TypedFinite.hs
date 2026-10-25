@@ -7,9 +7,9 @@ module Yuho.CoreYuho.TypedFinite
   , PriorityDecl(..), GroundFact(..), TypedFiniteProgram(..)
   , FiniteModule(..)
   , ExprObservation(..), RuleObservation(..), PropositionObservation(..)
-  , TypedFiniteResult(..), truthName, groundKey, evaluateTypedFinite
+  , TypedFiniteResult(..), truthName, groundKey, GroundIdentity, groundIdentity, groundIdentityText, evaluateTypedFinite
   , negateTruth, compareScalar, cardinalityTruth, resolveProposition
-  , FiniteRead(..), evaluateTypedFiniteObserved, checkTypedFiniteInputs
+  , FiniteRead(..), FiniteInput(..), inputDisplay, evaluateTypedFiniteObserved, checkTypedFiniteInputs
   , substituteTerm
   ) where
 
@@ -180,6 +180,26 @@ truthName UnresolvedValue = "unresolved"
 groundKey :: Text -> [Text] -> Text
 groundKey name arguments = name <> "(" <> Text.intercalate "," arguments <> ")"
 
+-- Display text above is deliberately not a lookup key. Argument boundaries and
+-- predicate identity remain structural, including admitted punctuation/Unicode.
+type GroundIdentity = (Text,[Text])
+groundIdentity :: Text -> [Text] -> GroundIdentity
+groundIdentity = (,)
+
+-- Existing opaque textual mapping/graph IDs remain byte-compatible on the
+-- unambiguous legacy alphabet. The escaped namespace starts with '(', which
+-- no legacy-safe predicate can start with. Its length-prefixed tuple is
+-- reversible and includes arity/order; neither branch aliases the other.
+groundIdentityText :: Text -> [Text] -> Text
+groundIdentityText name arguments
+  | all (Text.all (`notElem` ("(),"::String))) (name:arguments) = groundKey name arguments
+  | otherwise = "(tuple)" <> Text.concat [Text.pack (show (Text.length x)) <> ":" <> x | x<-name:arguments]
+
+factTable :: [GroundFact] -> Either Text (Map GroundIdentity GroundFact)
+factTable facts =
+  let table=Map.fromList [(groundIdentity (groundPredicate f) (groundArguments f),f) | f<-facts]
+  in if Map.size table==length facts then Right table else Left "duplicate ground fact"
+
 negateTruth :: Truth -> Truth
 negateTruth TrueValue = FalseValue
 negateTruth FalseValue = TrueValue
@@ -235,10 +255,19 @@ cardinalityTruth kindValue threshold values =
 -- | Actual eager evaluation ledger. Paths are occurrence paths within a named
 -- expression or a grounded rule invocation; reference expansion is retained.
 -- This ledger is opt-in: the established result encoder remains unchanged.
+data FiniteInput = GroundInput GroundFact | RequirementInput Text | ScalarInput Text
+  deriving (Eq, Show)
+
+-- Only a legacy human-readable description. Never use this to join provenance.
+inputDisplay :: FiniteInput -> Text
+inputDisplay (GroundInput f)=groundKey (groundPredicate f) (groundArguments f)
+inputDisplay (RequirementInput i)=i
+inputDisplay (ScalarInput i)=i
+
 data FiniteRead = FiniteRead
   { readRoot :: [Text], readPath :: [Int], readBindings :: [(Text,Text)]
   , readKind :: Text, readStatus :: Truth, readDetail :: Text
-  , readInputs :: [Text]
+  , readInputs :: [FiniteInput]
   } deriving (Eq, Show)
 
 evaluateTypedFinite :: TypedFiniteProgram -> Either Text TypedFiniteResult
@@ -246,9 +275,8 @@ evaluateTypedFinite program = fst <$> evaluateTypedFiniteObserved program
 
 evaluateTypedFiniteObserved :: TypedFiniteProgram -> Either Text (TypedFiniteResult,[FiniteRead])
 evaluateTypedFiniteObserved program = do
-  let facts = Map.fromList [(groundKey (groundPredicate item) (groundArguments item), groundStatus item)
-        | item <- finiteFacts program]
-      domains = programDomains program
+  facts <- factTable (finiteFacts program)
+  let domains = programDomains program
       requirements = Map.fromList (finiteRequirements program)
       evaluator root bindings seen = evaluateExpr program facts domains requirements root [] bindings seen
   requirementRows <- traverse (\(identifier,expression) -> do
@@ -284,17 +312,18 @@ parameterBindings domains ((variable,kindValue):rest) = do
 -- technical value. Used only by the new plan checker, not as an evaluation.
 checkTypedFiniteInputs :: TypedFiniteProgram -> Either Text ()
 checkTypedFiniteInputs program = do
+  _ <- factTable (finiteFacts program)
   mapM_ (\(i,e)->walk Map.empty (Set.singleton i) e) (finiteRequirements program)
   mapM_ (\r->parameterBindings domains (ruleParameters r) >>= mapM_
     (\bs->walk (Map.fromList bs) Set.empty (ruleBody r))) (finiteRules program)
   where
     domains = programDomains program
-    facts = Set.fromList [groundKey (groundPredicate f) (groundArguments f) | f <- finiteFacts program]
+    facts = Set.fromList [groundIdentity (groundPredicate f) (groundArguments f) | f <- finiteFacts program]
     walk bindings seen expression = case expression of
       PredicateExpr name terms -> do
         arguments <- traverse (resolveTerm bindings) terms
         let key = groundKey name arguments
-        if Set.member key facts then Right () else Left ("missing ground classification " <> key)
+        if Set.member (groundIdentity name arguments) facts then Right () else Left ("missing ground classification " <> key)
       ComparisonExpr _ l r u -> mapM_ (\i->if Map.member i (finiteValues program)
         then Right () else Left ("missing scalar value "<>i)) (l:r:maybe [] (:[]) u)
       AllExpr xs -> mapM_ (walk bindings seen) xs
@@ -309,7 +338,7 @@ checkTypedFiniteInputs program = do
       where quant v t x = maybe (Left ("unknown quantified type "<>t))
               (mapM_ (\e->walk (Map.insert v e bindings) seen x)) (Map.lookup t domains)
 
-evaluateExpr :: TypedFiniteProgram -> Map Text Truth -> Map Text [Text]
+evaluateExpr :: TypedFiniteProgram -> Map GroundIdentity GroundFact -> Map Text [Text]
   -> Map Text FiniteExpr -> [Text] -> [Int] -> Map Text Text -> Set Text -> FiniteExpr
   -> Either Text (Truth,Text,[FiniteRead])
 evaluateExpr program facts domains requirements root path bindings seen expression = do
@@ -317,15 +346,15 @@ evaluateExpr program facts domains requirements root path bindings seen expressi
     PredicateExpr name terms -> do
       arguments <- traverse (resolveTerm bindings) terms
       let key = groundKey name arguments
-      status <- maybe (Left ("missing ground classification " <> key)) Right (Map.lookup key facts)
-      pure (status,key,[key],[])
+      fact <- maybe (Left ("missing ground classification " <> key)) Right (Map.lookup (groundIdentity name arguments) facts)
+      pure (groundStatus fact,key,[GroundInput fact],[])
     ComparisonExpr operation leftName rightName upperName -> do
       left <- value leftName
       right <- value rightName
       upper <- traverse value upperName
       status <- compareScalar operation left right upper
       pure (status,leftName <> " " <> comparisonName operation <> " " <> rightName
-        <> maybe "" (" and " <>) upperName,leftName:rightName:maybe [] (:[]) upperName,[])
+        <> maybe "" (" and " <>) upperName,map ScalarInput (leftName:rightName:maybe [] (:[]) upperName),[])
     AllExpr members -> aggregate allStatus "all" members
     AnyExpr members -> aggregate anyStatus "any" members
     NotExpr member -> do
@@ -348,7 +377,7 @@ evaluateExpr program facts domains requirements root path bindings seen expressi
           Just target -> do
             (s,d,rs) <- evaluateExpr program facts domains requirements root (path++[0]) bindings
               (Set.insert identifier seen) target
-            pure (s,d,[identifier],rs)
+            pure (s,d,[RequirementInput identifier],rs)
   pure (status,detail,FiniteRead root path (Map.toAscList bindings) (kind expression) status detail inputs:children)
   where
     recurse index = evaluateExpr program facts domains requirements root (path++[index]) bindings seen

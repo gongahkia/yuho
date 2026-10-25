@@ -23,6 +23,7 @@ test: build
 	$(PYTHON) test/typed_case_identity.py $(YUHO)
 	$(PYTHON) test/checked_dependencies.py $(YUHO)
 	$(PYTHON) test/dependency_native.py $(YUHO)
+	$(PYTHON) test/dependency_integrity.py $(YUHO)
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)

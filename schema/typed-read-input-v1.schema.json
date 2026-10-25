@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/typed-read-input-v1.schema.json",
+  "description": "Authoritative typed evaluated input. Legacy actual_inputs strings are display descriptions only. Occurrence/component/snapshot are qualified by the enclosing execution read.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.typed-read-input/v1"
+        },
+        "kind": {
+          "const": "ground_predicate"
+        },
+        "predicate": {
+          "type": "string"
+        },
+        "arguments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "classification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "satisfied",
+                "not_satisfied",
+                "unresolved"
+              ]
+            },
+            "reason": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "format",
+        "kind",
+        "predicate",
+        "arguments",
+        "classification"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.typed-read-input/v1"
+        },
+        "kind": {
+          "const": "requirement_reference"
+        },
+        "requirement": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "kind",
+        "requirement"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.typed-read-input/v1"
+        },
+        "kind": {
+          "const": "scalar_operand"
+        },
+        "scalar": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "kind",
+        "scalar"
+      ]
+    }
+  ]
+}

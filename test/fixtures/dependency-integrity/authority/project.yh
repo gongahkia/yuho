@@ -1,0 +1,10 @@
+checked-project independent version "yuho.dependency-plan/v0.1-experimental" {
+source origin locator "urn:independent:fictional-control";
+scope scope:a actor project:a context project:i { identity project:a nominal role:person; identity project:i nominal role:event; }
+component numeric profile native-typed model "source.yh" scenario "facts.yh" scope scope:a { nominal person as role:person; nominal event as role:event; entity person:a as project:a; entity event:i as project:i; } rationale "Explicit fictional local entity correspondence";
+component consumer profile native-typed model "recipient.yh" scenario "recipient-facts.yh" scope scope:a { nominal person as role:person; nominal event as role:event; entity person:a as project:a; entity event:i as project:i; } rationale "Explicit fictional local entity correspondence";
+bind large from numeric . expression q:large to consumer . condition in:large mapping "yuho.condition-identity/v1" rationale "Technical support only, absence is not factual falsity" refs origin;
+bind count from numeric . expression q:count to consumer . condition in:count mapping "yuho.condition-identity/v1" rationale "Technical support only, absence is not factual falsity" refs origin;
+candidate eligible scope scope:a guard consumer . expression q:result mapping "yuho.condition-identity/v1" modality may rationale "Independent technical candidate only" refs origin { term-imprisonment term:prison unit months minimum 1 maximum 12; }
+candidate false scope scope:a guard numeric . expression q:equal mapping "yuho.condition-identity/v1" modality may rationale "Independent technical candidate only" refs origin { death term:death; }
+}

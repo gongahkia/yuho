@@ -1,0 +1,84 @@
+{
+  "fragment": "TypedFiniteRules-v1",
+  "input_schema": "yuho.kernel-input/v1",
+  "operation": "evaluate",
+  "policy": {
+    "max_nodes": 2048
+  },
+  "program": {
+    "entities": [
+      {
+        "id": "person:a",
+        "type": "person"
+      },
+      {
+        "id": "event:i",
+        "type": "event"
+      },
+      {
+        "id": "a(b",
+        "type": "person"
+      },
+      {
+        "id": "b",
+        "type": "person"
+      }
+    ],
+    "entity_types": [
+      "person",
+      "event"
+    ],
+    "facts": [
+      {
+        "arguments": [
+          "a(b"
+        ],
+        "predicate": "p",
+        "reason": "Fact for the other predicate and entity only",
+        "status": "satisfied"
+      }
+    ],
+    "id": "Control",
+    "limitations": [
+      "Fictional independent collision control"
+    ],
+    "predicates": [
+      {
+        "arguments": [
+          "person"
+        ],
+        "id": "p",
+        "kind": "relationship"
+      },
+      {
+        "arguments": [
+          "person"
+        ],
+        "id": "p(a",
+        "kind": "relationship"
+      }
+    ],
+    "priorities": [],
+    "propositions": [],
+    "requirements": [
+      {
+        "expression": {
+          "arguments": [
+            {
+              "id": "b",
+              "kind": "entity"
+            }
+          ],
+          "kind": "predicate",
+          "predicate": "p(a"
+        },
+        "id": "q:target"
+      }
+    ],
+    "rules": [],
+    "scalars": [],
+    "values": []
+  },
+  "protocol": "yuho.kernel-protocol/v1",
+  "request_id": "DEPENDENCY-RUN"
+}

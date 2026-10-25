@@ -1,0 +1,3 @@
+typed-rules-model Control { limit 2048; entity-type person; entity-type event; entity person:a as person; entity event:i as event;
+scalar amount type integer; scalar threshold type integer; requirement q:large = compare(amount,gt,threshold); requirement q:equal = compare(amount,eq,threshold); requirement q:count = exactly 1(q:large,q:equal);
+limitation "Fictional engineering model; no legal conclusion"; }

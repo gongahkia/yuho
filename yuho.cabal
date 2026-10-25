@@ -50,6 +50,10 @@ extra-source-files:
     test/fixtures/temporal-sdk/*.yh
     test/fixtures/temporal-view-format/*.json
     test/dependency_native.py
+    test/dependency_integrity.py
+    test/DependencyIntegrityClient.hs
+    test/fixtures/dependency-integrity/*.json
+    test/fixtures/dependency-integrity/authority/*.yh
     test/checked_dependencies.py
     test/DependencyModelChecks.hs
     scripts/verify_dependency_conformance.py

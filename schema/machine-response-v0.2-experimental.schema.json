@@ -47,10 +47,49 @@
       ]
     },
     "effects": {
-      "type": [
-        "object",
-        "null"
-      ]
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "evaluation",
+            "source_authority",
+            "writes"
+          ],
+          "properties": {
+            "evaluation": {
+              "enum": [
+                "none",
+                "requested",
+                "not_reported"
+              ]
+            },
+            "source_authority": {
+              "enum": [
+                "current_sources",
+                "embedded_artifact",
+                "not_validated"
+              ]
+            },
+            "requested_source_authority": {
+              "enum": [
+                "current_sources",
+                "embedded_artifact"
+              ]
+            },
+            "writes": {
+              "enum": [
+                "none",
+                "new_output_only"
+              ]
+            }
+          }
+        }
+      ],
+      "description": "Successful operations report validated source authority. On failure source_authority is not_validated; requested_source_authority describes only the request. Non-check failures may have evaluated, so evaluation is not_reported."
     },
     "payload": {},
     "diagnostics": {

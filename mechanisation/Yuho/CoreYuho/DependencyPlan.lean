@@ -186,4 +186,40 @@ def project (b : Binding) (e : Evidence) : ProjectionRecord := ⟨b,e,convert e�
 theorem projection_retains_source (b : Binding) (e : Evidence) :
     (project b e).binding.source = b.source := rfl
 
+-- Lookup and causal membership require structural keys and disjoint categories.
+-- Production parser/Map/JSON refinement is a separate, tested obligation.
+structure PrimitiveIdentity where
+  predicate : String
+  arguments : List String
+  deriving Repr, DecidableEq
+
+def primitive (p : String) (args : List String) : PrimitiveIdentity := ⟨p,args⟩
+
+theorem primitive_injective (p q : String) (xs ys : List String)
+    (h : primitive p xs = primitive q ys) : p = q ∧ xs = ys :=
+  ⟨congrArg PrimitiveIdentity.predicate h, congrArg PrimitiveIdentity.arguments h⟩
+
+inductive ReadInput where
+  | ground (application : PrimitiveIdentity)
+  | requirement (identity : String)
+  | scalar (identity : String)
+  deriving Repr, DecidableEq
+
+def groundReads : List ReadInput → List PrimitiveIdentity
+  | [] => []
+  | .ground p :: rest => p :: groundReads rest
+  | _ :: rest => groundReads rest
+
+theorem ground_witness (p : PrimitiveIdentity) (reads : List ReadInput) :
+    p ∈ groundReads reads ↔ ReadInput.ground p ∈ reads := by
+  induction reads with
+  | nil => simp [groundReads]
+  | cons item rest ih => cases item <;> simp [groundReads, ih]
+
+theorem requirement_does_not_supply_fact (i : String) (reads : List ReadInput) :
+    groundReads (.requirement i :: reads) = groundReads reads := rfl
+
+theorem scalar_does_not_supply_fact (i : String) (reads : List ReadInput) :
+    groundReads (.scalar i :: reads) = groundReads reads := rfl
+
 end Yuho.CoreYuho.DependencyPlan

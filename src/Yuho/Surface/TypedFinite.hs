@@ -1147,10 +1147,10 @@ uniqueGroundFacts path facts = go Set.empty facts
   where
     go _ [] = Right ()
     go seen (item:rest)
-      | Set.member key seen = at "SFT002" path (Token WordToken key 1 1)
+      | Set.member key seen = at "SFT002" path (Token WordToken (groundKey (groundPredicate item) (groundArguments item)) 1 1)
           "duplicate ground classification"
       | otherwise = go (Set.insert key seen) rest
-      where key = groundKey (groundPredicate item) (groundArguments item)
+      where key = groundIdentity (groundPredicate item) (groundArguments item)
 
 scalarAssignment :: FilePath -> Map Text ScalarType -> (Token,RawValue)
   -> Either Diagnostic (Text,ScalarValue)
@@ -1495,13 +1495,13 @@ checkGroundInputs path scenarioPath raw scenario program = do
   mapM_ (uncurry (walk Set.empty)) (rawRequirements raw)
   mapM_ (\(identifier,_,_,_,body,_) -> walk Set.empty identifier body) (rawRules raw)
   where
-    facts = Set.fromList [groundKey (groundPredicate f) (groundArguments f) | f <- finiteFacts program]
+    facts = Set.fromList [groundIdentity (groundPredicate f) (groundArguments f) | f <- finiteFacts program]
     definitions = Map.fromList [(tokenText i,(i,e)) | (i,e) <- rawRequirements raw]
     walk active origin expression = case expression of
       PredicateExpr name arguments -> do
         entities <- traverse (entity origin) arguments
         let key = groundKey name entities
-        unless (Set.member key facts) (atRelated "SFT011" scenarioPath (scenarioIdentifier scenario)
+        unless (Set.member (groundIdentity name entities) facts) (atRelated "SFT011" scenarioPath (scenarioIdentifier scenario)
           ("missing ground classification " <> key) path origin)
       ComparisonExpr {} -> Right () -- Declaration/value checks ran above; no comparison is computed.
       AllExpr members -> mapM_ (walk active origin) members

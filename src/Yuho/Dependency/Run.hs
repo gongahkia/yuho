@@ -6,6 +6,7 @@ import Control.Monad (foldM)
 import qualified Data.ByteString
 import qualified Data.Text
 import qualified Data.Aeson.KeyMap as AM
+import qualified Data.Aeson.KeyMap
 import qualified Data.Aeson as A
 import Data.List (nub, sort)
 import qualified Data.Map.Strict as M
@@ -77,7 +78,15 @@ executePlanModel blocked plan=do
   (records,results,conversions)<-foldM step (M.empty,M.empty,[]) (checkedOrder plan)
   candidates<-traverse (candidate records results conversions) (sortOnId (planCandidates p))
   let ordered=[records M.! i | i<-checkedOrder plan]
-      identity=hash (checkedDigest plan,ordered,conversions,candidates)
+      -- New typed read records are a deterministic refinement of the retained
+      -- request/read occurrence. Exclude only those additive fields from the
+      -- legacy execution digest; unchanged v0.1 saved executions still replay.
+      -- Corrected values/causes continue to change the digest and refuse unsafe
+      -- old executions. No caller-supplied read record is trusted on replay.
+      digestComponent c=c {executionReads=map legacyRead (executionReads c)}
+      legacyRead (A.Object x)=A.Object (Data.Aeson.KeyMap.delete "input_records" x)
+      legacyRead x=x
+      identity=hash (checkedDigest plan,map digestComponent ordered,conversions,candidates)
   pure (DependencyExecution plan ordered conversions candidates identity)
   where
     p=dependencyPlan (checkedDocument plan)
@@ -158,7 +167,8 @@ resolvePort plan records results port=do
           used=[conversion | conversion<-executionIncoming record
             ,b<-planBindings (dependencyPlan (checkedDocument plan)),bindingIdentity b==conversionIdentity conversion
             ,Just predicate<-[lookup (bindingSlot b) (checkedSlots c)]
-            ,K.groundKey predicate ["dep_template_entity"] `elem` inputs]
+            ,K.GroundInput fact<-inputs
+            ,K.groundIdentity (K.groundPredicate fact) (K.groundArguments fact)==K.groundIdentity predicate ["dep_template_entity"]]
       value v state row causes=PortValue handle port scope (executionSnapshot record) (if v==Nothing then Nothing else Just (portObject port)) v state row (sort (nub causes))
   if executionState record=="not_evaluated" then pure (value Nothing "not_evaluated" A.Null (executionBlockedBy record)) else do
     (result,ledger)<-maybe (failure "DEPOBSERVATION" [portObject port] "evaluated component has no authoritative result") Right (M.lookup (portComponent port) results)
@@ -204,7 +214,17 @@ readJson component snapshot r=A.object
   ["identity" A..= qualifiedIdentity [component,snapshot,qualifiedIdentity (K.readRoot r),qualifiedIdentity (map (Data.Text.pack . show) (K.readPath r)),qualifiedIdentity (concatMap (\(a,b)->[a,b]) (K.readBindings r))]
   ,"root" A..= K.readRoot r,"path" A..= K.readPath r,"bindings" A..= K.readBindings r
   ,"operator" A..= K.readKind r,"status" A..= K.truthName (K.readStatus r),"detail" A..= K.readDetail r
-  ,"actual_inputs" A..= K.readInputs r,"evaluation" A..= ("evaluated"::Text)]
+  ,"actual_inputs" A..= map K.inputDisplay (K.readInputs r),"input_records" A..= map inputRecord (K.readInputs r),"evaluation" A..= ("evaluated"::Text)]
+
+-- Versioned typed inputs are authoritative. actual_inputs retains legacy
+-- display descriptions only; requirement/scalar names never become facts.
+inputRecord :: K.FiniteInput -> A.Value
+inputRecord input=A.object (("format" A..= ("yuho.typed-read-input/v1"::Text)):case input of
+  K.GroundInput f->["kind" A..= ("ground_predicate"::Text),"predicate" A..= K.groundPredicate f
+    ,"arguments" A..= K.groundArguments f,"classification" A..= A.object
+      ["status" A..= K.truthName (K.groundStatus f),"reason" A..= K.groundReason f]]
+  K.RequirementInput i->["kind" A..= ("requirement_reference"::Text),"requirement" A..= i]
+  K.ScalarInput i->["kind" A..= ("scalar_operand"::Text),"scalar" A..= i])
 
 jsonBytes :: Data.ByteString.ByteString -> Either DependencyDiagnostic A.Value
 jsonBytes=either (failure "DEPFORMAT" [] . Data.Text.pack) Right . A.eitherDecodeStrict'

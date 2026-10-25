@@ -307,7 +307,7 @@ validateDecoded program = do
   unique "proposition" (finitePropositions program)
   unique "requirement" (map fst (finiteRequirements program))
   unique "rule" (map ruleName rules)
-  unique "ground fact" [groundKey (groundPredicate fact) (groundArguments fact) | fact <- finiteFacts program]
+  unique "ground fact" [groundIdentity (groundPredicate fact) (groundArguments fact) | fact <- finiteFacts program]
   traverse_ (boundedText "identifier") (finiteProgramId program : types ++ map fst entities
     ++ map predicateName predicates ++ map scalarName (finiteScalars program)
     ++ finitePropositions program ++ map fst (finiteRequirements program) ++ ruleIds)

@@ -1,0 +1,3 @@
+typed-rules-model Control { limit 2048; entity-type person; entity-type event; entity person:a as person; entity event:i as event;
+dependency-condition in:large type technical-condition; dependency-condition in:count type technical-condition; requirement q:result = all(condition(in:large),condition(in:count));
+limitation "Fictional engineering model; no legal conclusion"; }
