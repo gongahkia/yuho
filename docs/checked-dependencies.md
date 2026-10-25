@@ -58,7 +58,12 @@ requirement q:recipient = all(ownCriterion(local:person,local:event),condition(i
 A hole cannot be directly classified in a scenario or run unbound. Only a checked
 plan supplies execution-generated facts; source files are never rewritten.
 `condition` is reserved within a template declaring holes. Ordinary models keep
-their existing grammar. A binding is explicit:
+their existing grammar. The private `dep_template_type`, `dep_template_entity`
+and per-slot generated predicate identities are protected only when lowering
+actually creates condition-hole helpers. In a component without holes, those
+spellings remain authored identities and undergo normal nominal/entity mapping.
+This also applies to in-memory SDK templates and selected typed SDK producers.
+A binding is explicit:
 
 ```yuho
 bind link:qualification from supplier . proposition p:qualified

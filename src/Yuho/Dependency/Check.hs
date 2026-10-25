@@ -164,8 +164,11 @@ checkComponent doc c=withLocation (componentLocation c) $ do
     Just (caseId,allegation)->ensure "DEPSCOPE" [componentIdentity c] "actual case/allegation selector differs from declared scope"
       (scopeCase scope==Just caseId && scopeAllegation scope==Just allegation)
     Nothing->pure ()
-  let types=[x | K.EntityTypeDecl x<-K.finiteEntityTypes program,x/="dep_template_type"]
-      entities=[(x,t) | K.EntityDecl x t<-K.finiteEntities program,x/="dep_template_entity"]
+  -- Both template lowerers introduce these private helpers only for actual
+  -- condition slots, after rejecting authored collisions. Without slots the
+  -- same spellings are ordinary authored identities (including SDK producers).
+  let types=[x | K.EntityTypeDecl x<-K.finiteEntityTypes program,null slots || x/="dep_template_type"]
+      entities=[(x,t) | K.EntityDecl x t<-K.finiteEntities program,null slots || x/="dep_template_entity"]
   unique "local nominal map" (map fst (componentNominals c))
   unique "local entity map" (map fst (componentEntities c))
   unique "project entity map (injectivity required)" (map snd (componentEntities c))
@@ -253,7 +256,7 @@ compileTemplate :: TechnicalTemplate -> Either DependencyDiagnostic (K.TypedFini
 compileTemplate t=do
   unique "template condition" (templateConditions t)
   let slots=[(i,"dep_"<>sha256Text (U.encodeUtf8 i)) | i<-templateConditions t]
-      generated=["dep_template_type","dep_template_entity"]++map snd slots
+      generated=[n | not (null slots),n<-["dep_template_type","dep_template_entity"]]++map snd slots
   ensure "DEPWRITER" generated "authored template identities conflict with reserved lowering objects"
     (not (any (`elem` generated) (templateEntityTypes t++map fst (templateEntities t)++map fst (templatePredicates t))))
   let expr e=case e of

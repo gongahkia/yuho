@@ -24,6 +24,7 @@ test: build
 	$(PYTHON) test/checked_dependencies.py $(YUHO)
 	$(PYTHON) test/dependency_native.py $(YUHO)
 	$(PYTHON) test/dependency_integrity.py $(YUHO)
+	$(PYTHON) test/dependency_generated_identity.py $(YUHO)
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)

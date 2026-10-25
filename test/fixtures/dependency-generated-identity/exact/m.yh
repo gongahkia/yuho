@@ -1,0 +1,1 @@
+typed-rules-model Reserved { entity-type person; entity-type event; entity dep_template_entity as person; entity e as event; predicate own(person,event) kind relationship; requirement q = own(dep_template_entity,e); limitation "fictional"; }
