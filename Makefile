@@ -25,6 +25,7 @@ test: build
 	$(PYTHON) test/dependency_native.py $(YUHO)
 	$(PYTHON) test/dependency_integrity.py $(YUHO)
 	$(PYTHON) test/dependency_generated_identity.py $(YUHO)
+	$(PYTHON) test/dependency_condition_admission.py $(YUHO)
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)

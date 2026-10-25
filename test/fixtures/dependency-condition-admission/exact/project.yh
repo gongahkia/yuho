@@ -1,0 +1,6 @@
+checked-project acceptance version "yuho.dependency-plan/v0.1-experimental" {
+ source ref locator "urn:independent:fictional";
+ scope sc actor global:actor context global:context { identity global:actor nominal role:actor; identity global:context nominal role:event; }
+ component c profile native-typed model "m.yh" scenario "s.yh" scope sc { nominal person as role:actor; nominal event as role:event; entity actor as global:actor; entity e as global:context; } rationale "Explicit independent mapping";
+ candidate candidate scope sc guard c . expression q mapping "yuho.condition-identity/v1" modality unspecified rationale "Technical only" refs ref { life-imprisonment term:life; }
+}

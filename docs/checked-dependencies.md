@@ -63,6 +63,11 @@ and per-slot generated predicate identities are protected only when lowering
 actually creates condition-hole helpers. In a component without holes, those
 spellings remain authored identities and undergo normal nominal/entity mapping.
 This also applies to in-memory SDK templates and selected typed SDK producers.
+A no-hole native model may declare and classify an ordinary typed predicate
+named `condition`, such as `condition(person,event)`. Its ordinary nominal,
+arity and input-completeness rules still apply; no dependency input is generated.
+With holes, `condition(slot)` remains the reserved source form and may only
+receive its value through a checked binding.
 A binding is explicit:
 
 ```yuho

@@ -1,0 +1,1 @@
+typed-rules-model Plain { entity-type person; entity-type event; entity actor as person; entity e as event; predicate condition(person,event) kind relationship; requirement q = condition(actor,e); limitation "fictional"; }

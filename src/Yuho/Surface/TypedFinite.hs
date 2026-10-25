@@ -1644,7 +1644,9 @@ prepareDependencyTyped bundle path scenarioPath allegation = do
             ,rawPredicates=rawPredicates m++[(tok n,[tok generatedType],tok "circumstance") | (_,n)<-slots]}
           scenarioSlots=scenario {scenarioFacts=scenarioFacts scenario++
             [(tok n,[tok generatedEntity],tok "unresolved",Token StringToken "structural binding placeholder; not an observation" 1 1) | (_,n)<-slots]}
-      when (any (\(i,_,_,_)->tokenText i `elem` (map fst slots++map snd slots++["condition"])) (scenarioFacts scenario))
+      -- Only an active dependency construct owns these input identities.
+      -- Without holes, condition is an ordinary authored predicate.
+      when (not (null slots) && any (\(i,_,_,_)->tokenText i `elem` (map fst slots++map snd slots++["condition"])) (scenarioFacts scenario))
         (at "DEPWRITER" sp (scenarioIdentifier scenario) "a dependency slot cannot have a direct classification")
       program<-validateModelMode False True mp sp withSlots scenarioSlots
       pure (program,slots)
