@@ -22,6 +22,12 @@ import qualified TypedExamples as Examples
 
 runDependencyChecks :: IO ()
 runDependencyChecks=do
+  declaration<-ok (SDK.requirementTemplate "q:permission" [("var:subject","person")]
+    (SDK.ScopedAtom "authorised" ["var:subject"]))
+  unless (declaration=="requirement-template q:permission(var:subject as person) = authorised(var:subject);") (fail "public template declaration changed")
+  use<-ok (SDK.requirementUse "q:case" "law::q:permission" ["actor:a"])
+  unless (use=="requirement-use q:case from law::q:permission(actor:a) assessments scenario;") (fail "explicit scoped selection missing")
+  refuse "SFNAME" (SDK.requirementUse "q:case; injection" "q:permission" ["actor:a"])
   forM_ [(D.Satisfied,"not_satisfied"),(D.NotSatisfied,"satisfied"),(D.Unresolved,"unresolved")] $ \(value,expected)->do
     checked<-ok (D.checkDependencyPlan (document value))
     execution<-ok (D.executeDependencyPlan checked)

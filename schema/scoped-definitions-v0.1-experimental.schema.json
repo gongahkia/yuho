@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/scoped-definitions-v0.1-experimental.schema.json",
+  "description": "Opt-in source template/use evidence; actual observations remain sealed read records. Independent selections use selected component/scenario identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "definitions",
+    "uses",
+    "notice"
+  ],
+  "properties": {
+    "format": {
+      "const": "yuho.scoped-definitions/v0.1-experimental"
+    },
+    "definitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "definitionKey",
+          "definitionSource",
+          "definitionSnapshot",
+          "definitionName",
+          "definitionFormals",
+          "definitionExpression",
+          "definitionLine",
+          "definitionColumn"
+        ]
+      }
+    },
+    "uses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "identity",
+          "declaration",
+          "component",
+          "scope",
+          "snapshot",
+          "definition_snapshot",
+          "instantiation",
+          "selection",
+          "occurrences"
+        ]
+      }
+    },
+    "notice": {
+      "type": "string"
+    }
+  }
+}

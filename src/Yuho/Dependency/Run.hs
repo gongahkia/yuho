@@ -8,12 +8,17 @@ import qualified Data.Text
 import qualified Data.Aeson.KeyMap as AM
 import qualified Data.Aeson.KeyMap
 import qualified Data.Aeson as A
-import Data.List (nub, sort)
+import qualified Data.Aeson.Types as AT
+import qualified Data.Aeson.Key
+import qualified Data.Text.Encoding
+import qualified Yuho.Protocol.Decode
+import Data.List (nub, sort, isPrefixOf)
 import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 import Prelude hiding (reads)
 import Data.Text (Text)
 import qualified Yuho.CoreYuho.TypedFinite as K
+import Yuho.ScopedDefinitions.Types
 import Yuho.Dependency.Types
 import Yuho.Dependency.Check
 import qualified Yuho.Protocol.Json as J
@@ -60,12 +65,12 @@ data DependencyExecution = DependencyExecution
 
 reportDependencyPlan :: DependencyExecution -> A.Value
 reportDependencyPlan e=A.object
-  ["format" A..= reportFormat,"execution" A..= dependencyExecutionId e
+  (["format" A..= reportFormat,"execution" A..= dependencyExecutionId e
   ,"plan_snapshot" A..= checkedDigest (executionPlan e),"order" A..= checkedOrder (executionPlan e)
   ,"components" A..= executionComponents e,"bindings" A..= executionConversions e
   ,"candidates" A..= executionCandidates e
   ,"eligible_candidates" A..= [candidateIdentity (availabilityCandidate c) | c<-executionCandidates e,availabilityState c==Eligible]
-  ,"notice" A..= ("Technical authored candidates only; no imposed sentence, proof sufficiency or judicial finding."::Text)]
+  ,"notice" A..= ("Technical authored candidates only; no imposed sentence, proof sufficiency or judicial finding."::Text)] ++ scopedEvidenceFields e)
 
 -- | The only production entry. Unavailable typed sources cannot be authored.
 executeDependencyPlan :: CheckedPlan -> Either DependencyDiagnostic DependencyExecution
@@ -241,3 +246,62 @@ propositionSupport "not_established"=Right NotSatisfied
 propositionSupport "unresolved"=Right Unresolved
 propositionSupport "conflict"=Right Unresolved
 propositionSupport state=failure "DEPOBSERVATION" [state] "unsupported resolved proposition state"
+
+-- | Opt-in refinement. No new field or digest change for historical documents.
+scopedEvidenceFields :: DependencyExecution -> [AT.Pair]
+scopedEvidenceFields e
+  | null uses=[]
+  | otherwise=["scoped_definitions" A..= scopedDefinitionEvidence e]
+ where uses=concatMap (scopedUses . checkedScopedDefinitions) (M.elems (checkedComponents (executionPlan e)))
+
+-- Definition keys are structural tuples; occurrences are sealed actual reads.
+-- A scenario selection refers to exact authored sources, not an invented fact.
+scopedDefinitionEvidence :: DependencyExecution -> A.Value
+scopedDefinitionEvidence e=A.object
+  ["format" A..= ("yuho.scoped-definitions/v0.1-experimental"::Text)
+  ,"definitions" A..= M.elems (M.fromList [(definitionKey d,d) | c<-M.elems (checkedComponents plan),d<-scopedDefinitions (checkedScopedDefinitions c)])
+  ,"uses" A..= [A.object ["identity" A..= uid,"declaration" A..= u,"component" A..= executionComponent record
+      ,"scope" A..= executionScope record,"snapshot" A..= executionSnapshot record
+      ,"definition_snapshot" A..= definitionSnapshot d
+      ,"instantiation" A..= qualifiedIdentity [componentKey record "instantiation" (qualifiedIdentity (definitionKey d)),qualifiedIdentity (concatMap (\(a,b)->[a,b]) (useArguments u))]
+      ,"selection" A..= A.object ["scenario" A..= useScenario u,"source" A..= useScenarioSource u
+        ,"sha256" A..= fmap (hashSource) (M.lookup (useScenarioSource u) (dependencySources doc))
+        ,"policy" A..= useAssessmentPolicy u]
+      ,"occurrences" A..= [A.object ["identity" A..= qualifiedIdentity [uid,rid],"read" A..= r
+            ,"selected_inputs" A..= groundInputs record r
+            ,"selected_assessments" A..= selectedAssessments record u r] | r<-executionReads record,selectedRead (useIdentity u) r,Just (A.String rid)<-[fieldValue "identity" r]]]
+    | (record,u,d,uid)<-scopedUseRecords e]
+  ,"notice" A..= ("One authored definition; distinct use, selected scenario and actual eager evaluation occurrences. Sharing is explicit within the selected scenario; no derived-result or cross-scope assessment transfer."::Text)]
+ where
+  plan=executionPlan e;doc=checkedDocument plan
+  hashSource=Yuho.Protocol.Decode.sha256Text . Data.Text.Encoding.encodeUtf8
+  componentKey record category object=case M.lookup (executionComponent record) (checkedComponents plan) of
+    Just c->componentObjectKey (planIdentity (dependencyPlan doc)) c category object
+    Nothing->qualifiedIdentity ["invalid-checked-component",executionComponent record,category,object]
+  selectedRead use r=fieldValue "root" r==Just (A.toJSON (["expression",use]::[Text])) && fieldValue "path" r==Just (A.toJSON ([]::[Int]))
+    || fieldValue "operator" r==Just (A.String "reference") && any (\x->fieldValue "kind" x==Just (A.String "requirement_reference") && fieldValue "requirement" x==Just (A.String use)) (listField "input_records" r)
+  groundInputs record r=nub [x | child<-executionReads record,fieldValue "root" child==fieldValue "root" r
+    ,pathOf r `isPrefixOf` pathOf child,x<-listField "input_records" child,fieldValue "kind" x==Just (A.String "ground_predicate")]
+  pathOf=listField "path"
+  selectedAssessments record u r=[A.object
+    ["identity" A..= componentKey record "assessment-selection" (qualifiedIdentity [Data.Text.pack (selectedSource a),hashSource text,qualifiedIdentity (selectedPredicate a:selectedArguments a)])
+    ,"origin" A..= ("authored classification"::Text),"declaration" A..= a,"source_snapshot" A..= hashSource text
+    ,"selection" A..= useScenario u]
+    | input<-groundInputs record r,Just c<-[M.lookup (executionComponent record) (checkedComponents plan)]
+    ,a<-scopedAssessments (checkedScopedDefinitions c)
+    ,fieldValue "predicate" input==Just (A.String (selectedPredicate a))
+    ,fieldValue "arguments" input==Just (A.toJSON (selectedArguments a))
+    ,fieldValue "classification" input==Just (selectedClassification a)
+    ,Just text<-[M.lookup (selectedSource a) (dependencySources doc)]]
+
+scopedUseRecords :: DependencyExecution -> [(ComponentRecord,ScopedUse,ScopedDefinition,Text)]
+scopedUseRecords e=[(record,u,d,qualifiedIdentity ["scoped-use",componentObjectKey pid c "requirement-use" (useIdentity u)])
+  | record<-executionComponents e,Just c<-[M.lookup (executionComponent record) (checkedComponents (executionPlan e))]
+  ,u<-scopedUses (checkedScopedDefinitions c),d<-scopedDefinitions (checkedScopedDefinitions c),definitionKey d==useDefinition u]
+ where pid=planIdentity (dependencyPlan (checkedDocument (executionPlan e)))
+
+fieldValue :: Text -> A.Value -> Maybe A.Value
+fieldValue key (A.Object x)=AM.lookup (Data.Aeson.Key.fromText key) x
+fieldValue _ _=Nothing
+listField :: Text -> A.Value -> [A.Value]
+listField key v=case fieldValue key v of Just (A.Array xs)->foldr (:) [] xs;_->[]

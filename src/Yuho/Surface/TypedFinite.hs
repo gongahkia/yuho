@@ -6,7 +6,7 @@ module Yuho.Surface.TypedFinite
   , loadTypedFiniteCase, encodeTypedFiniteRequest, encodeTypedFiniteCase
   , explainTypedFinite, explainTypedFiniteCase
   , inspectTypedFiniteModel, inspectTypedFiniteScenario, prepareTypedFiniteInspection
-  , typedDeclarationTokens, expandedNodeEstimate, dependencySourcePaths, prepareDependencyTyped
+  , typedDeclarationTokens, expandedNodeEstimate, dependencySourcePaths, prepareDependencyTyped, prepareDependencyTypedScoped
   ) where
 
 import Control.Exception (IOException, try)
@@ -30,10 +30,20 @@ import qualified Data.Text.Encoding as UTF8
 import Yuho.Protocol.Json (J(..), decodeJson, encodeJson)
 import Yuho.Surface.InspectionData (locatedToken)
 import Yuho.Surface.Lexer (lexSource)
+import Yuho.ScopedDefinitions.Types
+import qualified Data.Aeson as A
 import Yuho.Surface.Token
 
 data RawScalarType = RawInteger | RawDate | RawEnum Token | RawMoney Token
   deriving (Eq, Show)
+
+-- Authored templates and explicit uses are surface objects, not new Core operators.
+data RawTemplate = RawTemplate
+  { rawTemplateName :: Token, rawTemplateLookup :: Text
+  , rawTemplateParameters :: [(Token,Token)], rawTemplateBody :: FiniteExpr
+  , rawTemplatePath :: FilePath, rawTemplateOwner :: Text, rawTemplateVersion :: Maybe Text
+  , rawTemplateDigest :: Text, rawTemplateSignature :: [(Token,[Token],Token)]
+  } deriving (Eq,Show)
 
 data RawModel = RawModel
   { rawModelId :: Token
@@ -43,6 +53,9 @@ data RawModel = RawModel
   , rawEnums :: [(Token,[Token])]
   , rawScalars :: [(Token,RawScalarType)]
   , rawPredicates :: [(Token,[Token],Token)]
+  -- Origins belong to declarations selected by the resolver, not to names
+  -- guessed from a diagnostic. The optional token is the actual host use-site.
+  , rawDeclarationSources :: [(Text,Token,FilePath,Maybe Token)]
   , rawPropositions :: [Token]
   , rawRequirements :: [(Token,FiniteExpr)]
   , rawRules :: [(Token,[(Token,Token)],Token,Token,FiniteExpr,Maybe Token)]
@@ -53,6 +66,8 @@ data RawModel = RawModel
   , rawImports :: [(Token,Token,Token)]
   , rawUses :: [(Token,Token)]
   , rawDependencySlots :: [Token]
+  , rawTemplates :: [RawTemplate]
+  , rawScopedUses :: [(Token,Token,[Token])]
   , rawLimitations :: [Token]
   } deriving (Eq, Show)
 
@@ -240,6 +255,27 @@ parseModelDeclaration :: P (RawModel -> RawModel)
 parseModelDeclaration = do
   headToken <- word
   case tokenText headToken of
+    "requirement-template" -> do
+      identifier <- word
+      _ <- takeText "("
+      parameters <- commaList parameter
+      _ <- takeText ")"
+      _ <- takeText "="
+      body <- parseExpression
+      _ <- takeText ";"
+      pure (\model -> model {rawTemplates = rawTemplates model ++
+        [RawTemplate identifier (tokenText identifier) parameters body "" "" Nothing "" []]})
+    "requirement-use" -> do
+      identifier <- word
+      _ <- takeText "from"
+      target <- word
+      _ <- takeText "("
+      arguments <- commaList word
+      _ <- takeText ")"
+      _ <- takeText "assessments"
+      _ <- takeText "scenario"
+      _ <- takeText ";"
+      pure (\model -> model {rawScopedUses = rawScopedUses model ++ [(identifier,target,arguments)]})
     "dependency-condition" -> do
       identifier <- word
       _ <- takeText "type"
@@ -406,11 +442,11 @@ parseTypedFiniteModel path bytes = do
         token:_ -> at "SFT001" source token "trailing typed-rules source"
         [] -> at "SFT001" source (Token EndToken "" 1 1) "missing end token"
       let emptyModel = emptyRawModel identifier
-      pure (foldl (flip ($)) emptyModel declarations)
+      pure (ownTemplates path bytes (tokenText identifier) Nothing (foldl (flip ($)) emptyModel declarations))
 
 emptyRawModel :: Token -> RawModel
 emptyRawModel identifier = RawModel identifier (Token WordToken "2048" 1 1)
-  [] [] [] [] [] [] [] [] [] [] [] Nothing [] [] [] []
+  [] [] [] [] [] [] [] [] [] [] [] [] Nothing [] [] [] [] [] []
 
 parseTypedFiniteModule :: FilePath -> BS.ByteString -> Either Diagnostic RawModule
 parseTypedFiniteModule path bytes = do
@@ -432,7 +468,7 @@ parseTypedFiniteModule path bytes = do
       let exports = [value | Left value <- entries]
           declarations = [value | Right value <- entries]
           model = foldl (flip ($)) (emptyRawModel name) declarations
-      pure (RawModule name version exports model)
+      pure (RawModule name version exports (ownTemplates path bytes (tokenText name) (Just (tokenText version)) model))
     moduleEntry = do
       token <- current
       if tokenText token == "export" then do
@@ -619,12 +655,13 @@ loadTypedFiniteProgram path modelBytes scenarioBytes = case parseTypedFiniteMode
         (validateModel path scenarioPath model scenario)
       pure program { finiteModules = moduleRecords }
 
--- Imported expression tokens do not carry their defining file after selection.
--- Point to the actual host use-site when possible, never to that module's line
--- number in the host file. The original diagnostic code is unchanged.
+-- Legacy fallback for diagnostics without retained declaration context.
+-- Do not replace an authoritative primary/related pair with a name-based host
+-- fallback. Selected declarations now retain their defining origin separately.
 importDiagnostic :: FilePath -> RawModel -> Diagnostic -> Diagnostic
 importDiagnostic path host issue
   | diagnosticPath issue == path
+  , diagnosticRelated issue == Nothing
   , not (tokenText (diagnosticToken issue) `elem` hostDeclarations)
   , [use] <- [token | (_,token) <- rawUses host
     , last (Text.splitOn "::" (tokenText token)) == tokenText (diagnosticToken issue)] =
@@ -661,7 +698,8 @@ loadTypedModules path model
             validateImportIdentities path (rawImports model)
             let aliased = zip [tokenText alias | (_,_,alias) <- rawImports model] modules
             selections <- traverse (resolveUse path aliased) (rawUses model)
-            let merged = foldl mergeSelection model selections
+            validateSelectionDuplicates path model selections
+            let merged = selectTemplates model aliased (foldl mergeSelection model selections)
                 records = [FiniteModule (tokenText name) (tokenText version)
                   (tokenText alias) [(tokenText kindValue,tokenText identifier)
                     | (kindValue,identifier) <- exports]
@@ -707,51 +745,106 @@ readBounded file owner token = do
 validateImportIdentities :: FilePath -> [(Token,Token,Token)] -> Either Diagnostic ()
 validateImportIdentities path imports = do
   uniqueTokens path "SFT002" "duplicate module alias" [alias | (_,_,alias) <- imports]
-  uniqueTokens path "SFT002" "duplicate module identity"
-    [name { tokenText = tokenText name <> "@" <> tokenText version }
-      | (name,version,_) <- imports]
+  uniqueIdentities Map.empty imports
   when (length imports > 32) (at "SFT010" path (let (name,_,_) = imports !! 32 in name)
     "module count limit exceeded")
+  where
+    -- The comparison key includes the exact version; the diagnostic token must
+    -- remain the actual source name, not a synthetic name@version span.
+    uniqueIdentities _ [] = Right ()
+    uniqueIdentities seen ((name,version,_):rest) =
+      let key = (tokenText name,tokenText version)
+      in case Map.lookup key seen of
+        Just previous -> atRelated "SFT002" path name "duplicate module identity" path previous
+        Nothing -> uniqueIdentities (Map.insert key name seen) rest
 
 resolveUse :: FilePath -> [(Text,RawModule)] -> (Token,Token)
-  -> Either Diagnostic (Text,Token,RawModel)
+  -> Either Diagnostic (Text,Token,Token,RawModel)
 resolveUse path modules (kindToken,qualifiedToken) = case Text.splitOn "::" (tokenText qualifiedToken) of
   [alias,identifier] -> case [declaration | (candidateAlias,declaration@(RawModule _ _ exports _)) <- modules,
       candidateAlias == alias,
       any (\(kindValue,item) -> tokenText kindValue == tokenText kindToken
         && tokenText item == identifier) exports] of
     [RawModule _ _ _ body] -> Right (tokenText kindToken,
-      qualifiedToken { tokenText = identifier },body)
+      qualifiedToken { tokenText = identifier },qualifiedToken,body)
     [] -> at "SFT014" path qualifiedToken "private, missing or wrong-kind module reference"
     _ -> at "SFT014" path qualifiedToken "ambiguous module reference"
   _ -> at "SFT014" path qualifiedToken "module use must be alias-qualified"
 
-mergeSelection :: RawModel -> (Text,Token,RawModel) -> RawModel
-mergeSelection host (kindValue,identifier,moduleModel) = case kindValue of
-  "entity-type" -> host { rawEntityTypes = rawEntityTypes host
-      ++ selected rawEntityTypes (\item -> tokenText item == tokenText identifier) }
-  "entity" -> host { rawEntities = rawEntities host
-      ++ selected rawEntities (\(item,_) -> tokenText item == tokenText identifier) }
-  "enum-type" -> host { rawEnums = rawEnums host
-      ++ selected rawEnums (\(item,_) -> tokenText item == tokenText identifier) }
-  "scalar" -> host { rawScalars = rawScalars host
-      ++ selected rawScalars (\(item,_) -> tokenText item == tokenText identifier) }
-  "predicate" -> host { rawPredicates = rawPredicates host
-      ++ selected rawPredicates (\(item,_,_) -> tokenText item == tokenText identifier) }
-  "proposition" -> host { rawPropositions = rawPropositions host
-      ++ selected rawPropositions (\item -> tokenText item == tokenText identifier) }
-  "requirement" -> host { rawRequirements = rawRequirements host
-      ++ selected rawRequirements (\(item,_) -> tokenText item == tokenText identifier) }
-  "rule" -> host { rawRules = rawRules host
-      ++ selected rawRules (\(item,_,_,_,_,_) -> tokenText item == tokenText identifier) }
-  "norm" -> host { rawNorms = rawNorms host
-      ++ selected rawNorms (\(item,_,_,_,_,_) -> tokenText item == tokenText identifier) }
-  "responsibility-route" -> host { rawRoutes = rawRoutes host
-      ++ selected rawRoutes (\(item,_,_,_,_,_) -> tokenText item == tokenText identifier) }
-  "priority" -> host { rawPriorities = rawPriorities host
-      ++ selected rawPriorities (\(item,_) -> tokenText item == tokenText identifier) }
-  _ -> host
-  where selected accessor predicate = filter predicate (accessor moduleModel)
+mergeSelection :: RawModel -> (Text,Token,Token,RawModel) -> RawModel
+mergeSelection host (kindValue,identifier,useSite,moduleModel) = merged
+  { rawDeclarationSources = rawDeclarationSources host ++
+      [(kind,token,file,Just useSite) | (kind,token,file,_) <- rawDeclarationSources moduleModel
+      ,kind == kindValue, tokenText token == tokenText identifier] }
+  where
+  merged = case kindValue of
+    "entity-type" -> host { rawEntityTypes = rawEntityTypes host
+        ++ selected rawEntityTypes (\item -> tokenText item == tokenText identifier) }
+    "entity" -> host { rawEntities = rawEntities host
+        ++ selected rawEntities (\(item,_) -> tokenText item == tokenText identifier) }
+    "enum-type" -> host { rawEnums = rawEnums host
+        ++ selected rawEnums (\(item,_) -> tokenText item == tokenText identifier) }
+    "scalar" -> host { rawScalars = rawScalars host
+        ++ selected rawScalars (\(item,_) -> tokenText item == tokenText identifier) }
+    "predicate" -> host { rawPredicates = rawPredicates host
+        ++ selected rawPredicates (\(item,_,_) -> tokenText item == tokenText identifier) }
+    "proposition" -> host { rawPropositions = rawPropositions host
+        ++ selected rawPropositions (\item -> tokenText item == tokenText identifier) }
+    "requirement" -> host { rawRequirements = rawRequirements host
+        ++ selected rawRequirements (\(item,_) -> tokenText item == tokenText identifier) }
+    "rule" -> host { rawRules = rawRules host
+        ++ selected rawRules (\(item,_,_,_,_,_) -> tokenText item == tokenText identifier) }
+    "norm" -> host { rawNorms = rawNorms host
+        ++ selected rawNorms (\(item,_,_,_,_,_) -> tokenText item == tokenText identifier) }
+    "responsibility-route" -> host { rawRoutes = rawRoutes host
+        ++ selected rawRoutes (\(item,_,_,_,_,_) -> tokenText item == tokenText identifier) }
+    "priority" -> host { rawPriorities = rawPriorities host
+        ++ selected rawPriorities (\(item,_) -> tokenText item == tokenText identifier) }
+    _ -> host
+  selected accessor predicate = filter predicate (accessor moduleModel)
+
+-- Admission happens while a resolved selection still owns both its module
+-- declaration tokens and its actual host use token. After merging, names are
+-- required to be unique; they cannot be used to reconstruct duplicate origins.
+-- Priorities are edges (not unique named declarations) and deliberately absent.
+validateSelectionDuplicates :: FilePath -> RawModel -> [(Text,Token,Token,RawModel)]
+  -> Either Diagnostic ()
+validateSelectionDuplicates _ _ [] = Right ()
+validateSelectionDuplicates path host selections = mapM_ checkCategory categories
+  where
+    categories = [("requirement","SFDUPLICATE","duplicate use-site/requirement identity")]
+      ++ [(kind,"SFT002",message) | (kind,message) <-
+        [("entity-type","duplicate entity type"),("entity","duplicate entity")
+        ,("enum-type","duplicate enum type"),("scalar","duplicate scalar")
+        ,("predicate","duplicate predicate"),("proposition","duplicate proposition")
+        ,("rule","duplicate rule"),("norm","duplicate norm")
+        ,("responsibility-route","duplicate responsibility route")]]
+    checkCategory (kind,code,message) = do
+      let local = [(tokenText token,file,token) | (category,token,file,_) <- rawDeclarationSources host
+                   ,category == kind]
+            ++ [(tokenText i,path,i) | kind == "requirement",(i,_,_) <- rawScopedUses host]
+      initial <- uniqueSites code message Map.empty local
+      _ <- foldSelections kind code message initial selections
+      pure ()
+    foldSelections _ _ _ seen [] = Right seen
+    foldSelections kind code message seen ((category,identifier,useSite,body):rest)
+      | category /= kind = foldSelections kind code message seen rest
+      | otherwise = do
+          let original = [(tokenText token,file,token) | (k,token,file,_) <- rawDeclarationSources body
+                           ,k == kind,tokenText token == tokenText identifier]
+          -- A duplicate within the module is its own error, independent of the
+          -- host selection. Do not replace those two original declaration sites.
+          _ <- uniqueSites code message Map.empty original
+          next <- uniqueSites code message seen [(tokenText identifier,path,useSite)
+            | not (null original)]
+          foldSelections kind code message next rest
+    -- Keep the namespace key separate from the actual source token (in
+    -- particular, a host token still contains its original alias qualification).
+    uniqueSites _ _ seen [] = Right seen
+    uniqueSites code message seen ((key,file,token):rest) = case Map.lookup key seen of
+      Just (previousFile,previousToken) ->
+        atRelated code file token message previousFile previousToken
+      Nothing -> uniqueSites code message (Map.insert key (file,token) seen) rest
 
 validateModel :: FilePath -> FilePath -> RawModel -> TypedFiniteScenario
   -> Either Diagnostic TypedFiniteProgram
@@ -765,7 +858,13 @@ validateModelWith execute = validateModelMode execute False
 
 validateModelMode :: Bool -> Bool -> FilePath -> FilePath -> RawModel -> TypedFiniteScenario
   -> Either Diagnostic TypedFiniteProgram
-validateModelMode execute fullReadiness path scenarioPath model scenario = do
+validateModelMode execute fullReadiness path scenarioPath rawModel scenario = do
+  model <- expandScopedModel path rawModel
+  validateExpandedModel execute fullReadiness path scenarioPath model scenario
+
+validateExpandedModel :: Bool -> Bool -> FilePath -> FilePath -> RawModel -> TypedFiniteScenario
+  -> Either Diagnostic TypedFiniteProgram
+validateExpandedModel execute fullReadiness path scenarioPath model scenario = do
   case rawDependencySlots model of
     slot:_ -> at "DEPMISSING" path slot "dependency template requires a checked-project binding; standalone execution is unavailable"
     [] -> pure ()
@@ -796,10 +895,12 @@ validateModelMode execute fullReadiness path scenarioPath model scenario = do
     [token | (token,_,_,_,_,_) <- rawRoutes model]
   let typeNames = Set.fromList (map tokenText (rawEntityTypes model))
       enumMap = Map.fromList [(tokenText name,map tokenText values) | (name,values) <- rawEnums model]
-  mapM_ (validateEntity path typeNames) (rawEntities model)
+  mapM_ (\decl@(i,_)->atDeclaration "entity" i (\file->validateEntity file typeNames decl)) (rawEntities model)
   mapM_ (validateDomainSize path) (Set.toList typeNames)
-  scalarDecls <- traverse (scalarDeclaration path enumMap) (rawScalars model)
-  predicates <- traverse (predicateDeclaration path typeNames) (rawPredicates model)
+  scalarDecls <- traverse (\decl@(i,_)->atDeclaration "scalar" i (\file->scalarDeclaration file enumMap decl)) (rawScalars model)
+  predicates <- traverse (\decl@(identifier,_,_) ->
+    let (file,site)=predicateSource path model identifier
+    in relatedImport path site (predicateDeclaration file typeNames decl)) (rawPredicates model)
   let entities = [EntityDecl (tokenText identifier) (tokenText kindValue)
         | (identifier,kindValue) <- rawEntities model]
       entityIndex = Map.fromList [(identifier,kindValue) | EntityDecl identifier kindValue <- entities]
@@ -809,14 +910,14 @@ validateModelMode execute fullReadiness path scenarioPath model scenario = do
         | (identifier,expression) <- rawRequirements model]
       propositionSet = Set.fromList (map tokenText (rawPropositions model))
   mapM_ (\(identifier,expression) -> relatedPredicate expression
-    (validateExpression path identifier typeNames entityIndex
-      predicateIndex scalarIndex requirementIndex Set.empty 0 expression)) (rawRequirements model)
-  rules <- traverse (ruleDeclaration path typeNames propositionSet entityIndex
-    predicateIndex scalarIndex requirementIndex) (rawRules model)
-  norms <- traverse (normDeclaration path propositionSet entityIndex typeNames
-    predicateIndex scalarIndex requirementIndex) (rawNorms model)
-  routes <- traverse (routeDeclaration path propositionSet entityIndex typeNames
-    predicateIndex scalarIndex requirementIndex) (rawRoutes model)
+    (atDeclaration "requirement" identifier (\file->validateExpression file identifier typeNames entityIndex
+      predicateIndex scalarIndex requirementIndex Set.empty 0 expression))) (rawRequirements model)
+  rules <- traverse (\decl@(i,_,_,_,_,_)->atDeclaration "rule" i (\file->ruleDeclaration file typeNames propositionSet entityIndex
+    predicateIndex scalarIndex requirementIndex decl)) (rawRules model)
+  norms <- traverse (\decl@(i,_,_,_,_,_)->atDeclaration "norm" i (\file->normDeclaration file propositionSet entityIndex typeNames
+    predicateIndex scalarIndex requirementIndex decl)) (rawNorms model)
+  routes <- traverse (\decl@(i,_,_,_,_,_)->atDeclaration "responsibility-route" i (\file->routeDeclaration file propositionSet entityIndex typeNames
+    predicateIndex scalarIndex requirementIndex decl)) (rawRoutes model)
   let elaborated = rules ++ map normRule norms ++ map routeRule routes
       normNames = Map.fromList [(normName item,ruleName (normRule item)) | item <- norms]
       routeNames = Map.fromList [(routeName item,ruleName (routeRule item)) | item <- routes]
@@ -864,10 +965,13 @@ validateModelMode execute fullReadiness path scenarioPath model scenario = do
     "generated-node limit exceeded")
   pure program
   where
+    atDeclaration kind identifier action=
+      let (file,site)=declarationSource path model kind identifier
+      in relatedImport path site (action file)
     relatedPredicate (PredicateExpr name _) (Left issue)
       | diagnosticCode issue `elem` ["SFT004","SFT005"] = case
           [token | (token,_,_) <- rawPredicates model, tokenText token == name] of
-          [token] -> Left issue { diagnosticRelated = Just (path,token) }
+          [token] -> Left issue { diagnosticRelated = Just (fst (predicateSource path model token),token) }
           _ -> Left issue
     relatedPredicate _ result = result
     validateDomainSize source kindValue = when
@@ -1455,7 +1559,7 @@ inspectTypedFiniteModel path bytes = do
       rawType RawDate = JObj [("kind",JStr "date")]
       rawType (RawEnum token) = JObj [("kind",JStr "enum"),("name",loc token)]
       rawType (RawMoney token) = JObj [("kind",JStr "money"),("currency",loc token)]
-  pure (JObj [("id",loc (rawModelId model)),("limit",loc (rawLimit model))
+  pure (JObj ([("id",loc (rawModelId model)),("limit",loc (rawLimit model))
     ,("tokens",JArr (map loc tokens))
     ,("entity_types",JArr (map loc (rawEntityTypes model)))
     ,("entities",JArr [JObj [("id",loc i),("type",loc t)] | (i,t) <- rawEntities model])
@@ -1468,7 +1572,13 @@ inspectTypedFiniteModel path bytes = do
       ,("citation",maybe JNull loc citation)] | (i,ps,polarity,conclusion,body,citation) <- rawRules model])
     ,("propositions",JArr (map loc (rawPropositions model)))
     ,("limitations",JArr (map loc (rawLimitations model)))
-    ,("scope",JStr "declaration overview plus complete source tokens; not lossless authoring interchange")])
+    ,("scope",JStr "declaration overview plus complete source tokens; not lossless authoring interchange")]
+    ++ if null (rawTemplates model) && null (rawScopedUses model) then [] else
+      [("scoped_templates",JArr [JObj [("id",loc (rawTemplateName t))
+        ,("formals",JArr [JObj [("variable",loc v),("type",loc k)] | (v,k)<-rawTemplateParameters t])
+        ,("body",expressionJson (rawTemplateBody t))] | t<-rawTemplates model])
+      ,("scoped_uses",JArr [JObj [("id",loc i),("definition",loc target),("arguments",JArr (map loc args))
+        ,("assessments",JStr "scenario")] | (i,target,args)<-rawScopedUses model])]))
 
 -- | Inspection admits ground, non-module programs only. It never calls
 -- evaluateTypedFinite: presence checks traverse structure, not truth values.
@@ -1476,6 +1586,9 @@ prepareTypedFiniteInspection :: FilePath -> BS.ByteString -> Maybe (FilePath,BS.
   -> Either Diagnostic TypedFiniteProgram
 prepareTypedFiniteInspection path bytes supplied = do
   model <- parseTypedFiniteModel path bytes
+  unless (null (rawTemplates model) && null (rawScopedUses model))
+    (at "SFI002" path (rawModelId model)
+      "checked inspection of scoped templates is unavailable; use parsed inspection and non-evaluating compose check with the complete scoped projection after execution")
   unless (null (rawImports model) && null (rawUses model)
     && null (rawNorms model) && null (rawRoutes model)
     && all (null . parameters) (rawRules model))
@@ -1562,6 +1675,12 @@ dependencySourcePaths path bytes = do
 prepareDependencyTyped :: Map FilePath BS.ByteString -> FilePath -> Maybe FilePath -> Maybe Text
   -> Either Diagnostic (TypedFiniteProgram,[(Text,Text)],Maybe (Text,Text))
 prepareDependencyTyped bundle path scenarioPath allegation = do
+  (p,s,c,_) <- prepareDependencyTypedScoped bundle path scenarioPath allegation
+  pure (p,s,c)
+
+prepareDependencyTypedScoped :: Map FilePath BS.ByteString -> FilePath -> Maybe FilePath -> Maybe Text
+  -> Either Diagnostic (TypedFiniteProgram,[(Text,Text)],Maybe (Text,Text),ScopedCompilation)
+prepareDependencyTypedScoped bundle path scenarioPath allegation = do
   bytes <- source path
   tokens <- lexSource path bytes
   case tokens of
@@ -1581,15 +1700,18 @@ prepareDependencyTyped bundle path scenarioPath allegation = do
       additions <- traverse (\i->case [x | x@(k,_,_,_,_)<-shared,tokenText k==tokenText i] of
         [(_,predId,args,status,reason)]->Right (predId,args,status,reason)
         _->at "DEPNAME" path i "unknown shared classification") uses
-      (program,slots) <- prepare mp sp m (scenario {scenarioFacts=scenarioFacts scenario++additions})
-      pure (program,slots,Just (tokenText caseId,tokenText identifier))
+      (program,slots,scoped) <- prepare mp sp m (scenario {scenarioFacts=scenarioFacts scenario++additions})
+      let actualOrigins=[a {selectedSource=normalise path} | a<-scopedAssessments scoped
+            ,any (\(predId,args,_,_)->selectedPredicate a==tokenText predId && selectedArguments a==map tokenText args) additions]
+          retained=[a | a<-scopedAssessments scoped,not (any (\b->selectedPredicate a==selectedPredicate b && selectedArguments a==selectedArguments b) actualOrigins)]
+      pure (program,slots,Just (tokenText caseId,tokenText identifier),scoped {scopedAssessments=retained++actualOrigins})
     _ -> do
       when (allegation/=Nothing) (at "DEPNAME" path origin "allegation selector requires an actual typed case")
       m <- parseTypedFiniteModel path bytes >>= modules path
       sp <- maybe (at "DEPMISSING" path origin "component requires scenario") Right scenarioPath
       scenario <- source sp >>= parseTypedFiniteScenario sp
-      (program,slots)<-prepare path sp m scenario
-      pure (program,slots,Nothing)
+      (program,slots,scoped)<-prepare path sp m scenario
+      pure (program,slots,Nothing,scoped)
   where
     origin=Token EndToken "" 1 1
     source file=maybe (at "DEPMISSING" file origin "source is absent from retained bundle") Right (Map.lookup (normalise file) bundle)
@@ -1609,8 +1731,11 @@ prepareDependencyTyped bundle path scenarioPath allegation = do
           (at "SFT013" file actual "module identity mismatch or unsupported nested import/template")
         pure (alias,declaration)) (rawImports m)
       selections<-traverse (resolveUse mp [(tokenText a,d) | (a,d)<-loaded]) (rawUses m)
-      pure (foldl mergeSelection m selections)
-    prepare mp sp m scenario = do
+      validateSelectionDuplicates mp m selections
+      pure (selectTemplates m [(tokenText a,d) | (a,d)<-loaded] (foldl mergeSelection m selections))
+    prepare mp sp original scenario = do
+      m <- expandScopedModel mp original
+      scoped <- scopedCompilation mp sp original scenario
       unless (tokenText (scenarioModel scenario)==tokenText (rawModelId m))
         (at "SFT002" sp (scenarioModel scenario) "scenario model identity mismatch")
       uniqueTokens mp "DEPWRITER" "duplicate condition slot" (rawDependencySlots m)
@@ -1649,4 +1774,143 @@ prepareDependencyTyped bundle path scenarioPath allegation = do
       when (not (null slots) && any (\(i,_,_,_)->tokenText i `elem` (map fst slots++map snd slots++["condition"])) (scenarioFacts scenario))
         (at "DEPWRITER" sp (scenarioIdentifier scenario) "a dependency slot cannot have a direct classification")
       program<-validateModelMode False True mp sp withSlots scenarioSlots
-      pure (program,slots)
+      pure (program,slots,scoped)
+
+-- Exact authored owner/source retained independently of a use-site alias.
+ownTemplates :: FilePath -> BS.ByteString -> Text -> Maybe Text -> RawModel -> RawModel
+ownTemplates path bytes owner version m=m
+ {rawTemplates=map own (rawTemplates m)
+ ,rawDeclarationSources=[(kind,i,normalise path,Nothing) | (kind,i)<-declarations]}
+ where
+  declarations=[("entity-type",i) | i<-rawEntityTypes m]
+    ++ [("entity",i) | (i,_)<-rawEntities m] ++ [("enum-type",i) | (i,_)<-rawEnums m]
+    ++ [("scalar",i) | (i,_)<-rawScalars m] ++ [("predicate",i) | (i,_,_)<-rawPredicates m]
+    ++ [("proposition",i) | i<-rawPropositions m] ++ [("requirement",i) | (i,_)<-rawRequirements m]
+    ++ [("rule",i) | (i,_,_,_,_,_)<-rawRules m]
+    ++ [("norm",i) | (i,_,_,_,_,_)<-rawNorms m]
+    ++ [("responsibility-route",i) | (i,_,_,_,_,_)<-rawRoutes m]
+    ++ [("priority",i) | (i,_)<-rawPriorities m]
+  own t=t {rawTemplatePath=normalise path,rawTemplateOwner=owner,rawTemplateVersion=version
+              ,rawTemplateDigest=sha256Text bytes
+              ,rawTemplateSignature=rawPredicates m}
+
+predicateSource :: FilePath -> RawModel -> Token -> (FilePath,Maybe Token)
+predicateSource fallback m=declarationSource fallback m "predicate"
+
+declarationSource :: FilePath -> RawModel -> Text -> Token -> (FilePath,Maybe Token)
+declarationSource fallback m kind token=case
+  [(file,site) | (category,identifier,file,site)<-rawDeclarationSources m
+  ,category==kind,tokenText identifier==tokenText token] of
+  [source]->source
+  _->(fallback,Nothing)
+
+relatedImport :: FilePath -> Maybe Token -> Either Diagnostic a -> Either Diagnostic a
+relatedImport host site result=case (site,result) of
+  (Just token,Left issue) | diagnosticRelated issue==Nothing ->
+    Left issue {diagnosticRelated=Just (host,token)}
+  _->result
+
+selectTemplates :: RawModel -> [(Text,RawModule)] -> RawModel -> RawModel
+selectTemplates host modules merged=merged {rawTemplates=rawTemplates host++
+  [t {rawTemplateLookup=alias<>"::"<>tokenText (rawTemplateName t)}
+  | (alias,RawModule _ _ exports body)<-modules,t<-rawTemplates body
+  ,any (\(k,i)->tokenText k=="requirement-template" && tokenText i==tokenText (rawTemplateName t)) exports
+  ,any (\(_,target,_)->tokenText target==alias<>"::"<>tokenText (rawTemplateName t)) (rawScopedUses host)]}
+
+-- Formal variables are replaced only by checked entity constants. Quantifier
+-- shadowing is refused by the existing checker; constants cannot be captured.
+expandScopedModel :: FilePath -> RawModel -> Either Diagnostic RawModel
+expandScopedModel path m=do
+  uniqueTokens path "SFDUPLICATE" "duplicate template identity" (map rawTemplateName local)
+  uniqueTokens path "SFDUPLICATE" "duplicate use-site/requirement identity"
+    (map fst (rawRequirements m)++[i | (i,_,_)<-rawScopedUses m])
+  when (length (rawTemplates m)>64 || length (rawScopedUses m)>128)
+    (at "SFLIMIT" path (rawModelId m) "at most 64 templates and 128 explicit uses")
+  mapM_ (\t->relatedImport path (useSite t) (validateTemplate t)) (rawTemplates m)
+  expanded<-traverse expand (rawScopedUses m)
+  pure m {rawRequirements=rawRequirements m++expanded,rawScopedUses=[]}
+ where
+  local=[t | t<-rawTemplates m,rawTemplateLookup t==tokenText (rawTemplateName t)]
+  types=Set.fromList (map tokenText (rawEntityTypes m))
+  entities=Map.fromList [(tokenText i,tokenText t) | (i,t)<-rawEntities m]
+  predicates=Map.fromList [(tokenText i,PredicateDecl (tokenText i) (map tokenText ts) PredicateRelationship) | (i,ts,_)<-rawPredicates m]
+  hostSignatures=[(tokenText i,map tokenText ts,tokenText k) | (i,ts,k)<-rawPredicates m]
+  useSite t=case [target | (_,target,_)<-rawScopedUses m,tokenText target==rawTemplateLookup t] of
+    target:_->Just target
+    []->Nothing
+  validateTemplate t=do
+    let origin=rawTemplateName t; formals=rawTemplateParameters t; body=rawTemplateBody t
+        atDefinition=rawTemplatePath t
+    identifierLength atDefinition origin
+    unless ("q:" `Text.isPrefixOf` tokenText origin) (at "SFNAME" atDefinition origin "template identity requires q: prefix")
+    when (null formals || length formals>4) (at "SFARITY" atDefinition origin "template needs 1..4 nominal formals")
+    uniqueTokens atDefinition "SFDUPLICATE" "duplicate formal" (map fst formals)
+    mapM_ (\(v,k)->do
+      unless ("var:" `Text.isPrefixOf` tokenText v) (at "SFT006" atDefinition v "formal requires var: prefix")
+      unless (Set.member (tokenText k) types) (at "SFT003" atDefinition k "unknown template nominal type")) formals
+    closed origin atDefinition body
+    mapM_ (\name->unless (any (\(i,as,k)->tokenText i==name
+        && (tokenText i,map tokenText as,tokenText k) `elem` hostSignatures) (rawTemplateSignature t)) $ do
+      let message="template predicate signature differs from authored definition: "<>name
+      case [i | (i,_,_)<-rawTemplateSignature t,tokenText i==name] of
+        []->at "SFSIGNATURE" atDefinition origin message
+        authored:_->case [i | (i,_,_)<-rawPredicates m,tokenText i==name] of
+          [i]->atRelated "SFSIGNATURE" (fst (predicateSource path m i)) i message atDefinition authored
+          _->case useSite t of
+            Just target->atRelated "SFSIGNATURE" path target message atDefinition authored
+            Nothing->at "SFSIGNATURE" atDefinition authored message) (predicateNames body)
+    validateExpression atDefinition origin types entities predicates Map.empty Map.empty
+      (Set.fromList [tokenText v<>"@"<>tokenText k | (v,k)<-formals]) 0 body
+  closed origin file e=case e of
+    PredicateExpr _ ts->mapM_ (\term->case term of EntityTerm _->at "SFCAPTURE" file origin "template bodies cannot capture ground entities; declare a nominal formal"; _->Right ()) ts
+    ReferenceExpr _->at "SFCAPTURE" file origin "ground requirement references/recursive templates are outside the closed template body; compose explicit uses in ordinary requirements"
+    ComparisonExpr {}->at "SFCAPTURE" file origin "scalar captures are outside scoped requirement templates"
+    _->mapM_ (closed origin file) (children e)
+  expand (i,target,args)=do
+    identifierLength path i
+    unless ("q:" `Text.isPrefixOf` tokenText i) (at "SFNAME" path i "use identity requires q: prefix")
+    t<-case filter ((==tokenText target) . rawTemplateLookup) (rawTemplates m) of
+      [x]->Right x
+      _->at "SFNAME" path target "unknown, private, wrong-kind or ambiguous requirement-template"
+    let fs=rawTemplateParameters t
+    unless (length fs==length args) (atRelated "SFARITY" path i "template argument count mismatch"
+      (rawTemplatePath t) (rawTemplateName t))
+    mapM_ (\((_,k),arg)->unless (Map.lookup (tokenText arg) entities==Just (tokenText k))
+      (atRelated "SFT005" path arg "template argument is unknown or has wrong nominal type"
+        (rawTemplatePath t) (rawTemplateName t))) (zip fs args)
+    let bindings=Map.fromList [(tokenText f,tokenText a) | ((f,_),a)<-zip fs args]
+    pure (i,substitute bindings (rawTemplateBody t))
+  substitute bindings e=case e of
+    PredicateExpr n ts->PredicateExpr n [case term of VariableTerm v->maybe term EntityTerm (Map.lookup v bindings); _->term | term<-ts]
+    AllExpr xs->AllExpr (map (substitute bindings) xs)
+    AnyExpr xs->AnyExpr (map (substitute bindings) xs)
+    NotExpr x->NotExpr (substitute bindings x)
+    ForallExpr v k x->ForallExpr v k (substitute (Map.delete v bindings) x)
+    ExistsExpr v k x->ExistsExpr v k (substitute (Map.delete v bindings) x)
+    CardinalityExpr k n xs->CardinalityExpr k n (map (substitute bindings) xs)
+    _->e
+
+children :: FiniteExpr -> [FiniteExpr]
+children e=case e of
+  AllExpr xs->xs; AnyExpr xs->xs; NotExpr x->[x]; ForallExpr _ _ x->[x]; ExistsExpr _ _ x->[x]; CardinalityExpr _ _ xs->xs; _->[]
+predicateNames :: FiniteExpr -> [Text]
+predicateNames e=case e of PredicateExpr n _->[n]; _->nub (concatMap predicateNames (children e))
+
+scopedCompilation :: FilePath -> FilePath -> RawModel -> TypedFiniteScenario -> Either Diagnostic ScopedCompilation
+scopedCompilation path scenarioPath m scenario=do
+  _<-expandScopedModel path m
+  let selected=[t | t<-rawTemplates m,any (\(_,target,_)->tokenText target==rawTemplateLookup t) (rawScopedUses m)]
+      key t=[rawTemplateOwner t,maybe "local" id (rawTemplateVersion t),tokenText (rawTemplateName t),Text.pack (rawTemplatePath t)]
+      expression e=case A.eitherDecodeStrict' (encodeJson (expressionJson e)) of Right x->x;Left _->A.Null
+      definition t=ScopedDefinition (key t) (rawTemplatePath t) (rawTemplateDigest t)
+        (tokenText (rawTemplateName t)) [(tokenText v,tokenText k) | (v,k)<-rawTemplateParameters t]
+        (expression (rawTemplateBody t)) (tokenLine (rawTemplateName t)) (tokenColumn (rawTemplateName t))
+      uses=[ScopedUse (tokenText i) (key t) [(tokenText v,tokenText a) | ((v,_),a)<-zip (rawTemplateParameters t) args]
+        (normalise path) (tokenLine i) (tokenColumn i) (tokenText (scenarioIdentifier scenario)) (normalise scenarioPath)
+        "explicit scenario selection; exact same-scope tuple classifications may be shared; independent selections require distinct selected components/scenarios"
+        | (i,target,args)<-rawScopedUses m,t<-selected,rawTemplateLookup t==tokenText target]
+  assessments<-traverse (\(predId,args,status,reason)->do
+    value<-statusValue scenarioPath status
+    pure (ScopedAssessment (tokenText predId) (map tokenText args)
+      (A.object ["status" A..= truthName value,"reason" A..= tokenText reason]) (normalise scenarioPath) (tokenLine predId) (tokenColumn predId))) (scenarioFacts scenario)
+  pure (ScopedCompilation (nub (map definition selected)) uses assessments)

@@ -147,9 +147,19 @@ def main():
         shutil.copytree(ROOT / 'examples/typed-finite', modules)
         imported = modules / 'modules/fictional.typed-rules@1.0.0.yh'
         imported.write_text(imported.read_text().replace('possesses(actor:modular-person,item:modular-item)', 'possesses(actor:modular-person)'))
-        imported_issue = negative('imported-expression-use-site', ['check', modules / 'modular-typed-rules.yh',
-            '--scenario', modules / 'modular-typed-rules-scenario.yh'], 'SFT004', 12)
-        assert 'use-site' in imported_issue['message']
+        imported_issue = negative('imported-expression-origin', ['check', modules / 'modular-typed-rules.yh',
+            '--scenario', modules / 'modular-typed-rules-scenario.yh'], 'SFT004', 6, 15)
+        # Selection now retains the defining origin rather than falling back to
+        # the host use-site. Check both real source/token pairs, not a filename.
+        vocabulary = modules / 'modules/fictional.typed-vocabulary@1.0.0.yh'
+        for location, source, line, column, token in [
+                (imported_issue, imported, 6, 15, b'q:modular-possession'),
+                (imported_issue['related'], vocabulary, 12, 13, b'possesses')]:
+            assert location['path'] == str(source)
+            assert (location['line'], location['column']) == (line, column)
+            raw = source.read_bytes()
+            offset = sum(len(x) + 1 for x in raw.split(b'\n')[:line - 1]) + column - 1
+            assert raw[offset:offset + len(token)] == token
         host = modules / 'modular-typed-rules.yh'
         host.write_text(host.read_text().replace('use predicate vocab::possesses', 'use entity vocab::possesses'))
         negative('wrong-reference-kind', ['check', host, '--scenario', modules / 'modular-typed-rules-scenario.yh'], 'SFT014', 10)

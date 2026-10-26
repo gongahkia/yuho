@@ -9,6 +9,7 @@ import qualified Data.Map.Strict as M
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as U
+import Yuho.ScopedDefinitions.Types
 import Yuho.Dependency.Types
 import Yuho.Dependency.Check
 import Yuho.Dependency.Run
@@ -95,8 +96,8 @@ dependencyGraph e=SemanticGraph (dependencyExecutionId e) TraceView nodes edges
       (candidateIdentity c<>" | "<>candidateModality c<>" | "<>availabilityText (availabilityState record)
         <>" | "<>termSummary (termValue (candidateTerm c))<>" | authored candidate only") Nothing Nothing (boundary (observationScope (conversionSource (availabilityGuard record))))
       | record<-executionCandidates e,let c=availabilityCandidate record]
-  nodes=componentNodes++portNodes++conversionNodes++slotNodes++candidateNodes
-  edges=[GraphEdge (componentId (portComponent (observationPort v))) (observationIdentity v) (if observationValue v==Nothing then "blocked_port" else "produces") (if observationValue v==Nothing then "port unavailable; component not evaluated" else "actual selected port") | v<-ports]
+  nodes=componentNodes++portNodes++conversionNodes++slotNodes++candidateNodes++map fst (scopedGraphRecords e)
+  edges=scopedGraphEdges e ports++[GraphEdge (componentId (portComponent (observationPort v))) (observationIdentity v) (if observationValue v==Nothing then "blocked_port" else "produces") (if observationValue v==Nothing then "port unavailable; component not evaluated" else "actual selected port") | v<-ports]
     ++[GraphEdge (observationIdentity (conversionSource c)) (convertId (conversionIdentity c)) "converts" "explicit policy" | c<-allConversions]
     ++concat [[GraphEdge (convertId (conversionIdentity c)) (conversionDestination c) "supplies" "execution-only input"
       ,GraphEdge (conversionDestination c) (componentId (bindingComponent b)) (if applied b then "consumed_by" else "required_by") (if applied b then "required slot applied" else "not applied: destination not evaluated")]
@@ -129,7 +130,7 @@ dependencyViewBindings e=A.object ["format" A..= ("yuho.dependency-view-bindings
   graph=dependencyGraph e
   p=dependencyPlan (checkedDocument (executionPlan e))
   allConversions=executionConversions e++map availabilityGuard (executionCandidates e)
-  nodeRecord key=case [A.object ["kind" A..= ("component"::Text),"scope" A..= executionScope c,"snapshot" A..= executionSnapshot c,"record" A..= c]
+  nodeRecord key=case [v | (n,v)<-scopedGraphRecords e,graphNodeId n==key] ++ [A.object ["kind" A..= ("component"::Text),"scope" A..= executionScope c,"snapshot" A..= executionSnapshot c,"record" A..= c]
        | c<-executionComponents e,Just template<-[M.lookup (executionComponent c) (checkedComponents (executionPlan e))],key==componentObjectKey (planIdentity p) template "component" (executionComponent c)]
       ++[A.object ["kind" A..= (if observationValue v==Nothing then "unavailable_port" else "observation"::Text),"scope" A..= observationScope v,"snapshot" A..= observationSnapshot v,"record" A..= v]
        | x<-allConversions,let v=conversionSource x,key==observationIdentity v]
@@ -205,3 +206,49 @@ termSummary value=case textField "kind" value of
                      _->"invalid"
       _->"invalid"
     _->"invalid"
+
+-- Reference view for new scoped uses. The shared body has one authored card;
+-- evaluated occurrences are separate actual read records, never guessed values.
+scopedGraphRecords :: DependencyExecution -> [(GraphNode,A.Value)]
+scopedGraphRecords e=definitionNodes++useNodes++occurrenceNodes
+ where
+  records=scopedUseRecords e
+  did d=qualifiedIdentity ("shared-definition":definitionKey d)
+  definitions=M.elems (M.fromList [(definitionKey d,d) | (_,_,d,_)<-records])
+  definitionNodes=[(GraphNode (did d) "shared_definition" (definitionName d<>" | shared authored definition")
+    (Just (T.pack (definitionSource d))) Nothing Nothing,A.toJSON d) | d<-definitions]
+  useNodes=[(GraphNode uid "definition_use" (useIdentity u<>" | "<>T.intercalate ", " [v<>"="<>a | (v,a)<-useArguments u])
+    (Just ("assessments: "<>useScenario u)) Nothing (Just (scopedBoundary r))
+    ,A.object ["use" A..= u,"definition" A..= definitionKey d,"scope" A..= executionScope r,"snapshot" A..= executionSnapshot r])
+    | (r,u,d,uid)<-records]
+  occurrenceNodes=[((GraphNode key "definition_occurrence" (useIdentity u<>" | actual "<>status<>" | "<>T.intercalate "/" (textArray "root" row)<>" | path "<>readPathText row)
+      Nothing (Just status) (Just (scopedBoundary r)))
+      {graphNodeObservation=Just (CoreObservation "evaluated" (Just status) Nothing Nothing)},record)
+    | (r,u,_,uid)<-records,use<-arrayField "uses" (scopedDefinitionEvidence e),textField "identity" use==uid
+    ,record<-arrayField "occurrences" use,let key=textField "identity" record,Just row<-[fieldValue "read" record],let status=textField "status" row]
+
+scopedGraphEdges :: DependencyExecution -> [PortValue] -> [GraphEdge]
+scopedGraphEdges e ports=concat
+  [[GraphEdge (qualifiedIdentity ("shared-definition":definitionKey d)) uid "instantiates" "typed explicit arguments"]
+    ++[GraphEdge uid (textField "identity" occ) "evaluates_as" "actual scoped read"
+      | use<-arrayField "uses" evidence,textField "identity" use==uid,occ<-arrayField "occurrences" use]
+    ++[GraphEdge (textField "identity" occ) (observationIdentity port) "produces_port" "actual selected root observation"
+      | port<-ports,portComponent (observationPort port)==executionComponent r
+      ,portCategory (observationPort port)=="typed.expression.truth",portObject (observationPort port)==useIdentity u
+      ,use<-arrayField "uses" evidence,textField "identity" use==uid,occ<-arrayField "occurrences" use
+      ,Just row<-[fieldValue "read" occ],fieldValue "root" row==Just (A.toJSON (["expression",useIdentity u]::[Text]))
+      ,fieldValue "path" row==Just (A.toJSON ([]::[Int]))]
+    | (r,u,d,uid)<-scopedUseRecords e]
+ where evidence=scopedDefinitionEvidence e
+
+textArray :: Text -> A.Value -> [Text]
+textArray key v=[x | A.String x<-arrayField (Data.Aeson.Key.fromText key) v]
+
+scopedBoundary :: ComponentRecord -> Text
+scopedBoundary r=T.intercalate " / " ([executionComponent r,scopeActor s,scopeContext s]
+  ++maybe [] (\x->["case "<>x]) (scopeCase s)++maybe [] (\x->["allegation "<>x]) (scopeAllegation s))
+ where s=executionScope r
+readPathText :: A.Value -> Text
+readPathText row=case arrayField "path" row of
+  []->"root"
+  xs->T.intercalate "." [U.decodeUtf8 (encode x) | x<-xs]

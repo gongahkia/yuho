@@ -45,6 +45,9 @@
     },
     "notice": {
       "type": "string"
+    },
+    "scoped_definitions": {
+      "$ref": "scoped-definitions-v0.1-experimental.schema.json"
     }
   },
   "required": [

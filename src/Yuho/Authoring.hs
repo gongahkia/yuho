@@ -15,6 +15,7 @@ module Yuho.Authoring
   , module Yuho.Authoring.Source
   , module Yuho.Authoring.Presumption
   , module Yuho.Authoring.Typed
+  , ScopedBody(..), requirementTemplate, requirementUse, inspectScopedDefinitions
   , module Yuho.Authoring.Definitions
   , module Yuho.Authoring.Interaction
   , validateDocument, validateAnalysis
@@ -33,6 +34,7 @@ import Yuho.Authoring.Edit
 import Yuho.Authoring.Source
 import Yuho.Authoring.Presumption
 import Yuho.Authoring.Typed
+import Yuho.Authoring.ScopedDefinitions (ScopedBody(..), requirementTemplate, requirementUse, inspectScopedDefinitions)
 import Yuho.Authoring.Definitions
 import Yuho.Authoring.Interaction
 import Yuho.Authoring.Codec

@@ -26,6 +26,9 @@ test: build
 	$(PYTHON) test/dependency_integrity.py $(YUHO)
 	$(PYTHON) test/dependency_generated_identity.py $(YUHO)
 	$(PYTHON) test/dependency_condition_admission.py $(YUHO)
+	$(PYTHON) test/scoped_definitions.py $(YUHO)
+	$(PYTHON) test/import_diagnostics.py $(YUHO)
+	$(PYTHON) test/import_duplicates.py $(YUHO)
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)
@@ -42,6 +45,7 @@ conformance: build
 	$(PYTHON) scripts/verify_core_yuho_typed_finite_conformance.py
 	$(PYTHON) scripts/verify_core_yuho_v03_conformance.py
 	$(PYTHON) scripts/verify_dependency_conformance.py
+	$(PYTHON) scripts/verify_scoped_definition_conformance.py
 
 lean:
 	cd mechanisation && lake build

@@ -13,3 +13,5 @@ import Yuho.CoreYuho.ReleaseV03TheoremRegistry
 import Yuho.CoreYuho.ReleaseV03Conformance
 
 import Yuho.CoreYuho.DependencyPlan
+
+import Yuho.CoreYuho.ScopedDefinitions
