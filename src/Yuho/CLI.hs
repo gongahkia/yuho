@@ -38,6 +38,7 @@ import Yuho.Surface.Case
   ( caseModelFile, checkAnalysisCase, compileAnalysisCase, runAnalysisCase
   , explainAnalysisCase )
 import Yuho.Surface.Explain (explainChecked)
+import Yuho.Provenance.CLI (runProvenance)
 import Yuho.Surface.Inspect (inspectSource)
 import Yuho.Surface.Lexer (lexSource)
 import Yuho.Surface.Modules
@@ -68,6 +69,7 @@ main = do
     ["--version"] -> BS.hPut stdout (Encoding.encodeUtf8
       (releaseName <> " v" <> releaseVersion <> "\n"))
     "machine":rest -> runMachine rest
+    "provenance":rest -> runProvenance rest
     "inspect":rest -> operateInspection rest
     "compose":rest -> runComputedCommand rest
     "fmt":_ -> releaseIssue

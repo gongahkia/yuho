@@ -21,6 +21,7 @@ import System.Exit (ExitCode(..), exitFailure)
 import System.IO (stdin, stdout, stderr)
 import System.Posix.Files (getSymbolicLinkStatus, isRegularFile, fileSize)
 import System.Process (readProcessWithExitCode)
+import Yuho.Provenance.CLI (provenanceOperation)
 import Yuho.Surface.Dependency (dependencyInput)
 import Yuho.Surface.Dependency.CLI (DependencyInputKind(..),dependencyOperation)
 import qualified Yuho.Authoring as SDK
@@ -46,6 +47,7 @@ runMachine args = do
     Right r -> pure r
     Left (field,message) -> do
       let format=case Strict.lookupField "format" value of
+            Just (Strict.JStr "yuho.machine-request/v0.3-experimental") -> "yuho.machine-response/v0.3-experimental"
             Just (Strict.JStr "yuho.machine-request/v0.2-experimental") -> "yuho.machine-response/v0.2-experimental"
             _ -> responseVersion
       emitVersion format Nothing False A.Null [] [A.object ["code" A..= ("SMREQUEST"::Text),"location" A..= field,"message" A..= message]] []
@@ -59,7 +61,8 @@ runMachine args = do
     selectedDependency <- dependencyInput input
     when selectedDependency
       (bad (Just selected) "SMREQUEST" "/input_kind" "dependency inputs require the explicit v0.2 dependency kinds")
-  if kind `elem` ["dependency-yh","dependency-artifact-json"] then dependencyRequest selected
+  if version=="yuho.machine-request/v0.3-experimental" then provenanceRequest selected
+    else if kind `elem` ["dependency-yh","dependency-artifact-json"] then dependencyRequest selected
     else if kind == "computed-input-json" && op == "check"
       then checkArtifact selected
       else delegate selected
@@ -87,9 +90,14 @@ parseRequest value = do
         Just (Strict.JStr t) | not (T.null (T.strip t)) && not (T.any (=='\0') t) -> Right t
         _ -> Left ("/"<>field,"required nonempty string")
   version <- get "format"
-  unless (version `elem` [requestVersion,"yuho.machine-request/v0.2-experimental"]) (Left ("/format","unsupported version "<>version<>"; expected "<>requestVersion))
+  unless (version `elem` [requestVersion,"yuho.machine-request/v0.2-experimental","yuho.machine-request/v0.3-experimental"]) (Left ("/format","unsupported version "<>version<>"; expected "<>requestVersion))
   kind <- get "input_kind"; op <- get "operation"; path <- get "path"
-  (optional,required) <- if version=="yuho.machine-request/v0.2-experimental" then case (kind,op) of
+  (optional,required) <- if version=="yuho.machine-request/v0.3-experimental" then case (kind,op) of
+    (k,operation) | k `elem` ["dependency-yh","dependency-artifact-json"],operation `elem` ["inspect","trace"] -> Right ([],[])
+    (k,"explain") | k `elem` ["dependency-yh","dependency-artifact-json"] -> Right ([],["focus"])
+    (k,"provenance") | k `elem` ["dependency-yh","dependency-artifact-json"] -> Right (["focus"],["output"])
+    _ -> Left ("/operation","unsupported v0.3 provenance input-kind/operation pair")
+   else if version=="yuho.machine-request/v0.2-experimental" then case (kind,op) of
     ("dependency-yh","check") -> Right (["against"],[])
     ("dependency-yh","run") -> Right ([],["output"])
     ("dependency-artifact-json","check") -> Right ([],[])
@@ -188,6 +196,7 @@ profilesIn value = nub (go value)
 
 emit :: Maybe Request -> Bool -> A.Value -> [Text] -> [A.Value] -> [A.Value] -> IO ()
 emit req = emitVersion (case req of
+  Just (Request v _ _ _ _) | v=="yuho.machine-request/v0.3-experimental" -> "yuho.machine-response/v0.3-experimental"
   Just (Request v _ _ _ _) | v=="yuho.machine-request/v0.2-experimental" -> "yuho.machine-response/v0.2-experimental"
   _->responseVersion) req
 
@@ -202,13 +211,39 @@ emitVersion format req success payload profiles diagnostics exports = BL.hPut st
   where
     effects Nothing = A.Null
     effects (Just (Request version kind op _ _))
-      | version=="yuho.machine-request/v0.2-experimental" && not success = A.object
-        ["evaluation" A..= (if op=="check" then "none" else "not_reported"::Text),"source_authority" A..= ("not_validated"::Text)
+      | version `elem` ["yuho.machine-request/v0.2-experimental","yuho.machine-request/v0.3-experimental"] && not success = A.object
+        ["evaluation" A..= (if op `elem` ["check","inspect"] then "none" else "not_reported"::Text),"source_authority" A..= ("not_validated"::Text)
         ,"requested_source_authority" A..= (if kind=="dependency-artifact-json" then "embedded_artifact" else "current_sources"::Text)
         ,"writes" A..= ("none"::Text)]
       | otherwise = A.object
       ["evaluation" A..= (if op=="inspect" || (kind/="native-yh" && op=="check") then "none"
-          else if op `elem` ["run","replay"] then "requested" else "native_command_may_evaluate" :: Text)
+          else if op `elem` ["run","replay","provenance","trace","explain"] then "requested" else "native_command_may_evaluate" :: Text)
       ,"source_authority" A..= (if kind `elem` ["computed-input-json","dependency-artifact-json"] then "embedded_artifact" else "current_sources" :: Text)
-      ,"writes" A..= (if op=="diagram" || (kind/="native-yh" && op `elem` ["run","replay"])
+      ,"writes" A..= (if op=="diagram" || (kind/="native-yh" && op `elem` ["run","replay","provenance"])
           then "new_output_only" else "none" :: Text)]
+
+-- New opt-in control version; old request versions retain closed operations.
+provenanceRequest :: Request -> IO ()
+provenanceRequest req@(Request _ kind op path fields)=do
+  result<-provenanceOperation (if kind=="dependency-yh" then CurrentDependencySource else SavedDependencyArtifact)
+    op path (T.unpack <$> lookup "output" fields) (lookup "focus" fields)
+  case result of
+    Left d->emit (Just req) False A.Null [] [A.toJSON d] []>>exitFailure
+    Right value->emit (Just req) True value (provenanceProfiles value) []
+      [A.object ["directory" A..= out,"contract" A..= ("yuho.typed-provenance/v0.1-experimental"::Text)
+        ,"files" A..= (["artifact.json","provenance.json","focus.json","view.json","view.xml","view.svg"]::[Text])]
+      | Just out<-[lookup "output" fields]]
+
+-- Inspect and trace contain checked quantity records; publication returns the
+-- profiles selected from the checked plan. No live-source guessing is needed.
+provenanceProfiles :: A.Value -> [Text]
+provenanceProfiles value=["TypedFiniteRules-v1"]++["ExactQuantities-v1" | quantitative value]
+ where
+  quantitative (A.Object o)=KM.lookup "category" o `elem` map (Just . A.String) ["exact_calculation","supplied_quantity"]
+    || case KM.lookup "profiles" o of
+      Just (A.Array xs)->A.String "ExactQuantities-v1" `elem` xs
+      _->case KM.lookup "quantitative" o of
+        Just v | v/=A.Null->True
+        _->any quantitative (KM.elems o)
+  quantitative (A.Array xs)=any quantitative xs
+  quantitative _=False

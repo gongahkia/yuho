@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "projection",
+    "root",
+    "notice",
+    "included_nodes",
+    "omitted_nodes",
+    "included_edges",
+    "omitted_edges",
+    "rendered_nodes"
+  ],
+  "properties": {
+    "format": {
+      "const": "yuho.typed-provenance-focus/v0.1-experimental"
+    },
+    "projection": {
+      "type": "string"
+    },
+    "root": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notice": {
+      "type": "string"
+    },
+    "included_nodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "omitted_nodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "included_edges": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "omitted_edges": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "rendered_nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "semantic_id",
+          "svg_id"
+        ],
+        "properties": {
+          "semantic_id": {
+            "type": "string"
+          },
+          "svg_id": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "description": "Partition equality, endpoint integrity and source projection correspondence additionally require validateProvenanceFocus."
+}

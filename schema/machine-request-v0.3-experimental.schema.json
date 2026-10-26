@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Opt-in provenance machine request v0.3",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.machine-request/v0.3-experimental"
+        },
+        "input_kind": {
+          "enum": [
+            "dependency-yh",
+            "dependency-artifact-json"
+          ]
+        },
+        "operation": {
+          "const": "inspect"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.machine-request/v0.3-experimental"
+        },
+        "input_kind": {
+          "enum": [
+            "dependency-yh",
+            "dependency-artifact-json"
+          ]
+        },
+        "operation": {
+          "const": "trace"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.machine-request/v0.3-experimental"
+        },
+        "input_kind": {
+          "enum": [
+            "dependency-yh",
+            "dependency-artifact-json"
+          ]
+        },
+        "operation": {
+          "const": "explain"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "focus": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path",
+        "focus"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.machine-request/v0.3-experimental"
+        },
+        "input_kind": {
+          "enum": [
+            "dependency-yh",
+            "dependency-artifact-json"
+          ]
+        },
+        "operation": {
+          "const": "provenance"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1
+        },
+        "focus": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "format",
+        "input_kind",
+        "operation",
+        "path",
+        "output"
+      ]
+    }
+  ]
+}

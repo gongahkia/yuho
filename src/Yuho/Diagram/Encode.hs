@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.Diagram.Encode
-  ( encodeSemanticGraph, encodeSemanticGraphXml, encodeSvg, encodeNativeSvg
+  ( nativeSvgId, encodeSemanticGraph, encodeSemanticGraphXml, encodeSvg, encodeNativeSvg
   , encodeNativeSemanticGraph, encodeNativeSemanticGraphXml ) where
 
 import qualified Data.ByteString as BS
@@ -433,3 +433,7 @@ legacyXmlId :: Text -> Text
 legacyXmlId = ("node-" <>) . Text.map (\value -> if valid value then value else '-')
   where valid value = value `elem` ['a'..'z'] || value `elem` ['A'..'Z']
           || value `elem` ['0'..'9'] || value `elem` ['-','_','.']
+
+-- Public mapping for opt-in view binding; historical encoders are unchanged.
+nativeSvgId :: Text -> Text
+nativeSvgId = xmlId

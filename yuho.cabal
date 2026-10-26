@@ -50,6 +50,9 @@ extra-source-files:
     test/fixtures/temporal-sdk/*.yh
     test/fixtures/temporal-view-format/*.json
     scripts/verify_scoped_definition_conformance.py
+    test/provenance.py
+    test/ProvenanceClient.hs
+    scripts/verify_provenance_conformance.py
     test/scoped_definitions.py
     test/ScopedDefinitionClient.hs
     test/dependency_native.py
@@ -126,12 +129,13 @@ common yuho-common
 library
   import: yuho-common
   hs-source-dirs: src
-  other-modules: Yuho.Quantitative, Yuho.Quantitative.Graph, Yuho.Machine, Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON, Yuho.Surface.InspectionData, Yuho.Surface.Computed.Parser, Yuho.Surface.Computed.CLI, Yuho.Dependency.Check, Yuho.Dependency.Run, Yuho.Dependency.Codec, Yuho.Dependency.Projection, Yuho.Dependency.Publication, Yuho.Dependency.Source, Yuho.Surface.Dependency.Parser, Yuho.Surface.Dependency.CLI, Yuho.Surface.Publication
+  other-modules: Yuho.Provenance.Types, Yuho.Provenance.Build, Yuho.Provenance.View, Yuho.Provenance.CLI, Yuho.Quantitative, Yuho.Quantitative.Graph, Yuho.Machine, Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON, Yuho.Surface.InspectionData, Yuho.Surface.Computed.Parser, Yuho.Surface.Computed.CLI, Yuho.Dependency.Check, Yuho.Dependency.Run, Yuho.Dependency.Codec, Yuho.Dependency.Projection, Yuho.Dependency.Publication, Yuho.Dependency.Source, Yuho.Surface.Dependency.Parser, Yuho.Surface.Dependency.CLI, Yuho.Surface.Publication
   exposed-modules:
       Yuho.Authoring.Quantitative
       Yuho.Dependency.Types
       Yuho.ScopedDefinitions.Types
       Yuho.Authoring.ScopedDefinitions
+      Yuho.Authoring.Provenance
       Yuho.Authoring.Dependency
       Yuho.Surface.Dependency
       Yuho.Authoring

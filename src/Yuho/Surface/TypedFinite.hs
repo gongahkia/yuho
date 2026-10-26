@@ -8,7 +8,7 @@ module Yuho.Surface.TypedFinite
   , inspectTypedFiniteModel, inspectTypedFiniteScenario, prepareTypedFiniteInspection
   , typedDeclarationTokens, expandedNodeEstimate, dependencySourcePaths, prepareDependencyTyped, prepareDependencyTypedScoped
   , prepareDependencyTypedQuantitative
-  , loadTypedFiniteQuantitative
+  , loadTypedFiniteQuantitative, dependencyTypedOrigins
   ) where
 
 import Control.Exception (IOException, try)
@@ -1836,24 +1836,7 @@ prepareDependencyTypedQuantitative bundle path scenarioPath allegation = do
   where
     origin=Token EndToken "" 1 1
     source file=maybe (at "DEPMISSING" file origin "source is absent from retained bundle") Right (Map.lookup (normalise file) bundle)
-    modules mp m = do
-      validateImportIdentities mp (rawImports m)
-      loaded <- traverse (\(name,version,alias)->do
-        unless (safeModuleName (tokenText name) && safeVersion (tokenText version))
-          (at "SFT013" mp name "invalid exact module identity")
-        root<-maybe (at "SFT013" mp name "module-root required") Right (rawModuleRoot m)
-        unless (not (isAbsolute (Text.unpack (tokenText root)))
-          && all (`notElem` ["",".",".."]) (Text.splitOn "/" (tokenText root)))
-          (at "SFT013" mp root "unsafe module root")
-        let file=takeDirectory mp </> Text.unpack (tokenText root) </> Text.unpack (tokenText name<>"@"<>tokenText version<>".yh")
-        declaration@(RawModule actual actualVersion _ body)<-source file >>= parseTypedFiniteModule file
-        unless (tokenText actual==tokenText name && tokenText actualVersion==tokenText version
-          && null (rawImports body) && null (rawUses body) && null (rawDependencySlots body))
-          (at "SFT013" file actual "module identity mismatch or unsupported nested import/template")
-        pure (alias,declaration)) (rawImports m)
-      selections<-traverse (resolveUse mp [(tokenText a,d) | (a,d)<-loaded]) (rawUses m)
-      validateSelectionDuplicates mp m selections
-      pure (selectTemplates m [(tokenText a,d) | (a,d)<-loaded] (foldl mergeSelection m selections))
+    modules = resolveDependencyModules bundle
     prepare mp sp original scenario = do
       m <- expandScopedModel mp original
       scoped <- scopedCompilation mp sp original scenario
@@ -2150,3 +2133,52 @@ scopedCompilation path scenarioPath m scenario=do
     pure (ScopedAssessment (tokenText predId) (map tokenText args)
       (A.object ["status" A..= truthName value,"reason" A..= tokenText reason]) (normalise scenarioPath) (tokenLine predId) (tokenColumn predId))) (scenarioFacts scenario)
   pure (ScopedCompilation (nub (map definition selected)) uses assessments)
+
+-- The same resolved declaration selections used by checking, with their original
+-- owners. Called only for a checked native component; never guess an owner by
+-- scanning for equal text in retained files. This does not evaluate expressions.
+dependencyTypedOrigins :: Map FilePath BS.ByteString -> FilePath -> Maybe FilePath -> Maybe Text
+  -> Either Diagnostic ([(Text,Text,Q.QSite,Maybe Q.QSite)],[(Text,Q.QSite)])
+dependencyTypedOrigins bundle path scenarioPath allegation = do
+  bytes<-retained path
+  ts<-lexSource path bytes
+  (mp,sp)<-case ts of
+    t:_ | tokenText t=="typed-rules-case" -> do
+      RawTypedCase _ modelToken _ allegations<-parseTypedFiniteCase path bytes
+      sc<-case [s | (i,s,_)<-allegations,Just (tokenText i)==allegation] of
+        [s]->Right s
+        _->at "DEPNAME" path t "unknown or ambiguous selected allegation"
+      pure (takeDirectory path </> Text.unpack (tokenText modelToken),takeDirectory path </> Text.unpack (tokenText sc))
+    _->do sp<-maybe (at "DEPMISSING" path (Token EndToken "" 1 1) "missing scenario") Right scenarioPath
+          pure (path,sp)
+  m<-retained mp >>= parseTypedFiniteModel mp >>= resolveDependencyModules bundle mp
+  scenario<-retained sp >>= parseTypedFiniteScenario sp
+  declarations<-traverse (\(kind,t,file,use)->do
+    b<-retained file
+    host<-retained mp
+    pure (kind,tokenText t,quantitySite file b t,fmap (quantitySite mp host) use)) (rawDeclarationSources m)
+  sb<-retained sp
+  pure (declarations,[(tokenText t,quantitySite sp sb t) | (t,_)<-scenarioValues scenario])
+ where retained file=maybe (at "DEPMISSING" file (Token EndToken "" 1 1) "source absent from immutable bundle") Right (Map.lookup (normalise file) bundle)
+
+resolveDependencyModules :: Map FilePath BS.ByteString -> FilePath -> RawModel -> Either Diagnostic RawModel
+resolveDependencyModules bundle mp m = do
+  validateImportIdentities mp (rawImports m)
+  loaded <- traverse (\(name,version,alias)->do
+    unless (safeModuleName (tokenText name) && safeVersion (tokenText version))
+      (at "SFT013" mp name "invalid exact module identity")
+    root<-maybe (at "SFT013" mp name "module-root required") Right (rawModuleRoot m)
+    unless (not (isAbsolute (Text.unpack (tokenText root)))
+      && all (`notElem` ["",".",".."]) (Text.splitOn "/" (tokenText root)))
+      (at "SFT013" mp root "unsafe module root")
+    let file=takeDirectory mp </> Text.unpack (tokenText root) </> Text.unpack (tokenText name<>"@"<>tokenText version<>".yh")
+    declaration@(RawModule actual actualVersion _ body)<-retained file >>= parseTypedFiniteModule file
+    unless (tokenText actual==tokenText name && tokenText actualVersion==tokenText version
+      && null (rawImports body) && null (rawUses body) && null (rawDependencySlots body))
+      (at "SFT013" file actual "module identity mismatch or unsupported nested import/template")
+    pure (alias,declaration)) (rawImports m)
+  selections<-traverse (resolveUse mp [(tokenText a,d) | (a,d)<-loaded]) (rawUses m)
+  validateSelectionDuplicates mp m selections
+  pure (selectTemplates m [(tokenText a,d) | (a,d)<-loaded] (foldl mergeSelection m selections))
+  where
+    retained file=maybe (at "DEPMISSING" file (Token EndToken "" 1 1) "source is absent from retained bundle") Right (Map.lookup (normalise file) bundle)

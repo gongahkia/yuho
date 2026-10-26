@@ -15,6 +15,7 @@ import Yuho.Dependency.Projection (dependencyGraph)
 import Yuho.Diagram.Encode (encodeNativeSemanticGraph)
 import qualified Data.Aeson.KeyMap as AM
 import qualified Data.Aeson as JSON
+import qualified Yuho.Authoring.Provenance as PV
 import Yuho.Surface.Dependency (loadDependencyProject)
 
 main :: IO ()
@@ -49,6 +50,15 @@ main=do
               (fail "unavailable graph port fabricated a technical value")
           _->fail "sealed model view omitted nodes"
         _->fail "sealed model view was not structured"
+      projection<-either (fail . show) pure (PV.projectTypedProvenance execution)
+      let authorityComponent n=case PV.authority n of
+            A.Object o->AM.lookup "component" o
+            _->Nothing
+          isBlocked n=authorityComponent n `elem` map (Just . A.String) ["gate:a","receipt:a"]
+          fabricated n=isBlocked n && PV.category n `elem` ["evaluation_read","expression_observation","rule_observation","proposition_observation","generated_condition_input"]
+      unless (not (any fabricated (PV.nodes projection))) (fail "complete provenance fabricated blocked execution")
+      unless (any (\n->PV.category n=="unavailable_port" && PV.state n==Nothing) (PV.nodes projection))
+        (fail "complete provenance lost unavailable ports")
       pure ()
     _->fail "expected a checked two-scope model for the sealed unavailable control"
   values<-traverse vector vectors

@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Complete bounded typed provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "identity",
+    "mode",
+    "authority",
+    "domain",
+    "nodes",
+    "edges",
+    "retained"
+  ],
+  "properties": {
+    "format": {
+      "const": "yuho.typed-provenance/v0.1-experimental"
+    },
+    "identity": {
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "executed",
+        "checked_not_evaluated"
+      ]
+    },
+    "authority": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string"
+    },
+    "nodes": {
+      "type": "array",
+      "maxItems": 65536,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "identity",
+          "structuralIdentity",
+          "category",
+          "label",
+          "evaluation",
+          "state",
+          "authority",
+          "record"
+        ],
+        "properties": {
+          "identity": {
+            "type": "string"
+          },
+          "structuralIdentity": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "category": {
+            "enum": [
+              "authorisation_origin",
+              "authored_binding",
+              "authored_candidate",
+              "source_document",
+              "checked_component",
+              "checked_structure",
+              "authored_declaration",
+              "authored_use",
+              "checked_declaration",
+              "component_execution",
+              "selected_classification",
+              "generated_condition_input",
+              "selected_scalar",
+              "expression_observation",
+              "rule_observation",
+              "proposition_observation",
+              "evaluation_read",
+              "component",
+              "observation",
+              "unavailable_port",
+              "conversion",
+              "condition_slot",
+              "candidate",
+              "shared_definition",
+              "definition_use",
+              "definition_occurrence",
+              "quantitative_definition",
+              "quantitative_use",
+              "supplied_quantity",
+              "exact_calculation",
+              "sdk_source_record",
+              "sdk_authored_object",
+              "source_reference"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "evaluation": {
+            "type": "string"
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "authority": {},
+          "record": {}
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "maxItems": 262144,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "edgeIdentity",
+          "from",
+          "to",
+          "relationship",
+          "evidence"
+        ],
+        "properties": {
+          "edgeIdentity": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "relationship": {
+            "enum": [
+              "authored_in",
+              "authorisation_rationale",
+              "executes_binding",
+              "candidate_effect",
+              "checked_as",
+              "selected_declaration",
+              "declares_checked",
+              "has_checked_structure",
+              "executed_component",
+              "retained_component",
+              "evaluated_as",
+              "classifies_application",
+              "selects_scalar",
+              "selected_assessment",
+              "selected_value",
+              "reads_classification",
+              "reads_scalar",
+              "expands_reference",
+              "evaluated_operand",
+              "evaluated_root",
+              "resolution_rule",
+              "blocks_by_priority",
+              "selected_port",
+              "filter_decision",
+              "scoped_occurrence",
+              "generated_by_binding",
+              "produces",
+              "blocked_port",
+              "converts",
+              "supplies",
+              "consumed_by",
+              "required_by",
+              "guards",
+              "instantiates",
+              "evaluates_as",
+              "produces_port",
+              "quantity_operand",
+              "inclusion_operand",
+              "arithmetic_operand",
+              "excluded_evaluated_item",
+              "comparison_operand",
+              "inclusion_condition",
+              "declares_sdk_object",
+              "sdk_source_reference",
+              "compiled_sdk_declaration",
+              "selects_sdk_input",
+              "lowered_as",
+              "anchors_original",
+              "assesses_application",
+              "supplies_declared_scalar"
+            ]
+          },
+          "evidence": {}
+        }
+      }
+    },
+    "retained": {}
+  },
+  "$comment": "Schema shape is insufficient for provenance authority. Use validateTypedProvenance against a checked execution; no JSON loader trusts caller supplied edges."
+}

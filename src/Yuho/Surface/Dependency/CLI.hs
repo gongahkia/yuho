@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module Yuho.Surface.Dependency.CLI
-  (runDependencyCommand, DependencyInputKind(..), dependencyOperation) where
+  (runDependencyCommand, DependencyInputKind(..), dependencyOperation, readArtifact) where
 import Control.Exception (IOException, try)
 import qualified Data.Aeson as A
 import qualified Data.ByteString as BS
