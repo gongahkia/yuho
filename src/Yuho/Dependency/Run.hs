@@ -19,6 +19,7 @@ import Prelude hiding (reads)
 import Data.Text (Text)
 import qualified Yuho.CoreYuho.TypedFinite as K
 import Yuho.ScopedDefinitions.Types
+import qualified Yuho.Quantitative as Q
 import Yuho.Dependency.Types
 import Yuho.Dependency.Check
 import qualified Yuho.Protocol.Json as J
@@ -46,8 +47,13 @@ data ComponentRecord = ComponentRecord
   , executionTemplate :: Text, executionSnapshot :: Text, executionState :: Text
   , executionBlockedBy :: [Text], executionIncoming :: [ConversionRecord]
   , executionRequest :: A.Value, executionBackend :: A.Value, executionReads :: [A.Value]
-  , executionMappings :: A.Value } deriving (Eq,Show,Generic)
-instance A.ToJSON ComponentRecord
+  , executionMappings :: A.Value, executionQuantitative :: Maybe Q.QExecution } deriving (Eq,Show,Generic)
+instance A.ToJSON ComponentRecord where
+  toJSON c=case A.genericToJSON A.defaultOptions c of
+    A.Object o->A.Object (case executionQuantitative c of
+      Nothing->AM.delete "executionQuantitative" o
+      Just q->AM.insert "quantitative" (A.toJSON q) (AM.delete "executionQuantitative" o))
+    v->v
 
 data CandidateAvailability = Eligible | Ineligible | EligibilityUnresolved [Text] | NotEvaluated [Text]
   deriving (Eq,Show,Generic)
@@ -70,7 +76,16 @@ reportDependencyPlan e=A.object
   ,"components" A..= executionComponents e,"bindings" A..= executionConversions e
   ,"candidates" A..= executionCandidates e
   ,"eligible_candidates" A..= [candidateIdentity (availabilityCandidate c) | c<-executionCandidates e,availabilityState c==Eligible]
-  ,"notice" A..= ("Technical authored candidates only; no imposed sentence, proof sufficiency or judicial finding."::Text)] ++ scopedEvidenceFields e)
+  ,"notice" A..= ("Technical authored candidates only; no imposed sentence, proof sufficiency or judicial finding."::Text)] ++ scopedEvidenceFields e
+  ++ ["quantitative" A..= quantitativeEvidence e | any ((/=Nothing) . checkedQuantitative) (M.elems (checkedComponents (executionPlan e)))])
+
+quantitativeEvidence :: DependencyExecution -> A.Value
+quantitativeEvidence e=A.object ["format" A..= Q.quantitativeFormat
+  ,"occurrences" A..= [A.object ["component" A..= executionComponent r,"scope" A..= executionScope r
+      ,"snapshot" A..= executionSnapshot r,"evaluation" A..= executionState r
+      ,"checked_plan" A..= q,"actual" A..= executionQuantitative r]
+    | r<-executionComponents e,Just c<-[M.lookup (executionComponent r) (checkedComponents (executionPlan e))]
+    ,Just q<-[checkedQuantitative c]]]
 
 -- | The only production entry. Unavailable typed sources cannot be authored.
 executeDependencyPlan :: CheckedPlan -> Either DependencyDiagnostic DependencyExecution
@@ -111,7 +126,7 @@ executePlanModel blocked plan=do
           template=checkedTemplateDigest c
           snapshot=hash (template,incoming,"yuho.dependency-lowering/v1"::Text)
           common state why req backend reads=ComponentRecord key (checkedScope c) (A.toJSON (checkedLocalScope c))
-            template snapshot state why incoming req backend reads (checkedMappings c)
+            template snapshot state why incoming req backend reads (checkedMappings c) Nothing
       if key `S.member` blocked || not (null unavailable) then
         let record=common "not_evaluated" (if key `S.member` blocked then ["sealed engine model: unavailable component"] else unavailable) A.Null A.Null []
         in pure (M.insert key record records,results,conversions++incoming)
@@ -124,8 +139,13 @@ executePlanModel blocked plan=do
               Nothing->f
               Just conversion->f {K.groundStatus=maybe (K.groundStatus f) valueTruth (conversionValue conversion)
                 ,K.groundReason=generatedReason conversion}
-            program=original {K.finiteFacts=map lower (K.finiteFacts original)}
-            bytes=encodeTypedFiniteRequest "DEPENDENCY-RUN" program
+            supplied=original {K.finiteFacts=map lower (K.finiteFacts original)}
+        (program,quantitative)<-case checkedQuantitative c of
+          Nothing->pure (supplied,Nothing)
+          Just qp->case Q.executeQuantitative supplied qp of
+            Right (computed,q)->pure (computed,Just q)
+            Left d->failure (Q.qFailureCode d) [key,maybe "" id (Q.qFailureOutput d)] (Q.qFailureMessage d)
+        let bytes=encodeTypedFiniteRequest "DEPENDENCY-RUN" program
         wire<-either (failure "DEPOBSERVATION" [key]) Right (J.decodeJson bytes)
         validated<-either (failure "DEPOBSERVATION" [key]) Right (decodeTypedFiniteRequest wire)
         (result,reads)<-either (failure "DEPOBSERVATION" [key]) Right (K.evaluateTypedFiniteObserved validated)
@@ -133,7 +153,8 @@ executePlanModel blocked plan=do
         backend<-jsonBytes (encodeTypedFiniteResult "DEPENDENCY-RUN" (inputDigest wire) result)
         request<-jsonBytes bytes
         let actualSnapshot=hash (template,incoming,request,"yuho.dependency-lowering/v1"::Text)
-            record=(common "evaluated" [] request backend (map (readJson key actualSnapshot) reads)) {executionSnapshot=actualSnapshot}
+            record=(common "evaluated" [] request backend (map (readJson key actualSnapshot) reads))
+              {executionSnapshot=actualSnapshot,executionQuantitative=quantitative}
         pure (M.insert key record records,M.insert key (result,reads) results,conversions++incoming)
     binding records results b=do
       source<-resolvePort plan records results (bindingPort b)
@@ -168,7 +189,10 @@ resolvePort plan records results port=do
             ["expression",i]->portCategory port=="typed.expression.truth" && i==portObject port
             "rule":i:_->portCategory port=="typed.proposition.resolution" && i `elem` ruleIds
             _->False
-          inputs=concatMap K.readInputs (filter relevant ledger)
+          directInputs=concatMap K.readInputs (filter relevant ledger)
+          inputs=directInputs++case executionQuantitative record of
+            Nothing->[]
+            Just q->Q.quantitativeInputs q [i | K.ScalarInput i<-directInputs]
           used=[conversion | conversion<-executionIncoming record
             ,b<-planBindings (dependencyPlan (checkedDocument plan)),bindingIdentity b==conversionIdentity conversion
             ,Just predicate<-[lookup (bindingSlot b) (checkedSlots c)]

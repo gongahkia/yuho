@@ -15,6 +15,7 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as U
 import Yuho.ScopedDefinitions.Types
+import qualified Yuho.Quantitative as Q
 import Yuho.Dependency.Types
 import qualified Yuho.CoreYuho.TypedFinite as K
 import qualified Yuho.Core.Types as C
@@ -23,7 +24,7 @@ import Yuho.Exception.Types (Truth(..))
 import Yuho.Protocol.Decode (sha256Text)
 import qualified Yuho.Protocol.Json as J
 import Yuho.Surface.Dependency.Parser (parseDependencyProject)
-import Yuho.Surface.TypedFinite (prepareDependencyTypedScoped, expandedNodeEstimate, encodeTypedFiniteRequest)
+import Yuho.Surface.TypedFinite (prepareDependencyTypedQuantitative, expandedNodeEstimate, encodeTypedFiniteRequest)
 import qualified Yuho.Surface.Token as ST
 import qualified Yuho.Authoring.Typed as SDK
 import qualified Yuho.Authoring.Types as SDK
@@ -56,7 +57,8 @@ data CheckedComponent = CheckedComponent
   { checkedComponent :: PlanComponent, checkedProgram :: K.TypedFiniteProgram
   , checkedSlots :: [(Text,Text)], checkedScope :: PlanScope
   , checkedLocalScope :: Maybe SDK.Scope, checkedMappings :: A.Value
-  , checkedScopedDefinitions :: ScopedCompilation, checkedTemplateDigest :: Text } deriving (Eq,Show)
+  , checkedScopedDefinitions :: ScopedCompilation, checkedTemplateDigest :: Text
+  , checkedQuantitative :: Maybe Q.QPlan } deriving (Eq,Show)
 data CheckedPlan = CheckedPlan { checkedDocument :: DependencyDocument
   , checkedComponents :: M.Map Text CheckedComponent, checkedOrder :: [Text]
   , checkedCost :: Integer, checkedDigest :: Text } deriving (Eq,Show)
@@ -132,17 +134,17 @@ checkComponent doc c=withLocation (componentLocation c) $ do
   scope<-case [s | s<-planScopes (dependencyPlan doc),scopeIdentity s==componentScope c] of
     [s]->Right s; _->failure "DEPSCOPE" [componentIdentity c] "unknown component scope"
   ensure "DEPRATIONALE" [componentIdentity c] "component identity mapping requires an authorisation rationale" (nonblank (componentRationale c))
-  (program,slots,localScope,mappings,actualCase,scoped)<-case (componentProfile c,componentTemplate c) of
+  (program,slots,localScope,mappings,actualCase,scoped,quantitative)<-case (componentProfile c,componentTemplate c) of
     ("native-typed",Nothing)->do
       ensure "DEPFORMAT" [componentIdentity c] "native model entry is implicit or a selected allegation" (maybe True ((=="allegation") . fst) (componentEntry c))
-      (p,holes,occ,scopedCompilationInfo)<-either (Left . surfaceFailureIn (dependencySources doc)) Right (prepareDependencyTypedScoped (M.map U.encodeUtf8 (dependencySources doc))
+      (p,holes,occ,scopedCompilationInfo,q)<-either (Left . surfaceFailureIn (dependencySources doc)) Right (prepareDependencyTypedQuantitative (M.map U.encodeUtf8 (dependencySources doc))
         (componentModel c) (componentScenario c) (snd <$> componentEntry c))
-      pure (p,holes,Nothing,A.Null,occ,scopedCompilationInfo)
+      pure (p,holes,Nothing,A.Null,occ,scopedCompilationInfo,q)
     ("native-typed",Just t)->do
       ensure "DEPFORMAT" [componentIdentity c] "in-memory technical template has no file/scenario/entry selector"
         (null (componentModel c) && componentScenario c==Nothing && componentEntry c==Nothing)
       (p,holes)<-compileTemplate t
-      pure (p,holes,Nothing,A.Null,Nothing,emptyScopedCompilation)
+      pure (p,holes,Nothing,A.Null,Nothing,emptyScopedCompilation,Nothing)
     ("sdk-typed-v0.3",Nothing)->do
       text<-maybe (failure "DEPMISSING" [componentIdentity c] "SDK document absent from exact source bundle") Right (M.lookup (componentModel c) (dependencySources doc))
       d<-either (failure "DEPFORMAT" [componentIdentity c] . SDK.diagnosticMessage) Right (SDK.decodeTypedDocument (U.encodeUtf8 text))
@@ -159,7 +161,7 @@ checkComponent doc c=withLocation (componentLocation c) $ do
       pure (p,[],Just local,A.object ["kernel_mappings" A..= SDK.typedCompiledMappings compiled
         ,"selected_analysis" A..= entry,"local_scope" A..= local,"project_scope" A..= scope
         ,"context_correspondence" A..= (SDK.scopeContext local,scopeContext scope)
-        ,"authority" A..= componentRationale c],Nothing,emptyScopedCompilation)
+        ,"authority" A..= componentRationale c],Nothing,emptyScopedCompilation,Nothing)
     _->failure "DEPUNSUPPORTED" [componentIdentity c] "unsupported component profile or template; no implicit adapter"
   case actualCase of
     Just (caseId,allegation)->ensure "DEPSCOPE" [componentIdentity c] "actual case/allegation selector differs from declared scope"
@@ -185,7 +187,7 @@ checkComponent doc c=withLocation (componentLocation c) $ do
   wire<-either (failure "DEPFORMAT" [componentIdentity c]) Right (J.decodeJson (encodeTypedFiniteRequest "DEPENDENCY-CHECK" program))
   _<-either (failure "DEPFORMAT" [componentIdentity c]) Right (decodeTypedFiniteRequest wire)
   either (failure "DEPMISSING" [componentIdentity c]) Right (K.checkTypedFiniteInputs program)
-  pure (CheckedComponent c program slots scope localScope mappings scoped (hash (doc,c,scope,localScope)))
+  pure (CheckedComponent c program slots scope localScope mappings scoped (hash (doc,c,scope,localScope)) quantitative)
 
 surfaceFailure :: ST.Diagnostic -> DependencyDiagnostic
 surfaceFailure=surfaceFailureIn M.empty

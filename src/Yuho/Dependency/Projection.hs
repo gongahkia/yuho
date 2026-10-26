@@ -6,10 +6,14 @@ import qualified Data.Aeson as A
 import qualified Data.Aeson.KeyMap as AM
 import qualified Data.ByteString as BS
 import qualified Data.Map.Strict as M
+import Data.List (nub)
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as U
 import Yuho.ScopedDefinitions.Types
+import qualified Yuho.Quantitative as Q
+import qualified Yuho.Quantitative.Graph as QG
+import qualified Yuho.CoreYuho.TypedFinite as K
 import Yuho.Dependency.Types
 import Yuho.Dependency.Check
 import Yuho.Dependency.Run
@@ -41,17 +45,25 @@ sourceMapDependencyPlan e=A.object ["format" A..= ("yuho.dependency-source-map/v
 projectDependencyPlan :: DependencyExecution -> Either DependencyDiagnostic A.Value
 projectDependencyPlan e=do
   let graph=dependencyGraph e
+      definitions=M.fromListWith (++) [(graphNodeId n,[v])
+        | r<-executionComponents e,Just q<-[executionQuantitative r]
+        ,(n,v)<-fst (QG.quantitativeGraph (quantitativePrefix r) q),graphNodeKind n=="quantitative_definition"]
+  ensure "DEPOBSERVATION" [] "shared quantitative definition has inconsistent authored records"
+    (all (\vs->case vs of first:rest->all (==first) rest;[]->True) (M.elems definitions))
   unique "view graph node" (map graphNodeId (semanticGraphNodes graph))
   ensure "DEPOBSERVATION" [] "view edge has unknown endpoint" (all (\edge->all (`elem` map graphNodeId (semanticGraphNodes graph)) [graphEdgeFrom edge,graphEdgeTo edge]) (semanticGraphEdges graph))
   json<-jsonBytes (encodeNativeSemanticGraph graph)
   pure (A.object ["format" A..= projectionFormat,"execution" A..= dependencyExecutionId e
     ,"document" A..= checkedDocument (executionPlan e),"report" A..= reportDependencyPlan e
     ,"source_map" A..= sourceMapDependencyPlan e,"view" A..= json,"bindings" A..= dependencyViewBindings e
-    ,"checked_components" A..= [A.object ["component" A..= key,"template_snapshot" A..= checkedTemplateDigest c
+    ,"checked_components" A..= [A.object (["component" A..= key,"template_snapshot" A..= checkedTemplateDigest c
        ,"declared_scope" A..= checkedScope c,"local_scope" A..= checkedLocalScope c
        ,"identity_maps" A..= (componentNominals (checkedComponent c),componentEntities (checkedComponent c))
        ,"slots" A..= checkedSlots c,"checked_request" A..= request c
-       ,"notice" A..= ("Checked request contains structural slot placeholders; authoritative evaluated inputs are in the execution request."::Text)]
+       ,"notice" A..= (if checkedQuantitative c==Nothing
+          then "Checked request contains structural slot placeholders; authoritative evaluated inputs are in the execution request."
+          else "Checked request contains structural slot and derived-scalar readiness placeholders, not evaluated observations or supplied assessments. The checked quantitative plan retains authorship; actual values and inputs are in the execution record."::Text)]
+       ++ ["quantitative_plan" A..= q | Just q<-[checkedQuantitative c]])
        | (key,c)<-M.toAscList (checkedComponents (executionPlan e))]])
  where request c=case jsonBytes (Yuho.Surface.TypedFinite.encodeTypedFiniteRequest "DEPENDENCY-TEMPLATE" (checkedProgram c)) of
         Right v->v;Left _->A.Null
@@ -96,8 +108,8 @@ dependencyGraph e=SemanticGraph (dependencyExecutionId e) TraceView nodes edges
       (candidateIdentity c<>" | "<>candidateModality c<>" | "<>availabilityText (availabilityState record)
         <>" | "<>termSummary (termValue (candidateTerm c))<>" | authored candidate only") Nothing Nothing (boundary (observationScope (conversionSource (availabilityGuard record))))
       | record<-executionCandidates e,let c=availabilityCandidate record]
-  nodes=componentNodes++portNodes++conversionNodes++slotNodes++candidateNodes++map fst (scopedGraphRecords e)
-  edges=scopedGraphEdges e ports++[GraphEdge (componentId (portComponent (observationPort v))) (observationIdentity v) (if observationValue v==Nothing then "blocked_port" else "produces") (if observationValue v==Nothing then "port unavailable; component not evaluated" else "actual selected port") | v<-ports]
+  nodes=componentNodes++portNodes++conversionNodes++slotNodes++candidateNodes++map fst (scopedGraphRecords e)++map fst (quantitativeGraphRecords e)
+  edges=nub (quantitativeGraphEdges e ports)++scopedGraphEdges e ports++[GraphEdge (componentId (portComponent (observationPort v))) (observationIdentity v) (if observationValue v==Nothing then "blocked_port" else "produces") (if observationValue v==Nothing then "port unavailable; component not evaluated" else "actual selected port") | v<-ports]
     ++[GraphEdge (observationIdentity (conversionSource c)) (convertId (conversionIdentity c)) "converts" "explicit policy" | c<-allConversions]
     ++concat [[GraphEdge (convertId (conversionIdentity c)) (conversionDestination c) "supplies" "execution-only input"
       ,GraphEdge (conversionDestination c) (componentId (bindingComponent b)) (if applied b then "consumed_by" else "required_by") (if applied b then "required slot applied" else "not applied: destination not evaluated")]
@@ -130,7 +142,7 @@ dependencyViewBindings e=A.object ["format" A..= ("yuho.dependency-view-bindings
   graph=dependencyGraph e
   p=dependencyPlan (checkedDocument (executionPlan e))
   allConversions=executionConversions e++map availabilityGuard (executionCandidates e)
-  nodeRecord key=case [v | (n,v)<-scopedGraphRecords e,graphNodeId n==key] ++ [A.object ["kind" A..= ("component"::Text),"scope" A..= executionScope c,"snapshot" A..= executionSnapshot c,"record" A..= c]
+  nodeRecord key=case [v | (n,v)<-scopedGraphRecords e++quantitativeGraphRecords e,graphNodeId n==key] ++ [A.object ["kind" A..= ("component"::Text),"scope" A..= executionScope c,"snapshot" A..= executionSnapshot c,"record" A..= c]
        | c<-executionComponents e,Just template<-[M.lookup (executionComponent c) (checkedComponents (executionPlan e))],key==componentObjectKey (planIdentity p) template "component" (executionComponent c)]
       ++[A.object ["kind" A..= (if observationValue v==Nothing then "unavailable_port" else "observation"::Text),"scope" A..= observationScope v,"snapshot" A..= observationSnapshot v,"record" A..= v]
        | x<-allConversions,let v=conversionSource x,key==observationIdentity v]
@@ -156,6 +168,8 @@ exportDependencyPlan e=do
         ,("view.json",encodeNativeSemanticGraph graph),("view.xml",xml),("view.svg",encodeNativeSvg graph)
         ,("source-map.json",encode (sourceMapDependencyPlan e))]
   ensure "DEPLIMIT" [] "complete encoded export exceeds 32 MiB" (sum (map (BS.length . snd) files)<=33554432)
+  ensure "DEPLIMIT" [] "saved artifact exceeds its 8 MiB decoder bound"
+    (all (\(name,bytes)->name/="artifact.json" || BS.length bytes<=8388608) files)
   pure files
  where graph=dependencyGraph e
 
@@ -178,6 +192,42 @@ componentSummary c
   | null (executionIncoming c) || executionState c/="evaluated" = ""
   | otherwise = " | model expressions: "<>T.intercalate "; "
       [textField "id" r<>"="<>textField "status" r | r<-arrayField "expressions" (executionBackend c)]
+
+quantitativePrefix :: ComponentRecord -> [Text]
+quantitativePrefix r=executionComponent r:scopeKey (executionScope r)++[executionSnapshot r]
+
+quantitativeGraphRecords :: DependencyExecution -> [(GraphNode,A.Value)]
+quantitativeGraphRecords e=M.elems (M.fromList [(graphNodeId n,(n,v)) | (n,v)<-records,graphNodeKind n=="quantitative_definition"])
+  ++[(n,v) | (n,v)<-records,graphNodeKind n/="quantitative_definition"]
+ where
+  records=[(n,located r n value)
+    | r<-executionComponents e,Just q<-[executionQuantitative r]
+    ,(n,value)<-fst (QG.quantitativeGraph (quantitativePrefix r) q)]
+  located r n value=if graphNodeKind n=="quantitative_definition" then value else A.object
+    ["scope" A..= executionScope r,"snapshot" A..= executionSnapshot r,"record" A..= value]
+
+quantitativeGraphEdges :: DependencyExecution -> [PortValue] -> [GraphEdge]
+quantitativeGraphEdges e ports=concat
+  [ snd (QG.quantitativeGraph prefix q)++
+    [GraphEdge (QG.stepId prefix s) (observationIdentity port) "comparison_operand" "actual derived scalar read"
+    | port<-ports,portComponent (observationPort port)==executionComponent r
+    ,portCategory (observationPort port)=="typed.expression.truth"
+    ,readRow<-executionReads r,textArray "root" readRow==["expression",portObject (observationPort port)]
+    ,input<-arrayField "input_records" readRow,textField "kind" input=="scalar_operand"
+    ,s<-Q.qSteps q,null (Q.qPath s),Q.qOutput s==textField "scalar" input]
+    ++[GraphEdge (QG.inputId prefix (Q.qInputName i)) (observationIdentity port) "comparison_operand" "actual supplied scalar read"
+      | port<-ports,portComponent (observationPort port)==executionComponent r
+      ,portCategory (observationPort port)=="typed.expression.truth"
+      ,readRow<-executionReads r,textArray "root" readRow==["expression",portObject (observationPort port)]
+      ,input<-arrayField "input_records" readRow,textField "kind" input=="scalar_operand"
+      ,i<-Q.qInputs (Q.qCheckedPlan q),Q.qInputName i==textField "scalar" input]
+    ++[GraphEdge (conversionDestination conversion) (QG.stepId prefix step) "inclusion_condition" "actual converted condition read"
+      | step<-Q.qSteps q,K.GroundInput fact<-Q.qReads step,conversion<-executionIncoming r
+      ,b<-planBindings (dependencyPlan (checkedDocument (executionPlan e))),bindingIdentity b==conversionIdentity conversion
+      ,Just checked<-[M.lookup (executionComponent r) (checkedComponents (executionPlan e))]
+      ,Just predicate<-[lookup (bindingSlot b) (checkedSlots checked)]
+      ,K.groundIdentity (K.groundPredicate fact) (K.groundArguments fact)==K.groundIdentity predicate ["dep_template_entity"]]
+  | r<-executionComponents e,Just q<-[executionQuantitative r],let prefix=quantitativePrefix r]
 
 textField :: Data.Aeson.Key.Key -> A.Value -> Text
 textField key (A.Object obj)=case AM.lookup key obj of Just (A.String t)->t;_->""

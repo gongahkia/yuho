@@ -29,6 +29,7 @@ test: build
 	$(PYTHON) test/scoped_definitions.py $(YUHO)
 	$(PYTHON) test/import_diagnostics.py $(YUHO)
 	$(PYTHON) test/import_duplicates.py $(YUHO)
+	$(PYTHON) test/quantitative.py $(YUHO)
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)
@@ -46,6 +47,7 @@ conformance: build
 	$(PYTHON) scripts/verify_core_yuho_v03_conformance.py
 	$(PYTHON) scripts/verify_dependency_conformance.py
 	$(PYTHON) scripts/verify_scoped_definition_conformance.py
+	$(PYTHON) scripts/verify_quantitative_conformance.py
 
 lean:
 	cd mechanisation && lake build

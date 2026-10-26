@@ -177,10 +177,10 @@ profilesIn :: A.Value -> [Text]
 profilesIn value = nub (go value)
   where
     known=["SuppliedProofStatus-v1","TypedFiniteRules-v1","RegisteredPresumptionDerivations-v1"
-      ,"PenaltySelection-v1","Core-v1","ExceptionOverride-v1","TypedLeaves-v1","Terms-v1"]
+      ,"PenaltySelection-v1","Core-v1","ExceptionOverride-v1","TypedLeaves-v1","Terms-v1","ExactQuantities-v1"]
     go (A.Object x) = concat
       [case valueAtKey of
-         A.String t | K.toText key `elem` ["fragment","destinationProfile","profile","evaluator"] && t `elem` known -> [t]
+         A.String t | K.toText key `elem` ["fragment","destinationProfile","profile","evaluator","quantitative_profile"] && t `elem` known -> [t]
          _ -> go valueAtKey
       | (key,valueAtKey) <- KM.toList x]
     go (A.Array xs) = concatMap go xs

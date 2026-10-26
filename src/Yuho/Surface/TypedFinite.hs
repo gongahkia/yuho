@@ -7,11 +7,14 @@ module Yuho.Surface.TypedFinite
   , explainTypedFinite, explainTypedFiniteCase
   , inspectTypedFiniteModel, inspectTypedFiniteScenario, prepareTypedFiniteInspection
   , typedDeclarationTokens, expandedNodeEstimate, dependencySourcePaths, prepareDependencyTyped, prepareDependencyTypedScoped
+  , prepareDependencyTypedQuantitative
+  , loadTypedFiniteQuantitative
   ) where
 
 import Control.Exception (IOException, try)
 import Control.Monad (unless, when)
 import qualified Data.ByteString as BS
+import qualified Data.ByteString.Lazy as BL
 import Data.List (nub)
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
@@ -31,10 +34,11 @@ import Yuho.Protocol.Json (J(..), decodeJson, encodeJson)
 import Yuho.Surface.InspectionData (locatedToken)
 import Yuho.Surface.Lexer (lexSource)
 import Yuho.ScopedDefinitions.Types
+import qualified Yuho.Quantitative as Q
 import qualified Data.Aeson as A
 import Yuho.Surface.Token
 
-data RawScalarType = RawInteger | RawDate | RawEnum Token | RawMoney Token
+data RawScalarType = RawInteger | RawDate | RawEnum Token | RawMoney Token | RawCount Token
   deriving (Eq, Show)
 
 -- Authored templates and explicit uses are surface objects, not new Core operators.
@@ -69,6 +73,10 @@ data RawModel = RawModel
   , rawTemplates :: [RawTemplate]
   , rawScopedUses :: [(Token,Token,[Token])]
   , rawLimitations :: [Token]
+  , rawQuantitative :: [Token]
+  , rawQuantDefinitions :: [Q.QDefinition]
+  , rawSourceOwner :: (FilePath,BS.ByteString)
+  , rawSourceBundle :: Map FilePath BS.ByteString
   } deriving (Eq, Show)
 
 data RawModule = RawModule Token Token [(Token,Token)] RawModel deriving (Eq, Show)
@@ -78,6 +86,7 @@ data TypedFiniteScenario = TypedFiniteScenario
   , scenarioModel :: Token
   , scenarioFacts :: [(Token,[Token],Token,Token)]
   , scenarioValues :: [(Token,RawValue)]
+  , scenarioValueReasons :: Map Text Token
   } deriving (Eq, Show)
 
 data RawValue
@@ -85,6 +94,7 @@ data RawValue
   | RawDateValue Token
   | RawEnumValue Token Token
   | RawMoneyValue Token Token
+  | RawCountValue Token Token
   | RawUnresolvedValue Token
   deriving (Eq, Show)
 
@@ -251,10 +261,72 @@ integerToken token = case reads (Text.unpack (tokenText token)) of
   [(value,"")] -> pure value
   _ -> P $ \path _ -> at "SFT008" path token "expected integer"
 
+parseScalarType :: P RawScalarType
+parseScalarType = do
+  token <- word
+  case tokenText token of
+    "integer"->pure RawInteger
+    "date"->pure RawDate
+    "enum"->RawEnum <$> word
+    "money"->RawMoney <$> word
+    "count"->RawCount <$> word
+    _->P $ \path _->at "SFT008" path token "unsupported scalar type"
+
+quantityType :: RawScalarType -> Q.QType
+quantityType ty=case ty of
+  RawInteger->Q.QInteger;RawMoney c->Q.QMoney (tokenText c)
+  RawCount domain->Q.QCount (tokenText domain);RawDate->Q.QDate;RawEnum e->Q.QEnum (tokenText e)
+
+parseQuantity :: Int -> P Q.QExpr
+parseQuantity depth=do
+  token<-word
+  when (depth>16) (P $ \path _->at "QLIMIT" path token "quantitative AST depth exceeds 16")
+  _<-takeText "("
+  result<-case tokenText token of
+    "ref"->Q.QRef . tokenText <$> word
+    "integer"->Q.QConstant Q.QInteger <$> number
+    "money"->do c<-word;_<-takeText ",";Q.QConstant (Q.QMoney (tokenText c)) <$> number
+    "count-value"->do d<-word;_<-takeText ",";Q.QConstant (Q.QCount (tokenText d)) <$> number
+    "scale"->do n<-number;_<-takeText ",";Q.QScale n <$> parseQuantity (depth+1)
+    "sum"->Q.QSum <$> commaList item
+    "count"->Q.QCountItems <$> commaList counted
+    _->P $ \path _->at "QOPERATION" path token "supported operations: ref, typed constant, sum, count, scale"
+  _<-takeText ")"
+  pure result
+  where
+    number=do
+      t<-word
+      P $ \path rest->do
+        when (Text.length (tokenText t)>1235) (at "QLIMIT" path t "numeric literal exceeds 4096-bit budget")
+        n<-numeric path t
+        unless (Q.bounded n) (at "QLIMIT" path t "numeric literal exceeds 4096-bit budget")
+        pure (n,rest)
+    item=do
+      _<-takeText "item";i<-word;_<-takeText "value";e<-parseQuantity (depth+1)
+      hasFilter<-optionalText "when"
+      condition<-if hasFilter then Just . tokenText <$> word else pure Nothing
+      pure (Q.QItem (tokenText i) e condition)
+    counted=do _<-takeText "item";i<-word;_<-takeText "when";c<-word;pure (tokenText i,tokenText c)
+
 parseModelDeclaration :: P (RawModel -> RawModel)
 parseModelDeclaration = do
   headToken <- word
   case tokenText headToken of
+    "quantitative" -> do
+      _ <- takeText "version"
+      version <- string
+      _ <- takeText ";"
+      pure (\m->m {rawQuantitative=rawQuantitative m++[version]})
+    "derive" -> do
+      identifier <- word
+      _ <- takeText "type"
+      ty <- parseScalarType
+      _ <- takeText "="
+      expression <- parseQuantity 0
+      _ <- takeText ";"
+      let site=Q.QSite "" (tokenLine identifier) (tokenColumn identifier) 0 0 (tokenText identifier)
+          definition=Q.QDefinition (tokenText identifier) (quantityType ty) expression site [] "" Nothing [] [] []
+      pure (\m->m {rawScalars=rawScalars m++[(identifier,ty)],rawQuantDefinitions=rawQuantDefinitions m++[definition]})
     "requirement-template" -> do
       identifier <- word
       _ <- takeText "("
@@ -323,13 +395,7 @@ parseModelDeclaration = do
     "scalar" -> do
       identifier <- word
       _ <- takeText "type"
-      typeToken <- word
-      declaredType <- case tokenText typeToken of
-        "integer" -> pure RawInteger
-        "date" -> pure RawDate
-        "enum" -> RawEnum <$> word
-        "money" -> RawMoney <$> word
-        _ -> P $ \path _ -> at "SFT008" path typeToken "unsupported scalar type"
+      declaredType <- parseScalarType
       _ <- takeText ";"
       pure (\model -> model { rawScalars = rawScalars model ++ [(identifier,declaredType)] })
     "predicate" -> do
@@ -446,7 +512,7 @@ parseTypedFiniteModel path bytes = do
 
 emptyRawModel :: Token -> RawModel
 emptyRawModel identifier = RawModel identifier (Token WordToken "2048" 1 1)
-  [] [] [] [] [] [] [] [] [] [] [] [] Nothing [] [] [] [] [] []
+  [] [] [] [] [] [] [] [] [] [] [] [] Nothing [] [] [] [] [] [] [] [] ("",BS.empty) Map.empty
 
 parseTypedFiniteModule :: FilePath -> BS.ByteString -> Either Diagnostic RawModule
 parseTypedFiniteModule path bytes = do
@@ -497,7 +563,8 @@ parseTypedFiniteScenario path bytes = do
         token:_ -> at "SFT001" source token "trailing typed-rules scenario"
         [] -> at "SFT001" source (Token EndToken "" 1 1) "missing end token"
       pure (TypedFiniteScenario identifier model
-        [value | Left value <- entries] [value | Right value <- entries])
+        [value | Left value <- entries] [(i,v) | Right (i,v,_) <- entries]
+        (Map.fromList [(tokenText i,r) | Right (i,_,Just r)<-entries]))
     entry = do
       headToken <- word
       case tokenText headToken of
@@ -521,12 +588,15 @@ parseTypedFiniteScenario path bytes = do
             "date" -> RawDateValue <$> word
             "enum" -> RawEnumValue <$> word <*> word
             "money" -> RawMoneyValue <$> word <*> word
+            "count" -> RawCountValue <$> word <*> word
             "unresolved" -> do
               _ <- takeText "reason"
               RawUnresolvedValue <$> string
             _ -> P $ \source _ -> at "SFT008" source valueKind "unsupported scalar value"
+          hasReason <- optionalText "reason"
+          reason <- if hasReason then Just <$> string else pure Nothing
           _ <- takeText ";"
-          pure (Right (identifier,value))
+          pure (Right (identifier,value,reason))
         _ -> P $ \source _ -> at "SFT001" source headToken
           "unsupported typed-rules scenario declaration"
 
@@ -641,10 +711,14 @@ loadTypedFiniteProgram :: FilePath -> BS.ByteString -> Maybe (FilePath,BS.ByteSt
   -> IO (Either Diagnostic TypedFiniteProgram)
 loadTypedFiniteProgram path modelBytes scenarioBytes = case parseTypedFiniteModel path modelBytes of
   Left issue -> pure (Left issue)
+  Right rawModel | hasQuantities rawModel ->pure (at "QWORKFLOW" path (rawModelId rawModel)
+    "this opt-in quantity model requires the quantitative execution/projection workflow")
   Right rawModel -> do
     composed <- loadTypedModules path rawModel
     pure $ do
       (model,moduleRecords) <- composed
+      when (hasQuantities model) (at "QWORKFLOW" path (rawModelId rawModel)
+        "selected quantitative scalars require the opt-in quantitative workflow")
       (scenarioPath,scenarioRaw) <- maybe
         (at "SFT011" path (rawModelId model) "typed-rules model requires a scenario") Right
         scenarioBytes
@@ -654,6 +728,32 @@ loadTypedFiniteProgram path modelBytes scenarioBytes = case parseTypedFiniteMode
       program <- either (Left . importDiagnostic path rawModel) Right
         (validateModel path scenarioPath model scenario)
       pure program { finiteModules = moduleRecords }
+
+hasQuantities :: RawModel -> Bool
+hasQuantities m=not (null (rawQuantitative m) && null (rawQuantDefinitions m))
+  || any (\(_,t)->case t of RawCount _->True;_->False) (rawScalars m)
+
+-- Native source entry retains the checked plan until actual run/diagram time.
+loadTypedFiniteQuantitative :: FilePath -> BS.ByteString -> Maybe (FilePath,BS.ByteString)
+  -> IO (Either Diagnostic (TypedFiniteProgram,Maybe Q.QPlan))
+loadTypedFiniteQuantitative path bytes supplied=case parseTypedFiniteModel path bytes of
+  Left d->pure (Left d)
+  Right raw | not (hasQuantities raw) && null (rawImports raw)->fmap (fmap (\p->(p,Nothing))) (loadTypedFiniteProgram path bytes supplied)
+  Right raw->do
+    loaded<-loadTypedModules path raw
+    pure $ do
+      (selected,records)<-loaded
+      (sp,sb)<-maybe (at "QMISSING" path (rawModelId raw) "quantitative model requires scenario") Right supplied
+      scenario<-parseTypedFiniteScenario sp sb
+      unless (tokenText (scenarioModel scenario)==tokenText (rawModelId raw))
+        (at "SFT002" sp (scenarioModel scenario) "scenario model identity mismatch")
+      if hasQuantities selected then do
+        expanded<-expandScopedModel path selected
+        (p,q)<-prepareQuantities (Map.insert (normalise sp) sb (rawSourceBundle expanded)) path sp expanded scenario
+        pure (p {finiteModules=records},q)
+      else do
+        p<-either (Left . importDiagnostic path raw) Right (validateModel path sp selected scenario)
+        pure (p {finiteModules=records},Nothing)
 
 -- Legacy fallback for diagnostics without retained declaration context.
 -- Do not replace an authoritative primary/related pair with a name-based host
@@ -775,7 +875,11 @@ mergeSelection :: RawModel -> (Text,Token,Token,RawModel) -> RawModel
 mergeSelection host (kindValue,identifier,useSite,moduleModel) = merged
   { rawDeclarationSources = rawDeclarationSources host ++
       [(kind,token,file,Just useSite) | (kind,token,file,_) <- rawDeclarationSources moduleModel
-      ,kind == kindValue, tokenText token == tokenText identifier] }
+      ,kind == kindValue, tokenText token == tokenText identifier]
+  , rawQuantDefinitions=rawQuantDefinitions host++
+      [d {Q.qUseSite=Just (uncurry (\file bytes->quantitySite file bytes useSite) (rawSourceOwner host))}
+       | kindValue=="scalar",d<-rawQuantDefinitions moduleModel,Q.qName d==tokenText identifier]
+  , rawSourceBundle=Map.union (rawSourceBundle host) (rawSourceBundle moduleModel) }
   where
   merged = case kindValue of
     "entity-type" -> host { rawEntityTypes = rawEntityTypes host
@@ -1015,6 +1119,8 @@ scalarDeclaration :: FilePath -> Map Text [Text] -> (Token,RawScalarType)
   -> Either Diagnostic ScalarDecl
 scalarDeclaration path enums (identifier,rawType) = ScalarDecl (tokenText identifier) <$> case rawType of
   RawInteger -> Right IntegerType
+  RawCount domain | Q.numeric (Q.QCount (tokenText domain))->Right IntegerType
+                  | otherwise->at "QTYPE" path domain "count domain must be nonblank and <=128 characters"
   RawDate -> Right DateType
   RawEnum name -> maybe (at "SFT003" path name "unknown enum type")
     (Right . EnumType (tokenText name)) (Map.lookup (tokenText name) enums)
@@ -1264,6 +1370,7 @@ scalarAssignment path declarations (identifier,raw) = do
   value <- case (expected,raw) of
     (kindValue,RawUnresolvedValue reason) -> Right (ScalarUnresolved (tokenText reason) kindValue)
     (IntegerType,RawIntegerValue token) -> IntegerValue <$> numeric path token
+    (IntegerType,RawCountValue _ token) -> IntegerValue <$> numeric path token
     (DateType,RawDateValue token) -> DateValue <$> parseDate path token
     (EnumType enumName members,RawEnumValue enumToken member)
       | tokenText enumToken == enumName && tokenText member `elem` members ->
@@ -1559,6 +1666,7 @@ inspectTypedFiniteModel path bytes = do
       rawType RawDate = JObj [("kind",JStr "date")]
       rawType (RawEnum token) = JObj [("kind",JStr "enum"),("name",loc token)]
       rawType (RawMoney token) = JObj [("kind",JStr "money"),("currency",loc token)]
+      rawType (RawCount token) = JObj [("kind",JStr "count"),("domain",loc token)]
   pure (JObj ([("id",loc (rawModelId model)),("limit",loc (rawLimit model))
     ,("tokens",JArr (map loc tokens))
     ,("entity_types",JArr (map loc (rawEntityTypes model)))
@@ -1573,6 +1681,8 @@ inspectTypedFiniteModel path bytes = do
     ,("propositions",JArr (map loc (rawPropositions model)))
     ,("limitations",JArr (map loc (rawLimitations model)))
     ,("scope",JStr "declaration overview plus complete source tokens; not lossless authoring interchange")]
+    ++ [("quantitative", either (const JNull) id (decodeJson (BL.toStrict (A.encode (rawQuantDefinitions model)))))
+       | not (null (rawQuantDefinitions model))]
     ++ if null (rawTemplates model) && null (rawScopedUses model) then [] else
       [("scoped_templates",JArr [JObj [("id",loc (rawTemplateName t))
         ,("formals",JArr [JObj [("variable",loc v),("type",loc k)] | (v,k)<-rawTemplateParameters t])
@@ -1586,6 +1696,8 @@ prepareTypedFiniteInspection :: FilePath -> BS.ByteString -> Maybe (FilePath,BS.
   -> Either Diagnostic TypedFiniteProgram
 prepareTypedFiniteInspection path bytes supplied = do
   model <- parseTypedFiniteModel path bytes
+  when (hasQuantities model) (at "SFI002" path (rawModelId model)
+    "quantitative parsed inspection is available; compose check retains the non-evaluated complete quantity plan; frozen kernel lowering alone omits authored calculations")
   unless (null (rawTemplates model) && null (rawScopedUses model))
     (at "SFI002" path (rawModelId model)
       "checked inspection of scoped templates is unavailable; use parsed inspection and non-evaluating compose check with the complete scoped projection after execution")
@@ -1681,6 +1793,15 @@ prepareDependencyTyped bundle path scenarioPath allegation = do
 prepareDependencyTypedScoped :: Map FilePath BS.ByteString -> FilePath -> Maybe FilePath -> Maybe Text
   -> Either Diagnostic (TypedFiniteProgram,[(Text,Text)],Maybe (Text,Text),ScopedCompilation)
 prepareDependencyTypedScoped bundle path scenarioPath allegation = do
+  (p,s,c,sc,q)<-prepareDependencyTypedQuantitative bundle path scenarioPath allegation
+  case q of
+    Nothing->pure (p,s,c,sc)
+    Just _->at "QWORKFLOW" path (Token WordToken "" 1 1)
+      "quantitative derivations require the checked quantitative workflow; no frozen scalar-input coercion"
+
+prepareDependencyTypedQuantitative :: Map FilePath BS.ByteString -> FilePath -> Maybe FilePath -> Maybe Text
+  -> Either Diagnostic (TypedFiniteProgram,[(Text,Text)],Maybe (Text,Text),ScopedCompilation,Maybe Q.QPlan)
+prepareDependencyTypedQuantitative bundle path scenarioPath allegation = do
   bytes <- source path
   tokens <- lexSource path bytes
   case tokens of
@@ -1700,18 +1821,18 @@ prepareDependencyTypedScoped bundle path scenarioPath allegation = do
       additions <- traverse (\i->case [x | x@(k,_,_,_,_)<-shared,tokenText k==tokenText i] of
         [(_,predId,args,status,reason)]->Right (predId,args,status,reason)
         _->at "DEPNAME" path i "unknown shared classification") uses
-      (program,slots,scoped) <- prepare mp sp m (scenario {scenarioFacts=scenarioFacts scenario++additions})
+      (program,slots,scoped,quantitative) <- prepare mp sp m (scenario {scenarioFacts=scenarioFacts scenario++additions})
       let actualOrigins=[a {selectedSource=normalise path} | a<-scopedAssessments scoped
             ,any (\(predId,args,_,_)->selectedPredicate a==tokenText predId && selectedArguments a==map tokenText args) additions]
           retained=[a | a<-scopedAssessments scoped,not (any (\b->selectedPredicate a==selectedPredicate b && selectedArguments a==selectedArguments b) actualOrigins)]
-      pure (program,slots,Just (tokenText caseId,tokenText identifier),scoped {scopedAssessments=retained++actualOrigins})
+      pure (program,slots,Just (tokenText caseId,tokenText identifier),scoped {scopedAssessments=retained++actualOrigins},quantitative)
     _ -> do
       when (allegation/=Nothing) (at "DEPNAME" path origin "allegation selector requires an actual typed case")
       m <- parseTypedFiniteModel path bytes >>= modules path
       sp <- maybe (at "DEPMISSING" path origin "component requires scenario") Right scenarioPath
       scenario <- source sp >>= parseTypedFiniteScenario sp
-      (program,slots,scoped)<-prepare path sp m scenario
-      pure (program,slots,Nothing,scoped)
+      (program,slots,scoped,quantitative)<-prepare path sp m scenario
+      pure (program,slots,Nothing,scoped,quantitative)
   where
     origin=Token EndToken "" 1 1
     source file=maybe (at "DEPMISSING" file origin "source is absent from retained bundle") Right (Map.lookup (normalise file) bundle)
@@ -1773,15 +1894,113 @@ prepareDependencyTypedScoped bundle path scenarioPath allegation = do
       -- Without holes, condition is an ordinary authored predicate.
       when (not (null slots) && any (\(i,_,_,_)->tokenText i `elem` (map fst slots++map snd slots++["condition"])) (scenarioFacts scenario))
         (at "DEPWRITER" sp (scenarioIdentifier scenario) "a dependency slot cannot have a direct classification")
-      program<-validateModelMode False True mp sp withSlots scenarioSlots
-      pure (program,slots,scoped)
+      (program,quantitative)<-prepareQuantities bundle mp sp withSlots scenarioSlots
+      pure (program,slots,scoped,quantitative)
+
+-- Static quantitative preparation retains actual authored values separately
+-- from readiness-only output placeholders. No arithmetic/filter is evaluated.
+prepareQuantities :: Map FilePath BS.ByteString -> FilePath -> FilePath -> RawModel -> TypedFiniteScenario
+  -> Either Diagnostic (TypedFiniteProgram,Maybe Q.QPlan)
+prepareQuantities bundle mp sp model scenario
+  | null (rawQuantitative model) && null definitions && not (any isCount (rawScalars model)) = do
+      when (any (\(_,v)->case v of RawCountValue {}->True;_->False) (scenarioValues scenario))
+        (at "QFORMAT" sp (scenarioIdentifier scenario) "count inputs require an opt-in quantitative model")
+      p<-validateModelMode False True mp sp model scenario
+      pure (p,Nothing)
+  | otherwise=do
+      unless (map tokenText (rawQuantitative model)==[Q.quantitativeFormat])
+        (at "QFORMAT" mp (rawModelId model) "exactly one quantitative version declaration is required")
+      mapM_ (\(i,_)->when (tokenText i `elem` outputs)
+        (at "QWRITER" sp i "a derived-only output cannot have an authored supplied value")) (scenarioValues scenario)
+      mapM_ (\(_,raw)->case raw of
+        RawIntegerValue t->literalSize t
+        RawMoneyValue _ t->literalSize t
+        RawCountValue _ t->literalSize t
+        _->pure ()) (scenarioValues scenario)
+      let tok i=Token WordToken i 1 1
+          placeholders=[(tok (Q.qName d),RawUnresolvedValue (Token StringToken "static derivation placeholder; not evaluated and not a supplied assessment" 1 1)) | d<-definitions]
+      p<-validateModelMode False True mp sp model (scenario {scenarioValues=scenarioValues scenario++placeholders})
+      inputs<-traverse (input p) (scenarioValues scenario)
+      mapM_ checkImportedAuthority definitions
+      plan<-either (Left . issue) Right (Q.checkQuantitative p types inputs definitions)
+      let conditions=[(tokenText i,sourceSite "requirement" i) | (i,_)<-rawRequirements model]
+      pure (p,Just plan {Q.qConditions=conditions})
+  where
+    definitions=rawQuantDefinitions model
+    literalSize t=when (Text.length (tokenText t)>1235)
+      (at "QLIMIT" sp t "numeric input literal exceeds the 4096-bit parsing budget")
+    outputs=map Q.qName definitions
+    types=Map.fromList [(tokenText i,quantityType t) | (i,t)<-rawScalars model]
+    isCount (_,RawCount _)=True
+    isCount _=False
+    input p (i,raw)=do
+      let name=tokenText i
+      ty<-maybe (at "QNAME" sp i "unknown quantitative input") Right (Map.lookup name types)
+      case (ty,raw) of
+        (Q.QCount domain,RawCountValue actual _)->unless (domain==tokenText actual) (at "QTYPE" sp actual "count domain mismatch")
+        (Q.QCount _,RawUnresolvedValue _)->pure ()
+        (Q.QCount _,_)->at "QTYPE" sp i "Count inputs require an explicit count domain value"
+        (_,RawCountValue _ _)->at "QTYPE" sp i "count values cannot supply a dimensionless/currency/date/enum scalar"
+        _->pure ()
+      reason<-case raw of
+        RawUnresolvedValue r->pure (tokenText r)
+        _->maybe (at "QREASON" sp i "quantitative inputs require an explicit source reason") (pure . tokenText)
+             (Map.lookup name (scenarioValueReasons scenario))
+      value<-maybe (at "QMISSING" sp i "missing checked input value") Right (Map.lookup name (finiteValues p))
+      let bytes=Map.findWithDefault BS.empty (normalise sp) bundle
+      declaration<-case [d | (d,_)<-rawScalars model,tokenText d==name] of
+        [d]->pure (sourceSite "scalar" d)
+        _->at "QNAME" sp i "input has no unique authored scalar declaration"
+      pure (Q.QInput name ty value reason (quantitySite sp bytes i) (sha256Text bytes) declaration)
+    sourceSite kind i=let (file,_)=declarationSource mp model kind i
+      in quantitySite file (Map.findWithDefault BS.empty (normalise file) bundle) i
+    checkImportedAuthority d=case Q.qUseSite d of
+      Nothing->pure ()
+      Just _->do
+        let actual kind name=case [token | (k,token,_,_)<-rawDeclarationSources model,k==kind,tokenText token==name] of
+              [i]->Just (sourceSite kind i)
+              _->Nothing
+            originals=Q.qInputOrigins d
+        unless (all (\name->name `elem` map fst originals) (quantityReferences (Q.qExpression d)))
+          (Left (issue (Q.QFailure "QAUTHORITY" "imported derivation must declare its scalar inputs in its original module" (Just (Q.qName d)))))
+        mapM_ (\(name,site)->unless (actual "scalar" name==Just site)
+          (Left (issue (Q.QFailure "QAUTHORITY" ("select the original module scalar explicitly: "<>name) (Just (Q.qName d)))))) originals
+        unless (all (\name->name `elem` map fst (Q.qFilterOrigins d)) (quantityFilters (Q.qExpression d)))
+          (Left (issue (Q.QFailure "QAUTHORITY" "imported inclusion requires its original module requirement" (Just (Q.qName d)))))
+        mapM_ (\(name,site)->unless (actual "requirement" name==Just site)
+          (Left (issue (Q.QFailure "QAUTHORITY" ("select the original inclusion requirement explicitly: "<>name) (Just (Q.qName d)))))) (Q.qFilterOrigins d)
+    issue e=case [d | d<-definitions,Just (Q.qName d)==Q.qFailureOutput e] of
+      [d]->let s=Q.qSite d in Diagnostic (Q.qFailureCode e) (Q.qSource s)
+        (Token WordToken (Q.qToken s) (Q.qLine s) (Q.qColumn s)) (Q.qFailureMessage e)
+        (fmap (\u->(Q.qSource u,Token WordToken (Q.qToken u) (Q.qLine u) (Q.qColumn u))) (Q.qUseSite d))
+      _->Diagnostic (Q.qFailureCode e) mp (rawModelId model) (Q.qFailureMessage e) Nothing
 
 -- Exact authored owner/source retained independently of a use-site alias.
 ownTemplates :: FilePath -> BS.ByteString -> Text -> Maybe Text -> RawModel -> RawModel
 ownTemplates path bytes owner version m=m
  {rawTemplates=map own (rawTemplates m)
- ,rawDeclarationSources=[(kind,i,normalise path,Nothing) | (kind,i)<-declarations]}
+ ,rawDeclarationSources=[(kind,i,normalise path,Nothing) | (kind,i)<-declarations]
+ ,rawSourceOwner=(normalise path,bytes)
+ ,rawSourceBundle=Map.singleton (normalise path) bytes
+ ,rawQuantDefinitions=map ownQuantity (rawQuantDefinitions m)}
  where
+  ownQuantity d=d {Q.qSite=quantitySite path bytes (Token WordToken (Q.qName d) (Q.qLine (Q.qSite d)) (Q.qColumn (Q.qSite d)))
+    ,Q.qDefinitionKey=[Text.pack (normalise path),owner,maybe "local" id version,Q.qName d,sha256Text bytes]
+    ,Q.qDefinitionVersion=case rawQuantitative m of [v]->tokenText v;_->""
+    ,Q.qSignatures=[(tokenText i,quantityType t) | (i,t)<-rawScalars m
+        ,tokenText i `elem` refs d]
+    ,Q.qInputOrigins=[(tokenText i,quantitySite path bytes i) | (i,_)<-rawScalars m,tokenText i `elem` refs d]
+    ,Q.qFilterOrigins=[(tokenText i,quantitySite path bytes i) | (i,_)<-rawRequirements m,tokenText i `elem` filterNames d]}
+  filterNames d=nubText (concatMap (conditionNames Set.empty) (quantityFilters (Q.qExpression d)))
+  conditionNames seen name | Set.member name seen=[]
+                          | otherwise=name:case lookup name [(tokenText i,e) | (i,e)<-rawRequirements m] of
+                              Nothing->[]
+                              Just e->concatMap (conditionNames (Set.insert name seen)) (requirementReferences e)
+  refs d=nubText (quantityReferences (Q.qExpression d)++concat
+      [scalarReferences e | (i,e)<-rawRequirements m,tokenText i `elem` filterNames d])
+  nubText=Set.toList . Set.fromList
+  scalarReferences e=case e of ComparisonExpr _ l r u->l:r:maybe [] (:[]) u;_->concatMap scalarReferences (Q.children e)
+  requirementReferences e=case e of ReferenceExpr i->[i];_->concatMap requirementReferences (Q.children e)
   declarations=[("entity-type",i) | i<-rawEntityTypes m]
     ++ [("entity",i) | (i,_)<-rawEntities m] ++ [("enum-type",i) | (i,_)<-rawEnums m]
     ++ [("scalar",i) | (i,_)<-rawScalars m] ++ [("predicate",i) | (i,_,_)<-rawPredicates m]
@@ -1793,6 +2012,23 @@ ownTemplates path bytes owner version m=m
   own t=t {rawTemplatePath=normalise path,rawTemplateOwner=owner,rawTemplateVersion=version
               ,rawTemplateDigest=sha256Text bytes
               ,rawTemplateSignature=rawPredicates m}
+
+quantityReferences :: Q.QExpr -> [Text]
+quantityReferences e=case e of
+  Q.QRef i->[i];Q.QScale _ x->quantityReferences x
+  Q.QSum xs->concat [quantityReferences x | Q.QItem _ x _<-xs];_->[]
+
+quantityFilters :: Q.QExpr -> [Text]
+quantityFilters e=case e of
+  Q.QScale _ x->quantityFilters x
+  Q.QSum xs->concat [maybe [] (:[]) c++quantityFilters x | Q.QItem _ x c<-xs]
+  Q.QCountItems xs->map snd xs
+  _->[]
+
+quantitySite :: FilePath -> BS.ByteString -> Token -> Q.QSite
+quantitySite file bytes token=Q.QSite (normalise file) (tokenLine token) (tokenColumn token)
+  offset (offset+BS.length (UTF8.encodeUtf8 (tokenText token))) (tokenText token)
+ where offset=sum [BS.length line+1 | line<-take (tokenLine token-1) (BS.split 10 bytes)]+tokenColumn token-1
 
 predicateSource :: FilePath -> RawModel -> Token -> (FilePath,Maybe Token)
 predicateSource fallback m=declarationSource fallback m "predicate"

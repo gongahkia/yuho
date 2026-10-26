@@ -16,6 +16,7 @@ import Yuho.Dependency.Run
 import Yuho.Dependency.Codec
 import Yuho.Surface.Dependency (loadDependencyProject)
 import Yuho.Dependency.Publication (publishDependencyPlan)
+import qualified Data.Map.Strict as M
 
 require :: Either DependencyDiagnostic a -> IO a
 require=either (\e->BS.hPut stderr (encode e<>"\n")>>exitFailure) pure
@@ -64,9 +65,13 @@ runDependencyCommand args=do
   require result >>= \payload->BS.hPut stdout (encode payload<>"\n")
 
 checkedPayload :: CheckedPlan -> A.Value
-checkedPayload p=A.object ["format" A..= planFormat,"status" A..= ("checked"::Text)
+checkedPayload p=A.object (["format" A..= planFormat,"status" A..= ("checked"::Text)
   ,"evaluated" A..= False,"snapshot" A..= checkedDigest p,"order" A..= checkedOrder p
   ,"expanded_cost" A..= checkedCost p,"profile" A..= ("TypedFiniteRules-v1"::Text)]
+  ++if any ((/=Nothing) . checkedQuantitative) (M.elems (checkedComponents p)) then
+    ["quantitative_profile" A..= ("ExactQuantities-v1"::Text),"quantitative_plans" A..=
+      [A.object ["component" A..= key,"evaluated" A..= False,"plan" A..= q]
+      | (key,c)<-M.toAscList (checkedComponents p),Just q<-[checkedQuantitative c]]] else [])
 readArtifact :: FilePath -> IO (Either DependencyDiagnostic DependencyArtifact)
 readArtifact path=do
   result<-fmap (>>=decodeDependencyArtifact) (readBytes path)
@@ -89,6 +94,8 @@ artifactInput path=do
   bytes<-readBytes path >>= require
   pure $ case A.eitherDecodeStrict' bytes of Right (A.Object _)->True;_->False
 executionPayload :: FilePath -> DependencyExecution -> A.Value
-executionPayload out e=A.object ["format" A..= reportFormat,"status" A..= ("evaluated"::Text)
+executionPayload out e=A.object (["format" A..= reportFormat,"status" A..= ("evaluated"::Text)
   ,"profile" A..= ("TypedFiniteRules-v1"::Text),"execution" A..= dependencyExecutionId e,"output" A..= out
   ,"replay_authority" A..= ("exact embedded dependency plan and sources; no live source IO during replay"::Text)]
+  ++["quantitative_profile" A..= ("ExactQuantities-v1"::Text)
+    | any ((/=Nothing) . checkedQuantitative) (M.elems (checkedComponents (executionPlan e)))])

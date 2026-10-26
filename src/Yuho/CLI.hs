@@ -3,7 +3,10 @@
 module Yuho.CLI (main) where
 
 import Control.Exception (IOException, finally, try)
+import Control.Monad (when)
 import qualified Data.ByteString as BS
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.Aeson as A
 import Data.Text (Text)
 import qualified Data.Text as DataText
 import qualified Data.Text.Encoding as Encoding
@@ -14,6 +17,8 @@ import System.FilePath (takeDirectory)
 import System.IO (IOMode(ReadMode), hClose, openBinaryTempFile, stderr, stdout, withBinaryFile)
 import System.Posix.Files (createLink, fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.Machine (runMachine)
+import qualified Yuho.Quantitative as Q
+import qualified Yuho.Quantitative.Graph as QG
 import Yuho.Kernel.Run (runLine)
 import qualified Yuho.Corpus as Corpus
 import Yuho.CoreYuho.Normalize (normalizeCase, normalizeChecked, normalizePresumption)
@@ -22,6 +27,7 @@ import Yuho.Diagram.Build
 import Yuho.Diagram.Encode (encodeNativeSemanticGraph, encodeNativeSemanticGraphXml, encodeNativeSvg)
 import Yuho.Diagram.Types (DiagramFormat(..), DiagramView(..), SemanticGraph)
 import Yuho.Protocol.Json (J(..), decodeJson, encodeJson, lookupField, textValue)
+import Yuho.Protocol.Decode (sha256Text)
 import Yuho.Release
   ( doctorReport, initialiseProject, locateRepository, releaseName, releaseVersion
   , verifyReleaseManifest )
@@ -41,10 +47,11 @@ import Yuho.Surface.Parser (parseAnalysisCase)
 import Yuho.Surface.Presumption
   ( PresumptionProgram(..), explainPresumptionProgram, loadPresumptionProgram )
 import Yuho.Surface.TypedFinite
-  ( TypedFiniteCase(..), TypedFiniteAllegation(..), loadTypedFiniteProgram
+  ( TypedFiniteCase(..), TypedFiniteAllegation(..)
+  , loadTypedFiniteQuantitative
   , loadTypedFiniteCase, encodeTypedFiniteRequest, encodeTypedFiniteCase
   , explainTypedFinite, explainTypedFiniteCase )
-import Yuho.CoreYuho.TypedFinite (evaluateTypedFinite, finiteProgramId)
+import Yuho.CoreYuho.TypedFinite (TypedFiniteProgram, evaluateTypedFinite, finiteProgramId)
 import Yuho.Surface.Temporal (loadAuthoredInput)
 import Yuho.Surface.Token (Diagnostic(..), Kind(..), Token(..), diagnosticJson)
 
@@ -287,7 +294,13 @@ operatePresumption command path bytes scenarioPath output = do
 operateTypedFinite :: Command -> FilePath -> BS.ByteString
   -> Maybe (FilePath,BS.ByteString) -> Maybe FilePath -> IO ()
 operateTypedFinite command path bytes scenario output = do
-  program <- loadTypedFiniteProgram path bytes scenario >>= either report pure
+  (program,quantitative) <- loadTypedFiniteQuantitative path bytes scenario >>= either report pure
+  case quantitative of
+    Just q->operateQuantitative command path program q output
+    Nothing->operateOrdinaryTypedFinite command path program output
+
+operateOrdinaryTypedFinite :: Command -> FilePath -> TypedFiniteProgram -> Maybe FilePath -> IO ()
+operateOrdinaryTypedFinite command path program output = do
   result <- either (report . issue) pure (evaluateTypedFinite program)
   let request = encodeTypedFiniteRequest (finiteProgramId program <> "-request") program
   case command of
@@ -307,6 +320,38 @@ operateTypedFinite command path bytes scenario output = do
   where
     origin = Token EndToken "" 1 1
     issue message = Diagnostic "SFT011" path origin message Nothing
+
+operateQuantitative :: Command -> FilePath -> TypedFiniteProgram -> Q.QPlan -> Maybe FilePath -> IO ()
+operateQuantitative command path program plan output=case command of
+  Check->BL.hPut stdout (A.encode (A.object ["format" A..= Q.quantitativeFormat,"profile" A..= ("ExactQuantities-v1"::Text)
+    ,"status" A..= ("checked"::Text),"evaluated" A..= False,"quantitative_plan" A..= plan])<>"\n")
+  Compile->report (Diagnostic "QWORKFLOW" path (Token WordToken "" 1 1)
+    "use compose run for a versioned immutable quantitative artifact; a frozen kernel request alone omits authored derivations" Nothing)
+  _->do
+    (computed,execution)<-either failQuantity pure (Q.executeQuantitative program plan)
+    result<-either (\m->report (Diagnostic "QOBSERVATION" path (Token WordToken "" 1 1) m Nothing)) pure (evaluateTypedFinite computed)
+    let request=encodeTypedFiniteRequest (finiteProgramId computed<>"-request") computed
+    case decodeJson (runLine request) of
+      Right v | (lookupField "status" v >>= textValue)==Just "evaluated"->pure ()
+      _->report (Diagnostic "QOBSERVATION" path (Token WordToken "" 1 1) "frozen typed backend refused the computed request" Nothing)
+    backend<-case A.eitherDecodeStrict' (runLine request) of
+      Right v->pure (v::A.Value)
+      Left _->report (Diagnostic "QOBSERVATION" path (Token WordToken "" 1 1) "typed backend did not produce a structured result" Nothing)
+    case command of
+      Diagram view format | view `elem` [RuleView,ModulesView,TraceView]->emitDiagram output format
+        (QG.nativeQuantitativeGraph [finiteProgramId program,DataText.pack path,sha256Text (BL.toStrict (A.encode plan))]
+          execution (typedFiniteGraph view computed result))
+      Diagram _ _->report (Diagnostic "SFD001" path (Token WordToken "" 1 1) "quantity diagrams require rule, modules or trace view" Nothing)
+      _->do
+        let bytes=A.encode (A.object ["format" A..= ("yuho.quantitative-result/v0.1-experimental"::Text)
+              ,"profile" A..= ("ExactQuantities-v1"::Text),"quantitative" A..= execution,"backend" A..= backend])<>"\n"
+        when (BL.length bytes>33554432) (report (Diagnostic "QLIMIT" path (Token WordToken "" 1 1) "quantitative result exceeds 32 MiB" Nothing))
+        BL.hPut stdout bytes
+  where
+    failQuantity e=case [d | d<-Q.qDefinitions plan,Just (Q.qName d)==Q.qFailureOutput e] of
+      d:_->let s=Q.qSite d in report (Diagnostic (Q.qFailureCode e) (Q.qSource s)
+        (Token WordToken (Q.qToken s) (Q.qLine s) (Q.qColumn s)) (Q.qFailureMessage e) Nothing)
+      _->report (Diagnostic (Q.qFailureCode e) path (Token WordToken "" 1 1) (Q.qFailureMessage e) Nothing)
 
 operateTypedFiniteCase :: Command -> FilePath -> BS.ByteString -> Maybe FilePath
   -> Maybe FilePath -> IO ()

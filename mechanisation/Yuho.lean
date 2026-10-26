@@ -15,3 +15,4 @@ import Yuho.CoreYuho.ReleaseV03Conformance
 import Yuho.CoreYuho.DependencyPlan
 
 import Yuho.CoreYuho.ScopedDefinitions
+import Yuho.CoreYuho.Quantitative

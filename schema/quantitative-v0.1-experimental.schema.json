@@ -1,0 +1,585 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuho.example/schema/quantitative-v0.1-experimental.schema.json",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/execution"
+    },
+    {
+      "$ref": "#/$defs/evidence"
+    }
+  ],
+  "$defs": {
+    "type": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "enum": [
+                "QInteger",
+                "QDate"
+              ]
+            }
+          },
+          "required": [
+            "tag"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "enum": [
+                "QMoney",
+                "QCount",
+                "QEnum"
+              ]
+            },
+            "contents": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "tag",
+            "contents"
+          ]
+        }
+      ]
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "qSource": {
+          "type": "string"
+        },
+        "qLine": {
+          "type": "integer"
+        },
+        "qColumn": {
+          "type": "integer"
+        },
+        "qStart": {
+          "type": "integer"
+        },
+        "qEnd": {
+          "type": "integer"
+        },
+        "qToken": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "qSource",
+        "qLine",
+        "qColumn",
+        "qStart",
+        "qEnd",
+        "qToken"
+      ]
+    },
+    "value": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/$defs/type"
+            },
+            "state": {
+              "const": "known_exact"
+            },
+            "integer": {
+              "type": "string",
+              "pattern": "^-?(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "type",
+            "state",
+            "integer"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/$defs/type"
+            },
+            "state": {
+              "const": "explicitly_unresolved"
+            },
+            "reasons": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "state",
+            "reasons"
+          ]
+        }
+      ]
+    },
+    "expression": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "const": "ref"
+            },
+            "scalar": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "operation",
+            "scalar"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "const": "constant"
+            },
+            "type": {
+              "$ref": "#/$defs/type"
+            },
+            "integer": {
+              "type": "string",
+              "pattern": "^-?(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "operation",
+            "type",
+            "integer"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "const": "scale"
+            },
+            "factor": {
+              "type": "string",
+              "pattern": "^-?(0|[1-9][0-9]*)$"
+            },
+            "operand": {
+              "$ref": "#/$defs/expression"
+            }
+          },
+          "required": [
+            "operation",
+            "factor",
+            "operand"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "const": "sum"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "identity": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "$ref": "#/$defs/expression"
+                  },
+                  "condition": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "identity",
+                  "value",
+                  "condition"
+                ]
+              }
+            }
+          },
+          "required": [
+            "operation",
+            "items"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "const": "count"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "identity": {
+                    "type": "string"
+                  },
+                  "condition": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "identity",
+                  "condition"
+                ]
+              }
+            }
+          },
+          "required": [
+            "operation",
+            "items"
+          ]
+        }
+      ]
+    },
+    "definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "qName": {
+          "type": "string"
+        },
+        "qType": {
+          "$ref": "#/$defs/type"
+        },
+        "qExpression": {
+          "$ref": "#/$defs/expression"
+        },
+        "qSite": {
+          "$ref": "#/$defs/site"
+        },
+        "qDefinitionKey": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "qDefinitionVersion": {
+          "const": "yuho.quantitative/v0.1-experimental"
+        },
+        "qUseSite": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/site"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "qSignatures": {
+          "type": "array",
+          "items": {
+            "type": "array"
+          }
+        },
+        "qInputOrigins": {
+          "type": "array",
+          "items": {
+            "type": "array"
+          }
+        },
+        "qFilterOrigins": {
+          "type": "array",
+          "items": {
+            "type": "array"
+          }
+        }
+      },
+      "required": [
+        "qName",
+        "qType",
+        "qExpression",
+        "qSite",
+        "qDefinitionKey",
+        "qDefinitionVersion",
+        "qUseSite",
+        "qSignatures",
+        "qInputOrigins",
+        "qFilterOrigins"
+      ]
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/type"
+        },
+        "value": {
+          "type": "object"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/site"
+        },
+        "snapshot": {
+          "type": "string"
+        },
+        "declaration": {
+          "$ref": "#/$defs/site"
+        },
+        "origin": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "value",
+        "reason",
+        "source",
+        "snapshot",
+        "declaration",
+        "origin"
+      ]
+    },
+    "plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "qDefinitions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/definition"
+          }
+        },
+        "qInputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/input"
+          }
+        },
+        "qTypes": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/type"
+          }
+        },
+        "qOrder": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "qConditions": {
+          "type": "array",
+          "items": {
+            "type": "array"
+          }
+        }
+      },
+      "required": [
+        "qDefinitions",
+        "qInputs",
+        "qTypes",
+        "qOrder",
+        "qConditions"
+      ]
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "output": {
+          "type": "string"
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "operation": {
+          "type": "string"
+        },
+        "expression": {
+          "$ref": "#/$defs/expression"
+        },
+        "result": {
+          "$ref": "#/$defs/value"
+        },
+        "operands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array"
+          }
+        },
+        "contributing_inputs": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "requirement": {
+                "type": "string"
+              },
+              "actual_reads": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            },
+            "required": [
+              "requirement",
+              "actual_reads"
+            ]
+          }
+        }
+      },
+      "required": [
+        "output",
+        "path",
+        "operation",
+        "expression",
+        "result",
+        "operands",
+        "items",
+        "contributing_inputs",
+        "filters"
+      ]
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.quantitative/v0.1-experimental"
+        },
+        "evaluation": {
+          "const": "evaluated"
+        },
+        "plan": {
+          "$ref": "#/$defs/plan"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          }
+        },
+        "notice": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "evaluation",
+        "plan",
+        "values",
+        "steps",
+        "notice"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "yuho.quantitative/v0.1-experimental"
+        },
+        "occurrences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "component": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object"
+              },
+              "snapshot": {
+                "type": "string"
+              },
+              "evaluation": {
+                "type": "string"
+              },
+              "checked_plan": {
+                "$ref": "#/$defs/plan"
+              },
+              "actual": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/execution"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "component",
+              "scope",
+              "snapshot",
+              "evaluation",
+              "checked_plan",
+              "actual"
+            ]
+          }
+        }
+      },
+      "required": [
+        "format",
+        "occurrences"
+      ]
+    }
+  }
+}

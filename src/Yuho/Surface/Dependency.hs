@@ -18,7 +18,7 @@ import Yuho.Surface.TypedFinite (dependencySourcePaths)
 import Yuho.Surface.Dependency.Parser
 import Yuho.Dependency.Types
 import Yuho.Dependency.Check
-import Yuho.Dependency.Codec (artifactFormat)
+import Yuho.Dependency.Codec (artifactFormat,quantitativeArtifactFormat)
 
 -- IO is confined to retaining source bytes once. Checking/replay is then pure.
 loadDependencyProject :: FilePath -> IO (Either DependencyDiagnostic CheckedPlan)
@@ -74,5 +74,5 @@ dependencyInput path=do
     Right b->case lexSource path b of
       Right (t:_) | ST.tokenText t=="checked-project"->True
       _->case A.eitherDecodeStrict' b of
-        Right (A.Object obj)->Data.Aeson.KeyMap.lookup "artifactFormatVersion" obj==Just (A.String artifactFormat)
+        Right (A.Object obj)->Data.Aeson.KeyMap.lookup "artifactFormatVersion" obj `elem` map (Just . A.String) [artifactFormat,quantitativeArtifactFormat]
         _->False

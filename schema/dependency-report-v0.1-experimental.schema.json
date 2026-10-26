@@ -48,6 +48,9 @@
     },
     "scoped_definitions": {
       "$ref": "scoped-definitions-v0.1-experimental.schema.json"
+    },
+    "quantitative": {
+      "$ref": "quantitative-v0.1-experimental.schema.json"
     }
   },
   "required": [

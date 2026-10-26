@@ -126,8 +126,9 @@ common yuho-common
 library
   import: yuho-common
   hs-source-dirs: src
-  other-modules: Yuho.Machine, Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON, Yuho.Surface.InspectionData, Yuho.Surface.Computed.Parser, Yuho.Surface.Computed.CLI, Yuho.Dependency.Check, Yuho.Dependency.Run, Yuho.Dependency.Codec, Yuho.Dependency.Projection, Yuho.Dependency.Publication, Yuho.Dependency.Source, Yuho.Surface.Dependency.Parser, Yuho.Surface.Dependency.CLI, Yuho.Surface.Publication
+  other-modules: Yuho.Quantitative, Yuho.Quantitative.Graph, Yuho.Machine, Yuho.Authoring.Projection.Render, Yuho.Authoring.Typed.JSON, Yuho.Surface.InspectionData, Yuho.Surface.Computed.Parser, Yuho.Surface.Computed.CLI, Yuho.Dependency.Check, Yuho.Dependency.Run, Yuho.Dependency.Codec, Yuho.Dependency.Projection, Yuho.Dependency.Publication, Yuho.Dependency.Source, Yuho.Surface.Dependency.Parser, Yuho.Surface.Dependency.CLI, Yuho.Surface.Publication
   exposed-modules:
+      Yuho.Authoring.Quantitative
       Yuho.Dependency.Types
       Yuho.ScopedDefinitions.Types
       Yuho.Authoring.ScopedDefinitions

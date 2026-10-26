@@ -84,6 +84,11 @@ typed-rules-scenario TFR01 for FictionalTypedFiniteRules-v0.2 {
 
 Scalar declarations are `integer`, `date`, `enum NAME` or `money SGD`. Values are exact integers, ISO dates, declared enum members, or integer minor units. `value ID = unresolved reason "...";` is explicit and propagates `unresolved`. Comparisons are `eq`, `neq`, `lt`, `lte`, `gt`, `gte` and the three-operand `in-half-open`. Cross-currency money comparisons and unrelated scalar types are rejected; Yuho performs no conversion or general arithmetic.
 
+An opt-in [exact quantitative layer](exact-quantities.md) adds identified sums,
+integer scaling, nominal counts and multi-stage derived values. It retains the
+distinction between supplied inputs and calculations and leaves the historical
+typed-finite protocol unchanged.
+
 `forall` and `exists` enumerate declared entities of the named nominal type. Empty `forall` is satisfied and empty `exists` is not satisfied. Variables are lexical, cannot shadow, and may appear only in compatible predicate positions. `not` is strong three-valued negation. `at-least`, `at-most` and `exactly` use the satisfied/unresolved count interval specified in the [formal semantics](formal-semantics.md).
 
 Rules conclude named technical propositions. Priority is explicit and acyclic; source order has no priority meaning. A satisfied higher opposite-polarity rule blocks the lower rule, an unresolved higher rule keeps the proposition unresolved, and incomparable satisfied opposite rules produce `conflict`. None of these states is guilt, liability or a sentence.
