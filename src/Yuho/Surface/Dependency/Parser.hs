@@ -24,7 +24,7 @@ takeWhen test expected = P $ \p ts -> case ts of
   t:_ -> at "DEPFORMAT" p t ("expected " <> expected)
   [] -> at "DEPFORMAT" p (Token EndToken "" 1 1) ("expected " <> expected)
 keyword :: Text -> P Token
-keyword value = takeWhen ((==value) . tokenText) value
+keyword value = takeWhen (matchesSyntax value) value
 word, string :: P Token
 word = takeWhen ((==WordToken) . tokenKind) "identifier"
 string = takeWhen ((==StringToken) . tokenKind) "quoted text"
@@ -111,6 +111,6 @@ parseDependencyProject path bytes=lexSource path bytes >>= fmap fst . runP parse
       _->P (\p _->at "DEPUNSUPPORTED" p k "unsupported candidate term")
 
 manyUntil :: Text -> P a -> P [a]
-manyUntil end item=do t<-peek;if tokenText t==end then pure [] else do x<-item; (x:) <$> manyUntil end item
+manyUntil end item=do t<-peek;if matchesSyntax end t then pure [] else do x<-item; (x:) <$> manyUntil end item
 
 data Decl=DOrigin SourceOrigin | DScope PlanScope | DComponent PlanComponent | DBinding PlanBinding | DCandidate PlanCandidate

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.Surface.Token
-  ( Kind(..), Token(..), Diagnostic(..), at, atRelated, diagnosticJson ) where
+  ( Kind(..), Token(..), matchesSyntax, Diagnostic(..), at, atRelated, diagnosticJson ) where
 
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -14,6 +14,12 @@ data Token = Token
   , tokenLine :: Int
   , tokenColumn :: Int
   } deriving (Eq, Show)
+
+-- Quoted text never acts as a keyword or delimiter, even when its text matches.
+matchesSyntax :: Text -> Token -> Bool
+matchesSyntax expected token = tokenText token == expected
+  && tokenKind token == (if expected `elem` ["{","}","(",")",",",";","="]
+    then SymbolToken else WordToken)
 
 data Diagnostic = Diagnostic
   { diagnosticCode :: Text

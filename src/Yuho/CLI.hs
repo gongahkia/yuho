@@ -416,7 +416,9 @@ emitDiagram destination format graph = case destination of
     publish path bytes
   where
     encoded = case format of
-      SvgFormat -> Right (encodeNativeSvg graph)
+      SvgFormat -> do
+        _ <- encodeNativeSemanticGraphXml graph
+        Right (encodeNativeSvg graph)
       JsonFormat -> Right (encodeNativeSemanticGraph graph)
       XmlFormat -> encodeNativeSemanticGraphXml graph
     origin = Token EndToken "" 1 1

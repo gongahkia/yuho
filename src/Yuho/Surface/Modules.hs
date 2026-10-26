@@ -16,6 +16,7 @@ import System.Posix.Files (fileSize, getSymbolicLinkStatus, isRegularFile)
 import Yuho.Surface.AST hiding (Attachment)
 import qualified Yuho.Surface.AST as AST
 import Yuho.Surface.Lexer (lexSource)
+import Yuho.Surface.Check (checkRequestId)
 import Yuho.Surface.Parser (parseModel)
 import Yuho.Surface.Token
 
@@ -64,7 +65,7 @@ current = P $ \path input -> case input of
 
 takeText :: Text -> P Token
 takeText wanted = P $ \path input -> case input of
-  token:rest | tokenText token == wanted -> Right (token,rest)
+  token:rest | matchesSyntax wanted token -> Right (token,rest)
   token:_ -> at "SFM001" path token ("expected " <> wanted)
   [] -> at "SFM001" path (Token EndToken "" 1 1) ("expected " <> wanted)
 
@@ -220,8 +221,14 @@ data Loaded = Loaded FilePath StatutoryModule Model
 loadAuthoredModel :: FilePath -> BS.ByteString -> IO (Either Diagnostic AuthoredModel)
 loadAuthoredModel path bytes = case lexSource path bytes of
   Right (first:_) | tokenText first == "modular-model" -> loadHost path bytes
-  _ -> pure (AuthoredModel <$> parseModel path bytes <*> pure Nothing <*> pure []
+  _ -> pure (AuthoredModel <$> parseSourceModel path bytes <*> pure Nothing <*> pure []
     <*> pure [] <*> pure [])
+
+parseSourceModel :: FilePath -> BS.ByteString -> Either Diagnostic Model
+parseSourceModel path bytes = do
+  model <- parseModel path bytes
+  checkRequestId path (modelRequest model)
+  pure model
 
 loadHost :: FilePath -> BS.ByteString -> IO (Either Diagnostic AuthoredModel)
 loadHost path bytes = case parseWith hostParser path bytes of
@@ -313,7 +320,7 @@ loadImports hostPath root imports = go Map.empty Set.empty Set.empty imports
                       modelBytes <- readBounded modelPath file modelToken
                       pure $ do
                         raw <- modelBytes
-                        model <- parseModel modelPath raw
+                        model <- parseSourceModel modelPath raw
                         validateExports file model exports
                         let ids = Set.insert identity (identities `Set.union` dependencyIds)
                         if Set.size ids > 32 then at "SFM004" hostPath name "module count limit exceeded"

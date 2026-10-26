@@ -34,7 +34,7 @@ current = P $ \path input -> case input of
 
 need :: Text -> P Token
 need wanted = P $ \path input -> case input of
-  token:rest | tokenText token == wanted -> Right (token, rest)
+  token:rest | matchesSyntax wanted token -> Right (token, rest)
   token:_ -> at (if tokenText token `elem` deferred then "SFE013" else "SFE001")
     path token ("expected " <> wanted)
   [] -> at "SFE001" path (Token EndToken "" 1 1) ("expected " <> wanted)
@@ -55,14 +55,14 @@ string = kind StringToken
 optional :: Text -> P Bool
 optional wanted = do
   token <- current
-  if tokenText token == wanted then need wanted >> pure True else pure False
+  if matchesSyntax wanted token then need wanted >> pure True else pure False
 
 manyBefore :: Text -> P a -> P [a]
 manyBefore ending action = go []
   where
     go reversed = do
       token <- current
-      if tokenText token == ending then pure (reverse reversed)
+      if matchesSyntax ending token then pure (reverse reversed)
       else if tokenKind token == EndToken then need ending >> pure []
       else do
         item <- action

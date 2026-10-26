@@ -55,7 +55,7 @@ instance Monad P where
 
 takeText :: Text -> P Token
 takeText wanted = P $ \path input -> case input of
-  token:rest | tokenText token == wanted -> Right (token,rest)
+  token:rest | matchesSyntax wanted token -> Right (token,rest)
   token:_ -> at "SFR001" path token ("expected " <> wanted)
   [] -> at "SFR001" path (Token EndToken "" 1 1) ("expected " <> wanted)
 

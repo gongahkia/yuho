@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Yuho.Surface.Check (checkModel) where
+module Yuho.Surface.Check (checkModel, checkRequestId) where
 
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
@@ -20,6 +20,7 @@ checkModel :: FilePath -> Model -> Maybe (FilePath, Scenario) -> Either Diagnost
 checkModel path model supplied = do
   expect path "SFE004" (modelVariant model) "SuppliedProofStatus-v1"
   expect path "SFE004" (modelLimit model) "1024"
+  checkRequestId path (modelRequest model)
   if null (modelLimitations model) || any (Text.null . tokenText) (modelLimitations model)
     then at "SFE004" path (modelIdentifier model) "limitations required"
     else pure ()
@@ -1445,6 +1446,15 @@ checkDefinitionOutputs path index offences exceptions rows = do
         not (Set.member (tokenText item) valid)] of
     item:_ -> at "SFE020" path item "invalid technical-output reference"
     [] -> pure ()
+
+-- Also checked while loading a source model, before wrappers lose its file owner.
+checkRequestId :: FilePath -> Token -> Either Diagnostic ()
+checkRequestId path token = case Text.unpack (tokenText token) of
+  [letter, tens, units]
+    | letter >= 'A' && letter <= 'Z'
+      && all (\digit -> digit >= '0' && digit <= '9') [tens, units] -> pure ()
+  _ -> at "SFE004" path token
+    "proof request ID must be an uppercase ASCII letter followed by two digits"
 
 expect :: FilePath -> Text -> Token -> Text -> Either Diagnostic ()
 expect path code token wanted

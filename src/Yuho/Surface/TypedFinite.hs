@@ -137,7 +137,7 @@ current = P $ \path input -> case input of
 
 takeText :: Text -> P Token
 takeText wanted = P $ \path input -> case input of
-  token:rest | tokenText token == wanted -> Right (token,rest)
+  token:rest | matchesSyntax wanted token -> Right (token,rest)
   token:_ -> at "SFT001" path token ("expected " <> wanted)
   [] -> at "SFT001" path (Token EndToken "" 1 1) ("expected " <> wanted)
 
@@ -156,28 +156,28 @@ string = P $ \path input -> case input of
 optionalText :: Text -> P Bool
 optionalText wanted = do
   token <- current
-  if tokenText token == wanted then takeText wanted >> pure True else pure False
+  if matchesSyntax wanted token then takeText wanted >> pure True else pure False
 
 manyBefore :: Text -> P a -> P [a]
 manyBefore ending action = go []
   where
     go reversed = do
       token <- current
-      if tokenText token == ending then pure (reverse reversed)
+      if matchesSyntax ending token then pure (reverse reversed)
       else if tokenKind token == EndToken then takeText ending >> pure []
       else action >>= \item -> go (item:reversed)
 
 commaList :: P a -> P [a]
 commaList action = do
   token <- current
-  if tokenText token == ")" then pure [] else do
+  if matchesSyntax ")" token then pure [] else do
     first <- action
     rest <- more
     pure (first:rest)
   where
     more = do
       token <- current
-      if tokenText token == ")" then pure [] else do
+      if matchesSyntax ")" token then pure [] else do
         _ <- takeText ","
         item <- action
         (item:) <$> more
@@ -222,6 +222,8 @@ parseExpression = do
     cardinal kindValue = do
       threshold <- word
       amount <- integerToken threshold
+      when (amount < 0 || amount > 2048) (P $ \path _ ->
+        at "SFT009" path threshold "cardinality threshold must be between 0 and 2048")
       _ <- takeText "("
       members <- commaList parseExpression
       _ <- takeText ")"

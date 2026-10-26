@@ -47,7 +47,7 @@ current = P $ \path input -> case input of
 
 takeText :: Text -> P Token
 takeText wanted = P $ \path input -> case input of
-  token:rest | tokenText token == wanted -> Right (token,rest)
+  token:rest | matchesSyntax wanted token -> Right (token,rest)
   token:_ -> at "SFT001" path token ("expected " <> wanted)
   [] -> at "SFT001" path (Token EndToken "" 1 1) ("expected " <> wanted)
 

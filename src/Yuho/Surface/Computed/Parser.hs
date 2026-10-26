@@ -35,7 +35,7 @@ takeWhen test expected = P $ \p ts -> case ts of
   t:_ -> at "SFC001" p t ("expected " <> expected)
   [] -> at "SFC001" p (Token EndToken "" 1 1) ("expected " <> expected)
 keyword :: Text -> P Token
-keyword value = takeWhen ((==value) . tokenText) value
+keyword value = takeWhen (matchesSyntax value) value
 word, string :: P Token
 word = takeWhen ((==WordToken) . tokenKind) "identifier"
 string = takeWhen ((==StringToken) . tokenKind) "quoted text"
