@@ -219,12 +219,16 @@ def main():
  # both fresh execution and immutable replay. Shared existing shim, no product
  # fault flags or second export implementation.
  spec=importlib.util.spec_from_file_location('tranche04_probe',ROOT/'test/tranche04.py');old=importlib.util.module_from_spec(spec);spec.loader.exec_module(old)
- (output/'fault.c').write_text(old.SHIM);subprocess.run(['cc','-shared','-fPIC','-o',str(output/'fault.so'),str(output/'fault.c'),'-ldl'],check=True)
+ (output/'fault.c').write_text(old.DARWIN_SHIM if sys.platform=='darwin' else old.SHIM)
+ flags=['-dynamiclib'] if sys.platform=='darwin' else ['-shared','-fPIC']
+ libraries=[] if sys.platform=='darwin' else ['-ldl']
+ subprocess.run(['cc',*flags,'-o',str(output/'fault.so'),str(output/'fault.c'),*libraries],check=True)
  for machine in (False,True):
   for replay_mode in (False,True):
    for fault in ('stage','publish','parent','race'):
     destination=output/f'fault-{machine}-{replay_mode}-{fault}'
-    env=os.environ.copy();env.update(LD_PRELOAD=str(output/'fault.so'),YUHO_TEST_FAULT=fault,YUHO_TEST_LOG=str(output/'fault.log'))
+    env=os.environ.copy();env['DYLD_INSERT_LIBRARIES' if sys.platform=='darwin' else 'LD_PRELOAD']=str(output/'fault.so')
+    env.update(YUHO_TEST_FAULT=fault,YUHO_TEST_LOG=str(output/'fault.log'))
     if machine:
      request={'format':'yuho.machine-request/v0.2-experimental','input_kind':'dependency-artifact-json' if replay_mode else 'dependency-yh','operation':'replay' if replay_mode else 'run','path':str(out/'artifact.json' if replay_mode else project('C')),'output':str(destination)}
      result=call(['machine','-'],1,stdin=json.dumps(request).encode(),env=env);check('failed machine exports absent',not result['success'] and not result['exports'] and result['payload'] is None)

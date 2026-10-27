@@ -10,9 +10,10 @@ module Yuho.CoreYuho.TypedFinite
   , TypedFiniteResult(..), truthName, groundKey, GroundIdentity, groundIdentity, groundIdentityText, evaluateTypedFinite
   , negateTruth, compareScalar, cardinalityTruth, resolveProposition
   , FiniteRead(..), FiniteInput(..), inputDisplay, evaluateTypedFiniteObserved, checkTypedFiniteInputs
-  , substituteTerm
+  , expandedProgramSize, substituteTerm
   ) where
 
+import Control.Monad (foldM)
 import Data.List (nub, sort)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
@@ -441,11 +442,14 @@ annotatePriority priorities observations item = item { observedDefeatedBy = sort
     priorityHigher priorities (observedRule other) (observedRule item)] }
 
 priorityHigher :: [PriorityDecl] -> Text -> Text -> Bool
-priorityHigher priorities higher lower = go (Set.singleton lower) lower
+priorityHigher priorities higher lower = go (Set.singleton lower) (parents lower)
   where
-    go visited current = any (\next -> next == higher
-      || (not (Set.member next visited) && go (Set.insert next visited) next))
-      [candidate | PriorityDecl candidate below <- priorities, below == current]
+    parents current = [candidate | PriorityDecl candidate below <- priorities, below == current]
+    go _ [] = False
+    go visited (next:rest)
+      | next == higher = True
+      | Set.member next visited = go visited rest
+      | otherwise = go (Set.insert next visited) (parents next ++ rest)
 
 comparisonName :: Comparison -> Text
 comparisonName Equal = "eq"
@@ -460,3 +464,57 @@ cardinalityName :: CardinalityKind -> Text
 cardinalityName AtLeast = "at-least"
 cardinalityName AtMost = "at-most"
 cardinalityName Exactly = "exactly"
+
+-- | Authoritative expanded structural cost for the frozen typed kernel request.
+expandedProgramSize :: TypedFiniteProgram -> Either Text Integer
+expandedProgramSize program = do
+  let domains = Map.unionWith (+)
+        (Map.fromListWith (+)
+          [(kindValue,1 :: Integer) | EntityDecl _ kindValue <- finiteEntities program])
+        (Map.fromList [(kindValue,0) | EntityTypeDecl kindValue <- finiteEntityTypes program])
+      requirements = Map.fromList (finiteRequirements program)
+      -- Cache named sizes, not expanded trees. A short reference DAG can denote
+      -- exponentially many nodes; estimating it must not perform that expansion.
+      named active cache identifier
+        | Set.member identifier active = Left "cyclic requirement expansion"
+        | Just size <- Map.lookup identifier cache = Right (size,cache)
+        | otherwise = do
+            target <- maybe (Left "unknown requirement expansion") Right
+              (Map.lookup identifier requirements)
+            (size,next) <- expression (Set.insert identifier active) cache target
+            pure (size,Map.insert identifier size next)
+      expression active cache item = case item of
+        AllExpr members -> aggregate active cache members
+        AnyExpr members -> aggregate active cache members
+        NotExpr member -> bump <$> expression active cache member
+        ForallExpr _ kindValue member -> quantified active cache kindValue member
+        ExistsExpr _ kindValue member -> quantified active cache kindValue member
+        CardinalityExpr _ _ members -> aggregate active cache members
+        ReferenceExpr identifier -> bump <$> named active cache identifier
+        _ -> Right (1,cache)
+      bump (size,cache) = (1+size,cache)
+      aggregate active cache members = foldM
+        (\(total,known) member -> do
+          (size,next) <- expression active known member
+          pure (total+size,next)) (1,cache) members
+      quantified active cache kindValue member = do
+        count <- maybe (Left "unknown quantified domain") Right (Map.lookup kindValue domains)
+        (size,next) <- expression active cache member
+        pure (1 + count * size,next)
+      parameterCount declaration = product <$> traverse
+        (\(_,kindValue) -> maybe (Left "unknown rule parameter domain") Right
+          (Map.lookup kindValue domains)) (ruleParameters declaration)
+      ruleSize (total,cache) declaration = do
+        bindings <- parameterCount declaration
+        (body,next) <- expression Set.empty cache (ruleBody declaration)
+        pure (total + 1 + bindings * body,next)
+  (requirementsSize,cache) <- foldM
+    (\(total,known) (identifier,_) -> do
+      (size,next) <- named Set.empty known identifier
+      pure (total+size,next)) (0,Map.empty) (finiteRequirements program)
+  (rulesSize,_) <- foldM ruleSize (0,cache) (finiteRules program)
+  pure (fromIntegral (length (finiteEntityTypes program) + length (finiteEntities program)
+    + length (finitePredicates program) + length (finiteScalars program)
+    + length (finitePropositions program) + length (finitePriorities program)
+    + length (finiteFacts program) + Map.size (finiteValues program))
+    + requirementsSize + rulesSize)

@@ -114,7 +114,7 @@ inspectSource wanted path bytes scenario
       if wanted == "parsed" then Right (record "TypedFiniteRules-v1" sources [initial] noNormalized)
       else do
         program <- prepareTypedFiniteInspection path bytes scenario
-        let request = encodeTypedFiniteRequest (finiteProgramId program <> "-request") program
+        let request = encodeTypedFiniteRequest (typedRequestId (finiteProgramId program)) program
         value <- json request
         let checkedStage = stage "checked" "TypedFiniteProgram" ["parsed"]
               (field "program" value)

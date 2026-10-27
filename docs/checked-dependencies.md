@@ -128,7 +128,7 @@ The focused view shows candidate term summaries and downstream model expression
 values, and omits primitive/read detail explicitly listed in its bindings;
 projection.json retains it. XML/SVG encode the same focused semantic graph.
 The existing deterministic renderer and injective DOM escaping are reused.
-Publication uses the existing Linux same-parent staging and atomic no-replace
+Publication uses the existing same-parent staging and atomic no-replace
 rename lifecycle. No existing destination, file or symlink is overwritten; handled
 failures clean only this operation's staging. No crash-durability guarantee is made.
 

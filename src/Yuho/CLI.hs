@@ -50,7 +50,7 @@ import Yuho.Surface.Presumption
 import Yuho.Surface.TypedFinite
   ( TypedFiniteCase(..), TypedFiniteAllegation(..)
   , loadTypedFiniteQuantitative
-  , loadTypedFiniteCase, encodeTypedFiniteRequest, encodeTypedFiniteCase
+  , loadTypedFiniteCase, typedRequestId, encodeTypedFiniteRequest, encodeTypedFiniteCase
   , explainTypedFinite, explainTypedFiniteCase )
 import Yuho.CoreYuho.TypedFinite (TypedFiniteProgram, evaluateTypedFinite, finiteProgramId)
 import Yuho.Surface.Temporal (loadAuthoredInput)
@@ -304,7 +304,7 @@ operateTypedFinite command path bytes scenario output = do
 operateOrdinaryTypedFinite :: Command -> FilePath -> TypedFiniteProgram -> Maybe FilePath -> IO ()
 operateOrdinaryTypedFinite command path program output = do
   result <- either (report . issue) pure (evaluateTypedFinite program)
-  let request = encodeTypedFiniteRequest (finiteProgramId program <> "-request") program
+  let request = encodeTypedFiniteRequest (typedRequestId (finiteProgramId program)) program
   case command of
     Check -> BS.hPut stdout "{\"kind\":\"typed-finite-rules\",\"status\":\"valid\"}\n"
     Compile -> case output of
@@ -332,7 +332,7 @@ operateQuantitative command path program plan output=case command of
   _->do
     (computed,execution)<-either failQuantity pure (Q.executeQuantitative program plan)
     result<-either (\m->report (Diagnostic "QOBSERVATION" path (Token WordToken "" 1 1) m Nothing)) pure (evaluateTypedFinite computed)
-    let request=encodeTypedFiniteRequest (finiteProgramId computed<>"-request") computed
+    let request=encodeTypedFiniteRequest (typedRequestId (finiteProgramId computed)) computed
     case decodeJson (runLine request) of
       Right v | (lookupField "status" v >>= textValue)==Just "evaluated"->pure ()
       _->report (Diagnostic "QOBSERVATION" path (Token WordToken "" 1 1) "frozen typed backend refused the computed request" Nothing)
@@ -384,7 +384,7 @@ operateTypedFiniteCase command path bytes scenario output = do
     origin = Token EndToken "" 1 1
     issue message = Diagnostic "SFT011" path origin message Nothing
     runAllegation allegation = case decodeJson (runLine (encodeTypedFiniteRequest
-        (typedAllegationId allegation <> "-request") (typedAllegationProgram allegation))) of
+        (typedRequestId (typedAllegationId allegation)) (typedAllegationProgram allegation))) of
       Right value | (lookupField "status" value >>= textValue) == Just "evaluated" ->
         pure (JObj [("id",JStr (typedAllegationId allegation)),("result",value)])
       _ -> report (issue "typed finite allegation was rejected by the Haskell kernel")

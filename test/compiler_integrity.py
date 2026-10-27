@@ -190,11 +190,11 @@ def main():
         refused = call([binary, *command, path], 1)
         check('wrapper quoted opening delimiter '+name, b'expected {' in refused.stderr)
     # A modular source request error belongs to its original model, not the host.
-    module = out / 'integrity@1.0.0.yh'
-    module.write_text('statutory-module integrity version 1.0.0 { '
+    module = out / 'fictional.integrity@1.0.0.yh'
+    module.write_text('statutory-module fictional.integrity version 1.0.0 { '
         'export model FictionalRestrictedAreaEntry-v0.1; source-model "bad-request.yh"; }')
     host = out / 'request-host.yh'
-    host.write_text('modular-model Host { module-root "."; import integrity version 1.0.0 as m; '
+    host.write_text('modular-model Host { module-root "."; import fictional.integrity version 1.0.0 as m; '
                     'use model m::FictionalRestrictedAreaEntry-v0.1; }')
     d = json.loads(call([binary, 'check', host, '--scenario', scenario], 1).stderr)
     check('imported request owner retained', Path(d['path']).resolve() == req.resolve()

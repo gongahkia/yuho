@@ -1,9 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Yuho.TypedFiniteRules.Run (runTypedFiniteLine, encodeTypedFiniteResult, decodeTypedFiniteRequest) where
 
-import Control.Monad (unless, when)
+import Control.Monad (foldM, unless, when)
 import qualified Data.ByteString as BS
 import Data.Foldable (traverse_)
+import Data.Graph (SCC(..), stronglyConnComp)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
@@ -391,14 +392,18 @@ validateExpression :: [Text] -> Map.Map Text Text -> Map.Map Text PredicateDecl
   -> Map.Map Text ScalarType -> Map.Map Text FiniteExpr -> Map.Map Text Text
   -> Set.Set Text -> FiniteExpr -> Either Text ()
 validateExpression types entities predicates scalars requirements scope seen expression =
-  case expression of
+  () <$ visit scope seen Set.empty expression
+  where
+   -- A named body is rechecked in each lexical scope, but only once per scope.
+   visit bindings active done item = case item of
     PredicateExpr name terms -> do
       signature <- maybe (Left "expression uses unknown predicate") Right (Map.lookup name predicates)
       unless (length terms == length (predicateArguments signature))
         (Left "predicate application arity mismatch")
-      sequence_ [unless (termType term == Just expected)
+      sequence_ [unless (termType bindings term == Just expected)
           (Left "predicate application argument type mismatch")
         | (term,expected) <- zip terms (predicateArguments signature)]
+      pure done
     ComparisonExpr operation left right upper -> do
       leftType <- scalar left
       rightType <- scalar right
@@ -411,36 +416,36 @@ validateExpression types entities predicates scalars requirements scope seen exp
         (InHalfOpen,Nothing) -> Left "half-open comparison requires upper operand"
         (_,Nothing) -> pure ()
         (_,Just _) -> Left "unexpected upper comparison operand"
-    AllExpr members -> traverse_ recurse members
-    AnyExpr members -> traverse_ recurse members
-    NotExpr member -> recurse member
-    ForallExpr variable kindValue member -> quantify variable kindValue member
-    ExistsExpr variable kindValue member -> quantify variable kindValue member
+      pure done
+    AllExpr members -> foldM (visit bindings active) done members
+    AnyExpr members -> foldM (visit bindings active) done members
+    NotExpr member -> visit bindings active done member
+    ForallExpr variable kindValue member -> quantify bindings active done variable kindValue member
+    ExistsExpr variable kindValue member -> quantify bindings active done variable kindValue member
     CardinalityExpr _ threshold members -> do
       when (threshold < 0 || null members) (Left "malformed cardinality expression")
-      traverse_ recurse members
+      foldM (visit bindings active) done members
     ReferenceExpr identifier -> do
-      when (Set.member identifier seen) (Left "cyclic requirement reference")
-      target <- maybe (Left "unknown requirement reference") Right (Map.lookup identifier requirements)
-      validateExpression types entities predicates scalars requirements scope
-        (Set.insert identifier seen) target
-  where
-    recurse = validateExpression types entities predicates scalars requirements scope seen
-    termType term = case term of
+      when (Set.member identifier active) (Left "cyclic requirement reference")
+      let key = (identifier,bindings)
+      if Set.member key done then pure done else do
+        target <- maybe (Left "unknown requirement reference") Right (Map.lookup identifier requirements)
+        next <- visit bindings (Set.insert identifier active) done target
+        pure (Set.insert key next)
+   termType bindings term = case term of
       EntityTerm identifier -> Map.lookup identifier entities
-      VariableTerm identifier -> Map.lookup identifier scope
-    scalar identifier = maybe (Left "unknown scalar reference") Right (Map.lookup identifier scalars)
-    ordered Equal _ = True
-    ordered NotEqual _ = True
-    ordered _ (EnumType _ _) = False
-    ordered _ IntegerType = True
-    ordered _ DateType = True
-    ordered _ (MoneyType _) = True
-    quantify variable kindValue member = do
+      VariableTerm identifier -> Map.lookup identifier bindings
+   scalar identifier = maybe (Left "unknown scalar reference") Right (Map.lookup identifier scalars)
+   ordered Equal _ = True
+   ordered NotEqual _ = True
+   ordered _ (EnumType _ _) = False
+   ordered _ IntegerType = True
+   ordered _ DateType = True
+   ordered _ (MoneyType _) = True
+   quantify bindings active done variable kindValue member = do
       unless (kindValue `elem` types) (Left "quantifier has unknown entity type")
-      when (Map.member variable scope) (Left "quantifier variable shadows an existing binding")
-      validateExpression types entities predicates scalars requirements
-        (Map.insert variable kindValue scope) seen member
+      when (Map.member variable bindings) (Left "quantifier variable shadows an existing binding")
+      visit (Map.insert variable kindValue bindings) active done member
 
 validatePriority :: [Text] -> PriorityDecl -> Either Text ()
 validatePriority rules (PriorityDecl higher lower) =
@@ -448,56 +453,15 @@ validatePriority rules (PriorityDecl higher lower) =
     (Left "invalid priority endpoint")
 
 priorityAcyclic :: [PriorityDecl] -> Bool
-priorityAcyclic priorities = all (not . visit Set.empty) identifiers
+priorityAcyclic priorities = all acyclic (stronglyConnComp
+  [(identifier,identifier,Map.findWithDefault [] identifier edges) | identifier <- identifiers])
   where
     identifiers = Set.toList (Set.fromList ([high | PriorityDecl high _ <- priorities]
       ++ [low | PriorityDecl _ low <- priorities]))
-    visit path current
-      | Set.member current path = True
-      | otherwise = any (visit (Set.insert current path))
-          [low | PriorityDecl high low <- priorities, high == current]
+    edges = Map.fromListWith (++) [(high,[low]) | PriorityDecl high low <- priorities]
+    acyclic (AcyclicSCC _) = True
+    acyclic (CyclicSCC _) = False
 
-expandedProgramSize :: TypedFiniteProgram -> Either Text Integer
-expandedProgramSize program = do
-  let domains = Map.unionWith (+)
-        (Map.fromListWith (+)
-          [(kindValue,1 :: Integer) | EntityDecl _ kindValue <- finiteEntities program])
-        (Map.fromList [(kindValue,0) | EntityTypeDecl kindValue <- finiteEntityTypes program])
-      requirements = Map.fromList (finiteRequirements program)
-      expression active item = case item of
-        AllExpr members -> aggregate active members
-        AnyExpr members -> aggregate active members
-        NotExpr member -> (1 +) <$> expression active member
-        ForallExpr _ kindValue member -> quantified active kindValue member
-        ExistsExpr _ kindValue member -> quantified active kindValue member
-        CardinalityExpr _ _ members -> aggregate active members
-        ReferenceExpr identifier
-          | Set.member identifier active -> Left "cyclic requirement expansion"
-          | otherwise -> maybe (Left "unknown requirement expansion")
-              (\target -> (1 +) <$> expression (Set.insert identifier active) target)
-              (Map.lookup identifier requirements)
-        _ -> Right 1
-      aggregate active members = (1 +) . sum <$> traverse (expression active) members
-      quantified active kindValue member = do
-        count <- maybe (Left "unknown quantified domain") Right (Map.lookup kindValue domains)
-        size <- expression active member
-        pure (1 + count * size)
-      parameterCount declaration = product <$> traverse
-        (\(_,kindValue) -> maybe (Left "unknown rule parameter domain") Right
-          (Map.lookup kindValue domains)) (ruleParameters declaration)
-      ruleSize declaration = do
-        bindings <- parameterCount declaration
-        body <- expression Set.empty (ruleBody declaration)
-        pure (1 + bindings * body)
-  requirementsSize <- sum <$> traverse
-    (\(identifier,item) -> expression (Set.singleton identifier) item)
-    (finiteRequirements program)
-  rulesSize <- sum <$> traverse ruleSize (finiteRules program)
-  pure (fromIntegral (length (finiteEntityTypes program) + length (finiteEntities program)
-    + length (finitePredicates program) + length (finiteScalars program)
-    + length (finitePropositions program) + length (finitePriorities program)
-    + length (finiteFacts program) + Map.size (finiteValues program))
-    + requirementsSize + rulesSize)
 
 fields :: J -> [Text] -> Either Text ()
 fields value expected = do

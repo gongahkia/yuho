@@ -49,7 +49,9 @@ loadDependencyProject path=do
             case bytes of
               Left (e::IOException)->pure (failure "DEPFORMAT" [T.pack file] (T.pack (show e)))
               Right b->case dependencySourcePaths file b of
-                Left e->pure (Left (surfaceFailure e))
+                Left e->pure (Left (surfaceFailureIn
+                  (M.mapMaybe (either (const Nothing) Just . U.decodeUtf8')
+                    (M.insert file b bundle)) e))
                 Right children->collect root (M.insert file b bundle)
                   (rest++map (normalise . (takeDirectory file </>)) children)
     safeVirtual file=ensure "DEPFORMAT" [T.pack file] "unsafe source/import path" (Yuho.Core.Source.validSourcePath (T.pack file))

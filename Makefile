@@ -18,6 +18,8 @@ test: build
 	$(CABAL) v2-test yuho-test yuho-sdk-test --offline -j1 --with-compiler=$(GHC) --test-show-details=direct
 	$(PYTHON) test/compiler_inspection.py $(YUHO)
 	$(PYTHON) test/compiler_integrity.py $(YUHO)
+	$(PYTHON) test/compiler_hardening.py $(YUHO)
+	$(PYTHON) test/source_kernel_admission.py $(YUHO)
 	$(PYTHON) test/source_composition.py $(YUHO)
 	$(PYTHON) test/machine_workbench.py $(YUHO)
 	$(PYTHON) test/tranche04.py $(YUHO)

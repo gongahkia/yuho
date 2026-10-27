@@ -3,7 +3,7 @@
 module Yuho.Surface.TypedFinite
   ( loadTypedFiniteProgram, parseTypedFiniteModel, parseTypedFiniteScenario
   , TypedFiniteScenario(..), TypedFiniteCase(..), TypedFiniteAllegation(..)
-  , loadTypedFiniteCase, encodeTypedFiniteRequest, encodeTypedFiniteCase
+  , loadTypedFiniteCase, typedRequestId, encodeTypedFiniteRequest, encodeTypedFiniteCase
   , explainTypedFinite, explainTypedFiniteCase
   , inspectTypedFiniteModel, inspectTypedFiniteScenario, prepareTypedFiniteInspection
   , typedDeclarationTokens, expandedNodeEstimate, dependencySourcePaths, prepareDependencyTyped, prepareDependencyTypedScoped
@@ -12,7 +12,7 @@ module Yuho.Surface.TypedFinite
   ) where
 
 import Control.Exception (IOException, try)
-import Control.Monad (unless, when)
+import Control.Monad (foldM, unless, when)
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
 import Data.List (nub)
@@ -36,6 +36,7 @@ import Yuho.Surface.Lexer (lexSource)
 import Yuho.ScopedDefinitions.Types
 import qualified Yuho.Quantitative as Q
 import qualified Data.Aeson as A
+import Yuho.TypedFiniteRules.Run (decodeTypedFiniteRequest)
 import Yuho.Surface.Token
 
 data RawScalarType = RawInteger | RawDate | RawEnum Token | RawMoney Token | RawCount Token
@@ -513,7 +514,7 @@ parseTypedFiniteModel path bytes = do
       pure (ownTemplates path bytes (tokenText identifier) Nothing (foldl (flip ($)) emptyModel declarations))
 
 emptyRawModel :: Token -> RawModel
-emptyRawModel identifier = RawModel identifier (Token WordToken "2048" 1 1)
+emptyRawModel identifier = RawModel identifier (identifier { tokenText = "2048" })
   [] [] [] [] [] [] [] [] [] [] [] [] Nothing [] [] [] [] [] [] [] [] ("",BS.empty) Map.empty
 
 parseTypedFiniteModule :: FilePath -> BS.ByteString -> Either Diagnostic RawModule
@@ -620,6 +621,16 @@ parseTypedFiniteCase path bytes = do
       _ <- takeText "}"
       let shared = [value | Left value <- entries]
           allegations = [value | Right value <- entries]
+      _ <- P $ \source remaining -> case remaining of
+        token:rest | tokenKind token == EndToken -> Right (token,rest)
+        token:_ -> at "SFT001" source token "trailing typed-rules case"
+        [] -> at "SFT001" source (Token EndToken "" 1 1) "missing end token"
+      _ <- P $ \source remaining -> do
+        mapM_ (identifierLength source) (identifier : [i | (i,_,_) <- allegations]
+          ++ [i | (i,_,_,_,_) <- shared])
+        mapM_ (factReason source) [r | (_,_,_,_,r) <- shared]
+        _ <- foldM (requestIdentity source) Map.empty [i | (i,_,_) <- allegations]
+        pure ((),remaining)
       pure (RawTypedCase identifier modelPath shared allegations)
     entry = do
       headToken <- word
@@ -650,26 +661,36 @@ parseTypedFiniteCase path bytes = do
       if tokenText token == "use" then takeText "use" >> word >>= \item -> (item:) <$> manyUses
       else pure []
 
+requestIdentity :: FilePath -> Map Text Token -> Token -> Either Diagnostic (Map Text Token)
+requestIdentity path seen identifier = case Map.lookup key seen of
+  Just previous | tokenText previous /= tokenText identifier ->
+    atRelated "SFT002" path identifier "generated request identity collision" path previous
+  _ -> Right (Map.insert key identifier seen)
+  where key = typedRequestId (tokenText identifier)
+
 loadTypedFiniteCase :: FilePath -> BS.ByteString -> IO (Either Diagnostic TypedFiniteCase)
 loadTypedFiniteCase path bytes = case parseTypedFiniteCase path bytes of
   Left issue -> pure (Left issue)
   Right (RawTypedCase identifier modelToken rawShared rawAllegations) -> do
-    let local token = let value = Text.unpack (tokenText token) in
+    let modelPath = takeDirectory path </> Text.unpack (tokenText modelToken)
+        local token = let value = Text.unpack (tokenText token) in
           not (null value) && not (isAbsolute value)
           && all (`notElem` ["",".."]) (Text.splitOn "/" (tokenText token))
     if not (local modelToken) then pure (at "SFT013" path modelToken "unsafe typed-rules case model path")
     else do
-      modelBytes <- readBounded (takeDirectory path </> Text.unpack (tokenText modelToken)) path modelToken
+      modelBytes <- readBounded modelPath path modelToken
       case modelBytes of
         Left issue -> pure (Left issue)
-        Right modelSource -> case parseTypedFiniteModel (Text.unpack (tokenText modelToken)) modelSource of
+        Right modelSource -> case parseTypedFiniteModel modelPath modelSource of
           Left issue -> pure (Left issue)
           Right rawModel -> do
-            composed <- loadTypedModules (takeDirectory path </> Text.unpack (tokenText modelToken)) rawModel
+            composed <- loadTypedModules modelPath rawModel
             case composed of
               Left issue -> pure (Left issue)
+              Right (model,_) | hasQuantities model -> pure (at "QWORKFLOW" modelPath (rawModelId model)
+                "quantitative cases require selected allegations in the checked-project workflow; native case lowering would omit derivation authority")
               Right (model,moduleRecords) -> do
-                loaded <- traverse (loadAllegation model moduleRecords rawShared local) rawAllegations
+                loaded <- traverse (loadAllegation modelPath model moduleRecords rawShared local) rawAllegations
                 pure $ do
                   allegations <- sequence loaded
                   when (null allegations || length allegations > 32)
@@ -681,19 +702,22 @@ loadTypedFiniteCase path bytes = case parseTypedFiniteCase path bytes of
                   shared <- traverse (sharedRecord rawAllegations) rawShared
                   pure (TypedFiniteCase (tokenText identifier) shared allegations)
   where
-    loadAllegation model modules rawShared local (allegationId,scenarioToken,uses)
+    loadAllegation modelPath model modules rawShared local (allegationId,scenarioToken,uses)
       | not (local scenarioToken) = pure (at "SFT013" path scenarioToken "unsafe allegation scenario path")
       | otherwise = do
-          scenarioBytes <- readBounded (takeDirectory path </> Text.unpack (tokenText scenarioToken)) path scenarioToken
+          let scenarioPath = takeDirectory path </> Text.unpack (tokenText scenarioToken)
+          scenarioBytes <- readBounded scenarioPath path scenarioToken
           pure $ do
             source <- scenarioBytes
-            scenario <- parseTypedFiniteScenario (Text.unpack (tokenText scenarioToken)) source
+            scenario <- parseTypedFiniteScenario scenarioPath source
             selected <- traverse (selectShared rawShared) uses
-            let scenarioWithShared = scenario { scenarioFacts = scenarioFacts scenario
-                  ++ [(predicate,arguments,status,reason) | (_,predicate,arguments,status,reason) <- selected] }
+            let additions = [(predicate,arguments,status,reason) | (_,predicate,arguments,status,reason) <- selected]
+                scenarioWithShared = scenario { scenarioFacts = scenarioFacts scenario ++ additions }
+            validateSharedFacts path model additions
+            uniqueGroundFacts ([(scenarioPath,f) | f <- scenarioFacts scenario] ++ [(path,f) | f <- additions])
             when (tokenText (scenarioModel scenario) /= tokenText (rawModelId model))
-              (at "SFT002" path (scenarioModel scenario) "case scenario model identity mismatch")
-            program <- validateModel path (Text.unpack (tokenText scenarioToken)) model scenarioWithShared
+              (at "SFT002" scenarioPath (scenarioModel scenario) "case scenario model identity mismatch")
+            program <- validateModel modelPath scenarioPath model scenarioWithShared
             let withModules = program { finiteModules = modules }
             result <- either (at "SFT011" path allegationId) Right (evaluateTypedFinite withModules)
             pure (TypedFiniteAllegation (tokenText allegationId) withModules result)
@@ -974,8 +998,11 @@ validateExpandedModel execute fullReadiness path scenarioPath model scenario = d
   case rawDependencySlots model of
     slot:_ -> at "DEPMISSING" path slot "dependency template requires a checked-project binding; standalone execution is unavailable"
     [] -> pure ()
+  let limitSite = if (tokenLine (rawLimit model),tokenColumn (rawLimit model))
+                       == (tokenLine (rawModelId model),tokenColumn (rawModelId model))
+        then rawModelId model else rawLimit model
   limit <- numeric path (rawLimit model)
-  when (limit < 1 || limit > 2048) (at "SFT010" path (rawLimit model)
+  when (limit < 1 || limit > 2048) (at "SFT010" path limitSite
     "generated-node limit must be between 1 and 2048")
   enforceLimit path "entity types" 32 (rawEntityTypes model)
   enforceLimit path "entities" 256 (map fst (rawEntities model))
@@ -987,7 +1014,14 @@ validateExpandedModel execute fullReadiness path scenarioPath model scenario = d
   enforceLimit path "responsibility routes" 64
     [token | (token,_,_,_,_,_) <- rawRoutes model]
   enforceLimit path "priority edges" 256 (map fst (rawPriorities model))
-  mapM_ (identifierLength path) (allIdentifiers model)
+  identifierLength path (rawModelId model)
+  mapM_ (\token -> let file = case [p | (_,i,p,_) <- rawDeclarationSources model, i == token] of
+                         p:_ -> p
+                         [] -> path
+                    in identifierLength file token) (allIdentifiers model)
+  mapM_ (\(identifier,members) -> atDeclaration "enum-type" identifier (\file -> do
+    mapM_ (identifierLength file) members
+    uniqueTokens file "SFT002" "duplicate enum member" members)) (rawEnums model)
   uniqueTokens path "SFT002" "duplicate entity type" (rawEntityTypes model)
   uniqueTokens path "SFT002" "duplicate entity" (map fst (rawEntities model))
   uniqueTokens path "SFT002" "duplicate enum type" (map fst (rawEnums model))
@@ -1032,11 +1066,25 @@ validateExpandedModel execute fullReadiness path scenarioPath model scenario = d
         (tokenText token) normNames }
       normalizedPriorities = [(normalizeEndpoint higher,normalizeEndpoint lower)
         | (higher,lower) <- rawPriorities model]
+  let ruleSites = [(kind,i,fst (declarationSource path model kind i))
+        | (kind,i) <- [("rule",i) | (i,_,_,_,_,_) <- rawRules model]
+          ++ [("norm",i) | (i,_,_,_,_,_) <- rawNorms model]
+          ++ [("responsibility-route",i) | (i,_,_,_,_,_) <- rawRoutes model]]
+  case drop 128 ruleSites of
+    (_,site,file):_ -> at "SFT010" file site "elaborated rule count exceeds 128"
+    [] -> pure ()
+  _ <- foldM (\seen (rule,(_,site,file)) -> do
+    when (Text.length (ruleName rule) > 128) (at "SFT010" file site
+      "generated rule identifier exceeds 128 characters (including its reserved prefix)")
+    case Map.lookup (ruleName rule) seen of
+      Just (previousFile,previous) -> atRelated "SFT002" file site
+        "duplicate elaborated rule identity" previousFile previous
+      Nothing -> Right (Map.insert (ruleName rule) (file,site) seen)) Map.empty (zip elaborated ruleSites)
   priorities <- traverse (priorityDeclaration path (Set.fromList (map ruleName elaborated)))
     normalizedPriorities
-  validatePriorityAcyclic path priorities
+  validatePriorityAcyclic path normalizedPriorities
   facts <- traverse (groundFact scenarioPath entityIndex predicateIndex) (scenarioFacts scenario)
-  uniqueGroundFacts scenarioPath facts
+  uniqueGroundFacts [(scenarioPath,f) | f <- scenarioFacts scenario]
   values <- traverse (scalarAssignment scenarioPath scalarIndex) (scenarioValues scenario)
   uniqueTokens scenarioPath "SFT002" "duplicate scalar assignment"
     (map fst (scenarioValues scenario))
@@ -1053,22 +1101,27 @@ validateExpandedModel execute fullReadiness path scenarioPath model scenario = d
         scalarDecls (map tokenText (rawPropositions model))
         [(tokenText identifier,expression) | (identifier,expression) <- rawRequirements model]
         elaborated norms routes priorities facts valueMap [] (map tokenText (rawLimitations model))
-  estimated <- either (at "SFT010" path (rawLimit model)) Right
+  estimated <- either (at "SFT010" path limitSite) Right
     (expandedNodeEstimate program)
-  when (estimated > fromInteger limit) (at "SFT010" path (rawLimit model)
-    "generated-node limit exceeded before evaluation")
-  nodeCount <- if execute then do
-      expanded <- either (at "SFT011" scenarioPath (scenarioIdentifier scenario)) Right
-        (evaluateTypedFinite program)
-      pure (length (finiteResultExpressions expanded) + length (finiteResultRules expanded)
-        + length (finiteResultPropositions expanded) + expressionNodes program)
-    else do
-      if fullReadiness then either (at "SFT011" scenarioPath (scenarioIdentifier scenario)) Right
-        (checkTypedFiniteInputs program) else checkGroundInputs path scenarioPath model scenario program
-      pure (length (finiteRequirements program) + length (finiteRules program)
-        + length (finitePropositions program) + expressionNodes program)
-  when (nodeCount > fromInteger limit) (at "SFT010" path (rawLimit model)
-    "generated-node limit exceeded")
+  when (estimated > fromInteger limit) (at "SFT010" path limitSite
+    ("generated-node cost " <> Text.pack (show estimated) <> " exceeds limit " <> Text.pack (show limit)))
+  let referenceSites = Map.fromList [(tokenText i,(file,i,body))
+        | (i,body) <- rawRequirements model
+        , let (file,_) = declarationSource path model "requirement" i]
+  mapM_ (\(file,i,body) -> validateReferenceScopes referenceSites file i Set.empty body)
+    (Map.elems referenceSites)
+  mapM_ (\(rule,(_,i,file)) -> validateReferenceScopes referenceSites file i
+    (Set.fromList (map fst (ruleParameters rule))) (ruleBody rule)) (zip elaborated ruleSites)
+  -- Closed target admission is structural only: this does not evaluate.
+  request <- either (at "SFT011" path (rawModelId model)) Right
+    (decodeJson (encodeTypedFiniteRequest (typedRequestId (finiteProgramId program)) program))
+  _ <- either (at "SFT011" path (rawModelId model)) Right (decodeTypedFiniteRequest request)
+  if execute then do
+    _ <- either (at "SFT011" scenarioPath (scenarioIdentifier scenario)) Right
+      (evaluateTypedFinite program)
+    pure ()
+  else if fullReadiness then either (at "SFT011" scenarioPath (scenarioIdentifier scenario)) Right
+    (checkTypedFiniteInputs program) else checkGroundInputs path scenarioPath model scenario program
   pure program
   where
     atDeclaration kind identifier action=
@@ -1088,6 +1141,36 @@ numeric :: FilePath -> Token -> Either Diagnostic Integer
 numeric path token = case reads (Text.unpack (tokenText token)) of
   [(value,"")] -> Right value
   _ -> at "SFT008" path token "invalid integer"
+
+-- References inherit the caller's lexical bindings. Check each named body once
+-- per scope, retaining its defining declaration for a shadowing diagnostic.
+validateReferenceScopes :: Map Text (FilePath,Token,FiniteExpr) -> FilePath -> Token
+  -> Set Text -> FiniteExpr -> Either Diagnostic ()
+validateReferenceScopes definitions path origin scope expression =
+  () <$ visit Set.empty Set.empty path origin scope expression
+  where
+    visit active done file site bindings item = case item of
+      ReferenceExpr name
+        | Set.member name active -> at "SFT007" file site "cyclic requirement reference"
+        | Set.member (name,bindings) done -> Right done
+        | otherwise -> case Map.lookup name definitions of
+            Nothing -> at "SFT003" file site "unknown requirement reference"
+            Just (owner,token,body) -> do
+              next <- visit (Set.insert name active) done owner token bindings body
+              pure (Set.insert (name,bindings) next)
+      AllExpr members -> membersIn members
+      AnyExpr members -> membersIn members
+      CardinalityExpr _ _ members -> membersIn members
+      NotExpr member -> visit active done file site bindings member
+      ForallExpr variable _ member -> quantified variable member
+      ExistsExpr variable _ member -> quantified variable member
+      _ -> Right done
+      where
+        membersIn = foldM (\known -> visit active known file site bindings) done
+        quantified variable member = do
+          when (Set.member variable bindings) (atRelated "SFT006" file site
+            "referenced quantifier shadows an existing binding" path origin)
+          visit active done file site (Set.insert variable bindings) member
 
 enforceLimit :: FilePath -> Text -> Int -> [Token] -> Either Diagnostic ()
 enforceLimit path label maximumCount values = when (length values > maximumCount)
@@ -1151,7 +1234,7 @@ validateExpression :: FilePath -> Token -> Set Text -> Map Text Text -> Map Text
   -> Map Text ScalarType -> Map Text FiniteExpr -> Set Text -> Int -> FiniteExpr
   -> Either Diagnostic ()
 validateExpression path origin types entities predicates scalars requirements scope depth expression = do
-  when (depth > 4) (at "SFT010" path origin "quantifier nesting limit exceeded")
+  when (depth > 4) (at "SFT010" path origin "expression depth exceeds 4")
   case expression of
     PredicateExpr name terms -> do
       signature <- maybe (at "SFT003" path origin ("unknown predicate " <> name)) Right
@@ -1174,7 +1257,7 @@ validateExpression path origin types entities predicates scalars requirements sc
     ReferenceExpr identifier -> unless (Map.member identifier requirements)
       (at "SFT003" path origin ("unknown requirement " <> identifier))
   where
-    recurse = validateExpression path origin types entities predicates scalars requirements scope depth
+    recurse = validateExpression path origin types entities predicates scalars requirements scope (depth + 1)
     validateTerm expected term = case term of
       EntityTerm identifier -> case Map.lookup identifier entities of
         Just actual | actual == expected -> Right ()
@@ -1215,6 +1298,7 @@ ruleDeclaration path types propositions entities predicates scalars requirements
     (identifier,parameters,polarityToken,conclusion,body,citation) = do
   when (length parameters > 4) (at "SFT010" path identifier
     "rule parameter count exceeds 4")
+  mapM_ (identifierLength path . fst) parameters
   uniqueTokens path "SFT002" "duplicate rule parameter" (map fst parameters)
   mapM_ (\(_,kindValue) -> unless (Set.member (tokenText kindValue) types)
     (at "SFT003" path kindValue "unknown rule parameter type")) parameters
@@ -1323,14 +1407,19 @@ priorityDeclaration path rules (higher,lower) = do
   when (tokenText higher == tokenText lower) (at "SFT007" path higher "self priority is invalid")
   pure (PriorityDecl (tokenText higher) (tokenText lower))
 
-validatePriorityAcyclic :: FilePath -> [PriorityDecl] -> Either Diagnostic ()
-validatePriorityAcyclic path priorities = mapM_ (visit Set.empty) nodes
+validatePriorityAcyclic :: FilePath -> [(Token,Token)] -> Either Diagnostic ()
+validatePriorityAcyclic path priorities = do
+  _ <- foldM (visit Set.empty) Set.empty nodes
+  pure ()
   where
-    nodes = nub ([high | PriorityDecl high _ <- priorities] ++ [low | PriorityDecl _ low <- priorities])
-    visit active node
-      | Set.member node active = at "SFT007" path (Token WordToken node 1 1) "priority cycle"
-      | otherwise = mapM_ (visit (Set.insert node active))
-          [low | PriorityDecl high low <- priorities, high == node]
+    nodes = map fst priorities ++ map snd priorities
+    edges = Map.fromListWith (flip (++)) [(tokenText high,[low]) | (high,low) <- priorities]
+    visit active done node
+      | Set.member key active = at "SFT007" path node "priority cycle"
+      | Set.member key done = Right done
+      | otherwise = Set.insert key <$> foldM (visit (Set.insert key active)) done
+          (Map.findWithDefault [] key edges)
+      where key = tokenText node
 
 groundFact :: FilePath -> Map Text Text -> Map Text PredicateDecl
   -> (Token,[Token],Token,Token) -> Either Diagnostic GroundFact
@@ -1344,8 +1433,14 @@ groundFact path entities predicates (name,arguments,statusToken,reason) = do
     Just _ -> at "SFT005" path argument "classified predicate entity type mismatch"
     Nothing -> at "SFT003" path argument "unknown classified entity"
     | (expected,argument) <- zip (predicateArguments signature) arguments]
+  factReason path reason
   status <- statusValue path statusToken
   pure (GroundFact (tokenText name) (map tokenText arguments) status (tokenText reason))
+
+factReason :: FilePath -> Token -> Either Diagnostic ()
+factReason path reason = when (Text.null value || Text.length value > 128)
+  (at "SFT008" path reason "ground fact reason length outside 1..128 Unicode code points")
+  where value = tokenText reason
 
 statusValue :: FilePath -> Token -> Either Diagnostic Truth
 statusValue path token = case tokenText token of
@@ -1354,15 +1449,24 @@ statusValue path token = case tokenText token of
   "unresolved" -> Right UnresolvedValue
   _ -> at "SFT008" path token "invalid proof classification"
 
-uniqueGroundFacts :: FilePath -> [GroundFact] -> Either Diagnostic ()
-uniqueGroundFacts path facts = go Set.empty facts
+uniqueGroundFacts :: [(FilePath,(Token,[Token],Token,Token))] -> Either Diagnostic ()
+uniqueGroundFacts = go Map.empty
   where
     go _ [] = Right ()
-    go seen (item:rest)
-      | Set.member key seen = at "SFT002" path (Token WordToken (groundKey (groundPredicate item) (groundArguments item)) 1 1)
-          "duplicate ground classification"
-      | otherwise = go (Set.insert key seen) rest
-      where key = groundIdentity (groundPredicate item) (groundArguments item)
+    go seen ((path,(name,arguments,_,_)):rest) = case Map.lookup key seen of
+      Just (originalPath,original) -> atRelated "SFT002" path name "duplicate ground classification" originalPath original
+      Nothing -> go (Map.insert key (path,name) seen) rest
+      where key = groundIdentity (tokenText name) (map tokenText arguments)
+
+-- Shared classifications retain the case's source owner before being combined
+-- with scenario inputs. Ground validation only needs the selected signatures.
+validateSharedFacts :: FilePath -> RawModel -> [(Token,[Token],Token,Token)] -> Either Diagnostic ()
+validateSharedFacts path model facts = do
+  let entities = Map.fromList [(tokenText i,tokenText t) | (i,t) <- rawEntities model]
+      predicates = Map.fromList [(tokenText i,PredicateDecl (tokenText i) (map tokenText ts) PredicateConduct)
+        | (i,ts,_) <- rawPredicates model]
+  _ <- traverse (groundFact path entities predicates) facts
+  pure ()
 
 scalarAssignment :: FilePath -> Map Text ScalarType -> (Token,RawValue)
   -> Either Diagnostic (Text,ScalarValue)
@@ -1391,59 +1495,17 @@ parseDate :: FilePath -> Token -> Either Diagnostic Day
 parseDate path token = maybe (at "SFT008" path token "date must be a real YYYY-MM-DD") Right
   (parseTimeM True defaultTimeLocale "%F" (Text.unpack (tokenText token)))
 
-expressionNodes :: TypedFiniteProgram -> Int
-expressionNodes program = sum (map (count . snd) (finiteRequirements program))
-  + sum (map (count . ruleBody) (finiteRules program))
-  where
-    count expression = 1 + case expression of
-      AllExpr members -> sum (map count members)
-      AnyExpr members -> sum (map count members)
-      NotExpr member -> count member
-      ForallExpr _ _ member -> count member
-      ExistsExpr _ _ member -> count member
-      CardinalityExpr _ _ members -> sum (map count members)
-      _ -> 0
-
+-- | Public source estimator uses the same exact calculation as kernel admission.
 expandedNodeEstimate :: TypedFiniteProgram -> Either Text Integer
-expandedNodeEstimate program = do
-  let domains = Map.unionWith (+)
-        (Map.fromListWith (+)
-          [(kindValue,1 :: Integer) | EntityDecl _ kindValue <- finiteEntities program])
-        (Map.fromList [(kindValue,0) | EntityTypeDecl kindValue <- finiteEntityTypes program])
-      requirements = Map.fromList (finiteRequirements program)
-      expression active item = case item of
-        AllExpr members -> aggregate active members
-        AnyExpr members -> aggregate active members
-        NotExpr member -> (1 +) <$> expression active member
-        ForallExpr _ kindValue member -> quantified active kindValue member
-        ExistsExpr _ kindValue member -> quantified active kindValue member
-        CardinalityExpr _ _ members -> aggregate active members
-        ReferenceExpr identifier
-          | Set.member identifier active -> Left "cyclic requirement expansion"
-          | otherwise -> maybe (Left "unknown requirement expansion")
-              (\target -> (1 +) <$> expression (Set.insert identifier active) target)
-              (Map.lookup identifier requirements)
-        _ -> Right 1
-      aggregate active members = (1 +) . sum <$> traverse (expression active) members
-      quantified active kindValue member = do
-        count <- maybe (Left "unknown quantified domain") Right (Map.lookup kindValue domains)
-        size <- expression active member
-        pure (1 + count * size)
-      parameterCount declaration = product <$> traverse
-        (\(_,kindValue) -> maybe (Left "unknown rule parameter domain") Right
-          (Map.lookup kindValue domains)) (ruleParameters declaration)
-      ruleSize declaration = do
-        bindings <- parameterCount declaration
-        body <- expression Set.empty (ruleBody declaration)
-        pure (1 + bindings * body)
-  requirementsSize <- sum <$> traverse
-    (\(identifier,item) -> expression (Set.singleton identifier) item)
-    (finiteRequirements program)
-  rulesSize <- sum <$> traverse ruleSize (finiteRules program)
-  pure (fromIntegral (length (finiteEntityTypes program) + length (finiteEntities program)
-    + length (finitePredicates program) + length (finiteScalars program)
-    + length (finitePropositions program) + length (finiteFacts program))
-    + requirementsSize + rulesSize)
+expandedNodeEstimate = expandedProgramSize
+
+-- Short identities retain their historical bytes. The reserved '~' namespace
+-- cannot be authored as a source identifier. Full authored identities remain in
+-- the program/case records; case admission checks generated IDs for collisions.
+typedRequestId :: Text -> Text
+typedRequestId identifier
+  | Text.length identifier <= 120 = identifier <> "-request"
+  | otherwise = "~yh-request:" <> sha256Text (UTF8.encodeUtf8 identifier)
 
 encodeTypedFiniteRequest :: Text -> TypedFiniteProgram -> BS.ByteString
 encodeTypedFiniteRequest requestId program = encodeJson (JObj
@@ -1462,7 +1524,7 @@ encodeTypedFiniteCase declaration = encodeJson (JObj
   ,("allegations",JArr [JObj
       [("id",JStr (typedAllegationId item))
       ,("request",requestObject (encodeTypedFiniteRequest
-          (typedAllegationId item <> "-request") (typedAllegationProgram item)))]
+          (typedRequestId (typedAllegationId item)) (typedAllegationProgram item)))]
       | item <- typedCaseAllegations declaration])])
   where
     requestObject bytes = case decodeJson bytes of
@@ -1823,6 +1885,8 @@ prepareDependencyTypedQuantitative bundle path scenarioPath allegation = do
       additions <- traverse (\i->case [x | x@(k,_,_,_,_)<-shared,tokenText k==tokenText i] of
         [(_,predId,args,status,reason)]->Right (predId,args,status,reason)
         _->at "DEPNAME" path i "unknown shared classification") uses
+      validateSharedFacts path m additions
+      uniqueGroundFacts ([(sp,f) | f <- scenarioFacts scenario] ++ [(path,f) | f <- additions])
       (program,slots,scoped,quantitative) <- prepare mp sp m (scenario {scenarioFacts=scenarioFacts scenario++additions})
       let actualOrigins=[a {selectedSource=normalise path} | a<-scopedAssessments scoped
             ,any (\(predId,args,_,_)->selectedPredicate a==tokenText predId && selectedArguments a==map tokenText args) additions]

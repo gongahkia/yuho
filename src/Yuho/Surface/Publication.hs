@@ -2,6 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE CApiFFI #-}
 module Yuho.Surface.Publication (publishExport) where
 import Control.Exception (bracketOnError, try)
 import Control.Monad (when)
@@ -11,13 +12,14 @@ import System.FilePath ((</>), takeDirectory, takeFileName, splitDirectories)
 import System.Posix.Files (getSymbolicLinkStatus, isDirectory)
 import System.Posix.Temp (mkdtemp)
 import System.IO.Error (isDoesNotExistError)
-#if defined(linux_HOST_OS)
+#if defined(linux_HOST_OS) || defined(darwin_HOST_OS)
 import Foreign.C.String (CString, withCString)
 import Foreign.C.Types (CInt(..), CUInt(..))
 import Foreign.C.Error (throwErrnoIfMinus1_)
 #endif
 
--- Linux renameat2(RENAME_NOREPLACE) publishes the completed directory in one
+-- Linux renameat2(RENAME_NOREPLACE) or macOS renamex_np(RENAME_EXCL) publishes
+-- the completed directory in one
 -- filesystem operation and refuses *any* existing destination, including an empty
 -- directory or a dangling link. There is deliberately no check-then-rename fallback.
 -- This is atomic visibility/no-clobber, not a power-loss durability guarantee.
@@ -53,6 +55,15 @@ publishNoReplace source destination = withCString source $ \src ->
 
 foreign import ccall unsafe "renameat2"
   renameNoReplace :: CInt -> CString -> CInt -> CString -> CUInt -> IO CInt
+#elif defined(darwin_HOST_OS)
+publishNoReplace source destination = withCString source $ \src ->
+  withCString destination $ \dst ->
+    throwErrnoIfMinus1_ "renamex_np(RENAME_EXCL)" (renameExclusive src dst renameExcl)
+
+foreign import capi unsafe "stdio.h renamex_np"
+  renameExclusive :: CString -> CString -> CUInt -> IO CInt
+foreign import capi "stdio.h value RENAME_EXCL"
+  renameExcl :: CUInt
 #else
 publishNoReplace _ _ = ioError (userError
   "atomic no-replace directory publication is unsupported on this platform; no output published")

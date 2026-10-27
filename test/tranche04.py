@@ -1,7 +1,7 @@
 """Actual CLI regressions for no-replace exports and native graph v0.2.
 
 All probes, source copies, fault shims and generated artifacts are external.
-Linux LD_PRELOAD injection affects only test children, never production behavior.
+Linux LD_PRELOAD/macOS DYLD interposition affects only test children.
 """
 import argparse
 import json
@@ -11,6 +11,7 @@ import resource
 import shutil
 import signal
 import subprocess
+import sys
 import tempfile
 import xml.etree.ElementTree as ET
 
@@ -66,6 +67,30 @@ int renameat2(int oldfd,const char *old,int newfd,const char *new,unsigned flags
 }
 '''
 
+# Darwin uses the same failure/race scenarios at its native publication syscall.
+DARWIN_SHIM = SHIM.replace(
+    'ssize_t write(int fd,', 'ssize_t yuho_write(int fd,').replace(
+    'char *mkdtemp(char *pattern)', 'char *yuho_mkdtemp(char *pattern)').replace(
+    'char proc[80],path[8192];snprintf(proc,sizeof proc,"/proc/self/fd/%d",fd);\n'
+    ' ssize_t n=readlink(proc,path,sizeof(path)-1);if(n>=0)path[n]=0;',
+    'char path[8192];int n=fcntl(fd,F_GETPATH,path);').replace(
+    'int renameat2(int oldfd,const char *old,int newfd,const char *new,unsigned flags)',
+    'int yuho_rename(const char *old,const char *new,unsigned flags)').replace(
+    'int (*realrename)(int,const char*,int,const char*,unsigned)=dlsym(RTLD_NEXT,"renameat2");',
+    'int (*realrename)(const char*,const char*,unsigned)=dlsym(RTLD_NEXT,"renamex_np");').replace(
+    'realrename(oldfd,old,newfd,new,flags)', 'realrename(old,new,flags)').replace(
+    'dlsym(RTLD_NEXT,"write")', 'write').replace(
+    'dlsym(RTLD_NEXT,"mkdtemp")', 'mkdtemp').replace(
+    'dlsym(RTLD_NEXT,"renamex_np")', 'renamex_np') + r'''
+#define INTERPOSE(replacement, original) \
+ __attribute__((used)) static struct { const void *newfn; const void *oldfn; } \
+ interpose_##original __attribute__((section("__DATA,__interpose"))) = \
+ { (const void *)&replacement, (const void *)&original };
+INTERPOSE(yuho_write, write)
+INTERPOSE(yuho_mkdtemp, mkdtemp)
+INTERPOSE(yuho_rename, renamex_np)
+'''
+
 
 def run(binary, base, project=None):
     base.mkdir(parents=True, exist_ok=False)
@@ -74,7 +99,8 @@ def run(binary, base, project=None):
     def call(label, args, expected=0, fault=None, limit=False, machine=False):
         env = os.environ.copy()
         if fault:
-            env.update(LD_PRELOAD=str(base/'fault.so'), YUHO_TEST_FAULT=fault,
+            env['DYLD_INSERT_LIBRARIES' if sys.platform == 'darwin' else 'LD_PRELOAD'] = str(base/'fault.so')
+            env.update(YUHO_TEST_FAULT=fault,
                        YUHO_TEST_LOG=str(base/'fault.log'))
         def limited():
             signal.signal(signal.SIGXFSZ, signal.SIG_IGN)
@@ -96,9 +122,11 @@ def run(binary, base, project=None):
             assert not p.stdout and json.loads(p.stderr)['code'] == 'SFC006', commands[-1]
         return p
 
-    (base/'fault.c').write_text(SHIM)
-    subprocess.run(['cc', '-shared', '-fPIC', '-O2', str(base/'fault.c'),
-                    '-o', str(base/'fault.so'), '-ldl'], check=True, capture_output=True)
+    (base/'fault.c').write_text(DARWIN_SHIM if sys.platform == 'darwin' else SHIM)
+    flags = ['-dynamiclib'] if sys.platform == 'darwin' else ['-shared', '-fPIC']
+    libraries = [] if sys.platform == 'darwin' else ['-ldl']
+    subprocess.run(['cc', *flags, '-O2', str(base/'fault.c'),
+                    '-o', str(base/'fault.so'), *libraries], check=True, capture_output=True)
     projects = base/'projects'
     shutil.copytree(ROOT/'examples/source-composition', projects)
     project = Path(project).resolve() if project else projects/'proof/true.project.yh'

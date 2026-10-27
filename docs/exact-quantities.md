@@ -36,6 +36,11 @@ the expression AST. Checked/lowered inspection and frozen kernel-only `compile`
 refuse quantitative source because those records omit calculation authority;
 use the checked-project workflow for complete exports and immutable replay.
 
+Native `typed-rules-case` check/compile/run/explain also refuse quantitative models with
+`QWORKFLOW`. Select those allegations through a checked project to retain their
+derivations and input authority; supplying a derived scalar as a case input does
+not turn it into an ordinary supplied value.
+
 ## Types and expressions
 
 * `integer`: signed, dimensionless exact integers.

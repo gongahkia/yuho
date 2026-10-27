@@ -2,12 +2,14 @@
 module TypedFiniteChecks (runTypedFiniteChecks) where
 
 import Control.Monad (forM_, unless)
+import Control.Exception (evaluate)
 import qualified Data.ByteString as BS
 import qualified Data.Map.Strict as Map
 import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Encoding
 import System.Exit (exitFailure)
 import System.FilePath ((</>))
+import System.Timeout (timeout)
 import Yuho.CoreYuho.TypedFinite
 import Yuho.Diagram.Build (typedFiniteCaseGraph, typedFiniteGraph)
 import Yuho.Diagram.Encode (encodeSemanticGraph, encodeNativeSemanticGraph, encodeNativeSvg)
@@ -22,12 +24,35 @@ runTypedFiniteChecks :: FilePath -> IO ()
 runTypedFiniteChecks root = do
   semanticMatrices
   primitiveIdentityChecks
+  boundedGraphChecks
   registryCheck root
   fixtureChecks root
   diagramChecks root
   scopedIdentityChecks
   refusalChecks root
   putStrLn "typed finite rules: exhaustive bounded semantics, fixtures and refusals passed"
+
+-- Independent closed-form size oracle: E(0)=1, E(n)=1+2*(1+E(n-1)).
+-- Computing this bound must not allocate the exponentially expanded tree.
+boundedGraphChecks :: IO ()
+boundedGraphChecks = do
+  let name i = "q:" <> Text.pack (show (i :: Int))
+      program n = TypedFiniteProgram "bounded" [EntityTypeDecl "t"] [EntityDecl "a" "t"]
+        [PredicateDecl "p" ["t"] PredicateConduct] [] []
+        ((name 0,PredicateExpr "p" [EntityTerm "a"]) :
+          [(name i,AllExpr [ReferenceExpr (name (i-1)),ReferenceExpr (name (i-1))]) | i <- [1..n]])
+        [] [] [] [] [GroundFact "p" ["a"] TrueValue "synthetic"] Map.empty [] ["fictional"]
+  forM_ [0,1,5,29,100] $ \n -> do
+    let expected = Right (4 + sum [4 * (2 ^ i :: Integer) - 3 | i <- [0..n]])
+    bounded <- timeout 5000000 (evaluate (expandedNodeEstimate (program n) == expected))
+    check "exact memoized expansion estimate" (bounded == Just True)
+  let rule i = "r:" <> Text.pack (show (i :: Int))
+      priorities = [PriorityDecl (rule i) (rule j) | i <- [0..39], j <- [i+1,i+2], j < 40]
+      observations = [RuleObservation (rule 39) Establish "p:x" TrueValue [] []
+        ,RuleObservation "r:unrelated" Defeat "p:x" TrueValue [] []]
+      expected = Right (PropositionObservation "p:x" UnresolvedValue "conflict" [rule 39,"r:unrelated"])
+  bounded <- timeout 5000000 (evaluate (resolveProposition priorities observations "p:x" == expected))
+  check "unrelated opposing rule remains conflict in bounded priority DAG" (bounded == Just True)
 
 -- Direct shared-evaluator and scalar/read-category controls. Literal tuples
 -- and expected observations are the oracle, not rendered keys.
