@@ -8,6 +8,8 @@ PYTHON ?= python3
 YUHO := $(shell $(CABAL) list-bin exe:yuho --offline --with-compiler=$(GHC) 2>/dev/null)
 KERNEL := $(shell $(CABAL) list-bin exe:yuho-kernel --offline --with-compiler=$(GHC) 2>/dev/null)
 BUNDLE := $(shell $(CABAL) list-bin exe:yuho-model-bundle --offline --with-compiler=$(GHC) 2>/dev/null)
+AUTHORING_CONSUMER := $(shell $(CABAL) list-bin exe:yuho-authoring-consumer --offline --with-compiler=$(GHC) 2>/dev/null)
+TYPED_CONSUMER := $(shell $(CABAL) list-bin exe:yuho-typed-authoring --offline --with-compiler=$(GHC) 2>/dev/null)
 
 .PHONY: build test protocols conformance lean corpus docs release-verify verify
 
@@ -30,10 +32,13 @@ test: build
 	$(PYTHON) test/dependency_generated_identity.py $(YUHO)
 	$(PYTHON) test/dependency_condition_admission.py $(YUHO)
 	$(PYTHON) test/scoped_definitions.py $(YUHO)
+	$(PYTHON) test/requirement_template_example.py $(YUHO)
 	$(PYTHON) test/import_diagnostics.py $(YUHO)
 	$(PYTHON) test/import_duplicates.py $(YUHO)
 	$(PYTHON) test/quantitative.py $(YUHO)
 	$(PYTHON) test/provenance.py $(YUHO)
+	$(PYTHON) test/authoring_consumer.py $(AUTHORING_CONSUMER)
+	$(PYTHON) test/typed_authoring_consumer.py $(TYPED_CONSUMER)
 
 protocols: build
 	$(PYTHON) test/protocol.py $(KERNEL)

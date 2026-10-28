@@ -10,6 +10,39 @@ Text and public graph authoring reach existing technical evaluators through dist
 adapters. Neither entrance replaces the semantic graphs, case assertions, explicit
 assessments or provenance. The SDK profiles are **not interchangeable language versions**.
 
+## Choose a surface and an integration route
+
+The legacy legal surface (`model ... { variant SuppliedProofStatus-v1 ... }` with
+offences, exceptions, definitions, participation, attempts and cases) is a bounded
+Singapore research prototype. The checker pins its metadata. The synthetic body
+requires `FictionalRestrictedAreaEntry-v0.1`. The direct section body requires
+`SingaporePenalCodeSection84Post2022ResearchPrototype-v1`. Legal multi-form IDs must end
+in `ResearchPrototype-v1`. Jurisdiction `Singapore`, purpose `research_prototype`,
+date `2026-09-13`, limit `1024` and the `balance_of_probabilities` burden annotation
+are also pinned. Other values are rejected with `SFE004`/`SFE011`. New offences fit only
+within those fixed shapes and closed element categories.
+
+`typed-rules-model` is the open-vocabulary surface. It has authored entity types,
+predicates, scalars, propositions, rules, priorities, exact-version modules, cases
+and local or imported requirement templates, with no pinned jurisdiction or
+identifier. Use it for statutes outside the legacy shapes. The
+[requirement-template example](scoped-definitions.md#retained-local-template-example)
+is a self-contained model of this kind.
+
+Applications integrate in one of two ways:
+
+- **Direct Haskell library use of `.yh` sources.** The exposed modules
+  `Yuho.Surface.TypedFinite` (`loadTypedFiniteProgram`), `Yuho.CoreYuho.TypedFinite`
+  (`evaluateTypedFinite`), `Yuho.Diagram.Build` (`typedFiniteGraph`) and
+  `Yuho.Diagram.Encode` (`encodeNativeSvg`, `encodeNativeSemanticGraph`,
+  `encodeNativeSemanticGraphXml`) are the functions the CLI itself calls. Their native
+  diagram bytes match `yuho diagram`. They are compiler modules, not the
+  `Yuho.Authoring` compatibility contract. For a `checked-project`, use
+  `Yuho.Surface.Dependency.loadDependencyProject` with `Yuho.Authoring.Dependency`.
+- **`Yuho.Authoring` JSON documents.** These are the graph-first SDK profiles listed
+  [below](#executable-capability-map). They use strict JSON decoders and do not read
+  `.yh` model files. The CLI does not read their JSON.
+
 ## Reproduce a compilation
 
 From the complete checkout, with GHC 9.8.4 and Cabal 3.12.1.0:
@@ -74,7 +107,8 @@ Round 1 inspection supports direct Section and Synthetic proof bodies without
 candidate penalties, ground typed rules (including scalar comparisons, finite groups,
 named references, technical negation/cardinality), and presumption programs with
 those direct proof bases. Checked typed inspection excludes parameters, quantification,
-modules, norms and responsibility routes. Source wrappers/cases, statutory proof
+modules, requirement templates, norms and responsibility routes; `--stage parsed` still
+reports their declarations, including `scoped_templates` and `scoped_uses`. Source wrappers/cases, statutory proof
 families, SDK JSON inputs and their composition are explicitly unsupported by this
 **inspection command**, not necessarily by the language. Use their established
 `compile`, `run`, `explain`, diagram or SDK operations. `SFI002` states this boundary.
@@ -108,6 +142,18 @@ profile-specific projection operations retain richer snapshots, authored identit
 occurrences, sources and inclusion/omission bindings. See the SDK
 [export recipe](authoring-sdk.md#export-recipe). CLI inspection JSON cannot be loaded
 as an `AuthoringDocument`, and the CLI does not auto-detect SDK profile JSON.
+
+Accepted `--view` values depend on the input. Some views currently produce the
+same graph, and then only the `view` label in JSON/XML differs:
+
+| Input | Accepted views | Distinct content |
+| --- | --- | --- |
+| Legacy proof `model` | `rule`, `modules`, `case`, `trace` | `modules` selects module/export nodes; `rule`, `case` and `trace` are the same full graph. A scenario adds observed statuses; without one, nodes are unevaluated. |
+| `typed-rules-model` | `rule`, `modules`, `trace` (scenario required) | All three are the same graph. |
+| `typed-rules-case`, `analysis-case` | `case`, `trace` | Both are the same graph. |
+| `presumption-program` | `trace` | Single view. |
+
+Other views are refused with `SFD001` or `SFT011`.
 
 ## Executable capability map
 
@@ -189,11 +235,28 @@ Lean conformance corpora run through `make conformance`. These are bounded equal
 checks, not a proof that parsers, checking, lowering, file resolution, SDK adapters,
 inspection serialization or diagram projections preserve semantics in general.
 
-`make test` runs native tests and the inspection CLI suite. `make protocols` checks
-existing wire behavior; `make docs` checks links and claims. Existing expected files
+`make test` runs `yuho-test` and `yuho-sdk-test`, the Makefile's Python CLI suites (among them
+inspection, composition, dependencies, scoped definitions and the requirement-template example) and
+the `authoring_consumer.py` and `typed_authoring_consumer.py` SDK consumer checks.
+The other consumer checks in the table above remain manual commands. `make protocols` checks
+existing wire behavior; `make docs` checks links and claims. `make conformance` and
+`make lean` need the pinned Lean toolchain (`lake`). Without it, only the Haskell
+conformance vectors run before the Lean step fails, and Haskell–Lean conformance is
+not established. Existing expected files
 are not regenerated by this workflow. Release manifest/archive staleness after source
 changes is reported separately; compiler development does not authorise changing
 rights/distribution policy or replacing a release candidate.
+
+Publication refuses output paths with a symbolic-link parent or ancestor. On macOS the
+default `TMPDIR` is under `/var`, which is a symbolic link to `/private/var`, so suites
+that publish into temporary directories (for example `yuho-sdk-test`) fail there with
+`DEPPUBLISH`. Run them with a temporary directory whose path has no links. The
+protection itself is intentional and unchanged:
+
+```sh
+mkdir -p /private/tmp/yuho-tmp
+TMPDIR=/private/tmp/yuho-tmp make test
+```
 
 The executable [language workbench](language-workbench.md) and local
 [machine interface](machine-interface.md) extend these command witnesses without

@@ -1,0 +1,14 @@
+typed-rules-scenario WorkplaceSafetyScenario01 for FictionalWorkplaceSafety-v0.1 {
+  classify assigned-hazardous(org:acme,worker:ana) as proved reason "synthetic supplied classification";
+  classify provided-equipment(org:acme,worker:ana) as not_proved reason "synthetic supplied classification";
+  classify refused-after-warning(worker:ana,org:acme) as not_proved reason "synthetic supplied classification";
+  classify assigned-hazardous(org:acme,worker:ben) as proved reason "synthetic supplied classification";
+  classify provided-equipment(org:acme,worker:ben) as proved reason "synthetic supplied classification";
+  classify refused-after-warning(worker:ben,org:acme) as not_proved reason "synthetic supplied classification";
+  classify trained-for(worker:ana,task:scaffolding) as proved reason "synthetic supplied classification";
+  classify trained-for(worker:ana,task:welding) as proved reason "synthetic supplied classification";
+  classify trained-for(worker:ben,task:scaffolding) as proved reason "synthetic supplied classification";
+  classify trained-for(worker:ben,task:welding) as not_proved reason "synthetic supplied classification";
+  value value:headcount = integer 40;
+  value value:small-employer-threshold = integer 5;
+}

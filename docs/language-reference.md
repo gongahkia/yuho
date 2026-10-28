@@ -11,10 +11,10 @@ This guide covers Yuho Haskell Research Language v1.0. The Haskell lexer, source
 From the root Haskell project, use the frozen dependency plan and GHC 9.8.4:
 
 ```sh
-PATH=/home/gongahkia/.ghcup/bin:/usr/bin:/bin cabal v2-build all --offline --jobs=1
-YUHO="$(PATH=/home/gongahkia/.ghcup/bin:/usr/bin:/bin cabal list-bin exe:yuho)"
-MODEL=../research/singapore/offence-corpus-pilot/modular-cheating-mischief.yh
-SCENARIO=../research/singapore/offence-corpus-pilot/scenarios/cheating/01_property_form_satisfied.yh
+cabal v2-build all --offline --jobs=1 --with-compiler=ghc-9.8.4
+YUHO="$(cabal list-bin exe:yuho --offline --with-compiler=ghc-9.8.4)"
+MODEL=research/singapore/offence-corpus-pilot/modular-cheating-mischief.yh
+SCENARIO=research/singapore/offence-corpus-pilot/scenarios/cheating/01_property_form_satisfied.yh
 "$YUHO" check "$MODEL" --scenario "$SCENARIO"
 "$YUHO" compile "$MODEL" --scenario "$SCENARIO"
 "$YUHO" run "$MODEL" --scenario "$SCENARIO"
@@ -31,11 +31,11 @@ OUT="$(mktemp -d)"
   --view rule --format svg --output "$OUT/rule.svg"
 "$YUHO" diagram "$MODEL" --scenario "$SCENARIO" \
   --view trace --format json --output "$OUT/trace.json"
-"$YUHO" diagram ../research/singapore/research-release/case-person-harm-showcase.yh \
+"$YUHO" diagram research/singapore/research-release/case-person-harm-showcase.yh \
   --view case --format svg --output "$OUT/case.svg"
 ```
 
-Views are `rule`, `modules`, `case` and `trace`; formats are `svg`, `json` and `xml`. An analysis case accepts `case` or `trace`, and a presumption program accepts `trace`. The output path must not already exist. Publication is atomic: checking or rendering failure leaves no partial destination. SVG uses shapes and border patterns as well as colour, includes citations, statuses, arrowheads, a legend and the no-judicial-outcome notice. JSON and XML use the same `yuho.semantic-graph/v0.1` data and stable semantic node IDs. Neither format embeds timestamps or absolute checkout paths. See the [Core Yuho language report](formal-semantics.md).
+Views are `rule`, `modules`, `case` and `trace`; formats are `svg`, `json` and `xml`. An analysis case accepts `case` or `trace`, and a presumption program accepts `trace`. The output path must not already exist. Publication is atomic: checking or rendering failure leaves no partial destination. SVG uses shapes and border patterns as well as colour, includes citations, statuses, arrowheads, a legend and the no-judicial-outcome notice. JSON and XML use the same `yuho.semantic-graph/v0.2` data and stable semantic node IDs. Some accepted views currently share one graph; see the [view table](compiler-guide.md#source--backend--observation--diagram). Neither format embeds timestamps or absolute checkout paths. See the [Core Yuho language report](formal-semantics.md).
 
 ## Models, rules and scenarios
 
@@ -129,8 +129,8 @@ typed-rules-case case:two-actors model "multi-person-property.yh" {
 Run a typed model with the normal commands and a scenario; run a typed case without `--scenario`:
 
 ```sh
-MODEL=../frontend/fixtures/typed-finite/fictional-typed-rules.yh
-SCENARIO=../frontend/fixtures/typed-finite/fictional-typed-rules-satisfied.yh
+MODEL=examples/typed-finite/fictional-typed-rules.yh
+SCENARIO=examples/typed-finite/fictional-typed-rules-satisfied.yh
 "$YUHO" check "$MODEL" --scenario "$SCENARIO"
 "$YUHO" compile "$MODEL" --scenario "$SCENARIO"
 "$YUHO" run "$MODEL" --scenario "$SCENARIO"
@@ -293,10 +293,10 @@ Derived definition outputs, rule results, penalty selection and final statuses c
 [`case-modular-warehouse-shared.yh`](../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh) loads a modular sibling model and checks principal theft, bounded s 107/s 109 participation and s 511 attempt as three allegations. It binds shared primitive case facts explicitly and keeps each actor's s 84 instance isolated. Run it without `--scenario`:
 
 ```sh
-"$YUHO" check ../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
-"$YUHO" compile ../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
-"$YUHO" run ../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
-"$YUHO" explain ../research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
+"$YUHO" check research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
+"$YUHO" compile research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
+"$YUHO" run research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
+"$YUHO" explain research/singapore/abetment-routes-pilot/case-modular-warehouse-shared.yh
 ```
 
 The case result has allegation-specific statuses and no aggregate status, guilt conclusion or sentencing outcome.
@@ -334,6 +334,10 @@ The target, trigger and rebuttal must already be primitive proof facts in the co
 | Typed finite rule model | `typed-rules-model` | `typed-rules-scenario ... for ...` |
 | Typed finite module | `typed-rules-module` | none |
 | Typed finite case | `typed-rules-case` | named scenarios are embedded |
+| Checked dependency project | `checked-project` | component models and scenarios are named in the project |
+| Computed-input project | `computed-project` | source/destination models and scenarios are named in the project |
+
+Inside `typed-rules-model` and `typed-rules-module`, `requirement-template` and `requirement-use` declare bounded reusable requirement bodies; see [scoped definitions](scoped-definitions.md). The legacy `model` surface pins its identifier, jurisdiction, purpose and date; see [choosing a surface](compiler-guide.md#choose-a-surface-and-an-integration-route).
 
 The [getting-started guide](getting-started.md) is the recommended entry point. The [capability matrix](assurance.md) classifies every major feature as supported, bounded, deferred or out of scope. The [Core conformance registry](../schema/core-yuho-conformance-v0.1.json) maps every public construct to its parser, checker, Core representation, lowering path, kernel boundary, explanation, diagram and test evidence.
 

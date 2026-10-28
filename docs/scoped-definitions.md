@@ -81,6 +81,43 @@ protocol validation and complete-input checks before plan execution. Unknown or
 private targets, wrong kinds/versions, arity/type errors, duplicate use IDs,
 recursive ordinary requirement expansions and excessive cost reject.
 
+## Retained local-template example
+
+[workplace-safety.yh](../examples/typed-finite-templates/workplace-safety.yh) is a
+self-contained model of a wholly fictional statute. One local template states the
+s 12(1) equipment element for an employer/worker pair and is used once per worker.
+A second local template contains a finite `forall` over tasks for the s 14
+training element. An ordinary scalar comparison defeats s 12(1) through a
+prioritised s 12(3) exception. Its
+[scenario](../examples/typed-finite-templates/workplace-safety-scenario.yh)
+classifies every expanded ground tuple. From the checkout:
+
+```sh
+cabal v2-build exe:yuho --offline -j1 --with-compiler=ghc-9.8.4
+yuho=$(cabal list-bin exe:yuho --offline --with-compiler=ghc-9.8.4)
+model=examples/typed-finite-templates/workplace-safety.yh
+scenario=examples/typed-finite-templates/workplace-safety-scenario.yh
+out=$(mktemp -d /tmp/yuho-templates.XXXXXX)
+"$yuho" check "$model" --scenario "$scenario"
+"$yuho" run "$model" --scenario "$scenario"
+"$yuho" compile "$model" --scenario "$scenario" --output "$out/request.json"
+"$yuho" explain "$model" --scenario "$scenario"
+"$yuho" diagram "$model" --scenario "$scenario" --view rule --format svg --output "$out/rule.svg"
+"$yuho" inspect "$model" --stage parsed
+python3 test/requirement_template_example.py "$yuho"
+```
+
+Expansion happens before kernel encoding. Each `requirement-use` becomes an
+ordinary named requirement whose body has the actual entities substituted, and
+no template construct reaches the compiled request. `check` also requires the
+scenario, because typed models validate complete ground inputs. Parsed inspection
+reports both templates and all four uses. `--stage checked` refuses with
+`SFI002`. For ordinary typed models, `--view rule`, `modules` and `trace` currently
+emit the same graph content, and only the JSON/XML `view` label differs. The
+regression check also confirms that capture, recursion, free variables, arity,
+role order, unknown targets, duplicate uses and missing classifications refuse with
+their existing codes.
+
 ## CLI, SDK and machine
 
 Standalone `yuho check/run MODEL --scenario SCENARIO` uses ordinary typed semantics.

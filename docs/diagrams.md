@@ -12,7 +12,7 @@ yuho diagram model.yh --scenario scenario.yh --view modules --format svg --outpu
 
 Stable node identifiers describe inputs, groups, definitions, offences, exceptions, participation, attempts, penalties, presumptions, typed finite rules, actors, allegations and shared facts. Shapes, borders and labels—not colour alone—distinguish node and trace kinds. Output contains no timestamp or absolute checkout path. Publication is atomic and an existing destination is refused.
 
-Retained deterministic fixtures live under [`docs/artifacts/`](artifacts/). Diagram labels report technical states and always preserve the no-judicial-outcome boundary.
+Accepted views depend on the input, and some views currently produce the same graph; the [compiler guide](compiler-guide.md#source--backend--observation--diagram) lists them. Retained deterministic fixtures live under [`docs/artifacts/`](artifacts/). Diagram labels report technical states and always preserve the no-judicial-outcome boundary.
 
 Current native output is `yuho.semantic-graph/v0.2`. Its optional node
 `observation` contains `evaluation` (`evaluated`, `not_evaluated`, or `supplied`),

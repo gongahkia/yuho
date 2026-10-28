@@ -1,0 +1,43 @@
+typed-rules-model FictionalWorkplaceSafety-v0.1 {
+  limit 2048;
+
+  entity-type employer;
+  entity-type worker;
+  entity-type task;
+  entity org:acme as employer;
+  entity worker:ana as worker;
+  entity worker:ben as worker;
+  entity task:scaffolding as task;
+  entity task:welding as task;
+
+  scalar value:headcount type integer;
+  scalar value:small-employer-threshold type integer;
+
+  predicate assigned-hazardous(employer,worker) kind conduct;
+  predicate provided-equipment(employer,worker) kind conduct;
+  predicate refused-after-warning(worker,employer) kind conduct;
+  predicate trained-for(worker,task) kind circumstance;
+
+  requirement-template q:unprotected-assignment(var:employer as employer,var:worker as worker) = all(assigned-hazardous(var:employer,var:worker),not(provided-equipment(var:employer,var:worker)),not(refused-after-warning(var:worker,var:employer)));
+  requirement-template q:fully-trained(var:worker as worker) = forall var:task as task (trained-for(var:worker,var:task));
+
+  requirement-use q:ana-unprotected from q:unprotected-assignment(org:acme,worker:ana) assessments scenario;
+  requirement-use q:ben-unprotected from q:unprotected-assignment(org:acme,worker:ben) assessments scenario;
+  requirement-use q:ana-trained from q:fully-trained(worker:ana) assessments scenario;
+  requirement-use q:ben-trained from q:fully-trained(worker:ben) assessments scenario;
+
+  requirement q:any-unprotected = any(q:ana-unprotected,q:ben-unprotected);
+  requirement q:any-untrained = not(all(q:ana-trained,q:ben-trained));
+  requirement q:small-employer = compare(value:headcount,lt,value:small-employer-threshold);
+
+  proposition p:s12-equipment-contravention;
+  proposition p:s14-training-contravention;
+
+  rule r:s12-equipment establishes proposition p:s12-equipment-contravention when q:any-unprotected citation "Fictional Workplace Safety Act s 12(1)";
+  rule r:s12-small-employer defeats proposition p:s12-equipment-contravention when q:small-employer citation "Fictional Workplace Safety Act s 12(3)";
+  priority r:s12-small-employer over r:s12-equipment;
+  rule r:s14-training establishes proposition p:s14-training-contravention when q:any-untrained citation "Fictional Workplace Safety Act s 14";
+
+  limitation "Wholly fictional statute; it is not a model of any enacted workplace safety law.";
+  limitation "Classifications and scalar values are supplied by the scenario; no evidence, liability or penalty is determined.";
+}

@@ -1025,14 +1025,14 @@ python3 test/authoring_consumer.py "$consumer_bin"
 python3 test/hurt_consumer.py "$consumer_bin"
 make protocols docs
 cd /tmp
-"$consumer_bin" --model hurt --artifacts /Users/gabrielongtemasek/Downloads/yuho-review/tranche04
+"$consumer_bin" --model hurt --artifacts /tmp/yuho-review/tranche04
 ```
 
 The two Python checks each execute the consumer in a temporary directory outside
 the checkout. The hurt check validates authored/kernel/projection/helper schemas,
 all nine JSON/XML/SVG exports, endpoint and inclusion/omission bindings, canonical
 states, comparisons and recovery. To verify saved review artifacts as well, add
-`--existing-artifacts /Users/gabrielongtemasek/Downloads/yuho-review/tranche04`
+`--existing-artifacts /tmp/yuho-review/tranche04`
 to `test/hurt_consumer.py`.
 
 `INDEX.md` in the artifact directory explains the outputs. Six
@@ -1048,7 +1048,7 @@ revision and diagnostic records are also under `data/`.
 Render PNG previews outside the checkout:
 
 ```sh
-cd /Users/gabrielongtemasek/Downloads/yuho-review/tranche04
+cd /tmp/yuho-review/tranche04
 for svg in *.svg; do rsvg-convert --output "${svg%.svg}.png" "$svg"; done
 ```
 
@@ -1232,13 +1232,13 @@ python3 test/hurt_consumer.py "$consumer_bin"
 python3 test/editing_consumer.py "$consumer_bin"
 make protocols docs
 cd /tmp
-"$consumer_bin" --edit-demo --artifacts /Users/gabrielongtemasek/Downloads/yuho-review/tranche05
+"$consumer_bin" --edit-demo --artifacts /tmp/yuho-review/tranche05
 ```
 
 The Python editing checker also runs outside the checkout, validates existing
 authored/kernel/projection/helper schemas and all six JSON/XML/SVG exports, and
 checks the session, rejection examples and snapshot/selection distinctions. Add
-`--existing-artifacts /Users/gabrielongtemasek/Downloads/yuho-review/tranche05`
+`--existing-artifacts /tmp/yuho-review/tranche05`
 to validate the saved review set too. Generate PNGs using the previously documented
 `rsvg-convert` loop. `INDEX.md` describes the six named views; `data/` retains every
 stage document, valid evaluation, complete projection, inclusion/omission binding,
@@ -1333,7 +1333,7 @@ edits and reevaluates narrative, and actually saves/reloads the authored revisio
 
 ```sh
 consumer_bin=$(cabal list-bin exe:yuho-authoring-consumer --offline --with-compiler=ghc-9.8.4)
-python3 test/authoring_quickstart.py "$consumer_bin" --review-dir /Users/gabrielongtemasek/Downloads/yuho-review/tranche06
+python3 test/authoring_quickstart.py "$consumer_bin" --review-dir /tmp/yuho-review/tranche06
 ```
 
 The checker records the exact external build/run commands and logs. It also
