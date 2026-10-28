@@ -1,8 +1,8 @@
 # Reduced experimental SDK: private exact-boundary checks
 
 The reduced SDK is the preferred internal candidate, with no final owner
-approval for public distribution. It contains the reviewed 154 regular-file
-paths: 120 unchanged library modules, 23 schema/conformance JSON files, two
+approval for public distribution. It contains the reviewed 180 regular-file
+paths: 146 unchanged library modules, 23 schema/conformance JSON files, two
 synthetic-consumer files and nine package/notice/guide resources. No CLI,
 research corpus, dataset, mascot pixels or excerpt-dependent tests are included.
 Original authorisation and artwork approval remain recorded; no licence choice
@@ -37,13 +37,17 @@ tool; it is not a signature or protection against an authorised edit to the
 tool itself. Neither `owner_approved=false` nor a passing digest check supplies
 publication permission. No automatic inventory-refresh/approve option exists.
 
-The 154 paths are unchanged from the independently reviewed proposal. Only the
+The 2026-10-28 refresh adds the 26 library modules that the listed modules now
+import, together with the `process` dependency used by `Yuho.Machine`, and
+updates the digests of 20 revised modules; the reduced package compiles and the
+synthetic consumer builds against it. The remaining 154 paths are unchanged from
+the independently reviewed proposal. Only the
 reduced `yuho.cabal` and `cabal.project.sdk` bytes change: the unused
 `research-tests` declaration and assignment are removed. The original full
 package still uses that flag to control research tests. Keep the original
 dependency freeze; use the reduced template's `development` flag. Consumers of
 the earlier private proposal should remove their redundant `-research-tests`
-assignment. No dependency, Haskell interface or authoring format changes.
+assignment. Apart from that refresh, no dependency, Haskell interface or authoring format changes.
 
 From an extracted root, copy `cabal.project.sdk` to `cabal.project` and build
 with `cabal v2-build all --offline -j1 --with-compiler=ghc-9.8.4`. Build the

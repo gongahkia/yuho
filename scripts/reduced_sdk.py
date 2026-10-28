@@ -15,7 +15,7 @@ import tarfile
 
 ROOT = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / "release/reduced-sdk-inventory.json"
-INVENTORY_SHA256 = "810a2b5a71200dfeb2a9c3b037ccb4eb7e5ca9eaba3da9f43497e48bf1ab0fc3"
+INVENTORY_SHA256 = "daed29151a12f2659b393cf227528bb14f8bac998ac99e3b2d348f3989bc435a"
 
 
 def canonical(name: str, directory: bool = False) -> str:
