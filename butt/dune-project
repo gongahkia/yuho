@@ -1,0 +1,20 @@
+(lang dune 3.17)
+
+(name front)
+
+(cram enable)
+
+(generate_opam_files true)
+
+(package
+ (name front)
+ (synopsis "Lexer and token-tree reader (tranche T1)")
+ (description
+  "Deterministic, source-preserving lexer and token-tree reader implementing the frozen lexical contract of docs/architecture.md section 2.1.")
+ (depends
+  (ocaml
+   (and
+    (>= 5.5.2)
+    (< 5.6)))
+  (dune
+   (>= 3.17))))

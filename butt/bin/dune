@@ -1,0 +1,5 @@
+(executable
+ (name lexdump)
+ (public_name lexdump)
+ (package front)
+ (libraries front))

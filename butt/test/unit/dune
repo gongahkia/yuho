@@ -1,0 +1,22 @@
+; The suite runs with a 32k-word stack so that recursion proportional to input
+; size or nesting depth fails the test instead of passing on the default stack.
+
+(test
+ (name test_front)
+ (modules harness suite_lexer suite_reader suite_oracle suite_generated test_front)
+ (libraries front str)
+ (action
+  (setenv
+   OCAMLRUNPARAM
+   l=32k
+   (run %{test}))))
+
+(test
+ (name test_stack)
+ (modules test_stack)
+ (libraries front)
+ (action
+  (setenv
+   OCAMLRUNPARAM
+   l=32k
+   (run %{test}))))
